@@ -3,9 +3,12 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { isAllowedEmail } from '@/lib/auth-allowed';
 
 // Rute yang hanya boleh diakses user terautentikasi.
-// /invite sengaja TIDAK ada di sini: halamannya memvalidasi sendiri
+// /invite sengaja TIDAK di sini: halamannya memvalidasi sendiri
 // token akses (?t=...) bagi pihak yang terikat desain tanpa login.
-const ADMIN_PREFIXES = ['/dashboard', '/builder', '/templates'];
+// Catatan: /templates/{id} (preview publik) TIDAK boleh dikunci;
+// hanya halaman pengelolaan "/templates" (admin) yang butuh login.
+const AUTH_PREFIXES = ['/dashboard', '/builder'];
+const AUTH_EXACT = ['/templates'];
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -25,7 +28,8 @@ export async function proxy(request: NextRequest) {
     !isApi &&
     pathname !== '/' &&
     pathname.split('/').length === 2 &&
-    !ADMIN_PREFIXES.includes(pathname) &&
+    !AUTH_PREFIXES.includes(pathname) &&
+    !AUTH_EXACT.includes(pathname) &&
     !isLogin;
 
   if (isGuestSlug || isAsset || isApi) {
@@ -60,7 +64,9 @@ export async function proxy(request: NextRequest) {
     data: { user }
   } = await supabase.auth.getUser();
 
-  const isAuthArea = ADMIN_PREFIXES.some((p) => pathname === p || pathname.startsWith(p + '/'));
+  const isAuthArea =
+    AUTH_PREFIXES.some((p) => pathname === p || pathname.startsWith(p + '/')) ||
+    AUTH_EXACT.some((p) => pathname === p || pathname === p + '/');
   const allowed = isAllowedEmail(user?.email);
 
   if (isAuthArea && !user) {
