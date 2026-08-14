@@ -63,8 +63,7 @@ export default function BuilderCanvas({
         onPointerDown={(e) => {
           if (e.target === e.currentTarget) selectBlock(null);
         }}
-      >
-        <div
+      >        <div
           className="relative h-full overflow-hidden rounded-md bg-white shadow-xl shadow-[#b98a3e]/20 ring-1 ring-[#e7ddcc]"
           style={{ width: device === 'desktop' ? '100%' : CANVAS_W, maxWidth: '100%' }}
         >
@@ -81,7 +80,8 @@ export default function BuilderCanvas({
           <div
             className="no-scrollbar h-full overflow-y-auto"
             onPointerDown={(e) => {
-              if (e.target === e.currentTarget) selectBlock(null);
+              const t = e.target as HTMLElement;
+              if (!t.closest('[data-block]')) selectBlock(null);
             }}
           >
             {flow === 'free' ? (
@@ -162,6 +162,7 @@ function SortableBlock({ block, dimmed, dropTarget }: { block: Block; dimmed: bo
     <div
       ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition }}
+      data-block
       className={`relative cursor-grab outline-2 outline-offset-[-2px] ${
         selected ? 'outline-[#c9a45c]' : dropTarget ? 'outline-[#c9a45c]' : 'outline-transparent'
       } ${isDragging ? 'opacity-40' : ''} ${dimmed && !dropTarget && !isDragging ? 'opacity-[0.35]' : ''}`}
@@ -254,6 +255,7 @@ function FreeBlock({ block }: { block: Block }) {
         transform: CSS.Translate.toString(transform),
         zIndex: isDragging ? 20 : selected ? 5 : 1
       }}
+      data-block
       className={`group relative outline-2 outline-offset-0 ${
         selected ? 'outline-[#c9a45c]' : 'outline-transparent'
       } ${isDragging ? 'opacity-70' : ''}`}
