@@ -90,12 +90,14 @@ const STEPS = [
 ];
 
 const FITUR = [
-  { title: 'Musik latar', body: 'MP3 atau YouTube, autoplay dan mulai di section tertentu.' },
-  { title: 'Galeri animasi', body: 'Grid, kolom, atau carousel dengan 12 pilihan efek foto.' },
-  { title: 'RSVP & buku tamu', body: 'Konfirmasi kehadiran dan ucapan tamu tampil di undangan.' },
-  { title: 'Petunjuk arah', body: 'Tombol Maps satu klik ke lokasi acara.' },
-  { title: 'Amplop digital', body: 'Nomor rekening untuk tanda kasih tamu.' },
-  { title: 'Kelola & kirim tamu', body: 'Ucapan per tamu dan tandai yang sudah menerima.' }
+  { title: 'RSVP & buku tamu', body: 'Konfirmasi kehadiran dalam sekali ketuk, plus ucapan & doa tampil langsung di undangan.' },
+  { title: 'Amplop & daftar kado', body: 'Nomor rekening tersembunyi & cuma muncul saat tombol "Beri Kado" ditekan, lengkap dengan daftar kado.' },
+  { title: 'QR check-in hari-H', body: 'Tamu memindai QR di venue untuk absen masuk — daftar kehadiran siap diunduh.' },
+  { title: 'Musik & galeri animasi', body: 'Autoplay, 12 efek foto (termasuk lengkung arch), carousel, dan ken-burns yang halus.' },
+  { title: 'Detail acara & peta', body: 'Tombol Maps satu klik, "Simpan ke Kalender", dan opsi siaran langsung.' },
+  { title: 'Template IG Story', body: 'Download poster Instagram Story siap unggah — dibagikan sekejap ke cerita Anda.' },
+  { title: 'Bingkai & gaya kartu', body: 'Frame dekoratif atau tampilan card-template pilihan; sesuaikan dengan gaya Anda.' },
+  { title: 'Kelola & kirim tamu', body: 'Ucapan per tamu via WhatsApp, tandai yang sudah menerima, ekspor CSV.' }
 ];
 
 const FEATURED = ['elegant-gold', 'blush-romance', 'ivory-dawn'];
@@ -109,6 +111,29 @@ const CATEGORY_FEATURED: Record<TemplateCategory, string> = {
 };
 
 const PER_PAGE = 9;
+
+const FAQ = [
+  {
+    q: 'Apa yang saya terima setelah memesan?',
+    a: 'Link undangan digital yang sudah diisi dengan foto, nama, jadwal, musik, dan semua fitur — lengkap dengan panel kelola tamu, RSVP, dan daftar kehadiran hari-H.'
+  },
+  {
+    q: 'Apakah saya perlu membuat akun?',
+    a: 'Tidak. Cukup pilih template dan isi form pemesanan; kami yang menyiapkan dan mengirimkan hasilnya beserta panduan membagikannya.'
+  },
+  {
+    q: 'Berapa lama proses pengerjaannya?',
+    a: 'Biasanya 2–4 hari kerja setelah seluruh materi (foto, teks, musik) diterima. Jadwal dan jumlah revisi dijelaskan sebelum produksi dimulai.'
+  },
+  {
+    q: 'Bisakah undangan mendukung tamu banyak?',
+    a: 'Bisa. Anda mengirimkan daftar nama, dan sistem membuat link + ucapan WhatsApp per tamu secara otomatis; konfirmasi masuk mereka terpantau dalam satu dasbor.'
+  },
+  {
+    q: 'Apakah ada biaya saat tamu melihat undangan?',
+    a: 'Tidak. Tamu cukup membuka link — musik, galeri, RSVP, QR check-in, dan buku tamu semuanya aktif tanpa biaya apa pun.'
+  }
+];
 
 function useFontsLink() {
   useEffect(() => {
@@ -139,6 +164,22 @@ function Ornament({ className = '' }: { className?: string }) {
         <rect x="0.5" y="0.5" width="9" height="9" transform="rotate(45 5 5)" stroke="#c9a45c" />
       </svg>
       <span className="h-px w-14 bg-gradient-to-l from-transparent to-[#c9a45c] sm:w-20" />
+    </div>
+  );
+}
+
+function FAQItem({ q, a, defaultOpen = false }: { q: string; a: string; defaultOpen?: boolean }) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div className="overflow-hidden rounded-xl border border-[#e7ddcc] bg-white/70">
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
+      >
+        <span className="font-heading text-base font-medium text-[#2b2620]">{q}</span>
+        <span className={`text-[#b98a3e] transition-transform ${open ? 'rotate-45' : ''}`}>+</span>
+      </button>
+      {open && <p className="px-5 pb-5 text-sm leading-relaxed text-[#8a7a66]">{a}</p>}
     </div>
   );
 }
@@ -267,7 +308,7 @@ export default function LandingPage() {
               </div>
 
               <p className="mt-7 text-xs text-[#b3a69a]">
-                {TEMPLATE_LIST.length} template siap pakai &middot; 4 tema &middot; dipesan lewat form, dibalas via WhatsApp — tanpa perlu akun.
+                {TEMPLATE_LIST.length} template siap pakai &middot; 4 tema &middot; RSVP, QR check-in, amplop & daftar kado — dipesan lewat form, dibalas via WhatsApp, tanpa perlu akun.
               </p>
             </div>
 
@@ -580,6 +621,22 @@ export default function LandingPage() {
                 </li>
               ))}
             </ol>
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section className="border-t border-[#e7ddcc] bg-[#f4eee1]">
+          <div className="mx-auto max-w-3xl px-4 py-20 sm:px-6">
+            <div className="text-center">
+              <p className="font-script text-3xl text-[#b98a3e]">Masih ragu?</p>
+              <Ornament className="mt-3" />
+              <h2 className="mt-5 font-heading text-3xl font-medium text-[#2b2620] sm:text-4xl">Pertanyaan yang Sering Muncul</h2>
+            </div>
+            <div className="mt-12 space-y-3">
+              {FAQ.map((item, i) => (
+                <FAQItem key={i} q={item.q} a={item.a} defaultOpen={i === 0} />
+              ))}
+            </div>
           </div>
         </section>
 
