@@ -63,6 +63,8 @@ export interface BlockStyle {
   /** Font override per elemen teks. Kunci = `${prop}` atau `${prop}.${index}`. Value = nama font (Google Fonts). */
   textFonts?: Record<string, string>;
   bgColor?: string;
+  /** Gradien latar section (CSS background, mis. "linear-gradient(160deg, #046A38, #B5A27C)"). Didahulukan dari bgColor. */
+  bgGradient?: string;
   bgImage?: string;
   /** Cara menyesuaikan gambar latar. Default: 'cover'. */
   bgFit?: 'cover' | 'contain';

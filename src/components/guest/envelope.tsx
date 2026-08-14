@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Check, Copy, Gift } from 'lucide-react';
 import type { BlockProps, BankAccount } from '@/lib/types';
-import { Editable } from '@/components/builder/inline-edit';
+import { Editable, BuilderEditableContext } from '@/components/builder/inline-edit';
 
 function str(props: BlockProps, key: string): string {
   const v = props[key];
@@ -12,6 +12,7 @@ function str(props: BlockProps, key: string): string {
 
 export default function EnvelopeBlock({ props }: { props: BlockProps }) {
   const [bankCopied, setBankCopied] = useState(false);
+  const inBuilder = useContext(BuilderEditableContext) !== null;
 
   const accounts = (Array.isArray(props.accounts) ? props.accounts : []) as BankAccount[];
   const legacyAccount = {
@@ -21,7 +22,7 @@ export default function EnvelopeBlock({ props }: { props: BlockProps }) {
   };
   const effectiveAccounts = accounts.length > 0 ? accounts : legacyAccount.account_number ? [legacyAccount] : [];
 
-  if (effectiveAccounts.length === 0) return null;
+  if (effectiveAccounts.length === 0 && !inBuilder) return null;
 
   async function copyAccount(accountNumber: string) {
     try {
@@ -48,6 +49,9 @@ export default function EnvelopeBlock({ props }: { props: BlockProps }) {
           </Editable>
         </p>
         <div className="mt-4 space-y-2 text-sm">
+          {effectiveAccounts.length === 0 && inBuilder && (
+            <p className="text-xs italic opacity-60">Belum ada rekening. Tambah via panel kanan.</p>
+          )}
           {effectiveAccounts.map((acc, i) => (
             <div key={i} className="rounded-xl border border-current/10 bg-white/5 px-3 py-2.5">
               {acc.bank_name && <p className="font-medium">{acc.bank_name}</p>}

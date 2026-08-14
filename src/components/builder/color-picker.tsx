@@ -17,13 +17,18 @@ const PRESET_PALETTES: string[][] = [
   ['#9A8C98', '#4A4E69', '#F2E9E4', '#22223B'],
   ['#3D5A80', '#EE6C4D', '#E0FBFC', '#293241'],
   ['#606C38', '#DDA15E', '#FEFAE0', '#283618'],
-  ['#B0413E', '#F6D365', '#FFF9F4', '#3D2C2E']
+  ['#B0413E', '#F6D365', '#FFF9F4', '#3D2C2E'],
+  ['#046A38', '#B5A27C', '#F7F5EF', '#2E3B34'],
+  ['#1E6B4E', '#C4B48A', '#FAF6EC', '#25332C'],
+  ['#005C39', '#9C8B63', '#F2EEDC', '#1F2E26'],
+  ['#3E7B5A', '#D2C5A0', '#FDFAF2', '#2B3A31']
 ];
 
 const PALETTE_NAMES = [
   'Elegant Gold', 'Sage Garden', 'Emerald Khaki', 'Navy Classic', 'Monochrome',
   'Blush', 'Boho Earth', 'Bali', 'Forest', 'Pastel', 'Dark Gold', 'Muted Mauve',
-  'Oceanic', 'Olive', 'Terracotta'
+  'Oceanic', 'Olive', 'Terracotta', 'Emerald Khaki',
+  'Deep Emerald', 'Royal Khaki', 'Fern Khaki'
 ];
 
 interface ColorPickerProps {

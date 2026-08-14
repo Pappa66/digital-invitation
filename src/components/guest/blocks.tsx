@@ -7,6 +7,7 @@ import { Calendar, MapPin, Heart, Sparkles, Gem, BookOpen, Sprout, MailOpen, Plu
 import type { BlockProps, DecorAsset, DecorShapeKind } from '@/lib/types';
 import { Editable, BuilderEditableContext } from '@/components/builder/inline-edit';
 import { usePreview } from '@/components/guest/preview-context';
+import { useTheme } from '@/components/guest/theme-context';
 import { useInnerPositions } from '@/components/guest/inner-context';
 import { useBuilderStore } from '@/store/builder-store';
 
@@ -562,9 +563,14 @@ export function HeroBlock({ props, greetingName }: { props: BlockProps; greeting
   const align = str(props, 'variant') === 'left' ? 'left' : 'center';
   const isLeft = align === 'left';
   const preview = usePreview();
+  const theme = useTheme();
   const inBuilder = useContext(BuilderEditableContext) !== null;
   const [opened, setOpened] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
+
+  const heroStyle = theme?.hero_style ?? 'image';
+  const hasBgImage = !!str(props, 'bg_image');
+  const showGradient = !hasBgImage && heroStyle === 'gradient';
 
   function openInvitation() {
     if (opened) return;
@@ -595,6 +601,12 @@ export function HeroBlock({ props, greetingName }: { props: BlockProps; greeting
       }`}
     >
       <BackgroundImage src={str(props, 'bg_image')} fit={str(props, 'bg_fit')} position={str(props, 'bg_position')} />
+      {showGradient && (
+        <div
+          className="absolute inset-0 z-0"
+          style={{ background: `linear-gradient(160deg, var(--color-primary) 0%, var(--color-secondary) 60%, var(--color-background) 130%)` }}
+        />
+      )}
       <HeroSparkles />
       <Inner name="content">
         <motion.div

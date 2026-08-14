@@ -143,6 +143,17 @@ const GALLERY_ANIMATIONS = [
   ['ken-burns', 'Ken Burns']
 ] as const;
 
+const GRADIENTS: { name: string; value: string }[] = [
+  { name: 'Emerald Khaki', value: 'linear-gradient(160deg, #046A38 0%, #B5A27C 60%, #F7F5EF 130%)' },
+  { name: 'Emerald Muda', value: 'linear-gradient(160deg, #7C9885 0%, #A9B7A6 55%, #F7F6F2 130%)' },
+  { name: 'Gold Muda', value: 'linear-gradient(160deg, #D4AF37 0%, #FAF6EF 70%, #F7F5EF 130%)' },
+  { name: 'Biru Malam', value: 'linear-gradient(160deg, #1F3A5F 0%, #C9A227 120%)' },
+  { name: 'Sage Hijau', value: 'linear-gradient(160deg, #324F43 0%, #A9C5B4 100%)' },
+  { name: 'Bali Tropis', value: 'linear-gradient(160deg, #2F5D50 0%, #C77B4E 100%)' },
+  { name: 'Terracotta', value: 'linear-gradient(160deg, #B0413E 0%, #F6D365 120%)' },
+  { name: 'Olive', value: 'linear-gradient(160deg, #606C38 0%, #DDA15E 120%)' }
+];
+
 const SECTION_TRIGGERS: { value: string; label: string }[] = [
   { value: '', label: 'Mulai di awal halaman' },
   { value: 'Hero', label: 'Saat masuk Hero' },
@@ -634,6 +645,26 @@ export default function PropertiesPanel() {
                             value={block.style?.bgColor ?? ''}
                             onChange={(c) => setBlockStyle(block.id, { bgColor: c })}
                           />
+                          <div>
+                            <p className="mb-1 text-xs font-medium text-[#4a443c]">Gradien Latar</p>
+                            <div className="grid grid-cols-3 gap-1.5">
+                              <button
+                                onClick={() => setBlockStyle(block.id, { bgGradient: undefined })}
+                                className={`rounded-md border px-1 py-2 text-[10px] ${!block.style?.bgGradient ? 'border-[#c9a45c] bg-[#c9a45c]/10 text-[#8a6d2f]' : 'border-[#e0d6c2] text-[#8a7a66]'}`}
+                              >
+                                Tidak ada
+                              </button>
+                              {GRADIENTS.map((g) => (
+                                <button
+                                  key={g.name}
+                                  onClick={() => setBlockStyle(block.id, { bgGradient: g.value })}
+                                  className={`h-10 rounded-md border ${block.style?.bgGradient === g.value ? 'border-[#c9a45c] ring-2 ring-[#c9a45c]' : 'border-[#e0d6c2]'}`}
+                                  style={{ background: g.value }}
+                                  title={g.name}
+                                />
+                              ))}
+                            </div>
+                          </div>
                           <div>
                             <p className="mb-1 text-xs font-medium text-[#4a443c]">Gambar Latar</p>
                             <button

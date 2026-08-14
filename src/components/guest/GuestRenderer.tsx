@@ -6,6 +6,7 @@ import MusicPlayer from '@/components/guest/music-player';
 import GuestBookWall from '@/components/guest/guest-book';
 import ShareBar from '@/components/guest/share-bar';
 import { PreviewContext } from '@/components/guest/preview-context';
+import { ThemeContext } from '@/components/guest/theme-context';
 
 interface GuestRendererProps {
   canvas: CanvasData;
@@ -38,6 +39,7 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
     const height = canvas.blocks.reduce((m, b) => (b.layout ? Math.max(m, b.layout.y) : m), 0) + 900;
     return (
       <PreviewContext.Provider value={!!preview}>
+        <ThemeContext.Provider value={canvas.theme}>
         <div className={`${rootClass} relative`} style={{ ...styleVars, minHeight: Math.max(height, 1200) }}>
           {canvas.blocks.map((block) =>
             block.layout ? (
@@ -54,12 +56,14 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
 {!preview && <MusicPlayer settings={canvas.settings} />}
         {!preview && <ShareBar />}
         </div>
+        </ThemeContext.Provider>
       </PreviewContext.Provider>
     );
   }
 
   return (
     <PreviewContext.Provider value={!!preview}>
+      <ThemeContext.Provider value={canvas.theme}>
       <div className={rootClass} style={styleVars}>
         {canvas.blocks.map((block) => (
           <BlockView key={block.id} block={block} projectId={projectId} greetingName={greetingName} />
@@ -68,6 +72,7 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
         {!preview && <MusicPlayer settings={canvas.settings} />}
         {!preview && <ShareBar />}
       </div>
+      </ThemeContext.Provider>
     </PreviewContext.Provider>
   );
 }

@@ -11,6 +11,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { GripVertical, Grid3x3 } from 'lucide-react';
 import type { Block, BlockType } from '@/lib/types';
 import BlockView from '@/components/guest/BlockView';
+import { ThemeContext } from '@/components/guest/theme-context';
 import { useBuilderStore } from '@/store/builder-store';
 import DeviceToggle from '@/components/ui/device-toggle';
 import type { Device } from '@/components/ui/device-toggle';
@@ -91,10 +92,12 @@ export default function BuilderCanvas({
               <FreeCanvas blocks={canvas.blocks} canvasRef={freeCanvasRef} guides={guides} />
             ) : (
               <SortableContext items={canvas.blocks.map((b) => b.id)} strategy={verticalListSortingStrategy}>
-                <div className="guest-root" style={guestStyle(canvas)}>
-                  <StackList blocks={canvas.blocks} dimmed={!!activeType} />
-                  {canvas.blocks.length === 0 && <EmptyHint />}
-                </div>
+                <ThemeContext.Provider value={canvas.theme}>
+                  <div className="guest-root" style={guestStyle(canvas)}>
+                    <StackList blocks={canvas.blocks} dimmed={!!activeType} />
+                    {canvas.blocks.length === 0 && <EmptyHint />}
+                  </div>
+                </ThemeContext.Provider>
               </SortableContext>
             )}
           </div>
@@ -211,10 +214,12 @@ function SortableBlock({ block, dimmed, dropTarget }: { block: Block; dimmed: bo
 
 function FreeCanvas({ blocks, canvasRef, guides }: { blocks: Block[]; canvasRef: React.MutableRefObject<HTMLDivElement | null>; guides: { x?: number; y?: number } }) {
   const selectBlock = useBuilderStore((s) => s.selectBlock);
+  const theme = useBuilderStore((s) => s.canvas.theme);
   const { setNodeRef } = useDroppable({ id: 'free-canvas' });
   const height = blocks.reduce((m, b) => (b.layout ? Math.max(m, b.layout.y) : m), 0) + 800;
 
   return (
+    <ThemeContext.Provider value={theme}>
     <div
       ref={(el) => {
         canvasRef.current = el;
@@ -241,6 +246,7 @@ function FreeCanvas({ blocks, canvasRef, guides }: { blocks: Block[]; canvasRef:
         </div>
       )}
     </div>
+    </ThemeContext.Provider>
   );
 }
 
