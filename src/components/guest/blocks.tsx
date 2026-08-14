@@ -570,12 +570,16 @@ export function HeroBlock({ props, greetingName }: { props: BlockProps; greeting
     if (opened) return;
     setOpened(true);
     window.dispatchEvent(new CustomEvent('invite-opened'));
-    // Gulir mulus ke konten di bawah hero setelah animasi fade selesai.
+    // Gulir mulus ke blok berikutnya (umumnya Couple) setelah animasi fade selesai.
     window.setTimeout(() => {
       const el = sectionRef.current;
       if (el) {
-        const target = el.nextElementSibling;
-        const rect = target ? target.getBoundingClientRect() : el.getBoundingClientRect();
+        const wrapper = el.closest('[data-block-type]');
+        const target =
+          (wrapper ? wrapper.nextElementSibling : null) ??
+          (el.nextElementSibling as HTMLElement | null) ??
+          el;
+        const rect = target.getBoundingClientRect();
         window.scrollTo({ top: window.scrollY + rect.top, behavior: 'smooth' });
       } else {
         window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
@@ -958,7 +962,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
     return (
       <section className="px-6 py-16">
         <Inner name="title">
-          <h2 className="mb-8 text-center text-xl md:text-2xl">{str(props, 'title')}</h2>
+          <h2 className="mb-8 text-center text-xl md:text-2xl"><Editable prop="title">{str(props, 'title')}</Editable></h2>
         </Inner>
         <div className="mx-auto flex w-full flex-col gap-5">
           {images.map((src, i) => (
@@ -982,7 +986,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
     return (
       <section className="px-6 py-16">
         <Inner name="title">
-          <h2 className="mb-8 text-center text-xl md:text-2xl">{str(props, 'title')}</h2>
+          <h2 className="mb-8 text-center text-xl md:text-2xl"><Editable prop="title">{str(props, 'title')}</Editable></h2>
         </Inner>
         <div className="mx-auto grid w-full grid-cols-3 gap-2.5">
           {images.map((src, i) => (
@@ -1006,7 +1010,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
     return (
       <section className="px-6 py-16">
         <Inner name="title">
-          <h2 className="mb-8 text-center text-xl md:text-2xl">{str(props, 'title')}</h2>
+          <h2 className="mb-8 text-center text-xl md:text-2xl"><Editable prop="title">{str(props, 'title')}</Editable></h2>
         </Inner>
         <div className="mx-auto w-full">
           <div className="columns-2 gap-3 [column-fill:_balance] md:columns-3">
@@ -1042,7 +1046,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
     return (
       <section className="px-6 py-16">
         <Inner name="title">
-          <h2 className="mb-8 text-center text-xl md:text-2xl">{str(props, 'title')}</h2>
+          <h2 className="mb-8 text-center text-xl md:text-2xl"><Editable prop="title">{str(props, 'title')}</Editable></h2>
         </Inner>
         <div className="mx-auto grid w-full grid-cols-3 gap-2">
           {images.map((src, i) => (
@@ -1066,7 +1070,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
     return (
       <section className="px-6 py-16">
         <Inner name="title">
-          <h2 className="mb-8 text-center text-xl md:text-2xl">{str(props, 'title')}</h2>
+          <h2 className="mb-8 text-center text-xl md:text-2xl"><Editable prop="title">{str(props, 'title')}</Editable></h2>
         </Inner>
         <div className="mx-auto grid w-full grid-cols-2 gap-6 md:grid-cols-3">
           {images.map((src, i) => (
@@ -1092,7 +1096,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
   return (
     <section className="px-6 py-16">
       <Inner name="title">
-        <h2 className="mb-8 text-center text-xl md:text-2xl">{str(props, 'title')}</h2>
+        <h2 className="mb-8 text-center text-xl md:text-2xl"><Editable prop="title">{str(props, 'title')}</Editable></h2>
       </Inner>
       <div className="mx-auto grid w-full grid-cols-2 gap-3">
         {images.map((src, i) => (
@@ -1206,7 +1210,7 @@ export function MapsBlock({ props }: { props: BlockProps }) {
   return (
     <section className="px-6 py-14 text-center">
       <Inner name="title">
-        <h2 className="text-xl md:text-2xl">{str(props, 'title')}</h2>
+        <h2 className="text-xl md:text-2xl"><Editable prop="title">{str(props, 'title')}</Editable></h2>
       </Inner>
       {address && <p className="mt-2 text-sm opacity-80">{address}</p>}
       <div className="mx-auto mt-6 w-full overflow-hidden rounded-xl border border-current/10">
@@ -1237,7 +1241,7 @@ export function ThanksBlock({ props }: { props: BlockProps }) {
       <Inner name="title">
         <div>
           <Ornament className="mb-6 opacity-60" />
-          <h2 className="text-2xl font-medium md:text-3xl">{str(props, 'title')}</h2>
+          <h2 className="text-2xl font-medium md:text-3xl"><Editable prop="title">{str(props, 'title')}</Editable></h2>
         </div>
       </Inner>
       <p className="mx-auto mt-6 w-full text-sm leading-relaxed opacity-80">
