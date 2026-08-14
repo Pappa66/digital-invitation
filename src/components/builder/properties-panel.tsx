@@ -94,9 +94,9 @@ const TITLE_PROPS: Record<string, { label: string; multiline?: boolean; url?: bo
     { label: 'note', multiline: true },
     { label: 'deadline' },
     { label: 'button_text' },
-    { label: 'success_message', multiline: true },
-    { label: 'envelope_note', multiline: true }
+    { label: 'success_message', multiline: true }
   ],
+  Envelope: [{ label: 'title' }, { label: 'note', multiline: true }],
   Maps: [{ label: 'title' }, { label: 'address' }, { label: 'embed_url', url: true, labelText: 'Link Google Maps' }],
   Thanks: [
     { label: 'title' },
@@ -557,7 +557,7 @@ export default function PropertiesPanel() {
                     </div>
                   )}
                   {block.type === 'Story' && <StoryChapters blockId={block.id} props={block.props} setBlockProps={setBlockProps} />}
-                  {block.type === 'RSVP' && (
+                  {block.type === 'Envelope' && (
                     <div className="space-y-3">
                       <p className="text-xs font-medium text-[#4a443c]">Rekening Amplop</p>
                       {Array.isArray(block.props.accounts) && (block.props.accounts as BankAccount[]).length > 0 && (

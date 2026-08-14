@@ -1,7 +1,7 @@
 'use client';
 
 import { useDraggable } from '@dnd-kit/core';
-import { Image as ImageIcon, LayoutPanelTop, Clock, CalendarHeart, BookOpen, Images, Mail, MapPin, HeartHandshake, Minus, GripVertical, Type } from 'lucide-react';
+import { Image as ImageIcon, LayoutPanelTop, Clock, CalendarHeart, BookOpen, Images, Mail, MapPin, HeartHandshake, Minus, GripVertical, Type, Gift } from 'lucide-react';
 import type { BlockType } from '@/lib/types';
 import { useBuilderStore } from '@/store/builder-store';
 
@@ -13,6 +13,7 @@ const ELEMENTS: { type: BlockType; label: string; icon: React.ElementType }[] = 
   { type: 'Story', label: 'Our Story', icon: BookOpen },
   { type: 'Gallery', label: 'Galeri', icon: Images },
   { type: 'RSVP', label: 'RSVP', icon: Mail },
+  { type: 'Envelope', label: 'Amplop Online', icon: Gift },
   { type: 'Maps', label: 'Maps', icon: MapPin },
   { type: 'Text', label: 'Teks Box', icon: Type },
   { type: 'Photo', label: 'Foto / Gambar', icon: ImageIcon },

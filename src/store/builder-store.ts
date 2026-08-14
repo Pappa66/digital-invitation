@@ -132,8 +132,15 @@ const BLOCK_PRESETS: Record<BlockType, Block> = {
       note: 'Mohon konfirmasi sebelum hari H',
       deadline: '2026-12-25',
       button_text: 'Kirim Konfirmasi',
-      success_message: 'Terima kasih atas konfirmasinya.',
-      envelope_note: '',
+      success_message: 'Terima kasih atas konfirmasinya.'
+    }
+  },
+  Envelope: {
+    id: '',
+    type: 'Envelope',
+    props: {
+      title: 'Amplop Online',
+      note: 'Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.',
       accounts: []
     }
   },

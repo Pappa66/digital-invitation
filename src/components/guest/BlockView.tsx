@@ -17,6 +17,7 @@ import {
   PhotoBlock
 } from '@/components/guest/blocks';
 import RSVPForm from '@/components/guest/rsvp';
+import EnvelopeBlock from '@/components/guest/envelope';
 import { BuilderEditableContext } from '@/components/builder/inline-edit';
 import { usePreview } from '@/components/guest/preview-context';
 import { InnerProvider } from '@/components/guest/inner-context';
@@ -56,6 +57,9 @@ export default function BlockView({ block, projectId, editable = false, greeting
       break;
     case 'RSVP':
       view = <RSVPForm projectId={projectId ?? ''} blockProps={block.props} readonly={!projectId} />;
+      break;
+    case 'Envelope':
+      view = <EnvelopeBlock props={block.props} />;
       break;
     case 'Maps':
       view = <MapsBlock props={block.props} />;

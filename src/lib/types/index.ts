@@ -6,6 +6,7 @@ export type BlockType =
   | 'Story'
   | 'Gallery'
   | 'RSVP'
+  | 'Envelope'
   | 'Maps'
   | 'Thanks'
   | 'Divider'
