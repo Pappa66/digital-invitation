@@ -520,6 +520,25 @@ export default function PropertiesPanel() {
                       </div>
                       <div>
                         <p className="mb-1 text-xs font-medium text-[#4a443c]">Galeri ({Array.isArray(block.props.images) ? block.props.images.length : 0})</p>
+                        {Array.isArray(block.props.images) && block.props.images.length > 0 && (
+                          <div className="mb-2 grid grid-cols-4 gap-1.5">
+                            {(block.props.images as string[]).map((src, i) => (
+                              <div key={i} className="group relative aspect-square overflow-hidden rounded-md border border-[#e0d6c2]">
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img src={src} alt="" className="h-full w-full object-cover" />
+                                <button
+                                  onClick={() =>
+                                    setBlockProps(block.id, { images: (block.props.images as string[]).filter((_, j) => j !== i) })
+                                  }
+                                  aria-label="Hapus foto"
+                                  className="absolute right-0.5 top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-[9px] text-white opacity-0 shadow transition-opacity group-hover:opacity-100"
+                                >
+                                  ×
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                         <button
                           onClick={() => {
                             setMediaMode('gallery');
