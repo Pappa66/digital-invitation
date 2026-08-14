@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef, useContext } from 'react';
 import { motion, type Target } from 'framer-motion';
 import Image from 'next/image';
-import { Calendar, MapPin, Heart, Sparkles, Gem, BookOpen, Sprout, MailOpen, Plus } from 'lucide-react';
+import { Calendar, MapPin, Heart, Sparkles, Gem, BookOpen, Sprout, MailOpen, Plus, Radio } from 'lucide-react';
 import type { BlockProps, DecorAsset, DecorShapeKind } from '@/lib/types';
 import { Editable, BuilderEditableContext } from '@/components/builder/inline-edit';
 import { usePreview } from '@/components/guest/preview-context';
@@ -898,6 +898,16 @@ export function EventDetailBlock({ props }: { props: BlockProps }) {
               </div>
               {(str(props, 'maps_url') || address) && (
                 <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
+                  {str(props, 'live_url') && (
+                    <a
+                      href={str(props, 'live_url')}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-current/25 px-4 py-2 text-xs font-medium transition-colors hover:bg-current/10"
+                    >
+                      <Radio className="h-3.5 w-3.5" /> Siaran Langsung
+                    </a>
+                  )}
                   {str(props, 'maps_url') && (
                     <a
                       href={str(props, 'maps_url')}

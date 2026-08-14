@@ -186,6 +186,15 @@ const BLOCK_PRESETS: Record<BlockType, Block> = {
       caption: '',
       rounded: true
     }
+  },
+  GiftList: {
+    id: '',
+    type: 'GiftList',
+    props: {
+      title: 'Daftar Kado',
+      note: '',
+      items: ['Amplop / tanda kasih', 'Perlengkapan rumah tangga', 'Gift / yang bermanfaat']
+    }
   }
 };
 

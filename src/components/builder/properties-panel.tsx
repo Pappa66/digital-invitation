@@ -86,7 +86,8 @@ const TITLE_PROPS: Record<string, { label: string; multiline?: boolean; url?: bo
     { label: 'time' },
     { label: 'location' },
     { label: 'address', multiline: true },
-    { label: 'maps_url' }
+    { label: 'maps_url', url: true, labelText: 'Link Google Maps' },
+    { label: 'live_url', url: true, labelText: 'Link Siaran Langsung' }
   ],
   Gallery: [{ label: 'title' }],
   RSVP: [
@@ -97,6 +98,7 @@ const TITLE_PROPS: Record<string, { label: string; multiline?: boolean; url?: bo
     { label: 'success_message', multiline: true }
   ],
   Envelope: [{ label: 'title' }, { label: 'note', multiline: true }],
+  GiftList: [{ label: 'title' }, { label: 'note', multiline: true }],
   Maps: [{ label: 'title' }, { label: 'address' }, { label: 'embed_url', url: true, labelText: 'Link Google Maps' }],
   Thanks: [
     { label: 'title' },
@@ -675,6 +677,51 @@ export default function PropertiesPanel() {
                       </button>
                     </div>
                   )}
+                  {block.type === 'GiftList' &&
+                    (() => {
+                      const current = block;
+                      const items = Array.isArray(current.props.items) ? (current.props.items as string[]) : [];
+                      function setItem(i: number, v: string) {
+                        const next = [...items];
+                        next[i] = v;
+                        setBlockProps(current.id, { items: next });
+                      }
+                      function addItem() {
+                        setBlockProps(current.id, { items: [...items, ''] });
+                      }
+                      function removeItem(i: number) {
+                        setBlockProps(current.id, { items: items.filter((_, j) => j !== i) });
+                      }
+                      return (
+                        <div className="space-y-3">
+                          <p className="text-xs font-medium text-[#4a443c]">Item Kado</p>
+                          <div className="space-y-2">
+                            {items.map((item, i) => (
+                              <div key={i} className="flex items-center gap-2">
+                                <input
+                                  value={item}
+                                  onChange={(e) => setItem(i, e.target.value)}
+                                  placeholder={`Item ${i + 1}`}
+                                  className="w-full rounded border border-[#e0d6c2] bg-[#faf7f2] px-2 py-1.5 text-sm outline-none focus:ring-1 focus:ring-[#c9a45c]"
+                                />
+                                <button
+                                  onClick={() => removeItem(i)}
+                                  className="shrink-0 text-[11px] font-medium text-red-600 hover:underline"
+                                >
+                                  Hapus
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                          <button
+                            onClick={addItem}
+                            className="flex w-full items-center gap-2 rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2 text-sm text-[#6b5f4d] hover:border-[#c9a45c]"
+                          >
+                            + Tambah Item
+                          </button>
+                        </div>
+                      );
+                    })()}
                   <Section
                     title="Warna & Background Section"
                     desc="Override warna teks, latar, atau gambar untuk section ini saja"
