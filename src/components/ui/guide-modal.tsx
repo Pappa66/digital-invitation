@@ -28,7 +28,7 @@ export default function GuideModal({ open, title, steps, onClose }: GuideModalPr
         <ol className="mt-4 space-y-4">
           {steps.map((step, i) => (
             <li key={i} className="flex gap-3">
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gray-900 text-xs font-semibold text-white">
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] text-xs font-semibold text-white">
                 {i + 1}
               </span>
               <div>
@@ -41,7 +41,7 @@ export default function GuideModal({ open, title, steps, onClose }: GuideModalPr
         <div className="mt-6 flex justify-end">
           <button
             onClick={onClose}
-            className="rounded-md border border-gray-300 px-4 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
+            className="rounded-md bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-4 py-1.5 text-sm font-semibold text-white hover:opacity-90"
           >
             Mengerti
           </button>

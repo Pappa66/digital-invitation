@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Copy,
   Check,
@@ -14,6 +14,7 @@ import {
   ListChecks
 } from 'lucide-react';
 import { RELIGIONS, getReligion, waLink, parseGuestLines, type ReligionKey } from '@/lib/religions';
+import { clientGetInviteAccessToken } from '@/lib/api/project-client';
 
 interface ShareDialogProps {
   open: boolean;
@@ -67,13 +68,25 @@ export default function ShareDialog({ open, projectId, slug, title, onClose, rel
   const [copied, setCopied] = useState<string | null>(null);
   const [bulkText, setBulkText] = useState<string>(() => loadState(STORAGE_BULK(projectId), ''));
   const [sentIndexes, setSentIndexes] = useState<Set<number>>(new Set());
+  const [manageToken, setManageToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    let alive = true;
+    clientGetInviteAccessToken(projectId).then((res) => {
+      if (alive && res.token) setManageToken(res.token);
+    });
+    return () => {
+      alive = false;
+    };
+  }, [open, projectId]);
 
   if (!open) return null;
 
   const base = typeof window !== 'undefined' ? window.location.origin : '';
   const cleanName = name.trim();
   const link = `${base}/${slug}${cleanName ? `?to=${encodeURIComponent(cleanName)}` : ''}`;
-  const manageLink = `${base}/invite/${projectId}`;
+  const manageLink = manageToken ? `${base}/invite/${projectId}?t=${manageToken}` : `${base}/invite/${projectId}`;
   const message = fill(template, cleanName, link);
 
   const rows = parseGuestLines(bulkText);

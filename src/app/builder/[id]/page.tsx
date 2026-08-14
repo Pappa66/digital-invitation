@@ -4,9 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { BookmarkPlus, HelpCircle, PenLine, Share2, Lock, Globe, GlobeLock } from 'lucide-react';
-import ElementsSidebar from '@/components/builder/elements-sidebar';
-import BuilderCanvas from '@/components/builder/builder-canvas';
-import PropertiesPanel from '@/components/builder/properties-panel';
+import BuilderWorkspace from '@/components/builder/builder-workspace';
 import ShareDialog from '@/components/dashboard/share-dialog';
 import SaveTemplateDialog from '@/components/builder/save-template-dialog';
 import GuideModal from '@/components/ui/guide-modal';
@@ -94,16 +92,16 @@ export default function BuilderPage() {
 
   if (access === 'denied') {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#0e1116] p-6">
-        <div className="w-full max-w-sm rounded-xl border border-[#262b35] bg-[#14171d] p-8 text-center shadow-xl">
-          <Lock className="mx-auto h-8 w-8 text-[#6b7380]" />
-          <h1 className="mt-3 text-base font-semibold text-[#e8e6e1]">Tidak Ada Akses</h1>
-          <p className="mt-2 text-sm text-[#8b93a3]">
+      <div className="flex min-h-screen items-center justify-center bg-[#faf7f2] p-6">
+        <div className="w-full max-w-sm rounded-xl border border-[#e7ddcc] bg-white p-8 text-center shadow-xl">
+          <Lock className="mx-auto h-8 w-8 text-[#8a7a66]" />
+          <h1 className="mt-3 text-base font-semibold text-[#2b2620]">Tidak Ada Akses</h1>
+          <p className="mt-2 text-sm text-[#6b5f4d]">
             Anda tidak memiliki akses untuk mengedit undangan ini. Halaman ini hanya bisa dibuka oleh pemiliknya.
           </p>
           <Link
             href="/dashboard"
-            className="mt-5 inline-block rounded-md bg-[#c9a45c] px-4 py-2 text-sm font-medium text-[#141414] hover:bg-[#e0c382]"
+            className="mt-5 inline-block rounded-md bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-4 py-2 text-sm font-medium text-white hover:opacity-90"
           >
             Kembali ke Dashboard
           </Link>
@@ -113,18 +111,18 @@ export default function BuilderPage() {
   }
 
   if (access === 'checking') {
-    return <div className="flex min-h-screen items-center justify-center bg-[#0e1116] text-sm text-[#6b7380]">Memeriksa akses...</div>;
+    return <div className="flex min-h-screen items-center justify-center bg-[#faf7f2] text-sm text-[#8a7a66]">Memeriksa akses...</div>;
   }
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden bg-[#0e1116]">
-      <header className="flex h-12 shrink-0 items-center justify-between border-b border-[#262b35] bg-[#14171d] px-4">
+    <div className="flex h-screen flex-col overflow-hidden bg-[#faf7f2]">
+      <header className="flex h-12 shrink-0 items-center justify-between border-b border-[#e7ddcc] bg-white px-4">
         <div className="flex min-w-0 items-center gap-3">
-          <Link href="/dashboard" className="shrink-0 text-sm font-semibold text-[#e8e6e1] transition-colors hover:text-[#c9a45c]">
+          <Link href="/dashboard" className="shrink-0 text-sm font-semibold text-[#2b2620] transition-colors hover:text-[#b98a3e]">
             ← Dashboard
           </Link>
-          <div className="flex min-w-0 items-center gap-1.5 rounded-md border border-[#2a303c] bg-[#0e1116] px-2 py-1">
-            <PenLine className="h-3.5 w-3.5 shrink-0 text-[#6b7380]" />
+          <div className="flex min-w-0 items-center gap-1.5 rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-2 py-1">
+            <PenLine className="h-3.5 w-3.5 shrink-0 text-[#8a7a66]" />
             <input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -133,20 +131,20 @@ export default function BuilderPage() {
                 if (e.key === 'Enter') e.currentTarget.blur();
               }}
               aria-label="Judul undangan"
-              className="w-56 min-w-0 truncate rounded-sm bg-transparent text-sm font-medium text-[#e8e6e1] outline-none focus:ring-1 focus:ring-[#c9a45c]"
+              className="w-56 min-w-0 truncate rounded-sm bg-transparent text-sm font-medium text-[#2b2620] outline-none focus:ring-1 focus:ring-[#c9a45c]"
             />
-            {renameStatus === 'saving' && <span className="shrink-0 text-[10px] text-[#6b7380]">...</span>}
-            {renameStatus === 'saved' && <span className="shrink-0 text-[10px] text-emerald-500">Tersimpan</span>}
+            {renameStatus === 'saving' && <span className="shrink-0 text-[10px] text-[#8a7a66]">...</span>}
+            {renameStatus === 'saved' && <span className="shrink-0 text-[10px] text-emerald-600">Tersimpan</span>}
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-sm text-[#6b7380]">
+          <span className="text-sm text-[#8a7a66]">
             {saveStatus === 'saving' && 'Menyimpan...'}
             {saveStatus === 'saved' && 'Tersimpan'}
           </span>
           <button
             onClick={() => setSaveTplOpen(true)}
-            className="flex items-center gap-1.5 rounded-md border border-[#2a303c] px-3 py-1.5 text-xs font-medium text-[#c4c9d4] hover:border-[#3d4554] hover:text-white"
+            className="flex items-center gap-1.5 rounded-md border border-[#e0d6c2] bg-white px-3 py-1.5 text-xs font-medium text-[#4a443c] hover:border-[#c9a45c] hover:text-[#8a6d2f]"
           >
             <BookmarkPlus className="h-3.5 w-3.5" /> Simpan sebagai Template
           </button>
@@ -156,8 +154,8 @@ export default function BuilderPage() {
             aria-pressed={status === 'published'}
             className={`flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-xs font-medium transition-colors disabled:opacity-50 ${
               status === 'published'
-                ? 'border-emerald-500/50 bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25'
-                : 'border-[#2a303c] text-[#c4c9d4] hover:border-[#3d4554] hover:text-white'
+                ? 'border-emerald-600 bg-emerald-50 text-emerald-700 hover:bg-emerald-100'
+                : 'border-[#e0d6c2] bg-white text-[#4a443c] hover:border-[#c9a45c] hover:text-[#8a6d2f]'
             }`}
           >
             {status === 'published' ? <Globe className="h-3.5 w-3.5" /> : <GlobeLock className="h-3.5 w-3.5" />}
@@ -166,7 +164,7 @@ export default function BuilderPage() {
           {previewSlug && (
             <button
               onClick={() => setShareOpen(true)}
-              className="flex items-center gap-1.5 rounded-md border border-[#2a303c] px-3 py-1.5 text-xs font-medium text-[#c4c9d4] hover:border-[#3d4554] hover:text-white"
+              className="flex items-center gap-1.5 rounded-md border border-[#e0d6c2] bg-white px-3 py-1.5 text-xs font-medium text-[#4a443c] hover:border-[#c9a45c] hover:text-[#8a6d2f]"
             >
               <Share2 className="h-3.5 w-3.5" /> Bagikan
             </button>
@@ -176,17 +174,17 @@ export default function BuilderPage() {
               href={`/${previewSlug}?preview=1`}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-md bg-[#c9a45c] px-3 py-1.5 text-xs font-medium text-[#141414] hover:bg-[#e0c382]"
+              className="rounded-md bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-3 py-1.5 text-xs font-medium text-white hover:opacity-90"
             >
               Preview ↗
             </a>
           ) : (
-            <span className="rounded-md bg-[#2a303c] px-3 py-1.5 text-xs font-medium text-[#6b7380]">Preview</span>
+            <span className="rounded-md border border-[#e0d6c2] bg-white px-3 py-1.5 text-xs font-medium text-[#8a7a66]">Preview</span>
           )}
           <button
             onClick={() => setGuideOpen(true)}
             aria-label="Panduan Builder"
-            className="rounded-md border border-[#2a303c] p-1.5 text-[#8b93a3] hover:bg-[#1d222b] hover:text-white"
+            className="rounded-md border border-[#e0d6c2] bg-white p-1.5 text-[#4a443c] hover:border-[#c9a45c] hover:text-[#8a6d2f]"
           >
             <HelpCircle className="h-4 w-4" />
           </button>
@@ -203,11 +201,7 @@ export default function BuilderPage() {
           )}
         </div>
       </header>
-      <div className="flex min-h-0 flex-1">
-        <ElementsSidebar />
-        <BuilderCanvas projectId={projectId} />
-        <PropertiesPanel />
-      </div>
+      <BuilderWorkspace projectId={projectId} />
       <SaveTemplateDialog open={saveTplOpen} canvas={canvas} defaultName={title} onClose={() => setSaveTplOpen(false)} />
       <GuideModal
         open={guideOpen}

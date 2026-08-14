@@ -176,6 +176,26 @@ export async function setProjectStatus(projectId: string, status: 'draft' | 'pub
 }
 
 /**
+ * Ambil (atau buat) token akses untuk halaman "Kelola Tamu" (/invite/...).
+ * Token memungkinkan pihak yang terikat desain membuka halaman itu TANPA login,
+ * sehingga link bisa dibagikan publik lewat "Tautan Kelola Tamu".
+ * Hanya pemilik proyek yang boleh memicu pembuatan token (via RPC ensure_invite_token).
+ */
+export async function getInviteAccessToken(projectId: string): Promise<{ token?: string; error?: string }> {
+  const user = await requireUser();
+  if (!user) return { error: 'Unauthorized' };
+
+  const supabase = await createServerSupabase();
+  const { data: tokenRes, error } = await supabase.rpc('ensure_invite_token', {
+    p_project_id: projectId
+  });
+
+  if (error) return { error: error.message };
+  const row = Array.isArray(tokenRes) ? tokenRes[0] : undefined;
+  return { token: row?.token };
+}
+
+/**
  * Cek apakah user saat ini berhak mengakses proyek (pemilik).
  * Dipakai untuk mengunci rute /builder dan /invite dari akses via URL langsung.
  */

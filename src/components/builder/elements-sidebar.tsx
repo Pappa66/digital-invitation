@@ -31,15 +31,15 @@ function DraggableElement({ type, label, icon: Icon }: { type: BlockType; label:
       ref={setNodeRef}
       {...listeners}
       {...attributes}
-      className={`group flex w-full items-center gap-3 rounded-md border bg-[#171b23] px-3 py-2.5 text-sm transition-colors ${
+      className={`group flex w-full items-center gap-3 rounded-md border bg-white px-3 py-2.5 text-sm transition-colors ${
         isDragging
-          ? 'border-[#c9a45c] bg-[#c9a45c]/10 text-[#e8ddc6] opacity-40'
-          : 'cursor-grab border-[#2a303c] text-[#c4c9d4] hover:border-[#3d4554] hover:bg-[#1d222b] active:cursor-grabbing'
+          ? 'border-[#c9a45c] bg-[#c9a45c]/10 text-[#8a6d2f] opacity-40'
+          : 'cursor-grab border-[#e0d6c2] text-[#4a443c] hover:border-[#c9a45c] hover:bg-[#fffdf8] active:cursor-grabbing'
       }`}
     >
-      <Icon className="h-4 w-4 shrink-0 text-[#8b93a3] transition-colors group-hover:text-[#c9a45c]" />
+      <Icon className="h-4 w-4 shrink-0 text-[#8a7a66] transition-colors group-hover:text-[#c9a45c]" />
       <span className="truncate">{label}</span>
-      <GripVertical className="ml-auto h-3.5 w-3.5 shrink-0 text-[#565d6b] opacity-0 transition-opacity group-hover:opacity-100" />
+      <GripVertical className="ml-auto h-3.5 w-3.5 shrink-0 text-[#c9b896] opacity-0 transition-opacity group-hover:opacity-100" />
     </button>
   );
 }
@@ -48,10 +48,10 @@ export default function ElementsSidebar() {
   const addBlock = useBuilderStore((s) => s.addBlock);
 
   return (
-    <aside className="flex h-full w-72 shrink-0 flex-col border-r border-[#262b35] bg-[#11141a]">
-      <div className="border-b border-[#262b35] px-4 py-3">
-        <h3 className="text-sm font-semibold text-[#e8e6e1]">Elements</h3>
-        <p className="mt-0.5 text-xs text-[#8b93a3]">Seret ke kanvas atau klik untuk menambah</p>
+    <aside className="flex h-full w-72 shrink-0 flex-col border-r border-[#e7ddcc] bg-white">
+      <div className="border-b border-[#e7ddcc] px-4 py-3">
+        <h3 className="text-sm font-semibold text-[#2b2620]">Elements</h3>
+        <p className="mt-0.5 text-xs text-[#8a7a66]">Seret ke kanvas atau klik untuk menambah</p>
       </div>
 
       <div className="flex-1 space-y-2 overflow-auto p-3">
@@ -62,7 +62,7 @@ export default function ElementsSidebar() {
         ))}
 
         <div className="pt-4">
-          <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[#5a6272]">Templates</p>
+          <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[#b39a65]">Templates</p>
           <div className="space-y-2">
             {QUICK_STARTS.map((t) => (
               <button
@@ -70,9 +70,9 @@ export default function ElementsSidebar() {
                 onClick={() => {
                   t.blocks.forEach((b) => addBlock(b));
                 }}
-                className="flex w-full items-center gap-3 rounded-md border border-dashed border-[#2f3542] px-3 py-2.5 text-sm text-[#8b93a3] transition-colors hover:border-[#3d4554] hover:bg-[#171b23] hover:text-[#c4c9d4]"
+                className="flex w-full items-center gap-3 rounded-md border border-dashed border-[#e0d6c2] px-3 py-2.5 text-sm text-[#6b5f4d] transition-colors hover:border-[#c9a45c] hover:bg-[#faf7f2] hover:text-[#8a6d2f]"
               >
-                <ImageIcon className="h-4 w-4 text-[#5a6272]" />
+                <ImageIcon className="h-4 w-4 text-[#b39a65]" />
                 {t.label}
               </button>
             ))}

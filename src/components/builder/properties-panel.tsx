@@ -117,9 +117,9 @@ export default function PropertiesPanel() {
   const [mediaMode, setMediaMode] = useState<'hero' | 'gallery' | 'bg' | null>(null);
 
   return (
-    <aside className="flex h-full w-80 shrink-0 flex-col border-l border-[#262b35] bg-[#11141a]">
-      <div className="border-b border-[#262b35] px-4 py-3">
-        <h3 className="text-sm font-semibold text-[#e8e6e1]">{block ? `Edit ${block.type}` : 'Pengaturan Halaman'}</h3>
+    <aside className="flex h-full w-80 shrink-0 flex-col border-l border-[#e7ddcc] bg-white">
+      <div className="border-b border-[#e7ddcc] px-4 py-3">
+        <h3 className="text-sm font-semibold text-[#2b2620]">{block ? `Edit ${block.type}` : 'Pengaturan Halaman'}</h3>
       </div>
 
       <div className="flex-1 space-y-5 overflow-auto p-4">
@@ -154,48 +154,48 @@ export default function PropertiesPanel() {
               render={
                 <div className="space-y-3">
                   <div>
-                    <label className="block text-xs font-medium text-[#c4c9d4]">Mode Kanvas</label>
+                    <label className="block text-xs font-medium text-[#4a443c]">Mode Kanvas</label>
                     <div className="mt-1 flex gap-2">
                       {(['stack', 'free'] as const).map((f) => (
                         <button
                           key={f}
                           onClick={() => setFlow(f)}
                           className={`flex-1 rounded-md border px-2 py-1.5 text-xs capitalize ${
-                            (canvas.flow ?? 'stack') === f ? 'border-[#c9a45c] bg-[#c9a45c] text-white' : 'border-[#2a303c] text-[#8b93a3]'
+                            (canvas.flow ?? 'stack') === f ? 'border-[#c9a45c] bg-[#c9a45c] text-white' : 'border-[#e0d6c2] text-[#6b5f4d]'
                           }`}
                         >
                           {f === 'stack' ? 'Vertikal' : 'Bebas'}
                         </button>
                       ))}
                     </div>
-                    <p className="mt-1 text-[11px] text-[#6b7380]">
+                    <p className="mt-1 text-[11px] text-[#8a7a66]">
                       {canvas.flow === 'free'
                         ? 'Seret elemen ke posisi bebas di kanvas dan atur lebarnya.'
                         : 'Elemen tersusun vertikal, bisa diurutkan dengan seret.'}
                     </p>
                   </div>
-                  <label className="block text-xs font-medium text-[#c4c9d4]">Layout</label>
+                  <label className="block text-xs font-medium text-[#4a443c]">Layout</label>
                   <div className="flex gap-2">
                     {(['center', 'left', 'right'] as const).map((l) => (
                       <button
                         key={l}
                         onClick={() => setTheme({ layout: l })}
                         className={`flex-1 rounded-md border px-2 py-1.5 text-xs capitalize ${
-                          canvas.theme.layout === l ? 'border-[#c9a45c] bg-[#c9a45c] text-white' : 'border-[#2a303c] text-[#8b93a3]'
+                          canvas.theme.layout === l ? 'border-[#c9a45c] bg-[#c9a45c] text-white' : 'border-[#e0d6c2] text-[#6b5f4d]'
                         }`}
                       >
                         {l}
                       </button>
                     ))}
                   </div>
-                  <label className="block text-xs font-medium text-[#c4c9d4]">Gaya Hero</label>
+                  <label className="block text-xs font-medium text-[#4a443c]">Gaya Hero</label>
                   <div className="flex gap-2">
                     {(['image', 'solid', 'gradient'] as const).map((h) => (
                       <button
                         key={h}
                         onClick={() => setTheme({ hero_style: h })}
                         className={`flex-1 rounded-md border px-2 py-1.5 text-xs capitalize ${
-                          canvas.theme.hero_style === h ? 'border-[#c9a45c] bg-[#c9a45c] text-white' : 'border-[#2a303c] text-[#8b93a3]'
+                          canvas.theme.hero_style === h ? 'border-[#c9a45c] bg-[#c9a45c] text-white' : 'border-[#e0d6c2] text-[#6b5f4d]'
                         }`}
                       >
                         {h}
@@ -212,41 +212,41 @@ export default function PropertiesPanel() {
               render={
                 <div className="space-y-3">
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-[#c4c9d4]">Tautan Musik (MP3 / YouTube)</label>
+                    <label className="mb-1 block text-xs font-medium text-[#4a443c]">Tautan Musik (MP3 / YouTube)</label>
                     <input
                       type="url"
                       value={canvas.settings.music_url}
                       onChange={(e) => setSettings({ music_url: e.target.value })}
                       placeholder="https://...mp3  atau  https://youtu.be/xxxx"
-                      className="w-full rounded-md border border-[#2a303c] bg-[#171b23] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
+                      className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
                     />
                   </div>
-                  <label className="flex items-center gap-2 text-xs font-medium text-[#c4c9d4]">
+                  <label className="flex items-center gap-2 text-xs font-medium text-[#4a443c]">
                     <input
                       type="checkbox"
                       checked={canvas.settings.music_autoplay ?? true}
                       onChange={(e) => setSettings({ music_autoplay: e.target.checked })}
-                      className="h-4 w-4 rounded border-[#2a303c] accent-[#c9a45c]"
+                      className="h-4 w-4 rounded border-[#e0d6c2] accent-[#c9a45c]"
                     />
                     Putar otomatis
                   </label>
                   <div className="grid grid-cols-2 gap-2">
                     <div>
-                      <label className="mb-1 block text-xs font-medium text-[#c4c9d4]">Mulai detik ke-</label>
+                      <label className="mb-1 block text-xs font-medium text-[#4a443c]">Mulai detik ke-</label>
                       <input
                         type="number"
                         min={0}
                         value={canvas.settings.music_offset_sec ?? 0}
                         onChange={(e) => setSettings({ music_offset_sec: Math.max(0, Number(e.target.value) || 0) })}
-                        className="w-full rounded-md border border-[#2a303c] bg-[#171b23] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
+                        className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
                       />
                     </div>
                     <div>
-                      <label className="mb-1 block text-xs font-medium text-[#c4c9d4]">Mulai saat section</label>
+                      <label className="mb-1 block text-xs font-medium text-[#4a443c]">Mulai saat section</label>
                       <select
                         value={canvas.settings.music_on_section ?? ''}
                         onChange={(e) => setSettings({ music_on_section: e.target.value })}
-                        className="w-full rounded-md border border-[#2a303c] bg-[#171b23] px-2 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
+                        className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-2 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
                       >
                         {SECTION_TRIGGERS.map((t) => (
                           <option key={t.value} value={t.value}>
@@ -256,7 +256,7 @@ export default function PropertiesPanel() {
                       </select>
                     </div>
                   </div>
-                  <p className="text-[11px] leading-relaxed text-[#6b7380]">
+                  <p className="text-[11px] leading-relaxed text-[#8a7a66]">
                     Autoplay pada beberapa browser baru berfungsi setelah ada interaksi; tombol musik tetap tersedia di pojok kiri bawah undangan.
                   </p>
                 </div>
@@ -268,7 +268,7 @@ export default function PropertiesPanel() {
               desc="Menyesuaikan pembuka/penutup undangan dan preset ucapan tamu"
               render={
                 <div>
-                  <label className="block text-xs font-medium text-[#c4c9d4]">Agama Undangan</label>
+                  <label className="block text-xs font-medium text-[#4a443c]">Agama Undangan</label>
                   <div className="mt-1 grid grid-cols-2 gap-1.5">
                     {RELIGIONS.map((r) => (
                       <button
@@ -277,14 +277,14 @@ export default function PropertiesPanel() {
                         className={`rounded-md border px-2 py-1.5 text-xs ${
                           (canvas.settings.religion ?? 'islam') === r.key
                             ? 'border-[#c9a45c] bg-[#c9a45c] text-white'
-                            : 'border-[#2a303c] text-[#8b93a3] hover:bg-[#1d222b]'
+                            : 'border-[#e0d6c2] text-[#6b5f4d] hover:bg-[#faf7f2]'
                         }`}
                       >
                         {r.label}
                       </button>
                     ))}
                   </div>
-                  <p className="mt-2 text-[11px] leading-relaxed text-[#6b7380]">
+                  <p className="mt-2 text-[11px] leading-relaxed text-[#8a7a66]">
                     Teks pembuka &amp; penutup yang masih bawaan akan menyesuaikan agama. Teks yang sudah diedit manual tidak diubah.
                   </p>
                 </div>
@@ -312,13 +312,13 @@ export default function PropertiesPanel() {
                   ))}
                   {block.type === 'Hero' && (
                     <div>
-                      <p className="mb-1 text-xs font-medium text-[#c4c9d4]">Gambar Hero</p>
+                      <p className="mb-1 text-xs font-medium text-[#4a443c]">Gambar Hero</p>
                       <button
                         onClick={() => {
                           setMediaMode('hero');
                           setMediaOpen(true);
                         }}
-                        className="flex w-full items-center gap-2 rounded-md border border-[#2a303c] bg-[#171b23] px-3 py-2 text-sm text-[#8b93a3] hover:border-[#3d4554]"
+                        className="flex w-full items-center gap-2 rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2 text-sm text-[#6b5f4d] hover:border-[#c9a45c]"
                       >
                         {block.props.bg_image ? 'Change Image' : 'Pilih Gambar'}
                       </button>
@@ -326,7 +326,7 @@ export default function PropertiesPanel() {
                   )}
                   {VARIANTS[block.type] && (
                     <div>
-                      <label className="mb-1 block text-xs font-medium text-[#c4c9d4]">Gaya</label>
+                      <label className="mb-1 block text-xs font-medium text-[#4a443c]">Gaya</label>
                       <div className="flex gap-2">
                         {VARIANTS[block.type]!.options.map((opt) => (
                           <button
@@ -335,7 +335,7 @@ export default function PropertiesPanel() {
                             className={`flex-1 rounded-md border px-2 py-1.5 text-xs capitalize ${
                               (block.props[VARIANTS[block.type]!.key] as string) === opt
                                 ? 'border-[#c9a45c] bg-[#c9a45c] text-white'
-                                : 'border-[#2a303c] text-[#8b93a3]'
+                                : 'border-[#e0d6c2] text-[#6b5f4d]'
                             }`}
                           >
                             {opt}
@@ -347,7 +347,7 @@ export default function PropertiesPanel() {
                   {block.type === 'Gallery' && (
                     <div className="space-y-3">
                       <div>
-                        <p className="mb-1 text-xs font-medium text-[#c4c9d4]">Tata Letak Foto</p>
+                        <p className="mb-1 text-xs font-medium text-[#4a443c]">Tata Letak Foto</p>
                         <div className="flex flex-col gap-1.5">
                           {GALLERY_LAYOUTS.map((l) => (
                             <button
@@ -356,11 +356,11 @@ export default function PropertiesPanel() {
                               className={`rounded-md border px-3 py-1.5 text-left text-xs ${
                                 (block.props.variant as string) === l.key
                                   ? 'border-[#c9a45c] bg-[#c9a45c] text-white'
-                                  : 'border-[#2a303c] text-[#8b93a3] hover:bg-[#1d222b]'
+                                  : 'border-[#e0d6c2] text-[#6b5f4d] hover:bg-[#faf7f2]'
                               }`}
                             >
                               <span className="block font-semibold">{l.label}</span>
-                              <span className={`block text-[10px] ${(block.props.variant as string) === l.key ? 'text-white/80' : 'text-[#6b7380]'}`}>
+                              <span className={`block text-[10px] ${(block.props.variant as string) === l.key ? 'text-white/80' : 'text-[#8a7a66]'}`}>
                                 {l.desc}
                               </span>
                             </button>
@@ -369,18 +369,18 @@ export default function PropertiesPanel() {
                       </div>
                       {(block.props.variant as string) === 'carousel' && (
                         <div>
-                          <label className="mb-1 block text-xs font-medium text-[#c4c9d4]">Interval (detik)</label>
+                          <label className="mb-1 block text-xs font-medium text-[#4a443c]">Interval (detik)</label>
                           <input
                             type="number"
                             min={1}
                             value={Number(block.props.interval_sec) || 3}
                             onChange={(e) => setBlockProps(block.id, { interval_sec: Math.max(1, Number(e.target.value) || 1) })}
-                            className="w-full rounded-md border border-[#2a303c] bg-[#171b23] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
+                            className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
                           />
                         </div>
                       )}
                       <div>
-                        <p className="mb-1 text-xs font-medium text-[#c4c9d4]">Animasi Foto</p>
+                        <p className="mb-1 text-xs font-medium text-[#4a443c]">Animasi Foto</p>
                         <div className="grid grid-cols-2 gap-1.5">
                           {GALLERY_ANIMATIONS.map(([value, label]) => (
                             <button
@@ -389,7 +389,7 @@ export default function PropertiesPanel() {
                               className={`rounded-md border px-2 py-1.5 text-xs ${
                                 (block.props.animation as string) === value
                                   ? 'border-[#c9a45c] bg-[#c9a45c] text-white'
-                                  : 'border-[#2a303c] text-[#8b93a3] hover:bg-[#1d222b]'
+                                  : 'border-[#e0d6c2] text-[#6b5f4d] hover:bg-[#faf7f2]'
                               }`}
                             >
                               {label}
@@ -398,13 +398,13 @@ export default function PropertiesPanel() {
                         </div>
                       </div>
                       <div>
-                        <p className="mb-1 text-xs font-medium text-[#c4c9d4]">Galeri ({Array.isArray(block.props.images) ? block.props.images.length : 0})</p>
+                        <p className="mb-1 text-xs font-medium text-[#4a443c]">Galeri ({Array.isArray(block.props.images) ? block.props.images.length : 0})</p>
                         <button
                           onClick={() => {
                             setMediaMode('gallery');
                             setMediaOpen(true);
                           }}
-                          className="flex w-full items-center gap-2 rounded-md border border-[#2a303c] bg-[#171b23] px-3 py-2 text-sm text-[#8b93a3] hover:border-[#3d4554]"
+                          className="flex w-full items-center gap-2 rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2 text-sm text-[#6b5f4d] hover:border-[#c9a45c]"
                         >
                           Tambah Gambar
                         </button>
@@ -428,20 +428,20 @@ export default function PropertiesPanel() {
                             onChange={(c) => setBlockStyle(block.id, { bgColor: c })}
                           />
                           <div>
-                            <p className="mb-1 text-xs font-medium text-[#c4c9d4]">Gambar Latar</p>
+                            <p className="mb-1 text-xs font-medium text-[#4a443c]">Gambar Latar</p>
                             <button
                               onClick={() => {
                                 setMediaMode('bg');
                                 setMediaOpen(true);
                               }}
-                              className="flex w-full items-center gap-2 rounded-md border border-[#2a303c] bg-[#171b23] px-3 py-2 text-sm text-[#8b93a3] hover:border-[#3d4554]"
+                              className="flex w-full items-center gap-2 rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2 text-sm text-[#6b5f4d] hover:border-[#c9a45c]"
                             >
                               {block.style?.bgImage ? 'Ganti Gambar Latar' : 'Pilih Gambar Latar'}
                             </button>
                           </div>
                           <button
                             onClick={() => clearBlockStyle(block.id)}
-                            className="w-full rounded-md border border-[#2a303c] py-1.5 text-xs text-[#8b93a3] hover:border-red-300 hover:text-red-600"
+                            className="w-full rounded-md border border-[#e0d6c2] py-1.5 text-xs text-[#6b5f4d] hover:border-red-300 hover:text-red-600"
                           >
                             Reset style section
                           </button>
@@ -514,9 +514,9 @@ function StoryChapters({
       render={
         <div className="space-y-4">
           {Array.from({ length: count }).map((_, i) => (
-            <div key={i} className="rounded-md border border-[#262b35] bg-[#1d222b]/60 p-2">
+            <div key={i} className="rounded-md border border-[#e0d6c2] bg-[#faf7f2] p-2">
               <div className="mb-1 flex items-center justify-between">
-                <span className="text-[11px] font-semibold uppercase tracking-wide text-[#5a6272]">Bab {i + 1}</span>
+                <span className="text-[11px] font-semibold uppercase tracking-wide text-[#b39a65]">Bab {i + 1}</span>
                 {titles.length > 1 && (
                   <button
                     onClick={() => {
@@ -536,20 +536,20 @@ function StoryChapters({
                 value={titles[i] ?? ''}
                 onChange={(e) => setArr('ev_title', i, e.target.value)}
                 placeholder="Judul bab"
-                className="mb-2 w-full rounded border border-[#2a303c] bg-[#171b23] px-2 py-1.5 text-sm outline-none focus:ring-1 focus:ring-[#c9a45c]"
+                className="mb-2 w-full rounded border border-[#e0d6c2] bg-[#faf7f2] px-2 py-1.5 text-sm outline-none focus:ring-1 focus:ring-[#c9a45c]"
               />
               <input
                 value={dates[i] ?? ''}
                 onChange={(e) => setArr('ev_date', i, e.target.value)}
                 placeholder="Tahun / tanggal"
-                className="mb-2 w-full rounded border border-[#2a303c] bg-[#171b23] px-2 py-1.5 text-sm outline-none focus:ring-1 focus:ring-[#c9a45c]"
+                className="mb-2 w-full rounded border border-[#e0d6c2] bg-[#faf7f2] px-2 py-1.5 text-sm outline-none focus:ring-1 focus:ring-[#c9a45c]"
               />
               <textarea
                 value={descs[i] ?? ''}
                 onChange={(e) => setArr('ev_desc', i, e.target.value)}
                 placeholder="Cerita singkat"
                 rows={2}
-                className="w-full rounded border border-[#2a303c] bg-[#171b23] px-2 py-1.5 text-sm outline-none focus:ring-1 focus:ring-[#c9a45c]"
+                className="w-full rounded border border-[#e0d6c2] bg-[#faf7f2] px-2 py-1.5 text-sm outline-none focus:ring-1 focus:ring-[#c9a45c]"
               />
             </div>
           ))}
@@ -561,7 +561,7 @@ function StoryChapters({
                 ev_desc: [...descs, 'Tulis ceritanya di sini.']
               })
             }
-            className="w-full rounded-md border border-dashed border-[#2a303c] py-1.5 text-sm text-[#8b93a3] hover:border-[#3d4554]"
+            className="w-full rounded-md border border-dashed border-[#e0d6c2] py-1.5 text-sm text-[#6b5f4d] hover:border-[#c9a45c]"
           >
             + Tambah Bab
           </button>
@@ -586,7 +586,7 @@ function NumberField({
 }) {
   return (
     <div>
-      <label className="mb-1 block text-xs font-medium text-[#c4c9d4]">{label}</label>
+      <label className="mb-1 block text-xs font-medium text-[#4a443c]">{label}</label>
       <input
         type="number"
         value={value}
@@ -596,7 +596,7 @@ function NumberField({
           const n = Math.min(max, Math.max(min, Number(e.target.value) || 0));
           onChange(n);
         }}
-        className="w-full rounded-md border border-[#2a303c] bg-[#171b23] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
+        className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
       />
     </div>
   );
@@ -613,8 +613,8 @@ function Section({
 }) {
   return (
     <div>
-      <h4 className="text-xs font-semibold uppercase tracking-wide text-[#5a6272]">{title}</h4>
-      {desc && <p className="mb-2 text-[11px] text-[#6b7380]">{desc}</p>}
+      <h4 className="text-xs font-semibold uppercase tracking-wide text-[#b39a65]">{title}</h4>
+      {desc && <p className="mb-2 text-[11px] text-[#8a7a66]">{desc}</p>}
       <div className="mt-2">{render}</div>
     </div>
   );
@@ -635,19 +635,19 @@ function Field({
 }) {
   return (
     <div>
-      <label className="mb-1 block text-xs font-medium text-[#c4c9d4]">{label}</label>
+      <label className="mb-1 block text-xs font-medium text-[#4a443c]">{label}</label>
       {multiline ? (
         <textarea
           value={value}
           onChange={(e) => onChange(e.target.value)}
           rows={3}
-          className="w-full rounded-md border border-[#2a303c] bg-[#171b23] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
+          className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
         />
       ) : (
         <input
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="w-full rounded-md border border-[#2a303c] bg-[#171b23] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
+          className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
         />
       )}
     </div>
@@ -665,13 +665,13 @@ function FontSelect({
 }) {
   return (
     <div>
-      <label className="mb-1 block text-xs font-medium text-[#c4c9d4]">{label}</label>
+      <label className="mb-1 block text-xs font-medium text-[#4a443c]">{label}</label>
       <div className="flex items-center gap-2">
-        <Type className="h-4 w-4 shrink-0 text-[#6b7380]" />
+        <Type className="h-4 w-4 shrink-0 text-[#8a7a66]" />
         <select
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="w-full rounded-md border border-[#2a303c] bg-[#171b23] px-2 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
+          className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-2 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
         >
           {FONTS.map((f) => (
             <option key={f} value={f}>
@@ -680,7 +680,7 @@ function FontSelect({
           ))}
         </select>
       </div>
-      <p className="mt-1 flex items-center gap-1 text-[11px] text-[#6b7380]">
+      <p className="mt-1 flex items-center gap-1 text-[11px] text-[#8a7a66]">
         <Clapperboard className="h-3 w-3" /> Otomatis dimuat via Google Fonts pada output.
       </p>
     </div>

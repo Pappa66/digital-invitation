@@ -1,6 +1,6 @@
 'use client';
 
-import { createProject, createProjectFromCanvas, duplicateProject, deleteProject, updateProjectTitle, verifyProjectAccess, setProjectStatus } from '@/lib/actions/project-actions';
+import { createProject, createProjectFromCanvas, duplicateProject, deleteProject, updateProjectTitle, verifyProjectAccess, setProjectStatus, getInviteAccessToken } from '@/lib/actions/project-actions';
 import { demoCreateProject, demoCreateProjectFromData, demoDuplicateProject, demoDeleteProject, demoRenameProject, demoSetProjectStatus } from '@/lib/demo/demo-store';
 import { demoIsDemoMode } from '@/lib/env';
 import type { CanvasData } from '@/lib/types';
@@ -65,6 +65,15 @@ export async function clientSetProjectStatus(
     return demoSetProjectStatus(projectId, status);
   }
   return setProjectStatus(projectId, status);
+}
+
+/**
+ * Ambil token akses "Kelola Tamu". Demo tidak butuh token (halaman /invite
+ * langsung terbuka di demo store); produksi memanggil server action.
+ */
+export async function clientGetInviteAccessToken(projectId: string): Promise<{ token?: string; error?: string }> {
+  if (demoIsDemoMode()) return { token: 'demo' };
+  return getInviteAccessToken(projectId);
 }
 
 /**

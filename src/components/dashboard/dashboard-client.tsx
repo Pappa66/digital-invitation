@@ -79,7 +79,7 @@ export default function DashboardClient({ projects, isDemo = false, userName = n
           </button>
           <button
             onClick={() => setModalOpen(true)}
-            className="flex items-center gap-2 rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:opacity-90"
+            className="flex items-center gap-2 rounded-md bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-4 py-2 text-sm font-semibold text-white shadow-sm hover:opacity-90"
           >
             <Plus className="h-4 w-4" /> Create New
           </button>
@@ -98,7 +98,7 @@ export default function DashboardClient({ projects, isDemo = false, userName = n
           <p className="text-sm text-gray-500">Belum ada undangan.</p>
           <button
             onClick={() => setModalOpen(true)}
-            className="mt-4 rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:opacity-90"
+            className="mt-4 rounded-md bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-4 py-2 text-sm font-semibold text-white shadow-sm hover:opacity-90"
           >
             Buat undangan pertama
           </button>
@@ -125,7 +125,7 @@ export default function DashboardClient({ projects, isDemo = false, userName = n
               key={n}
               onClick={() => setPage(n)}
               className={`h-8 w-8 rounded-md text-sm ${
-                n === safePage ? 'bg-gray-900 text-white' : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
+                n === safePage ? 'bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] font-semibold text-white' : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
               }`}
             >
               {n}

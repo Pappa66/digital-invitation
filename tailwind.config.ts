@@ -10,10 +10,10 @@ const config: Config = {
     extend: {
       colors: {
         dashboard: {
-          bg: '#F9FAFB',
+          bg: '#faf7f2',
           surface: '#FFFFFF',
           primary: '#111827',
-          border: '#E5E7EB'
+          border: '#e7ddcc'
         }
       }
     }
