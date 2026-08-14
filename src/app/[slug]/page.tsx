@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { headers } from 'next/headers';
 import { Suspense } from 'react';
-import { createServerSupabase } from '@/lib/supabase/server';
+import { createServerSupabase, requireUser } from '@/lib/supabase/server';
 import GuestView from '@/components/guest/GuestView';
 import GuestDemoView from '@/components/guest/GuestDemoView';
 
@@ -55,6 +55,7 @@ export default async function GuestPage({ params, searchParams }: PageProps) {
   const { slug } = await params;
   const search = await searchParams;
   const to = typeof search?.to === 'string' ? search.to.slice(0, 100) : undefined;
+  const preview = search?.preview === '1';
 
   // Mode demo: ambil data dari localStorage via komponen client.
   if (process.env.NEXT_PUBLIC_DEMO_MODE === 'true') {
@@ -71,7 +72,36 @@ export default async function GuestPage({ params, searchParams }: PageProps) {
   });
 
   const row = Array.isArray(data) ? data[0] : null;
-  if (error || !row) notFound();
+  if (error || !row) {
+    // Mode preview (?preview=1): hanya pemilik yang bisa melihat draft sebelum dipublish.
+    if (preview) {
+      const user = await requireUser();
+      if (!user) {
+        notFound();
+      }
+      const { data: project } = await supabase
+        .from('projects')
+        .select('id')
+        .eq('slug', slug)
+        .eq('user_id', user.id)
+        .maybeSingle();
+      if (!project) notFound();
+      const { data: draft } = await supabase
+        .from('project_designs')
+        .select('canvas_data')
+        .eq('project_id', project.id)
+        .maybeSingle();
+      if (!draft?.canvas_data) notFound();
+      return (
+        <GuestView
+          projectId={project.id}
+          canvas={draft.canvas_data as unknown as Record<string, unknown>}
+          to={to}
+        />
+      );
+    }
+    notFound();
+  }
 
   return (
     <GuestView

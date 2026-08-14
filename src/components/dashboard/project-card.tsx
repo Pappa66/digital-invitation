@@ -3,9 +3,9 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { Copy, Pencil, Share2, Trash2, ExternalLink } from 'lucide-react';
+import { Copy, Pencil, Share2, Trash2, ExternalLink, Globe, GlobeLock } from 'lucide-react';
 import type { Project } from '@/lib/types';
-import { clientDuplicateProject, clientDeleteProject } from '@/lib/api/project-client';
+import { clientDuplicateProject, clientDeleteProject, clientSetProjectStatus } from '@/lib/api/project-client';
 import ConfirmDialog from '@/components/dashboard/confirm-dialog';
 import ShareDialog from '@/components/dashboard/share-dialog';
 
@@ -22,6 +22,8 @@ export default function ProjectCard({ project, onDuplicated, onDeleted }: Projec
   const [confirm, setConfirm] = useState<ConfirmTarget>(null);
   const [busy, setBusy] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
+  const [status, setStatus] = useState<Project['status']>(project.status);
+  const [statusBusy, setStatusBusy] = useState(false);
 
   const publicUrl = `/${project.slug}`;
 
@@ -39,6 +41,15 @@ export default function ProjectCard({ project, onDuplicated, onDeleted }: Projec
     setBusy(false);
     setConfirm(null);
     if (!res.error) onDeleted(project.id);
+  }
+
+  async function handleToggleStatus() {
+    if (statusBusy) return;
+    setStatusBusy(true);
+    const next = status === 'published' ? 'draft' : 'published';
+    const res = await clientSetProjectStatus(project.id, next);
+    setStatusBusy(false);
+    if (!res.error) setStatus(next);
   }
 
   return (
@@ -60,7 +71,18 @@ export default function ProjectCard({ project, onDuplicated, onDeleted }: Projec
 
       <div className="flex items-center justify-between gap-2 border-t border-dashboard-border bg-white px-4 py-3">
         <div className="min-w-0">
-          <p className="truncate text-sm font-medium text-gray-900">{project.title}</p>
+          <div className="flex min-w-0 items-center gap-2">
+            <p className="truncate text-sm font-medium text-gray-900">{project.title}</p>
+            <span
+              className={`flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium ${
+                status === 'published' ? 'bg-emerald-50 text-emerald-700' : 'bg-gray-100 text-gray-500'
+              }`}
+              title={status === 'published' ? 'Publik — tamu dengan link bisa membuka' : 'Draft — belum bisa diakses tamu'}
+            >
+              {status === 'published' ? <Globe className="h-3 w-3" /> : <GlobeLock className="h-3 w-3" />}
+              {status === 'published' ? 'Publik' : 'Draft'}
+            </span>
+          </div>
           <p className="mt-0.5 text-xs text-gray-500">
             Dibuat {new Date(project.created_at).toLocaleDateString('id-ID')}
           </p>
@@ -74,6 +96,13 @@ export default function ProjectCard({ project, onDuplicated, onDeleted }: Projec
           </IconBtn>
           <IconBtn label="Bagikan undangan dengan nama tamu" onClick={() => setShareOpen(true)}>
             <Share2 className="h-4 w-4" />
+          </IconBtn>
+          <IconBtn
+            label={status === 'published' ? 'Jadikan draft (tidak bisa diakses tamu)' : 'Publish (tamu dengan link bisa membuka)'}
+            onClick={handleToggleStatus}
+            disabled={statusBusy}
+          >
+            {status === 'published' ? <Globe className="h-4 w-4 text-emerald-600" /> : <GlobeLock className="h-4 w-4" />}
           </IconBtn>
           <IconBtn label="Buka halaman publik" onClick={() => router.push(publicUrl)}>
             <ExternalLink className="h-4 w-4" />
@@ -111,11 +140,13 @@ export default function ProjectCard({ project, onDuplicated, onDeleted }: Projec
 function IconBtn({
   label,
   danger = false,
+  disabled = false,
   onClick,
   children
 }: {
   label: string;
   danger?: boolean;
+  disabled?: boolean;
   onClick: () => void;
   children: React.ReactNode;
 }) {
@@ -124,8 +155,11 @@ function IconBtn({
       onClick={onClick}
       aria-label={label}
       title={label}
-      className={`rounded-md p-1.5 ${
-        danger ? 'text-gray-500 hover:bg-red-50 hover:text-red-600' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'
+      disabled={disabled}
+      className={`rounded-md p-1.5 disabled:opacity-40 ${
+        danger
+          ? 'text-gray-500 hover:bg-red-50 hover:text-red-600'
+          : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'
       }`}
     >
       {children}

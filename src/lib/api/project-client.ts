@@ -1,7 +1,7 @@
 'use client';
 
-import { createProject, createProjectFromCanvas, duplicateProject, deleteProject, updateProjectTitle, verifyProjectAccess } from '@/lib/actions/project-actions';
-import { demoCreateProject, demoCreateProjectFromData, demoDuplicateProject, demoDeleteProject, demoRenameProject } from '@/lib/demo/demo-store';
+import { createProject, createProjectFromCanvas, duplicateProject, deleteProject, updateProjectTitle, verifyProjectAccess, setProjectStatus } from '@/lib/actions/project-actions';
+import { demoCreateProject, demoCreateProjectFromData, demoDuplicateProject, demoDeleteProject, demoRenameProject, demoSetProjectStatus } from '@/lib/demo/demo-store';
 import { demoIsDemoMode } from '@/lib/env';
 import type { CanvasData } from '@/lib/types';
 
@@ -51,6 +51,20 @@ export async function clientRenameProject(projectId: string, title: string): Pro
     return demoRenameProject(projectId, title);
   }
   return updateProjectTitle(projectId, title);
+}
+
+/**
+ * Ubah status publikasi proyek (draft <-> published).
+ * Menentukan apakah halaman tamu /{slug} bisa diakses tanpa login.
+ */
+export async function clientSetProjectStatus(
+  projectId: string,
+  status: 'draft' | 'published'
+): Promise<{ error?: string; slug?: string }> {
+  if (demoIsDemoMode()) {
+    return demoSetProjectStatus(projectId, status);
+  }
+  return setProjectStatus(projectId, status);
 }
 
 /**

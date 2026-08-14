@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { BookmarkPlus, HelpCircle, PenLine, Share2, Lock } from 'lucide-react';
+import { BookmarkPlus, HelpCircle, PenLine, Share2, Lock, Globe, GlobeLock } from 'lucide-react';
 import ElementsSidebar from '@/components/builder/elements-sidebar';
 import BuilderCanvas from '@/components/builder/builder-canvas';
 import PropertiesPanel from '@/components/builder/properties-panel';
@@ -13,7 +13,7 @@ import GuideModal from '@/components/ui/guide-modal';
 import { useBuilderStore } from '@/store/builder-store';
 import { useAutosave } from '@/hooks/use-autosave';
 import { supabase } from '@/lib/supabase/client';
-import { clientRenameProject } from '@/lib/api/project-client';
+import { clientRenameProject, clientSetProjectStatus } from '@/lib/api/project-client';
 import { demoGetDesign, demoGetProject, demoIsDemoMode } from '@/lib/demo/demo-store';
 import { clientVerifyProjectAccess } from '@/lib/api/project-client';
 import type { CanvasData } from '@/lib/types';
@@ -27,6 +27,8 @@ export default function BuilderPage() {
   const saveStatus = useAutosave({ projectId, canvas });
   const [previewSlug, setPreviewSlug] = useState<string | null>(null);
   const [title, setTitle] = useState('Tanpa Judul');
+  const [status, setStatus] = useState<'draft' | 'published'>('draft');
+  const [statusBusy, setStatusBusy] = useState(false);
   const [renameStatus, setRenameStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
   const [shareOpen, setShareOpen] = useState(false);
   const [saveTplOpen, setSaveTplOpen] = useState(false);
@@ -41,6 +43,7 @@ export default function BuilderPage() {
         const proj = demoGetProject(projectId);
         setTitle(proj?.title ?? 'Tanpa Judul');
         setPreviewSlug(proj?.slug ?? null);
+        setStatus(proj?.status ?? 'draft');
         setAccess('ok');
         return;
       }
@@ -58,9 +61,10 @@ export default function BuilderPage() {
       if (!error && data?.canvas_data) {
         init(data.canvas_data as unknown as CanvasData);
       }
-      const { data: proj } = await supabase.from('projects').select('slug, title').eq('id', projectId).maybeSingle();
+      const { data: proj } = await supabase.from('projects').select('slug, title, status').eq('id', projectId).maybeSingle();
       setTitle(proj?.title ?? 'Tanpa Judul');
       setPreviewSlug(proj?.slug ?? null);
+      setStatus(proj?.status ?? 'draft');
     }
     load();
   }, [projectId, init]);
@@ -72,6 +76,20 @@ export default function BuilderPage() {
     const { error } = await clientRenameProject(projectId, trimmed);
     setRenameStatus(error ? 'idle' : 'saved');
     setTimeout(() => setRenameStatus('idle'), 1500);
+  }
+
+  async function handleToggleStatus() {
+    if (statusBusy) return;
+    setStatusBusy(true);
+    const next = status === 'published' ? 'draft' : 'published';
+    const res = await clientSetProjectStatus(projectId, next);
+    if (res.error) {
+      setStatusBusy(false);
+      return;
+    }
+    setStatus(next);
+    if (res.slug) setPreviewSlug(res.slug);
+    setStatusBusy(false);
   }
 
   if (access === 'denied') {
@@ -131,6 +149,19 @@ export default function BuilderPage() {
             className="flex items-center gap-1.5 rounded-md border border-[#2a303c] px-3 py-1.5 text-xs font-medium text-[#c4c9d4] hover:border-[#3d4554] hover:text-white"
           >
             <BookmarkPlus className="h-3.5 w-3.5" /> Simpan sebagai Template
+          </button>
+          <button
+            onClick={handleToggleStatus}
+            disabled={statusBusy}
+            aria-pressed={status === 'published'}
+            className={`flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-xs font-medium transition-colors disabled:opacity-50 ${
+              status === 'published'
+                ? 'border-emerald-500/50 bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25'
+                : 'border-[#2a303c] text-[#c4c9d4] hover:border-[#3d4554] hover:text-white'
+            }`}
+          >
+            {status === 'published' ? <Globe className="h-3.5 w-3.5" /> : <GlobeLock className="h-3.5 w-3.5" />}
+            {statusBusy ? 'Menyimpan...' : status === 'published' ? 'Dipublikasikan' : 'Publish'}
           </button>
           {previewSlug && (
             <button

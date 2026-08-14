@@ -170,6 +170,21 @@ export function demoRenameProject(id: string, title: string): { error?: string }
   return {};
 }
 
+export function demoSetProjectStatus(id: string, status: 'draft' | 'published'): { error?: string; slug?: string } {
+  const projects = listProjects();
+  const project = projects.find((p) => p.id === id);
+  if (!project) return { error: 'Proyek tidak ditemukan' };
+  write(
+    PROJECTS_KEY,
+    projects.map((p) =>
+      p.id === id
+        ? { ...p, status, updated_at: new Date().toISOString() }
+        : p
+    )
+  );
+  return { slug: project.slug };
+}
+
 export function demoSaveDesign(id: string, canvas: CanvasData) {
   const designs = read<Record<string, CanvasData>>(DESIGNS_KEY, {});
   designs[id] = structuredClone(canvas);
