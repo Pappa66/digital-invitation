@@ -8,16 +8,19 @@
     "font_body": "Montserrat",
     "layout": "center",
     "hero_style": "image",
-    "ornament": "flourish"
+    "ornament": "flourish-double",
+    "frame": "classic",
+    "card_style": false
   },
   "settings": {
     "music_url": "",
     "guest_book_enabled": true,
-    "religion": "islam"
+    "religion": "islam",
+    "checkin_enabled": true
   },
   "blocks": [
     {
-      "id": "b-1",
+      "id": "b-hero-4bjj",
       "type": "Hero",
       "props": {
         "groom": "Panca Priyantoro",
@@ -31,30 +34,40 @@
       }
     },
     {
-      "id": "b-2",
+      "id": "b-couple-5lv4",
       "type": "Couple",
       "props": {
-        "introduction": "Assalamu’alaikum Warahmatullahi Wabarakatuh",
+        "introduction": "Assalamu'alaikum Warahmatullahi Wabarakatuh",
         "bismillah": "Bismillahirrahmanirrahim",
         "groom": "Panca Priyantoro, S.T.",
         "groom_parents": "Putra pertama dari Bpk. H. Darmo & Ibu Hj. Wulan",
         "bride": "Sena Ayudia, S.E.",
         "bride_parents": "Putri kedua dari Bpk. Ir. Rendra & Ibu Lily Susanti",
-        "quote": "Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya.",
-        "variant": "vertical"
+        "variant": "side"
       }
     },
     {
-      "id": "b-3",
+      "id": "b-quote-61me",
+      "type": "Quote",
+      "props": {
+        "religion": "islam",
+        "original": "وَمِن كُلِّ شَيْءٍ خَلَقْنَا زَوْجَيْنِ لَعَلَّكُمْ تَذَكَّرُونَ",
+        "latin": "Wa min kulli syai-in khalaqnaa zaujaini la'allakum tadzakkaruun",
+        "translation": "Dan segala sesuatu Kami ciptakan berpasang-pasangan supaya kamu mengingat (kebesaran Allah).",
+        "reference": "QS. Adz Dzariyyat: 49"
+      }
+    },
+    {
+      "id": "b-countdown-7zru",
       "type": "Countdown",
       "props": {
         "target_date": "2026-12-12T08:00:00+07:00",
         "title": "Menghitung Hari Kebahagiaan Kami",
-        "variant": "circles"
+        "variant": "line"
       }
     },
     {
-      "id": "b-4",
+      "id": "b-story-8v6z",
       "type": "Story",
       "props": {
         "title": "Our Story",
@@ -77,7 +90,7 @@
       }
     },
     {
-      "id": "b-5",
+      "id": "b-eventdetail-9rww",
       "type": "EventDetail",
       "props": {
         "title": "Akad Nikah",
@@ -87,11 +100,11 @@
         "location": "The Ritz-Carlton Grand Ballroom",
         "address": "Jl. DR. IDE Anak Agung Gde Agung Kav. C1, Kuningan",
         "maps_url": "https://maps.google.com/?q=The%20Ritz-Carlton%20Grand%20Ballroom",
-        "variant": "card"
+        "variant": "band"
       }
     },
     {
-      "id": "b-6",
+      "id": "b-eventdetail-at4u",
       "type": "EventDetail",
       "props": {
         "title": "Resepsi",
@@ -105,7 +118,7 @@
       }
     },
     {
-      "id": "b-7",
+      "id": "b-gallery-bwm6",
       "type": "Gallery",
       "props": {
         "title": "Momen Bahagia Kami",
@@ -114,11 +127,40 @@
           "https://images.unsplash.com/photo-1522673607200-164d1b6ce486",
           "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6",
           "https://images.unsplash.com/photo-1511285560929-80b456fea0bc"
+        ],
+        "variant": "polaroid"
+      }
+    },
+    {
+      "id": "b-envelope-c94g",
+      "type": "Envelope",
+      "props": {
+        "title": "Amplop Online",
+        "note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "accounts": [
+          {
+            "bank_name": "BCA",
+            "account_number": "885 012 3456",
+            "account_holder": "Sena Ayudia, S.E."
+          }
         ]
       }
     },
     {
-      "id": "b-8",
+      "id": "b-giftlist-dao6",
+      "type": "GiftList",
+      "props": {
+        "title": "Daftar Kado",
+        "note": "Kehadiran Anda adalah hadiah terindah bagi kami. Namun bila ingin berbagi kebahagiaan, berikut beberapa referensi tanda kasih.",
+        "items": [
+          "Amplop / Tanda Kasih",
+          "Perlengkapan Rumah Tangga",
+          "Gift / yang bermanfaat"
+        ]
+      }
+    },
+    {
+      "id": "b-rsvp-ej5s",
       "type": "RSVP",
       "props": {
         "title": "Konfirmasi Kehadiran",
@@ -133,17 +175,17 @@
       }
     },
     {
-      "id": "b-9",
+      "id": "b-thanks-fn5z",
       "type": "Thanks",
       "props": {
         "title": "Doa Restu Anda",
         "message": "Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu kepada kami.",
-        "closing": "Wassalamu’alaikum Warahmatullahi Wabarakatuh",
+        "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Panca & Sena"
       }
     },
     {
-      "id": "b-10",
+      "id": "b-maps-ggx7",
       "type": "Maps",
       "props": {
         "title": "Lokasi Acara",

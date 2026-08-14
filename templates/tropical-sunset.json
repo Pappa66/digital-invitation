@@ -8,7 +8,9 @@
     "font_body": "Quicksand",
     "layout": "left",
     "hero_style": "image",
-    "ornament": "eucalyptus"
+    "ornament": "eucalyptus",
+    "frame": "classic",
+    "card_style": true
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-12.mp3",
@@ -16,11 +18,12 @@
     "religion": "islam",
     "music_autoplay": true,
     "music_offset_sec": 0,
-    "music_on_section": ""
+    "music_on_section": "",
+    "checkin_enabled": true
   },
   "blocks": [
     {
-      "id": "b-1",
+      "id": "b-hero-9kvwm",
       "type": "Hero",
       "props": {
         "groom": "Ardan Pradana",
@@ -34,30 +37,40 @@
       }
     },
     {
-      "id": "b-2",
+      "id": "b-couple-9l25j",
       "type": "Couple",
       "props": {
-        "introduction": "Shalom, sahabat kami",
+        "introduction": "Assalamu'alaikum Warahmatullahi Wabarakatuh",
         "bismillah": "Bismillahirrahmanirrahim",
         "groom": "Ardan Pradana, S.T.",
         "groom_parents": "Anak pertama dari Bpk. Paul Mananta & Ibu Grace",
         "bride": "Maharani Putri, S.E.",
         "bride_parents": "Anak pertama dari Bpk. Doni Siahaan & Ibu Merry",
-        "quote": "Seperti senja tropis, cinta kami selalu memerah di penghujung hari.",
         "variant": "side"
       }
     },
     {
-      "id": "b-3",
+      "id": "b-quote-9mxoy",
+      "type": "Quote",
+      "props": {
+        "religion": "islam",
+        "original": "وَمِن كُلِّ شَيْءٍ خَلَقْنَا زَوْجَيْنِ لَعَلَّكُمْ تَذَكَّرُونَ",
+        "latin": "Wa min kulli syai-in khalaqnaa zaujaini la'allakum tadzakkaruun",
+        "translation": "Dan segala sesuatu Kami ciptakan berpasang-pasangan supaya kamu mengingat (kebesaran Allah).",
+        "reference": "QS. Adz Dzariyyat: 49"
+      }
+    },
+    {
+      "id": "b-countdown-9nv9d",
       "type": "Countdown",
       "props": {
         "target_date": "2027-11-07T17:00:00+08:00",
         "title": "Ayunan Senja",
-        "variant": "cards"
+        "variant": "circles"
       }
     },
     {
-      "id": "b-4",
+      "id": "b-story-9oosx",
       "type": "Story",
       "props": {
         "title": "Our Story",
@@ -80,7 +93,7 @@
       }
     },
     {
-      "id": "b-5",
+      "id": "b-eventdetail-9pfbv",
       "type": "EventDetail",
       "props": {
         "title": "Resepsi Sore",
@@ -94,7 +107,21 @@
       }
     },
     {
-      "id": "b-6",
+      "id": "b-eventdetail-9q8az",
+      "type": "EventDetail",
+      "props": {
+        "title": "Resepsi",
+        "icon": "glass",
+        "date": "Minggu, 7 November 2027",
+        "time": "11.00 - 14.00 WIB",
+        "location": "Sunset Bay, Manado",
+        "address": "Alamat venue akan menyusul",
+        "maps_url": "https://maps.google.com/?q=Sunset%20Bay%2C%20Manado",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "b-gallery-9r7hd",
       "type": "Gallery",
       "props": {
         "title": "Warna Surga",
@@ -105,13 +132,41 @@
           "https://picsum.photos/seed/tropical-sunset-g4/600/800",
           "https://picsum.photos/seed/tropical-sunset-g5/600/800"
         ],
-        "variant": "carousel",
+        "variant": "arch",
         "animation": "ken-burns",
         "interval_sec": 5
       }
     },
     {
-      "id": "b-7",
+      "id": "b-envelope-9scu8",
+      "type": "Envelope",
+      "props": {
+        "title": "Amplop Online",
+        "note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "accounts": [
+          {
+            "bank_name": "BCA",
+            "account_number": "885 012 3456",
+            "account_holder": "Maharani Putri, S.E."
+          }
+        ]
+      }
+    },
+    {
+      "id": "b-giftlist-9trjm",
+      "type": "GiftList",
+      "props": {
+        "title": "Daftar Kado",
+        "note": "Kehadiran Anda adalah hadiah terindah bagi kami. Namun bila ingin berbagi kebahagiaan, berikut beberapa referensi tanda kasih.",
+        "items": [
+          "Amplop / Tanda Kasih",
+          "Perlengkapan Rumah Tangga",
+          "Gift / yang bermanfaat"
+        ]
+      }
+    },
+    {
+      "id": "b-rsvp-9ug3m",
       "type": "RSVP",
       "props": {
         "title": "Konfirmasi Kehadiran",
@@ -126,17 +181,17 @@
       }
     },
     {
-      "id": "b-8",
+      "id": "b-thanks-9v1tq",
       "type": "Thanks",
       "props": {
         "title": "Terima Kasih",
         "message": "Terima kasih telah menjadi bagian dari senja terindah kami di tepi lautan.",
-        "closing": "Penuh syukur,",
+        "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Ardan & Maharani"
       }
     },
     {
-      "id": "b-9",
+      "id": "b-maps-9wjfm",
       "type": "Maps",
       "props": {
         "title": "Lokasi Acara",

@@ -8,16 +8,19 @@
     "font_body": "Karla",
     "layout": "center",
     "hero_style": "solid",
-    "ornament": "flourish"
+    "ornament": "flourish",
+    "frame": "classic",
+    "card_style": false
   },
   "settings": {
     "music_url": "",
     "guest_book_enabled": true,
-    "religion": "islam"
+    "religion": "islam",
+    "checkin_enabled": true
   },
   "blocks": [
     {
-      "id": "b-1",
+      "id": "b-hero-eju8w",
       "type": "Hero",
       "props": {
         "groom": "Arka Wicaksono",
@@ -31,30 +34,40 @@
       }
     },
     {
-      "id": "b-2",
+      "id": "b-couple-ekte7",
       "type": "Couple",
       "props": {
-        "introduction": "Assalamu’alaikum Warahmatullahi Wabarakatuh",
+        "introduction": "Assalamu'alaikum Warahmatullahi Wabarakatuh",
         "bismillah": "Bismillahirrahmanirrahim",
         "groom": "Arka Wicaksono, S.Ars.",
         "groom_parents": "Putra pertama dari Bpk. H. Sutrisno & Ibu Hj. Ratna",
         "bride": "Maya Kirana, S.H.",
         "bride_parents": "Putri kedua dari Bpk. Ir. Hendra & Ibu Dewi Lestari",
-        "quote": "Dan Kami ciptakan kamu berpasang-pasangan.",
         "variant": "vertical"
       }
     },
     {
-      "id": "b-3",
+      "id": "b-quote-elvqk",
+      "type": "Quote",
+      "props": {
+        "religion": "islam",
+        "original": "وَمِن كُلِّ شَيْءٍ خَلَقْنَا زَوْجَيْنِ لَعَلَّكُمْ تَذَكَّرُونَ",
+        "latin": "Wa min kulli syai-in khalaqnaa zaujaini la'allakum tadzakkaruun",
+        "translation": "Dan segala sesuatu Kami ciptakan berpasang-pasangan supaya kamu mengingat (kebesaran Allah).",
+        "reference": "QS. Adz Dzariyyat: 49"
+      }
+    },
+    {
+      "id": "b-countdown-emtzs",
       "type": "Countdown",
       "props": {
         "target_date": "2026-11-21T08:00:00+07:00",
         "title": "Menuju Hari Bahagia",
-        "variant": "cards"
+        "variant": "circles"
       }
     },
     {
-      "id": "b-4",
+      "id": "b-story-engxg",
       "type": "Story",
       "props": {
         "title": "Our Story",
@@ -77,14 +90,7 @@
       }
     },
     {
-      "id": "b-5",
-      "type": "Divider",
-      "props": {
-        "variant": "diamond"
-      }
-    },
-    {
-      "id": "b-6",
+      "id": "b-eventdetail-eo6s3",
       "type": "EventDetail",
       "props": {
         "title": "Akad Nikah",
@@ -98,7 +104,7 @@
       }
     },
     {
-      "id": "b-7",
+      "id": "b-eventdetail-epo66",
       "type": "EventDetail",
       "props": {
         "title": "Resepsi",
@@ -108,11 +114,18 @@
         "location": "The Grand Majestic Ballroom",
         "address": "Kawasan Thamrin, Jakarta Pusat",
         "maps_url": "https://maps.google.com/?q=The%20Grand%20Majestic%20Ballroom",
-        "variant": "card"
+        "variant": "band"
       }
     },
     {
-      "id": "b-8",
+      "id": "b-divider-eqysn",
+      "type": "Divider",
+      "props": {
+        "variant": "diamond"
+      }
+    },
+    {
+      "id": "b-gallery-err71",
       "type": "Gallery",
       "props": {
         "title": "Momen Bahagia Kami",
@@ -127,7 +140,35 @@
       }
     },
     {
-      "id": "b-9",
+      "id": "b-envelope-es95j",
+      "type": "Envelope",
+      "props": {
+        "title": "Amplop Online",
+        "note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "accounts": [
+          {
+            "bank_name": "BCA",
+            "account_number": "885 012 3456",
+            "account_holder": "Maya Kirana, S.H."
+          }
+        ]
+      }
+    },
+    {
+      "id": "b-giftlist-etk0y",
+      "type": "GiftList",
+      "props": {
+        "title": "Daftar Kado",
+        "note": "Kehadiran Anda adalah hadiah terindah bagi kami. Namun bila ingin berbagi kebahagiaan, berikut beberapa referensi tanda kasih.",
+        "items": [
+          "Amplop / Tanda Kasih",
+          "Perlengkapan Rumah Tangga",
+          "Gift / yang bermanfaat"
+        ]
+      }
+    },
+    {
+      "id": "b-rsvp-eu3lk",
       "type": "RSVP",
       "props": {
         "title": "Konfirmasi Kehadiran",
@@ -142,17 +183,17 @@
       }
     },
     {
-      "id": "b-10",
+      "id": "b-thanks-evgnv",
       "type": "Thanks",
       "props": {
         "title": "Doa Restu Anda",
         "message": "Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu kepada kami.",
-        "closing": "Wassalamu’alaikum Warahmatullahi Wabarakatuh",
+        "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Arka & Maya"
       }
     },
     {
-      "id": "b-11",
+      "id": "b-maps-ew3em",
       "type": "Maps",
       "props": {
         "title": "Lokasi Acara",

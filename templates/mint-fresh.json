@@ -8,7 +8,9 @@
     "font_body": "Nunito Sans",
     "layout": "center",
     "hero_style": "solid",
-    "ornament": "arch-geometric"
+    "ornament": "diamond-lines",
+    "frame": "classic",
+    "card_style": false
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3",
@@ -16,11 +18,12 @@
     "religion": "islam",
     "music_autoplay": true,
     "music_offset_sec": 0,
-    "music_on_section": ""
+    "music_on_section": "",
+    "checkin_enabled": true
   },
   "blocks": [
     {
-      "id": "b-1",
+      "id": "b-hero-87yuy",
       "type": "Hero",
       "props": {
         "groom": "Kevin Aditya",
@@ -34,30 +37,40 @@
       }
     },
     {
-      "id": "b-2",
+      "id": "b-couple-88nex",
       "type": "Couple",
       "props": {
-        "introduction": "Assalamu’alaikum Warahmatullahi Wabarakatuh",
+        "introduction": "Assalamu'alaikum Warahmatullahi Wabarakatuh",
         "bismillah": "Bismillahirrahmanirrahim",
         "groom": "Kevin Aditya, S.T.",
         "groom_parents": "Putra dari Bpk. Handoko & Ibu Laras",
         "bride": "Nadya Ramadhani, S.E.",
         "bride_parents": "Putri dari Bpk. Wijaya & Ibu Sulastri",
-        "quote": "Segar seperti mint pagi, tenang seperti laut biru.",
         "variant": "vertical"
       }
     },
     {
-      "id": "b-3",
+      "id": "b-quote-89r01",
+      "type": "Quote",
+      "props": {
+        "religion": "islam",
+        "original": "وَمِن كُلِّ شَيْءٍ خَلَقْنَا زَوْجَيْنِ لَعَلَّكُمْ تَذَكَّرُونَ",
+        "latin": "Wa min kulli syai-in khalaqnaa zaujaini la'allakum tadzakkaruun",
+        "translation": "Dan segala sesuatu Kami ciptakan berpasang-pasangan supaya kamu mengingat (kebesaran Allah).",
+        "reference": "QS. Adz Dzariyyat: 49"
+      }
+    },
+    {
+      "id": "b-countdown-8af7k",
       "type": "Countdown",
       "props": {
         "target_date": "2027-08-14T10:00:00+07:00",
         "title": "Hari yang Segar",
-        "variant": "line"
+        "variant": "cards"
       }
     },
     {
-      "id": "b-4",
+      "id": "b-story-8bmse",
       "type": "Story",
       "props": {
         "title": "Our Story",
@@ -80,7 +93,7 @@
       }
     },
     {
-      "id": "b-5",
+      "id": "b-eventdetail-8cpzc",
       "type": "EventDetail",
       "props": {
         "title": "Akad Nikah",
@@ -94,7 +107,7 @@
       }
     },
     {
-      "id": "b-6",
+      "id": "b-eventdetail-8d6cj",
       "type": "EventDetail",
       "props": {
         "title": "Resepsi",
@@ -104,11 +117,11 @@
         "location": "The Mint Garden",
         "address": "Kalibata, Jakarta Selatan",
         "maps_url": "https://maps.google.com/?q=The%20Mint%20Garden",
-        "variant": "card"
+        "variant": "band"
       }
     },
     {
-      "id": "b-7",
+      "id": "b-gallery-8etck",
       "type": "Gallery",
       "props": {
         "title": "Senja Mint",
@@ -119,12 +132,40 @@
           "https://picsum.photos/seed/mint-fresh-g4/600/800",
           "https://picsum.photos/seed/mint-fresh-g5/600/800"
         ],
-        "variant": "grid",
+        "variant": "masonry",
         "animation": "zoom"
       }
     },
     {
-      "id": "b-8",
+      "id": "b-envelope-8f8r9",
+      "type": "Envelope",
+      "props": {
+        "title": "Amplop Online",
+        "note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "accounts": [
+          {
+            "bank_name": "BCA",
+            "account_number": "885 012 3456",
+            "account_holder": "Nadya Ramadhani, S.E."
+          }
+        ]
+      }
+    },
+    {
+      "id": "b-giftlist-8gafg",
+      "type": "GiftList",
+      "props": {
+        "title": "Daftar Kado",
+        "note": "Kehadiran Anda adalah hadiah terindah bagi kami. Namun bila ingin berbagi kebahagiaan, berikut beberapa referensi tanda kasih.",
+        "items": [
+          "Amplop / Tanda Kasih",
+          "Perlengkapan Rumah Tangga",
+          "Gift / yang bermanfaat"
+        ]
+      }
+    },
+    {
+      "id": "b-rsvp-8h4cb",
       "type": "RSVP",
       "props": {
         "title": "Konfirmasi Kehadiran",
@@ -139,17 +180,17 @@
       }
     },
     {
-      "id": "b-9",
+      "id": "b-thanks-8iid4",
       "type": "Thanks",
       "props": {
         "title": "Doa Restu",
         "message": "Kehadiran Anda membuat hari kami semakin segar dan bermakna.",
-        "closing": "Wassalamu’alaikum Warahmatullahi Wabarakatuh",
+        "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Kevin & Nadya"
       }
     },
     {
-      "id": "b-10",
+      "id": "b-maps-8jhgt",
       "type": "Maps",
       "props": {
         "title": "Lokasi Acara",

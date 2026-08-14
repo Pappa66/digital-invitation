@@ -8,16 +8,19 @@
     "font_body": "Quicksand",
     "layout": "left",
     "hero_style": "image",
-    "ornament": "eucalyptus"
+    "ornament": "birds",
+    "frame": "double",
+    "card_style": false
   },
   "settings": {
     "music_url": "",
     "guest_book_enabled": true,
-    "religion": "islam"
+    "religion": "islam",
+    "checkin_enabled": true
   },
   "blocks": [
     {
-      "id": "b-1",
+      "id": "b-hero-2tcov",
       "type": "Hero",
       "props": {
         "groom": "Rangga Bumi",
@@ -31,30 +34,40 @@
       }
     },
     {
-      "id": "b-2",
+      "id": "b-couple-2u6t1",
       "type": "Couple",
       "props": {
-        "introduction": "Selamat datang di perayaan kami",
+        "introduction": "Assalamu'alaikum Warahmatullahi Wabarakatuh",
         "bismillah": "Bismillahirrahmanirrahim",
         "groom": "Rangga Bumi, S.T.P.",
         "groom_parents": "Putra dari Bpk. Joko Pranoto & Ibu Wanti",
         "bride": "Intan Ayuningtyas, S.Farm.",
         "bride_parents": "Putri dari Bpk. Heri Purnomo & Ibu Siti",
-        "quote": "Di bumi yang berisik ini, kamu adalah keheningan yang kucari.",
         "variant": "vertical"
       }
     },
     {
-      "id": "b-3",
+      "id": "b-quote-2vzwl",
+      "type": "Quote",
+      "props": {
+        "religion": "islam",
+        "original": "وَمِن كُلِّ شَيْءٍ خَلَقْنَا زَوْجَيْنِ لَعَلَّكُمْ تَذَكَّرُونَ",
+        "latin": "Wa min kulli syai-in khalaqnaa zaujaini la'allakum tadzakkaruun",
+        "translation": "Dan segala sesuatu Kami ciptakan berpasang-pasangan supaya kamu mengingat (kebesaran Allah).",
+        "reference": "QS. Adz Dzariyyat: 49"
+      }
+    },
+    {
+      "id": "b-countdown-2w5tk",
       "type": "Countdown",
       "props": {
         "target_date": "2026-09-20T10:00:00+07:00",
         "title": "Hari Raya Cinta Kami",
-        "variant": "line"
+        "variant": "circles"
       }
     },
     {
-      "id": "b-4",
+      "id": "b-story-2xlw1",
       "type": "Story",
       "props": {
         "title": "Our Story",
@@ -77,7 +90,7 @@
       }
     },
     {
-      "id": "b-5",
+      "id": "b-eventdetail-2ylei",
       "type": "EventDetail",
       "props": {
         "title": "Ijab & Resepsi",
@@ -87,11 +100,25 @@
         "location": "Villa Bukit Cinta",
         "address": "Kawasan Puncak, Cisarua, Bogor",
         "maps_url": "https://maps.google.com/?q=Villa%20Bukit%20Cinta",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "b-eventdetail-2zym3",
+      "type": "EventDetail",
+      "props": {
+        "title": "Resepsi",
+        "icon": "glass",
+        "date": "Minggu, 20 September 2026",
+        "time": "11.00 - 14.00 WIB",
+        "location": "Villa Bukit Cinta, Bogor",
+        "address": "Alamat venue akan menyusul",
+        "maps_url": "https://maps.google.com/?q=Villa%20Bukit%20Cinta%2C%20Bogor",
         "variant": "band"
       }
     },
     {
-      "id": "b-6",
+      "id": "b-gallery-30rap",
       "type": "Gallery",
       "props": {
         "title": "Bumi & Rasa",
@@ -101,11 +128,40 @@
           "https://images.unsplash.com/photo-1519741497674-611481863552",
           "https://images.unsplash.com/photo-1511285560929-80b456fea0bc",
           "https://images.unsplash.com/photo-1532712938310-34cb3982ef74"
+        ],
+        "variant": "masonry"
+      }
+    },
+    {
+      "id": "b-envelope-31j6y",
+      "type": "Envelope",
+      "props": {
+        "title": "Amplop Online",
+        "note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "accounts": [
+          {
+            "bank_name": "BCA",
+            "account_number": "885 012 3456",
+            "account_holder": "Intan Ayuningtyas, S.Farm."
+          }
         ]
       }
     },
     {
-      "id": "b-7",
+      "id": "b-giftlist-32qxq",
+      "type": "GiftList",
+      "props": {
+        "title": "Daftar Kado",
+        "note": "Kehadiran Anda adalah hadiah terindah bagi kami. Namun bila ingin berbagi kebahagiaan, berikut beberapa referensi tanda kasih.",
+        "items": [
+          "Amplop / Tanda Kasih",
+          "Perlengkapan Rumah Tangga",
+          "Gift / yang bermanfaat"
+        ]
+      }
+    },
+    {
+      "id": "b-rsvp-33j9j",
       "type": "RSVP",
       "props": {
         "title": "Konfirmasi Kehadiran",
@@ -120,17 +176,17 @@
       }
     },
     {
-      "id": "b-8",
+      "id": "b-thanks-344ww",
       "type": "Thanks",
       "props": {
         "title": "Terima Kasih",
         "message": "Sungguh berbahagia bila kehadiranmu menjadi bagian dari pesta kecil kami.",
-        "closing": "Rangga & Intan",
+        "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Rangga & Intan"
       }
     },
     {
-      "id": "b-9",
+      "id": "b-maps-350u8",
       "type": "Maps",
       "props": {
         "title": "Lokasi Acara",

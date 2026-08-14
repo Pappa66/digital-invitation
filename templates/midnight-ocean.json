@@ -8,19 +8,22 @@
     "font_body": "Inter",
     "layout": "left",
     "hero_style": "solid",
-    "ornament": "flourish"
+    "ornament": "laurel",
+    "frame": "double",
+    "card_style": true
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
     "guest_book_enabled": true,
-    "religion": "islam",
+    "religion": "buddha",
     "music_autoplay": true,
     "music_offset_sec": 0,
-    "music_on_section": ""
+    "music_on_section": "",
+    "checkin_enabled": true
   },
   "blocks": [
     {
-      "id": "b-1",
+      "id": "b-hero-5zo7c",
       "type": "Hero",
       "props": {
         "groom": "Bryan Hadinata",
@@ -34,30 +37,40 @@
       }
     },
     {
-      "id": "b-2",
+      "id": "b-couple-60tg4",
       "type": "Couple",
       "props": {
-        "introduction": "Two oceans, one wave",
-        "bismillah": "Bismillahirrahmanirrahim",
+        "introduction": "Namo Buddhaya,",
+        "bismillah": "",
         "groom": "Bryan Hadinata, S.T.",
         "groom_parents": "Son of Mr. Anton Wijaya & Mrs. Lina",
         "bride": "Stella Wijaya, S.E.",
         "bride_parents": "Daughter of Mr. Kevin Kusuma & Mrs. Yuli",
-        "quote": "Our love runs as deep and calm as the midnight ocean.",
-        "variant": "side"
+        "variant": "vertical"
       }
     },
     {
-      "id": "b-3",
+      "id": "b-quote-61vzz",
+      "type": "Quote",
+      "props": {
+        "religion": "buddha",
+        "original": "Sabbe sattā bhavantu sukhitattā — semoga semua makhluk berbahagia dan tenteram.",
+        "latin": "",
+        "translation": "Semoga semua makhluk berbahagia dan tenteram, hidup saling menyayangi sebagaimana seorang ibu menyayangi anak tunggalnya.",
+        "reference": "Metta Sutta"
+      }
+    },
+    {
+      "id": "b-countdown-62aux",
       "type": "Countdown",
       "props": {
         "target_date": "2027-04-25T18:00:00+07:00",
         "title": "Counting Down To Forever",
-        "variant": "line"
+        "variant": "circles"
       }
     },
     {
-      "id": "b-4",
+      "id": "b-eventdetail-63ned",
       "type": "EventDetail",
       "props": {
         "title": "The Celebration",
@@ -67,11 +80,25 @@
         "location": "Ritz-Carlton Grand Ballroom",
         "address": "Jl. DR. Ide Anak Agung Gde Agung, Jakarta",
         "maps_url": "https://maps.google.com/?q=Ritz-Carlton%20Grand%20Ballroom",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "b-eventdetail-64cdq",
+      "type": "EventDetail",
+      "props": {
+        "title": "Resepsi",
+        "icon": "glass",
+        "date": "25.04.2027",
+        "time": "11.00 - 14.00 WIB",
+        "location": "The Ritz-Carlton, Jakarta",
+        "address": "Alamat venue akan menyusul",
+        "maps_url": "https://maps.google.com/?q=The%20Ritz-Carlton%2C%20Jakarta",
         "variant": "band"
       }
     },
     {
-      "id": "b-5",
+      "id": "b-gallery-65ohk",
       "type": "Gallery",
       "props": {
         "title": "Deep Blue Moments",
@@ -81,13 +108,41 @@
           "https://picsum.photos/seed/midnight-ocean-g3/600/800",
           "https://picsum.photos/seed/midnight-ocean-g4/600/800"
         ],
-        "variant": "carousel",
+        "variant": "grid",
         "animation": "slide-up",
         "interval_sec": 3
       }
     },
     {
-      "id": "b-6",
+      "id": "b-envelope-660q4",
+      "type": "Envelope",
+      "props": {
+        "title": "Amplop Online",
+        "note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "accounts": [
+          {
+            "bank_name": "BCA",
+            "account_number": "885 012 3456",
+            "account_holder": "Stella Wijaya, S.E."
+          }
+        ]
+      }
+    },
+    {
+      "id": "b-giftlist-678pz",
+      "type": "GiftList",
+      "props": {
+        "title": "Daftar Kado",
+        "note": "Kehadiran Anda adalah hadiah terindah bagi kami. Namun bila ingin berbagi kebahagiaan, berikut beberapa referensi tanda kasih.",
+        "items": [
+          "Amplop / Tanda Kasih",
+          "Perlengkapan Rumah Tangga",
+          "Gift / yang bermanfaat"
+        ]
+      }
+    },
+    {
+      "id": "b-rsvp-68izl",
       "type": "RSVP",
       "props": {
         "title": "Konfirmasi Kehadiran",
@@ -102,17 +157,17 @@
       }
     },
     {
-      "id": "b-7",
+      "id": "b-thanks-694ir",
       "type": "Thanks",
       "props": {
         "title": "With Gratitude",
         "message": "Thank you for sailing into our lives and celebrating this voyage with us.",
-        "closing": "Forever yours,",
+        "closing": "Semoga semua makhluk berbahagia.",
         "names": "Bryan & Stella"
       }
     },
     {
-      "id": "b-8",
+      "id": "b-maps-6atb9",
       "type": "Maps",
       "props": {
         "title": "Lokasi Acara",

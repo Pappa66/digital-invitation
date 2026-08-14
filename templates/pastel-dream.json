@@ -8,16 +8,19 @@
     "font_body": "Nunito Sans",
     "layout": "center",
     "hero_style": "image",
-    "ornament": "rose-branch"
+    "ornament": "paisley",
+    "frame": "classic",
+    "card_style": true
   },
   "settings": {
     "music_url": "",
     "guest_book_enabled": true,
-    "religion": "islam"
+    "religion": "islam",
+    "checkin_enabled": true
   },
   "blocks": [
     {
-      "id": "b-1",
+      "id": "b-hero-3qvkj",
       "type": "Hero",
       "props": {
         "groom": "Galih Rehan",
@@ -31,21 +34,31 @@
       }
     },
     {
-      "id": "b-2",
+      "id": "b-couple-3rx83",
       "type": "Couple",
       "props": {
-        "introduction": "Assalamu’alaikum Warahmatullahi Wabarakatuh",
+        "introduction": "Assalamu'alaikum Warahmatullahi Wabarakatuh",
         "bismillah": "Bismillahirrahmanirrahim",
         "groom": "Galih Rehan, S.Ds.",
         "groom_parents": "Putra dari Bpk. Andi Kurnia & Ibu Maya",
         "bride": "Cinta Larassati, S.S.",
         "bride_parents": "Putri dari Bpk. Reza Fauzi & Ibu Lani",
-        "quote": "Semesta merayakan, aku dan kamu.",
         "variant": "side"
       }
     },
     {
-      "id": "b-3",
+      "id": "b-quote-3sk6m",
+      "type": "Quote",
+      "props": {
+        "religion": "islam",
+        "original": "وَمِن كُلِّ شَيْءٍ خَلَقْنَا زَوْجَيْنِ لَعَلَّكُمْ تَذَكَّرُونَ",
+        "latin": "Wa min kulli syai-in khalaqnaa zaujaini la'allakum tadzakkaruun",
+        "translation": "Dan segala sesuatu Kami ciptakan berpasang-pasangan supaya kamu mengingat (kebesaran Allah).",
+        "reference": "QS. Adz Dzariyyat: 49"
+      }
+    },
+    {
+      "id": "b-countdown-3tx3k",
       "type": "Countdown",
       "props": {
         "target_date": "2026-04-18T10:00:00+07:00",
@@ -54,7 +67,7 @@
       }
     },
     {
-      "id": "b-4",
+      "id": "b-story-3uqqv",
       "type": "Story",
       "props": {
         "title": "Our Story",
@@ -77,7 +90,7 @@
       }
     },
     {
-      "id": "b-5",
+      "id": "b-eventdetail-3vbd0",
       "type": "EventDetail",
       "props": {
         "title": "Akad & Resepsi",
@@ -91,7 +104,21 @@
       }
     },
     {
-      "id": "b-6",
+      "id": "b-eventdetail-3wpr1",
+      "type": "EventDetail",
+      "props": {
+        "title": "Resepsi",
+        "icon": "glass",
+        "date": "Sabtu, 18 April 2026",
+        "time": "11.00 - 14.00 WIB",
+        "location": "Taman Sari Garden, Bandung",
+        "address": "Alamat venue akan menyusul",
+        "maps_url": "https://maps.google.com/?q=Taman%20Sari%20Garden%2C%20Bandung",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "b-gallery-3xayq",
       "type": "Gallery",
       "props": {
         "title": "Hari-Hari Manis",
@@ -102,11 +129,40 @@
           "https://images.unsplash.com/photo-1519741497674-611481863552",
           "https://images.unsplash.com/photo-1511285560929-80b456fea0bc",
           "https://images.unsplash.com/photo-1532712938310-34cb3982ef74"
+        ],
+        "variant": "polaroid"
+      }
+    },
+    {
+      "id": "b-envelope-3yc3s",
+      "type": "Envelope",
+      "props": {
+        "title": "Amplop Online",
+        "note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "accounts": [
+          {
+            "bank_name": "BCA",
+            "account_number": "885 012 3456",
+            "account_holder": "Cinta Larassati, S.S."
+          }
         ]
       }
     },
     {
-      "id": "b-7",
+      "id": "b-giftlist-3zhno",
+      "type": "GiftList",
+      "props": {
+        "title": "Daftar Kado",
+        "note": "Kehadiran Anda adalah hadiah terindah bagi kami. Namun bila ingin berbagi kebahagiaan, berikut beberapa referensi tanda kasih.",
+        "items": [
+          "Amplop / Tanda Kasih",
+          "Perlengkapan Rumah Tangga",
+          "Gift / yang bermanfaat"
+        ]
+      }
+    },
+    {
+      "id": "b-rsvp-40dms",
       "type": "RSVP",
       "props": {
         "title": "Konfirmasi Kehadiran",
@@ -121,17 +177,17 @@
       }
     },
     {
-      "id": "b-8",
+      "id": "b-thanks-417j3",
       "type": "Thanks",
       "props": {
         "title": "Terima Kasih",
         "message": "Terima kasih sudah menjadi bagian dari kebahagiaan kecil kami di hari yang cerah ini.",
-        "closing": "Wassalamu’alaikum Warahmatullahi Wabarakatuh",
+        "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Galih & Cinta"
       }
     },
     {
-      "id": "b-9",
+      "id": "b-maps-42ti8",
       "type": "Maps",
       "props": {
         "title": "Lokasi Acara",

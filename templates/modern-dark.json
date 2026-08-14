@@ -8,16 +8,19 @@
     "font_body": "Nunito Sans",
     "layout": "left",
     "hero_style": "solid",
-    "ornament": "arch-geometric"
+    "ornament": "diamond-lines",
+    "frame": "classic",
+    "card_style": false
   },
   "settings": {
     "music_url": "",
     "guest_book_enabled": true,
-    "religion": "islam"
+    "religion": "islam",
+    "checkin_enabled": true
   },
   "blocks": [
     {
-      "id": "b-1",
+      "id": "b-hero-47sjk",
       "type": "Hero",
       "props": {
         "groom": "Vino Geraldo",
@@ -31,30 +34,40 @@
       }
     },
     {
-      "id": "b-2",
+      "id": "b-couple-48v8z",
       "type": "Couple",
       "props": {
-        "introduction": "Two souls, one rhythm",
-        "bismillah": "",
+        "introduction": "Assalamu'alaikum Warahmatullahi Wabarakatuh",
+        "bismillah": "Bismillahirrahmanirrahim",
         "groom": "Vino Geraldo, S.T.",
         "groom_parents": "Son of Mr. Ricardo Halim & Mrs. Melia",
         "bride": "Sasha Ayumi, S.E.",
         "bride_parents": "Daughter of Mr. Steven Tanudjaja & Mrs. Winona",
-        "quote": "In the middle of the night, among the stars, our love will shine forever.",
-        "variant": "side"
+        "variant": "vertical"
       }
     },
     {
-      "id": "b-3",
+      "id": "b-quote-491a3",
+      "type": "Quote",
+      "props": {
+        "religion": "islam",
+        "original": "وَمِن كُلِّ شَيْءٍ خَلَقْنَا زَوْجَيْنِ لَعَلَّكُمْ تَذَكَّرُونَ",
+        "latin": "Wa min kulli syai-in khalaqnaa zaujaini la'allakum tadzakkaruun",
+        "translation": "Dan segala sesuatu Kami ciptakan berpasang-pasangan supaya kamu mengingat (kebesaran Allah).",
+        "reference": "QS. Adz Dzariyyat: 49"
+      }
+    },
+    {
+      "id": "b-countdown-4au45",
       "type": "Countdown",
       "props": {
         "target_date": "2027-03-13T16:00:00+07:00",
         "title": "The Clock Ticks Toward Forever",
-        "variant": "line"
+        "variant": "cards"
       }
     },
     {
-      "id": "b-4",
+      "id": "b-eventdetail-4bo61",
       "type": "EventDetail",
       "props": {
         "title": "The Celebration",
@@ -64,11 +77,25 @@
         "location": "The St. Regis Ballroom",
         "address": "Jl. H.R. Rasuna Said Kav. B6, Jakarta",
         "maps_url": "https://maps.google.com/?q=The%20St.%20Regis%20Ballroom",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "b-eventdetail-4cd12",
+      "type": "EventDetail",
+      "props": {
+        "title": "Resepsi",
+        "icon": "glass",
+        "date": "13.03.2027",
+        "time": "11.00 - 14.00 WIB",
+        "location": "The St. Regis, Jakarta",
+        "address": "Alamat venue akan menyusul",
+        "maps_url": "https://maps.google.com/?q=The%20St.%20Regis%2C%20Jakarta",
         "variant": "band"
       }
     },
     {
-      "id": "b-5",
+      "id": "b-gallery-4db5m",
       "type": "Gallery",
       "props": {
         "title": "Starry Moments",
@@ -78,11 +105,40 @@
           "https://images.unsplash.com/photo-1520854221256-17451cc331bf",
           "https://images.unsplash.com/photo-1522673607200-164d1b6ce486",
           "https://images.unsplash.com/photo-1532712938310-34cb3982ef74"
+        ],
+        "variant": "masonry"
+      }
+    },
+    {
+      "id": "b-envelope-4ei9o",
+      "type": "Envelope",
+      "props": {
+        "title": "Amplop Online",
+        "note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "accounts": [
+          {
+            "bank_name": "BCA",
+            "account_number": "885 012 3456",
+            "account_holder": "Sasha Ayumi, S.E."
+          }
         ]
       }
     },
     {
-      "id": "b-6",
+      "id": "b-giftlist-4fl7d",
+      "type": "GiftList",
+      "props": {
+        "title": "Daftar Kado",
+        "note": "Kehadiran Anda adalah hadiah terindah bagi kami. Namun bila ingin berbagi kebahagiaan, berikut beberapa referensi tanda kasih.",
+        "items": [
+          "Amplop / Tanda Kasih",
+          "Perlengkapan Rumah Tangga",
+          "Gift / yang bermanfaat"
+        ]
+      }
+    },
+    {
+      "id": "b-rsvp-4gdbe",
       "type": "RSVP",
       "props": {
         "title": "Konfirmasi Kehadiran",
@@ -97,17 +153,17 @@
       }
     },
     {
-      "id": "b-7",
+      "id": "b-thanks-4hp7n",
       "type": "Thanks",
       "props": {
         "title": "A Thousand Thanks",
         "message": "Your presence lights up our celebration. Thank you for being part of our story.",
-        "closing": "Forever yours,",
+        "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Vino & Sasha"
       }
     },
     {
-      "id": "b-8",
+      "id": "b-maps-4itb3",
       "type": "Maps",
       "props": {
         "title": "Lokasi Acara",

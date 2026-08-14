@@ -8,7 +8,9 @@
     "font_body": "Poppins",
     "layout": "left",
     "hero_style": "image",
-    "ornament": "flourish"
+    "ornament": "flourish",
+    "frame": "classic",
+    "card_style": false
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-14.mp3",
@@ -16,11 +18,12 @@
     "religion": "islam",
     "music_autoplay": true,
     "music_offset_sec": 0,
-    "music_on_section": ""
+    "music_on_section": "",
+    "checkin_enabled": true
   },
   "blocks": [
     {
-      "id": "b-1",
+      "id": "b-hero-ah4l1",
       "type": "Hero",
       "props": {
         "groom": "Rizky Pratama",
@@ -34,30 +37,40 @@
       }
     },
     {
-      "id": "b-2",
+      "id": "b-couple-aig1n",
       "type": "Couple",
       "props": {
-        "introduction": "Assalamu’alaikum Warahmatullahi Wabarakatuh",
+        "introduction": "Assalamu'alaikum Warahmatullahi Wabarakatuh",
         "bismillah": "Bismillahirrahmanirrahim",
         "groom": "Rizky Pratama, S.T.",
         "groom_parents": "Putra dari Bpk. Samsul Hadi & Ibu Susi",
         "bride": "Salsa Nabila, S.E.",
         "bride_parents": "Putri dari Bpk. Rachmat Hidayat & Ibu Yeni",
-        "quote": "Kamu adalah gula yang membuat kopi hidupku terasa sempurna.",
         "variant": "vertical"
       }
     },
     {
-      "id": "b-3",
+      "id": "b-quote-ajkue",
+      "type": "Quote",
+      "props": {
+        "religion": "islam",
+        "original": "وَمِن كُلِّ شَيْءٍ خَلَقْنَا زَوْجَيْنِ لَعَلَّكُمْ تَذَكَّرُونَ",
+        "latin": "Wa min kulli syai-in khalaqnaa zaujaini la'allakum tadzakkaruun",
+        "translation": "Dan segala sesuatu Kami ciptakan berpasang-pasangan supaya kamu mengingat (kebesaran Allah).",
+        "reference": "QS. Adz Dzariyyat: 49"
+      }
+    },
+    {
+      "id": "b-countdown-aks8o",
       "type": "Countdown",
       "props": {
         "target_date": "2028-01-15T10:00:00+07:00",
         "title": "Ramuan Cinta",
-        "variant": "line"
+        "variant": "circles"
       }
     },
     {
-      "id": "b-4",
+      "id": "b-story-alm1i",
       "type": "Story",
       "props": {
         "title": "Our Story",
@@ -80,7 +93,7 @@
       }
     },
     {
-      "id": "b-5",
+      "id": "b-eventdetail-amsrr",
       "type": "EventDetail",
       "props": {
         "title": "Akad & Resepsi",
@@ -90,11 +103,25 @@
         "location": "Coffee Hill Estate",
         "address": "Karangploso, Malang",
         "maps_url": "https://maps.google.com/?q=Coffee%20Hill%20Estate",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "b-eventdetail-anc8a",
+      "type": "EventDetail",
+      "props": {
+        "title": "Resepsi",
+        "icon": "glass",
+        "date": "Sabtu, 15 Januari 2028",
+        "time": "11.00 - 14.00 WIB",
+        "location": "Coffee Hill Estate, Malang",
+        "address": "Alamat venue akan menyusul",
+        "maps_url": "https://maps.google.com/?q=Coffee%20Hill%20Estate%2C%20Malang",
         "variant": "band"
       }
     },
     {
-      "id": "b-6",
+      "id": "b-gallery-aorak",
       "type": "Gallery",
       "props": {
         "title": "Rasa & Aroma",
@@ -110,7 +137,35 @@
       }
     },
     {
-      "id": "b-7",
+      "id": "b-envelope-ap0y9",
+      "type": "Envelope",
+      "props": {
+        "title": "Amplop Online",
+        "note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "accounts": [
+          {
+            "bank_name": "BCA",
+            "account_number": "885 012 3456",
+            "account_holder": "Salsa Nabila, S.E."
+          }
+        ]
+      }
+    },
+    {
+      "id": "b-giftlist-aqd46",
+      "type": "GiftList",
+      "props": {
+        "title": "Daftar Kado",
+        "note": "Kehadiran Anda adalah hadiah terindah bagi kami. Namun bila ingin berbagi kebahagiaan, berikut beberapa referensi tanda kasih.",
+        "items": [
+          "Amplop / Tanda Kasih",
+          "Perlengkapan Rumah Tangga",
+          "Gift / yang bermanfaat"
+        ]
+      }
+    },
+    {
+      "id": "b-rsvp-arhkn",
       "type": "RSVP",
       "props": {
         "title": "Konfirmasi Kehadiran",
@@ -125,17 +180,17 @@
       }
     },
     {
-      "id": "b-8",
+      "id": "b-thanks-as8r1",
       "type": "Thanks",
       "props": {
         "title": "Doa Restu",
         "message": "Kehadiran Anda adalah rasa terhangat dalam secangkir cerita kami.",
-        "closing": "Wassalamu’alaikum Warahmatullahi Wabarakatuh",
+        "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Rizky & Salsa"
       }
     },
     {
-      "id": "b-9",
+      "id": "b-maps-aty40",
       "type": "Maps",
       "props": {
         "title": "Lokasi Acara",

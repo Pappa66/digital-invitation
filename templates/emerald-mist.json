@@ -8,7 +8,9 @@
     "font_body": "Montserrat",
     "layout": "center",
     "hero_style": "image",
-    "ornament": "flourish"
+    "ornament": "laurel",
+    "frame": "double",
+    "card_style": true
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3",
@@ -16,11 +18,12 @@
     "religion": "islam",
     "music_autoplay": true,
     "music_offset_sec": 0,
-    "music_on_section": ""
+    "music_on_section": "",
+    "checkin_enabled": true
   },
   "blocks": [
     {
-      "id": "b-1",
+      "id": "b-hero-axtik",
       "type": "Hero",
       "props": {
         "groom": "Devan Mahendra",
@@ -34,21 +37,31 @@
       }
     },
     {
-      "id": "b-2",
+      "id": "b-couple-ayh1v",
       "type": "Couple",
       "props": {
-        "introduction": "Assalamu’alaikum Warahmatullahi Wabarakatuh",
+        "introduction": "Assalamu'alaikum Warahmatullahi Wabarakatuh",
         "bismillah": "Bismillahirrahmanirrahim",
         "groom": "Devan Mahendra, S.T.",
         "groom_parents": "Putra dari Bpk. Rendra Kurnia & Ibu Wulan",
         "bride": "Kiara Anindya, S.E.",
         "bride_parents": "Putri dari Bpk. Hartono & Ibu Ratih",
-        "quote": "Seperti kabut pagi di hutan, kamu menyelimutiku dengan tenang.",
         "variant": "vertical"
       }
     },
     {
-      "id": "b-3",
+      "id": "b-quote-az64m",
+      "type": "Quote",
+      "props": {
+        "religion": "islam",
+        "original": "وَمِن كُلِّ شَيْءٍ خَلَقْنَا زَوْجَيْنِ لَعَلَّكُمْ تَذَكَّرُونَ",
+        "latin": "Wa min kulli syai-in khalaqnaa zaujaini la'allakum tadzakkaruun",
+        "translation": "Dan segala sesuatu Kami ciptakan berpasang-pasangan supaya kamu mengingat (kebesaran Allah).",
+        "reference": "QS. Adz Dzariyyat: 49"
+      }
+    },
+    {
+      "id": "b-countdown-b0x8r",
       "type": "Countdown",
       "props": {
         "target_date": "2028-02-19T09:00:00+07:00",
@@ -57,7 +70,7 @@
       }
     },
     {
-      "id": "b-4",
+      "id": "b-story-b13va",
       "type": "Story",
       "props": {
         "title": "Our Story",
@@ -80,7 +93,7 @@
       }
     },
     {
-      "id": "b-5",
+      "id": "b-eventdetail-b2opo",
       "type": "EventDetail",
       "props": {
         "title": "Akad Nikah",
@@ -94,7 +107,7 @@
       }
     },
     {
-      "id": "b-6",
+      "id": "b-eventdetail-b37kj",
       "type": "EventDetail",
       "props": {
         "title": "Resepsi",
@@ -104,11 +117,11 @@
         "location": "Emerald Shelter",
         "address": "Kaliurang, Sleman",
         "maps_url": "https://maps.google.com/?q=Emerald%20Shelter",
-        "variant": "card"
+        "variant": "band"
       }
     },
     {
-      "id": "b-7",
+      "id": "b-gallery-b4tf1",
       "type": "Gallery",
       "props": {
         "title": "Selimut Kabut",
@@ -119,13 +132,41 @@
           "https://picsum.photos/seed/emerald-mist-g4/600/800",
           "https://picsum.photos/seed/emerald-mist-g5/600/800"
         ],
-        "variant": "carousel",
+        "variant": "grid",
         "animation": "slide-left",
         "interval_sec": 3
       }
     },
     {
-      "id": "b-8",
+      "id": "b-envelope-b5zu1",
+      "type": "Envelope",
+      "props": {
+        "title": "Amplop Online",
+        "note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "accounts": [
+          {
+            "bank_name": "BCA",
+            "account_number": "885 012 3456",
+            "account_holder": "Kiara Anindya, S.E."
+          }
+        ]
+      }
+    },
+    {
+      "id": "b-giftlist-b65iw",
+      "type": "GiftList",
+      "props": {
+        "title": "Daftar Kado",
+        "note": "Kehadiran Anda adalah hadiah terindah bagi kami. Namun bila ingin berbagi kebahagiaan, berikut beberapa referensi tanda kasih.",
+        "items": [
+          "Amplop / Tanda Kasih",
+          "Perlengkapan Rumah Tangga",
+          "Gift / yang bermanfaat"
+        ]
+      }
+    },
+    {
+      "id": "b-rsvp-b7ez8",
       "type": "RSVP",
       "props": {
         "title": "Konfirmasi Kehadiran",
@@ -140,17 +181,17 @@
       }
     },
     {
-      "id": "b-9",
+      "id": "b-thanks-b8ett",
       "type": "Thanks",
       "props": {
         "title": "Doa Restu",
         "message": "Semoga doa dan restu Anda menjadi kabut yang mendinginkan perjalanan kami.",
-        "closing": "Wassalamu’alaikum Warahmatullahi Wabarakatuh",
+        "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Devan & Kiara"
       }
     },
     {
-      "id": "b-10",
+      "id": "b-maps-b9u76",
       "type": "Maps",
       "props": {
         "title": "Lokasi Acara",

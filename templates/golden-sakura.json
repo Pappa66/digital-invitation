@@ -8,19 +8,22 @@
     "font_body": "Jost",
     "layout": "center",
     "hero_style": "image",
-    "ornament": "flourish"
+    "ornament": "corner-flourish",
+    "frame": "double",
+    "card_style": false
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3",
     "guest_book_enabled": true,
-    "religion": "islam",
+    "religion": "buddha",
     "music_autoplay": true,
     "music_offset_sec": 0,
-    "music_on_section": ""
+    "music_on_section": "",
+    "checkin_enabled": true
   },
   "blocks": [
     {
-      "id": "b-1",
+      "id": "b-hero-6e7hn",
       "type": "Hero",
       "props": {
         "groom": "Fajar Ramadhan",
@@ -34,30 +37,40 @@
       }
     },
     {
-      "id": "b-2",
+      "id": "b-couple-6fsdz",
       "type": "Couple",
       "props": {
-        "introduction": "Assalamu’alaikum Warahmatullahi Wabarakatuh",
-        "bismillah": "Bismillahirrahmanirrahim",
+        "introduction": "Namo Buddhaya,",
+        "bismillah": "",
         "groom": "Fajar Ramadhan, S.T.",
         "groom_parents": "Putra dari Bpk. Arief Hidayat & Ibu Dewi",
         "bride": "Sakura Ayudia, S.E.",
         "bride_parents": "Putri dari Bpk. Yusuf Ramli & Ibu Nur",
-        "quote": "Cinta kami mekar seperti sakura di musim semi.",
-        "variant": "vertical"
+        "variant": "side"
       }
     },
     {
-      "id": "b-3",
+      "id": "b-quote-6gxkj",
+      "type": "Quote",
+      "props": {
+        "religion": "buddha",
+        "original": "Sabbe sattā bhavantu sukhitattā — semoga semua makhluk berbahagia dan tenteram.",
+        "latin": "",
+        "translation": "Semoga semua makhluk berbahagia dan tenteram, hidup saling menyayangi sebagaimana seorang ibu menyayangi anak tunggalnya.",
+        "reference": "Metta Sutta"
+      }
+    },
+    {
+      "id": "b-countdown-6hrqr",
       "type": "Countdown",
       "props": {
         "target_date": "2027-05-08T09:00:00+07:00",
         "title": "Menuju Sakura Mekar",
-        "variant": "circles"
+        "variant": "cards"
       }
     },
     {
-      "id": "b-4",
+      "id": "b-story-6i3yy",
       "type": "Story",
       "props": {
         "title": "Our Story",
@@ -80,7 +93,7 @@
       }
     },
     {
-      "id": "b-5",
+      "id": "b-eventdetail-6j9b4",
       "type": "EventDetail",
       "props": {
         "title": "Akad Nikah",
@@ -90,11 +103,11 @@
         "location": "Sakura Garden Hall",
         "address": "Jalan Raya Oro-oro Ombo, Batu",
         "maps_url": "https://maps.google.com/?q=Sakura%20Garden%20Hall",
-        "variant": "card"
+        "variant": "band"
       }
     },
     {
-      "id": "b-6",
+      "id": "b-eventdetail-6k813",
       "type": "EventDetail",
       "props": {
         "title": "Resepsi",
@@ -108,7 +121,7 @@
       }
     },
     {
-      "id": "b-7",
+      "id": "b-gallery-6l3h1",
       "type": "Gallery",
       "props": {
         "title": "Kelopak Kenangan",
@@ -120,12 +133,40 @@
           "https://picsum.photos/seed/golden-sakura-g5/600/800",
           "https://picsum.photos/seed/golden-sakura-g6/600/800"
         ],
-        "variant": "grid",
+        "variant": "arch",
         "animation": "swing"
       }
     },
     {
-      "id": "b-8",
+      "id": "b-envelope-6mocq",
+      "type": "Envelope",
+      "props": {
+        "title": "Amplop Online",
+        "note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "accounts": [
+          {
+            "bank_name": "BCA",
+            "account_number": "885 012 3456",
+            "account_holder": "Sakura Ayudia, S.E."
+          }
+        ]
+      }
+    },
+    {
+      "id": "b-giftlist-6n6ay",
+      "type": "GiftList",
+      "props": {
+        "title": "Daftar Kado",
+        "note": "Kehadiran Anda adalah hadiah terindah bagi kami. Namun bila ingin berbagi kebahagiaan, berikut beberapa referensi tanda kasih.",
+        "items": [
+          "Amplop / Tanda Kasih",
+          "Perlengkapan Rumah Tangga",
+          "Gift / yang bermanfaat"
+        ]
+      }
+    },
+    {
+      "id": "b-rsvp-6ocih",
       "type": "RSVP",
       "props": {
         "title": "Konfirmasi Kehadiran",
@@ -140,17 +181,17 @@
       }
     },
     {
-      "id": "b-9",
+      "id": "b-thanks-6pufc",
       "type": "Thanks",
       "props": {
         "title": "Doa Restu",
         "message": "Semoga doa restu Bapak/Ibu/Saudara/i menjadi kelopak yang mengiringi cinta kami.",
-        "closing": "Wassalamu’alaikum Warahmatullahi Wabarakatuh",
+        "closing": "Semoga semua makhluk berbahagia.",
         "names": "Fajar & Sakura"
       }
     },
     {
-      "id": "b-10",
+      "id": "b-maps-6qfkh",
       "type": "Maps",
       "props": {
         "title": "Lokasi Acara",

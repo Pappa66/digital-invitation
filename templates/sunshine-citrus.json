@@ -8,7 +8,9 @@
     "font_body": "Nunito Sans",
     "layout": "center",
     "hero_style": "solid",
-    "ornament": "rose-branch"
+    "ornament": "rose-branch",
+    "frame": "arch",
+    "card_style": true
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
@@ -16,11 +18,12 @@
     "religion": "islam",
     "music_autoplay": true,
     "music_offset_sec": 0,
-    "music_on_section": ""
+    "music_on_section": "",
+    "checkin_enabled": true
   },
   "blocks": [
     {
-      "id": "b-1",
+      "id": "b-hero-cq2y5",
       "type": "Hero",
       "props": {
         "groom": "Farhan Mahesa",
@@ -34,21 +37,31 @@
       }
     },
     {
-      "id": "b-2",
+      "id": "b-couple-crdo3",
       "type": "Couple",
       "props": {
-        "introduction": "Selamat datang di pesta cahaya kami",
+        "introduction": "Assalamu'alaikum Warahmatullahi Wabarakatuh",
         "bismillah": "Bismillahirrahmanirrahim",
         "groom": "Farhan Mahesa, S.T.",
         "groom_parents": "Putra dari Bpk. Rony Febrian & Ibu Tari",
         "bride": "Alea Putri, S.E.",
         "bride_parents": "Putri dari Bpk. Indra Kusuma & Ibu Sari",
-        "quote": "Kamu adalah sinar matahari yang menghangatkan setiap musim.",
         "variant": "side"
       }
     },
     {
-      "id": "b-3",
+      "id": "b-quote-cs8yb",
+      "type": "Quote",
+      "props": {
+        "religion": "islam",
+        "original": "وَمِن كُلِّ شَيْءٍ خَلَقْنَا زَوْجَيْنِ لَعَلَّكُمْ تَذَكَّرُونَ",
+        "latin": "Wa min kulli syai-in khalaqnaa zaujaini la'allakum tadzakkaruun",
+        "translation": "Dan segala sesuatu Kami ciptakan berpasang-pasangan supaya kamu mengingat (kebesaran Allah).",
+        "reference": "QS. Adz Dzariyyat: 49"
+      }
+    },
+    {
+      "id": "b-countdown-ctjby",
       "type": "Countdown",
       "props": {
         "target_date": "2028-05-13T10:00:00+07:00",
@@ -57,7 +70,7 @@
       }
     },
     {
-      "id": "b-4",
+      "id": "b-story-cu166",
       "type": "Story",
       "props": {
         "title": "Our Story",
@@ -80,7 +93,7 @@
       }
     },
     {
-      "id": "b-5",
+      "id": "b-eventdetail-cv1i7",
       "type": "EventDetail",
       "props": {
         "title": "Akad Nikah",
@@ -94,7 +107,7 @@
       }
     },
     {
-      "id": "b-6",
+      "id": "b-eventdetail-cwm01",
       "type": "EventDetail",
       "props": {
         "title": "Resepsi",
@@ -108,7 +121,7 @@
       }
     },
     {
-      "id": "b-7",
+      "id": "b-gallery-cx2mv",
       "type": "Gallery",
       "props": {
         "title": "Kilau Mentari",
@@ -120,12 +133,40 @@
           "https://picsum.photos/seed/sunshine-citrus-g5/600/800",
           "https://picsum.photos/seed/sunshine-citrus-g6/600/800"
         ],
-        "variant": "grid",
+        "variant": "polaroid",
         "animation": "swing"
       }
     },
     {
-      "id": "b-8",
+      "id": "b-envelope-cy2xx",
+      "type": "Envelope",
+      "props": {
+        "title": "Amplop Online",
+        "note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "accounts": [
+          {
+            "bank_name": "BCA",
+            "account_number": "885 012 3456",
+            "account_holder": "Alea Putri, S.E."
+          }
+        ]
+      }
+    },
+    {
+      "id": "b-giftlist-czir8",
+      "type": "GiftList",
+      "props": {
+        "title": "Daftar Kado",
+        "note": "Kehadiran Anda adalah hadiah terindah bagi kami. Namun bila ingin berbagi kebahagiaan, berikut beberapa referensi tanda kasih.",
+        "items": [
+          "Amplop / Tanda Kasih",
+          "Perlengkapan Rumah Tangga",
+          "Gift / yang bermanfaat"
+        ]
+      }
+    },
+    {
+      "id": "b-rsvp-d09x4",
       "type": "RSVP",
       "props": {
         "title": "Konfirmasi Kehadiran",
@@ -140,17 +181,17 @@
       }
     },
     {
-      "id": "b-9",
+      "id": "b-thanks-d1c7h",
       "type": "Thanks",
       "props": {
         "title": "Doa Restu",
         "message": "Semoga kehadiran Anda menjadi sinar yang menerangi pernikahan kami.",
-        "closing": "Wassalamu’alaikum Warahmatullahi Wabarakatuh",
+        "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Farhan & Alea"
       }
     },
     {
-      "id": "b-10",
+      "id": "b-maps-d2v2k",
       "type": "Maps",
       "props": {
         "title": "Lokasi Acara",
