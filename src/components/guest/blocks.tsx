@@ -1452,6 +1452,35 @@ export function PhotoBlock({ props }: { props: BlockProps }) {
   );
 }
 
+/** Kutipan / ayat (Arab + latin + referensi) menyerupai seksi doa di webvitation. */
+export function QuoteBlock({ props }: { props: BlockProps }) {
+  return (
+    <section className="px-6 py-14 text-center">
+      <Inner name="quote">
+        <div>
+          <Ornament className="mb-6 opacity-50" />
+          <p
+            lang="ar"
+            dir="rtl"
+            className="mx-auto max-w-md font-['Amiri','Scheherazade_New',serif] text-2xl leading-[2] md:text-3xl"
+          >
+            <Editable prop="arabic" multiline>
+              {str(props, 'arabic')}
+            </Editable>
+          </p>
+          <p className="mx-auto mt-5 max-w-md text-sm italic leading-relaxed opacity-80">
+            <Editable prop="latin" multiline>
+              {str(props, 'latin')}
+            </Editable>
+          </p>
+          {str(props, 'latin') && <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed opacity-70">{str(props, 'translation')}</p>}
+          <p className="mt-5 text-xs uppercase tracking-widest opacity-60">{str(props, 'reference')}</p>
+        </div>
+      </Inner>
+    </section>
+  );
+}
+
 const DIVIDER_VARIANTS: Record<string, React.ReactNode> = {
   line: (
     <div className="flex items-center gap-3">

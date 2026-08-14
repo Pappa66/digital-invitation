@@ -3,7 +3,7 @@ import type { TemplateMeta, CanvasData } from '@/lib/types';
 import { TEMPLATE_LIST, getTemplate, emptyCanvas } from '@/lib/templates';
 
 const TEMPLATE_IDS = TEMPLATE_LIST.map((t) => t.id);
-const VALID_TYPES = ['Hero', 'Couple', 'Countdown', 'EventDetail', 'Story', 'Gallery', 'RSVP', 'Maps', 'Thanks', 'Divider', 'GiftList'];
+const VALID_TYPES = ['Hero', 'Couple', 'Countdown', 'EventDetail', 'Story', 'Gallery', 'RSVP', 'Envelope', 'Maps', 'Thanks', 'Divider', 'GiftList', 'Quote'];
 
 function loadTemplateRaw(id: string): CanvasData {
   // cjs require dengan path relatif ke folder templates/

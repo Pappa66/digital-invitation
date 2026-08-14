@@ -37,7 +37,7 @@ export default function BuilderPage() {
     async function load() {
       if (demoIsDemoMode()) {
         const design = demoGetDesign(projectId);
-        if (design) init(design);
+        if (design) init(design, projectId);
         const proj = demoGetProject(projectId);
         setTitle(proj?.title ?? 'Tanpa Judul');
         setPreviewSlug(proj?.slug ?? null);
@@ -57,7 +57,7 @@ export default function BuilderPage() {
         .eq('project_id', projectId)
         .maybeSingle();
       if (!error && data?.canvas_data) {
-        init(data.canvas_data as unknown as CanvasData);
+        init(data.canvas_data as unknown as CanvasData, projectId);
       }
       const { data: proj } = await supabase.from('projects').select('slug, title, status').eq('id', projectId).maybeSingle();
       setTitle(proj?.title ?? 'Tanpa Judul');

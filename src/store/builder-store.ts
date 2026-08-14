@@ -13,8 +13,10 @@ interface BuilderState {
   /** Asset dekor yang sedang dipilih dalam blok ("${blockId}::${decorId}"). */
   selectedDecor: string | null;
   initialized: boolean;
+  /** Project id terakhir yang dimuat lewat init(), agar ganti project bisa dimuat ulang. */
+  lastProjectId: string | null;
 
-  init: (data: CanvasData) => void;
+  init: (data: CanvasData, projectToken?: string) => void;
   setTheme: (theme: Partial<Theme>) => void;
   setSettings: (settings: Partial<Settings>) => void;
   setReligion: (religion: ReligionKey) => void;
@@ -195,6 +197,16 @@ const BLOCK_PRESETS: Record<BlockType, Block> = {
       note: '',
       items: ['Amplop / tanda kasih', 'Perlengkapan rumah tangga', 'Gift / yang bermanfaat']
     }
+  },
+  Quote: {
+    id: '',
+    type: 'Quote',
+    props: {
+      arabic: '',
+      latin: '',
+      translation: '',
+      reference: ''
+    }
   }
 };
 
@@ -204,14 +216,17 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
   selectedText: null,
   selectedDecor: null,
   initialized: false,
+  lastProjectId: '',
 
-  init: (data) => {
-    if (get().initialized) return;
+  init: (data, projectToken) => {
+    const token = projectToken ?? '';
+    if (get().initialized && get().lastProjectId === token) return;
     const canvas = structuredClone(data);
     if (!canvas.flow) canvas.flow = 'stack';
     set({
       canvas,
       initialized: true,
+      lastProjectId: token,
       selectedBlockId: null
     });
   },
@@ -447,6 +462,7 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
       selectedBlockId: null,
       selectedText: null,
       selectedDecor: null,
-      initialized: false
+      initialized: false,
+      lastProjectId: null
     })
 }));

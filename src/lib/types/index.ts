@@ -12,7 +12,8 @@ export type BlockType =
   | 'Divider'
   | 'Text'
   | 'Photo'
-  | 'GiftList';
+  | 'GiftList'
+  | 'Quote';
 
 export interface Theme {
   primary: string;

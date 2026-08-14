@@ -59,9 +59,14 @@ describe('XSS prevention (STRICT: no raw HTML injection)', () => {
         <BlockView block={{ id: 't', type: 'Thanks', props: { names: 'A' } }} projectId="" />
         <BlockView block={{ id: 'r', type: 'RSVP', props: {} }} projectId="" />
         <BlockView block={{ id: 'd', type: 'Divider', props: {} }} projectId="" />
+        <BlockView
+          block={{ id: 'q', type: 'Quote', props: { arabic: 'وَمِن كُلِّ شَيْءٍ', latin: 'Wa min kulli syai-in', reference: 'QS. Adz Dzariyyat: 49' } }}
+          projectId=""
+        />
       </div>
     );
     expect(container.querySelectorAll('section').length).toBeGreaterThanOrEqual(5);
+    expect(container.textContent).toContain('Adz Dzariyyat');
   });
 
   it('maps block data through the secure component switch (no dangerouslySetInnerHTML)', () => {

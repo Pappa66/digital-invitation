@@ -14,6 +14,7 @@
   "settings": {
     "music_url": "",
     "guest_book_enabled": true,
+    "checkin_enabled": true,
     "religion": "islam"
   },
   "blocks": [
@@ -21,12 +22,12 @@
       "id": "b-1",
       "type": "Hero",
       "props": {
-        "groom": "Rafi Pradana",
-        "bride": "Naila Zahra",
-        "date": "Sabtu, 21 November 2026",
-        "place": "Emerald Garden, Kota Batu",
+        "groom": "Tio Bachir",
+        "bride": "Vinna Lissa",
+        "date": "Sabtu, 28 Maret 2026",
+        "place": "Maximo Resto & Garden, Bandung",
         "caption": "Undangan Pernikahan",
-        "bg_image": "https://images.unsplash.com/photo-1511376777868-611b54f68947",
+        "bg_image": "https://images.unsplash.com/photo-1519741497674-611481863552",
         "show_ornament": true,
         "variant": "center"
       }
@@ -37,91 +38,121 @@
       "props": {
         "introduction": "Assalamu’alaikum Warahmatullahi Wabarakatuh",
         "bismillah": "Bismillahirrahmanirrahim",
-        "groom": "Rafi Pradana, S.Ag.",
-        "groom_parents": "Putra dari H. Muhammad Sholeh & Hj. Aminah",
-        "bride": "Naila Zahra, S.Pd.",
-        "bride_parents": "Putri dari H. Abdul Malik & Hj. Fatimah",
-        "quote": "Dan dari buah hati yang terpilih, kami memohonkan doa dan restu.",
+        "groom": "Tio Bachir",
+        "groom_parents": "Putra dari Bapak Danang Bachir & Ibu Murni Zulaikha",
+        "bride": "Vinna Lissa",
+        "bride_parents": "Putri dari Bapak Agung Raharjo & Ibu Siti Khadijah",
+        "quote": "Perkenankanlah kami memohon doa dan restu dari Bapak/Ibu sekalian.",
         "variant": "vertical"
       }
     },
     {
       "id": "b-3",
+      "type": "Quote",
+      "props": {
+        "arabic": "وَمِن كُلِّ شَيْءٍ خَلَقْنَا زَوْجَيْنِ لَعَلَّكُمْ تَذَكَّرُونَ",
+        "latin": "Wa min kulli syai-in khalaqnaa zaujaini la'allakum tadzakkaruun",
+        "translation": "Dan segala sesuatu Kami ciptakan berpasang-pasangan agar kamu mengingat (kebesaran Allah).",
+        "reference": "QS. Adz Dzariyyat: 49"
+      }
+    },
+    {
+      "id": "b-4",
       "type": "Countdown",
       "props": {
-        "target_date": "2026-11-21T08:00:00+07:00",
+        "target_date": "2026-03-28T16:30:00+07:00",
         "title": "Menuju Hari Bahagia",
         "variant": "cards"
       }
     },
     {
-      "id": "b-4",
+      "id": "b-5",
       "type": "Story",
       "props": {
         "title": "Our Story",
-        "subtitle": "Perjalanan cinta kami",
+        "subtitle": "Kisah Vinna & Tio",
         "ev_title": [
           "Pertemuan Pertama",
           "Menjadi Pasangan",
           "Lamaran"
         ],
         "ev_date": [
-          "2015",
-          "2017",
-          "2025"
+          "2020",
+          "2022",
+          "2026"
         ],
         "ev_desc": [
-          "Rafi dan Naila pertama kali bertemu di kampus saat masa orientasi.",
-          "Mereka mulai menjalin hubungan di antara tumpukan buku dan teh hangat.",
-          "Rafi melamar Naila di di taman apel Kota Batu."
+          "Vinna dan Tio pertama bertemu di sebuah acara komunitas fotografi.",
+          "Ketertarikan yang sama pada seni membuat mereka semakin dekat.",
+          "Tio melamar Vinna dengan memutar video sinematik berisi memori mereka."
         ]
-      }
-    },
-    {
-      "id": "b-5",
-      "type": "EventDetail",
-      "props": {
-        "title": "Akad Nikah",
-        "icon": "rings",
-        "date": "Sabtu, 21 November 2026",
-        "time": "08.00 - 10.00 WIB",
-        "location": "Emerald Garden Hall",
-        "address": "Jalan Raya Batu, Kota Batu",
-        "maps_url": "https://maps.google.com/?q=Emerald%20Garden%20Hall",
-        "variant": "card"
       }
     },
     {
       "id": "b-6",
       "type": "EventDetail",
       "props": {
-        "title": "Resepsi",
-        "icon": "glass",
-        "date": "Sabtu, 21 November 2026",
-        "time": "10.00 - 14.00 WIB",
-        "location": "Emerald Garden Lawn",
-        "address": "Wisata Selecta, Batu",
-        "maps_url": "https://maps.google.com/?q=Emerald%20Garden%20Lawn",
+        "title": "Akad Nikah",
+        "icon": "rings",
+        "date": "Sabtu, 28 Maret 2026",
+        "time": "16.30 - 17.30 WIB",
+        "location": "Maximo Resto & Garden",
+        "address": "Jl. Dr. Setiabudi No. 378, Bandung",
+        "maps_url": "https://maps.google.com/?q=Maximo%20Resto%20%26%20Garden%20Jl.%20Dr.%20Setiabudi%20No.%20378",
         "variant": "card"
       }
     },
     {
       "id": "b-7",
+      "type": "EventDetail",
+      "props": {
+        "title": "Resepsi",
+        "icon": "glass",
+        "date": "Sabtu, 28 Maret 2026",
+        "time": "18.30 - 20.30 WIB",
+        "location": "Maximo Resto & Garden",
+        "address": "Jl. Dr. Setiabudi No. 378, Bandung",
+        "maps_url": "https://maps.google.com/?q=Maximo%20Resto%20%26%20Garden%20Jl.%20Dr.%20Setiabudi%20No.%20378",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "b-8",
       "type": "Gallery",
       "props": {
         "title": "Langkah Menuju Pernikahan",
         "images": [
-          "https://images.unsplash.com/photo-1519741497674-611481863552",
           "https://images.unsplash.com/photo-1522673607200-164d1b6ce486",
           "https://images.unsplash.com/photo-1511285560929-80b456fea0bc",
           "https://images.unsplash.com/photo-1532712938310-34cb3982ef74",
-          "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6"
+          "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6",
+          "https://images.unsplash.com/photo-1519741497674-611481863552"
         ],
         "variant": "arch"
       }
     },
     {
-      "id": "b-7.5",
+      "id": "b-9",
+      "type": "Envelope",
+      "props": {
+        "title": "Amplop Online",
+        "note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "accounts": [
+          {
+            "bank_name": "BJB",
+            "account_number": "0105 1208 0023 43",
+            "account_holder": "Vinna Lissa"
+          },
+          {
+            "bank_name": "BNI",
+            "account_number": "0756 9031 55",
+            "account_holder": "Tio Bachir"
+          }
+        ]
+      }
+    },
+    {
+      "id": "b-10",
       "type": "GiftList",
       "props": {
         "title": "Daftar Kado",
@@ -135,37 +166,34 @@
       }
     },
     {
-      "id": "b-8",
+      "id": "b-11",
       "type": "RSVP",
       "props": {
         "title": "Konfirmasi Kehadiran",
-        "note": "Konfirmasi kehadiran paling lambat 10 November 2026",
-        "deadline": "2026-11-10",
+        "note": "Konfirmasi kehadiran paling lambat 20 Maret 2026",
+        "deadline": "2026-03-20",
         "button_text": "Kirim Konfirmasi",
         "success_message": "Terima kasih, konfirmasi Anda sudah kami terima.",
-        "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
-        "bank_name": "BSI",
-        "account_number": "721 101 3344",
-        "account_holder": "Rafi Pradana"
+        "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening pada bagian Amplop Online."
       }
     },
     {
-      "id": "b-9",
+      "id": "b-12",
       "type": "Thanks",
       "props": {
         "title": "Doa Restu Anda",
-        "message": "Kehadiran Bapak/Ibu/Saudara/i adalah doa dan semangat bagi perjalanan kami.",
+        "message": "Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.",
         "closing": "Wassalamu’alaikum Warahmatullahi Wabarakatuh",
-        "names": "Rafi & Naila"
+        "names": "Vinna & Tio"
       }
     },
     {
-      "id": "b-10",
+      "id": "b-13",
       "type": "Maps",
       "props": {
         "title": "Lokasi Acara",
-        "address": "Emerald Garden, Kota Batu",
-        "embed_url": "https://maps.google.com/?q=Emerald%20Garden%2C%20Kota%20Batu"
+        "address": "Maximo Resto & Garden, Jl. Dr. Setiabudi No. 378, Bandung",
+        "embed_url": "https://maps.google.com/?q=Maximo%20Resto%20%26%20Garden%2C%20Jl.%20Dr.%20Setiabudi%20No.%20378"
       }
     }
   ],

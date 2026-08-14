@@ -94,4 +94,27 @@ describe('builder-store', () => {
     expect(blocks).toHaveLength(1);
     expect(blocks[0].id).toBe('x');
   });
+
+  it('init() reloads when switching to a different project (memuat ulang kanvas)', () => {
+    const store = useBuilderStore.getState();
+    store.init(
+      {
+        theme: { ...store.canvas.theme },
+        settings: { music_url: '', guest_book_enabled: false },
+        blocks: [{ id: 'a', type: 'Hero', props: { bride: 'A' } }]
+      },
+      'proj-a'
+    );
+    store.init(
+      {
+        theme: { ...store.canvas.theme },
+        settings: { music_url: '', guest_book_enabled: false },
+        blocks: [{ id: 'b', type: 'Hero', props: { bride: 'B' } }]
+      },
+      'proj-b'
+    );
+    const blocks = useBuilderStore.getState().canvas.blocks;
+    expect(blocks).toHaveLength(1);
+    expect(blocks[0].id).toBe('b');
+  });
 });

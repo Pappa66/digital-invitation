@@ -108,7 +108,13 @@ const TITLE_PROPS: Record<string, { label: string; multiline?: boolean; url?: bo
   ],
   Divider: [],
   Text: [{ label: 'text', multiline: true }],
-  Photo: [{ label: 'image' }, { label: 'caption' }]
+  Photo: [{ label: 'image' }, { label: 'caption' }],
+  Quote: [
+    { label: 'arabic', multiline: true, labelText: 'Ayat (Arab)' },
+    { label: 'latin', multiline: true, labelText: 'Latin / Bacaan' },
+    { label: 'translation', multiline: true, labelText: 'Terjemahan' },
+    { label: 'reference', labelText: 'Referensi (mis. QS Adz Dzariyyat: 49)' }
+  ]
 };
 
 const VARIANTS: Partial<Record<string, { key: string; options: string[] }>> = {
