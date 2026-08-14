@@ -191,15 +191,20 @@ export default function LandingPage() {
         {/* HEADER */}
         <header className="sticky top-0 z-40 border-b border-[#e7ddcc]/80 bg-[#faf7f2]/90 backdrop-blur">
           <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-            <div className="flex items-center gap-3">
+            <a
+              href="https://prashadigitalindonesia.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 transition-opacity hover:opacity-80"
+            >
               <span className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-black ring-1 ring-[#3a332b]">
-                <Image src="/logo/prasha.png" width={40} height={40} alt="Prasha Digital" className="h-10 w-10 object-cover" />
+                <Image src="/logo/prasha.png" width={40} height={40} alt="Prasha Digital Indonesia" className="h-10 w-10 object-cover" />
               </span>
               <div className="leading-tight">
                 <p className="font-script text-2xl text-[#b98a3e]">Prasha</p>
                 <p className="-mt-1 text-[9px] font-semibold uppercase tracking-[0.35em] text-[#8a7a66]">Digital</p>
               </div>
-            </div>
+            </a>
             <nav className="hidden items-center gap-8 text-sm text-[#8a7a66] md:flex">
               <a href="#catalog" className="transition-colors hover:text-[#2b2620]">Template</a>
               <a href="#cara" className="transition-colors hover:text-[#2b2620]">Cara Kerja</a>
