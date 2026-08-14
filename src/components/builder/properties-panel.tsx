@@ -454,6 +454,17 @@ export default function PropertiesPanel() {
                       onChange={(v) => setBlockProps(block.id, { [prop.label]: v })}
                     />
                   ))}
+                  {block.type === 'EventDetail' && (
+                    <label className="flex items-center gap-2 text-xs font-medium text-[#4a443c]">
+                      <input
+                        type="checkbox"
+                        checked={block.props.show_live !== false}
+                        onChange={(e) => setBlockProps(block.id, { show_live: e.target.checked })}
+                        className="h-4 w-4 rounded border-[#e0d6c2] accent-[#c9a45c]"
+                      />
+                      Tampilkan tombol Siaran Langsung
+                    </label>
+                  )}
                   {block.type === 'Hero' && (
                     <div>
                       <p className="mb-1 text-xs font-medium text-[#4a443c]">Gambar Hero</p>

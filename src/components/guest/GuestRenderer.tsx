@@ -9,6 +9,7 @@ import ShareBar from '@/components/guest/share-bar';
 import { PreviewContext } from '@/components/guest/preview-context';
 import { ThemeContext } from '@/components/guest/theme-context';
 import { GuestFrame } from '@/components/guest/guest-frame';
+import GuestNav from '@/components/guest/guest-nav';
 
 interface GuestRendererProps {
   canvas: CanvasData;
@@ -64,6 +65,7 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
           )}
 {!preview && <MusicPlayer settings={canvas.settings} />}
         {!preview && <ShareBar {...shareMeta} />}
+        {!preview && <GuestNav />}
         <GuestFrame mode={canvas.theme.frame} color={canvas.theme.secondary} fixed={!preview} />
         </div>
         </ThemeContext.Provider>
@@ -84,6 +86,7 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
         )}
         {!preview && <MusicPlayer settings={canvas.settings} />}
         {!preview && <ShareBar {...shareMeta} />}
+        {!preview && <GuestNav />}
         <GuestFrame mode={canvas.theme.frame} color={canvas.theme.secondary} fixed={!preview} />
       </div>
       </ThemeContext.Provider>

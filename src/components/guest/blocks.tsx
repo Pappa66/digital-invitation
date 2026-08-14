@@ -898,7 +898,7 @@ export function EventDetailBlock({ props }: { props: BlockProps }) {
               </div>
               {(str(props, 'maps_url') || address) && (
                 <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
-                  {str(props, 'live_url') && (
+                  {str(props, 'live_url') && bool(props, 'show_live') !== false && (
                     <a
                       href={str(props, 'live_url')}
                       target="_blank"
