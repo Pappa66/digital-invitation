@@ -111,6 +111,37 @@ export interface Database {
           }
         ];
       };
+      checkins: {
+        Row: {
+          id: string;
+          project_id: string;
+          name: string;
+          guest_count: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          project_id: string;
+          name: string;
+          guest_count?: number;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          project_id?: string;
+          name?: string;
+          guest_count?: number;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'checkins_project_id_fkey';
+            columns: ['project_id'];
+            referencedRelation: 'projects';
+            referencedColumns: ['id'];
+          }
+        ];
+      };
       access_tokens: {
         Row: {
           id: string;

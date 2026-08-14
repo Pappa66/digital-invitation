@@ -27,6 +27,8 @@ export interface Theme {
 export interface Settings {
   music_url: string;
   guest_book_enabled: boolean;
+  /** Tampilkan bagian Absensi Kehadiran (QR check-in) pada undangan. */
+  checkin_enabled?: boolean;
   /** Agama undangan (untuk templating ucapan & wording). Default: 'islam'. */
   religion?: string;
   /** Putar otomatis saat halaman terbuka / section trigger tampil. Default: true. */
@@ -164,6 +166,15 @@ export interface Rsvp {
   attendance: 'hadir' | 'tidak' | 'ragu';
   guest_count: number;
   message: string | null;
+  created_at: string;
+}
+
+/** Check-in kehadiran hari-H dari QR absensi. */
+export interface Checkin {
+  id: string;
+  project_id: string;
+  name: string;
+  guest_count: number;
   created_at: string;
 }
 

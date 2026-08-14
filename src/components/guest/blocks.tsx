@@ -826,6 +826,20 @@ export function EventDetailBlock({ props }: { props: BlockProps }) {
   const icon = str(props, 'icon') === 'glass' ? Sparkles : Gem;
   const Icon = icon;
   const band = str(props, 'variant') === 'band';
+
+  const title = str(props, 'title');
+  const dateStr = str(props, 'date');
+  const address = str(props, 'address') || str(props, 'location');
+
+  const calendarHref = (() => {
+    const text = [title, `Lokasi: ${str(props, 'location')}`, address].filter(Boolean).join('\n');
+    return (
+      'https://calendar.google.com/calendar/render?action=TEMPLATE' +
+      `&text=${encodeURIComponent(`Undangan: ${title}`)}` +
+      `&details=${encodeURIComponent(text)}` +
+      `&location=${encodeURIComponent(address)}`
+    );
+  })();
   return (
     <section className={`px-6 py-14 text-center ${band ? 'py-20' : ''}`}>
       <div
@@ -864,6 +878,30 @@ export function EventDetailBlock({ props }: { props: BlockProps }) {
                   </span>
                 </span>
               </div>
+              {(str(props, 'maps_url') || address) && (
+                <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
+                  {str(props, 'maps_url') && (
+                    <a
+                      href={str(props, 'maps_url')}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-current/25 px-4 py-2 text-xs font-medium transition-colors hover:bg-current/10"
+                    >
+                      <MapPin className="h-3.5 w-3.5" /> Buka Maps
+                    </a>
+                  )}
+                  {address && (
+                    <a
+                      href={calendarHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-current/25 px-4 py-2 text-xs font-medium transition-colors hover:bg-current/10"
+                    >
+                      <Calendar className="h-3.5 w-3.5" /> Simpan ke Kalender
+                    </a>
+                  )}
+                </div>
+              )}
             </div>
           </motion.div>
         </Inner>

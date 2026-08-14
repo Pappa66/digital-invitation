@@ -1,6 +1,6 @@
 'use client';
 
-import type { CanvasData, Project, Rsvp } from '@/lib/types';
+import type { CanvasData, Project, Rsvp, Checkin } from '@/lib/types';
 import { getTemplate, emptyCanvas } from '@/lib/templates';
 import { slugify } from '@/lib/slug';
 import { demoIsDemoMode } from '@/lib/env';
@@ -16,6 +16,7 @@ export { demoIsDemoMode };
 const PROJECTS_KEY = 'di_demo_projects';
 const DESIGNS_KEY = 'di_demo_designs';
 const RSVPS_KEY = 'di_demo_rsvps';
+const CHECKINS_KEY = 'di_demo_checkins';
 
 function read<T>(key: string, fallback: T): T {
   if (typeof window === 'undefined') return fallback;
@@ -240,5 +241,26 @@ export function demoAddRsvp(
   all[projectId] = list;
   write(RSVPS_KEY, all);
   rsvpListeners.forEach((fn) => fn());
+  return {};
+}
+
+/** Check-in demo: daftar absensi per proyek (terbaru dulu). */
+export function demoListCheckins(projectId: string): Checkin[] {
+  const all = read<Record<string, Checkin[]>>(CHECKINS_KEY, {});
+  return (all[projectId] ?? []).slice().sort((a, b) => b.created_at.localeCompare(a.created_at));
+}
+
+export function demoAddCheckin(projectId: string, input: { name: string; guest_count: number }): { error?: string } {
+  const all = read<Record<string, Checkin[]>>(CHECKINS_KEY, {});
+  const list = all[projectId] ?? [];
+  list.unshift({
+    id: uid(),
+    project_id: projectId,
+    name: input.name.trim(),
+    guest_count: input.guest_count,
+    created_at: new Date().toISOString()
+  });
+  all[projectId] = list;
+  write(CHECKINS_KEY, all);
   return {};
 }

@@ -4,6 +4,7 @@ import type { CanvasData } from '@/lib/types';
 import BlockView from '@/components/guest/BlockView';
 import MusicPlayer from '@/components/guest/music-player';
 import GuestBookWall from '@/components/guest/guest-book';
+import CheckIn from '@/components/guest/check-in';
 import ShareBar from '@/components/guest/share-bar';
 import { PreviewContext } from '@/components/guest/preview-context';
 import { ThemeContext } from '@/components/guest/theme-context';
@@ -69,6 +70,9 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
           <BlockView key={block.id} block={block} projectId={projectId} greetingName={greetingName} />
         ))}
         {!preview && canvas.settings.guest_book_enabled && <GuestBookWall projectId={projectId} />}
+        {!preview && projectId && canvas.settings.checkin_enabled !== false && (
+          <CheckIn projectId={projectId} greetingName={greetingName} preview={preview} />
+        )}
         {!preview && <MusicPlayer settings={canvas.settings} />}
         {!preview && <ShareBar />}
       </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Copy, Check, Send, Users, ListChecks, Link2, ExternalLink, ShieldCheck, Radio, Download, UserCheck } from 'lucide-react';
+import { Copy, Check, Send, Users, ListChecks, Link2, ExternalLink, ShieldCheck, Radio, Download, UserCheck, QrCode, CalendarClock } from 'lucide-react';
 import { demoIsDemoMode } from '@/lib/env';
 import {
   RELIGIONS,
@@ -11,9 +11,9 @@ import {
   type ReligionKey,
   type MessagePreset
 } from '@/lib/religions';
-import { demoGetProject, demoGetDesign, demoListRsvps } from '@/lib/demo/demo-store';
+import { demoGetProject, demoGetDesign, demoListRsvps, demoListCheckins } from '@/lib/demo/demo-store';
 import { supabase } from '@/lib/supabase/client';
-import type { Rsvp } from '@/lib/types';
+import type { Rsvp, Checkin } from '@/lib/types';
 
 interface InviteManagerProps {
   projectId: string;
@@ -111,6 +111,7 @@ export default function InviteManager({ projectId, slug: slugProp, title: titleP
   const [sentIndexes, setSentIndexes] = useState<Set<number>>(new Set());
   const [copied, setCopied] = useState<string | null>(null);
   const [rsvps, setRsvps] = useState<Rsvp[]>([]);
+  const [checkins, setCheckins] = useState<Checkin[]>([]);
 
   useEffect(() => {
     if (!demoIsDemoMode()) return;
@@ -129,6 +130,7 @@ export default function InviteManager({ projectId, slug: slugProp, title: titleP
   useEffect(() => {
     if (demoIsDemoMode()) {
       setRsvps(demoListRsvps(projectId));
+      setCheckins(demoListCheckins(projectId));
       return;
     }
     supabase
@@ -137,6 +139,12 @@ export default function InviteManager({ projectId, slug: slugProp, title: titleP
       .eq('project_id', projectId)
       .order('created_at', { ascending: false })
       .then(({ data }) => setRsvps((data ?? []) as Rsvp[]));
+    supabase
+      .from('checkins')
+      .select('*')
+      .eq('project_id', projectId)
+      .order('created_at', { ascending: false })
+      .then(({ data }) => setCheckins((data ?? []) as Checkin[]));
   }, [projectId]);
 
   function applyReligion(key: ReligionKey) {
@@ -239,6 +247,16 @@ export default function InviteManager({ projectId, slug: slugProp, title: titleP
       toCsv(
         ['Nama', 'Nomor HP'],
         rows.map((r) => [r.name, r.phone ?? ''])
+      )
+    );
+  }
+
+  function exportCheckins() {
+    download(
+      `absen-hari-h-${slug || 'undangan'}.csv`,
+      toCsv(
+        ['Nama', 'Jumlah Tamu', 'Waktu Check-in'],
+        checkins.map((c) => [c.name, c.guest_count, new Date(c.created_at).toLocaleString('id-ID')])
       )
     );
   }
@@ -466,6 +484,39 @@ export default function InviteManager({ projectId, slug: slugProp, title: titleP
                     {r.message ? <p className="mt-0.5 text-xs leading-relaxed text-[#8a7a66]">{r.message}</p> : null}
                     <p className="mt-0.5 text-[10px] text-[#b3a69a]">
                       {r.guest_count} tamu · {new Date(r.created_at).toLocaleString('id-ID')}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </Panel>
+
+        <Panel>
+          <div className="flex items-center justify-between gap-2">
+            <PanelTitle icon={<QrCode className="h-3.5 w-3.5" />}>Absensi Hari-H (Check-in QR)</PanelTitle>
+            <button onClick={exportCheckins} disabled={checkins.length === 0} className={BTN_OUTLINE}>
+              <Download className="h-3.5 w-3.5" />
+              Unduh CSV
+            </button>
+          </div>
+          {slug ? (
+            <p className="mt-1.5 text-[11px] leading-relaxed text-[#8a7a66]">
+              Tamu memindai QR ini saat tiba di venue (lihat bagian &quot;Absensi Kehadiran&quot; pada undangan). Catatan
+              check-in masuk ke daftar di bawah sesuai urutan waktu.
+            </p>
+          ) : null}
+          {checkins.length === 0 ? (
+            <p className="mt-3 text-[11px] text-[#b3a69a]">Belum ada tamu yang check-in.</p>
+          ) : (
+            <div className="mt-3 max-h-80 overflow-y-auto rounded-xl border border-[#e7ddcc]">
+              {checkins.map((c) => (
+                <div key={c.id} className="flex items-center gap-2 border-b border-[#e7ddcc]/70 px-3 py-2 last:border-0">
+                  <CalendarClock className="h-3.5 w-3.5 shrink-0 text-[#c9a45c]" />
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-medium text-[#2b2620]">{c.name}</p>
+                    <p className="mt-0.5 text-[10px] text-[#b3a69a]">
+                      {c.guest_count} tamu · {new Date(c.created_at).toLocaleString('id-ID')}
                     </p>
                   </div>
                 </div>
