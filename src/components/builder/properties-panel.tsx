@@ -290,6 +290,25 @@ export default function PropertiesPanel() {
                       </button>
                     ))}
                   </div>
+                <label className="block text-xs font-medium text-[#4a443c]">Bingkai Undangan</label>
+                  <div className="flex flex-wrap gap-2">
+                    {(['none', 'classic', 'double', 'corner', 'arch'] as const).map((f) => (
+                      <button
+                        key={f}
+                        onClick={() => setTheme({ frame: f })}
+                        className={`rounded-md border px-2 py-1.5 text-xs capitalize ${
+                          (canvas.theme.frame ?? 'none') === f
+                            ? 'border-[#c9a45c] bg-[#c9a45c] text-white'
+                            : 'border-[#e0d6c2] text-[#6b5f4d]'
+                        }`}
+                      >
+                        {f === 'none' ? 'Tanpa' : f}
+                      </button>
+                    ))}
+                  </div>
+                  <p className="mt-1 text-[11px] text-[#8a7a66]">
+                    Bingkai dekoratif yang mengelilingi seluruh undangan. Sesuaikan dengan gaya tema Anda.
+                  </p>
                 </div>
               }
             />

@@ -8,6 +8,7 @@ import CheckIn from '@/components/guest/check-in';
 import ShareBar from '@/components/guest/share-bar';
 import { PreviewContext } from '@/components/guest/preview-context';
 import { ThemeContext } from '@/components/guest/theme-context';
+import { GuestFrame } from '@/components/guest/guest-frame';
 
 interface GuestRendererProps {
   canvas: CanvasData;
@@ -56,6 +57,7 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
           )}
 {!preview && <MusicPlayer settings={canvas.settings} />}
         {!preview && <ShareBar />}
+        <GuestFrame mode={canvas.theme.frame} color={canvas.theme.secondary} fixed={!preview} />
         </div>
         </ThemeContext.Provider>
       </PreviewContext.Provider>
@@ -75,6 +77,7 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
         )}
         {!preview && <MusicPlayer settings={canvas.settings} />}
         {!preview && <ShareBar />}
+        <GuestFrame mode={canvas.theme.frame} color={canvas.theme.secondary} fixed={!preview} />
       </div>
       </ThemeContext.Provider>
     </PreviewContext.Provider>

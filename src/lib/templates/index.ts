@@ -83,10 +83,55 @@ const RAW_TEMPLATES: Record<string, CanvasData> = {
  * Mengambil template berdasarkan id. Berguna saat "Start from Template".
  * Mengembalikan clone deep agar state reducer tidak mengubah template asli.
  */
+/**
+ * Gaya bingkai dekoratif default per template (nilai Theme.frame).
+ * Template di luar map memakai fallback 'double' supaya semua terlihat rapi.
+ */
+const TEMPLATE_FRAMES: Record<string, string> = {
+  'elegant-gold': 'double',
+  'rustic-garden': 'arch',
+  'bali-tropical': 'corner',
+  'minimal-mono': 'none',
+  'blush-romance': 'classic',
+  'navy-classic': 'double',
+  'boho-earth': 'corner',
+  'forest-celadon': 'arch',
+  'pastel-dream': 'classic',
+  'modern-dark': 'none',
+  'emerald-khaki': 'double',
+  'violet-dusk': 'classic',
+  'terracotta-sun': 'corner',
+  'midnight-ocean': 'double',
+  'golden-sakura': 'corner',
+  'platinum-luxe': 'none',
+  'rose-garden': 'arch',
+  'autumn-maple': 'corner',
+  'mint-fresh': 'classic',
+  'burgundy-classic': 'double',
+  'pearl-white': 'classic',
+  'tropical-sunset': 'corner',
+  'lavender-dream': 'classic',
+  'coffee-cream': 'double',
+  'emerald-mist': 'arch',
+  'moonlight-silver': 'none',
+  'coral-blush': 'classic',
+  'forest-evergreen': 'arch',
+  'sunshine-citrus': 'classic',
+  'glacier-blue': 'double',
+  'ivory-dawn': 'classic',
+  'sapphire-night': 'double',
+  'obsidian-noir': 'double',
+  'steel-blueprint': 'none',
+  'dune-horizon': 'corner',
+  'mauve-reverie': 'arch'
+};
+
 export function getTemplate(id: string): CanvasData | null {
   const tpl = RAW_TEMPLATES[id];
   if (!tpl) return null;
-  return structuredClone(tpl);
+  const clone = structuredClone(tpl);
+  clone.theme.frame = TEMPLATE_FRAMES[id] ?? 'double';
+  return clone;
 }
 
 /** Mengembalikan canvas_data kosong dengan theme default. */

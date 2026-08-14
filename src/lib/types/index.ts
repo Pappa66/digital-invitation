@@ -22,6 +22,11 @@ export interface Theme {
   font_body: string;
   layout: 'center' | 'left' | 'right';
   hero_style: 'image' | 'solid' | 'gradient';
+  /**
+   * Bingkai dekoratif mengelilingi undangan (mode stack).
+   * 'none' | 'classic' | 'double' | 'corner' | 'arch'.
+   */
+  frame?: string;
 }
 
 export interface Settings {
