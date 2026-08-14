@@ -38,6 +38,69 @@ function loadRaw(key: string): string {
   }
 }
 
+function Ornament({ className = '' }: { className?: string }) {
+  return (
+    <div className={`flex items-center justify-center gap-3 ${className}`} aria-hidden>
+      <span className="h-px w-14 bg-gradient-to-r from-transparent to-[#c9a45c]" />
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+        <rect x="0.5" y="0.5" width="9" height="9" transform="rotate(45 5 5)" stroke="#c9a45c" />
+      </svg>
+      <span className="h-px w-14 bg-gradient-to-l from-transparent to-[#c9a45c]" />
+    </div>
+  );
+}
+
+function Panel({ children, className = '' }: { children: React.ReactNode; className?: string }) {
+  return (
+    <section className={`rounded-2xl border border-[#e7ddcc] bg-white/85 p-5 shadow-sm backdrop-blur ${className}`}>
+      {children}
+    </section>
+  );
+}
+
+function PanelTitle({ icon, children }: { icon?: React.ReactNode; children: React.ReactNode }) {
+  return (
+    <h3 className="flex items-center gap-1.5 font-heading text-sm font-medium uppercase tracking-wide text-[#8a6d2f]">
+      {icon}
+      {children}
+    </h3>
+  );
+}
+
+const INPUT_CLS =
+  'w-full rounded-lg border border-[#e0d6c2] bg-[#faf7f2]/70 px-3 py-2 text-sm text-[#4a443c] outline-none transition-colors placeholder:text-[#b3a69a] focus:border-[#c9a45c] focus:ring-2 focus:ring-[#c9a45c]/30';
+
+const BTN_OUTLINE =
+  'flex items-center gap-1.5 rounded-lg border border-[#e0d6c2] px-3 py-1.5 text-xs font-medium text-[#4a443c] transition-colors hover:border-[#c9a45c] hover:bg-[#faf7f2] disabled:cursor-not-allowed disabled:opacity-40';
+
+const BTN_GOLD =
+  'flex items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition-transform hover:scale-[1.02]';
+
+function SegBtn({
+  active,
+  onClick,
+  children,
+  className = ''
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`rounded-lg border px-2 py-1.5 text-xs transition-colors ${
+        active
+          ? 'border-[#c9a45c] bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] text-white'
+          : 'border-[#e0d6c2] text-[#8a7a66] hover:border-[#c9a45c] hover:bg-[#faf7f2]'
+      } ${className}`}
+    >
+      {children}
+    </button>
+  );
+}
+
 export default function InviteManager({ projectId, slug: slugProp, title: titleProp, religion: religionProp, accessToken }: InviteManagerProps) {
   const [slug, setSlug] = useState<string | undefined>(slugProp);
   const [title, setTitle] = useState<string | undefined>(titleProp);
@@ -185,14 +248,26 @@ export default function InviteManager({ projectId, slug: slugProp, title: titleP
     : undefined;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="sticky top-0 z-10 border-b border-gray-200 bg-white">
+    <div className="relative min-h-screen bg-[#faf7f2] text-[#2b2620]">
+      {/* Ornamen latar */}
+      <div aria-hidden className="pointer-events-none fixed inset-0 z-0">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(201,164,92,0.14),transparent_55%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(200,155,138,0.08),transparent_50%)]" />
+        <div
+          className="absolute inset-0 opacity-[0.025]"
+          style={{ backgroundImage: 'radial-gradient(circle, #2b2620 1px, transparent 1px)', backgroundSize: '28px 28px' }}
+        />
+      </div>
+
+      <header className="sticky top-0 z-10 border-b border-[#e7ddcc]/80 bg-[#faf7f2]/90 backdrop-blur">
         <div className="mx-auto flex max-w-2xl items-center justify-between px-4 py-3">
           <div className="flex min-w-0 items-center gap-2">
-            <ShieldCheck className="h-4 w-4 shrink-0 text-emerald-600" />
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-black ring-1 ring-[#3a332b]">
+              <ShieldCheck className="h-4 w-4 text-[#d4af37]" />
+            </span>
             <div className="min-w-0">
-              <p className="truncate text-sm font-semibold text-gray-900">{title ?? 'Undangan'}</p>
-              <p className="text-[10px] text-gray-400">Kelola daftar tamu &amp; ucapan saja</p>
+              <p className="truncate font-heading text-sm font-medium text-[#2b2620]">{title ?? 'Undangan'}</p>
+              <p className="text-[10px] text-[#b3a69a]">Kelola daftar tamu &amp; ucapan saja</p>
             </div>
           </div>
           {slug && (
@@ -200,7 +275,7 @@ export default function InviteManager({ projectId, slug: slugProp, title: titleP
               href={`/${slug}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex shrink-0 items-center gap-1.5 rounded-md border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 hover:border-gray-400"
+              className="flex shrink-0 items-center gap-1.5 rounded-lg border border-[#e0d6c2] bg-white px-3 py-1.5 text-xs font-medium text-[#4a443c] transition-colors hover:border-[#c9a45c]"
             >
               <ExternalLink className="h-3.5 w-3.5" /> Lihat Undangan
             </a>
@@ -208,174 +283,145 @@ export default function InviteManager({ projectId, slug: slugProp, title: titleP
         </div>
       </header>
 
-      <main className="mx-auto max-w-2xl space-y-6 px-4 py-6">
-        <p className="flex items-center gap-2 rounded-md bg-sky-50 px-3 py-2 text-xs text-sky-700">
-          <Radio className="h-3.5 w-3.5 shrink-0" />
+      <main className="relative z-10 mx-auto max-w-2xl space-y-6 px-4 py-8">
+        <div className="text-center">
+          <h1 className="font-heading text-2xl font-medium text-[#2b2620]">Kelola Tamu &amp; Ucapan</h1>
+          <Ornament className="mt-3" />
+        </div>
+
+        <p className="flex items-center gap-2 rounded-xl border border-[#e7ddcc] bg-white/70 px-3 py-2 text-xs text-[#8a7a66]">
+          <Radio className="h-3.5 w-3.5 shrink-0 text-[#c9a45c]" />
           Anda hanya mengelola daftar nama tamu dan membagikan ucapan undangan — desain tidak bisa diubah di sini.
         </p>
 
         {manageLink && (
-          <section className="rounded-xl border border-gray-200 bg-white p-4">
-            <h3 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-gray-500">
-              <Link2 className="h-3.5 w-3.5" /> Link Kelola Tamu (tanpa login)
-            </h3>
-            <p className="mt-1.5 text-[11px] leading-relaxed text-gray-400">
+          <Panel>
+            <PanelTitle icon={<Link2 className="h-3.5 w-3.5" />}>Link Kelola Tamu (tanpa login)</PanelTitle>
+            <p className="mt-1.5 text-[11px] leading-relaxed text-[#8a7a66]">
               Bagikan ke pihak lain yang terikat undangan — mereka bisa membuka halaman ini tanpa login dashboard, lewat token rahasia di tautan.
             </p>
             <div className="mt-2 flex items-center gap-2">
-              <code className="min-w-0 flex-1 truncate rounded-md bg-gray-50 px-2 py-1.5 font-mono text-[11px] text-gray-600">
+              <code className="min-w-0 flex-1 truncate rounded-lg border border-[#e7ddcc] bg-[#faf7f2] px-2 py-1.5 font-mono text-[11px] text-[#4a443c]">
                 {manageLink}
               </code>
-              <button
-                onClick={() => copy('manage-link', manageLink)}
-                className="flex shrink-0 items-center gap-1 rounded-md border border-gray-300 px-2.5 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
-              >
-                {copied === 'manage-link' ? <Check className="h-3 w-3 text-green-600" /> : <Copy className="h-3 w-3" />}
+              <button onClick={() => copy('manage-link', manageLink)} className={BTN_OUTLINE}>
+                {copied === 'manage-link' ? <Check className="h-3 w-3 text-emerald-600" /> : <Copy className="h-3 w-3" />}
                 Salin
               </button>
             </div>
-          </section>
+          </Panel>
         )}
 
-        <details className="rounded-xl border border-gray-200 bg-white p-4" open={false}>
-          <summary className="cursor-pointer text-sm font-medium text-gray-700">Cara pakai halaman ini</summary>
-          <ol className="mt-3 space-y-2 text-xs leading-relaxed text-gray-600">
+        <details className="rounded-2xl border border-[#e7ddcc] bg-white/70 p-4 shadow-sm" open={false}>
+          <summary className="cursor-pointer font-heading text-sm font-medium text-[#2b2620]">Cara pakai halaman ini</summary>
+          <ol className="mt-3 space-y-2 text-xs leading-relaxed text-[#8a7a66]">
             <li>
-              <b>1. Pilih agama</b> — ucapan otomatis menyesuaikan (Islam, Kristen, dan lainnya).
+              <b className="text-[#4a443c]">1. Pilih agama</b> — ucapan otomatis menyesuaikan (Islam, Kristen, dan lainnya).
             </li>
             <li>
-              <b>2. Pilih kalimat</b> — preset siap pakai atau tulis sendiri. Gunakan {'{nama}'} untuk nama tamu dan {'{link}'}
-              untuk tautan undangan.
+              <b className="text-[#4a443c]">2. Pilih kalimat</b> — preset siap pakai atau tulis sendiri. Gunakan {'{nama}'} untuk nama tamu
+              dan {'{link}'} untuk tautan undangan.
             </li>
             <li>
-              <b>3. Tempel daftar tamu</b> — satu nama per baris; bisa tambah nomor, misal <code>Nama | 0812xxxx</code>.
-              Daftar tersimpan otomatis di browser.
+              <b className="text-[#4a443c]">3. Tempel daftar tamu</b> — satu nama per baris; bisa tambah nomor, misal{' '}
+              <code>Nama | 0812xxxx</code>. Daftar tersimpan otomatis di browser.
             </li>
             <li>
-              <b>4. Kirim via WA</b> — klik tombol WA di samping nama, atau &quot;Salin Semua Pesan/Link&quot;. Centang kotak untuk menandai
-              tamu yang sudah menerima.
+              <b className="text-[#4a443c]">4. Kirim via WA</b> — klik tombol WA di samping nama, atau &quot;Salin Semua
+              Pesan/Link&quot;. Centang kotak untuk menandai tamu yang sudah menerima.
             </li>
           </ol>
         </details>
 
-        <section className="rounded-xl border border-gray-200 bg-white p-5">
-          <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-500">Agama &amp; Ucapan</h3>
+        <Panel>
+          <PanelTitle>Agama &amp; Ucapan</PanelTitle>
           <div className="mt-3 grid grid-cols-3 gap-1.5">
             {RELIGIONS.map((r) => (
-              <button
-                key={r.key}
-                onClick={() => applyReligion(r.key)}
-                className={`rounded-md border px-2 py-1.5 text-xs ${
-                  religion === r.key ? 'border-gray-900 bg-gray-900 text-white' : 'border-gray-300 text-gray-600 hover:bg-gray-50'
-                }`}
-              >
+              <SegBtn key={r.key} active={religion === r.key} onClick={() => applyReligion(r.key)}>
                 {r.label}
-              </button>
+              </SegBtn>
             ))}
           </div>
-          <p className="mt-3 text-[11px] text-gray-400">Ucapan otomatis menyesuaikan agama yang dipilih.</p>
+          <p className="mt-3 text-[11px] text-[#b3a69a]">Ucapan otomatis menyesuaikan agama yang dipilih.</p>
 
-          <label className="mt-4 block text-xs font-medium text-gray-700">Pilih Kalimat</label>
-          <div className="mt-1.5 flex gap-1.5">
+          <label className="mt-4 block text-xs font-medium text-[#4a443c]">Pilih Kalimat</label>
+          <div className="mt-1.5 flex flex-wrap gap-1.5">
             {cfg.messages.map((p) => (
-              <button
-                key={p.id}
-                onClick={() => selectPreset(p)}
-                className={`flex-1 rounded-md border px-2 py-1.5 text-xs ${
-                  presetId === p.id ? 'border-gray-900 bg-gray-900 text-white' : 'border-gray-300 text-gray-600 hover:bg-gray-50'
-                }`}
-              >
+              <SegBtn key={p.id} active={presetId === p.id} onClick={() => selectPreset(p)} className="flex-1 min-w-[64px]">
                 {p.label}
-              </button>
+              </SegBtn>
             ))}
-            <button
-              onClick={() => editTemplate(template)}
-              className={`flex-1 rounded-md border px-2 py-1.5 text-xs ${
-                presetId === 'custom' ? 'border-gray-900 bg-gray-900 text-white' : 'border-gray-300 text-gray-600 hover:bg-gray-50'
-              }`}
-            >
+            <SegBtn active={presetId === 'custom'} onClick={() => editTemplate(template)} className="flex-1 min-w-[64px]">
               Custom
-            </button>
+            </SegBtn>
           </div>
-          <textarea
-            value={template}
-            onChange={(e) => editTemplate(e.target.value)}
-            rows={6}
-            className="mt-2 w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-900"
-          />
-        </section>
+          <textarea value={template} onChange={(e) => editTemplate(e.target.value)} rows={6} className={`${INPUT_CLS} mt-2`} />
+        </Panel>
 
-        <section className="rounded-xl border border-gray-200 bg-white p-5">
-          <h3 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-gray-500">
-            <Users className="h-3.5 w-3.5" /> Daftar Nama Tamu
-          </h3>
+        <Panel>
+          <PanelTitle icon={<Users className="h-3.5 w-3.5" />}>Daftar Nama Tamu</PanelTitle>
           <textarea
             value={bulkText}
             onChange={(e) => updateBulk(e.target.value)}
             rows={8}
             placeholder={'Ketik nama tamu satu per baris.\n\nBisa tambah nomor HP:\nNama | 0812xxxx\natau\nNama, 0812xxxx'}
-            className="mt-3 w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-2 font-mono text-xs outline-none focus:ring-2 focus:ring-gray-900"
+            className={`${INPUT_CLS} mt-3 font-mono text-xs`}
           />
-          <p className="mt-1.5 text-[11px] text-gray-400">
-            Terdeteksi <b>{rows.length}</b> tamu. Tersimpan otomatis — bisa dilanjutkan kapan saja.
+          <p className="mt-1.5 text-[11px] text-[#b3a69a]">
+            Terdeteksi <b className="text-[#8a6d2f]">{rows.length}</b> tamu. Tersimpan otomatis — bisa dilanjutkan kapan saja.
           </p>
 
           <div className="mt-3 flex flex-wrap gap-2">
-            <button
-              onClick={() => copy('all-messages', allMessages)}
-              disabled={rows.length === 0}
-              className="flex items-center gap-1.5 rounded-md border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-40"
-            >
-              {copied === 'all-messages' ? <Check className="h-3.5 w-3.5 text-green-600" /> : <ListChecks className="h-3.5 w-3.5" />}
+            <button onClick={() => copy('all-messages', allMessages)} disabled={rows.length === 0} className={BTN_OUTLINE}>
+              {copied === 'all-messages' ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <ListChecks className="h-3.5 w-3.5" />}
               Salin Semua Pesan
             </button>
-            <button
-              onClick={() => copy('all-links', links.join('\n'))}
-              disabled={rows.length === 0}
-              className="flex items-center gap-1.5 rounded-md border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-40"
-            >
-              {copied === 'all-links' ? <Check className="h-3.5 w-3.5 text-green-600" /> : <Link2 className="h-3.5 w-3.5" />}
+            <button onClick={() => copy('all-links', links.join('\n'))} disabled={rows.length === 0} className={BTN_OUTLINE}>
+              {copied === 'all-links' ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Link2 className="h-3.5 w-3.5" />}
               Salin Semua Link
             </button>
-            <button
-              onClick={exportGuests}
-              disabled={rows.length === 0}
-              className="flex items-center gap-1.5 rounded-md border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-40"
-            >
+            <button onClick={exportGuests} disabled={rows.length === 0} className={BTN_OUTLINE}>
               <Download className="h-3.5 w-3.5" />
               Unduh Daftar Tamu (CSV)
             </button>
           </div>
 
           {rows.length > 0 && (
-            <div className="mt-4 max-h-96 overflow-y-auto rounded-md border border-gray-200">
+            <div className="mt-4 max-h-96 overflow-y-auto rounded-xl border border-[#e7ddcc]">
               {rows.map((row, i) => {
                 const done = sentIndexes.has(i);
                 return (
-                  <div key={i} className={`flex items-center gap-2 border-b border-gray-100 px-3 py-2 last:border-0 ${done ? 'bg-green-50' : ''}`}>
+                  <div
+                    key={i}
+                    className={`flex items-center gap-2 border-b border-[#e7ddcc]/70 px-3 py-2 last:border-0 ${done ? 'bg-emerald-50/60' : ''}`}
+                  >
                     <button
                       onClick={() => toggleSent(i)}
                       title="Tandai sudah dikirim"
-                      className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border ${done ? 'border-green-600 bg-green-600' : 'border-gray-300'}`}
+                      className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border ${
+                        done ? 'border-emerald-600 bg-emerald-600' : 'border-[#d9c795]'
+                      }`}
                     >
                       {done && <Check className="h-3 w-3 text-white" />}
                     </button>
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-medium text-gray-800">{row.name}</p>
-                      <p className="truncate text-[10px] text-gray-400">{row.phone ? `+${row.phone.replace(/[^0-9+]/g, '')}` : 'tanpa nomor'}</p>
+                      <p className="truncate text-sm font-medium text-[#2b2620]">{row.name}</p>
+                      <p className="truncate text-[10px] text-[#b3a69a]">
+                        {row.phone ? `+${row.phone.replace(/[^0-9+]/g, '')}` : 'tanpa nomor'}
+                      </p>
                     </div>
                     <button
                       onClick={() => copy(`row-msg-${i}`, fill(template, row.name, links[i]))}
                       title="Salin pesan"
-                      className="flex shrink-0 items-center gap-1 rounded-md border border-gray-300 px-2 py-1.5 text-[11px] text-gray-600 hover:bg-gray-50"
+                      className="flex shrink-0 items-center gap-1 rounded-lg border border-[#e0d6c2] px-2 py-1.5 text-[11px] text-[#4a443c] transition-colors hover:border-[#c9a45c]"
                     >
-                      {copied === `row-msg-${i}` ? <Check className="h-3 w-3 text-green-600" /> : <Copy className="h-3 w-3" />}
+                      {copied === `row-msg-${i}` ? <Check className="h-3 w-3 text-emerald-600" /> : <Copy className="h-3 w-3" />}
                       Salin
                     </button>
                     <button
                       onClick={() => openWa(row, i)}
-                      className={`flex shrink-0 items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium text-white ${
-                        done ? 'bg-gray-300' : 'bg-emerald-600 hover:bg-emerald-500'
+                      className={`flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-white transition-colors ${
+                        done ? 'bg-[#d9c795]' : 'bg-emerald-600 hover:bg-emerald-500'
                       }`}
                     >
                       <Send className="h-3.5 w-3.5" />
@@ -386,31 +432,25 @@ export default function InviteManager({ projectId, slug: slugProp, title: titleP
               })}
             </div>
           )}
-        </section>
+        </Panel>
 
-        <section className="rounded-xl border border-gray-200 bg-white p-5">
+        <Panel>
           <div className="flex items-center justify-between gap-2">
-            <h3 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-gray-500">
-              <UserCheck className="h-3.5 w-3.5" /> Konfirmasi Masuk (RSVP)
-            </h3>
-            <button
-              onClick={exportRsvps}
-              disabled={rsvps.length === 0}
-              className="flex items-center gap-1.5 rounded-md border border-gray-300 px-2.5 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-40"
-            >
+            <PanelTitle icon={<UserCheck className="h-3.5 w-3.5" />}>Konfirmasi Masuk (RSVP)</PanelTitle>
+            <button onClick={exportRsvps} disabled={rsvps.length === 0} className={BTN_OUTLINE}>
               <Download className="h-3.5 w-3.5" />
               Unduh CSV
             </button>
           </div>
           {rsvps.length === 0 ? (
-            <p className="mt-3 text-[11px] text-gray-400">Belum ada konfirmasi kehadiran dari tamu.</p>
+            <p className="mt-3 text-[11px] text-[#b3a69a]">Belum ada konfirmasi kehadiran dari tamu.</p>
           ) : (
-            <div className="mt-3 max-h-80 overflow-y-auto rounded-md border border-gray-200">
+            <div className="mt-3 max-h-80 overflow-y-auto rounded-xl border border-[#e7ddcc]">
               {rsvps.map((r) => (
-                <div key={r.id} className="flex items-start gap-2 border-b border-gray-100 px-3 py-2 last:border-0">
+                <div key={r.id} className="flex items-start gap-2 border-b border-[#e7ddcc]/70 px-3 py-2 last:border-0">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
-                      <p className="truncate text-sm font-medium text-gray-800">{r.name}</p>
+                      <p className="truncate text-sm font-medium text-[#2b2620]">{r.name}</p>
                       <span
                         className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold ${
                           r.attendance === 'hadir'
@@ -423,8 +463,8 @@ export default function InviteManager({ projectId, slug: slugProp, title: titleP
                         {r.attendance === 'hadir' ? 'Hadir' : r.attendance === 'ragu' ? 'Ragu' : 'Tidak Hadir'}
                       </span>
                     </div>
-                    {r.message ? <p className="mt-0.5 text-xs leading-relaxed text-gray-500">{r.message}</p> : null}
-                    <p className="mt-0.5 text-[10px] text-gray-400">
+                    {r.message ? <p className="mt-0.5 text-xs leading-relaxed text-[#8a7a66]">{r.message}</p> : null}
+                    <p className="mt-0.5 text-[10px] text-[#b3a69a]">
                       {r.guest_count} tamu · {new Date(r.created_at).toLocaleString('id-ID')}
                     </p>
                   </div>
@@ -432,7 +472,11 @@ export default function InviteManager({ projectId, slug: slugProp, title: titleP
               ))}
             </div>
           )}
-        </section>
+        </Panel>
+
+        <p className="pb-4 text-center text-xs text-[#b3a69a]">
+          Undangan digital mewah &amp; personal &middot; {new Date().getFullYear()} Prasha Digital Indonesia
+        </p>
       </main>
     </div>
   );
