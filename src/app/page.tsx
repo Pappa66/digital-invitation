@@ -207,9 +207,6 @@ export default function LandingPage() {
               <a href="#syarat" className="transition-colors hover:text-[#2b2620]">Syarat</a>
             </nav>
             <div className="flex items-center gap-3">
-              <Link href="/login" className="rounded-md border border-[#e0d6c2] bg-white px-4 py-1.5 text-sm font-medium text-[#4a443c] transition-colors hover:border-[#c9a45c]">
-                Masuk
-              </Link>
               <button
                 onClick={() => openOrder()}
                 className="rounded-md bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-4 py-1.5 text-sm font-semibold text-white shadow-sm transition-transform hover:scale-[1.03]"
