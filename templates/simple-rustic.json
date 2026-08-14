@@ -1,0 +1,173 @@
+{
+  "theme": {
+    "primary": "#7A5C3E",
+    "secondary": "#A98D6F",
+    "background": "#F5EFE6",
+    "text": "#3E362E",
+    "font_heading": "Playfair Display",
+    "font_body": "Lora",
+    "layout": "center",
+    "hero_style": "image",
+    "frame": "double",
+    "card_style": true
+  },
+  "settings": {
+    "music_url": "",
+    "guest_book_enabled": true,
+    "religion": "islam"
+  },
+  "blocks": [
+    {
+      "id": "b-1",
+      "type": "Hero",
+      "props": {
+        "groom": "Rafi Pradana",
+        "bride": "Naila Zahra",
+        "date": "Sabtu, 21 November 2026",
+        "place": "Emerald Garden, Kota Batu",
+        "caption": "Undangan Pernikahan",
+        "bg_image": "https://images.unsplash.com/photo-1511376777868-611b54f68947",
+        "show_ornament": true,
+        "variant": "center"
+      }
+    },
+    {
+      "id": "b-2",
+      "type": "Couple",
+      "props": {
+        "introduction": "Assalamu’alaikum Warahmatullahi Wabarakatuh",
+        "bismillah": "Bismillahirrahmanirrahim",
+        "groom": "Rafi Pradana, S.Ag.",
+        "groom_parents": "Putra dari H. Muhammad Sholeh & Hj. Aminah",
+        "bride": "Naila Zahra, S.Pd.",
+        "bride_parents": "Putri dari H. Abdul Malik & Hj. Fatimah",
+        "quote": "Dan dari buah hati yang terpilih, kami memohonkan doa dan restu.",
+        "variant": "vertical"
+      }
+    },
+    {
+      "id": "b-3",
+      "type": "Countdown",
+      "props": {
+        "target_date": "2026-11-21T08:00:00+07:00",
+        "title": "Menuju Hari Bahagia",
+        "variant": "cards"
+      }
+    },
+    {
+      "id": "b-4",
+      "type": "Story",
+      "props": {
+        "title": "Our Story",
+        "subtitle": "Perjalanan cinta kami",
+        "ev_title": [
+          "Pertemuan Pertama",
+          "Menjadi Pasangan",
+          "Lamaran"
+        ],
+        "ev_date": [
+          "2015",
+          "2017",
+          "2025"
+        ],
+        "ev_desc": [
+          "Rafi dan Naila pertama kali bertemu di kampus saat masa orientasi.",
+          "Mereka mulai menjalin hubungan di antara tumpukan buku dan teh hangat.",
+          "Rafi melamar Naila di di taman apel Kota Batu."
+        ]
+      }
+    },
+    {
+      "id": "b-5",
+      "type": "EventDetail",
+      "props": {
+        "title": "Akad Nikah",
+        "icon": "rings",
+        "date": "Sabtu, 21 November 2026",
+        "time": "08.00 - 10.00 WIB",
+        "location": "Emerald Garden Hall",
+        "address": "Jalan Raya Batu, Kota Batu",
+        "maps_url": "https://maps.google.com/?q=Emerald%20Garden%20Hall",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "b-6",
+      "type": "EventDetail",
+      "props": {
+        "title": "Resepsi",
+        "icon": "glass",
+        "date": "Sabtu, 21 November 2026",
+        "time": "10.00 - 14.00 WIB",
+        "location": "Emerald Garden Lawn",
+        "address": "Wisata Selecta, Batu",
+        "maps_url": "https://maps.google.com/?q=Emerald%20Garden%20Lawn",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "b-7",
+      "type": "Gallery",
+      "props": {
+        "title": "Langkah Menuju Pernikahan",
+        "images": [
+          "https://images.unsplash.com/photo-1519741497674-611481863552",
+          "https://images.unsplash.com/photo-1522673607200-164d1b6ce486",
+          "https://images.unsplash.com/photo-1511285560929-80b456fea0bc",
+          "https://images.unsplash.com/photo-1532712938310-34cb3982ef74",
+          "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6"
+        ],
+        "variant": "arch"
+      }
+    },
+    {
+      "id": "b-7.5",
+      "type": "GiftList",
+      "props": {
+        "title": "Daftar Kado",
+        "note": "Kehadiran Anda adalah hadiah terindah bagi kami. Namun bila ingin berbagi kebahagiaan, berikut beberapa referensi tanda kasih.",
+        "items": [
+          "Tanda kasih",
+          "Perlengkapan rumah tangga",
+          "Gift / parcel",
+          "Cokelat & bunga"
+        ]
+      }
+    },
+    {
+      "id": "b-8",
+      "type": "RSVP",
+      "props": {
+        "title": "Konfirmasi Kehadiran",
+        "note": "Konfirmasi kehadiran paling lambat 10 November 2026",
+        "deadline": "2026-11-10",
+        "button_text": "Kirim Konfirmasi",
+        "success_message": "Terima kasih, konfirmasi Anda sudah kami terima.",
+        "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "bank_name": "BSI",
+        "account_number": "721 101 3344",
+        "account_holder": "Rafi Pradana"
+      }
+    },
+    {
+      "id": "b-9",
+      "type": "Thanks",
+      "props": {
+        "title": "Doa Restu Anda",
+        "message": "Kehadiran Bapak/Ibu/Saudara/i adalah doa dan semangat bagi perjalanan kami.",
+        "closing": "Wassalamu’alaikum Warahmatullahi Wabarakatuh",
+        "names": "Rafi & Naila"
+      }
+    },
+    {
+      "id": "b-10",
+      "type": "Maps",
+      "props": {
+        "title": "Lokasi Acara",
+        "address": "Emerald Garden, Kota Batu",
+        "embed_url": "https://maps.google.com/?q=Emerald%20Garden%2C%20Kota%20Batu"
+      }
+    }
+  ],
+  "flow": "stack"
+}

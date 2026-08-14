@@ -286,5 +286,29 @@
     "description": "Mauve lembut dan carousel foto yang romantis, puitis dan tenang.",
     "primary": "#9B6A8C",
     "secondary": "#C9A3BE"
+  },
+  {
+    "id": "simple-rustic",
+    "name": "Simple Rustic",
+    "category": "outdoor",
+    "description": "Gaya kartu rustic hangat: kopi-krem, bingkai ganda, dan setiap section berbentuk card yang rapi.",
+    "primary": "#7A5C3E",
+    "secondary": "#A98D6F"
+  },
+  {
+    "id": "serene",
+    "name": "Serene",
+    "category": "modern",
+    "description": "Tenang dan segar: palet sage hijau, section berbentuk kartu dengan lengkungan arch.",
+    "primary": "#6B9080",
+    "secondary": "#A4C3B2"
+  },
+  {
+    "id": "photovita",
+    "name": "PhotoVita",
+    "category": "modern",
+    "description": "Fokus tajam pada foto: monokrom gelap dengan bingkai minimalis agar foto menjadi bintangnya.",
+    "primary": "#2B2B2B",
+    "secondary": "#6B6B6B"
   }
 ]

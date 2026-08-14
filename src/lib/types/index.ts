@@ -28,6 +28,11 @@ export interface Theme {
    * 'none' | 'classic' | 'double' | 'corner' | 'arch'.
    */
   frame?: string;
+  /**
+   * Tampilkan tiap section sebagai kartu berdampingan (gaya card-template,
+   * seperti webvitation Simple Rustic). Hero tetap penuh layar.
+   */
+  card_style?: boolean;
 }
 
 export interface Settings {

@@ -40,6 +40,11 @@ body {
   scroll-behavior: smooth;
 }
 
+/* Card-template: latar sedikit lebih gelap agar kartu putih menonjol. */
+.guest-card-style {
+  background-color: color-mix(in srgb, var(--color-background) 62%, #000000 38%);
+}
+
 .guest-root h1,
 .guest-root h2,
 .guest-root h3 {

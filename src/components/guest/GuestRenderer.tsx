@@ -43,7 +43,9 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
   } as React.CSSProperties;
 
   const rootClass =
-    'guest-root mx-auto w-full overflow-x-hidden ' + (width === 'desktop' ? 'max-w-full' : 'max-w-[430px]');
+    'guest-root mx-auto w-full overflow-x-hidden ' +
+    (canvas.theme.card_style ? 'guest-card-style ' : '') +
+    (width === 'desktop' ? 'max-w-full' : 'max-w-[430px]');
 
   if (flow === 'free') {
     const height = canvas.blocks.reduce((m, b) => (b.layout ? Math.max(m, b.layout.y) : m), 0) + 900;
@@ -57,10 +59,10 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
                 key={block.id}
                 style={{ position: 'absolute', left: block.layout.x, top: block.layout.y, width: block.layout.width, maxWidth: CANVAS_W }}
               >
-                <BlockView block={block} projectId={projectId} greetingName={greetingName} />
+                <BlockView block={block} projectId={projectId} greetingName={greetingName} cardStyle={canvas.theme.card_style} />
               </div>
             ) : (
-              <BlockView key={block.id} block={block} projectId={projectId} greetingName={greetingName} />
+              <BlockView key={block.id} block={block} projectId={projectId} greetingName={greetingName} cardStyle={canvas.theme.card_style} />
             )
           )}
 {!preview && <MusicPlayer settings={canvas.settings} />}
@@ -78,7 +80,7 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
       <ThemeContext.Provider value={canvas.theme}>
       <div className={rootClass} style={styleVars}>
         {canvas.blocks.map((block) => (
-          <BlockView key={block.id} block={block} projectId={projectId} greetingName={greetingName} />
+          <BlockView key={block.id} block={block} projectId={projectId} greetingName={greetingName} cardStyle={canvas.theme.card_style} />
         ))}
         {!preview && canvas.settings.guest_book_enabled && <GuestBookWall projectId={projectId} />}
         {!preview && projectId && canvas.settings.checkin_enabled !== false && (

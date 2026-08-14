@@ -309,6 +309,15 @@ export default function PropertiesPanel() {
                       </button>
                     ))}
                   </div>
+                  <label className="mt-1 flex items-center gap-2 text-xs font-medium text-[#4a443c]">
+                    <input
+                      type="checkbox"
+                      checked={canvas.theme.card_style === true}
+                      onChange={(e) => setTheme({ card_style: e.target.checked })}
+                      className="h-4 w-4 rounded border-[#e0d6c2] accent-[#c9a45c]"
+                    />
+                    Gaya Kartu (tiap section berbentuk card)
+                  </label>
                   <p className="mt-1 text-[11px] text-[#8a7a66]">
                     Bingkai dekoratif yang mengelilingi seluruh undangan. Sesuaikan dengan gaya tema Anda.
                   </p>

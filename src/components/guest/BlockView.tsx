@@ -32,9 +32,11 @@ interface BlockViewProps {
   editable?: boolean;
   /** Nama tamu (dari ?to=) untuk sapaan di Hero. */
   greetingName?: string;
+  /** Mode card-template: bungkus section (kecuali Hero) sebagai kartu. */
+  cardStyle?: boolean;
 }
 
-export default function BlockView({ block, projectId, editable = false, greetingName }: BlockViewProps) {
+export default function BlockView({ block, projectId, editable = false, greetingName, cardStyle }: BlockViewProps) {
   const preview = usePreview();
   let view: React.ReactNode;
   switch (block.type) {
@@ -84,6 +86,12 @@ export default function BlockView({ block, projectId, editable = false, greeting
       return null;
   }
 
+  const isHero = block.type === 'Hero';
+  const renderCard = cardStyle && !isHero;
+  const body = (
+    <StyledSection style={block.style}>{view}</StyledSection>
+  );
+
   return (
     <InnerProvider value={block.inner ?? undefined}>
       <BuilderEditableContext.Provider value={editable ? { blockId: block.id } : null}>
@@ -95,10 +103,10 @@ export default function BlockView({ block, projectId, editable = false, greeting
               viewport={{ once: true, amount: 0.15 }}
               transition={{ duration: 0.55, ease: 'easeOut' }}
             >
-              <StyledSection style={block.style}>{view}</StyledSection>
+              {renderCard ? <div className="card-mask overflow-hidden rounded-2xl shadow-[0_8px_26px_rgba(0,0,0,0.12)] ring-1 ring-black/5">{body}</div> : body}
             </motion.div>
           ) : (
-            <StyledSection style={block.style}>{view}</StyledSection>
+            renderCard ? <div className="overflow-hidden rounded-2xl shadow-[0_8px_26px_rgba(0,0,0,0.12)] ring-1 ring-black/5">{body}</div> : body
           )}
           <DecorLayer blockId={block.id} decor={block.decor} />
         </div>

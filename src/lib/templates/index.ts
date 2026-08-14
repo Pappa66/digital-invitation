@@ -36,6 +36,9 @@ import obsidianNoir from '../../../templates/obsidian-noir.json';
 import steelBlueprint from '../../../templates/steel-blueprint.json';
 import duneHorizon from '../../../templates/dune-horizon.json';
 import mauveReverie from '../../../templates/mauve-reverie.json';
+import simpleRustic from '../../../templates/simple-rustic.json';
+import serene from '../../../templates/serene.json';
+import photovita from '../../../templates/photovita.json';
 import templateIndex from '../../../templates/index.json';
 
 export const TEMPLATE_LIST: TemplateMeta[] = templateIndex as TemplateMeta[];
@@ -76,7 +79,10 @@ const RAW_TEMPLATES: Record<string, CanvasData> = {
   'obsidian-noir': obsidianNoir as unknown as CanvasData,
   'steel-blueprint': steelBlueprint as unknown as CanvasData,
   'dune-horizon': duneHorizon as unknown as CanvasData,
-  'mauve-reverie': mauveReverie as unknown as CanvasData
+  'mauve-reverie': mauveReverie as unknown as CanvasData,
+  'simple-rustic': simpleRustic as unknown as CanvasData,
+  'serene': serene as unknown as CanvasData,
+  'photovita': photovita as unknown as CanvasData
 };
 
 /**
@@ -125,6 +131,11 @@ const TEMPLATE_FRAMES: Record<string, string> = {
   'dune-horizon': 'corner',
   'mauve-reverie': 'arch'
 };
+
+/** Gaya bingkai default utk template card-style baru. */
+TEMPLATE_FRAMES['simple-rustic'] = 'double';
+TEMPLATE_FRAMES['serene'] = 'arch';
+TEMPLATE_FRAMES['photovita'] = 'none';
 
 export function getTemplate(id: string): CanvasData | null {
   const tpl = RAW_TEMPLATES[id];
