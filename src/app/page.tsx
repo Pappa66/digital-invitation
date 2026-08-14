@@ -202,7 +202,7 @@ export default function LandingPage() {
               </span>
               <div className="leading-tight">
                 <p className="font-script text-2xl text-[#b98a3e]">Prasha</p>
-                <p className="-mt-1 text-[9px] font-semibold uppercase tracking-[0.35em] text-[#8a7a66]">Digital</p>
+                <p className="-mt-1 text-[9px] font-semibold uppercase tracking-[0.35em] text-[#8a7a66]">Digital Indonesia</p>
               </div>
             </a>
             <nav className="hidden items-center gap-8 text-sm text-[#8a7a66] md:flex">
