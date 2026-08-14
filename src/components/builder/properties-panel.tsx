@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Type, Clapperboard } from 'lucide-react';
 import ColorPicker from '@/components/builder/color-picker';
 import MediaLibrary from '@/components/dashboard/media-library';
+import MusicPreview from '@/components/builder/music-preview';
 import { useBuilderStore } from '@/store/builder-store';
 import { RELIGIONS } from '@/lib/religions';
 import type { BlockProps } from '@/lib/types';
@@ -309,6 +310,13 @@ export default function PropertiesPanel() {
                       </select>
                     </div>
                   </div>
+                  {canvas.settings.music_url.trim() && (
+                    <MusicPreview
+                      url={canvas.settings.music_url}
+                      offsetSec={canvas.settings.music_offset_sec ?? 0}
+                      onOffsetChange={(s) => setSettings({ music_offset_sec: s })}
+                    />
+                  )}
                   <p className="text-[11px] leading-relaxed text-[#8a7a66]">
                     Autoplay pada beberapa browser baru berfungsi setelah ada interaksi; tombol musik tetap tersedia di pojok kiri bawah undangan.
                   </p>
