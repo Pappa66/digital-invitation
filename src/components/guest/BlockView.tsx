@@ -76,27 +76,25 @@ export default function BlockView({ block, projectId, editable = false, greeting
       return null;
   }
 
-  if (editable) {
-    view = <BuilderEditableContext.Provider value={{ blockId: block.id }}>{view}</BuilderEditableContext.Provider>;
-  }
-
   return (
     <InnerProvider value={block.inner ?? undefined}>
-      <div data-block-type={block.type} className="relative">
-        {!preview && !editable ? (
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.15 }}
-            transition={{ duration: 0.55, ease: 'easeOut' }}
-          >
+      <BuilderEditableContext.Provider value={editable ? { blockId: block.id } : null}>
+        <div data-block-type={block.type} className="relative">
+          {!preview && !editable ? (
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{ duration: 0.55, ease: 'easeOut' }}
+            >
+              <StyledSection style={block.style}>{view}</StyledSection>
+            </motion.div>
+          ) : (
             <StyledSection style={block.style}>{view}</StyledSection>
-          </motion.div>
-        ) : (
-          <StyledSection style={block.style}>{view}</StyledSection>
-        )}
-        <DecorLayer blockId={block.id} decor={block.decor} />
-      </div>
+          )}
+          <DecorLayer blockId={block.id} decor={block.decor} />
+        </div>
+      </BuilderEditableContext.Provider>
     </InnerProvider>
   );
 }
