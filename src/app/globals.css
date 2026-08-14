@@ -34,8 +34,6 @@ body {
   --color-secondary: var(--gc-secondary);
   --color-background: var(--gc-background);
   --color-text: var(--gc-text);
-  --font-heading: var(--font-heading);
-  --font-body: var(--font-body);
   background-color: var(--color-background);
   color: var(--color-text);
   font-family: var(--font-body);

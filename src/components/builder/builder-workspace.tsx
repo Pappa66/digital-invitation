@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   DndContext,
   DragOverlay,
@@ -40,6 +40,18 @@ export default function BuilderWorkspace({ projectId }: { projectId: string }) {
   const dragTranslatedRef = useRef<Record<string, { left: number; top: number }>>({});
   const freeCanvasRef = useRef<HTMLDivElement | null>(null);
   const [guides, setGuides] = useState<{ x?: number; y?: number }>({});
+
+  useEffect(() => {
+    const fonts = Array.from(new Set([canvas.theme.font_heading, canvas.theme.font_body]));
+    let link = document.getElementById('invitation-fonts') as HTMLLinkElement | null;
+    if (!link) {
+      link = document.createElement('link');
+      link.id = 'invitation-fonts';
+      link.rel = 'stylesheet';
+      document.head.appendChild(link);
+    }
+    link.href = `https://fonts.googleapis.com/css2?${fonts.map((f) => `family=${encodeURIComponent(f)}`).join('&')}&display=swap`;
+  }, [canvas.theme.font_heading, canvas.theme.font_body]);
 
   const flow = canvas.flow ?? 'stack';
   const canvasW = device === 'desktop' ? CANVAS_W_DESKTOP : CANVAS_W;
