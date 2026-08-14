@@ -1,0 +1,124 @@
+{
+  "theme": {
+    "primary": "#123C4E",
+    "secondary": "#2E7D8C",
+    "background": "#0E2230",
+    "text": "#E7EEF2",
+    "font_heading": "Playfair Display",
+    "font_body": "Inter",
+    "layout": "left",
+    "hero_style": "solid"
+  },
+  "settings": {
+    "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
+    "guest_book_enabled": true,
+    "religion": "islam",
+    "music_autoplay": true,
+    "music_offset_sec": 0,
+    "music_on_section": ""
+  },
+  "blocks": [
+    {
+      "id": "b-1",
+      "type": "Hero",
+      "props": {
+        "groom": "Bryan Hadinata",
+        "bride": "Stella Wijaya",
+        "date": "25.04.2027",
+        "place": "The Ritz-Carlton, Jakarta",
+        "caption": "Save The Date",
+        "bg_image": "",
+        "show_ornament": false,
+        "variant": "left"
+      }
+    },
+    {
+      "id": "b-2",
+      "type": "Couple",
+      "props": {
+        "introduction": "Two oceans, one wave",
+        "bismillah": "Bismillahirrahmanirrahim",
+        "groom": "Bryan Hadinata, S.T.",
+        "groom_parents": "Son of Mr. Anton Wijaya & Mrs. Lina",
+        "bride": "Stella Wijaya, S.E.",
+        "bride_parents": "Daughter of Mr. Kevin Kusuma & Mrs. Yuli",
+        "quote": "Our love runs as deep and calm as the midnight ocean.",
+        "variant": "side"
+      }
+    },
+    {
+      "id": "b-3",
+      "type": "Countdown",
+      "props": {
+        "target_date": "2027-04-25T18:00:00+07:00",
+        "title": "Counting Down To Forever",
+        "variant": "line"
+      }
+    },
+    {
+      "id": "b-4",
+      "type": "EventDetail",
+      "props": {
+        "title": "The Celebration",
+        "icon": "rings",
+        "date": "Sunday, 25 April 2027",
+        "time": "18.00 - 22.00 WIB",
+        "location": "Ritz-Carlton Grand Ballroom",
+        "address": "Jl. DR. Ide Anak Agung Gde Agung, Jakarta",
+        "maps_url": "https://maps.google.com/?q=Ritz-Carlton%20Grand%20Ballroom",
+        "variant": "band"
+      }
+    },
+    {
+      "id": "b-5",
+      "type": "Gallery",
+      "props": {
+        "title": "Deep Blue Moments",
+        "images": [
+          "https://picsum.photos/seed/midnight-ocean-g1/600/800",
+          "https://picsum.photos/seed/midnight-ocean-g2/600/800",
+          "https://picsum.photos/seed/midnight-ocean-g3/600/800",
+          "https://picsum.photos/seed/midnight-ocean-g4/600/800"
+        ],
+        "variant": "carousel",
+        "animation": "slide-up",
+        "interval_sec": 3
+      }
+    },
+    {
+      "id": "b-6",
+      "type": "RSVP",
+      "props": {
+        "title": "Konfirmasi Kehadiran",
+        "note": "Kindly RSVP before 10 April 2027",
+        "deadline": "2027-04-10",
+        "button_text": "Kindly RSVP",
+        "success_message": "Thank you! We look forward to seeing you.",
+        "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "bank_name": "BCA",
+        "account_number": "880013987911",
+        "account_holder": "Bryan Hadinata"
+      }
+    },
+    {
+      "id": "b-7",
+      "type": "Thanks",
+      "props": {
+        "title": "With Gratitude",
+        "message": "Thank you for sailing into our lives and celebrating this voyage with us.",
+        "closing": "Forever yours,",
+        "names": "Bryan & Stella"
+      }
+    },
+    {
+      "id": "b-8",
+      "type": "Maps",
+      "props": {
+        "title": "Lokasi Acara",
+        "address": "The Ritz-Carlton, Jakarta",
+        "embed_url": "https://maps.google.com/?q=The%20Ritz-Carlton%2C%20Jakarta"
+      }
+    }
+  ],
+  "flow": "stack"
+}

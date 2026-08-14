@@ -1,0 +1,123 @@
+{
+  "theme": {
+    "primary": "#2B3A42",
+    "secondary": "#9DB4C0",
+    "background": "#172431",
+    "text": "#DEE6EA",
+    "font_heading": "Cinzel",
+    "font_body": "Inter",
+    "layout": "left",
+    "hero_style": "solid"
+  },
+  "settings": {
+    "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3",
+    "guest_book_enabled": true,
+    "religion": "islam",
+    "music_autoplay": true,
+    "music_offset_sec": 0,
+    "music_on_section": ""
+  },
+  "blocks": [
+    {
+      "id": "b-1",
+      "type": "Hero",
+      "props": {
+        "groom": "Evan Sanjaya",
+        "bride": "Giselle Tanuwijaya",
+        "date": "04.03.2028",
+        "place": "Fairmont, Jakarta",
+        "caption": "Save The Date",
+        "bg_image": "",
+        "show_ornament": false,
+        "variant": "right"
+      }
+    },
+    {
+      "id": "b-2",
+      "type": "Couple",
+      "props": {
+        "introduction": "Under the same moonlight",
+        "bismillah": "Bismillahirrahmanirrahim",
+        "groom": "Evan Sanjaya, S.T.",
+        "groom_parents": "Son of Mr. Richard Tanu & Mrs. Maria",
+        "bride": "Giselle Tanuwijaya, S.E.",
+        "bride_parents": "Daughter of Mr. Hendra Wijaya & Mrs. Susan",
+        "quote": "We met by moonlight and swore to love forever under its glow.",
+        "variant": "side"
+      }
+    },
+    {
+      "id": "b-3",
+      "type": "Countdown",
+      "props": {
+        "target_date": "2028-03-04T19:00:00+07:00",
+        "title": "Until the Full Moon",
+        "variant": "line"
+      }
+    },
+    {
+      "id": "b-4",
+      "type": "EventDetail",
+      "props": {
+        "title": "The Night of Nuptials",
+        "icon": "rings",
+        "date": "Saturday, 4 March 2028",
+        "time": "19.00 - 23.00 WIB",
+        "location": "Fairmont Ballroom",
+        "address": "Jl. Asia Afrika, Jakarta Pusat",
+        "maps_url": "https://maps.google.com/?q=Fairmont%20Ballroom",
+        "variant": "band"
+      }
+    },
+    {
+      "id": "b-5",
+      "type": "Gallery",
+      "props": {
+        "title": "Silver Moonlight",
+        "images": [
+          "https://picsum.photos/seed/moonlight-silver-g1/600/800",
+          "https://picsum.photos/seed/moonlight-silver-g2/600/800",
+          "https://picsum.photos/seed/moonlight-silver-g3/600/800",
+          "https://picsum.photos/seed/moonlight-silver-g4/600/800"
+        ],
+        "variant": "column",
+        "animation": "blur"
+      }
+    },
+    {
+      "id": "b-6",
+      "type": "RSVP",
+      "props": {
+        "title": "Konfirmasi Kehadiran",
+        "note": "Kindly RSVP before 20 February 2028",
+        "deadline": "2028-02-20",
+        "button_text": "Kindly RSVP",
+        "success_message": "Thank you! We look forward to seeing you.",
+        "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "bank_name": "BSI",
+        "account_number": "880018040107",
+        "account_holder": "Evan Sanjaya"
+      }
+    },
+    {
+      "id": "b-7",
+      "type": "Thanks",
+      "props": {
+        "title": "Moonlit Thanks",
+        "message": "Thank you for illuminating our celebration with your presence.",
+        "closing": "By the moonlight,",
+        "names": "Evan & Giselle"
+      }
+    },
+    {
+      "id": "b-8",
+      "type": "Maps",
+      "props": {
+        "title": "Lokasi Acara",
+        "address": "Fairmont, Jakarta",
+        "embed_url": "https://maps.google.com/?q=Fairmont%2C%20Jakarta"
+      }
+    }
+  ],
+  "flow": "stack"
+}

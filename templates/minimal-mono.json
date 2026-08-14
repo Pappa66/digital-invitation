@@ -1,0 +1,118 @@
+{
+  "theme": {
+    "primary": "#111827",
+    "secondary": "#6B7280",
+    "background": "#FFFFFF",
+    "text": "#111827",
+    "font_heading": "Jost",
+    "font_body": "Inter",
+    "layout": "left",
+    "hero_style": "solid"
+  },
+  "settings": {
+    "music_url": "",
+    "guest_book_enabled": true,
+    "religion": "islam"
+  },
+  "blocks": [
+    {
+      "id": "b-1",
+      "type": "Hero",
+      "props": {
+        "groom": "Raka Prasetya",
+        "bride": "Nadia Amara",
+        "date": "09.08.2026",
+        "place": "The Westin, Surabaya",
+        "caption": "Save The Date",
+        "bg_image": "",
+        "show_ornament": false,
+        "variant": "left"
+      }
+    },
+    {
+      "id": "b-2",
+      "type": "Couple",
+      "props": {
+        "introduction": "Two hearts, one beginning",
+        "bismillah": "In the name of love",
+        "groom": "Raka Prasetya, S.Kom.",
+        "groom_parents": "Son of Mr. Budi Hartanto & Mrs. Ratna",
+        "bride": "Nadia Amara, S.T.",
+        "bride_parents": "Daughter of Mr. Hendra Wijaya & Mrs. Elisa",
+        "quote": "Minimal things, maximal love.",
+        "variant": "side"
+      }
+    },
+    {
+      "id": "b-3",
+      "type": "Countdown",
+      "props": {
+        "target_date": "2026-08-09T10:00:00+07:00",
+        "title": "09.08.2026",
+        "variant": "line"
+      }
+    },
+    {
+      "id": "b-4",
+      "type": "EventDetail",
+      "props": {
+        "title": "The Wedding",
+        "icon": "rings",
+        "date": "Sunday, 09 August 2026",
+        "time": "10.00 - 14.00 WIB",
+        "location": "The Westin Grand Ballroom",
+        "address": "Jl. Embong Malang, Surabaya",
+        "maps_url": "https://maps.google.com/?q=The%20Westin%20Grand%20Ballroom",
+        "variant": "band"
+      }
+    },
+    {
+      "id": "b-5",
+      "type": "Gallery",
+      "props": {
+        "title": "Moments",
+        "images": [
+          "https://images.unsplash.com/photo-1519741497674-611481863552",
+          "https://images.unsplash.com/photo-1520854221256-17451cc331bf",
+          "https://images.unsplash.com/photo-1522673607200-164d1b6ce486",
+          "https://images.unsplash.com/photo-1532712938310-34cb3982ef74"
+        ]
+      }
+    },
+    {
+      "id": "b-6",
+      "type": "RSVP",
+      "props": {
+        "title": "Konfirmasi Kehadiran",
+        "note": "Kindly RSVP before 31 July 2026",
+        "deadline": "2026-07-31",
+        "button_text": "With Gratitude",
+        "success_message": "Thank you! We look forward to seeing you.",
+        "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "bank_name": "BCA",
+        "account_number": "883 071 2288",
+        "account_holder": "Raka Prasetya"
+      }
+    },
+    {
+      "id": "b-7",
+      "type": "Thanks",
+      "props": {
+        "title": "With Gratitude",
+        "message": "Your presence is a gift. Thank you for celebrating this day with us.",
+        "closing": "Raka & Nadia",
+        "names": "Raka & Nadia"
+      }
+    },
+    {
+      "id": "b-8",
+      "type": "Maps",
+      "props": {
+        "title": "Lokasi Acara",
+        "address": "The Westin, Surabaya",
+        "embed_url": "https://maps.google.com/?q=The%20Westin%2C%20Surabaya"
+      }
+    }
+  ],
+  "flow": "stack"
+}

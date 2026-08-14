@@ -1,0 +1,147 @@
+{
+  "theme": {
+    "primary": "#B4552D",
+    "secondary": "#8C4A1E",
+    "background": "#F9F1E6",
+    "text": "#4C3A27",
+    "font_heading": "Marcellus",
+    "font_body": "Lora",
+    "layout": "left",
+    "hero_style": "image"
+  },
+  "settings": {
+    "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3",
+    "guest_book_enabled": true,
+    "religion": "islam",
+    "music_autoplay": true,
+    "music_offset_sec": 0,
+    "music_on_section": ""
+  },
+  "blocks": [
+    {
+      "id": "b-1",
+      "type": "Hero",
+      "props": {
+        "groom": "Reyhan Maulana",
+        "bride": "Chintya Ayu",
+        "date": "Minggu, 18 Juli 2027",
+        "place": "Maple Hill, Bandung",
+        "caption": "We Are Getting Married",
+        "bg_image": "https://picsum.photos/seed/autumn-maple-hero/900/1200",
+        "show_ornament": true,
+        "variant": "left"
+      }
+    },
+    {
+      "id": "b-2",
+      "type": "Couple",
+      "props": {
+        "introduction": "Dengan penuh suka cita",
+        "bismillah": "Bismillahirrahmanirrahim",
+        "groom": "Reyhan Maulana, S.T.",
+        "groom_parents": "Anak pertama dari Bpk. Dedi Kurniawan & Ibu Ratih",
+        "bride": "Chintya Ayu, S.E.",
+        "bride_parents": "Anak pertama dari Bpk. Hendar Ginanjar & Ibu Maya",
+        "quote": "Seperti daun maple yang memerah, cinta kami semakin hangat setiap musim.",
+        "variant": "side"
+      }
+    },
+    {
+      "id": "b-3",
+      "type": "Countdown",
+      "props": {
+        "target_date": "2027-07-18T15:00:00+07:00",
+        "title": "Musim Gugur Cinta",
+        "variant": "cards"
+      }
+    },
+    {
+      "id": "b-4",
+      "type": "Story",
+      "props": {
+        "title": "Our Story",
+        "subtitle": "Perjalanan cinta kami",
+        "ev_title": [
+          "Pertemuan Pertama",
+          "Menjadi Pasangan",
+          "Lamaran"
+        ],
+        "ev_date": [
+          "2016",
+          "2019",
+          "2026"
+        ],
+        "ev_desc": [
+          "Reyhan dan Chintya pertama kali bertemu di kebun teh Lembang.",
+          "Mereka mulai menjalin hubungan saat menikmati musim gugur.",
+          "Reyhan melamar Chintya di di bawah pohon maple tertua."
+        ]
+      }
+    },
+    {
+      "id": "b-5",
+      "type": "EventDetail",
+      "props": {
+        "title": "Akad & Resepsi",
+        "icon": "rings",
+        "date": "Minggu, 18 Juli 2027",
+        "time": "15.00 - 20.00 WIB",
+        "location": "Maple Hill Hall",
+        "address": "Lembang, Bandung Barat",
+        "maps_url": "https://maps.google.com/?q=Maple%20Hill%20Hall",
+        "variant": "band"
+      }
+    },
+    {
+      "id": "b-6",
+      "type": "Gallery",
+      "props": {
+        "title": "Warna-warna Musim",
+        "images": [
+          "https://picsum.photos/seed/autumn-maple-g1/600/800",
+          "https://picsum.photos/seed/autumn-maple-g2/600/800",
+          "https://picsum.photos/seed/autumn-maple-g3/600/800",
+          "https://picsum.photos/seed/autumn-maple-g4/600/800",
+          "https://picsum.photos/seed/autumn-maple-g5/600/800"
+        ],
+        "variant": "column",
+        "animation": "slide-right"
+      }
+    },
+    {
+      "id": "b-7",
+      "type": "RSVP",
+      "props": {
+        "title": "Konfirmasi Kehadiran",
+        "note": "Mohon konfirmasi kehadiran sebelum 5 Juli 2027",
+        "deadline": "2027-07-05",
+        "button_text": "Kirim Konfirmasi",
+        "success_message": "Terima kasih, konfirmasi Anda sudah kami terima.",
+        "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "bank_name": "BCA",
+        "account_number": "880030225718",
+        "account_holder": "Reyhan Maulana"
+      }
+    },
+    {
+      "id": "b-8",
+      "type": "Thanks",
+      "props": {
+        "title": "Terima Kasih",
+        "message": "Terima kasih telah hadir merayakan musim paling hangat dalam hidup kami.",
+        "closing": "Dengan cinta,",
+        "names": "Reyhan & Chintya"
+      }
+    },
+    {
+      "id": "b-9",
+      "type": "Maps",
+      "props": {
+        "title": "Lokasi Acara",
+        "address": "Maple Hill, Bandung",
+        "embed_url": "https://maps.google.com/?q=Maple%20Hill%2C%20Bandung"
+      }
+    }
+  ],
+  "flow": "stack"
+}

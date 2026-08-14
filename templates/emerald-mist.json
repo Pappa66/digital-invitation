@@ -1,0 +1,162 @@
+{
+  "theme": {
+    "primary": "#0F5132",
+    "secondary": "#82A396",
+    "background": "#F0F5EF",
+    "text": "#28463A",
+    "font_heading": "Cormorant Garamond",
+    "font_body": "Montserrat",
+    "layout": "center",
+    "hero_style": "image"
+  },
+  "settings": {
+    "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3",
+    "guest_book_enabled": true,
+    "religion": "islam",
+    "music_autoplay": true,
+    "music_offset_sec": 0,
+    "music_on_section": ""
+  },
+  "blocks": [
+    {
+      "id": "b-1",
+      "type": "Hero",
+      "props": {
+        "groom": "Devan Mahendra",
+        "bride": "Kiara Anindya",
+        "date": "Sabtu, 19 Februari 2028",
+        "place": "Emerald Shelter, Yogyakarta",
+        "caption": "The Wedding Of",
+        "bg_image": "https://picsum.photos/seed/emerald-mist-hero/900/1200",
+        "show_ornament": true,
+        "variant": "center"
+      }
+    },
+    {
+      "id": "b-2",
+      "type": "Couple",
+      "props": {
+        "introduction": "Assalamu’alaikum Warahmatullahi Wabarakatuh",
+        "bismillah": "Bismillahirrahmanirrahim",
+        "groom": "Devan Mahendra, S.T.",
+        "groom_parents": "Putra dari Bpk. Rendra Kurnia & Ibu Wulan",
+        "bride": "Kiara Anindya, S.E.",
+        "bride_parents": "Putri dari Bpk. Hartono & Ibu Ratih",
+        "quote": "Seperti kabut pagi di hutan, kamu menyelimutiku dengan tenang.",
+        "variant": "vertical"
+      }
+    },
+    {
+      "id": "b-3",
+      "type": "Countdown",
+      "props": {
+        "target_date": "2028-02-19T09:00:00+07:00",
+        "title": "Kabut Cinta",
+        "variant": "circles"
+      }
+    },
+    {
+      "id": "b-4",
+      "type": "Story",
+      "props": {
+        "title": "Our Story",
+        "subtitle": "Perjalanan cinta kami",
+        "ev_title": [
+          "Pertemuan Pertama",
+          "Menjadi Pasangan",
+          "Lamaran"
+        ],
+        "ev_date": [
+          "2016",
+          "2019",
+          "2027"
+        ],
+        "ev_desc": [
+          "Devan dan Kiara pertama kali bertemu di perpustakaan UGM.",
+          "Mereka mulai menjalin hubungan saat menikmati hujan di Kaliurang.",
+          "Devan melamar Kiara di di tebing Parangtritis."
+        ]
+      }
+    },
+    {
+      "id": "b-5",
+      "type": "EventDetail",
+      "props": {
+        "title": "Akad Nikah",
+        "icon": "rings",
+        "date": "Sabtu, 19 Februari 2028",
+        "time": "09.00 - 11.00 WIB",
+        "location": "Emerald Shelter",
+        "address": "Kaliurang, Yogyakarta",
+        "maps_url": "https://maps.google.com/?q=Emerald%20Shelter",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "b-6",
+      "type": "EventDetail",
+      "props": {
+        "title": "Resepsi",
+        "icon": "glass",
+        "date": "Sabtu, 19 Februari 2028",
+        "time": "11.30 - 15.00 WIB",
+        "location": "Emerald Shelter",
+        "address": "Kaliurang, Sleman",
+        "maps_url": "https://maps.google.com/?q=Emerald%20Shelter",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "b-7",
+      "type": "Gallery",
+      "props": {
+        "title": "Selimut Kabut",
+        "images": [
+          "https://picsum.photos/seed/emerald-mist-g1/600/800",
+          "https://picsum.photos/seed/emerald-mist-g2/600/800",
+          "https://picsum.photos/seed/emerald-mist-g3/600/800",
+          "https://picsum.photos/seed/emerald-mist-g4/600/800",
+          "https://picsum.photos/seed/emerald-mist-g5/600/800"
+        ],
+        "variant": "carousel",
+        "animation": "slide-left",
+        "interval_sec": 3
+      }
+    },
+    {
+      "id": "b-8",
+      "type": "RSVP",
+      "props": {
+        "title": "Konfirmasi Kehadiran",
+        "note": "Mohon konfirmasi kehadiran sebelum 5 Februari 2028",
+        "deadline": "2028-02-05",
+        "button_text": "Kirim Konfirmasi",
+        "success_message": "Terima kasih, konfirmasi Anda sudah kami terima.",
+        "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "bank_name": "BNI",
+        "account_number": "880008167298",
+        "account_holder": "Devan Mahendra"
+      }
+    },
+    {
+      "id": "b-9",
+      "type": "Thanks",
+      "props": {
+        "title": "Doa Restu",
+        "message": "Semoga doa dan restu Anda menjadi kabut yang mendinginkan perjalanan kami.",
+        "closing": "Wassalamu’alaikum Warahmatullahi Wabarakatuh",
+        "names": "Devan & Kiara"
+      }
+    },
+    {
+      "id": "b-10",
+      "type": "Maps",
+      "props": {
+        "title": "Lokasi Acara",
+        "address": "Emerald Shelter, Yogyakarta",
+        "embed_url": "https://maps.google.com/?q=Emerald%20Shelter%2C%20Yogyakarta"
+      }
+    }
+  ],
+  "flow": "stack"
+}

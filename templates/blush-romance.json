@@ -1,0 +1,156 @@
+{
+  "theme": {
+    "primary": "#E8A0B4",
+    "secondary": "#F3C7D3",
+    "background": "#FFF8F5",
+    "text": "#6B5558",
+    "font_heading": "Great Vibes",
+    "font_body": "Nunito Sans",
+    "layout": "center",
+    "hero_style": "image"
+  },
+  "settings": {
+    "music_url": "",
+    "guest_book_enabled": true,
+    "religion": "islam"
+  },
+  "blocks": [
+    {
+      "id": "b-1",
+      "type": "Hero",
+      "props": {
+        "groom": "Dimas Anugrah",
+        "bride": "Alya Sekar Ayu",
+        "date": "Sabtu, 16 Mei 2026",
+        "place": "The Alana Hotel, Yogyakarta",
+        "caption": "The Wedding Of",
+        "bg_image": "https://images.unsplash.com/photo-1519741497674-611481863552",
+        "show_ornament": true,
+        "variant": "center"
+      }
+    },
+    {
+      "id": "b-2",
+      "type": "Couple",
+      "props": {
+        "introduction": "Assalamu’alaikum Warahmatullahi Wabarakatuh",
+        "bismillah": "Bismillahirrahmanirrahim",
+        "groom": "Dimas Anugrah, S.Ars.",
+        "groom_parents": "Putra dari Bpk. Suryo Baskoro & Ibu Rina",
+        "bride": "Alya Sekar Ayu, S.Psi.",
+        "bride_parents": "Putri dari Bpk. Arman Wibowo & Ibu Dewi",
+        "quote": "Cinta bukan tentang saling menatap, melainkan memandang ke arah yang sama.",
+        "variant": "vertical"
+      }
+    },
+    {
+      "id": "b-3",
+      "type": "Countdown",
+      "props": {
+        "target_date": "2026-05-16T09:00:00+07:00",
+        "title": "Menuju Hari Kita",
+        "variant": "circles"
+      }
+    },
+    {
+      "id": "b-4",
+      "type": "Story",
+      "props": {
+        "title": "Our Story",
+        "subtitle": "Perjalanan cinta kami",
+        "ev_title": [
+          "Pertemuan Pertama",
+          "Menjadi Pasangan",
+          "Lamaran"
+        ],
+        "ev_date": [
+          "2018",
+          "2020",
+          "2025"
+        ],
+        "ev_desc": [
+          "Dimas dan Alya pertama kali bertemu di perpustakaan kota Malioboro.",
+          "Mereka mulai menjalin hubungan di tengah hujan rintik Jogja.",
+          "Dimas melamar Alya di di bawah langit senja Borobudur."
+        ]
+      }
+    },
+    {
+      "id": "b-5",
+      "type": "EventDetail",
+      "props": {
+        "title": "Akad Nikah",
+        "icon": "rings",
+        "date": "Sabtu, 16 Mei 2026",
+        "time": "09.00 - 11.00 WIB",
+        "location": "Ballroom The Alana",
+        "address": "Jl. Magelang KM 4.4, Yogyakarta",
+        "maps_url": "https://maps.google.com/?q=Ballroom%20The%20Alana",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "b-6",
+      "type": "EventDetail",
+      "props": {
+        "title": "Resepsi",
+        "icon": "glass",
+        "date": "Sabtu, 16 Mei 2026",
+        "time": "11.00 - 14.00 WIB",
+        "location": "Garden The Alana",
+        "address": "Sinduadi, Mlati, Sleman",
+        "maps_url": "https://maps.google.com/?q=Garden%20The%20Alana",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "b-7",
+      "type": "Gallery",
+      "props": {
+        "title": "Kisah Kami",
+        "images": [
+          "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6",
+          "https://images.unsplash.com/photo-1519741497674-611481863552",
+          "https://images.unsplash.com/photo-1511285560929-80b456fea0bc",
+          "https://images.unsplash.com/photo-1522673607200-164d1b6ce486",
+          "https://images.unsplash.com/photo-1532712938310-34cb3982ef74"
+        ]
+      }
+    },
+    {
+      "id": "b-8",
+      "type": "RSVP",
+      "props": {
+        "title": "Konfirmasi Kehadiran",
+        "note": "Mohon konfirmasi sebelum 5 Mei 2026",
+        "deadline": "2026-05-05",
+        "button_text": "Kirim Konfirmasi",
+        "success_message": "Terima kasih, konfirmasi Anda sudah kami terima.",
+        "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "bank_name": "BNI",
+        "account_number": "071 334 5566",
+        "account_holder": "Dimas Anugrah"
+      }
+    },
+    {
+      "id": "b-9",
+      "type": "Thanks",
+      "props": {
+        "title": "Doa Restu Anda",
+        "message": "Terima kasih atas kehadiran dan doa restu Bapak/Ibu/Saudara/i untuk perjalanan kami.",
+        "closing": "Wassalamu’alaikum Warahmatullahi Wabarakatuh",
+        "names": "Dimas & Alya"
+      }
+    },
+    {
+      "id": "b-10",
+      "type": "Maps",
+      "props": {
+        "title": "Lokasi Acara",
+        "address": "The Alana Hotel, Yogyakarta",
+        "embed_url": "https://maps.google.com/?q=The%20Alana%20Hotel%2C%20Yogyakarta"
+      }
+    }
+  ],
+  "flow": "stack"
+}

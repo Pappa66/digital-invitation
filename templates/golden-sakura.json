@@ -1,0 +1,162 @@
+{
+  "theme": {
+    "primary": "#D4A03C",
+    "secondary": "#E8C5CD",
+    "background": "#FBF6EF",
+    "text": "#574B3A",
+    "font_heading": "Cormorant Garamond",
+    "font_body": "Jost",
+    "layout": "center",
+    "hero_style": "image"
+  },
+  "settings": {
+    "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3",
+    "guest_book_enabled": true,
+    "religion": "islam",
+    "music_autoplay": true,
+    "music_offset_sec": 0,
+    "music_on_section": ""
+  },
+  "blocks": [
+    {
+      "id": "b-1",
+      "type": "Hero",
+      "props": {
+        "groom": "Fajar Ramadhan",
+        "bride": "Sakura Ayudia",
+        "date": "Sabtu, 8 Mei 2027",
+        "place": "Sakura Garden, Batu",
+        "caption": "Undangan Pernikahan",
+        "bg_image": "https://picsum.photos/seed/golden-sakura-hero/900/1200",
+        "show_ornament": true,
+        "variant": "center"
+      }
+    },
+    {
+      "id": "b-2",
+      "type": "Couple",
+      "props": {
+        "introduction": "Assalamu’alaikum Warahmatullahi Wabarakatuh",
+        "bismillah": "Bismillahirrahmanirrahim",
+        "groom": "Fajar Ramadhan, S.T.",
+        "groom_parents": "Putra dari Bpk. Arief Hidayat & Ibu Dewi",
+        "bride": "Sakura Ayudia, S.E.",
+        "bride_parents": "Putri dari Bpk. Yusuf Ramli & Ibu Nur",
+        "quote": "Cinta kami mekar seperti sakura di musim semi.",
+        "variant": "vertical"
+      }
+    },
+    {
+      "id": "b-3",
+      "type": "Countdown",
+      "props": {
+        "target_date": "2027-05-08T09:00:00+07:00",
+        "title": "Menuju Sakura Mekar",
+        "variant": "circles"
+      }
+    },
+    {
+      "id": "b-4",
+      "type": "Story",
+      "props": {
+        "title": "Our Story",
+        "subtitle": "Perjalanan cinta kami",
+        "ev_title": [
+          "Pertemuan Pertama",
+          "Menjadi Pasangan",
+          "Lamaran"
+        ],
+        "ev_date": [
+          "2017",
+          "2019",
+          "2026"
+        ],
+        "ev_desc": [
+          "Fajar dan Sakura pertama kali bertemu di kebun apel Kota Batu.",
+          "Mereka mulai menjalin hubungan saat musim sakura mekar.",
+          "Fajar melamar Sakura di di lereng Gunung Arjuno."
+        ]
+      }
+    },
+    {
+      "id": "b-5",
+      "type": "EventDetail",
+      "props": {
+        "title": "Akad Nikah",
+        "icon": "rings",
+        "date": "Sabtu, 8 Mei 2027",
+        "time": "09.00 - 11.00 WIB",
+        "location": "Sakura Garden Hall",
+        "address": "Jalan Raya Oro-oro Ombo, Batu",
+        "maps_url": "https://maps.google.com/?q=Sakura%20Garden%20Hall",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "b-6",
+      "type": "EventDetail",
+      "props": {
+        "title": "Resepsi",
+        "icon": "glass",
+        "date": "Sabtu, 8 Mei 2027",
+        "time": "11.30 - 15.00 WIB",
+        "location": "Sakura Garden Lawn",
+        "address": "Pemandian Cangar, Batu",
+        "maps_url": "https://maps.google.com/?q=Sakura%20Garden%20Lawn",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "b-7",
+      "type": "Gallery",
+      "props": {
+        "title": "Kelopak Kenangan",
+        "images": [
+          "https://picsum.photos/seed/golden-sakura-g1/600/800",
+          "https://picsum.photos/seed/golden-sakura-g2/600/800",
+          "https://picsum.photos/seed/golden-sakura-g3/600/800",
+          "https://picsum.photos/seed/golden-sakura-g4/600/800",
+          "https://picsum.photos/seed/golden-sakura-g5/600/800",
+          "https://picsum.photos/seed/golden-sakura-g6/600/800"
+        ],
+        "variant": "grid",
+        "animation": "swing"
+      }
+    },
+    {
+      "id": "b-8",
+      "type": "RSVP",
+      "props": {
+        "title": "Konfirmasi Kehadiran",
+        "note": "Mohon konfirmasi kehadiran sebelum 25 April 2027",
+        "deadline": "2027-04-25",
+        "button_text": "Kirim Konfirmasi",
+        "success_message": "Terima kasih, konfirmasi Anda sudah kami terima.",
+        "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "bank_name": "BNI",
+        "account_number": "880032533405",
+        "account_holder": "Fajar Ramadhan"
+      }
+    },
+    {
+      "id": "b-9",
+      "type": "Thanks",
+      "props": {
+        "title": "Doa Restu",
+        "message": "Semoga doa restu Bapak/Ibu/Saudara/i menjadi kelopak yang mengiringi cinta kami.",
+        "closing": "Wassalamu’alaikum Warahmatullahi Wabarakatuh",
+        "names": "Fajar & Sakura"
+      }
+    },
+    {
+      "id": "b-10",
+      "type": "Maps",
+      "props": {
+        "title": "Lokasi Acara",
+        "address": "Sakura Garden, Batu",
+        "embed_url": "https://maps.google.com/?q=Sakura%20Garden%2C%20Batu"
+      }
+    }
+  ],
+  "flow": "stack"
+}

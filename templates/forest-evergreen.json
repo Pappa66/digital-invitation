@@ -1,0 +1,147 @@
+{
+  "theme": {
+    "primary": "#1C3D2F",
+    "secondary": "#7AA874",
+    "background": "#F3F6F1",
+    "text": "#2E423A",
+    "font_heading": "Marcellus",
+    "font_body": "Jost",
+    "layout": "left",
+    "hero_style": "image"
+  },
+  "settings": {
+    "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+    "guest_book_enabled": true,
+    "religion": "islam",
+    "music_autoplay": true,
+    "music_offset_sec": 0,
+    "music_on_section": ""
+  },
+  "blocks": [
+    {
+      "id": "b-1",
+      "type": "Hero",
+      "props": {
+        "groom": "Naufal Akbar",
+        "bride": "Syifa Rahma",
+        "date": "Minggu, 16 April 2028",
+        "place": "Evergreen Forest, Bandung",
+        "caption": "We Are Getting Married",
+        "bg_image": "https://picsum.photos/seed/forest-evergreen-hero/900/1200",
+        "show_ornament": true,
+        "variant": "left"
+      }
+    },
+    {
+      "id": "b-2",
+      "type": "Couple",
+      "props": {
+        "introduction": "Dengan penuh suka cita",
+        "bismillah": "Bismillahirrahmanirrahim",
+        "groom": "Naufal Akbar, S.T.",
+        "groom_parents": "Anak pertama dari Bpk. Hadi Suwarno & Ibu Sri Wahyuni",
+        "bride": "Syifa Rahma, S.E.",
+        "bride_parents": "Anak pertama dari Bpk. Agus Salim & Ibu Ida Farida",
+        "quote": "Di hutan yang rimbun ini, kau adalah napas paling dalam.",
+        "variant": "vertical"
+      }
+    },
+    {
+      "id": "b-3",
+      "type": "Countdown",
+      "props": {
+        "target_date": "2028-04-16T10:00:00+07:00",
+        "title": "Musim Tumbuh",
+        "variant": "cards"
+      }
+    },
+    {
+      "id": "b-4",
+      "type": "Story",
+      "props": {
+        "title": "Our Story",
+        "subtitle": "Perjalanan cinta kami",
+        "ev_title": [
+          "Pertemuan Pertama",
+          "Menjadi Pasangan",
+          "Lamaran"
+        ],
+        "ev_date": [
+          "2017",
+          "2020",
+          "2027"
+        ],
+        "ev_desc": [
+          "Naufal dan Syifa pertama kali bertemu di kampus kehutanan.",
+          "Mereka mulai menjalin hubungan saat mendaki Gunung Papandayan.",
+          "Naufal melamar Syifa di di hutan pinus Cikole."
+        ]
+      }
+    },
+    {
+      "id": "b-5",
+      "type": "EventDetail",
+      "props": {
+        "title": "Akad & Resepsi",
+        "icon": "rings",
+        "date": "Minggu, 16 April 2028",
+        "time": "10.00 - 15.00 WIB",
+        "location": "Evergreen Forest",
+        "address": "Cikole, Lembang",
+        "maps_url": "https://maps.google.com/?q=Evergreen%20Forest",
+        "variant": "band"
+      }
+    },
+    {
+      "id": "b-6",
+      "type": "Gallery",
+      "props": {
+        "title": "Tunas Kenangan",
+        "images": [
+          "https://picsum.photos/seed/forest-evergreen-g1/600/800",
+          "https://picsum.photos/seed/forest-evergreen-g2/600/800",
+          "https://picsum.photos/seed/forest-evergreen-g3/600/800",
+          "https://picsum.photos/seed/forest-evergreen-g4/600/800",
+          "https://picsum.photos/seed/forest-evergreen-g5/600/800"
+        ],
+        "variant": "column",
+        "animation": "zoom-out"
+      }
+    },
+    {
+      "id": "b-7",
+      "type": "RSVP",
+      "props": {
+        "title": "Konfirmasi Kehadiran",
+        "note": "Mohon konfirmasi kehadiran sebelum 2 April 2028",
+        "deadline": "2028-04-02",
+        "button_text": "Kirim Konfirmasi",
+        "success_message": "Terima kasih, konfirmasi Anda sudah kami terima.",
+        "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "bank_name": "BSI",
+        "account_number": "880017799001",
+        "account_holder": "Naufal Akbar"
+      }
+    },
+    {
+      "id": "b-8",
+      "type": "Thanks",
+      "props": {
+        "title": "Terima Kasih",
+        "message": "Terima kasih telah menumbuhkan cinta kami dengan doa dan kehadiranmu.",
+        "closing": "Dengan cinta,",
+        "names": "Naufal & Syifa"
+      }
+    },
+    {
+      "id": "b-9",
+      "type": "Maps",
+      "props": {
+        "title": "Lokasi Acara",
+        "address": "Evergreen Forest, Bandung",
+        "embed_url": "https://maps.google.com/?q=Evergreen%20Forest%2C%20Bandung"
+      }
+    }
+  ],
+  "flow": "stack"
+}

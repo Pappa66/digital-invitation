@@ -1,0 +1,142 @@
+{
+  "theme": {
+    "primary": "#B5651D",
+    "secondary": "#C9A28A",
+    "background": "#F7F2E9",
+    "text": "#4C4439",
+    "font_heading": "Lora",
+    "font_body": "Quicksand",
+    "layout": "left",
+    "hero_style": "image"
+  },
+  "settings": {
+    "music_url": "",
+    "guest_book_enabled": true,
+    "religion": "islam"
+  },
+  "blocks": [
+    {
+      "id": "b-1",
+      "type": "Hero",
+      "props": {
+        "groom": "Rangga Bumi",
+        "bride": "Intan Ayuningtyas",
+        "date": "Minggu, 20 September 2026",
+        "place": "Villa Bukit Cinta, Bogor",
+        "caption": "We Are Getting Married",
+        "bg_image": "https://images.unsplash.com/photo-1519741497674-611481863552",
+        "show_ornament": true,
+        "variant": "left"
+      }
+    },
+    {
+      "id": "b-2",
+      "type": "Couple",
+      "props": {
+        "introduction": "Selamat datang di perayaan kami",
+        "bismillah": "Bismillahirrahmanirrahim",
+        "groom": "Rangga Bumi, S.T.P.",
+        "groom_parents": "Putra dari Bpk. Joko Pranoto & Ibu Wanti",
+        "bride": "Intan Ayuningtyas, S.Farm.",
+        "bride_parents": "Putri dari Bpk. Heri Purnomo & Ibu Siti",
+        "quote": "Di bumi yang berisik ini, kamu adalah keheningan yang kucari.",
+        "variant": "vertical"
+      }
+    },
+    {
+      "id": "b-3",
+      "type": "Countdown",
+      "props": {
+        "target_date": "2026-09-20T10:00:00+07:00",
+        "title": "Hari Raya Cinta Kami",
+        "variant": "line"
+      }
+    },
+    {
+      "id": "b-4",
+      "type": "Story",
+      "props": {
+        "title": "Our Story",
+        "subtitle": "Perjalanan cinta kami",
+        "ev_title": [
+          "Pertemuan Pertama",
+          "Menjadi Pasangan",
+          "Lamaran"
+        ],
+        "ev_date": [
+          "2019",
+          "2021",
+          "2025"
+        ],
+        "ev_desc": [
+          "Rangga dan Intan pertama kali bertemu di sebuah kafe kopi di Bandung.",
+          "Mereka mulai menjalin hubungan saat menjelajahi bukit bersama.",
+          "Rangga melamar Intan di di lereng Gunung Pangrango."
+        ]
+      }
+    },
+    {
+      "id": "b-5",
+      "type": "EventDetail",
+      "props": {
+        "title": "Ijab & Resepsi",
+        "icon": "rings",
+        "date": "Minggu, 20 September 2026",
+        "time": "10.00 - 15.00 WIB",
+        "location": "Villa Bukit Cinta",
+        "address": "Kawasan Puncak, Cisarua, Bogor",
+        "maps_url": "https://maps.google.com/?q=Villa%20Bukit%20Cinta",
+        "variant": "band"
+      }
+    },
+    {
+      "id": "b-6",
+      "type": "Gallery",
+      "props": {
+        "title": "Bumi & Rasa",
+        "images": [
+          "https://images.unsplash.com/photo-1522673607200-164d1b6ce486",
+          "https://images.unsplash.com/photo-1520854221256-17451cc331bf",
+          "https://images.unsplash.com/photo-1519741497674-611481863552",
+          "https://images.unsplash.com/photo-1511285560929-80b456fea0bc",
+          "https://images.unsplash.com/photo-1532712938310-34cb3982ef74"
+        ]
+      }
+    },
+    {
+      "id": "b-7",
+      "type": "RSVP",
+      "props": {
+        "title": "Konfirmasi Kehadiran",
+        "note": "Mohon konfirmasi kehadiran sebelum 10 September 2026",
+        "deadline": "2026-09-10",
+        "button_text": "Kirim Konfirmasi",
+        "success_message": "Terima kasih, konfirmasi Anda sudah kami terima.",
+        "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "bank_name": "BSI",
+        "account_number": "720 011 2233",
+        "account_holder": "Rangga Bumi"
+      }
+    },
+    {
+      "id": "b-8",
+      "type": "Thanks",
+      "props": {
+        "title": "Terima Kasih",
+        "message": "Sungguh berbahagia bila kehadiranmu menjadi bagian dari pesta kecil kami.",
+        "closing": "Rangga & Intan",
+        "names": "Rangga & Intan"
+      }
+    },
+    {
+      "id": "b-9",
+      "type": "Maps",
+      "props": {
+        "title": "Lokasi Acara",
+        "address": "Villa Bukit Cinta, Bogor",
+        "embed_url": "https://maps.google.com/?q=Villa%20Bukit%20Cinta%2C%20Bogor"
+      }
+    }
+  ],
+  "flow": "stack"
+}

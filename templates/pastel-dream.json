@@ -1,0 +1,143 @@
+{
+  "theme": {
+    "primary": "#7FB5A8",
+    "secondary": "#F6C6A8",
+    "background": "#FFFCF6",
+    "text": "#5A6360",
+    "font_heading": "Quicksand",
+    "font_body": "Nunito Sans",
+    "layout": "center",
+    "hero_style": "image"
+  },
+  "settings": {
+    "music_url": "",
+    "guest_book_enabled": true,
+    "religion": "islam"
+  },
+  "blocks": [
+    {
+      "id": "b-1",
+      "type": "Hero",
+      "props": {
+        "groom": "Galih Rehan",
+        "bride": "Cinta Larassati",
+        "date": "Sabtu, 18 April 2026",
+        "place": "Taman Sari Garden, Bandung",
+        "caption": "Undangan Pernikahan",
+        "bg_image": "https://images.unsplash.com/photo-1519741497674-611481863552",
+        "show_ornament": true,
+        "variant": "center"
+      }
+    },
+    {
+      "id": "b-2",
+      "type": "Couple",
+      "props": {
+        "introduction": "Assalamu’alaikum Warahmatullahi Wabarakatuh",
+        "bismillah": "Bismillahirrahmanirrahim",
+        "groom": "Galih Rehan, S.Ds.",
+        "groom_parents": "Putra dari Bpk. Andi Kurnia & Ibu Maya",
+        "bride": "Cinta Larassati, S.S.",
+        "bride_parents": "Putri dari Bpk. Reza Fauzi & Ibu Lani",
+        "quote": "Semesta merayakan, aku dan kamu.",
+        "variant": "side"
+      }
+    },
+    {
+      "id": "b-3",
+      "type": "Countdown",
+      "props": {
+        "target_date": "2026-04-18T10:00:00+07:00",
+        "title": "Countdown Cinta",
+        "variant": "circles"
+      }
+    },
+    {
+      "id": "b-4",
+      "type": "Story",
+      "props": {
+        "title": "Our Story",
+        "subtitle": "Perjalanan cinta kami",
+        "ev_title": [
+          "Pertemuan Pertama",
+          "Menjadi Pasangan",
+          "Lamaran"
+        ],
+        "ev_date": [
+          "2020",
+          "2022",
+          "2025"
+        ],
+        "ev_desc": [
+          "Galih dan Cinta pertama kali bertemu di sebuah festival musik di Bandung.",
+          "Mereka mulai menjalin hubungan saat kami berbagi sebungkus gorengan.",
+          "Galih melamar Cinta di di taman bunga Ciwidey."
+        ]
+      }
+    },
+    {
+      "id": "b-5",
+      "type": "EventDetail",
+      "props": {
+        "title": "Akad & Resepsi",
+        "icon": "rings",
+        "date": "Sabtu, 18 April 2026",
+        "time": "10.00 - 15.00 WIB",
+        "location": "Taman Sari Garden",
+        "address": "Dago Pakar, Bandung",
+        "maps_url": "https://maps.google.com/?q=Taman%20Sari%20Garden",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "b-6",
+      "type": "Gallery",
+      "props": {
+        "title": "Hari-Hari Manis",
+        "images": [
+          "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6",
+          "https://images.unsplash.com/photo-1522673607200-164d1b6ce486",
+          "https://images.unsplash.com/photo-1520854221256-17451cc331bf",
+          "https://images.unsplash.com/photo-1519741497674-611481863552",
+          "https://images.unsplash.com/photo-1511285560929-80b456fea0bc",
+          "https://images.unsplash.com/photo-1532712938310-34cb3982ef74"
+        ]
+      }
+    },
+    {
+      "id": "b-7",
+      "type": "RSVP",
+      "props": {
+        "title": "Konfirmasi Kehadiran",
+        "note": "Mohon konfirmasi kehadiran sebelum 5 April 2026",
+        "deadline": "2026-04-05",
+        "button_text": "Kirim Konfirmasi",
+        "success_message": "Terima kasih, konfirmasi Anda sudah kami terima.",
+        "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "bank_name": "BNI",
+        "account_number": "072 909 1122",
+        "account_holder": "Galih Rehan"
+      }
+    },
+    {
+      "id": "b-8",
+      "type": "Thanks",
+      "props": {
+        "title": "Terima Kasih",
+        "message": "Terima kasih sudah menjadi bagian dari kebahagiaan kecil kami di hari yang cerah ini.",
+        "closing": "Wassalamu’alaikum Warahmatullahi Wabarakatuh",
+        "names": "Galih & Cinta"
+      }
+    },
+    {
+      "id": "b-9",
+      "type": "Maps",
+      "props": {
+        "title": "Lokasi Acara",
+        "address": "Taman Sari Garden, Bandung",
+        "embed_url": "https://maps.google.com/?q=Taman%20Sari%20Garden%2C%20Bandung"
+      }
+    }
+  ],
+  "flow": "stack"
+}

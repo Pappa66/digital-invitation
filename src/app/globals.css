@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --gc-primary: #d4af37;
+  --gc-secondary: #8a6d2f;
+  --gc-background: #faf6ef;
+  --gc-text: #4a443c;
+  --font-heading: 'Playfair Display', serif;
+  --font-body: 'Montserrat', sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+/* Guest output theme vars driven by JSON */
+.guest-root {
+  --color-primary: var(--gc-primary);
+  --color-secondary: var(--gc-secondary);
+  --color-background: var(--gc-background);
+  --color-text: var(--gc-text);
+  --font-heading: var(--font-heading);
+  --font-body: var(--font-body);
+  background-color: var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+
+.guest-root h1,
+.guest-root h2,
+.guest-root h3 {
+  font-family: var(--font-heading);
+}
+
+/* Utility: hide scrollbar on 100vh builder canvas */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Cetak (print): sembunyikan elemen mengambang, rapikan section */
+.print-hidden {
+  display: none;
+}
+
+@media print {
+  body {
+    background: #fff !important;
+  }
+  .guest-root {
+    max-width: none !important;
+    overflow: visible !important;
+  }
+  .guest-root .fixed {
+    display: none !important;
+  }
+  .guest-root section {
+    page-break-inside: avoid;
+  }
+}

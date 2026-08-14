@@ -1,0 +1,148 @@
+{
+  "theme": {
+    "primary": "#F26D5D",
+    "secondary": "#1B7A72",
+    "background": "#FFF7F0",
+    "text": "#4A3F38",
+    "font_heading": "Jost",
+    "font_body": "Quicksand",
+    "layout": "left",
+    "hero_style": "image"
+  },
+  "settings": {
+    "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-12.mp3",
+    "guest_book_enabled": true,
+    "religion": "islam",
+    "music_autoplay": true,
+    "music_offset_sec": 0,
+    "music_on_section": ""
+  },
+  "blocks": [
+    {
+      "id": "b-1",
+      "type": "Hero",
+      "props": {
+        "groom": "Ardan Pradana",
+        "bride": "Maharani Putri",
+        "date": "Minggu, 7 November 2027",
+        "place": "Sunset Bay, Manado",
+        "caption": "We Are Getting Married",
+        "bg_image": "https://picsum.photos/seed/tropical-sunset-hero/900/1200",
+        "show_ornament": true,
+        "variant": "left"
+      }
+    },
+    {
+      "id": "b-2",
+      "type": "Couple",
+      "props": {
+        "introduction": "Shalom, sahabat kami",
+        "bismillah": "Bismillahirrahmanirrahim",
+        "groom": "Ardan Pradana, S.T.",
+        "groom_parents": "Anak pertama dari Bpk. Paul Mananta & Ibu Grace",
+        "bride": "Maharani Putri, S.E.",
+        "bride_parents": "Anak pertama dari Bpk. Doni Siahaan & Ibu Merry",
+        "quote": "Seperti senja tropis, cinta kami selalu memerah di penghujung hari.",
+        "variant": "side"
+      }
+    },
+    {
+      "id": "b-3",
+      "type": "Countdown",
+      "props": {
+        "target_date": "2027-11-07T17:00:00+08:00",
+        "title": "Ayunan Senja",
+        "variant": "cards"
+      }
+    },
+    {
+      "id": "b-4",
+      "type": "Story",
+      "props": {
+        "title": "Our Story",
+        "subtitle": "Perjalanan cinta kami",
+        "ev_title": [
+          "Pertemuan Pertama",
+          "Menjadi Pasangan",
+          "Lamaran"
+        ],
+        "ev_date": [
+          "2018",
+          "2020",
+          "2026"
+        ],
+        "ev_desc": [
+          "Ardan dan Maharani pertama kali bertemu di pantai Malalayang.",
+          "Mereka mulai menjalin hubungan saat snorkeling di Bunaken.",
+          "Ardan melamar Maharani di di bawah senja Pulau Siladen."
+        ]
+      }
+    },
+    {
+      "id": "b-5",
+      "type": "EventDetail",
+      "props": {
+        "title": "Resepsi Sore",
+        "icon": "glass",
+        "date": "Minggu, 7 November 2027",
+        "time": "17.00 - 21.00 WITA",
+        "location": "Sunset Bay Deck",
+        "address": "Bunaken, Manado",
+        "maps_url": "https://maps.google.com/?q=Sunset%20Bay%20Deck",
+        "variant": "band"
+      }
+    },
+    {
+      "id": "b-6",
+      "type": "Gallery",
+      "props": {
+        "title": "Warna Surga",
+        "images": [
+          "https://picsum.photos/seed/tropical-sunset-g1/600/800",
+          "https://picsum.photos/seed/tropical-sunset-g2/600/800",
+          "https://picsum.photos/seed/tropical-sunset-g3/600/800",
+          "https://picsum.photos/seed/tropical-sunset-g4/600/800",
+          "https://picsum.photos/seed/tropical-sunset-g5/600/800"
+        ],
+        "variant": "carousel",
+        "animation": "ken-burns",
+        "interval_sec": 5
+      }
+    },
+    {
+      "id": "b-7",
+      "type": "RSVP",
+      "props": {
+        "title": "Konfirmasi Kehadiran",
+        "note": "Mohon konfirmasi kehadiran sebelum 25 Oktober 2027",
+        "deadline": "2027-10-25",
+        "button_text": "Kirim Konfirmasi",
+        "success_message": "Terima kasih, konfirmasi Anda sudah kami terima.",
+        "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "bank_name": "BRI",
+        "account_number": "880030735965",
+        "account_holder": "Ardan Pradana"
+      }
+    },
+    {
+      "id": "b-8",
+      "type": "Thanks",
+      "props": {
+        "title": "Terima Kasih",
+        "message": "Terima kasih telah menjadi bagian dari senja terindah kami di tepi lautan.",
+        "closing": "Penuh syukur,",
+        "names": "Ardan & Maharani"
+      }
+    },
+    {
+      "id": "b-9",
+      "type": "Maps",
+      "props": {
+        "title": "Lokasi Acara",
+        "address": "Sunset Bay, Manado",
+        "embed_url": "https://maps.google.com/?q=Sunset%20Bay%2C%20Manado"
+      }
+    }
+  ],
+  "flow": "stack"
+}

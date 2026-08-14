@@ -1,0 +1,162 @@
+{
+  "theme": {
+    "primary": "#F08080",
+    "secondary": "#F5B7B1",
+    "background": "#FFF7F5",
+    "text": "#5F4442",
+    "font_heading": "Great Vibes",
+    "font_body": "Nunito Sans",
+    "layout": "center",
+    "hero_style": "image"
+  },
+  "settings": {
+    "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+    "guest_book_enabled": true,
+    "religion": "islam",
+    "music_autoplay": true,
+    "music_offset_sec": 0,
+    "music_on_section": ""
+  },
+  "blocks": [
+    {
+      "id": "b-1",
+      "type": "Hero",
+      "props": {
+        "groom": "Adnan Hakim",
+        "bride": "Bella Salsabila",
+        "date": "Sabtu, 11 Maret 2028",
+        "place": "Blush Garden, Depok",
+        "caption": "The Wedding Of",
+        "bg_image": "https://picsum.photos/seed/coral-blush-hero/900/1200",
+        "show_ornament": true,
+        "variant": "center"
+      }
+    },
+    {
+      "id": "b-2",
+      "type": "Couple",
+      "props": {
+        "introduction": "Assalamu’alaikum Warahmatullahi Wabarakatuh",
+        "bismillah": "Bismillahirrahmanirrahim",
+        "groom": "Adnan Hakim, S.T.",
+        "groom_parents": "Putra dari Bpk. Fikri Ramdani & Ibu Yuli",
+        "bride": "Bella Salsabila, S.E.",
+        "bride_parents": "Putri dari Bpk. Ahmad Syafii & Ibu Rina",
+        "quote": "Senyummu adalah sinar lembut yang menerangi hariku.",
+        "variant": "vertical"
+      }
+    },
+    {
+      "id": "b-3",
+      "type": "Countdown",
+      "props": {
+        "target_date": "2028-03-11T09:00:00+07:00",
+        "title": "Hari Berbisik",
+        "variant": "circles"
+      }
+    },
+    {
+      "id": "b-4",
+      "type": "Story",
+      "props": {
+        "title": "Our Story",
+        "subtitle": "Perjalanan cinta kami",
+        "ev_title": [
+          "Pertemuan Pertama",
+          "Menjadi Pasangan",
+          "Lamaran"
+        ],
+        "ev_date": [
+          "2019",
+          "2021",
+          "2027"
+        ],
+        "ev_desc": [
+          "Adnan dan Bella pertama kali bertemu di perpustakaan kampus.",
+          "Mereka mulai menjalin hubungan saat berbagi payung di tengah hujan.",
+          "Adnan melamar Bella di di tepi danau Situ Gintung."
+        ]
+      }
+    },
+    {
+      "id": "b-5",
+      "type": "EventDetail",
+      "props": {
+        "title": "Akad Nikah",
+        "icon": "rings",
+        "date": "Sabtu, 11 Maret 2028",
+        "time": "09.00 - 11.00 WIB",
+        "location": "Blush Garden Hall",
+        "address": "Cinere, Depok",
+        "maps_url": "https://maps.google.com/?q=Blush%20Garden%20Hall",
+        "variant": "band"
+      }
+    },
+    {
+      "id": "b-6",
+      "type": "EventDetail",
+      "props": {
+        "title": "Resepsi",
+        "icon": "glass",
+        "date": "Sabtu, 11 Maret 2028",
+        "time": "11.30 - 15.00 WIB",
+        "location": "Blush Garden Lawn",
+        "address": "Sawangan, Depok",
+        "maps_url": "https://maps.google.com/?q=Blush%20Garden%20Lawn",
+        "variant": "band"
+      }
+    },
+    {
+      "id": "b-7",
+      "type": "Gallery",
+      "props": {
+        "title": "Bisikan Cinta",
+        "images": [
+          "https://picsum.photos/seed/coral-blush-g1/600/800",
+          "https://picsum.photos/seed/coral-blush-g2/600/800",
+          "https://picsum.photos/seed/coral-blush-g3/600/800",
+          "https://picsum.photos/seed/coral-blush-g4/600/800",
+          "https://picsum.photos/seed/coral-blush-g5/600/800"
+        ],
+        "variant": "carousel",
+        "animation": "rise",
+        "interval_sec": 4
+      }
+    },
+    {
+      "id": "b-8",
+      "type": "RSVP",
+      "props": {
+        "title": "Konfirmasi Kehadiran",
+        "note": "Mohon konfirmasi kehadiran sebelum 25 Februari 2028",
+        "deadline": "2028-02-25",
+        "button_text": "Kirim Konfirmasi",
+        "success_message": "Terima kasih, konfirmasi Anda sudah kami terima.",
+        "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "bank_name": "BCA",
+        "account_number": "880022580788",
+        "account_holder": "Adnan Hakim"
+      }
+    },
+    {
+      "id": "b-9",
+      "type": "Thanks",
+      "props": {
+        "title": "Doa Restu",
+        "message": "Kehadiran Anda adalah bisikan hangat dalam pernikahan kami.",
+        "closing": "Wassalamu’alaikum Warahmatullahi Wabarakatuh",
+        "names": "Adnan & Bella"
+      }
+    },
+    {
+      "id": "b-10",
+      "type": "Maps",
+      "props": {
+        "title": "Lokasi Acara",
+        "address": "Blush Garden, Depok",
+        "embed_url": "https://maps.google.com/?q=Blush%20Garden%2C%20Depok"
+      }
+    }
+  ],
+  "flow": "stack"
+}

@@ -1,0 +1,203 @@
+'use client';
+
+import { useState } from 'react';
+import { Check, Copy, Gift } from 'lucide-react';
+import { supabase } from '@/lib/supabase/client';
+import { demoIsDemoMode } from '@/lib/env';
+import { demoAddRsvp } from '@/lib/demo/demo-store';
+import type { BlockProps } from '@/lib/types';
+
+function str(props: BlockProps, key: string): string {
+  const v = props[key];
+  return typeof v === 'string' ? v : '';
+}
+
+const THROTTLE_MS = 30_000;
+const throttleKey = (projectId: string) => `di_rsvp_last_${projectId}`;
+
+interface RSVPFormProps {
+  projectId: string;
+  blockProps: BlockProps;
+  /** Mode rendered tanpa DB (preview builder). Jika dengan-db, gunakan projectId. */
+  readonly?: boolean;
+}
+
+export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormProps) {
+  const [name, setName] = useState('');
+  const [attendance, setAttendance] = useState<'hadir' | 'tidak' | 'ragu'>('hadir');
+  const [guestCount, setGuestCount] = useState(1);
+  const [message, setMessage] = useState('');
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [errorMsg, setErrorMsg] = useState('');
+  const [bankCopied, setBankCopied] = useState(false);
+
+  const hasBank = !!str(blockProps, 'account_number');
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (readonly || !projectId) return;
+
+    const cleanName = name.trim();
+    if (cleanName.length < 2) {
+      setErrorMsg('Nama terlalu pendek.');
+      setStatus('error');
+      return;
+    }
+    if (guestCount < 1 || guestCount > 10) {
+      setErrorMsg('Jumlah tamu tidak valid.');
+      setStatus('error');
+      return;
+    }
+
+    // Throttle sederhana: satu konfirmasi per 30 detik per browser.
+    try {
+      const last = Number(localStorage.getItem(throttleKey(projectId)) ?? 0);
+      if (Date.now() - last < THROTTLE_MS) {
+        setErrorMsg('Terlalu cepat. Silakan tunggu sebentar lalu coba lagi.');
+        setStatus('error');
+        return;
+      }
+    } catch {
+      /* ignore */
+    }
+
+    setStatus('submitting');
+
+    let error: { message?: string } | null = null;
+    if (demoIsDemoMode()) {
+      const res = demoAddRsvp(projectId, {
+        name: cleanName,
+        attendance,
+        guest_count: guestCount,
+        message: message.trim()
+      });
+      error = res.error ? { message: res.error } : null;
+    } else {
+      const r = await supabase
+        .from('rsvps')
+        .insert({ project_id: projectId, name: cleanName, attendance, guest_count: guestCount, message: message.trim() || null });
+      error = r.error;
+    }
+
+    if (error) {
+      setErrorMsg('Gagal mengirim. Silakan coba lagi.');
+      setStatus('error');
+    } else {
+      try {
+        localStorage.setItem(throttleKey(projectId), String(Date.now()));
+      } catch {
+        /* ignore */
+      }
+      setStatus('success');
+    }
+  }
+
+  async function copyAccount() {
+    try {
+      await navigator.clipboard.writeText(str(blockProps, 'account_number'));
+      setBankCopied(true);
+    } catch {
+      setBankCopied(false);
+    }
+    setTimeout(() => setBankCopied(false), 1500);
+  }
+
+  const inputClass =
+    'w-full rounded-xl border border-current/15 bg-transparent px-4 py-2.5 text-sm outline-none transition-colors focus:border-current';
+
+  return (
+    <section className="px-6 py-16 text-center">
+      <h2 className="text-xl md:text-2xl">{str(blockProps, 'title')}</h2>
+      <p className="mt-2 text-sm opacity-80">{str(blockProps, 'note')}</p>
+
+      {status === 'success' ? (
+        <div className="mx-auto mt-8 max-w-sm rounded-2xl border border-current/10 px-6 py-10">
+          <p className="text-lg">{str(blockProps, 'success_message') || 'Terima kasih atas konfirmasinya.'}</p>
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit} className="mx-auto mt-8 max-w-sm space-y-4 rounded-2xl border border-current/10 bg-white/5 px-6 py-6 text-left">
+          <input
+            required
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Nama Anda"
+            className={inputClass}
+          />
+          <div>
+            <p className="mb-2 text-sm opacity-80">Kehadiran</p>
+            <div className="flex rounded-full border border-current/15 p-1">
+              {(['hadir', 'ragu', 'tidak'] as const).map((opt) => (
+                <button
+                  key={opt}
+                  type="button"
+                  onClick={() => setAttendance(opt)}
+                  className={`flex-1 rounded-full px-2 py-2 text-xs uppercase tracking-wide transition-colors ${
+                    attendance === opt ? 'bg-current text-[var(--color-background)]' : 'hover:bg-current/10'
+                  }`}
+                >
+                  {opt === 'hadir' ? 'Hadir' : opt === 'ragu' ? 'Ragu-ragu' : 'Tidak Hadir'}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="flex items-center justify-between gap-3">
+            <label className="text-sm opacity-80">Jumlah tamu</label>
+            <select
+              value={guestCount}
+              onChange={(e) => setGuestCount(Number(e.target.value))}
+              className={inputClass}
+              style={{ width: 110 }}
+            >
+              {[1, 2, 3, 4, 5].map((n) => (
+                <option key={n} value={n}>
+                  {n} orang
+                </option>
+              ))}
+            </select>
+          </div>
+          <textarea
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Tulis doa / ucapan"
+            rows={3}
+            className={inputClass}
+          />
+          <button
+            type="submit"
+            disabled={status === 'submitting'}
+            className="w-full rounded-full bg-[var(--color-primary)] px-4 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+          >
+            {status === 'submitting' ? 'Mengirim...' : String(blockProps.button_text || 'Kirim Konfirmasi')}
+          </button>
+          {status === 'error' && <p className="text-center text-xs text-red-500">{errorMsg || 'Gagal mengirim. Silakan coba lagi.'}</p>}
+        </form>
+      )}
+
+      {hasBank && (
+        <div className="mx-auto mt-8 max-w-sm rounded-2xl border border-dashed border-current/25 bg-white/5 px-6 py-6 text-center">
+          <div className="flex flex-col items-center gap-1">
+            <Gift className="h-5 w-5 opacity-70" />
+            <p className="text-xs font-medium uppercase tracking-[0.2em] opacity-70">Amplop Online</p>
+          </div>
+          <p className="mt-3 text-xs leading-relaxed opacity-80">
+            {str(blockProps, 'envelope_note') || 'Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.'}
+          </p>
+          <div className="mt-4 space-y-2 text-sm">
+            {str(blockProps, 'bank_name') && <p className="font-medium">{str(blockProps, 'bank_name')}</p>}
+            <div className="flex items-center justify-center gap-2">
+              <span className="text-base font-semibold tracking-wider">{str(blockProps, 'account_number')}</span>
+              <button
+                onClick={copyAccount}
+                title="Salin nomor rekening"
+                className="flex h-7 w-7 items-center justify-center rounded-full border border-current/25 transition-colors hover:bg-current/10"
+              >
+                {bankCopied ? <Check className="h-3.5 w-3.5 text-green-500" /> : <Copy className="h-3.5 w-3.5 opacity-80" />}
+              </button>
+            </div>
+            {str(blockProps, 'account_holder') && <p className="text-xs opacity-70">a.n. {str(blockProps, 'account_holder')}</p>}
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}

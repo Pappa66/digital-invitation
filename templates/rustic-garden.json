@@ -1,0 +1,155 @@
+{
+  "theme": {
+    "primary": "#7C9885",
+    "secondary": "#A9B7A6",
+    "background": "#F6F4EC",
+    "text": "#56544A",
+    "font_heading": "Marcellus",
+    "font_body": "Lora",
+    "layout": "left",
+    "hero_style": "image"
+  },
+  "settings": {
+    "music_url": "",
+    "guest_book_enabled": true,
+    "religion": "islam"
+  },
+  "blocks": [
+    {
+      "id": "b-1",
+      "type": "Hero",
+      "props": {
+        "groom": "Bayu Wicaksono",
+        "bride": "Kintan Maharani",
+        "date": "Minggu, 7 Juni 2026",
+        "place": "Kebun Raya Cibodas, Cianjur",
+        "caption": "We Are Getting Married",
+        "bg_image": "https://images.unsplash.com/photo-1519741497674-611481863552",
+        "show_ornament": true,
+        "variant": "left"
+      }
+    },
+    {
+      "id": "b-2",
+      "type": "Couple",
+      "props": {
+        "introduction": "Dengan penuh rasa syukur",
+        "bismillah": "Bismillahirrahmanirrahim",
+        "groom": "Bayu Wicaksono, S.H.",
+        "groom_parents": "Anak pertama dari Bpk. Agus Santoso & Ibu Sari Dewi",
+        "bride": "Kintan Maharani, M.Ds.",
+        "bride_parents": "Anak kedua dari Bpk. H. Bambang Sutrisno & Ibu Lestari",
+        "quote": "Bersamamu, hari-hari biasa menjadi cerita yang indah untuk dikenang.",
+        "variant": "vertical"
+      }
+    },
+    {
+      "id": "b-3",
+      "type": "Countdown",
+      "props": {
+        "target_date": "2026-06-07T09:00:00+07:00",
+        "title": "Hitungan Menuju Hari Bahagia",
+        "variant": "cards"
+      }
+    },
+    {
+      "id": "b-4",
+      "type": "Story",
+      "props": {
+        "title": "Our Story",
+        "subtitle": "Perjalanan cinta kami",
+        "ev_title": [
+          "Pertemuan Pertama",
+          "Menjadi Pasangan",
+          "Lamaran"
+        ],
+        "ev_date": [
+          "2017",
+          "2019",
+          "2025"
+        ],
+        "ev_desc": [
+          "Bayu dan Kintan pertama kali bertemu di sebuah acara taman di Bandung.",
+          "Mereka mulai menjalin hubungan saat ia menemaniku berkebun melati.",
+          "Bayu melamar Kintan di di bawah pohon sakura Cibodas."
+        ]
+      }
+    },
+    {
+      "id": "b-5",
+      "type": "EventDetail",
+      "props": {
+        "title": "Ijab Kabul",
+        "icon": "rings",
+        "date": "Minggu, 7 Juni 2026",
+        "time": "09.00 - 10.30 WIB",
+        "location": "Gedung Serbaguna Kebun Raya",
+        "address": "Jalan Kebun Raya Cibodas, Cianjur",
+        "maps_url": "https://maps.google.com/?q=Gedung%20Serbaguna%20Kebun%20Raya",
+        "variant": "band"
+      }
+    },
+    {
+      "id": "b-6",
+      "type": "EventDetail",
+      "props": {
+        "title": "Resepsi",
+        "icon": "glass",
+        "date": "Minggu, 7 Juni 2026",
+        "time": "10.30 - 14.00 WIB",
+        "location": "Taman Sakura Venue",
+        "address": "Cibodas, Cianjur, Jawa Barat",
+        "maps_url": "https://maps.google.com/?q=Taman%20Sakura%20Venue",
+        "variant": "band"
+      }
+    },
+    {
+      "id": "b-7",
+      "type": "Gallery",
+      "props": {
+        "title": "Momen Taman Kami",
+        "images": [
+          "https://images.unsplash.com/photo-1522673607200-164d1b6ce486",
+          "https://images.unsplash.com/photo-1511285560929-80b456fea0bc",
+          "https://images.unsplash.com/photo-1532712938310-34cb3982ef74",
+          "https://images.unsplash.com/photo-1519741497674-611481863552"
+        ]
+      }
+    },
+    {
+      "id": "b-8",
+      "type": "RSVP",
+      "props": {
+        "title": "Konfirmasi Kehadiran",
+        "note": "Mohon konfirmasi kehadiran sebelum tanggal 31 Mei 2026",
+        "deadline": "2026-05-31",
+        "button_text": "Kirim Konfirmasi",
+        "success_message": "Terima kasih, konfirmasi Anda sudah kami terima.",
+        "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "bank_name": "Mandiri",
+        "account_number": "137 000 456 789",
+        "account_holder": "Bayu Wicaksono"
+      }
+    },
+    {
+      "id": "b-9",
+      "type": "Thanks",
+      "props": {
+        "title": "Terima Kasih",
+        "message": "Sungguh sebuah kebahagiaan bila Bapak/Ibu/Saudara berkenan hadir untuk merayakan hari bahagia kami di sini.",
+        "closing": "Wassalamu’alaikum Warahmatullahi Wabarakatuh",
+        "names": "Bayu & Kintan"
+      }
+    },
+    {
+      "id": "b-10",
+      "type": "Maps",
+      "props": {
+        "title": "Lokasi Acara",
+        "address": "Kebun Raya Cibodas, Cianjur",
+        "embed_url": "https://maps.google.com/?q=Kebun%20Raya%20Cibodas%2C%20Cianjur"
+      }
+    }
+  ],
+  "flow": "stack"
+}

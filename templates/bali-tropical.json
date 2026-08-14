@@ -1,0 +1,156 @@
+{
+  "theme": {
+    "primary": "#2F5D50",
+    "secondary": "#C77B4E",
+    "background": "#F7F3EA",
+    "text": "#3E463F",
+    "font_heading": "Cormorant Garamond",
+    "font_body": "Jost",
+    "layout": "left",
+    "hero_style": "image"
+  },
+  "settings": {
+    "music_url": "",
+    "guest_book_enabled": true,
+    "religion": "islam"
+  },
+  "blocks": [
+    {
+      "id": "b-1",
+      "type": "Hero",
+      "props": {
+        "groom": "Made Wiradana",
+        "bride": "Putu Ayu Lestari",
+        "date": "Sabtu, 24 Oktober 2026",
+        "place": "Ayana Resort, Uluwatu",
+        "caption": "Undangan Pernikahan",
+        "bg_image": "https://images.unsplash.com/photo-1519741497674-611481863552",
+        "show_ornament": true,
+        "variant": "left"
+      }
+    },
+    {
+      "id": "b-2",
+      "type": "Couple",
+      "props": {
+        "introduction": "Om Swastiastu",
+        "bismillah": "Bismillahirrahmanirrahim",
+        "groom": "Made Wiradana, S.Pd.",
+        "groom_parents": "Putra dari I Wayan Surya & Ni Nyoman Rini",
+        "bride": "Putu Ayu Lestari, A.Md.Keb.",
+        "bride_parents": "Putri dari I Ketut Arta & Ni Made Sumiati",
+        "quote": "Cinta kami seperti laut Bali: dalam, tenang, dan tanpa batas.",
+        "variant": "side"
+      }
+    },
+    {
+      "id": "b-3",
+      "type": "Countdown",
+      "props": {
+        "target_date": "2026-10-24T15:00:00+08:00",
+        "title": "Hari Bahagia",
+        "variant": "cards"
+      }
+    },
+    {
+      "id": "b-4",
+      "type": "Story",
+      "props": {
+        "title": "Our Story",
+        "subtitle": "Perjalanan cinta kami",
+        "ev_title": [
+          "Pertemuan Pertama",
+          "Menjadi Pasangan",
+          "Lamaran"
+        ],
+        "ev_date": [
+          "2015",
+          "2017",
+          "2025"
+        ],
+        "ev_desc": [
+          "Made dan Putu pertama kali bertemu di pasar seni Sukawati.",
+          "Mereka mulai menjalin hubungan di tengah senja Pantai Kuta.",
+          "Made melamar Putu di di tepi sawah Ubud."
+        ]
+      }
+    },
+    {
+      "id": "b-5",
+      "type": "EventDetail",
+      "props": {
+        "title": "Akad Nikah",
+        "icon": "rings",
+        "date": "Sabtu, 24 Oktober 2026",
+        "time": "15.00 - 17.00 WITA",
+        "location": "Chapel Ayana",
+        "address": "Jalan Karang Mas, Jimbaran, Uluwatu",
+        "maps_url": "https://maps.google.com/?q=Chapel%20Ayana",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "b-6",
+      "type": "EventDetail",
+      "props": {
+        "title": "Resepsi",
+        "icon": "glass",
+        "date": "Sabtu, 24 Oktober 2026",
+        "time": "18.00 - 21.00 WITA",
+        "location": "Tresna Chapel & Garden",
+        "address": "Uluwatu, Badung, Bali",
+        "maps_url": "https://maps.google.com/?q=Tresna%20Chapel%20%26%20Garden",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "b-7",
+      "type": "Gallery",
+      "props": {
+        "title": "Kisah Dua Hati",
+        "images": [
+          "https://images.unsplash.com/photo-1511285560929-80b456fea0bc",
+          "https://images.unsplash.com/photo-1522673607200-164d1b6ce486",
+          "https://images.unsplash.com/photo-1519741497674-611481863552",
+          "https://images.unsplash.com/photo-1532712938310-34cb3982ef74",
+          "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6"
+        ]
+      }
+    },
+    {
+      "id": "b-8",
+      "type": "RSVP",
+      "props": {
+        "title": "Konfirmasi Kehadiran",
+        "note": "Konfirmasi kehadiran paling lambat 10 Oktober 2026",
+        "deadline": "2026-10-10",
+        "button_text": "Kirim Konfirmasi",
+        "success_message": "Terima kasih, konfirmasi Anda sudah kami terima.",
+        "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "bank_name": "BRI",
+        "account_number": "0099 0101 202 508",
+        "account_holder": "Made Wiradana"
+      }
+    },
+    {
+      "id": "b-9",
+      "type": "Thanks",
+      "props": {
+        "title": "Sukacita Kami",
+        "message": "Kehadiran dan doa restu Bapak/Ibu/Saudara/i adalah hadiah terindah bagi kami berdua.",
+        "closing": "Om Shanti Shanti Shanti Om",
+        "names": "Made & Ayu"
+      }
+    },
+    {
+      "id": "b-10",
+      "type": "Maps",
+      "props": {
+        "title": "Lokasi Acara",
+        "address": "Ayana Resort, Uluwatu, Bali",
+        "embed_url": "https://maps.google.com/?q=Ayana%20Resort%2C%20Uluwatu%2C%20Bali"
+      }
+    }
+  ],
+  "flow": "stack"
+}

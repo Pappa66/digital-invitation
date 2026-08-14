@@ -1,0 +1,147 @@
+{
+  "theme": {
+    "primary": "#1B2A4A",
+    "secondary": "#C9A227",
+    "background": "#0F1524",
+    "text": "#EAEEF5",
+    "font_heading": "Playfair Display",
+    "font_body": "Inter",
+    "layout": "left",
+    "hero_style": "image"
+  },
+  "settings": {
+    "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-11.mp3",
+    "guest_book_enabled": true,
+    "religion": "islam",
+    "music_autoplay": true,
+    "music_offset_sec": 0,
+    "music_on_section": ""
+  },
+  "blocks": [
+    {
+      "id": "b-1",
+      "type": "Hero",
+      "props": {
+        "groom": "Dimas Prakoso",
+        "bride": "Nadia Larasati",
+        "date": "Minggu, 17 Oktober 2027",
+        "place": "The Ballroom At The Hill, Yogyakarta",
+        "caption": "Save The Date",
+        "bg_image": "https://picsum.photos/seed/sapphire-night-hero/900/1200",
+        "show_ornament": true,
+        "variant": "left"
+      }
+    },
+    {
+      "id": "b-2",
+      "type": "Couple",
+      "props": {
+        "introduction": "Beneath the same sapphire sky",
+        "bismillah": "Bismillahirrahmanirrahim",
+        "groom": "Dimas Prakoso, S.T.",
+        "groom_parents": "Putra dari Bpk. Yudi Hartono & Ibu Rina",
+        "bride": "Nadia Larasati, S.E.",
+        "bride_parents": "Putri dari Bpk. Agus Salim & Ibu Maya",
+        "quote": "Like the night sky, our love is deep, endless, and full of light.",
+        "variant": "side"
+      }
+    },
+    {
+      "id": "b-3",
+      "type": "Countdown",
+      "props": {
+        "target_date": "2027-10-17T19:00:00+07:00",
+        "title": "Countdown To Forever",
+        "variant": "line"
+      }
+    },
+    {
+      "id": "b-4",
+      "type": "Story",
+      "props": {
+        "title": "Our Story",
+        "subtitle": "Perjalanan cinta kami",
+        "ev_title": [
+          "Pertemuan Pertama",
+          "Menjadi Pasangan",
+          "Lamaran"
+        ],
+        "ev_date": [
+          "2018",
+          "2020",
+          "2027"
+        ],
+        "ev_desc": [
+          "Dimas dan Nadia pertama kali bertemu di sebuah acara galau seni di Jogja.",
+          "Mereka mulai menjalin hubungan saat hujan turun di Malioboro.",
+          "Dimas melamar Nadia di di teras candi Prambanan."
+        ]
+      }
+    },
+    {
+      "id": "b-5",
+      "type": "EventDetail",
+      "props": {
+        "title": "The Gala Night",
+        "icon": "glass",
+        "date": "Minggu, 17 Oktober 2027",
+        "time": "19.00 - 23.00 WIB",
+        "location": "The Hill Grand Ballroom",
+        "address": "Jl. Kaliurang KM 15, Yogyakarta",
+        "maps_url": "https://maps.google.com/?q=The%20Hill%20Grand%20Ballroom",
+        "variant": "band"
+      }
+    },
+    {
+      "id": "b-6",
+      "type": "Gallery",
+      "props": {
+        "title": "Midnight Reverie",
+        "images": [
+          "https://picsum.photos/seed/sapphire-night-g1/600/800",
+          "https://picsum.photos/seed/sapphire-night-g2/600/800",
+          "https://picsum.photos/seed/sapphire-night-g3/600/800",
+          "https://picsum.photos/seed/sapphire-night-g4/600/800"
+        ],
+        "variant": "carousel",
+        "animation": "ken-burns",
+        "interval_sec": 5
+      }
+    },
+    {
+      "id": "b-7",
+      "type": "RSVP",
+      "props": {
+        "title": "Konfirmasi Kehadiran",
+        "note": "Mohon konfirmasi kehadiran sebelum 1 Oktober 2027",
+        "deadline": "2027-10-01",
+        "button_text": "Kirim Konfirmasi",
+        "success_message": "Terima kasih, konfirmasi Anda sudah kami terima.",
+        "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "bank_name": "BRI",
+        "account_number": "880036591307",
+        "account_holder": "Dimas Prakoso"
+      }
+    },
+    {
+      "id": "b-8",
+      "type": "Thanks",
+      "props": {
+        "title": "Terima Kasih",
+        "message": "Terima kasih telah hadir merayakan malam safir kami, ditemani bintang-bintang di langit Jogja.",
+        "closing": "Dengan cinta,",
+        "names": "Dimas & Nadia"
+      }
+    },
+    {
+      "id": "b-9",
+      "type": "Maps",
+      "props": {
+        "title": "Lokasi Acara",
+        "address": "The Ballroom At The Hill, Yogyakarta",
+        "embed_url": "https://maps.google.com/?q=The%20Ballroom%20At%20The%20Hill%2C%20Yogyakarta"
+      }
+    }
+  ],
+  "flow": "stack"
+}

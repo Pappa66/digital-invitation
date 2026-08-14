@@ -1,0 +1,162 @@
+{
+  "theme": {
+    "primary": "#6E1423",
+    "secondary": "#C08552",
+    "background": "#FAF1EC",
+    "text": "#3F232B",
+    "font_heading": "Cinzel",
+    "font_body": "Lora",
+    "layout": "center",
+    "hero_style": "image"
+  },
+  "settings": {
+    "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3",
+    "guest_book_enabled": true,
+    "religion": "islam",
+    "music_autoplay": true,
+    "music_offset_sec": 0,
+    "music_on_section": ""
+  },
+  "blocks": [
+    {
+      "id": "b-1",
+      "type": "Hero",
+      "props": {
+        "groom": "Wisnu Bramantyo",
+        "bride": "Ayu Sekar",
+        "date": "Sabtu, 25 September 2027",
+        "place": "Marriott Ballroom, Surakarta",
+        "caption": "Undangan Pernikahan",
+        "bg_image": "https://picsum.photos/seed/burgundy-classic-hero/900/1200",
+        "show_ornament": true,
+        "variant": "center"
+      }
+    },
+    {
+      "id": "b-2",
+      "type": "Couple",
+      "props": {
+        "introduction": "Assalamu’alaikum Warahmatullahi Wabarakatuh",
+        "bismillah": "Bismillahirrahmanirrahim",
+        "groom": "Wisnu Bramantyo, S.T.",
+        "groom_parents": "Putra dari Bpk. H. Suryanto & Ibu Hj. Murni",
+        "bride": "Ayu Sekar, S.E.",
+        "bride_parents": "Putri dari Bpk. H. Sudirman & Ibu Hj. Amanah",
+        "quote": "Sekuat anggur burgundy, sehangat emas musim gugur.",
+        "variant": "vertical"
+      }
+    },
+    {
+      "id": "b-3",
+      "type": "Countdown",
+      "props": {
+        "target_date": "2027-09-25T08:00:00+07:00",
+        "title": "Menuju Mahligai",
+        "variant": "circles"
+      }
+    },
+    {
+      "id": "b-4",
+      "type": "Story",
+      "props": {
+        "title": "Our Story",
+        "subtitle": "Perjalanan cinta kami",
+        "ev_title": [
+          "Pertemuan Pertama",
+          "Menjadi Pasangan",
+          "Lamaran"
+        ],
+        "ev_date": [
+          "2015",
+          "2018",
+          "2026"
+        ],
+        "ev_desc": [
+          "Wisnu dan Ayu pertama kali bertemu di upacara wisuda UNS Solo.",
+          "Mereka mulai menjalin hubungan saat berbagi sebatas teh hangat.",
+          "Wisnu melamar Ayu di di Candi Prambanan."
+        ]
+      }
+    },
+    {
+      "id": "b-5",
+      "type": "EventDetail",
+      "props": {
+        "title": "Akad Nikah",
+        "icon": "rings",
+        "date": "Sabtu, 25 September 2027",
+        "time": "08.00 - 10.00 WIB",
+        "location": "Marriott Grand Ballroom",
+        "address": "Jl. Adi Sucipto, Surakarta",
+        "maps_url": "https://maps.google.com/?q=Marriott%20Grand%20Ballroom",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "b-6",
+      "type": "EventDetail",
+      "props": {
+        "title": "Resepsi",
+        "icon": "glass",
+        "date": "Sabtu, 25 September 2027",
+        "time": "10.30 - 14.00 WIB",
+        "location": "Marriott Grand Ballroom",
+        "address": "Kartosuro, Sukoharjo",
+        "maps_url": "https://maps.google.com/?q=Marriott%20Grand%20Ballroom",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "b-7",
+      "type": "Gallery",
+      "props": {
+        "title": "Nuansa Agung",
+        "images": [
+          "https://picsum.photos/seed/burgundy-classic-g1/600/800",
+          "https://picsum.photos/seed/burgundy-classic-g2/600/800",
+          "https://picsum.photos/seed/burgundy-classic-g3/600/800",
+          "https://picsum.photos/seed/burgundy-classic-g4/600/800",
+          "https://picsum.photos/seed/burgundy-classic-g5/600/800"
+        ],
+        "variant": "carousel",
+        "animation": "flip",
+        "interval_sec": 4
+      }
+    },
+    {
+      "id": "b-8",
+      "type": "RSVP",
+      "props": {
+        "title": "Konfirmasi Kehadiran",
+        "note": "Mohon konfirmasi kehadiran sebelum 12 September 2027",
+        "deadline": "2027-09-12",
+        "button_text": "Kirim Konfirmasi",
+        "success_message": "Terima kasih, konfirmasi Anda sudah kami terima.",
+        "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "bank_name": "BSI",
+        "account_number": "880018044714",
+        "account_holder": "Wisnu Bramantyo"
+      }
+    },
+    {
+      "id": "b-9",
+      "type": "Thanks",
+      "props": {
+        "title": "Doa Restu",
+        "message": "Semoga kehadiran dan doa Bapak/Ibu menjadi mahar terindah bagi kami.",
+        "closing": "Wassalamu’alaikum Warahmatullahi Wabarakatuh",
+        "names": "Wisnu & Ayu"
+      }
+    },
+    {
+      "id": "b-10",
+      "type": "Maps",
+      "props": {
+        "title": "Lokasi Acara",
+        "address": "Marriott Ballroom, Surakarta",
+        "embed_url": "https://maps.google.com/?q=Marriott%20Ballroom%2C%20Surakarta"
+      }
+    }
+  ],
+  "flow": "stack"
+}

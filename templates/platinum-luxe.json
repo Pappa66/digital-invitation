@@ -1,0 +1,123 @@
+{
+  "theme": {
+    "primary": "#3D3D3D",
+    "secondary": "#A8A8A8",
+    "background": "#FFFFFF",
+    "text": "#2B2B2B",
+    "font_heading": "Cinzel",
+    "font_body": "Lato",
+    "layout": "center",
+    "hero_style": "solid"
+  },
+  "settings": {
+    "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3",
+    "guest_book_enabled": true,
+    "religion": "islam",
+    "music_autoplay": true,
+    "music_offset_sec": 0,
+    "music_on_section": ""
+  },
+  "blocks": [
+    {
+      "id": "b-1",
+      "type": "Hero",
+      "props": {
+        "groom": "Gerald Marchel",
+        "bride": "Vanessa Putri",
+        "date": "12.06.2027",
+        "place": "The Westin, Surabaya",
+        "caption": "Save The Date",
+        "bg_image": "",
+        "show_ornament": false,
+        "variant": "center"
+      }
+    },
+    {
+      "id": "b-2",
+      "type": "Couple",
+      "props": {
+        "introduction": "Elegance in simplicity",
+        "bismillah": "Bismillahirrahmanirrahim",
+        "groom": "Gerald Marchel, S.T.",
+        "groom_parents": "Son of Mr. Johanes Widodo & Mrs. Sisca",
+        "bride": "Vanessa Putri, S.E.",
+        "bride_parents": "Daughter of Mr. Tommy Limanto & Mrs. Helen",
+        "quote": "Some things are timeless — like platinum, and like us.",
+        "variant": "side"
+      }
+    },
+    {
+      "id": "b-3",
+      "type": "Countdown",
+      "props": {
+        "target_date": "2027-06-12T17:00:00+07:00",
+        "title": "12.06.2027",
+        "variant": "line"
+      }
+    },
+    {
+      "id": "b-4",
+      "type": "EventDetail",
+      "props": {
+        "title": "The Wedding",
+        "icon": "rings",
+        "date": "Saturday, 12 June 2027",
+        "time": "17.00 - 21.00 WIB",
+        "location": "Westin Grand Ballroom",
+        "address": "Jl. Embong Malang, Surabaya",
+        "maps_url": "https://maps.google.com/?q=Westin%20Grand%20Ballroom",
+        "variant": "band"
+      }
+    },
+    {
+      "id": "b-5",
+      "type": "Gallery",
+      "props": {
+        "title": "Shades of Silver",
+        "images": [
+          "https://picsum.photos/seed/platinum-luxe-g1/600/800",
+          "https://picsum.photos/seed/platinum-luxe-g2/600/800",
+          "https://picsum.photos/seed/platinum-luxe-g3/600/800",
+          "https://picsum.photos/seed/platinum-luxe-g4/600/800"
+        ],
+        "variant": "column",
+        "animation": "fade"
+      }
+    },
+    {
+      "id": "b-6",
+      "type": "RSVP",
+      "props": {
+        "title": "Konfirmasi Kehadiran",
+        "note": "Kindly RSVP before 28 May 2027",
+        "deadline": "2027-05-28",
+        "button_text": "Kindly RSVP",
+        "success_message": "Thank you! We look forward to seeing you.",
+        "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "bank_name": "BNI",
+        "account_number": "880002839493",
+        "account_holder": "Gerald Marchel"
+      }
+    },
+    {
+      "id": "b-7",
+      "type": "Thanks",
+      "props": {
+        "title": "A Thank You",
+        "message": "Your presence adds a shining touch to our celebration. Thank you.",
+        "closing": "With love,",
+        "names": "Gerald & Vanessa"
+      }
+    },
+    {
+      "id": "b-8",
+      "type": "Maps",
+      "props": {
+        "title": "Lokasi Acara",
+        "address": "The Westin, Surabaya",
+        "embed_url": "https://maps.google.com/?q=The%20Westin%2C%20Surabaya"
+      }
+    }
+  ],
+  "flow": "stack"
+}

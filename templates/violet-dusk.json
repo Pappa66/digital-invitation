@@ -1,0 +1,161 @@
+{
+  "theme": {
+    "primary": "#6C4A9B",
+    "secondary": "#C9A9E8",
+    "background": "#F7F4FA",
+    "text": "#3E3450",
+    "font_heading": "Cormorant Garamond",
+    "font_body": "Quicksand",
+    "layout": "center",
+    "hero_style": "image"
+  },
+  "settings": {
+    "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+    "guest_book_enabled": true,
+    "religion": "islam",
+    "music_autoplay": true,
+    "music_offset_sec": 0,
+    "music_on_section": ""
+  },
+  "blocks": [
+    {
+      "id": "b-1",
+      "type": "Hero",
+      "props": {
+        "groom": "Arjuna Pradipta",
+        "bride": "Kirana Maharani",
+        "date": "Sabtu, 6 Februari 2027",
+        "place": "The Violet Ballroom, Bandung",
+        "caption": "Undangan Pernikahan",
+        "bg_image": "https://picsum.photos/seed/violet-dusk-hero/900/1200",
+        "show_ornament": true,
+        "variant": "center"
+      }
+    },
+    {
+      "id": "b-2",
+      "type": "Couple",
+      "props": {
+        "introduction": "Assalamu’alaikum Warahmatullahi Wabarakatuh",
+        "bismillah": "Bismillahirrahmanirrahim",
+        "groom": "Arjuna Pradipta, S.T.",
+        "groom_parents": "Putra dari Bpk. Hendra Santosa & Ibu Ratna",
+        "bride": "Kirana Maharani, S.E.",
+        "bride_parents": "Putri dari Bpk. Gunawan Wibisono & Ibu Mira",
+        "quote": "Kamu adalah warna yang melengkapi seluruh nuansa hidupku.",
+        "variant": "vertical"
+      }
+    },
+    {
+      "id": "b-3",
+      "type": "Countdown",
+      "props": {
+        "target_date": "2027-02-06T09:00:00+07:00",
+        "title": "Menghitung Hari",
+        "variant": "circles"
+      }
+    },
+    {
+      "id": "b-4",
+      "type": "Story",
+      "props": {
+        "title": "Our Story",
+        "subtitle": "Perjalanan cinta kami",
+        "ev_title": [
+          "Pertemuan Pertama",
+          "Menjadi Pasangan",
+          "Lamaran"
+        ],
+        "ev_date": [
+          "2018",
+          "2020",
+          "2026"
+        ],
+        "ev_desc": [
+          "Arjuna dan Kirana pertama kali bertemu di sebuah pameran seni di Bandung.",
+          "Mereka mulai menjalin hubungan di tengah konser musik senja.",
+          "Arjuna melamar Kirana di di taman bunga Lembang."
+        ]
+      }
+    },
+    {
+      "id": "b-5",
+      "type": "EventDetail",
+      "props": {
+        "title": "Akad Nikah",
+        "icon": "rings",
+        "date": "Sabtu, 6 Februari 2027",
+        "time": "09.00 - 10.30 WIB",
+        "location": "The Violet Ballroom",
+        "address": "Jl. Dago Pakar, Bandung",
+        "maps_url": "https://maps.google.com/?q=The%20Violet%20Ballroom",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "b-6",
+      "type": "EventDetail",
+      "props": {
+        "title": "Resepsi",
+        "icon": "glass",
+        "date": "Sabtu, 6 Februari 2027",
+        "time": "11.00 - 14.00 WIB",
+        "location": "The Violet Garden",
+        "address": "Dago Atas, Bandung",
+        "maps_url": "https://maps.google.com/?q=The%20Violet%20Garden",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "b-7",
+      "type": "Gallery",
+      "props": {
+        "title": "Dua Warna Cinta",
+        "images": [
+          "https://picsum.photos/seed/violet-dusk-g1/600/800",
+          "https://picsum.photos/seed/violet-dusk-g2/600/800",
+          "https://picsum.photos/seed/violet-dusk-g3/600/800",
+          "https://picsum.photos/seed/violet-dusk-g4/600/800",
+          "https://picsum.photos/seed/violet-dusk-g5/600/800"
+        ],
+        "variant": "column",
+        "animation": "blur"
+      }
+    },
+    {
+      "id": "b-8",
+      "type": "RSVP",
+      "props": {
+        "title": "Konfirmasi Kehadiran",
+        "note": "Mohon konfirmasi kehadiran sebelum 25 Januari 2027",
+        "deadline": "2027-01-25",
+        "button_text": "Kirim Konfirmasi",
+        "success_message": "Terima kasih, konfirmasi Anda sudah kami terima.",
+        "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "bank_name": "BNI",
+        "account_number": "880025442220",
+        "account_holder": "Arjuna Pradipta"
+      }
+    },
+    {
+      "id": "b-9",
+      "type": "Thanks",
+      "props": {
+        "title": "Doa Restu Anda",
+        "message": "Kehadiran dan doa Bapak/Ibu/Saudara/i adalah warna terindah dalam pernikahan kami.",
+        "closing": "Wassalamu’alaikum Warahmatullahi Wabarakatuh",
+        "names": "Arjuna & Kirana"
+      }
+    },
+    {
+      "id": "b-10",
+      "type": "Maps",
+      "props": {
+        "title": "Lokasi Acara",
+        "address": "The Violet Ballroom, Bandung",
+        "embed_url": "https://maps.google.com/?q=The%20Violet%20Ballroom%2C%20Bandung"
+      }
+    }
+  ],
+  "flow": "stack"
+}

@@ -1,0 +1,119 @@
+{
+  "theme": {
+    "primary": "#C9A227",
+    "secondary": "#2A2A2A",
+    "background": "#1A1A1A",
+    "text": "#EDEDED",
+    "font_heading": "Cinzel",
+    "font_body": "Nunito Sans",
+    "layout": "left",
+    "hero_style": "solid"
+  },
+  "settings": {
+    "music_url": "",
+    "guest_book_enabled": true,
+    "religion": "islam"
+  },
+  "blocks": [
+    {
+      "id": "b-1",
+      "type": "Hero",
+      "props": {
+        "groom": "Vino Geraldo",
+        "bride": "Sasha Ayumi",
+        "date": "13.03.2027",
+        "place": "The St. Regis, Jakarta",
+        "caption": "Save The Date",
+        "bg_image": "",
+        "show_ornament": true,
+        "variant": "left"
+      }
+    },
+    {
+      "id": "b-2",
+      "type": "Couple",
+      "props": {
+        "introduction": "Two souls, one rhythm",
+        "bismillah": "",
+        "groom": "Vino Geraldo, S.T.",
+        "groom_parents": "Son of Mr. Ricardo Halim & Mrs. Melia",
+        "bride": "Sasha Ayumi, S.E.",
+        "bride_parents": "Daughter of Mr. Steven Tanudjaja & Mrs. Winona",
+        "quote": "In the middle of the night, among the stars, our love will shine forever.",
+        "variant": "side"
+      }
+    },
+    {
+      "id": "b-3",
+      "type": "Countdown",
+      "props": {
+        "target_date": "2027-03-13T16:00:00+07:00",
+        "title": "The Clock Ticks Toward Forever",
+        "variant": "line"
+      }
+    },
+    {
+      "id": "b-4",
+      "type": "EventDetail",
+      "props": {
+        "title": "The Celebration",
+        "icon": "rings",
+        "date": "Saturday, 13 March 2027",
+        "time": "16.00 - 21.00 WIB",
+        "location": "The St. Regis Ballroom",
+        "address": "Jl. H.R. Rasuna Said Kav. B6, Jakarta",
+        "maps_url": "https://maps.google.com/?q=The%20St.%20Regis%20Ballroom",
+        "variant": "band"
+      }
+    },
+    {
+      "id": "b-5",
+      "type": "Gallery",
+      "props": {
+        "title": "Starry Moments",
+        "images": [
+          "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6",
+          "https://images.unsplash.com/photo-1519741497674-611481863552",
+          "https://images.unsplash.com/photo-1520854221256-17451cc331bf",
+          "https://images.unsplash.com/photo-1522673607200-164d1b6ce486",
+          "https://images.unsplash.com/photo-1532712938310-34cb3982ef74"
+        ]
+      }
+    },
+    {
+      "id": "b-6",
+      "type": "RSVP",
+      "props": {
+        "title": "Konfirmasi Kehadiran",
+        "note": "Kindly respond before 28 February 2027",
+        "deadline": "2027-02-28",
+        "button_text": "With Gratitude",
+        "success_message": "Thank you! We look forward to seeing you.",
+        "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "bank_name": "BCA",
+        "account_number": "884 019 8877",
+        "account_holder": "Vino Geraldo"
+      }
+    },
+    {
+      "id": "b-7",
+      "type": "Thanks",
+      "props": {
+        "title": "A Thousand Thanks",
+        "message": "Your presence lights up our celebration. Thank you for being part of our story.",
+        "closing": "Forever yours,",
+        "names": "Vino & Sasha"
+      }
+    },
+    {
+      "id": "b-8",
+      "type": "Maps",
+      "props": {
+        "title": "Lokasi Acara",
+        "address": "The St. Regis, Jakarta",
+        "embed_url": "https://maps.google.com/?q=The%20St.%20Regis%2C%20Jakarta"
+      }
+    }
+  ],
+  "flow": "stack"
+}

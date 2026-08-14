@@ -1,0 +1,162 @@
+{
+  "theme": {
+    "primary": "#F0A202",
+    "secondary": "#F2560D",
+    "background": "#FFFBF0",
+    "text": "#4A3B26",
+    "font_heading": "Quicksand",
+    "font_body": "Nunito Sans",
+    "layout": "center",
+    "hero_style": "solid"
+  },
+  "settings": {
+    "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+    "guest_book_enabled": true,
+    "religion": "islam",
+    "music_autoplay": true,
+    "music_offset_sec": 0,
+    "music_on_section": ""
+  },
+  "blocks": [
+    {
+      "id": "b-1",
+      "type": "Hero",
+      "props": {
+        "groom": "Farhan Mahesa",
+        "bride": "Alea Putri",
+        "date": "Sabtu, 13 Mei 2028",
+        "place": "Citrus Hills, Puncak",
+        "caption": "Undangan Pernikahan",
+        "bg_image": "",
+        "show_ornament": false,
+        "variant": "center"
+      }
+    },
+    {
+      "id": "b-2",
+      "type": "Couple",
+      "props": {
+        "introduction": "Selamat datang di pesta cahaya kami",
+        "bismillah": "Bismillahirrahmanirrahim",
+        "groom": "Farhan Mahesa, S.T.",
+        "groom_parents": "Putra dari Bpk. Rony Febrian & Ibu Tari",
+        "bride": "Alea Putri, S.E.",
+        "bride_parents": "Putri dari Bpk. Indra Kusuma & Ibu Sari",
+        "quote": "Kamu adalah sinar matahari yang menghangatkan setiap musim.",
+        "variant": "side"
+      }
+    },
+    {
+      "id": "b-3",
+      "type": "Countdown",
+      "props": {
+        "target_date": "2028-05-13T10:00:00+07:00",
+        "title": "Lewat Hari Cerah",
+        "variant": "cards"
+      }
+    },
+    {
+      "id": "b-4",
+      "type": "Story",
+      "props": {
+        "title": "Our Story",
+        "subtitle": "Perjalanan cinta kami",
+        "ev_title": [
+          "Pertemuan Pertama",
+          "Menjadi Pasangan",
+          "Lamaran"
+        ],
+        "ev_date": [
+          "2018",
+          "2021",
+          "2027"
+        ],
+        "ev_desc": [
+          "Farhan dan Alea pertama kali bertemu di sebuah acara lari pagi.",
+          "Mereka mulai menjalin hubungan saat piknik di Kebun Raya Cibodas.",
+          "Farhan melamar Alea di di puncak Gunung Gede."
+        ]
+      }
+    },
+    {
+      "id": "b-5",
+      "type": "EventDetail",
+      "props": {
+        "title": "Akad Nikah",
+        "icon": "rings",
+        "date": "Sabtu, 13 Mei 2028",
+        "time": "10.00 - 12.00 WIB",
+        "location": "Citrus Hills",
+        "address": "Cipanas, Puncak",
+        "maps_url": "https://maps.google.com/?q=Citrus%20Hills",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "b-6",
+      "type": "EventDetail",
+      "props": {
+        "title": "Resepsi",
+        "icon": "glass",
+        "date": "Sabtu, 13 Mei 2028",
+        "time": "12.30 - 16.00 WIB",
+        "location": "Citrus Hills",
+        "address": "Cipanas, Bogor",
+        "maps_url": "https://maps.google.com/?q=Citrus%20Hills",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "b-7",
+      "type": "Gallery",
+      "props": {
+        "title": "Kilau Mentari",
+        "images": [
+          "https://picsum.photos/seed/sunshine-citrus-g1/600/800",
+          "https://picsum.photos/seed/sunshine-citrus-g2/600/800",
+          "https://picsum.photos/seed/sunshine-citrus-g3/600/800",
+          "https://picsum.photos/seed/sunshine-citrus-g4/600/800",
+          "https://picsum.photos/seed/sunshine-citrus-g5/600/800",
+          "https://picsum.photos/seed/sunshine-citrus-g6/600/800"
+        ],
+        "variant": "grid",
+        "animation": "swing"
+      }
+    },
+    {
+      "id": "b-8",
+      "type": "RSVP",
+      "props": {
+        "title": "Konfirmasi Kehadiran",
+        "note": "Mohon konfirmasi kehadiran sebelum 30 April 2028",
+        "deadline": "2028-04-30",
+        "button_text": "Kirim Konfirmasi",
+        "success_message": "Terima kasih, konfirmasi Anda sudah kami terima.",
+        "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "bank_name": "BNI",
+        "account_number": "880038370452",
+        "account_holder": "Farhan Mahesa"
+      }
+    },
+    {
+      "id": "b-9",
+      "type": "Thanks",
+      "props": {
+        "title": "Doa Restu",
+        "message": "Semoga kehadiran Anda menjadi sinar yang menerangi pernikahan kami.",
+        "closing": "Wassalamu’alaikum Warahmatullahi Wabarakatuh",
+        "names": "Farhan & Alea"
+      }
+    },
+    {
+      "id": "b-10",
+      "type": "Maps",
+      "props": {
+        "title": "Lokasi Acara",
+        "address": "Citrus Hills, Puncak",
+        "embed_url": "https://maps.google.com/?q=Citrus%20Hills%2C%20Puncak"
+      }
+    }
+  ],
+  "flow": "stack"
+}

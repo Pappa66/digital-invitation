@@ -1,0 +1,147 @@
+{
+  "theme": {
+    "primary": "#6F4E37",
+    "secondary": "#A67C52",
+    "background": "#F6EFE3",
+    "text": "#43352A",
+    "font_heading": "Lora",
+    "font_body": "Poppins",
+    "layout": "left",
+    "hero_style": "image"
+  },
+  "settings": {
+    "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-14.mp3",
+    "guest_book_enabled": true,
+    "religion": "islam",
+    "music_autoplay": true,
+    "music_offset_sec": 0,
+    "music_on_section": ""
+  },
+  "blocks": [
+    {
+      "id": "b-1",
+      "type": "Hero",
+      "props": {
+        "groom": "Rizky Pratama",
+        "bride": "Salsa Nabila",
+        "date": "Sabtu, 15 Januari 2028",
+        "place": "Coffee Hill Estate, Malang",
+        "caption": "Undangan Pernikahan",
+        "bg_image": "https://picsum.photos/seed/coffee-cream-hero/900/1200",
+        "show_ornament": true,
+        "variant": "left"
+      }
+    },
+    {
+      "id": "b-2",
+      "type": "Couple",
+      "props": {
+        "introduction": "Assalamu’alaikum Warahmatullahi Wabarakatuh",
+        "bismillah": "Bismillahirrahmanirrahim",
+        "groom": "Rizky Pratama, S.T.",
+        "groom_parents": "Putra dari Bpk. Samsul Hadi & Ibu Susi",
+        "bride": "Salsa Nabila, S.E.",
+        "bride_parents": "Putri dari Bpk. Rachmat Hidayat & Ibu Yeni",
+        "quote": "Kamu adalah gula yang membuat kopi hidupku terasa sempurna.",
+        "variant": "vertical"
+      }
+    },
+    {
+      "id": "b-3",
+      "type": "Countdown",
+      "props": {
+        "target_date": "2028-01-15T10:00:00+07:00",
+        "title": "Ramuan Cinta",
+        "variant": "line"
+      }
+    },
+    {
+      "id": "b-4",
+      "type": "Story",
+      "props": {
+        "title": "Our Story",
+        "subtitle": "Perjalanan cinta kami",
+        "ev_title": [
+          "Pertemuan Pertama",
+          "Menjadi Pasangan",
+          "Lamaran"
+        ],
+        "ev_date": [
+          "2018",
+          "2021",
+          "2026"
+        ],
+        "ev_desc": [
+          "Rizky dan Salsa pertama kali bertemu di kedai kopi Alun-alun Malang.",
+          "Mereka mulai menjalin hubungan saat menikmati segelas kopi tubruk.",
+          "Rizky melamar Salsa di di kebun kopi Pujon."
+        ]
+      }
+    },
+    {
+      "id": "b-5",
+      "type": "EventDetail",
+      "props": {
+        "title": "Akad & Resepsi",
+        "icon": "rings",
+        "date": "Sabtu, 15 Januari 2028",
+        "time": "10.00 - 15.00 WIB",
+        "location": "Coffee Hill Estate",
+        "address": "Karangploso, Malang",
+        "maps_url": "https://maps.google.com/?q=Coffee%20Hill%20Estate",
+        "variant": "band"
+      }
+    },
+    {
+      "id": "b-6",
+      "type": "Gallery",
+      "props": {
+        "title": "Rasa & Aroma",
+        "images": [
+          "https://picsum.photos/seed/coffee-cream-g1/600/800",
+          "https://picsum.photos/seed/coffee-cream-g2/600/800",
+          "https://picsum.photos/seed/coffee-cream-g3/600/800",
+          "https://picsum.photos/seed/coffee-cream-g4/600/800",
+          "https://picsum.photos/seed/coffee-cream-g5/600/800"
+        ],
+        "variant": "grid",
+        "animation": "fade"
+      }
+    },
+    {
+      "id": "b-7",
+      "type": "RSVP",
+      "props": {
+        "title": "Konfirmasi Kehadiran",
+        "note": "Mohon konfirmasi kehadiran sebelum 2 Januari 2028",
+        "deadline": "2028-01-02",
+        "button_text": "Kirim Konfirmasi",
+        "success_message": "Terima kasih, konfirmasi Anda sudah kami terima.",
+        "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "bank_name": "BRI",
+        "account_number": "880005118595",
+        "account_holder": "Rizky Pratama"
+      }
+    },
+    {
+      "id": "b-8",
+      "type": "Thanks",
+      "props": {
+        "title": "Doa Restu",
+        "message": "Kehadiran Anda adalah rasa terhangat dalam secangkir cerita kami.",
+        "closing": "Wassalamu’alaikum Warahmatullahi Wabarakatuh",
+        "names": "Rizky & Salsa"
+      }
+    },
+    {
+      "id": "b-9",
+      "type": "Maps",
+      "props": {
+        "title": "Lokasi Acara",
+        "address": "Coffee Hill Estate, Malang",
+        "embed_url": "https://maps.google.com/?q=Coffee%20Hill%20Estate%2C%20Malang"
+      }
+    }
+  ],
+  "flow": "stack"
+}

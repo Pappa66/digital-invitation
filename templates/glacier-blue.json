@@ -1,0 +1,162 @@
+{
+  "theme": {
+    "primary": "#4E7FA3",
+    "secondary": "#8FB6CE",
+    "background": "#F2F7FA",
+    "text": "#2F4A5C",
+    "font_heading": "Playfair Display",
+    "font_body": "Lato",
+    "layout": "center",
+    "hero_style": "image"
+  },
+  "settings": {
+    "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
+    "guest_book_enabled": true,
+    "religion": "islam",
+    "music_autoplay": true,
+    "music_offset_sec": 0,
+    "music_on_section": ""
+  },
+  "blocks": [
+    {
+      "id": "b-1",
+      "type": "Hero",
+      "props": {
+        "groom": "Radit Nagagara",
+        "bride": "Alysia Deandra",
+        "date": "Sabtu, 10 Juni 2028",
+        "place": "Glacier Hall, Bali",
+        "caption": "The Wedding Of",
+        "bg_image": "https://picsum.photos/seed/glacier-blue-hero/900/1200",
+        "show_ornament": true,
+        "variant": "center"
+      }
+    },
+    {
+      "id": "b-2",
+      "type": "Couple",
+      "props": {
+        "introduction": "Om Swastiastu",
+        "bismillah": "Bismillahirrahmanirrahim",
+        "groom": "Radit Nagagara, S.T.",
+        "groom_parents": "Putra dari I Made Sudana & Ni Ketut Ayu",
+        "bride": "Alysia Deandra, S.E.",
+        "bride_parents": "Putri dari I Nyoman Arta & Ni Made Dian",
+        "quote": "Sejernih gletser, secair es — itulah janji kita.",
+        "variant": "side"
+      }
+    },
+    {
+      "id": "b-3",
+      "type": "Countdown",
+      "props": {
+        "target_date": "2028-06-10T15:00:00+08:00",
+        "title": "Mencairkan Kerinduan",
+        "variant": "circles"
+      }
+    },
+    {
+      "id": "b-4",
+      "type": "Story",
+      "props": {
+        "title": "Our Story",
+        "subtitle": "Perjalanan cinta kami",
+        "ev_title": [
+          "Pertemuan Pertama",
+          "Menjadi Pasangan",
+          "Lamaran"
+        ],
+        "ev_date": [
+          "2017",
+          "2019",
+          "2027"
+        ],
+        "ev_desc": [
+          "Radit dan Alysia pertama kali bertemu di festival kuliner Ubud.",
+          "Mereka mulai menjalin hubungan saat menyelam di Menjangan.",
+          "Radit melamar Alysia di di tepi Pantai Pandawa."
+        ]
+      }
+    },
+    {
+      "id": "b-5",
+      "type": "EventDetail",
+      "props": {
+        "title": "Akad Nikah",
+        "icon": "rings",
+        "date": "Sabtu, 10 Juni 2028",
+        "time": "15.00 - 17.00 WITA",
+        "location": "Glacier Chapel",
+        "address": "Nusa Dua, Badung, Bali",
+        "maps_url": "https://maps.google.com/?q=Glacier%20Chapel",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "b-6",
+      "type": "EventDetail",
+      "props": {
+        "title": "Resepsi",
+        "icon": "glass",
+        "date": "Sabtu, 10 Juni 2028",
+        "time": "18.00 - 21.00 WITA",
+        "location": "Glacier Lawn",
+        "address": "Nusa Dua, Bali",
+        "maps_url": "https://maps.google.com/?q=Glacier%20Lawn",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "b-7",
+      "type": "Gallery",
+      "props": {
+        "title": "Kebiruan Cinta",
+        "images": [
+          "https://picsum.photos/seed/glacier-blue-g1/600/800",
+          "https://picsum.photos/seed/glacier-blue-g2/600/800",
+          "https://picsum.photos/seed/glacier-blue-g3/600/800",
+          "https://picsum.photos/seed/glacier-blue-g4/600/800",
+          "https://picsum.photos/seed/glacier-blue-g5/600/800"
+        ],
+        "variant": "carousel",
+        "animation": "fade",
+        "interval_sec": 4
+      }
+    },
+    {
+      "id": "b-8",
+      "type": "RSVP",
+      "props": {
+        "title": "Konfirmasi Kehadiran",
+        "note": "Mohon konfirmasi kehadiran sebelum 25 Mei 2028",
+        "deadline": "2028-05-25",
+        "button_text": "Kirim Konfirmasi",
+        "success_message": "Terima kasih, konfirmasi Anda sudah kami terima.",
+        "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "bank_name": "BRI",
+        "account_number": "880002454522",
+        "account_holder": "Radit Nagagara"
+      }
+    },
+    {
+      "id": "b-9",
+      "type": "Thanks",
+      "props": {
+        "title": "Doa Restu",
+        "message": "Kehadiran Anda sejuk seperti gletser menyejukkan perjalanan kami.",
+        "closing": "Om Shanti Shanti Shanti Om",
+        "names": "Radit & Alysia"
+      }
+    },
+    {
+      "id": "b-10",
+      "type": "Maps",
+      "props": {
+        "title": "Lokasi Acara",
+        "address": "Glacier Hall, Bali",
+        "embed_url": "https://maps.google.com/?q=Glacier%20Hall%2C%20Bali"
+      }
+    }
+  ],
+  "flow": "stack"
+}

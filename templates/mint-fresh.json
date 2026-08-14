@@ -1,0 +1,161 @@
+{
+  "theme": {
+    "primary": "#3E8E7E",
+    "secondary": "#1F3A5F",
+    "background": "#F2FAF6",
+    "text": "#21403A",
+    "font_heading": "Quicksand",
+    "font_body": "Nunito Sans",
+    "layout": "center",
+    "hero_style": "solid"
+  },
+  "settings": {
+    "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3",
+    "guest_book_enabled": true,
+    "religion": "islam",
+    "music_autoplay": true,
+    "music_offset_sec": 0,
+    "music_on_section": ""
+  },
+  "blocks": [
+    {
+      "id": "b-1",
+      "type": "Hero",
+      "props": {
+        "groom": "Kevin Aditya",
+        "bride": "Nadya Ramadhani",
+        "date": "Sabtu, 14 Agustus 2027",
+        "place": "The Mint Garden, Jakarta",
+        "caption": "Undangan Pernikahan",
+        "bg_image": "",
+        "show_ornament": false,
+        "variant": "center"
+      }
+    },
+    {
+      "id": "b-2",
+      "type": "Couple",
+      "props": {
+        "introduction": "Assalamu’alaikum Warahmatullahi Wabarakatuh",
+        "bismillah": "Bismillahirrahmanirrahim",
+        "groom": "Kevin Aditya, S.T.",
+        "groom_parents": "Putra dari Bpk. Handoko & Ibu Laras",
+        "bride": "Nadya Ramadhani, S.E.",
+        "bride_parents": "Putri dari Bpk. Wijaya & Ibu Sulastri",
+        "quote": "Segar seperti mint pagi, tenang seperti laut biru.",
+        "variant": "vertical"
+      }
+    },
+    {
+      "id": "b-3",
+      "type": "Countdown",
+      "props": {
+        "target_date": "2027-08-14T10:00:00+07:00",
+        "title": "Hari yang Segar",
+        "variant": "line"
+      }
+    },
+    {
+      "id": "b-4",
+      "type": "Story",
+      "props": {
+        "title": "Our Story",
+        "subtitle": "Perjalanan cinta kami",
+        "ev_title": [
+          "Pertemuan Pertama",
+          "Menjadi Pasangan",
+          "Lamaran"
+        ],
+        "ev_date": [
+          "2019",
+          "2022",
+          "2026"
+        ],
+        "ev_desc": [
+          "Kevin dan Nadya pertama kali bertemu di sebuah kedai kopi Kemang.",
+          "Mereka mulai menjalin hubungan di tepi pantai Anyer.",
+          "Kevin melamar Nadya di di rooftop gedung di Sudirman."
+        ]
+      }
+    },
+    {
+      "id": "b-5",
+      "type": "EventDetail",
+      "props": {
+        "title": "Akad Nikah",
+        "icon": "rings",
+        "date": "Sabtu, 14 Agustus 2027",
+        "time": "10.00 - 12.00 WIB",
+        "location": "The Mint Garden",
+        "address": "Kalibata, Jakarta Selatan",
+        "maps_url": "https://maps.google.com/?q=The%20Mint%20Garden",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "b-6",
+      "type": "EventDetail",
+      "props": {
+        "title": "Resepsi",
+        "icon": "glass",
+        "date": "Sabtu, 14 Agustus 2027",
+        "time": "12.30 - 16.00 WIB",
+        "location": "The Mint Garden",
+        "address": "Kalibata, Jakarta Selatan",
+        "maps_url": "https://maps.google.com/?q=The%20Mint%20Garden",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "b-7",
+      "type": "Gallery",
+      "props": {
+        "title": "Senja Mint",
+        "images": [
+          "https://picsum.photos/seed/mint-fresh-g1/600/800",
+          "https://picsum.photos/seed/mint-fresh-g2/600/800",
+          "https://picsum.photos/seed/mint-fresh-g3/600/800",
+          "https://picsum.photos/seed/mint-fresh-g4/600/800",
+          "https://picsum.photos/seed/mint-fresh-g5/600/800"
+        ],
+        "variant": "grid",
+        "animation": "zoom"
+      }
+    },
+    {
+      "id": "b-8",
+      "type": "RSVP",
+      "props": {
+        "title": "Konfirmasi Kehadiran",
+        "note": "Mohon konfirmasi kehadiran sebelum 30 Juli 2027",
+        "deadline": "2027-07-30",
+        "button_text": "Kirim Konfirmasi",
+        "success_message": "Terima kasih, konfirmasi Anda sudah kami terima.",
+        "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "bank_name": "Mandiri",
+        "account_number": "880032385024",
+        "account_holder": "Kevin Aditya"
+      }
+    },
+    {
+      "id": "b-9",
+      "type": "Thanks",
+      "props": {
+        "title": "Doa Restu",
+        "message": "Kehadiran Anda membuat hari kami semakin segar dan bermakna.",
+        "closing": "Wassalamu’alaikum Warahmatullahi Wabarakatuh",
+        "names": "Kevin & Nadya"
+      }
+    },
+    {
+      "id": "b-10",
+      "type": "Maps",
+      "props": {
+        "title": "Lokasi Acara",
+        "address": "The Mint Garden, Jakarta",
+        "embed_url": "https://maps.google.com/?q=The%20Mint%20Garden%2C%20Jakarta"
+      }
+    }
+  ],
+  "flow": "stack"
+}

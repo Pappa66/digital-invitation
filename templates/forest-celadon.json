@@ -1,0 +1,119 @@
+{
+  "theme": {
+    "primary": "#324F43",
+    "secondary": "#A9C5B4",
+    "background": "#F1F5EF",
+    "text": "#33423B",
+    "font_heading": "Marcellus",
+    "font_body": "Jost",
+    "layout": "center",
+    "hero_style": "image"
+  },
+  "settings": {
+    "music_url": "",
+    "guest_book_enabled": true,
+    "religion": "islam"
+  },
+  "blocks": [
+    {
+      "id": "b-1",
+      "type": "Hero",
+      "props": {
+        "groom": "Bima Permana",
+        "bride": "Rania Puspita",
+        "date": "Sabtu, 3 Oktober 2026",
+        "place": "Sarangan Lake Hotel, Magetan",
+        "caption": "The Wedding Of",
+        "bg_image": "https://images.unsplash.com/photo-1519741497674-611481863552",
+        "show_ornament": true,
+        "variant": "center"
+      }
+    },
+    {
+      "id": "b-2",
+      "type": "Couple",
+      "props": {
+        "introduction": "Dengan penuh suka cita",
+        "bismillah": "Bismillahirrahmanirrahim",
+        "groom": "Bima Permana, S.E.",
+        "groom_parents": "Putra dari Bpk. Edi Suryanto & Ibu Yuliana",
+        "bride": "Rania Puspita, S.Ked.",
+        "bride_parents": "Putri dari Bpk. Widodo Nursalim & Ibu Anti",
+        "quote": "Bersamamu, hutan terasa seperti rumah.",
+        "variant": "side"
+      }
+    },
+    {
+      "id": "b-3",
+      "type": "Countdown",
+      "props": {
+        "target_date": "2026-10-03T09:00:00+07:00",
+        "title": "Menuju Hari Kita",
+        "variant": "cards"
+      }
+    },
+    {
+      "id": "b-4",
+      "type": "EventDetail",
+      "props": {
+        "title": "Akad Nikah",
+        "icon": "rings",
+        "date": "Sabtu, 3 Oktober 2026",
+        "time": "09.00 - 11.00 WIB",
+        "location": "Gd. Sarangan Lake",
+        "address": "Jalan Raya Sarangan, Magetan",
+        "maps_url": "https://maps.google.com/?q=Gd.%20Sarangan%20Lake",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "b-5",
+      "type": "Gallery",
+      "props": {
+        "title": "Jejak Cinta",
+        "images": [
+          "https://images.unsplash.com/photo-1519741497674-611481863552",
+          "https://images.unsplash.com/photo-1511285560929-80b456fea0bc",
+          "https://images.unsplash.com/photo-1522673607200-164d1b6ce486",
+          "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6",
+          "https://images.unsplash.com/photo-1520854221256-17451cc331bf"
+        ]
+      }
+    },
+    {
+      "id": "b-6",
+      "type": "RSVP",
+      "props": {
+        "title": "Konfirmasi Kehadiran",
+        "note": "Konfirmasi kehadiran paling lambat 20 September 2026",
+        "deadline": "2026-09-20",
+        "button_text": "Kirim Konfirmasi",
+        "success_message": "Terima kasih, konfirmasi Anda sudah kami terima.",
+        "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "bank_name": "BCA",
+        "account_number": "882 044 5566",
+        "account_holder": "Bima Permana"
+      }
+    },
+    {
+      "id": "b-7",
+      "type": "Thanks",
+      "props": {
+        "title": "Doa Restu",
+        "message": "Terima kasih atas kehadiran dan doa restu Bapak/Ibu/Saudara/i sekalian.",
+        "closing": "Wassalamu’alaikum Warahmatullahi Wabarakatuh",
+        "names": "Bima & Rania"
+      }
+    },
+    {
+      "id": "b-8",
+      "type": "Maps",
+      "props": {
+        "title": "Lokasi Acara",
+        "address": "Sarangan Lake Hotel, Magetan",
+        "embed_url": "https://maps.google.com/?q=Sarangan%20Lake%20Hotel%2C%20Magetan"
+      }
+    }
+  ],
+  "flow": "stack"
+}

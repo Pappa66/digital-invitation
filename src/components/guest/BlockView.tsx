@@ -1,0 +1,121 @@
+'use client';
+
+import Image from 'next/image';
+import { motion } from 'framer-motion';
+import type { Block, BlockStyle } from '@/lib/types';
+import {
+  HeroBlock,
+  CoupleBlock,
+  CountdownBlock,
+  EventDetailBlock,
+  StoryBlock,
+  GalleryBlock,
+  MapsBlock,
+  ThanksBlock,
+  DividerBlock
+} from '@/components/guest/blocks';
+import RSVPForm from '@/components/guest/rsvp';
+import { BuilderEditableContext } from '@/components/builder/inline-edit';
+import { usePreview } from '@/components/guest/preview-context';
+
+interface BlockViewProps {
+  block: Block;
+  /** projectId untuk RSVP DB insert. Kosong = readonly preview. */
+  projectId?: string;
+  /** Aktifkan edit-inline (hanya di builder). */
+  editable?: boolean;
+  /** Nama tamu (dari ?to=) untuk sapaan di Hero. */
+  greetingName?: string;
+}
+
+export default function BlockView({ block, projectId, editable = false, greetingName }: BlockViewProps) {
+  const preview = usePreview();
+  let view: React.ReactNode;
+  switch (block.type) {
+    case 'Hero':
+      view = <HeroBlock props={block.props} greetingName={greetingName} />;
+      break;
+    case 'Couple':
+      view = <CoupleBlock props={block.props} />;
+      break;
+    case 'Countdown':
+      view = <CountdownBlock props={block.props} />;
+      break;
+    case 'EventDetail':
+      view = <EventDetailBlock props={block.props} />;
+      break;
+    case 'Story':
+      view = <StoryBlock props={block.props} />;
+      break;
+    case 'Gallery':
+      view = <GalleryBlock props={block.props} />;
+      break;
+    case 'RSVP':
+      view = <RSVPForm projectId={projectId ?? ''} blockProps={block.props} readonly={!projectId} />;
+      break;
+    case 'Maps':
+      view = <MapsBlock props={block.props} />;
+      break;
+    case 'Thanks':
+      view = <ThanksBlock props={block.props} />;
+      break;
+    case 'Divider':
+      view = <DividerBlock props={block.props} />;
+      break;
+    default:
+      return null;
+  }
+
+  if (editable) {
+    view = <BuilderEditableContext.Provider value={{ blockId: block.id }}>{view}</BuilderEditableContext.Provider>;
+  }
+
+  return (
+    <div data-block-type={block.type}>
+      {!preview && !editable ? (
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.15 }}
+          transition={{ duration: 0.55, ease: 'easeOut' }}
+        >
+          <StyledSection style={block.style}>{view}</StyledSection>
+        </motion.div>
+      ) : (
+        <StyledSection style={block.style}>{view}</StyledSection>
+      )}
+    </div>
+  );
+}
+
+function StyledSection({ style, children }: { style?: BlockStyle; children: React.ReactNode }) {
+  if (!style || (!style.textColor && !style.bgColor && !style.bgImage)) {
+    return <>{children}</>;
+  }
+
+  const css: React.CSSProperties = {};
+  if (style.textColor) css.color = style.textColor;
+  if (style.bgColor) css.backgroundColor = style.bgColor;
+
+  if (style.bgImage) {
+    return (
+      <div className="relative" style={css}>
+        <div className="absolute inset-0 z-0">
+          <Image
+            src={style.bgImage}
+            alt=""
+            fill
+            sizes="(min-width: 768px) 420px, 100vw"
+            quality={75}
+            loading="lazy"
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-black/40" />
+        </div>
+        <div className="relative z-10">{children}</div>
+      </div>
+    );
+  }
+
+  return <div style={css}>{children}</div>;
+}

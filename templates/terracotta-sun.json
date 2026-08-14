@@ -1,0 +1,147 @@
+{
+  "theme": {
+    "primary": "#C25938",
+    "secondary": "#E8A87C",
+    "background": "#FBF3EA",
+    "text": "#5A4232",
+    "font_heading": "Lora",
+    "font_body": "Poppins",
+    "layout": "left",
+    "hero_style": "image"
+  },
+  "settings": {
+    "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+    "guest_book_enabled": true,
+    "religion": "islam",
+    "music_autoplay": true,
+    "music_offset_sec": 0,
+    "music_on_section": ""
+  },
+  "blocks": [
+    {
+      "id": "b-1",
+      "type": "Hero",
+      "props": {
+        "groom": "Satria Nugraha",
+        "bride": "Amara Kinanti",
+        "date": "Minggu, 14 Maret 2027",
+        "place": "The Sun Terrace, Ubud",
+        "caption": "We Are Getting Married",
+        "bg_image": "https://picsum.photos/seed/terracotta-sun-hero/900/1200",
+        "show_ornament": true,
+        "variant": "left"
+      }
+    },
+    {
+      "id": "b-2",
+      "type": "Couple",
+      "props": {
+        "introduction": "Dengan penuh rasa syukur",
+        "bismillah": "Bismillahirrahmanirrahim",
+        "groom": "Satria Nugraha, S.T.",
+        "groom_parents": "Anak pertama dari Bpk. Rudi Hartono & Ibu Sri",
+        "bride": "Amara Kinanti, S.E.",
+        "bride_parents": "Anak kedua dari Bpk. Eka Putra & Ibu Yani",
+        "quote": "Seperti matahari sore di Ubud, kamu hangat dan menenangkan.",
+        "variant": "side"
+      }
+    },
+    {
+      "id": "b-3",
+      "type": "Countdown",
+      "props": {
+        "target_date": "2027-03-14T16:00:00+08:00",
+        "title": "Hari Berterakota",
+        "variant": "cards"
+      }
+    },
+    {
+      "id": "b-4",
+      "type": "Story",
+      "props": {
+        "title": "Our Story",
+        "subtitle": "Perjalanan cinta kami",
+        "ev_title": [
+          "Pertemuan Pertama",
+          "Menjadi Pasangan",
+          "Lamaran"
+        ],
+        "ev_date": [
+          "2019",
+          "2021",
+          "2026"
+        ],
+        "ev_desc": [
+          "Satria dan Amara pertama kali bertemu di pasar malam Gianyar.",
+          "Mereka mulai menjalin hubungan saat menikmati senja Tanah Lot.",
+          "Satria melamar Amara di di bawah langit Campuhan Ridge."
+        ]
+      }
+    },
+    {
+      "id": "b-5",
+      "type": "EventDetail",
+      "props": {
+        "title": "Resepsi",
+        "icon": "glass",
+        "date": "Minggu, 14 Maret 2027",
+        "time": "16.00 - 21.00 WITA",
+        "location": "The Sun Terrace",
+        "address": "Jalan Raya Sanggingan, Ubud",
+        "maps_url": "https://maps.google.com/?q=The%20Sun%20Terrace",
+        "variant": "band"
+      }
+    },
+    {
+      "id": "b-6",
+      "type": "Gallery",
+      "props": {
+        "title": "Semesta Senja",
+        "images": [
+          "https://picsum.photos/seed/terracotta-sun-g1/600/800",
+          "https://picsum.photos/seed/terracotta-sun-g2/600/800",
+          "https://picsum.photos/seed/terracotta-sun-g3/600/800",
+          "https://picsum.photos/seed/terracotta-sun-g4/600/800"
+        ],
+        "variant": "carousel",
+        "animation": "ken-burns",
+        "interval_sec": 4
+      }
+    },
+    {
+      "id": "b-7",
+      "type": "RSVP",
+      "props": {
+        "title": "Konfirmasi Kehadiran",
+        "note": "Mohon konfirmasi kehadiran sebelum 28 Februari 2027",
+        "deadline": "2027-02-28",
+        "button_text": "Kirim Konfirmasi",
+        "success_message": "Terima kasih, konfirmasi Anda sudah kami terima.",
+        "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "bank_name": "BSI",
+        "account_number": "880037876875",
+        "account_holder": "Satria Nugraha"
+      }
+    },
+    {
+      "id": "b-8",
+      "type": "Thanks",
+      "props": {
+        "title": "Terima Kasih",
+        "message": "Terima kasih telah menjadi bagian dari senja paling hangat dalam hidup kami.",
+        "closing": "Dengan cinta,",
+        "names": "Satria & Amara"
+      }
+    },
+    {
+      "id": "b-9",
+      "type": "Maps",
+      "props": {
+        "title": "Lokasi Acara",
+        "address": "The Sun Terrace, Ubud",
+        "embed_url": "https://maps.google.com/?q=The%20Sun%20Terrace%2C%20Ubud"
+      }
+    }
+  ],
+  "flow": "stack"
+}

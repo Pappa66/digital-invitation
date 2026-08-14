@@ -1,0 +1,123 @@
+{
+  "theme": {
+    "primary": "#B7B1A0",
+    "secondary": "#8C8577",
+    "background": "#FBFAF5",
+    "text": "#5B564A",
+    "font_heading": "Cormorant Garamond",
+    "font_body": "Jost",
+    "layout": "center",
+    "hero_style": "solid"
+  },
+  "settings": {
+    "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-11.mp3",
+    "guest_book_enabled": true,
+    "religion": "islam",
+    "music_autoplay": true,
+    "music_offset_sec": 0,
+    "music_on_section": ""
+  },
+  "blocks": [
+    {
+      "id": "b-1",
+      "type": "Hero",
+      "props": {
+        "groom": "Nathan Kristanto",
+        "bride": "Ariana Basuki",
+        "date": "16.10.2027",
+        "place": "The Mulia, Jakarta",
+        "caption": "Save The Date",
+        "bg_image": "",
+        "show_ornament": false,
+        "variant": "center"
+      }
+    },
+    {
+      "id": "b-2",
+      "type": "Couple",
+      "props": {
+        "introduction": "The purity of a pearl",
+        "bismillah": "Bismillahirrahmanirrahim",
+        "groom": "Nathan Kristanto, S.T.",
+        "groom_parents": "Son of Mr. Hendra Basuki & Mrs. Ratna",
+        "bride": "Ariana Basuki, S.E.",
+        "bride_parents": "Daughter of Mr. Felix Pratama & Mrs. Sanny",
+        "quote": "Rare, calm, and timeless — that is the love we cherish.",
+        "variant": "side"
+      }
+    },
+    {
+      "id": "b-3",
+      "type": "Countdown",
+      "props": {
+        "target_date": "2027-10-16T17:00:00+07:00",
+        "title": "16.10.2027",
+        "variant": "circles"
+      }
+    },
+    {
+      "id": "b-4",
+      "type": "EventDetail",
+      "props": {
+        "title": "The Wedding",
+        "icon": "rings",
+        "date": "Saturday, 16 October 2027",
+        "time": "17.00 - 21.00 WIB",
+        "location": "The Mulia Ballroom",
+        "address": "Jl. Asia Afrika, Senayan, Jakarta",
+        "maps_url": "https://maps.google.com/?q=The%20Mulia%20Ballroom",
+        "variant": "band"
+      }
+    },
+    {
+      "id": "b-5",
+      "type": "Gallery",
+      "props": {
+        "title": "Pearls of Time",
+        "images": [
+          "https://picsum.photos/seed/pearl-white-g1/600/800",
+          "https://picsum.photos/seed/pearl-white-g2/600/800",
+          "https://picsum.photos/seed/pearl-white-g3/600/800",
+          "https://picsum.photos/seed/pearl-white-g4/600/800"
+        ],
+        "variant": "column",
+        "animation": "fade"
+      }
+    },
+    {
+      "id": "b-6",
+      "type": "RSVP",
+      "props": {
+        "title": "Konfirmasi Kehadiran",
+        "note": "Kindly RSVP before 2 October 2027",
+        "deadline": "2027-10-02",
+        "button_text": "Kindly RSVP",
+        "success_message": "Thank you! We look forward to seeing you.",
+        "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "bank_name": "Mandiri",
+        "account_number": "880025819053",
+        "account_holder": "Nathan Kristanto"
+      }
+    },
+    {
+      "id": "b-7",
+      "type": "Thanks",
+      "props": {
+        "title": "In Gratitude",
+        "message": "Thank you for treasuring this day with us. Your presence is our pearl.",
+        "closing": "Forever,",
+        "names": "Nathan & Ariana"
+      }
+    },
+    {
+      "id": "b-8",
+      "type": "Maps",
+      "props": {
+        "title": "Lokasi Acara",
+        "address": "The Mulia, Jakarta",
+        "embed_url": "https://maps.google.com/?q=The%20Mulia%2C%20Jakarta"
+      }
+    }
+  ],
+  "flow": "stack"
+}

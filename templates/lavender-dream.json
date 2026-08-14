@@ -1,0 +1,161 @@
+{
+  "theme": {
+    "primary": "#7C6FA8",
+    "secondary": "#C6B8E8",
+    "background": "#FBFAFD",
+    "text": "#463F5C",
+    "font_heading": "Great Vibes",
+    "font_body": "Nunito Sans",
+    "layout": "center",
+    "hero_style": "image"
+  },
+  "settings": {
+    "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3",
+    "guest_book_enabled": true,
+    "religion": "islam",
+    "music_autoplay": true,
+    "music_offset_sec": 0,
+    "music_on_section": ""
+  },
+  "blocks": [
+    {
+      "id": "b-1",
+      "type": "Hero",
+      "props": {
+        "groom": "Bagas Widyatama",
+        "bride": "Lavina Ayu",
+        "date": "Sabtu, 11 Desember 2027",
+        "place": "Lavender Farm, Ciwidey",
+        "caption": "The Wedding Of",
+        "bg_image": "https://picsum.photos/seed/lavender-dream-hero/900/1200",
+        "show_ornament": true,
+        "variant": "center"
+      }
+    },
+    {
+      "id": "b-2",
+      "type": "Couple",
+      "props": {
+        "introduction": "Assalamu’alaikum Warahmatullahi Wabarakatuh",
+        "bismillah": "Bismillahirrahmanirrahim",
+        "groom": "Bagas Widyatama, S.T.",
+        "groom_parents": "Putra dari Bpk. Haryo Kusumo & Ibu Sita",
+        "bride": "Lavina Ayu, S.E.",
+        "bride_parents": "Putri dari Bpk. Andra Wijaya & Ibu Fitri",
+        "quote": "Harum lavender mengingatkanku pada janji kita.",
+        "variant": "vertical"
+      }
+    },
+    {
+      "id": "b-3",
+      "type": "Countdown",
+      "props": {
+        "target_date": "2027-12-11T09:00:00+07:00",
+        "title": "Mimpi Lavender",
+        "variant": "circles"
+      }
+    },
+    {
+      "id": "b-4",
+      "type": "Story",
+      "props": {
+        "title": "Our Story",
+        "subtitle": "Perjalanan cinta kami",
+        "ev_title": [
+          "Pertemuan Pertama",
+          "Menjadi Pasangan",
+          "Lamaran"
+        ],
+        "ev_date": [
+          "2019",
+          "2021",
+          "2026"
+        ],
+        "ev_desc": [
+          "Bagas dan Lavina pertama kali bertemu di kebun strawberry Ciwidey.",
+          "Mereka mulai menjalin hubungan di antara ladang lavender.",
+          "Bagas melamar Lavina di di puncak Gunung Patuha."
+        ]
+      }
+    },
+    {
+      "id": "b-5",
+      "type": "EventDetail",
+      "props": {
+        "title": "Akad Nikah",
+        "icon": "rings",
+        "date": "Sabtu, 11 Desember 2027",
+        "time": "09.00 - 11.00 WIB",
+        "location": "Lavender Hall",
+        "address": "Kampung Cai, Rancabali, Ciwidey",
+        "maps_url": "https://maps.google.com/?q=Lavender%20Hall",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "b-6",
+      "type": "EventDetail",
+      "props": {
+        "title": "Resepsi",
+        "icon": "glass",
+        "date": "Sabtu, 11 Desember 2027",
+        "time": "11.30 - 15.00 WIB",
+        "location": "Lavender Garden",
+        "address": "Rancabali, Bandung Selatan",
+        "maps_url": "https://maps.google.com/?q=Lavender%20Garden",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "b-7",
+      "type": "Gallery",
+      "props": {
+        "title": "Hamparan Ungu",
+        "images": [
+          "https://picsum.photos/seed/lavender-dream-g1/600/800",
+          "https://picsum.photos/seed/lavender-dream-g2/600/800",
+          "https://picsum.photos/seed/lavender-dream-g3/600/800",
+          "https://picsum.photos/seed/lavender-dream-g4/600/800",
+          "https://picsum.photos/seed/lavender-dream-g5/600/800"
+        ],
+        "variant": "column",
+        "animation": "pop"
+      }
+    },
+    {
+      "id": "b-8",
+      "type": "RSVP",
+      "props": {
+        "title": "Konfirmasi Kehadiran",
+        "note": "Mohon konfirmasi kehadiran sebelum 27 November 2027",
+        "deadline": "2027-11-27",
+        "button_text": "Kirim Konfirmasi",
+        "success_message": "Terima kasih, konfirmasi Anda sudah kami terima.",
+        "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "bank_name": "BCA",
+        "account_number": "880029944014",
+        "account_holder": "Bagas Widyatama"
+      }
+    },
+    {
+      "id": "b-9",
+      "type": "Thanks",
+      "props": {
+        "title": "Doa Restu",
+        "message": "Kehadiran Anda adalah harum lavender yang menyemarakkan hari kami.",
+        "closing": "Wassalamu’alaikum Warahmatullahi Wabarakatuh",
+        "names": "Bagas & Lavina"
+      }
+    },
+    {
+      "id": "b-10",
+      "type": "Maps",
+      "props": {
+        "title": "Lokasi Acara",
+        "address": "Lavender Farm, Ciwidey",
+        "embed_url": "https://maps.google.com/?q=Lavender%20Farm%2C%20Ciwidey"
+      }
+    }
+  ],
+  "flow": "stack"
+}

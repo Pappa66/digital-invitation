@@ -1,0 +1,162 @@
+{
+  "theme": {
+    "primary": "#A63D5F",
+    "secondary": "#5E7C6B",
+    "background": "#FBF2F5",
+    "text": "#542C3B",
+    "font_heading": "Playfair Display",
+    "font_body": "Montserrat",
+    "layout": "center",
+    "hero_style": "image"
+  },
+  "settings": {
+    "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3",
+    "guest_book_enabled": true,
+    "religion": "islam",
+    "music_autoplay": true,
+    "music_offset_sec": 0,
+    "music_on_section": ""
+  },
+  "blocks": [
+    {
+      "id": "b-1",
+      "type": "Hero",
+      "props": {
+        "groom": "Dimas Prasetya",
+        "bride": "Rania Anggraini",
+        "date": "Sabtu, 26 Juni 2027",
+        "place": "Rose Garden Hotel, Bogor",
+        "caption": "The Wedding Of",
+        "bg_image": "https://picsum.photos/seed/rose-garden-hero/900/1200",
+        "show_ornament": true,
+        "variant": "center"
+      }
+    },
+    {
+      "id": "b-2",
+      "type": "Couple",
+      "props": {
+        "introduction": "Assalamu’alaikum Warahmatullahi Wabarakatuh",
+        "bismillah": "Bismillahirrahmanirrahim",
+        "groom": "Dimas Prasetya, S.T.",
+        "groom_parents": "Putra dari Bpk. Bambang Sutopo & Ibu Endang",
+        "bride": "Rania Anggraini, S.E.",
+        "bride_parents": "Putri dari Bpk. Sukarno & Ibu Ida",
+        "quote": "Di antara duri hidup, kamu adalah mawar yang paling lembut.",
+        "variant": "vertical"
+      }
+    },
+    {
+      "id": "b-3",
+      "type": "Countdown",
+      "props": {
+        "target_date": "2027-06-26T10:00:00+07:00",
+        "title": "Menuju Hari Mawar",
+        "variant": "circles"
+      }
+    },
+    {
+      "id": "b-4",
+      "type": "Story",
+      "props": {
+        "title": "Our Story",
+        "subtitle": "Perjalanan cinta kami",
+        "ev_title": [
+          "Pertemuan Pertama",
+          "Menjadi Pasangan",
+          "Lamaran"
+        ],
+        "ev_date": [
+          "2018",
+          "2021",
+          "2026"
+        ],
+        "ev_desc": [
+          "Dimas dan Rania pertama kali bertemu di Kebun Raya Bogor.",
+          "Mereka mulai menjalin hubungan ketika hujan turun tiba-tiba.",
+          "Dimas melamar Rania di di antara mawar-mawar taman."
+        ]
+      }
+    },
+    {
+      "id": "b-5",
+      "type": "EventDetail",
+      "props": {
+        "title": "Akad Nikah",
+        "icon": "rings",
+        "date": "Sabtu, 26 Juni 2027",
+        "time": "10.00 - 12.00 WIB",
+        "location": "Rose Garden Ballroom",
+        "address": "Kebun Raya Bogor, Jalan Ir. H. Juanda, Bogor",
+        "maps_url": "https://maps.google.com/?q=Rose%20Garden%20Ballroom",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "b-6",
+      "type": "EventDetail",
+      "props": {
+        "title": "Resepsi",
+        "icon": "glass",
+        "date": "Sabtu, 26 Juni 2027",
+        "time": "12.30 - 16.00 WIB",
+        "location": "Rose Garden Lawn",
+        "address": "Sindangbarang, Bogor",
+        "maps_url": "https://maps.google.com/?q=Rose%20Garden%20Lawn",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "b-7",
+      "type": "Gallery",
+      "props": {
+        "title": "Mawar Kami",
+        "images": [
+          "https://picsum.photos/seed/rose-garden-g1/600/800",
+          "https://picsum.photos/seed/rose-garden-g2/600/800",
+          "https://picsum.photos/seed/rose-garden-g3/600/800",
+          "https://picsum.photos/seed/rose-garden-g4/600/800",
+          "https://picsum.photos/seed/rose-garden-g5/600/800"
+        ],
+        "variant": "carousel",
+        "animation": "fade",
+        "interval_sec": 3
+      }
+    },
+    {
+      "id": "b-8",
+      "type": "RSVP",
+      "props": {
+        "title": "Konfirmasi Kehadiran",
+        "note": "Mohon konfirmasi kehadiran sebelum 12 Juni 2027",
+        "deadline": "2027-06-12",
+        "button_text": "Kirim Konfirmasi",
+        "success_message": "Terima kasih, konfirmasi Anda sudah kami terima.",
+        "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "bank_name": "BCA",
+        "account_number": "880035240039",
+        "account_holder": "Dimas Prasetya"
+      }
+    },
+    {
+      "id": "b-9",
+      "type": "Thanks",
+      "props": {
+        "title": "Doa Restu",
+        "message": "Kehadiran Bapak/Ibu/Saudara/i adalah mawar terindah dalam taman cinta kami.",
+        "closing": "Wassalamu’alaikum Warahmatullahi Wabarakatuh",
+        "names": "Dimas & Rania"
+      }
+    },
+    {
+      "id": "b-10",
+      "type": "Maps",
+      "props": {
+        "title": "Lokasi Acara",
+        "address": "Rose Garden Hotel, Bogor",
+        "embed_url": "https://maps.google.com/?q=Rose%20Garden%20Hotel%2C%20Bogor"
+      }
+    }
+  ],
+  "flow": "stack"
+}
