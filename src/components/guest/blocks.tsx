@@ -558,6 +558,27 @@ function CouplePerson({ propKey, name, parents }: { propKey: string; name: strin
   );
 }
 
+/** "&" raksasa khas undangan mewah (webvitation.com): besar, tipis, miring. */
+function GiantAmp() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.7 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
+      aria-hidden
+      className="flex items-center justify-center py-4"
+    >
+      <span
+        className="font-heading text-7xl leading-none italic opacity-30 md:text-8xl"
+        style={{ color: 'var(--color-primary)' }}
+      >
+        &amp;
+      </span>
+    </motion.div>
+  );
+}
+
 export function HeroBlock({ props, greetingName }: { props: BlockProps; greetingName?: string }) {
   const showOrnament = bool(props, 'show_ornament');
   const align = str(props, 'variant') === 'left' ? 'left' : 'center';
@@ -773,7 +794,7 @@ export function CoupleBlock({ props }: { props: BlockProps }) {
                 <CouplePerson propKey="groom" name={str(props, 'groom')} parents={str(props, 'groom_parents')} />
               </div>
               <div className="my-2 flex min-w-0 justify-center md:my-0">
-                <Ornament className="text-current opacity-60" />
+                <GiantAmp />
               </div>
               <div className="min-w-0 text-center">
                 <CouplePerson propKey="bride" name={str(props, 'bride')} parents={str(props, 'bride_parents')} />
@@ -782,11 +803,11 @@ export function CoupleBlock({ props }: { props: BlockProps }) {
           </Inner>
         ) : (
           <>
-            <div className="mb-10">
+            <div className="mb-0">
               <CouplePerson propKey="groom" name={str(props, 'groom')} parents={str(props, 'groom_parents')} />
             </div>
-            <Ornament className="text-current opacity-60" />
-            <div className="mt-10">
+            <GiantAmp />
+            <div className="mt-0">
               <CouplePerson propKey="bride" name={str(props, 'bride')} parents={str(props, 'bride_parents')} />
             </div>
           </>

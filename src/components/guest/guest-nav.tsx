@@ -47,7 +47,7 @@ export default function GuestNav() {
   }
 
   return (
-    <nav className="print-hidden fixed bottom-4 left-1/2 z-50 -translate-x-1/2">
+    <nav className="print-hidden sticky bottom-0 z-50 flex justify-center px-4 pb-3 pt-0">
       <div className="flex items-center gap-1 rounded-full border border-current/12 bg-[var(--color-background)]/95 px-2 py-1.5 shadow-lg shadow-black/10 backdrop-blur">
         {NAV_ITEMS.map((item) => {
           const Icon = item.icon;

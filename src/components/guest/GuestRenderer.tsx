@@ -10,6 +10,7 @@ import { PreviewContext } from '@/components/guest/preview-context';
 import { ThemeContext } from '@/components/guest/theme-context';
 import { GuestFrame } from '@/components/guest/guest-frame';
 import GuestNav from '@/components/guest/guest-nav';
+import CoverModal from '@/components/guest/cover-modal';
 
 interface GuestRendererProps {
   canvas: CanvasData;
@@ -90,6 +91,20 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
         {!preview && <ShareBar {...shareMeta} />}
         <GuestNav />
         <GuestFrame mode={canvas.theme.frame} color={canvas.theme.secondary} fixed={!preview} />
+        {!preview && (
+          <CoverModal
+            caption={typeof heroBlock?.props.caption === 'string' ? heroBlock.props.caption : 'Undangan Pernikahan'}
+            bride={typeof heroBlock?.props.bride === 'string' ? heroBlock.props.bride : ''}
+            groom={typeof heroBlock?.props.groom === 'string' ? heroBlock.props.groom : ''}
+            date={typeof heroBlock?.props.date === 'string' ? heroBlock.props.date : ''}
+            bgImage={typeof heroBlock?.props.bg_image === 'string' ? heroBlock.props.bg_image : undefined}
+            greetingName={greetingName}
+            primary={canvas.theme.primary}
+            secondary={canvas.theme.secondary}
+            background={canvas.theme.background}
+            text={canvas.theme.text}
+          />
+        )}
       </div>
       </ThemeContext.Provider>
     </PreviewContext.Provider>
