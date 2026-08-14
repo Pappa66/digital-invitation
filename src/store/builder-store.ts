@@ -24,6 +24,7 @@ interface BuilderState {
   clearBlockStyle: (blockId: string) => void;
   /** Set ukuran font override per elemen teks. size kosong = reset ke default. */
   setBlockTextSize: (blockId: string, key: string, size: string) => void;
+  setBlockTextFont: (blockId: string, key: string, font: string) => void;
   /** Tandai elemen teks yang sedang difokus (kunci `${prop}.${index}` atau `${prop}`). */
   setSelectedText: (key: string | null) => void;
   setBlockInner: (blockId: string, key: string, pos: { x: number; y: number }) => void;
@@ -295,6 +296,20 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
           if (size) next[key] = size;
           else delete next[key];
           return { ...b, style: { ...(b.style ?? {}), textSizes: next } };
+        })
+      }
+    })),
+
+  setBlockTextFont: (blockId, key, font) =>
+    set((state) => ({
+      canvas: {
+        ...state.canvas,
+        blocks: state.canvas.blocks.map((b) => {
+          if (b.id !== blockId) return b;
+          const next = { ...(b.style?.textFonts ?? {}) };
+          if (font) next[key] = font;
+          else delete next[key];
+          return { ...b, style: { ...(b.style ?? {}), textFonts: next } };
         })
       }
     })),

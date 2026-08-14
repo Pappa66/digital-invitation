@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabase/client';
 import { demoIsDemoMode } from '@/lib/env';
 import { demoAddRsvp } from '@/lib/demo/demo-store';
 import type { BlockProps } from '@/lib/types';
+import { Editable } from '@/components/builder/inline-edit';
 
 function str(props: BlockProps, key: string): string {
   const v = props[key];
@@ -114,8 +115,12 @@ export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormPr
 
   return (
     <section className="px-6 py-16 text-center">
-      <h2 className="text-xl md:text-2xl">{str(blockProps, 'title')}</h2>
-      <p className="mt-2 text-sm opacity-80">{str(blockProps, 'note')}</p>
+      <h2 className="text-xl md:text-2xl">
+        <Editable prop="title">{str(blockProps, 'title')}</Editable>
+      </h2>
+      <p className="mt-2 text-sm opacity-80">
+        <Editable prop="note">{str(blockProps, 'note')}</Editable>
+      </p>
 
       {status === 'success' ? (
         <div className="mx-auto mt-8 max-w-sm rounded-2xl border border-current/10 px-6 py-10">

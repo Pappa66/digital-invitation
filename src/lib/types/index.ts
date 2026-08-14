@@ -59,6 +59,8 @@ export interface BlockStyle {
   textColor?: string;
   /** Ukuran font override per elemen teks. Kunci = `${prop}` atau `${prop}.${index}`. Value = CSS fontSize (mis. "2rem"). */
   textSizes?: Record<string, string>;
+  /** Font override per elemen teks. Kunci = `${prop}` atau `${prop}.${index}`. Value = nama font (Google Fonts). */
+  textFonts?: Record<string, string>;
   bgColor?: string;
   bgImage?: string;
   /** Cara menyesuaikan gambar latar. Default: 'cover'. */

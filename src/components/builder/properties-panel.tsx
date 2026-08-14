@@ -165,6 +165,7 @@ export default function PropertiesPanel() {
   const setBlockStyle = useBuilderStore((s) => s.setBlockStyle);
   const clearBlockStyle = useBuilderStore((s) => s.clearBlockStyle);
   const setBlockTextSize = useBuilderStore((s) => s.setBlockTextSize);
+  const setBlockTextFont = useBuilderStore((s) => s.setBlockTextFont);
   const setSelectedText = useBuilderStore((s) => s.setSelectedText);
   const selectedText = useBuilderStore((s) => s.selectedText);
   const setFlow = useBuilderStore((s) => s.setFlow);
@@ -683,13 +684,15 @@ export default function PropertiesPanel() {
                     />
                   {selectedText && (
                     <Section
-                      title="Ukuran Teks"
+                      title="Font & Ukuran Teks"
                       desc={`Elemen "${humanize(selectedText)}"`}
                       render={
-                        <TextSizeControl
+                        <TextStyleControl
                           key={selectedText}
-                          value={block.style?.textSizes?.[selectedText]}
-                          onCommit={(size) => setBlockTextSize(block.id, selectedText, size)}
+                          fontSize={block.style?.textSizes?.[selectedText]}
+                          fontFamily={block.style?.textFonts?.[selectedText]}
+                          onCommitSize={(size) => setBlockTextSize(block.id, selectedText, size)}
+                          onCommitFont={(font) => setBlockTextFont(block.id, selectedText, font)}
                           onDone={() => setSelectedText(null)}
                         />
                       }
@@ -1181,19 +1184,38 @@ function parsePx(v?: string) {
   return Number.isFinite(n) ? Math.round(n) : undefined;
 }
 
-/** Kontrol ukuran font per elemen teks. value = string CSS fontSize (mis. "32px"). */
-function TextSizeControl({
-  value,
-  onCommit,
+/** Kontrol font + ukuran per elemen teks. value = CSS fontSize (mis. "32px") & nama font. */
+function TextStyleControl({
+  fontSize,
+  fontFamily,
+  onCommitSize,
+  onCommitFont,
   onDone
 }: {
-  value?: string;
-  onCommit: (size: string) => void;
+  fontSize?: string;
+  fontFamily?: string;
+  onCommitSize: (size: string) => void;
+  onCommitFont: (font: string) => void;
   onDone: () => void;
 }) {
-  const current = parsePx(value);
+  const current = parsePx(fontSize);
   return (
     <div className="space-y-3">
+      <div>
+        <label className="mb-1 block text-xs font-medium text-[#4a443c]">Font</label>
+        <select
+          value={fontFamily ?? ''}
+          onChange={(e) => onCommitFont(e.target.value)}
+          className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-2 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
+        >
+          <option value="">Ikuti tema (default)</option>
+          {FONTS.map((f) => (
+            <option key={f} value={f}>
+              {f}
+            </option>
+          ))}
+        </select>
+      </div>
       <div>
         <label className="mb-1 block text-xs font-medium text-[#4a443c]">
           Ukuran (px){current !== undefined ? ` · ${current}px` : ''}
@@ -1203,14 +1225,19 @@ function TextSizeControl({
           min={8}
           max={96}
           value={current ?? 16}
-          onChange={(e) => onCommit(`${e.target.value}px`)}
+          onChange={(e) => onCommitSize(`${e.target.value}px`)}
           className="w-full accent-[#c9a45c]"
         />
       </div>
-      <p className="text-[11px] text-[#8a7a66]">Geser untuk mengubah ukuran teks elemen ini saja.</p>
+      <p className="text-[11px] leading-relaxed text-[#8a7a66]">
+        Font &amp; ukuran ini hanya berlaku untuk elemen teks ini saja. Font otomatis dimuat via Google Fonts.
+      </p>
       <div className="flex gap-2">
         <button
-          onClick={() => onCommit('')}
+          onClick={() => {
+            onCommitSize('');
+            onCommitFont('');
+          }}
           className="flex-1 rounded-md border border-[#e0d6c2] py-1.5 text-xs text-[#6b5f4d] hover:border-red-300 hover:text-red-600"
         >
           Reset ke default
