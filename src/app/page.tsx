@@ -100,6 +100,14 @@ const FITUR = [
 
 const FEATURED = ['elegant-gold', 'blush-romance', 'ivory-dawn'];
 
+/** Template representatif untuk tiap kategori pada section 「Tema & Filosofi」. */
+const CATEGORY_FEATURED: Record<TemplateCategory, string> = {
+  classic: 'elegant-gold',
+  modern: 'minimal-mono',
+  outdoor: 'bali-tropical',
+  romance: 'blush-romance'
+};
+
 const PER_PAGE = 9;
 
 function useFontsLink() {
@@ -207,6 +215,7 @@ export default function LandingPage() {
             </a>
             <nav className="hidden items-center gap-8 text-sm text-[#8a7a66] md:flex">
               <a href="#catalog" className="transition-colors hover:text-[#2b2620]">Template</a>
+              <a href="#filosofi" className="transition-colors hover:text-[#2b2620]">Filosofi</a>
               <a href="#cara" className="transition-colors hover:text-[#2b2620]">Cara Kerja</a>
               <a href="#bahan" className="transition-colors hover:text-[#2b2620]">Bahan</a>
               <a href="#syarat" className="transition-colors hover:text-[#2b2620]">Syarat</a>
@@ -404,6 +413,59 @@ export default function LandingPage() {
           </div>
         </section>
 
+        {/* TEMA & FILOSOFI */}
+        <section id="filosofi" className="scroll-mt-20 border-t border-[#e7ddcc] bg-white/40">
+          <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+            <div className="text-center">
+              <p className="font-script text-3xl text-[#b98a3e]">Di balik setiap desain</p>
+              <Ornament className="mt-3" />
+              <h2 className="mt-5 font-heading text-3xl font-medium text-[#2b2620] sm:text-4xl">Tema &amp; Filosofi</h2>
+              <p className="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-[#8a7a66]">
+                Lebih dari sekadar perpaduan warna — setiap tema membawa makna yang tercermin pada kesan undangan Anda.
+              </p>
+            </div>
+
+            <div className="mt-16 grid grid-cols-1 gap-x-12 gap-y-16 md:grid-cols-2">
+              {CATEGORIES.map((c, i) => {
+                const meta = TEMPLATE_LIST.find((t) => t.id === CATEGORY_FEATURED[c.key]);
+                const canvas = meta?.id ? getTemplate(meta.id) : null;
+                return (
+                  <div key={c.key} className={`group flex flex-col gap-8 md:flex-row md:items-center ${i % 2 === 1 ? 'md:flex-row-reverse' : ''}`}>
+                    <div className="flex-1">
+                      <span className="font-script text-5xl text-[#c9a45c]" aria-hidden>
+                        {['I', 'II', 'III', 'IV'][i]}
+                      </span>
+                      <h3 className="mt-2 font-heading text-2xl font-medium text-[#2b2620]">{c.label}</h3>
+                      <p className="mt-3 text-sm leading-relaxed text-[#8a7a66]">{c.desc}</p>
+                      <button
+                        onClick={() => selectCategory(c.key)}
+                        className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-[#8a6d2f] transition-colors hover:text-[#b98a3e]"
+                      >
+                        Jelajahi gaya {c.label} <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                      </button>
+                    </div>
+                    <div className="flex-1">
+                      {canvas && meta ? (
+                        <a
+                          href={`/templates/${meta.id}`}
+                          className="block overflow-hidden rounded-lg bg-white p-2 shadow-sm ring-1 ring-[#d9c795] transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-[#b98a3e]/10"
+                        >
+                          <div className="overflow-hidden rounded-[4px]">
+                            <TemplatePreview canvas={canvas} bg={canvas.theme.background} />
+                          </div>
+                          <p className="mt-1.5 truncate text-center font-heading text-xs italic text-[#8a7a66]">{meta.name}</p>
+                        </a>
+                      ) : (
+                        <div className="aspect-[3/4] rounded-lg border border-dashed border-[#e0d6c2] bg-[#faf7f2]" />
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
         {/* CARA KERJA */}
         <section id="cara" className="scroll-mt-20 border-t border-[#e7ddcc] bg-[#f4eee1]">
           <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
@@ -561,6 +623,7 @@ export default function LandingPage() {
               </a>
               <nav className="flex flex-wrap items-center justify-center gap-6 text-xs text-[#8a7a66]">
                 <a href="#catalog" className="transition-colors hover:text-[#2b2620]">Template</a>
+                <a href="#filosofi" className="transition-colors hover:text-[#2b2620]">Filosofi</a>
                 <a href="#cara" className="transition-colors hover:text-[#2b2620]">Cara Kerja</a>
                 <a href="#bahan" className="transition-colors hover:text-[#2b2620]">Bahan</a>
                 <a href="#syarat" className="transition-colors hover:text-[#2b2620]">Syarat</a>
