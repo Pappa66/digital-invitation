@@ -602,10 +602,28 @@ export function HeroBlock({ props, greetingName }: { props: BlockProps; greeting
     >
       <BackgroundImage src={str(props, 'bg_image')} fit={str(props, 'bg_fit')} position={str(props, 'bg_position')} />
       {showGradient && (
-        <div
-          className="absolute inset-0 z-0"
-          style={{ background: `linear-gradient(160deg, var(--color-primary) 0%, var(--color-secondary) 60%, var(--color-background) 130%)` }}
-        />
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          <div
+            className="absolute inset-0"
+            style={{
+              background: `linear-gradient(165deg, var(--color-primary) 0%, color-mix(in srgb, var(--color-primary) 55%, var(--color-secondary)) 45%, var(--color-background) 135%)`
+            }}
+          />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'radial-gradient(120% 90% at 15% 0%, rgba(255,255,255,0.28), transparent 55%), radial-gradient(100% 70% at 85% 100%, rgba(255,255,255,0.12), transparent 55%)'
+            }}
+          />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'radial-gradient(60% 42% at 50% 38%, transparent 30%, rgba(0,0,0,0.5) 100%)'
+            }}
+          />
+        </div>
       )}
       <HeroSparkles />
       <Inner name="content">
