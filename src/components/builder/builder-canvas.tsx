@@ -37,6 +37,7 @@ export default function BuilderCanvas({
   saveState
 }: BuilderCanvasProps) {
   const canvas = useBuilderStore((s) => s.canvas);
+  const selectBlock = useBuilderStore((s) => s.selectBlock);
   const flow = canvas.flow ?? 'stack';
 
   return (
@@ -57,7 +58,12 @@ export default function BuilderCanvas({
         <DeviceToggle device={device} onChange={onDeviceChange} />
       </div>
 
-      <div className="flex min-h-0 flex-1 items-center justify-center p-4">
+      <div
+        className="flex min-h-0 flex-1 items-center justify-center p-4"
+        onPointerDown={(e) => {
+          if (e.target === e.currentTarget) selectBlock(null);
+        }}
+      >
         <div
           className="relative h-full overflow-hidden rounded-md bg-white shadow-xl shadow-[#b98a3e]/20 ring-1 ring-[#e7ddcc]"
           style={{ width: device === 'desktop' ? '100%' : CANVAS_W, maxWidth: '100%' }}
@@ -72,7 +78,12 @@ export default function BuilderCanvas({
               }}
             />
           )}
-          <div className="no-scrollbar h-full overflow-y-auto">
+          <div
+            className="no-scrollbar h-full overflow-y-auto"
+            onPointerDown={(e) => {
+              if (e.target === e.currentTarget) selectBlock(null);
+            }}
+          >
             {flow === 'free' ? (
               <FreeCanvas blocks={canvas.blocks} canvasRef={freeCanvasRef} />
             ) : (
