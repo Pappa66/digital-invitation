@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
-import { LayoutDashboard, LayoutTemplate, LogOut } from 'lucide-react';
+import { LayoutDashboard, LayoutTemplate, Inbox, LogOut } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
 
 interface AppLayoutProps {
@@ -12,7 +13,8 @@ interface AppLayoutProps {
 
 const NAV = [
   { href: '/dashboard', label: 'Undangan', icon: LayoutDashboard },
-  { href: '/templates', label: 'Template', icon: LayoutTemplate }
+  { href: '/templates', label: 'Template', icon: LayoutTemplate },
+  { href: '/orders', label: 'Kontak Masuk', icon: Inbox }
 ];
 
 export default function AppLayout({ children }: AppLayoutProps) {
@@ -37,8 +39,8 @@ export default function AppLayout({ children }: AppLayoutProps) {
     <div className="flex min-h-screen bg-dashboard-bg">
       <aside className="hidden w-60 shrink-0 flex-col border-r border-dashboard-border bg-dashboard-surface md:flex">
         <div className="flex h-16 items-center gap-2 border-b border-dashboard-border px-5">
-          <LayoutTemplate className="h-5 w-5" />
-          <span className="text-sm font-semibold">Invitation Builder</span>
+          <Image src="/logo/prasha.png" width={32} height={32} alt="Prasha Digital" className="h-8 w-8 rounded-md bg-black object-cover" />
+          <span className="truncate text-sm font-semibold">Prasha Digital</span>
         </div>
         <nav className="flex-1 space-y-1 p-3">
           {NAV.map((item) => {
@@ -73,6 +75,9 @@ export default function AppLayout({ children }: AppLayoutProps) {
         <header className="flex h-16 items-center justify-between border-b border-dashboard-border bg-dashboard-surface px-6">
           <h1 className="font-semibold">{title}</h1>
           <div className="flex items-center gap-3 md:hidden">
+            <Link href="/orders" className={`text-xs ${pathname.startsWith('/orders') ? 'font-semibold text-gray-900' : 'text-gray-500 hover:text-gray-900'}`}>
+              Kontak
+            </Link>
             <Link href="/templates" className={`text-xs ${pathname.startsWith('/templates') ? 'font-semibold text-gray-900' : 'text-gray-500 hover:text-gray-900'}`}>
               Template
             </Link>

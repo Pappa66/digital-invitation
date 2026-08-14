@@ -151,6 +151,33 @@ export interface Database {
           }
         ];
       };
+    orders: {
+        Row: {
+          id: string;
+          template_name: string | null;
+          name: string;
+          whatsapp: string | null;
+          note: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          template_name?: string | null;
+          name: string;
+          whatsapp?: string | null;
+          note?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          template_name?: string | null;
+          name?: string;
+          whatsapp?: string | null;
+          note?: string | null;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: {

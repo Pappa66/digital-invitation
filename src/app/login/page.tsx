@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { supabase } from '@/lib/supabase/client';
 import { demoIsDemoMode } from '@/lib/demo/demo-store';
 import { ALLOWED_EMAIL } from '@/lib/auth-allowed';
@@ -72,7 +73,10 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-dashboard-bg px-4">
       <div className="w-full max-w-sm">
         <div className="rounded-xl border border-dashboard-border bg-white p-8 shadow-sm">
-          <h1 className="text-center text-xl font-semibold text-gray-900">Digital Invitation Builder</h1>
+          <div className="mx-auto flex h-14 w-14 items-center justify-center overflow-hidden rounded-xl bg-black shadow-sm">
+            <Image src="/logo/prasha.png" width={56} height={56} alt="Prasha Digital" className="h-14 w-14 object-cover" />
+          </div>
+          <h1 className="mt-4 text-center text-xl font-semibold text-gray-900">Prasha Digital</h1>
           <p className="mt-1 text-center text-sm text-gray-500">
             {isDemo ? 'Mode Demo — masuk otomatis tanpa login Google' : 'Masuk tim internal'}
           </p>

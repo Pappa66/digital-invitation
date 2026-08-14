@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   ArrowRight,
   Camera,
@@ -156,11 +157,11 @@ export default function LandingPage() {
       <div className="relative z-10">
         <header className="sticky top-0 z-40 border-b border-white/10 bg-[#0e0e13]/85 backdrop-blur">
           <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-            <div className="flex items-center gap-2">
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-amber-300 to-amber-500 text-black">
-                <Heart className="h-4 w-4" />
+            <div className="flex items-center gap-2.5">
+              <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg bg-black ring-1 ring-white/10">
+                <Image src="/logo/prasha.png" width={36} height={36} alt="Prasha Digital" className="h-9 w-9 object-cover" />
               </span>
-              <span className="text-sm font-semibold tracking-wide sm:text-base">Undangan Digital</span>
+              <span className="text-sm font-semibold tracking-wide sm:text-base">Prasha Digital</span>
             </div>
             <nav className="hidden items-center gap-6 text-sm text-gray-400 md:flex">
               <a href="#template" className="hover:text-white">Template</a>
@@ -197,7 +198,7 @@ export default function LandingPage() {
             <span className="h-px flex-1 bg-gradient-to-l from-transparent to-amber-400/60" />
           </div>
           <p className="mx-auto mt-6 max-w-2xl text-sm leading-relaxed text-gray-400 sm:text-base">
-            Jelajahi semua template, lihat hasil desainnya secara langsung, lalu sesuaikan foto, teks, musik, dan terbitkan link undangan dalam hitungan menit.
+            Pilih desain favorit, isi form pemesanan singkat, dan tim kami yang menyusun teks, foto, musik, serta link undangannya — kamu tinggal terima hasilnya.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <a href="#template" className="flex items-center gap-2 rounded-xl bg-amber-400 px-6 py-3 text-sm font-semibold text-black transition-transform hover:scale-[1.02]">
@@ -207,6 +208,7 @@ export default function LandingPage() {
               Pesan Undangan
             </button>
           </div>
+          <p className="mt-6 text-xs text-gray-500">Tanpa perlu membuat akun — pemesanan lewat form dan dibalas lewat WhatsApp.</p>
         </section>
 
         {/* TEMPLATE CATALOG */}
@@ -215,7 +217,7 @@ export default function LandingPage() {
             <div>
               <h2 className="text-2xl font-bold">Katalog Template</h2>
               <p className="mt-1 text-sm text-gray-400">
-                Pratinjau asli setiap desain — klik untuk melihat detail lalu pakai di Builder.
+                Pratinjau asli setiap desain — klik untuk melihat detail, lalu pesan untuk dikerjakan tim kami.
               </p>
             </div>
             <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-gray-400">
@@ -446,7 +448,10 @@ export default function LandingPage() {
         <footer className="border-t border-white/10 bg-[#0a0a0f]">
           <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-6 text-xs text-gray-500 sm:px-6">
             <div className="flex items-center gap-2">
-              <Heart className="h-4 w-4 text-amber-400" /> Prasha Digital Indonesia
+              <span className="flex h-7 w-7 items-center justify-center overflow-hidden rounded-md bg-black ring-1 ring-white/10">
+                <Image src="/logo/prasha.png" width={28} height={28} alt="Prasha Digital" className="h-7 w-7 object-cover" />
+              </span>
+              Prasha Digital Indonesia
             </div>
             <div className="flex items-center gap-4">
               <a href="#template" className="hover:text-white">Template</a>

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Check, Copy, MessageCircle, X } from 'lucide-react';
 import { buildOrderMessage, whatsappOrderUrl, normalizePhone, ORDER_WHATSAPP } from '@/lib/order';
+import { clientSubmitOrder } from '@/lib/api/order-client';
 
 interface OrderDialogProps {
   open: boolean;
@@ -37,6 +38,13 @@ export default function OrderDialog({ open, templateName, onClose }: OrderDialog
       note: note.trim() || undefined
     });
     setSent(true);
+    // Simpan ke tabel orders (Kontak Masuk di dashboard) — publik, tanpa login.
+    await clientSubmitOrder({
+      templateName,
+      name: name.trim(),
+      whatsapp: normalizePhone(phone),
+      note: note.trim() || undefined
+    });
     const url = whatsappOrderUrl(message);
     if (url) {
       window.open(url, '_blank', 'noopener');
