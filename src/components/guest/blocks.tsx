@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef, useContext } from 'react';
 import { motion, type Target } from 'framer-motion';
 import Image from 'next/image';
-import { Calendar, MapPin, Heart, Sparkles, Gem, BookOpen, Sprout, MailOpen } from 'lucide-react';
+import { Calendar, MapPin, Heart, Sparkles, Gem, BookOpen, Sprout, MailOpen, Plus } from 'lucide-react';
 import type { BlockProps, DecorAsset, DecorShapeKind } from '@/lib/types';
 import { Editable, BuilderEditableContext } from '@/components/builder/inline-edit';
 import { usePreview } from '@/components/guest/preview-context';
@@ -424,9 +424,9 @@ function BuilderDecorLayer({ blockId, decor }: { blockId: string; decor?: DecorA
 
       {/* Tombol tambah asset pada blok terpilih */}
       {blockSelected && (
-        <div className="pointer-events-auto absolute -right-1 -top-3 z-[300] flex gap-1">
+        <div className="pointer-events-auto absolute -top-3 left-1/2 z-[300] flex w-40 -translate-x-1/2 justify-center">
           {addMenu === 'main' ? (
-            <div className="flex flex-col gap-1 rounded-md bg-[#141414] p-1.5 shadow-xl ring-1 ring-white/15">
+            <div className="flex flex-col gap-1 rounded-md bg-[#141414]/95 p-1.5 shadow-lg ring-1 ring-white/10">
               <button
                 className="rounded px-2 py-1 text-left text-[11px] text-white hover:bg-[#c9a45c]/30"
                 onClick={(e) => {
@@ -482,15 +482,16 @@ function BuilderDecorLayer({ blockId, decor }: { blockId: string; decor?: DecorA
             </div>
           ) : (
             <button
-              className="flex h-6 w-6 items-center justify-center rounded-full bg-[#c9a45c] text-sm font-bold text-white shadow-lg hover:scale-110"
-              title="Tambah asset dekor"
+              className="inline-flex items-center gap-1 rounded-md bg-[#141414]/90 px-2.5 py-1 text-xs font-medium text-white shadow-lg ring-1 ring-white/10 transition-colors hover:bg-[#c9a45c]/30"
+              title="Tambah asset di dalam blok"
               onPointerDown={(e) => e.stopPropagation()}
               onClick={(e) => {
                 e.stopPropagation();
                 setAddMenu('main');
               }}
             >
-              +
+              <Plus className="h-3.5 w-3.5" />
+              Asset
             </button>
           )}
         </div>
