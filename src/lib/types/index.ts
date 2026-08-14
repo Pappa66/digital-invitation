@@ -8,7 +8,9 @@ export type BlockType =
   | 'RSVP'
   | 'Maps'
   | 'Thanks'
-  | 'Divider';
+  | 'Divider'
+  | 'Text'
+  | 'Photo';
 
 export interface Theme {
   primary: string;
@@ -58,6 +60,42 @@ export interface BlockStyle {
   bgPosition?: string;
 }
 
+/** Bentuk dekor support shape. */
+export type DecorShapeKind = 'circle' | 'square' | 'triangle' | 'star' | 'heart' | 'leaf' | 'diamond' | 'ring';
+/** Bentuk tampilan foto di asset gambar. */
+export type PhotoDecorShape = 'square' | 'circle' | 'rounded' | 'tilt';
+
+/**
+ * Elemen dekor tambahan DI DALAM blok (special layer).
+ * Posisi x/y relatif kiri-atas blok (px skala kanvas 420).
+ * Ditaruh di atas/berlapis di atas konten bawaan blok.
+ */
+export interface DecorAsset {
+  id: string;
+  kind: 'shape' | 'text' | 'image';
+  x: number;
+  y: number;
+  opacity?: number;
+  rotation?: number;
+  /** 0 = di belakang konten bawaan, 1+ = di depan. Default 0. */
+  layer?: number;
+  // shape
+  shape?: DecorShapeKind;
+  color?: string;
+  size?: number;
+  // text
+  text?: string;
+  fontSize?: number;
+  fontWeight?: 'normal' | 'bold';
+  underline?: boolean;
+  italic?: boolean;
+  align?: 'left' | 'center' | 'right';
+  // image
+  imageUrl?: string;
+  photoShape?: PhotoDecorShape;
+  width?: number;
+}
+
 export interface Block {
   id: string;
   type: BlockType;
@@ -72,6 +110,8 @@ export interface Block {
    * mode free positioning + elemen sudah digeser pengguna.
    */
   inner?: Record<string, { x: number; y: number }> | null;
+  /** Layer dekor tambahan (shape/teks/gambar) di dalam blok. */
+  decor?: DecorAsset[];
 }
 
 export interface CanvasData {

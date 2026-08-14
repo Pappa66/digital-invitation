@@ -4,10 +4,11 @@ import { useEffect, useState, useRef, useContext } from 'react';
 import { motion, type Target } from 'framer-motion';
 import Image from 'next/image';
 import { Calendar, MapPin, Heart, Sparkles, Gem, BookOpen, Sprout, MailOpen } from 'lucide-react';
-import type { BlockProps } from '@/lib/types';
+import type { BlockProps, DecorAsset, DecorShapeKind } from '@/lib/types';
 import { Editable, BuilderEditableContext } from '@/components/builder/inline-edit';
 import { usePreview } from '@/components/guest/preview-context';
 import { useInnerPositions } from '@/components/guest/inner-context';
+import { useBuilderStore } from '@/store/builder-store';
 
 /** Akses props sebagai string dengan fallback aman (''). */
 function str(props: BlockProps, key: string): string {
@@ -49,6 +50,451 @@ function Ornament({ className = '' }: { className?: string }) {
       <span className="h-px w-12 bg-current opacity-50" />
       <Heart className="h-4 w-4" />
       <span className="h-px w-12 bg-current opacity-50" />
+    </div>
+  );
+}
+
+/* ============================ Layer dekor ============================ */
+
+function ShapeSvg({ kind, color, size, opacity }: { kind: string; color: string; size: number; opacity: number }) {
+  const s = size;
+  const props = { fill: kind === 'ring' ? 'none' : color, stroke: kind === 'ring' ? color : 'none', strokeWidth: kind === 'ring' ? s * 0.06 : 0 };
+  let node: React.ReactNode = null;
+  switch (kind) {
+    case 'circle':
+      node = <circle cx={s / 2} cy={s / 2} r={s / 2} {...props} />;
+      break;
+    case 'square':
+      node = <rect width={s} height={s} {...props} />;
+      break;
+    case 'triangle':
+      node = (
+        <polygon
+          points={`${s / 2},0 ${s},${s * 0.92} 0,${s * 0.92}`}
+          {...props}
+        />
+      );
+      break;
+    case 'star': {
+      const pts: string[] = [];
+      for (let i = 0; i < 10; i++) {
+        const r = i % 2 === 0 ? s / 2 : s * 0.22;
+        const a = (Math.PI / 5) * i - Math.PI / 2;
+        pts.push(`${s / 2 + r * Math.cos(a)},${s / 2 + r * Math.sin(a)}`);
+      }
+      node = <polygon points={pts.join(' ')} {...props} />;
+      break;
+    }
+    case 'heart':
+      node = (
+        <path
+          d={`M ${s / 2} ${s * 0.9} C ${s * 0.05} ${s * 0.65}, ${s * 0.05} ${s * 0.3}, ${s * 0.3} ${s * 0.3} C ${s * 0.46} ${s * 0.3}, ${s / 2} ${s * 0.42}, ${s / 2} ${s * 0.5} C ${s / 2} ${s * 0.42}, ${s * 0.54} ${s * 0.3}, ${s * 0.7} ${s * 0.3} C ${s * 0.95} ${s * 0.3}, ${s * 0.95} ${s * 0.65}, ${s / 2} ${s * 0.9} Z`}
+          {...props}
+        />
+      );
+      break;
+    case 'leaf':
+      node = (
+        <path
+          d={`M ${s * 0.1} ${s * 0.9} Q ${s * 0.95} ${s * 0.7}, ${s * 0.9} ${s * 0.1} Q ${s * 0.55} ${s * 0.2}, ${s * 0.1} ${s * 0.9} Z`}
+          {...props}
+        />
+      );
+      break;
+    case 'diamond':
+      node = (
+        <polygon
+          points={`${s / 2},0 ${s},${s / 2} ${s / 2},${s} 0,${s / 2}`}
+          {...props}
+        />
+      );
+      break;
+    case 'ring':
+      node = <circle cx={s / 2} cy={s / 2} r={s / 2 - s * 0.05} {...props} />;
+      break;
+    default:
+      node = <circle cx={s / 2} cy={s / 2} r={s / 2} {...props} />;
+  }
+  return (
+    <svg width={s} height={s} viewBox={`0 0 ${s} ${s}`} style={{ opacity, display: 'block' }} aria-hidden>
+      {node}
+    </svg>
+  );
+}
+
+const PHOTO_SHAPE_CLASS: Record<string, string> = {
+  square: 'rounded-none',
+  circle: 'rounded-full object-cover',
+  rounded: 'rounded-xl',
+  tilt: 'rounded-xl -rotate-3'
+};
+
+function DecorText({ props }: { props: DecorAsset }) {
+  const align = props.align ?? 'center';
+  return (
+    <div
+      className={`${align === 'left' ? 'text-left' : align === 'right' ? 'text-right' : 'text-center'}`}
+      style={{
+        fontWeight: props.fontWeight ?? 'normal',
+        fontStyle: props.italic ? 'italic' : 'normal',
+        textDecoration: props.underline ? 'underline' : 'none',
+        fontSize: `${props.fontSize ?? 14}px`,
+        color: props.color ?? '#ffffff',
+        opacity: props.opacity ?? 1,
+        whiteSpace: 'pre-wrap'
+      }}
+    >
+      {props.text ?? ''}
+    </div>
+  );
+}
+
+function DecorImage({ props }: { props: DecorAsset }) {
+  const url = props.imageUrl ?? '';
+  if (!url) return null;
+  const width = props.width ?? 120;
+  const cls = (props.photoShape ?? 'rounded') === 'circle' ? 'rounded-full object-cover' : (PHOTO_SHAPE_CLASS[props.photoShape ?? 'rounded']);
+  return (
+    <img
+      src={url}
+      alt=""
+      width={width}
+      style={{ width, height: width, opacity: props.opacity ?? 1 }}
+      className={`${cls} ${props.photoShape === 'circle' ? 'aspect-square' : ''}`}
+    />
+  );
+}
+
+export function DecorAssetView({ asset }: { asset: DecorAsset }) {
+  if (asset.kind === 'text') return <DecorText props={asset} />;
+  if (asset.kind === 'image') return <DecorImage props={asset} />;
+  const shape = asset.shape ?? 'circle';
+  return (
+    <ShapeSvg
+      kind={shape}
+      color={asset.color ?? '#c9a45c'}
+      size={asset.size ?? 48}
+      opacity={asset.opacity ?? 1}
+    />
+  );
+}
+
+/** Layer dekor di dalam blok. Mode builder: interaktif (drag, pilih, hapus). Mode guest: pasif. */
+export function DecorLayer({ blockId, decor }: { blockId: string; decor?: DecorAsset[] }) {
+  const inBuilder = useContext(BuilderEditableContext) !== null;
+
+  if (inBuilder) {
+    return <BuilderDecorLayer blockId={blockId} decor={decor} />;
+  }
+  if (!decor || decor.length === 0) return null;
+  return (
+    <div className="pointer-events-none absolute inset-0 z-10 overflow-visible">
+      {decor.map((asset) => (
+        <DecorNode key={asset.id} asset={asset} />
+      ))}
+    </div>
+  );
+}
+
+function DecorNode({ asset }: { asset: DecorAsset }) {
+  return (
+    <div
+      className="absolute"
+      style={{
+        left: asset.x,
+        top: asset.y,
+        transform: asset.rotation ? `rotate(${asset.rotation}deg)` : undefined,
+        zIndex: asset.layer ?? 0
+      }}
+    >
+      <DecorAssetView asset={asset} />
+    </div>
+  );
+}
+
+const DECOR_SHAPES: { key: string; label: string }[] = [
+  { key: 'circle', label: 'Bulat' },
+  { key: 'square', label: 'Kotak' },
+  { key: 'triangle', label: 'Segitiga' },
+  { key: 'star', label: 'Bintang' },
+  { key: 'heart', label: 'Hati' },
+  { key: 'leaf', label: 'Daun' },
+  { key: 'diamond', label: 'Ketupat' },
+  { key: 'ring', label: 'Cincin' }
+];
+
+function decorUid() {
+  return `d-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
+}
+
+/** Editor layer dekor di mode builder: pilih, seret (dengan guide/snap), hapus, tambah. */
+function BuilderDecorLayer({ blockId, decor }: { blockId: string; decor?: DecorAsset[] }) {
+  const selectedBlockId = useBuilderStore((s) => s.selectedBlockId);
+  const selectedDecor = useBuilderStore((s) => s.selectedDecor);
+  const selectDecor = useBuilderStore((s) => s.selectDecor);
+  const updateDecor = useBuilderStore((s) => s.updateDecor);
+  const removeDecor = useBuilderStore((s) => s.removeDecor);
+  const addDecor = useBuilderStore((s) => s.addDecor);
+  const [addMenu, setAddMenu] = useState<'main' | 'text' | 'image' | null>(null);
+  const [shapePick, setShapePick] = useState<DecorShapeKind>('circle');
+  const dragRef = useRef<{
+    assetId: string;
+    startX: number;
+    startY: number;
+    origX: number;
+    origY: number;
+    w: number;
+    h: number;
+  } | null>(null);
+  const [draggingId, setDraggingId] = useState<string | null>(null);
+  const [guides, setGuides] = useState<{ x?: number; y?: number }>({});
+  const boxRef = useRef<HTMLDivElement>(null);
+
+  const blockSelected = selectedBlockId === blockId;
+  const isSelected = (id: string) => selectedDecor === `${blockId}::${id}`;
+
+  function startDrag(e: React.PointerEvent, asset: DecorAsset) {
+    e.stopPropagation();
+    e.preventDefault();
+    selectDecor(`${blockId}::${asset.id}`);
+    const el = e.currentTarget as HTMLElement;
+    const rect = el.getBoundingClientRect();
+    dragRef.current = {
+      assetId: asset.id,
+      startX: e.clientX,
+      startY: e.clientY,
+      origX: asset.x,
+      origY: asset.y,
+      w: rect.width,
+      h: rect.height
+    };
+    setDraggingId(asset.id);
+  }
+
+  useEffect(() => {
+    if (!dragRef.current) return;
+    const onMove = (ev: PointerEvent) => {
+      const d = dragRef.current;
+      if (!d) return;
+      const box = boxRef.current?.getBoundingClientRect();
+      const blkW = box?.width ?? 420;
+      const blkH = box?.height ?? 800;
+
+      let nx = Math.max(0, d.origX + (ev.clientX - d.startX));
+      let ny = Math.max(0, d.origY + (ev.clientY - d.startY));
+      const cx = nx + d.w / 2;
+      const cy = ny + d.h / 2;
+
+      const snap = 6;
+      let gx: number | undefined;
+      let gy: number | undefined;
+      // tengah horizontal
+      if (Math.abs(cx - blkW / 2) < snap) {
+        nx = blkW / 2 - d.w / 2;
+        gx = blkW / 2;
+      } else if (Math.abs(cx - d.w / 2) < snap) {
+        nx = 0;
+        gx = 0;
+      } else if (Math.abs(cx - (blkW - d.w / 2)) < snap) {
+        nx = blkW - d.w;
+        gx = blkW;
+      }
+      // tengah vertikal
+      if (Math.abs(cy - blkH / 2) < snap) {
+        ny = blkH / 2 - d.h / 2;
+        gy = blkH / 2;
+      } else if (Math.abs(cy - d.h / 2) < snap) {
+        ny = 0;
+        gy = 0;
+      }
+      setGuides({ x: gx, y: gy });
+      updateDecor(blockId, d.assetId, { x: Math.round(nx), y: Math.round(ny) });
+    };
+    const onUp = () => {
+      dragRef.current = null;
+      setDraggingId(null);
+      setGuides({});
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+    };
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+    return () => {
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+    };
+  }, [draggingId, blockId, updateDecor]);
+
+  function addText() {
+    addDecor(blockId, {
+      id: decorUid(),
+      kind: 'text',
+      text: 'Teks tambahan',
+      fontSize: 14,
+      color: '#ffffff',
+      align: 'center',
+      x: 120,
+      y: 40,
+      width: 180,
+      layer: 1
+    });
+    setAddMenu(null);
+  }
+
+  function addImage() {
+    addDecor(blockId, {
+      id: decorUid(),
+      kind: 'image',
+      imageUrl: '',
+      photoShape: 'rounded',
+      width: 100,
+      x: 160,
+      y: 40,
+      layer: 1
+    });
+    setAddMenu(null);
+  }
+
+  function addShape() {
+    addDecor(blockId, {
+      id: decorUid(),
+      kind: 'shape',
+      shape: shapePick,
+      color: '#c9a45c',
+      size: 48,
+      x: 180,
+      y: 40,
+      opacity: 0.9,
+      layer: 1
+    });
+    setAddMenu(null);
+  }
+
+  const items = decor ?? [];
+
+  return (
+    <div ref={boxRef} className="pointer-events-none absolute inset-0 z-20 overflow-visible">
+      {/* Guide align saat drag */}
+      {guides.x !== undefined && (
+        <div className="pointer-events-none absolute top-0 h-full w-px bg-[#c9a45c]" style={{ left: guides.x }} />
+      )}
+      {guides.y !== undefined && (
+        <div className="pointer-events-none absolute left-0 h-px w-full bg-[#c9a45c]" style={{ top: guides.y }} />
+      )}
+
+      {/* Kontrol pilihan & drag pada tiap asset */}
+      {items.map((asset) => (
+        <div
+          key={asset.id}
+          data-decor
+          className={`pointer-events-auto absolute cursor-move ${isSelected(asset.id) ? 'outline-2 outline-dashed outline-[#c9a45c] outline-offset-1' : 'outline-none'}`}
+          style={{
+            left: asset.x,
+            top: asset.y,
+            transform: asset.rotation ? `rotate(${asset.rotation}deg)` : undefined,
+            zIndex: (asset.layer ?? 0) + 100
+          }}
+          onPointerDown={(e) => startDrag(e, asset)}
+          onDoubleClick={(e) => {
+            e.stopPropagation();
+            removeDecor(blockId, asset.id);
+          }}
+        >
+          <DecorAssetView asset={asset} />
+          {isSelected(asset.id) && (
+            <>
+              <button
+                className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] text-white shadow"
+                title="Hapus asset"
+                onPointerDown={(e) => e.stopPropagation()}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  removeDecor(blockId, asset.id);
+                }}
+              >
+                ✕
+              </button>
+              <span className="absolute -bottom-5 left-0 whitespace-nowrap text-[9px] text-[#8a6d2f]">
+                {asset.kind === 'shape' ? asset.shape : asset.kind} · drag utk pindah
+              </span>
+            </>
+          )}
+        </div>
+      ))}
+
+      {/* Tombol tambah asset pada blok terpilih */}
+      {blockSelected && (
+        <div className="pointer-events-auto absolute -right-1 -top-3 z-[300] flex gap-1">
+          {addMenu === 'main' ? (
+            <div className="flex flex-col gap-1 rounded-md bg-[#141414] p-1.5 shadow-xl ring-1 ring-white/15">
+              <button
+                className="rounded px-2 py-1 text-left text-[11px] text-white hover:bg-[#c9a45c]/30"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  addShape();
+                }}
+              >
+                {DECOR_SHAPES.find((s) => s.key === shapePick)?.label ?? 'Shape'} ({shapePick})
+              </button>
+              <button
+                className="rounded px-2 py-1 text-left text-[11px] text-white hover:bg-[#c9a45c]/30"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  addText();
+                }}
+              >
+                Teks
+              </button>
+              <button
+                className="rounded px-2 py-1 text-left text-[11px] text-white hover:bg-[#c9a45c]/30"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  addImage();
+                }}
+              >
+                Gambar
+              </button>
+              <div className="my-1 h-px bg-white/10" />
+              <p className="px-2 pb-1 text-[9px] uppercase tracking-wide text-[#c9a45c]">Shape</p>
+              <div className="flex flex-wrap gap-1 px-1">
+                {DECOR_SHAPES.map((s) => (
+                  <button
+                    key={s.key}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShapePick(s.key as DecorShapeKind);
+                    }}
+                    className={`rounded px-1.5 py-0.5 text-[10px] ${shapePick === s.key ? 'bg-[#c9a45c] text-white' : 'text-white/80 hover:bg-white/10'}`}
+                  >
+                    {s.label}
+                  </button>
+                ))}
+              </div>
+              <button
+                className="mt-1 rounded px-2 py-1 text-left text-[11px] text-[#c9a45c] hover:bg-[#c9a45c]/30"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setAddMenu(null);
+                }}
+              >
+                Tutup
+              </button>
+            </div>
+          ) : (
+            <button
+              className="flex h-6 w-6 items-center justify-center rounded-full bg-[#c9a45c] text-sm font-bold text-white shadow-lg hover:scale-110"
+              title="Tambah asset dekor"
+              onPointerDown={(e) => e.stopPropagation()}
+              onClick={(e) => {
+                e.stopPropagation();
+                setAddMenu('main');
+              }}
+            >
+              +
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }
@@ -798,6 +1244,45 @@ export function ThanksBlock({ props }: { props: BlockProps }) {
       </p>
       <p className="mt-8 text-xs uppercase tracking-widest opacity-70">{str(props, 'closing')}</p>
       <p className="mt-4 text-xl italic">{str(props, 'names')}</p>
+    </section>
+  );
+}
+
+export function TextBlock({ props }: { props: BlockProps }) {
+  const align = str(props, 'align') === 'left' ? 'left' : str(props, 'align') === 'right' ? 'right' : 'center';
+  return (
+    <section className="px-6 py-8">
+      <Inner name="text">
+        <p
+          className={`text-sm leading-relaxed opacity-90 ${align === 'left' ? 'text-left' : align === 'right' ? 'text-right' : 'text-center'}`}
+        >
+          <Editable prop="text" multiline>
+            {str(props, 'text')}
+          </Editable>
+        </p>
+      </Inner>
+    </section>
+  );
+}
+
+export function PhotoBlock({ props }: { props: BlockProps }) {
+  const rounded = bool(props, 'rounded');
+  const image = str(props, 'image');
+  const caption = str(props, 'caption');
+  return (
+    <section className="px-6 py-8">
+      <Inner name="photo">
+        <div className={`mx-auto w-full overflow-hidden ${rounded ? 'rounded-xl' : ''}`}>
+          {image ? (
+            <Image src={image} alt={caption} width={0} height={0} sizes="100vw" className="h-auto w-full object-cover" />
+          ) : (
+            <div className="flex h-48 w-full items-center justify-center border border-dashed border-current/20 text-xs text-[#8a7a66]">
+              Pilih gambar di panel kanan
+            </div>
+          )}
+        </div>
+        {caption && <p className="mt-3 text-center text-xs opacity-70">{caption}</p>}
+      </Inner>
     </section>
   );
 }

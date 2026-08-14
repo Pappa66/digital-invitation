@@ -7,7 +7,7 @@ import MediaLibrary from '@/components/dashboard/media-library';
 import MusicPreview from '@/components/builder/music-preview';
 import { useBuilderStore } from '@/store/builder-store';
 import { RELIGIONS } from '@/lib/religions';
-import type { BlockProps } from '@/lib/types';
+import type { Block, BlockProps, DecorAsset } from '@/lib/types';
 
 const FONTS = [
   'Playfair Display',
@@ -107,7 +107,9 @@ const TITLE_PROPS: Record<string, { label: string; multiline?: boolean; url?: bo
     { label: 'closing' },
     { label: 'names' }
   ],
-  Divider: []
+  Divider: [],
+  Text: [{ label: 'text', multiline: true }],
+  Photo: [{ label: 'image' }, { label: 'caption' }]
 };
 
 const VARIANTS: Partial<Record<string, { key: string; options: string[] }>> = {
@@ -115,7 +117,8 @@ const VARIANTS: Partial<Record<string, { key: string; options: string[] }>> = {
   Couple: { key: 'variant', options: ['vertical', 'side'] },
   Countdown: { key: 'variant', options: ['circles', 'cards', 'line'] },
   EventDetail: { key: 'variant', options: ['card', 'band'] },
-  Divider: { key: 'variant', options: ['line', 'dots', 'diamond', 'hearts', 'leaves'] }
+  Divider: { key: 'variant', options: ['line', 'dots', 'diamond', 'hearts', 'leaves'] },
+  Text: { key: 'align', options: ['left', 'center', 'right'] }
 };
 
 const GALLERY_LAYOUTS: { key: string; label: string; desc: string }[] = [
@@ -171,7 +174,19 @@ export default function PropertiesPanel() {
   const setReligion = useBuilderStore((s) => s.setReligion);
 
   const [mediaOpen, setMediaOpen] = useState(false);
-  const [mediaMode, setMediaMode] = useState<'hero' | 'gallery' | 'bg' | null>(null);
+  const [mediaMode, setMediaMode] = useState<'hero' | 'gallery' | 'bg' | 'photo' | 'decor' | null>(null);
+  const selectedDecor = useBuilderStore((s) => s.selectedDecor);
+  const updateDecor = useBuilderStore((s) => s.updateDecor);
+  const removeDecor = useBuilderStore((s) => s.removeDecor);
+  const selectDecor = useBuilderStore((s) => s.selectDecor);
+
+  const activeDecor: { block: Block; asset: DecorAsset } | null = (() => {
+    if (!selectedDecor) return null;
+    const [bid, aid] = selectedDecor.split('::');
+    const b = canvas.blocks.find((x) => x.id === bid);
+    const asset = b?.decor?.find((d) => d.id === aid);
+    return b && asset ? { block: b, asset } : null;
+  })();
 
   return (
     <aside className="flex h-full w-80 shrink-0 flex-col border-l border-[#e7ddcc] bg-white">
@@ -436,6 +451,20 @@ export default function PropertiesPanel() {
                       </div>
                     </div>
                   )}
+                  {block.type === 'Photo' && (
+                    <div>
+                      <p className="mb-1 text-xs font-medium text-[#4a443c]">Gambar</p>
+                      <button
+                        onClick={() => {
+                          setMediaMode('photo');
+                          setMediaOpen(true);
+                        }}
+                        className="flex w-full items-center gap-2 rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2 text-sm text-[#6b5f4d] hover:border-[#c9a45c]"
+                      >
+                        {block.props.image ? 'Ganti Gambar' : 'Pilih Gambar'}
+                      </button>
+                    </div>
+                  )}
                   {block.type === 'Gallery' && (
                     <div className="space-y-3">
                       <div>
@@ -598,6 +627,28 @@ export default function PropertiesPanel() {
               }
             />
           </>
+
+        )}
+
+        {activeDecor && (
+          <Section
+            title={`Dekor ${activeDecor.asset.kind}`}
+            desc="Layer tambahan di atas blok"
+            render={
+              <DecorSettings
+                key={activeDecor.asset.id}
+                blockId={activeDecor.block.id}
+                asset={activeDecor.asset}
+                updateDecor={updateDecor}
+                removeDecor={removeDecor}
+                selectDecor={selectDecor}
+                onPickImage={() => {
+                  setMediaMode('decor');
+                  setMediaOpen(true);
+                }}
+              />
+            }
+          />
         )}
       </div>
 
@@ -611,6 +662,9 @@ export default function PropertiesPanel() {
             setBlockProps(block.id, { images: [...imgs, url] });
           }
           if (mediaMode === 'bg' && block) setBlockStyle(block.id, { bgImage: url });
+          if (mediaMode === 'photo' && block?.type === 'Photo') setBlockProps(block.id, { image: url });
+          if (mediaMode === 'decor' && activeDecor)
+            updateDecor(activeDecor.block.id, activeDecor.asset.id, { imageUrl: url });
           setMediaMode(null);
           setMediaOpen(false);
         }}
@@ -731,6 +785,214 @@ function NumberField({
         }}
         className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
       />
+    </div>
+  );
+}
+
+const DECOR_SHAPES: { key: string; label: string }[] = [
+  { key: 'circle', label: 'Bulat' },
+  { key: 'square', label: 'Kotak' },
+  { key: 'triangle', label: 'Segitiga' },
+  { key: 'star', label: 'Bintang' },
+  { key: 'heart', label: 'Hati' },
+  { key: 'leaf', label: 'Daun' },
+  { key: 'diamond', label: 'Ketupat' },
+  { key: 'ring', label: 'Cincin' }
+];
+const DECOR_PHOTO_SHAPES = [
+  { key: 'square', label: 'Persegi' },
+  { key: 'rounded', label: 'Sudut Bulat' },
+  { key: 'circle', label: 'Bulat' },
+  { key: 'miring', label: 'Miring' }
+];
+
+function DecorSettings({
+  blockId,
+  asset,
+  updateDecor,
+  removeDecor,
+  selectDecor,
+  onPickImage
+}: {
+  blockId: string;
+  asset: DecorAsset;
+  updateDecor: (blockId: string, decorId: string, partial: Partial<DecorAsset>) => void;
+  removeDecor: (blockId: string, decorId: string) => void;
+  selectDecor: (key: string | null) => void;
+  onPickImage: () => void;
+}) {
+  const set = (partial: Partial<DecorAsset>) => updateDecor(blockId, asset.id, partial);
+
+  return (
+    <div className="space-y-3">
+      <div className="grid grid-cols-2 gap-2">
+        <NumberField label="Kiri (x)" value={asset.x} min={0} max={420} onChange={(v) => set({ x: v })} />
+        <NumberField label="Atas (y)" value={asset.y} min={0} max={2000} onChange={(v) => set({ y: v })} />
+      </div>
+      <div className="grid grid-cols-2 gap-2">
+        <div>
+          <label className="mb-1 block text-xs font-medium text-[#4a443c]">Rotasi (°)</label>
+          <input
+            type="number"
+            value={asset.rotation ?? 0}
+            min={0}
+            max={360}
+            onChange={(e) => set({ rotation: Math.min(360, Math.max(0, Number(e.target.value) || 0)) })}
+            className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
+          />
+        </div>
+        <div>
+          <label className="mb-1 block text-xs font-medium text-[#4a443c]">Lapisan</label>
+          <div className="flex gap-1">
+            {[0, 1].map((l) => (
+              <button
+                key={l}
+                onClick={() => set({ layer: l })}
+                className={`flex-1 rounded-md border px-2 py-1.5 text-xs ${(asset.layer ?? 0) === l ? 'border-[#c9a45c] bg-[#c9a45c] text-white' : 'border-[#e0d6c2] text-[#6b5f4d]'}`}
+              >
+                {l === 0 ? 'Belakang' : 'Depan'}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {asset.kind === 'shape' && (
+        <>
+          <div>
+            <p className="mb-1 text-xs font-medium text-[#4a443c]">Bentuk</p>
+            <div className="flex flex-wrap gap-1.5">
+              {DECOR_SHAPES.map((s) => (
+                <button
+                  key={s.key}
+                  onClick={() => set({ shape: s.key as DecorAsset['shape'] })}
+                  className={`rounded-md border px-2 py-1 text-xs ${asset.shape === s.key ? 'border-[#c9a45c] bg-[#c9a45c] text-white' : 'border-[#e0d6c2] text-[#6b5f4d]'}`}
+                >
+                  {s.label}
+                </button>
+              ))}
+            </div>
+          </div>
+          <NumberField label="Ukuran (px)" value={asset.size ?? 48} min={8} max={200} onChange={(v) => set({ size: v })} />
+          <ColorPicker label="Warna" value={asset.color ?? '#c9a45c'} onChange={(c) => set({ color: c })} />
+        </>
+      )}
+
+      {asset.kind === 'text' && (
+        <>
+          <div>
+            <label className="mb-1 block text-xs font-medium text-[#4a443c]">Teks</label>
+            <textarea
+              value={asset.text ?? ''}
+              onChange={(e) => set({ text: e.target.value })}
+              rows={3}
+              className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            <NumberField label="Ukuran (px)" value={asset.fontSize ?? 14} min={8} max={96} onChange={(v) => set({ fontSize: v })} />
+            <ColorPicker label="Warna" value={asset.color ?? '#ffffff'} onChange={(c) => set({ color: c })} />
+          </div>
+          <div className="flex gap-2">
+            <div className="flex-1">
+              <label className="mb-1 block text-xs font-medium text-[#4a443c]">Rata</label>
+              <div className="flex gap-1">
+                {(['left', 'center', 'right'] as const).map((a) => (
+                  <button
+                    key={a}
+                    onClick={() => set({ align: a })}
+                    className={`flex-1 rounded-md border px-2 py-1.5 text-xs ${asset.align === a ? 'border-[#c9a45c] bg-[#c9a45c] text-white' : 'border-[#e0d6c2] text-[#6b5f4d]'}`}
+                  >
+                    {a === 'left' ? 'R' : a === 'center' ? 'T' : 'K'}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="flex-1">
+              <label className="mb-1 block text-xs font-medium text-[#4a443c]">Gaya</label>
+              <div className="flex gap-1">
+                <button
+                  onClick={() => set({ fontWeight: asset.fontWeight === 'bold' ? 'normal' : 'bold' })}
+                  className={`flex-1 rounded-md border px-2 py-1.5 text-xs font-bold ${asset.fontWeight === 'bold' ? 'border-[#c9a45c] bg-[#c9a45c] text-white' : 'border-[#e0d6c2] text-[#6b5f4d]'}`}
+                >
+                  B
+                </button>
+                <button
+                  onClick={() => set({ underline: !asset.underline })}
+                  className={`flex-1 rounded-md border px-2 py-1.5 text-xs underline ${asset.underline ? 'border-[#c9a45c] bg-[#c9a45c] text-white' : 'border-[#e0d6c2] text-[#6b5f4d]'}`}
+                >
+                  U
+                </button>
+                <button
+                  onClick={() => set({ italic: !asset.italic })}
+                  className={`flex-1 rounded-md border px-2 py-1.5 text-xs italic ${asset.italic ? 'border-[#c9a45c] bg-[#c9a45c] text-white' : 'border-[#e0d6c2] text-[#6b5f4d]'}`}
+                >
+                  I
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
+      {asset.kind === 'image' && (
+        <>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={onPickImage}
+              className="flex-1 rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2 text-sm text-[#6b5f4d] hover:border-[#c9a45c]"
+            >
+              {asset.imageUrl ? 'Ganti Gambar' : 'Pilih Gambar'}
+            </button>
+            {asset.imageUrl && (
+              <button
+                onClick={() => set({ imageUrl: '' })}
+                className="rounded-md border border-[#e0d6c2] px-2 py-2 text-xs text-[#6b5f4d] hover:border-red-300 hover:text-red-600"
+              >
+                Hapus
+              </button>
+            )}
+          </div>
+          <div>
+            <p className="mb-1 text-xs font-medium text-[#4a443c]">Bentuk Foto</p>
+            <div className="flex flex-wrap gap-1.5">
+              {DECOR_PHOTO_SHAPES.map((s) => (
+                <button
+                  key={s.key}
+                  onClick={() => set({ photoShape: s.key as DecorAsset['photoShape'] })}
+                  className={`rounded-md border px-2 py-1 text-xs ${asset.photoShape === s.key ? 'border-[#c9a45c] bg-[#c9a45c] text-white' : 'border-[#e0d6c2] text-[#6b5f4d]'}`}
+                >
+                  {s.label}
+                </button>
+              ))}
+            </div>
+          </div>
+          <NumberField label="Lebar (px)" value={asset.width ?? 100} min={24} max={420} onChange={(v) => set({ width: v })} />
+        </>
+      )}
+
+      <NumberField
+        label="Opacity (%)"
+        value={Math.round((asset.opacity ?? 1) * 100)}
+        min={5}
+        max={100}
+        onChange={(v) => set({ opacity: v / 100 })}
+      />
+
+      <div className="flex gap-2 pt-1">
+        <button
+          onClick={() => removeDecor(blockId, asset.id)}
+          className="flex-1 rounded-md border border-red-200 py-1.5 text-xs text-red-600 hover:bg-red-50"
+        >
+          Hapus Asset
+        </button>
+        <button
+          onClick={() => selectDecor(null)}
+          className="flex-1 rounded-md border border-[#c9a45c] bg-[#c9a45c] py-1.5 text-xs text-white"
+        >
+          Selesai
+        </button>
+      </div>
     </div>
   );
 }

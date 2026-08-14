@@ -12,12 +12,15 @@ import {
   GalleryBlock,
   MapsBlock,
   ThanksBlock,
-  DividerBlock
+  DividerBlock,
+  TextBlock,
+  PhotoBlock
 } from '@/components/guest/blocks';
 import RSVPForm from '@/components/guest/rsvp';
 import { BuilderEditableContext } from '@/components/builder/inline-edit';
 import { usePreview } from '@/components/guest/preview-context';
 import { InnerProvider } from '@/components/guest/inner-context';
+import { DecorLayer } from '@/components/guest/blocks';
 
 interface BlockViewProps {
   block: Block;
@@ -63,6 +66,12 @@ export default function BlockView({ block, projectId, editable = false, greeting
     case 'Divider':
       view = <DividerBlock props={block.props} />;
       break;
+    case 'Text':
+      view = <TextBlock props={block.props} />;
+      break;
+    case 'Photo':
+      view = <PhotoBlock props={block.props} />;
+      break;
     default:
       return null;
   }
@@ -73,7 +82,7 @@ export default function BlockView({ block, projectId, editable = false, greeting
 
   return (
     <InnerProvider value={block.inner ?? undefined}>
-      <div data-block-type={block.type}>
+      <div data-block-type={block.type} className="relative">
         {!preview && !editable ? (
           <motion.div
             initial={{ opacity: 0, y: 24 }}
@@ -86,6 +95,7 @@ export default function BlockView({ block, projectId, editable = false, greeting
         ) : (
           <StyledSection style={block.style}>{view}</StyledSection>
         )}
+        <DecorLayer blockId={block.id} decor={block.decor} />
       </div>
     </InnerProvider>
   );

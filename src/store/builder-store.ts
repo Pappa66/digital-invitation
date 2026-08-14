@@ -1,7 +1,7 @@
 'use client';
 
 import { create } from 'zustand';
-import type { Block, BlockLayout, BlockProps, BlockStyle, BlockType, CanvasData, Settings, Theme } from '@/lib/types';
+import type { Block, BlockLayout, BlockProps, BlockStyle, BlockType, CanvasData, DecorAsset, Settings, Theme } from '@/lib/types';
 import { emptyCanvas } from '@/lib/templates';
 import { getReligion, isKnownDefault, type ReligionKey } from '@/lib/religions';
 
@@ -10,6 +10,8 @@ interface BuilderState {
   selectedBlockId: string | null;
   /** Elemen teks yang sedang difokus di kanvas (kunci = `${prop}` atau `${prop}.${index}`). */
   selectedText: string | null;
+  /** Asset dekor yang sedang dipilih dalam blok ("${blockId}::${decorId}"). */
+  selectedDecor: string | null;
   initialized: boolean;
 
   init: (data: CanvasData) => void;
@@ -25,6 +27,10 @@ interface BuilderState {
   /** Tandai elemen teks yang sedang difokus (kunci `${prop}.${index}` atau `${prop}`). */
   setSelectedText: (key: string | null) => void;
   setBlockInner: (blockId: string, key: string, pos: { x: number; y: number }) => void;
+  addDecor: (blockId: string, asset: DecorAsset) => void;
+  updateDecor: (blockId: string, decorId: string, partial: Partial<DecorAsset>) => void;
+  removeDecor: (blockId: string, decorId: string) => void;
+  selectDecor: (key: string | null) => void;
   setFlow: (flow: 'stack' | 'free') => void;
   addBlock: (type: BlockType, index?: number) => void;
   removeBlock: (blockId: string) => void;
@@ -157,6 +163,23 @@ const BLOCK_PRESETS: Record<BlockType, Block> = {
     props: {
       variant: 'line'
     }
+  },
+  Text: {
+    id: '',
+    type: 'Text',
+    props: {
+      text: 'Tulis teks di sini',
+      align: 'center'
+    }
+  },
+  Photo: {
+    id: '',
+    type: 'Photo',
+    props: {
+      image: '',
+      caption: '',
+      rounded: true
+    }
   }
 };
 
@@ -164,6 +187,7 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
   canvas: emptyCanvas(),
   selectedBlockId: null,
   selectedText: null,
+  selectedDecor: null,
   initialized: false,
 
   init: (data) => {
@@ -289,6 +313,45 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
       }
     })),
 
+  addDecor: (blockId, asset) =>
+    set((state) => ({
+      canvas: {
+        ...state.canvas,
+        blocks: state.canvas.blocks.map((b) =>
+          b.id === blockId ? { ...b, decor: [...(b.decor ?? []), asset] } : b
+        )
+      },
+      selectedDecor: `${blockId}::${asset.id}`
+    })),
+
+  updateDecor: (blockId, decorId, partial) =>
+    set((state) => ({
+      canvas: {
+        ...state.canvas,
+        blocks: state.canvas.blocks.map((b) =>
+          b.id === blockId
+            ? {
+                ...b,
+                decor: (b.decor ?? []).map((d) => (d.id === decorId ? { ...d, ...partial } : d))
+              }
+            : b
+        )
+      }
+    })),
+
+  removeDecor: (blockId, decorId) =>
+    set((state) => ({
+      canvas: {
+        ...state.canvas,
+        blocks: state.canvas.blocks.map((b) =>
+          b.id === blockId ? { ...b, decor: (b.decor ?? []).filter((d) => d.id !== decorId) } : b
+        )
+      },
+      selectedDecor: state.selectedDecor === `${blockId}::${decorId}` ? null : state.selectedDecor
+    })),
+
+  selectDecor: (key) => set({ selectedDecor: key }),
+
   setFlow: (flow) => set((state) => ({ canvas: { ...state.canvas, flow } })),
 
   addBlock: (type, index) =>
@@ -354,6 +417,7 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
       canvas: emptyCanvas(),
       selectedBlockId: null,
       selectedText: null,
+      selectedDecor: null,
       initialized: false
     })
 }));
