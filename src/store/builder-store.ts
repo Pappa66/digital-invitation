@@ -133,9 +133,7 @@ const BLOCK_PRESETS: Record<BlockType, Block> = {
       button_text: 'Kirim Konfirmasi',
       success_message: 'Terima kasih atas konfirmasinya.',
       envelope_note: '',
-      bank_name: '',
-      account_number: '',
-      account_holder: ''
+      accounts: []
     }
   },
   Maps: {

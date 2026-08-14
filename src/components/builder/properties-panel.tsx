@@ -7,7 +7,7 @@ import MediaLibrary from '@/components/dashboard/media-library';
 import MusicPreview from '@/components/builder/music-preview';
 import { useBuilderStore } from '@/store/builder-store';
 import { RELIGIONS } from '@/lib/religions';
-import type { Block, BlockProps, DecorAsset } from '@/lib/types';
+import type { Block, BlockProps, DecorAsset, BankAccount } from '@/lib/types';
 
 const FONTS = [
   'Playfair Display',
@@ -95,10 +95,7 @@ const TITLE_PROPS: Record<string, { label: string; multiline?: boolean; url?: bo
     { label: 'deadline' },
     { label: 'button_text' },
     { label: 'success_message', multiline: true },
-    { label: 'envelope_note', multiline: true },
-    { label: 'bank_name' },
-    { label: 'account_number' },
-    { label: 'account_holder' }
+    { label: 'envelope_note', multiline: true }
   ],
   Maps: [{ label: 'title' }, { label: 'address' }, { label: 'embed_url', url: true, labelText: 'Link Google Maps' }],
   Thanks: [
@@ -175,6 +172,13 @@ export default function PropertiesPanel() {
 
   const [mediaOpen, setMediaOpen] = useState(false);
   const [mediaMode, setMediaMode] = useState<'hero' | 'gallery' | 'bg' | 'photo' | 'decor' | null>(null);
+
+  function updateAccount(blockId: string, index: number, key: 'bank_name' | 'account_number' | 'account_holder', value: string) {
+    const b = canvas.blocks.find((x) => x.id === blockId);
+    const accounts = Array.isArray(b?.props.accounts) ? (b.props.accounts as BankAccount[]) : [];
+    const next = accounts.map((a, i) => (i === index ? { ...a, [key]: value } : a));
+    setBlockProps(blockId, { accounts: next });
+  }
   const selectedDecor = useBuilderStore((s) => s.selectedDecor);
   const updateDecor = useBuilderStore((s) => s.updateDecor);
   const removeDecor = useBuilderStore((s) => s.removeDecor);
@@ -552,6 +556,68 @@ export default function PropertiesPanel() {
                     </div>
                   )}
                   {block.type === 'Story' && <StoryChapters blockId={block.id} props={block.props} setBlockProps={setBlockProps} />}
+                  {block.type === 'RSVP' && (
+                    <div className="space-y-3">
+                      <p className="text-xs font-medium text-[#4a443c]">Rekening Amplop</p>
+                      {Array.isArray(block.props.accounts) && (block.props.accounts as BankAccount[]).length > 0 && (
+                        <div className="space-y-2">
+                          {(block.props.accounts as BankAccount[]).map(
+                            (acc, i) => (
+                              <div key={i} className="rounded-md border border-[#e0d6c2] bg-[#faf7f2] p-2">
+                                <div className="mb-1.5 flex items-center justify-between">
+                                  <span className="text-[11px] font-medium text-[#8a7a66]">Rekening {i + 1}</span>
+                                  <button
+                                    onClick={() =>
+                                      setBlockProps(block.id, {
+                                        accounts: (block.props.accounts as BankAccount[]).filter((_, j) => j !== i)
+                                      })
+                                    }
+                                    className="text-[11px] font-medium text-red-600 hover:underline"
+                                  >
+                                    Hapus
+                                  </button>
+                                </div>
+                                <div className="space-y-1.5">
+                                  <input
+                                    value={acc.bank_name ?? ''}
+                                    onChange={(e) => updateAccount(block.id, i, 'bank_name', e.target.value)}
+                                    placeholder="Nama bank / e-wallet"
+                                    className="w-full rounded-md border border-[#e0d6c2] bg-white px-2 py-1.5 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
+                                  />
+                                  <input
+                                    value={acc.account_number ?? ''}
+                                    onChange={(e) => updateAccount(block.id, i, 'account_number', e.target.value)}
+                                    placeholder="Nomor rekening"
+                                    className="w-full rounded-md border border-[#e0d6c2] bg-white px-2 py-1.5 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
+                                  />
+                                  <input
+                                    value={acc.account_holder ?? ''}
+                                    onChange={(e) => updateAccount(block.id, i, 'account_holder', e.target.value)}
+                                    placeholder="Atas nama"
+                                    className="w-full rounded-md border border-[#e0d6c2] bg-white px-2 py-1.5 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
+                                  />
+                                </div>
+                              </div>
+                            )
+                          )}
+                        </div>
+                      )}
+                      <button
+                        onClick={() =>
+                          setBlockProps(block.id, {
+                            accounts: [...(Array.isArray(block.props.accounts) ? (block.props.accounts as BankAccount[]) : []), {
+                              bank_name: '',
+                              account_number: '',
+                              account_holder: ''
+                            }]
+                          })
+                        }
+                        className="flex w-full items-center gap-2 rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2 text-sm text-[#6b5f4d] hover:border-[#c9a45c]"
+                      >
+                        + Tambah Rekening
+                      </button>
+                    </div>
+                  )}
                   <Section
                     title="Warna & Background Section"
                     desc="Override warna teks, latar, atau gambar untuk section ini saja"

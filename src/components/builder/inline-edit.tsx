@@ -104,7 +104,7 @@ export function Editable({ prop, index, multiline, className, children }: Editab
                 ? (block.props[prop] as string[])
                 : undefined;
           if (index === undefined) el.textContent = typeof arr === 'string' ? arr : '';
-          else if (Array.isArray(arr)) el.textContent = arr[index] ?? '';
+          else if (Array.isArray(arr)) el.textContent = (arr[index] as string) ?? '';
           el.blur();
         }
       }}

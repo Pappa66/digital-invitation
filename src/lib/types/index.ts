@@ -36,8 +36,15 @@ export interface Settings {
   music_on_section?: string;
 }
 
+/** Rekening bank / e-wallet untuk amplop online. */
+export interface BankAccount {
+  bank_name: string;
+  account_number: string;
+  account_holder: string;
+}
+
 export interface BlockProps {
-  [key: string]: string | number | boolean | string[] | undefined;
+  [key: string]: string | number | boolean | string[] | BankAccount[] | undefined;
 }
 
 /** Posisi bebas blok pada kanvas (mode free positioning). Unit px. */

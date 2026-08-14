@@ -31,7 +31,14 @@ export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormPr
   const [errorMsg, setErrorMsg] = useState('');
   const [bankCopied, setBankCopied] = useState(false);
 
-  const hasBank = !!str(blockProps, 'account_number');
+  const accounts = (Array.isArray(blockProps.accounts) ? blockProps.accounts : []) as { bank_name: string; account_number: string; account_holder: string }[];
+  const legacyAccount = {
+    bank_name: str(blockProps, 'bank_name'),
+    account_number: str(blockProps, 'account_number'),
+    account_holder: str(blockProps, 'account_holder')
+  };
+  const effectiveAccounts = accounts.length > 0 ? accounts : (legacyAccount.account_number ? [legacyAccount] : []);
+  const hasBank = effectiveAccounts.length > 0;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -92,9 +99,9 @@ export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormPr
     }
   }
 
-  async function copyAccount() {
+  async function copyAccount(accountNumber: string) {
     try {
-      await navigator.clipboard.writeText(str(blockProps, 'account_number'));
+      await navigator.clipboard.writeText(accountNumber);
       setBankCopied(true);
     } catch {
       setBankCopied(false);
@@ -183,18 +190,22 @@ export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormPr
             {str(blockProps, 'envelope_note') || 'Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.'}
           </p>
           <div className="mt-4 space-y-2 text-sm">
-            {str(blockProps, 'bank_name') && <p className="font-medium">{str(blockProps, 'bank_name')}</p>}
-            <div className="flex items-center justify-center gap-2">
-              <span className="text-base font-semibold tracking-wider">{str(blockProps, 'account_number')}</span>
-              <button
-                onClick={copyAccount}
-                title="Salin nomor rekening"
-                className="flex h-7 w-7 items-center justify-center rounded-full border border-current/25 transition-colors hover:bg-current/10"
-              >
-                {bankCopied ? <Check className="h-3.5 w-3.5 text-green-500" /> : <Copy className="h-3.5 w-3.5 opacity-80" />}
-              </button>
-            </div>
-            {str(blockProps, 'account_holder') && <p className="text-xs opacity-70">a.n. {str(blockProps, 'account_holder')}</p>}
+            {effectiveAccounts.map((acc, i) => (
+              <div key={i} className="rounded-xl border border-current/10 bg-white/5 px-3 py-2.5">
+                {acc.bank_name && <p className="font-medium">{acc.bank_name}</p>}
+                <div className="flex items-center justify-center gap-2">
+                  <span className="text-base font-semibold tracking-wider">{acc.account_number}</span>
+                  <button
+                    onClick={() => copyAccount(acc.account_number)}
+                    title="Salin nomor rekening"
+                    className="flex h-7 w-7 items-center justify-center rounded-full border border-current/25 transition-colors hover:bg-current/10"
+                  >
+                    {bankCopied ? <Check className="h-3.5 w-3.5 text-green-500" /> : <Copy className="h-3.5 w-3.5 opacity-80" />}
+                  </button>
+                </div>
+                {acc.account_holder && <p className="text-xs opacity-70">a.n. {acc.account_holder}</p>}
+              </div>
+            ))}
           </div>
         </div>
       )}
