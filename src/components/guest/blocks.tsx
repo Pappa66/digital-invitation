@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useContext } from 'react';
 import { motion, type Target } from 'framer-motion';
 import Image from 'next/image';
-import { Calendar, MapPin, Heart, Sparkles, Gem, BookOpen, Sprout } from 'lucide-react';
+import { Calendar, MapPin, Heart, Sparkles, Gem, BookOpen, Sprout, MailOpen } from 'lucide-react';
 import type { BlockProps } from '@/lib/types';
-import { Editable } from '@/components/builder/inline-edit';
+import { Editable, BuilderEditableContext } from '@/components/builder/inline-edit';
 import { usePreview } from '@/components/guest/preview-context';
 import { useInnerPositions } from '@/components/guest/inner-context';
 
@@ -114,8 +114,31 @@ export function HeroBlock({ props, greetingName }: { props: BlockProps; greeting
   const showOrnament = bool(props, 'show_ornament');
   const align = str(props, 'variant') === 'left' ? 'left' : 'center';
   const isLeft = align === 'left';
+  const preview = usePreview();
+  const inBuilder = useContext(BuilderEditableContext) !== null;
+  const [opened, setOpened] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  function openInvitation() {
+    if (opened) return;
+    setOpened(true);
+    window.dispatchEvent(new CustomEvent('invite-opened'));
+    // Gulir mulus ke konten di bawah hero setelah animasi fade selesai.
+    window.setTimeout(() => {
+      const el = sectionRef.current;
+      if (el) {
+        const target = el.nextElementSibling;
+        const rect = target ? target.getBoundingClientRect() : el.getBoundingClientRect();
+        window.scrollTo({ top: window.scrollY + rect.top, behavior: 'smooth' });
+      } else {
+        window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+      }
+    }, 650);
+  }
+
   return (
     <section
+      ref={sectionRef}
       className={`relative flex min-h-screen w-full flex-col overflow-hidden px-6 py-20 text-white ${
         isLeft ? 'items-start justify-center text-left' : 'items-center justify-center text-center'
       }`}
@@ -128,6 +151,7 @@ export function HeroBlock({ props, greetingName }: { props: BlockProps; greeting
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
+          animate={opened ? { opacity: 0, y: -40, transition: { duration: 0.6, ease: 'easeInOut' } } : {}}
           className={`relative z-10 flex w-full flex-col ${isLeft ? 'items-start' : 'items-center'}`}
         >
           <p className="text-xs uppercase tracking-[0.3em]">
@@ -164,6 +188,20 @@ export function HeroBlock({ props, greetingName }: { props: BlockProps; greeting
               </div>
             </motion.div>
           )}
+          {!preview && !inBuilder && (
+            <motion.button
+              initial={{ opacity: 0, y: 8 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              animate={opened ? { opacity: 0, y: -12, transition: { duration: 0.4 } } : {}}
+              onClick={openInvitation}
+              className="mt-10 inline-flex items-center gap-2 rounded-full border border-white/40 bg-white/10 px-8 py-3 text-sm font-semibold text-white backdrop-blur-sm transition-transform hover:scale-[1.04] active:scale-95"
+            >
+              <MailOpen className="h-4 w-4" />
+              Buka Undangan
+            </motion.button>
+          )}
         </motion.div>
       </Inner>
     </section>
@@ -186,6 +224,14 @@ export function CoupleBlock({ props }: { props: BlockProps }) {
   return (
     <section className="px-6 py-16 md:py-24">
       <div className={`mx-auto w-full ${side ? '' : 'text-center'}`}>
+        {str(props, 'introduction') &&
+          title(
+            <p className="mb-6 text-sm leading-relaxed opacity-80">
+              <Editable prop="introduction" multiline>
+                {str(props, 'introduction')}
+              </Editable>
+            </p>
+          )}
         {str(props, 'bismillah') &&
           title(
             <p className={`mb-6 text-sm italic opacity-70 ${side ? 'text-center' : ''}`}>
@@ -687,46 +733,55 @@ function GalleryCarousel({
 }
 
 export function MapsBlock({ props }: { props: BlockProps }) {
-  const embedSrc = mapsEmbedSrc(str(props, 'embed_url'), str(props, 'address'));
+  const embedUrl = str(props, 'embed_url');
+  const address = str(props, 'address');
+  const direct = maybeEmbedSrc(embedUrl);
+  const [apiSrc, setApiSrc] = useState<{ url: string; src: string } | null>(null);
+
+  useEffect(() => {
+    let alive = true;
+    if (!embedUrl || direct) return () => {
+      alive = false;
+    };
+    fetch(`/api/maps?url=${encodeURIComponent(embedUrl)}`)
+      .then((r) => r.json())
+      .then((d) => {
+        if (alive && d.src) setApiSrc({ url: embedUrl, src: d.src });
+      })
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, [embedUrl, direct]);
+
+  const resolved = direct ?? (apiSrc?.url === embedUrl ? apiSrc.src : null);
+  const src = resolved ?? `https://maps.google.com/maps?q=${encodeURIComponent(address)}&output=embed`;
   return (
     <section className="px-6 py-14 text-center">
       <Inner name="title">
         <h2 className="text-xl md:text-2xl">{str(props, 'title')}</h2>
       </Inner>
-      {str(props, 'address') && <p className="mt-2 text-sm opacity-80">{str(props, 'address')}</p>}
+      {address && <p className="mt-2 text-sm opacity-80">{address}</p>}
       <div className="mx-auto mt-6 w-full overflow-hidden rounded-xl border border-current/10">
         <iframe
-          src={embedSrc}
+          src={src}
           className="h-64 w-full"
           loading="lazy"
-          title={str(props, 'address')}
+          title={address}
         />
       </div>
     </section>
   );
 }
 
-/** Ubah berbagai format tautan Google Maps menjadi src iframe embed. */
-function mapsEmbedSrc(embedUrl: string, address: string): string {
+/** Ubah tautan Google Maps yang sudah langsung embedable. null = perlu di-resolve server. */
+function maybeEmbedSrc(embedUrl: string): string | null {
   const raw = (embedUrl || '').trim();
-  if (raw) {
-    // sudah format embed pb
-    if (/^https?:\/\/[^/]+\/maps\/embed/.test(raw) || /[?&]output=embed/.test(raw)) return raw;
-    // tautan pendek maps.app.goo.gl -> ikuti redirect
-    if (/maps\.app\.goo\.gl/i.test(raw)) return raw;
-    // place/@{lat},{lng},{z}z
-    const at = raw.match(/@(-?\d+\.\d+),(-?\d+\.\d+),(\d+)z/);
-    if (at) return `https://www.google.com/maps?q=${at[1]},${at[2]}&z=${at[3]}&output=embed`;
-    // ?q=... atau /maps/search/...
-    const q = raw.match(/[?&]q=([^&#]+)/) || raw.match(/maps\/search\/([^/#?]+)/);
-    if (q) return `https://www.google.com/maps?q=${q[1]}&output=embed`;
-    // place/<loc> + query di ?query= membawa koordinat di @ ...
-    const place = raw.match(/maps\/place\/([^/#?@]+)/);
-    if (place) return `https://www.google.com/maps?q=${place[1]}&output=embed`;
-    // fallback: langsung pakai link yang diberikan bila mengandung maps
-    return raw;
-  }
-  return `https://maps.google.com/maps?q=${encodeURIComponent(address)}&output=embed`;
+  if (!raw) return null;
+  if (/^https?:\/\/[^/]+\/maps\/embed/.test(raw) || /[?&]output=embed/.test(raw)) return raw;
+  const at = raw.match(/@(-?\d+\.\d+),(-?\d+\.\d+)(?:,(\d+)z)?/);
+  if (at) return `https://maps.google.com/maps?q=${at[1]},${at[2]}&z=${at[3] ?? 15}&output=embed`;
+  return null;
 }
 
 export function ThanksBlock({ props }: { props: BlockProps }) {
