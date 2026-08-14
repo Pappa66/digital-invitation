@@ -9,7 +9,8 @@
     "layout": "center",
     "hero_style": "solid",
     "frame": "arch",
-    "card_style": true
+    "card_style": true,
+    "ornament": "eucalyptus"
   },
   "settings": {
     "music_url": "",
@@ -50,7 +51,8 @@
       "id": "b-3",
       "type": "Quote",
       "props": {
-        "arabic": "وَمِن كُلِّ شَيْءٍ خَلَقْنَا زَوْجَيْنِ لَعَلَّكُمْ تَذَكَّرُونَ",
+        "religion": "islam",
+        "original": "وَمِن كُلِّ شَيْءٍ خَلَقْنَا زَوْجَيْنِ لَعَلَّكُمْ تَذَكَّرُونَ",
         "latin": "Wa min kulli syai-in khalaqnaa zaujaini la'allakum tadzakkaruun",
         "translation": "Dan segala sesuatu Kami ciptakan berpasang-pasangan agar kamu mengingat (kebesaran Allah).",
         "reference": "QS. Adz Dzariyyat: 49"

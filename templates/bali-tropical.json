@@ -7,7 +7,8 @@
     "font_heading": "Cormorant Garamond",
     "font_body": "Jost",
     "layout": "left",
-    "hero_style": "image"
+    "hero_style": "image",
+    "ornament": "eucalyptus"
   },
   "settings": {
     "music_url": "",

@@ -7,7 +7,8 @@
     "font_heading": "Lora",
     "font_body": "Poppins",
     "layout": "left",
-    "hero_style": "image"
+    "hero_style": "image",
+    "ornament": "eucalyptus"
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",

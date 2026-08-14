@@ -7,7 +7,8 @@
     "font_heading": "Playfair Display",
     "font_body": "Inter",
     "layout": "left",
-    "hero_style": "solid"
+    "hero_style": "solid",
+    "ornament": "flourish"
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",

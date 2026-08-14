@@ -103,6 +103,7 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
             secondary={canvas.theme.secondary}
             background={canvas.theme.background}
             text={canvas.theme.text}
+            ornament={typeof canvas.theme.ornament === 'string' ? canvas.theme.ornament : undefined}
           />
         )}
       </div>

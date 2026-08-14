@@ -7,7 +7,8 @@
     "font_heading": "Playfair Display",
     "font_body": "Montserrat",
     "layout": "center",
-    "hero_style": "image"
+    "hero_style": "image",
+    "ornament": "flourish"
   },
   "settings": {
     "music_url": "",

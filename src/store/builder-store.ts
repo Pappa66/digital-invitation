@@ -202,7 +202,8 @@ const BLOCK_PRESETS: Record<BlockType, Block> = {
     id: '',
     type: 'Quote',
     props: {
-      arabic: '',
+      religion: 'islam',
+      original: '',
       latin: '',
       translation: '',
       reference: ''

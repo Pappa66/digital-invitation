@@ -34,6 +34,12 @@ export interface Theme {
    * seperti webvitation Simple Rustic). Hero tetap penuh layar.
    */
   card_style?: boolean;
+  /**
+   * Ornamen dekoratif (SVG library) untuk section pengantar/sepanjang undangan.
+   * Nilai: kunci di ornaments.tsx (mis. 'flourish', 'eucalyptus', 'rose-branch').
+   * Kosong (default) = ornamen klasik hati-lama dipakai.
+   */
+  ornament?: string;
 }
 
 export interface Settings {

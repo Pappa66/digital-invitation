@@ -3,10 +3,12 @@
 import { useState } from 'react';
 import { Type, Clapperboard } from 'lucide-react';
 import ColorPicker from '@/components/builder/color-picker';
+import { OrnamentArt, ORNAMENT_CATEGORIES, ORNAMENT_LABELS, type OrnamentKey } from '@/components/builder/ornaments';
 import MediaLibrary from '@/components/dashboard/media-library';
 import MusicPreview from '@/components/builder/music-preview';
 import { useBuilderStore } from '@/store/builder-store';
-import { RELIGIONS } from '@/lib/religions';
+import { RELIGIONS, type ReligionKey } from '@/lib/religions';
+import { getQuotesByReligion, RELIGION_LABELS, type WeddingQuote } from '@/lib/quotes';
 import type { Block, BlockProps, DecorAsset, BankAccount } from '@/lib/types';
 
 const FONTS = [
@@ -110,10 +112,11 @@ const TITLE_PROPS: Record<string, { label: string; multiline?: boolean; url?: bo
   Text: [{ label: 'text', multiline: true }],
   Photo: [{ label: 'image' }, { label: 'caption' }],
   Quote: [
-    { label: 'arabic', multiline: true, labelText: 'Ayat (Arab)' },
+    { label: 'religion', labelText: 'Agama (untuk preset kutipan)' },
+    { label: 'original', multiline: true, labelText: 'Teks Asli / Ayat' },
     { label: 'latin', multiline: true, labelText: 'Latin / Bacaan' },
     { label: 'translation', multiline: true, labelText: 'Terjemahan' },
-    { label: 'reference', labelText: 'Referensi (mis. QS Adz Dzariyyat: 49)' }
+    { label: 'reference', labelText: 'Referensi' }
   ]
 };
 
@@ -245,6 +248,8 @@ export default function PropertiesPanel() {
                 </div>
               }
             />
+
+            <OrnamentThemePicker value={canvas.theme.ornament} onChange={(v) => setTheme({ ornament: v })} />
 
             <Section
               title="Penataan"
@@ -541,6 +546,7 @@ export default function PropertiesPanel() {
                       </div>
                     </div>
                   )}
+                  {block.type === 'Quote' && <QuotePicker blockId={block.id} props={block.props} setBlockProps={setBlockProps} />}
                   {block.type === 'Photo' && (
                     <div>
                       <p className="mb-1 text-xs font-medium text-[#4a443c]">Gambar</p>
@@ -1398,6 +1404,126 @@ function TextStyleControl({
         >
           Selesai
         </button>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Pilih ornamen SVG global undangan, dikelompokkan per kategori template
+ * (klasik/outdoor/romantis/modern). Dipakai di cover, hero, dan pembagi section.
+ */
+function OrnamentThemePicker({ value, onChange }: { value?: string; onChange: (v: string) => void }) {
+  return (
+    <Section
+      title="Ornamen & Aset"
+      desc="Ornamen dekoratif SVG yang mengikuti tema & kategori"
+      render={
+        <div className="space-y-3">
+          {Object.entries(ORNAMENT_CATEGORIES).map(([cat, { label, keys }]) => (
+            <div key={cat}>
+              <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-wide text-[#8a7a66]">{label}</p>
+              <div className="grid grid-cols-3 gap-1.5">
+                {keys.map((k) => {
+                  const active = (value || undefined) === k;
+                  return (
+                    <button
+                      key={k}
+                      title={ORNAMENT_LABELS[k]}
+                      onClick={() => onChange(active ? '' : k)}
+                      className={`flex flex-col items-center gap-1 rounded-md border p-2 transition-colors ${
+                        active ? 'border-[#c9a45c] bg-[#c9a45c]/10' : 'border-[#e0d6c2] bg-white hover:border-[#c9a45c]'
+                      }`}
+                    >
+                      <OrnamentArt ornament={k as OrnamentKey} width={64} className="text-[#6b5f4d]" />
+                      <span className={`w-full truncate text-center text-[9px] ${active ? 'text-[#c9a45c]' : 'text-[#8a7a66]'}`}>
+                        {ORNAMENT_LABELS[k]}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+          {value && (
+            <p className="text-[11px] leading-relaxed text-[#8a7a66]">
+              Ornamen aktif: <span className="font-medium text-[#4a443c]">{ORNAMENT_LABELS[value as OrnamentKey] ?? value}</span>. Klik lagi untuk hapus (kembali ke preset klasik).
+            </p>
+          )}
+        </div>
+      }
+    />
+  );
+}
+
+/**
+ * Pilih agama & kutipan untuk blok Kutipan/Ayat.
+ * - Pindah agama → menampilkan preset ayat/kutipan agama tsb.
+ * - Klik kutipan → mengisi original/latin/translation/reference sekaligus.
+ */
+function QuotePicker({
+  blockId,
+  props,
+  setBlockProps
+}: {
+  blockId: string;
+  props: BlockProps;
+  setBlockProps: (id: string, p: Partial<BlockProps>) => void;
+}) {
+  const religion = (props.religion as ReligionKey) || ('islam' as ReligionKey);
+  const quotes = getQuotesByReligion(religion);
+
+  function apply(q: WeddingQuote) {
+    setBlockProps(blockId, {
+      religion: q.religion,
+      original: q.original,
+      latin: q.latin ?? '',
+      translation: q.translation,
+      reference: q.reference
+    });
+  }
+
+  return (
+    <div className="space-y-3 rounded-md border border-[#e7ddcc] bg-[#faf7f2] p-3">
+      <div>
+        <p className="mb-1 text-xs font-medium text-[#4a443c]">Agama Kutipan</p>
+        <div className="grid grid-cols-2 gap-1.5">
+          {RELIGIONS.map((r) => (
+            <button
+              key={r.key}
+              onClick={() => setBlockProps(blockId, { religion: r.key })}
+              className={`rounded-md border px-2 py-1.5 text-xs ${
+                religion === r.key ? 'border-[#c9a45c] bg-[#c9a45c] text-white' : 'border-[#e0d6c2] text-[#6b5f4d] hover:bg-white'
+              }`}
+            >
+              {r.label}
+            </button>
+          ))}
+        </div>
+        <p className="mt-1.5 text-[11px] leading-relaxed text-[#8a7a66]">
+          {RELIGION_LABELS[religion]} — {quotes.length} kutipan tersedia. Klik untuk memakai.
+        </p>
+      </div>
+      <div>
+        <p className="mb-1 text-xs font-medium text-[#4a443c]">Pilih Kutipan</p>
+        <div className="max-h-52 space-y-1.5 overflow-y-auto pr-1">
+          {quotes.map((q) => {
+            const active = (props.reference as string) === q.reference && (props.original as string) === q.original;
+            return (
+              <button
+                key={q.id}
+                onClick={() => apply(q)}
+                title={q.translation}
+                className={`flex w-full flex-col gap-0.5 rounded-md border px-2.5 py-2 text-left ${
+                  active ? 'border-[#c9a45c] bg-[#c9a45c]/10' : 'border-[#e0d6c2] bg-white hover:border-[#c9a45c]'
+                }`}
+              >
+                <span className="text-[11px] font-semibold text-[#4a443c]">{q.reference}</span>
+                <span className="truncate text-[11px] text-[#8a7a66]">{q.original}</span>
+              </button>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

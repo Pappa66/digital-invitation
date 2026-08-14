@@ -7,7 +7,8 @@
     "font_heading": "Cinzel",
     "font_body": "Lato",
     "layout": "center",
-    "hero_style": "solid"
+    "hero_style": "solid",
+    "ornament": "flourish"
   },
   "settings": {
     "music_url": "",

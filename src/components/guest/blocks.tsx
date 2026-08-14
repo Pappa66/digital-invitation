@@ -5,7 +5,9 @@ import { motion, type Target } from 'framer-motion';
 import Image from 'next/image';
 import { Calendar, MapPin, Heart, Sparkles, Gem, BookOpen, Sprout, MailOpen, Plus, Radio } from 'lucide-react';
 import type { BlockProps, DecorAsset, DecorShapeKind } from '@/lib/types';
+import type { ReligionKey } from '@/lib/religions';
 import { Editable, BuilderEditableContext } from '@/components/builder/inline-edit';
+import { OrnamentArt, ORNAMENTS, type OrnamentKey } from '@/components/builder/ornaments';
 import { usePreview } from '@/components/guest/preview-context';
 import { useTheme } from '@/components/guest/theme-context';
 import { useInnerPositions } from '@/components/guest/inner-context';
@@ -45,7 +47,15 @@ function Inner({ name, className, children }: { name: string; className?: string
   );
 }
 
-function Ornament({ className = '' }: { className?: string }) {
+function Ornament({ className = '', ornament }: { className?: string; ornament?: string }) {
+  if (ornament && (ORNAMENTS as unknown as Record<string, string>)[ornament]) {
+    const key = ornament as OrnamentKey;
+    return (
+      <div className={`flex items-center justify-center ${className}`} aria-hidden>
+        <OrnamentArt ornament={key} width={140} className="text-current opacity-70" />
+      </div>
+    );
+  }
   return (
     <div className={`flex items-center justify-center gap-3 ${className}`} aria-hidden>
       <span className="h-px w-12 bg-current opacity-50" />
@@ -671,7 +681,7 @@ export function HeroBlock({ props, greetingName }: { props: BlockProps; greeting
               transition={{ duration: 0.5, delay: 0.3 }}
               className={isLeft ? 'mt-4 mr-auto text-white opacity-80' : 'mt-4 text-white opacity-80'}
             >
-              <Ornament />
+              <Ornament ornament={str(props, 'ornament') || theme?.ornament} />
             </motion.div>
           )}
           <motion.h1
@@ -1001,6 +1011,7 @@ export function EventDetailBlock({ props }: { props: BlockProps }) {
 }
 
 export function StoryBlock({ props }: { props: BlockProps }) {
+  const theme = useTheme();
   const titles = arr(props, 'ev_title');
   const dates = arr(props, 'ev_date');
   const descs = arr(props, 'ev_desc');
@@ -1017,7 +1028,7 @@ export function StoryBlock({ props }: { props: BlockProps }) {
               <Editable prop="subtitle">{str(props, 'subtitle')}</Editable>
             </p>
           )}
-          <Ornament className="mt-6 opacity-60" />
+          <Ornament className="mt-6 opacity-60" ornament={str(props, 'ornament') || theme?.ornament} />
         </div>
       </Inner>
       <div className="mx-auto mt-10 w-full space-y-8">
@@ -1475,27 +1486,50 @@ export function PhotoBlock({ props }: { props: BlockProps }) {
 
 /** Kutipan / ayat (Arab + latin + referensi) menyerupai seksi doa di webvitation. */
 export function QuoteBlock({ props }: { props: BlockProps }) {
+  const theme = useTheme();
+  const religion = (str(props, 'religion') || 'islam') as ReligionKey;
+  const isIslamic = religion === 'islam';
   return (
     <section className="px-6 py-14 text-center">
       <Inner name="quote">
         <div>
-          <Ornament className="mb-6 opacity-50" />
-          <p
-            lang="ar"
-            dir="rtl"
-            className="mx-auto max-w-md font-['Amiri','Scheherazade_New',serif] text-2xl leading-[2] md:text-3xl"
-          >
-            <Editable prop="arabic" multiline>
-              {str(props, 'arabic')}
-            </Editable>
+          <Ornament className="mb-6 opacity-50" ornament={str(props, 'ornament') || theme?.ornament} />
+          {isIslamic ? (
+            <>
+              <p
+                lang="ar"
+                dir="rtl"
+                className="mx-auto max-w-md font-['Amiri','Scheherazade_New',serif] text-2xl leading-[2] md:text-3xl"
+              >
+                <Editable prop="original" multiline>
+                  {str(props, 'original')}
+                </Editable>
+              </p>
+              {str(props, 'latin') && (
+                <p className="mx-auto mt-5 max-w-md text-sm italic leading-relaxed opacity-80">
+                  <Editable prop="latin" multiline>
+                    {str(props, 'latin')}
+                  </Editable>
+                </p>
+              )}
+            </>
+          ) : (
+            <p className={`mx-auto max-w-md text-2xl leading-relaxed md:text-3xl ${religion === 'konghucu' ? 'italic' : 'font-medium'}`}>
+              <Editable prop="original" multiline>
+                {str(props, 'original')}
+              </Editable>
+            </p>
+          )}
+          {str(props, 'translation') && (
+            <p className="mx-auto mt-5 max-w-md text-sm leading-relaxed opacity-70">
+              <Editable prop="translation" multiline>
+                {str(props, 'translation')}
+              </Editable>
+            </p>
+          )}
+          <p className="mt-5 text-xs uppercase tracking-widest opacity-60">
+            <Editable prop="reference">{str(props, 'reference')}</Editable>
           </p>
-          <p className="mx-auto mt-5 max-w-md text-sm italic leading-relaxed opacity-80">
-            <Editable prop="latin" multiline>
-              {str(props, 'latin')}
-            </Editable>
-          </p>
-          {str(props, 'latin') && <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed opacity-70">{str(props, 'translation')}</p>}
-          <p className="mt-5 text-xs uppercase tracking-widest opacity-60">{str(props, 'reference')}</p>
         </div>
       </Inner>
     </section>

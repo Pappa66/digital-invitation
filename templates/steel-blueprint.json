@@ -7,7 +7,8 @@
     "font_heading": "Jost",
     "font_body": "Lato",
     "layout": "left",
-    "hero_style": "solid"
+    "hero_style": "solid",
+    "ornament": "arch-geometric"
   },
   "settings": {
     "music_url": "",

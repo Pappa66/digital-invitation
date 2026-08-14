@@ -7,7 +7,8 @@
     "font_heading": "Marcellus",
     "font_body": "Jost",
     "layout": "left",
-    "hero_style": "image"
+    "hero_style": "image",
+    "ornament": "eucalyptus"
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",

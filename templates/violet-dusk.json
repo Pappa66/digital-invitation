@@ -7,7 +7,8 @@
     "font_heading": "Cormorant Garamond",
     "font_body": "Quicksand",
     "layout": "center",
-    "hero_style": "image"
+    "hero_style": "image",
+    "ornament": "rose-branch"
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",

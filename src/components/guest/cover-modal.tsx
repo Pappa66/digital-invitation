@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { MailOpen } from 'lucide-react';
+import { OrnamentArt, type OrnamentKey } from '@/components/builder/ornaments';
 
 interface CoverModalProps {
   caption: string;
@@ -18,6 +19,8 @@ interface CoverModalProps {
   text: string;
   /** Skala huruf nama (dipakai template agar nama terlihat besar & mewah). */
   namesScale?: string;
+  /** Ornamen SVG dekoratif (kunci di ornaments.tsx). */
+  ornament?: string;
 }
 
 /**
@@ -36,7 +39,8 @@ export default function CoverModal({
   secondary,
   background,
   text,
-  namesScale = 'text-4xl'
+  namesScale = 'text-4xl',
+  ornament
 }: CoverModalProps) {
   const [open, setOpen] = useState(true);
 
@@ -77,7 +81,10 @@ export default function CoverModal({
           )}
 
           <div className="relative z-10 flex h-full w-full flex-col items-center justify-between px-8 py-12 text-center text-white">
-            <div className="mt-4">
+            <div className="mt-2 flex flex-col items-center">
+              {ornament && (
+                <OrnamentArt ornament={ornament as OrnamentKey} width={180} className="mb-3 text-white opacity-60" />
+              )}
               <p className="text-xs uppercase tracking-[0.35em] opacity-90">{caption}</p>
               <h1
                 className={`font-script mt-4 leading-tight ${namesScale}`}
