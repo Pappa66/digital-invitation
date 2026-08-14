@@ -18,6 +18,7 @@ export default function MediaLibrary({ open, onClose, onSelect }: MediaLibraryPr
   const [files, setFiles] = useState<{ name: string; url: string }[]>([]);
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [uploadingCount, setUploadingCount] = useState(0);
 
   const loadFiles = useCallback(async () => {
     setLoading(true);
@@ -41,28 +42,33 @@ export default function MediaLibrary({ open, onClose, onSelect }: MediaLibraryPr
   }, [open, loadFiles]);
 
   async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const fileList = e.target.files;
+    if (!fileList || fileList.length === 0) return;
+    const picked = Array.from(fileList);
     setUploading(true);
+    setUploadingCount(picked.length);
     try {
-      const compressed = await imageCompression(file, {
-        maxSizeMB: 1,
-        maxWidthOrHeight: 1920,
-        useWebWorker: true
-      });
-      const name = `${Date.now()}-${file.name.replace(/\s+/g, '-')}`;
-      const { data, error } = await supabase.storage.from(BUCKET).upload(name, compressed, {
-        cacheControl: '3600',
-        upsert: false
-      });
-
-      if (!error && data) {
-        await loadFiles();
+      for (const file of picked) {
+        const compressed = await imageCompression(file, {
+          maxSizeMB: 1,
+          maxWidthOrHeight: 1920,
+          useWebWorker: true
+        });
+        const name = `${Date.now()}-${file.name.replace(/\s+/g, '-')}`;
+        const { error } = await supabase.storage.from(BUCKET).upload(name, compressed, {
+          cacheControl: '3600',
+          upsert: false
+        });
+        if (!error) {
+          setUploadingCount((c) => Math.max(0, c - 1));
+        }
       }
+      await loadFiles();
     } catch (err) {
       console.error('Upload failed', err);
     } finally {
       setUploading(false);
+      setUploadingCount(0);
       e.target.value = '';
     }
   }
@@ -83,7 +89,10 @@ export default function MediaLibrary({ open, onClose, onSelect }: MediaLibraryPr
           <label className="flex cursor-pointer items-center gap-2 rounded-md bg-gray-900 px-3 py-2 text-xs font-medium text-white hover:opacity-90">
             {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
             {uploading ? 'Mengunggah...' : 'Upload New'}
-            <input type="file" accept="image/*" className="hidden" onChange={handleUpload} disabled={uploading} />
+            <input type="file" accept="image/*" multiple className="hidden" onChange={handleUpload} disabled={uploading} />
+          </label>
+          <span className="text-xs text-gray-500">
+            {uploading ? `Mengunggah ${uploadingCount} gambar...` : 'Pilih banyak gambar sekaligus — akan dikompresi sebelum diunggah.'}
           </label>
           <span className="text-xs text-gray-500">Gambar otomatis dikompresi sebelum diunggah.</span>
         </div>
