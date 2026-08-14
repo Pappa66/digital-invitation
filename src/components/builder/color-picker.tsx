@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { Check } from 'lucide-react';
 
 const PRESET_PALETTES: string[][] = [
   ['#D4AF37', '#8A6D2F', '#FAF6EF', '#4A443C'],
@@ -38,15 +37,15 @@ export default function ColorPicker({ value, onChange, label }: ColorPickerProps
 
   return (
     <div className="relative">
-      {label && <label className="mb-1 block text-xs font-medium text-gray-700">{label}</label>}
+      {label && <label className="mb-1 block text-xs font-medium text-[#c4c9d4]">{label}</label>}
       <div className="flex items-center gap-2">
         <button
           onClick={() => setOpen((o) => !o)}
-          className="h-9 w-9 shrink-0 rounded-md border border-gray-300"
+          className="h-9 w-9 shrink-0 rounded-md border border-[#2a303c]"
           style={{ background: value }}
           aria-label="Buka color picker"
         />
-        <div className="flex flex-1 items-center rounded-md border border-gray-300 bg-gray-50 px-2">
+        <div className="flex flex-1 items-center rounded-md border border-[#2a303c] bg-[#171b23] px-2">
           <input
             type="color"
             value={value}
@@ -60,7 +59,7 @@ export default function ColorPicker({ value, onChange, label }: ColorPickerProps
               const v = e.target.value;
               if (/^#[0-9a-fA-F]{6}$/.test(v)) onChange(v);
             }}
-            className="w-full bg-transparent px-2 py-1.5 text-xs outline-none"
+            className="w-full bg-transparent px-2 py-1.5 text-xs text-[#c4c9d4] outline-none"
           />
         </div>
       </div>
@@ -68,8 +67,8 @@ export default function ColorPicker({ value, onChange, label }: ColorPickerProps
       {open && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
-          <div className="absolute left-0 top-11 z-50 w-64 rounded-lg border border-gray-200 bg-white p-3 shadow-lg">
-            <p className="mb-2 text-xs font-medium text-gray-500">Preset Palettes</p>
+          <div className="absolute left-0 top-11 z-50 w-64 rounded-lg border border-[#262b35] bg-[#14171d] p-3 shadow-2xl">
+            <p className="mb-2 text-xs font-medium text-[#6b7380]">Preset Palettes</p>
             <div className="space-y-2">
               {PRESET_PALETTES.map((palette, i) => (
                 <div key={i} className="group flex items-center justify-between">
@@ -78,13 +77,13 @@ export default function ColorPicker({ value, onChange, label }: ColorPickerProps
                       <button
                         key={j}
                         onClick={() => onChange(c)}
-                        className={`h-6 w-6 rounded-full border border-black/10 transition-transform hover:scale-110 ${value === c ? 'ring-2 ring-gray-900 ring-offset-1' : ''}`}
+                        className={`h-6 w-6 rounded-full border border-black/30 transition-transform hover:scale-110 ${value === c ? 'ring-2 ring-[#c9a45c] ring-offset-1 ring-offset-[#14171d]' : ''}`}
                         style={{ background: c }}
                         title={c}
                       />
                     ))}
                   </div>
-                  <span className="text-[10px] text-gray-400">{PALETTE_NAMES[i]}</span>
+                  <span className="text-[10px] text-[#6b7380]">{PALETTE_NAMES[i]}</span>
                 </div>
               ))}
             </div>

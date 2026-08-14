@@ -76,16 +76,16 @@ export default function BuilderPage() {
 
   if (access === 'denied') {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50 p-6">
-        <div className="w-full max-w-sm rounded-xl border border-gray-200 bg-white p-8 text-center shadow-sm">
-          <Lock className="mx-auto h-8 w-8 text-gray-300" />
-          <h1 className="mt-3 text-base font-semibold text-gray-900">Tidak Ada Akses</h1>
-          <p className="mt-2 text-sm text-gray-500">
+      <div className="flex min-h-screen items-center justify-center bg-[#0e1116] p-6">
+        <div className="w-full max-w-sm rounded-xl border border-[#262b35] bg-[#14171d] p-8 text-center shadow-xl">
+          <Lock className="mx-auto h-8 w-8 text-[#6b7380]" />
+          <h1 className="mt-3 text-base font-semibold text-[#e8e6e1]">Tidak Ada Akses</h1>
+          <p className="mt-2 text-sm text-[#8b93a3]">
             Anda tidak memiliki akses untuk mengedit undangan ini. Halaman ini hanya bisa dibuka oleh pemiliknya.
           </p>
           <Link
             href="/dashboard"
-            className="mt-5 inline-block rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:opacity-90"
+            className="mt-5 inline-block rounded-md bg-[#c9a45c] px-4 py-2 text-sm font-medium text-[#141414] hover:bg-[#e0c382]"
           >
             Kembali ke Dashboard
           </Link>
@@ -95,18 +95,18 @@ export default function BuilderPage() {
   }
 
   if (access === 'checking') {
-    return <div className="flex min-h-screen items-center justify-center bg-gray-50 text-sm text-gray-400">Memeriksa akses...</div>;
+    return <div className="flex min-h-screen items-center justify-center bg-[#0e1116] text-sm text-[#6b7380]">Memeriksa akses...</div>;
   }
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden bg-gray-50">
-      <header className="flex h-12 shrink-0 items-center justify-between border-b border-gray-200 bg-white px-4">
+    <div className="flex h-screen flex-col overflow-hidden bg-[#0e1116]">
+      <header className="flex h-12 shrink-0 items-center justify-between border-b border-[#262b35] bg-[#14171d] px-4">
         <div className="flex min-w-0 items-center gap-3">
-          <Link href="/dashboard" className="shrink-0 text-sm font-semibold text-gray-900">
+          <Link href="/dashboard" className="shrink-0 text-sm font-semibold text-[#e8e6e1] transition-colors hover:text-[#c9a45c]">
             ← Dashboard
           </Link>
-          <div className="flex min-w-0 items-center gap-1.5 rounded-md border border-gray-200 bg-gray-50 px-2 py-1">
-            <PenLine className="h-3.5 w-3.5 shrink-0 text-gray-400" />
+          <div className="flex min-w-0 items-center gap-1.5 rounded-md border border-[#2a303c] bg-[#0e1116] px-2 py-1">
+            <PenLine className="h-3.5 w-3.5 shrink-0 text-[#6b7380]" />
             <input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -115,27 +115,27 @@ export default function BuilderPage() {
                 if (e.key === 'Enter') e.currentTarget.blur();
               }}
               aria-label="Judul undangan"
-              className="w-56 min-w-0 truncate rounded-sm bg-transparent text-sm font-medium text-gray-900 outline-none focus:ring-1 focus:ring-gray-900"
+              className="w-56 min-w-0 truncate rounded-sm bg-transparent text-sm font-medium text-[#e8e6e1] outline-none focus:ring-1 focus:ring-[#c9a45c]"
             />
-            {renameStatus === 'saving' && <span className="shrink-0 text-[10px] text-gray-400">...</span>}
-            {renameStatus === 'saved' && <span className="shrink-0 text-[10px] text-green-600">Tersimpan</span>}
+            {renameStatus === 'saving' && <span className="shrink-0 text-[10px] text-[#6b7380]">...</span>}
+            {renameStatus === 'saved' && <span className="shrink-0 text-[10px] text-emerald-500">Tersimpan</span>}
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-sm text-gray-500">
+          <span className="text-sm text-[#6b7380]">
             {saveStatus === 'saving' && 'Menyimpan...'}
             {saveStatus === 'saved' && 'Tersimpan'}
           </span>
           <button
             onClick={() => setSaveTplOpen(true)}
-            className="flex items-center gap-1.5 rounded-md border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 hover:border-gray-400"
+            className="flex items-center gap-1.5 rounded-md border border-[#2a303c] px-3 py-1.5 text-xs font-medium text-[#c4c9d4] hover:border-[#3d4554] hover:text-white"
           >
             <BookmarkPlus className="h-3.5 w-3.5" /> Simpan sebagai Template
           </button>
           {previewSlug && (
             <button
               onClick={() => setShareOpen(true)}
-              className="flex items-center gap-1.5 rounded-md border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 hover:border-gray-400"
+              className="flex items-center gap-1.5 rounded-md border border-[#2a303c] px-3 py-1.5 text-xs font-medium text-[#c4c9d4] hover:border-[#3d4554] hover:text-white"
             >
               <Share2 className="h-3.5 w-3.5" /> Bagikan
             </button>
@@ -145,17 +145,17 @@ export default function BuilderPage() {
               href={`/${previewSlug}?preview=1`}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-md bg-gray-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-gray-700"
+              className="rounded-md bg-[#c9a45c] px-3 py-1.5 text-xs font-medium text-[#141414] hover:bg-[#e0c382]"
             >
               Preview ↗
             </a>
           ) : (
-            <span className="rounded-md bg-gray-300 px-3 py-1.5 text-xs font-medium text-white">Preview</span>
+            <span className="rounded-md bg-[#2a303c] px-3 py-1.5 text-xs font-medium text-[#6b7380]">Preview</span>
           )}
           <button
             onClick={() => setGuideOpen(true)}
             aria-label="Panduan Builder"
-            className="rounded-md border border-gray-300 p-1.5 text-gray-600 hover:bg-gray-50"
+            className="rounded-md border border-[#2a303c] p-1.5 text-[#8b93a3] hover:bg-[#1d222b] hover:text-white"
           >
             <HelpCircle className="h-4 w-4" />
           </button>
@@ -185,11 +185,15 @@ export default function BuilderPage() {
         steps={[
           {
             title: 'Tambahkan bagian',
-            body: 'Seret blok dari panel kiri (Hero, Mempelai, Countdown, Pemisah, dst.) ke kanvas. Blok baru muncul di posisi kursor.'
+            body: 'Seret blok dari panel kiri (Hero, Mempelai, Countdown, Pemisah, dst.) ke kanvas. Saat diseret, kanvas meredup dan blok tujuan disorot; blok baru muncul di posisi yang dimaksud.'
           },
           {
             title: 'Edit teks langsung',
             body: 'Klik teks pada kanvas untuk menyunting. Klik tombol "Geser" pada blok untuk memindahkannya; seret dari tombol itu, bukan dari seluruh blok.'
+          },
+          {
+            title: 'Atur alat bantu tampilan',
+            body: 'Tombol di atas kanvas bisa mengaktif/menonaktifkan garis Grid agar penataan rapi, serta beralih antara tampilan Mobile dan Desktop.'
           },
           {
             title: 'Atur gaya & isi',

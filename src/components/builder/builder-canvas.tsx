@@ -10,6 +10,7 @@ import {
   useSensors,
   useDraggable,
   useDroppable,
+  useDndContext,
   closestCenter,
   type DragStartEvent,
   type DragMoveEvent,
@@ -23,28 +24,33 @@ import {
 } from '@dnd-kit/sortable';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { GripVertical } from 'lucide-react';
+import { GripVertical, Grid3x3 } from 'lucide-react';
 import type { Block, BlockType } from '@/lib/types';
 import BlockView from '@/components/guest/BlockView';
 import { useBuilderStore } from '@/store/builder-store';
 import { saveCanvasNow } from '@/hooks/use-autosave';
+import DeviceToggle from '@/components/ui/device-toggle';
+import type { Device } from '@/components/ui/device-toggle';
 
 interface BuilderCanvasProps {
   projectId: string;
 }
 
 const CANVAS_W = 420;
+const CANVAS_W_DESKTOP = 900;
 
 export default function BuilderCanvas({ projectId }: BuilderCanvasProps) {
   const canvas = useBuilderStore((s) => s.canvas);
-  const selectedBlockId = useBuilderStore((s) => s.selectedBlockId);
   const [activeType, setActiveType] = useState<BlockType | null>(null);
+  const [showGrid, setShowGrid] = useState(true);
+  const [device, setDevice] = useState<Device>('mobile');
   const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved'>('idle');
   const dragStartLayoutRef = useRef<Record<string, { x: number; y: number }>>({});
   const dragTranslatedRef = useRef<Record<string, { left: number; top: number }>>({});
   const freeCanvasRef = useRef<HTMLDivElement | null>(null);
 
   const flow = canvas.flow ?? 'stack';
+  const canvasW = device === 'desktop' ? CANVAS_W_DESKTOP : CANVAS_W;
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
@@ -86,7 +92,7 @@ export default function BuilderCanvas({ projectId }: BuilderCanvasProps) {
           useBuilderStore
             .getState()
             .setBlockLayout(newId, {
-              x: Math.max(0, Math.min(CANVAS_W - 40, rect.left - cb.left)),
+              x: Math.max(0, Math.min(canvasW - 40, rect.left - cb.left)),
               y: Math.max(0, rect.top - cb.top)
             });
         }
@@ -107,7 +113,7 @@ export default function BuilderCanvas({ projectId }: BuilderCanvasProps) {
         useBuilderStore
           .getState()
           .setBlockLayout(activeString, {
-            x: Math.max(0, Math.min(CANVAS_W - 40, rect.left - cb.left)),
+            x: Math.max(0, Math.min(canvasW - 40, rect.left - cb.left)),
             y: Math.max(0, rect.top - cb.top)
           });
       } else {
@@ -117,7 +123,7 @@ export default function BuilderCanvas({ projectId }: BuilderCanvasProps) {
           useBuilderStore
             .getState()
             .setBlockLayout(activeString, {
-              x: Math.max(0, Math.min(CANVAS_W - 40, start.x + event.delta.x)),
+              x: Math.max(0, Math.min(canvasW - 40, start.x + event.delta.x)),
               y: Math.max(0, start.y + event.delta.y)
             });
         }
@@ -146,46 +152,80 @@ export default function BuilderCanvas({ projectId }: BuilderCanvasProps) {
   }
 
   return (
-    <div className="relative flex h-full flex-1 items-center justify-center overflow-hidden bg-gray-100">
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragStart={handleDragStart}
-        onDragMove={handleDragMove}
-        onDragEnd={handleDragEnd}
-      >
-        <div className="h-full w-[420px] max-w-full overflow-hidden rounded-md bg-white shadow-2xl">
-          <div className="no-scrollbar h-full overflow-y-auto">
-            {flow === 'free' ? (
-              <FreeCanvas blocks={canvas.blocks} canvasRef={freeCanvasRef} />
-            ) : (
-              <SortableContext items={canvas.blocks.map((b) => b.id)} strategy={verticalListSortingStrategy}>
-                <div className="guest-root" style={guestStyle(canvas)}>
-                  {canvas.blocks.map((block) => (
-                    <SortableBlock key={block.id} block={block} />
-                  ))}
-                  {canvas.blocks.length === 0 && <EmptyHint />}
-                </div>
-              </SortableContext>
-            )}
-          </div>
-        </div>
+    <div className="relative flex h-full flex-1 flex-col items-center justify-center overflow-hidden bg-[#1a1e26]">
+      <div className="flex w-full items-center justify-end gap-3 px-4 pt-3">
+        <button
+          onClick={() => setShowGrid((v) => !v)}
+          aria-pressed={showGrid}
+          className={`flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs font-medium transition-colors ${
+            showGrid
+              ? 'border-[#c9a45c] bg-[#c9a45c]/15 text-[#e8ddc6]'
+              : 'border-[#3a3f4a] text-[#8b93a3] hover:border-[#555c6b] hover:text-white'
+          }`}
+        >
+          <Grid3x3 className="h-3.5 w-3.5" />
+          Grid
+        </button>
+        <DeviceToggle device={device} onChange={setDevice} />
+      </div>
 
-        <DragOverlay>
-          {activeType && (
-            <div className="rounded-md border border-gray-200 bg-white px-3 py-2 text-sm shadow-lg">{activeType}</div>
-          )}
-        </DragOverlay>
-      </DndContext>
+      <div className="flex min-h-0 flex-1 items-center justify-center p-4">
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragStart={handleDragStart}
+          onDragMove={handleDragMove}
+          onDragEnd={handleDragEnd}
+        >
+          <div
+            className="relative h-full overflow-hidden rounded-md bg-white shadow-2xl shadow-black/50"
+            style={{ width: device === 'desktop' ? '100%' : canvasW, maxWidth: '100%' }}
+          >
+            {showGrid && (
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0 z-40 opacity-[0.06]"
+                style={{
+                  backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)',
+                  backgroundSize: '20px 20px'
+                }}
+              />
+            )}
+            <div className="no-scrollbar h-full overflow-y-auto">
+              {flow === 'free' ? (
+                <FreeCanvas blocks={canvas.blocks} canvasRef={freeCanvasRef} />
+              ) : (
+                <SortableContext items={canvas.blocks.map((b) => b.id)} strategy={verticalListSortingStrategy}>
+                  <div className="guest-root" style={guestStyle(canvas)}>
+                    <StackList blocks={canvas.blocks} dimmed={!!activeType} />
+                    {canvas.blocks.length === 0 && <EmptyHint />}
+                  </div>
+                </SortableContext>
+              )}
+            </div>
+          </div>
+
+          <DragOverlay dropAnimation={null}>
+            {activeType && (
+              <div className="w-[300px] rounded-lg border-2 border-dashed border-[#c9a45c] bg-white/95 p-4 opacity-95 shadow-2xl">
+                <div className="flex items-center gap-2 text-sm font-medium text-[#141414]">
+                  <span className="h-7 w-7 rounded-md bg-[#c9a45c]/15 text-center leading-7">{activeType.slice(0, 1)}</span>
+                  Tambah {activeType}
+                </div>
+              </div>
+            )}
+          </DragOverlay>
+        </DndContext>
+      </div>
 
       {saveState === 'saving' && (
-        <span className="fixed bottom-4 right-4 rounded bg-gray-900 px-2 py-1 text-xs text-white">Menyimpan...</span>
+        <span className="fixed bottom-4 right-4 rounded bg-[#10131a] px-2 py-1 text-xs text-[#e8ddc6] ring-1 ring-[#3a3f4a]">Menyimpan...</span>
       )}
       {saveState === 'saved' && (
-        <span className="fixed bottom-4 right-4 rounded bg-green-600 px-2 py-1 text-xs text-white">Tersimpan</span>
+        <span className="fixed bottom-4 right-4 rounded bg-emerald-600 px-2 py-1 text-xs text-white">Tersimpan</span>
       )}
       {flow === 'free' && (
-        <span className="pointer-events-none absolute right-4 top-3 rounded bg-gray-900/80 px-2 py-1 text-[10px] text-white">
+        <span className="pointer-events-none absolute right-4 top-3 rounded bg-[#10131a]/90 px-2 py-1 text-[10px] text-[#8b93a3]">
           Mode Bebas — seret handle &ldquo;Geser&rdquo; untuk pindah, tepi biru untuk ubah lebar
         </span>
       )}
@@ -212,7 +252,24 @@ function EmptyHint() {
   );
 }
 
-function SortableBlock({ block }: { block: Block }) {
+/** List blok mode stack — menyorot posisi target saat widget diseret dari sidebar. */
+function StackList({ blocks, dimmed }: { blocks: Block[]; dimmed: boolean }) {
+  const { over, active } = useDndContext();
+  const isWidgetDrag = !!active && String(active.id).startsWith('widget-');
+  const overId = over ? String(over.id) : null;
+  return (
+    <>
+      {blocks.map((block) => {
+        const isOver = isWidgetDrag && overId === block.id;
+        return (
+          <SortableBlock key={block.id} block={block} dimmed={dimmed} dropTarget={isOver} />
+        );
+      })}
+    </>
+  );
+}
+
+function SortableBlock({ block, dimmed, dropTarget }: { block: Block; dimmed: boolean; dropTarget: boolean }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: block.id
   });
@@ -226,17 +283,17 @@ function SortableBlock({ block }: { block: Block }) {
       ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition }}
       className={`relative cursor-grab outline-2 outline-offset-[-2px] ${
-        selected ? 'outline-blue-500' : 'outline-transparent'
-      } ${isDragging ? 'opacity-40' : ''}`}
+        selected ? 'outline-[#c9a45c]' : dropTarget ? 'outline-[#c9a45c]' : 'outline-transparent'
+      } ${isDragging ? 'opacity-40' : ''} ${dimmed && !dropTarget && !isDragging ? 'opacity-[0.35]' : ''}`}
       onClick={() => selectBlock(block.id)}
       {...attributes}
       {...listeners}
     >
       <BlockView block={block} editable />
       {selected && (
-        <div className="absolute right-2 top-2 z-30 flex gap-1 rounded-md bg-gray-900/90 p-1 shadow" onClick={(e) => e.stopPropagation()}>
+        <div className="absolute right-2 top-2 z-30 flex gap-1 rounded-md bg-[#141414]/90 p-1 shadow-lg ring-1 ring-white/10" onClick={(e) => e.stopPropagation()}>
           <button
-            className="rounded p-1 text-white hover:bg-white/20"
+            className="rounded p-1 text-white transition-colors hover:bg-[#c9a45c]/30"
             aria-label="Duplikat blok"
             onClick={(e) => {
               e.stopPropagation();
@@ -249,7 +306,7 @@ function SortableBlock({ block }: { block: Block }) {
             </svg>
           </button>
           <button
-            className="rounded p-1 text-white hover:bg-white/20"
+            className="rounded p-1 text-white transition-colors hover:bg-red-500/30"
             aria-label="Hapus blok"
             onClick={(e) => {
               e.stopPropagation();
@@ -318,7 +375,7 @@ function FreeBlock({ block }: { block: Block }) {
         zIndex: isDragging ? 20 : selected ? 5 : 1
       }}
       className={`group relative outline-2 outline-offset-0 ${
-        selected ? 'outline-blue-500' : 'outline-transparent'
+        selected ? 'outline-[#c9a45c]' : 'outline-transparent'
       } ${isDragging ? 'opacity-70' : ''}`}
       onClick={() => selectBlock(block.id)}
     >
@@ -327,7 +384,7 @@ function FreeBlock({ block }: { block: Block }) {
         {...listeners}
         title="Seret untuk pindah"
         aria-label="Geser blok"
-        className={`absolute -top-2 left-1/2 z-30 flex -translate-x-1/2 cursor-grab items-center gap-1 rounded-full bg-gray-900/85 px-2 py-0.5 text-[10px] text-white shadow transition-opacity active:cursor-grabbing ${
+        className={`absolute -top-2 left-1/2 z-30 flex -translate-x-1/2 cursor-grab items-center gap-1 rounded-full bg-[#141414]/90 px-2 py-0.5 text-[10px] text-white shadow ring-1 ring-white/10 transition-opacity active:cursor-grabbing ${
           selected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
         }`}
       >
@@ -337,9 +394,9 @@ function FreeBlock({ block }: { block: Block }) {
       <BlockView block={block} editable />
       {selected && (
         <>
-          <div className="absolute right-0 top-0 z-30 flex gap-1 rounded-bl-md bg-gray-900/90 p-1 shadow" onClick={(e) => e.stopPropagation()}>
+          <div className="absolute right-0 top-0 z-30 flex gap-1 rounded-bl-md bg-[#141414]/90 p-1 shadow ring-1 ring-white/10" onClick={(e) => e.stopPropagation()}>
             <button
-              className="rounded p-1 text-white hover:bg-white/20"
+              className="rounded p-1 text-white transition-colors hover:bg-[#c9a45c]/30"
               aria-label="Duplikat blok"
               onClick={(e) => {
                 e.stopPropagation();
@@ -352,7 +409,7 @@ function FreeBlock({ block }: { block: Block }) {
               </svg>
             </button>
             <button
-              className="rounded p-1 text-white hover:bg-white/20"
+              className="rounded p-1 text-white transition-colors hover:bg-red-500/30"
               aria-label="Hapus blok"
               onClick={(e) => {
                 e.stopPropagation();
@@ -367,7 +424,7 @@ function FreeBlock({ block }: { block: Block }) {
             </button>
           </div>
           <div
-            className="absolute inset-y-0 right-0 z-40 w-2 cursor-ew-resize bg-blue-500/50"
+            className="absolute inset-y-0 right-0 z-40 w-2 cursor-ew-resize bg-[#c9a45c]/60"
             title="Ubah lebar"
             onPointerDown={(e) => {
               e.stopPropagation();

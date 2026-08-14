@@ -14,11 +14,13 @@ interface GuestRendererProps {
   greetingName?: string;
   /** Mode preview (kartu template): matikan musik & timer agar ringan. */
   preview?: boolean;
+  /** Lebar tampilan yang dirender: ponsel (default) atau desktop. */
+  width?: 'mobile' | 'desktop';
 }
 
 const CANVAS_W = 420;
 
-export default function GuestRenderer({ canvas, projectId, greetingName, preview }: GuestRendererProps) {
+export default function GuestRenderer({ canvas, projectId, greetingName, preview, width = 'mobile' }: GuestRendererProps) {
   const flow = canvas.flow ?? 'stack';
   const styleVars = {
     '--color-primary': canvas.theme.primary,
@@ -29,7 +31,8 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
     '--font-body': `'${canvas.theme.font_body}', sans-serif`
   } as React.CSSProperties;
 
-  const rootClass = 'guest-root mx-auto w-full max-w-[430px] overflow-x-hidden';
+  const rootClass =
+    'guest-root mx-auto w-full overflow-x-hidden ' + (width === 'desktop' ? 'max-w-full' : 'max-w-[430px]');
 
   if (flow === 'free') {
     const height = canvas.blocks.reduce((m, b) => (b.layout ? Math.max(m, b.layout.y) : m), 0) + 900;

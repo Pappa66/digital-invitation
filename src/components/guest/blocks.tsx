@@ -78,11 +78,11 @@ function BackgroundImage({ src }: { src: string }) {
 
 function CouplePerson({ propKey, name, parents }: { propKey: string; name: string; parents: string }) {
   return (
-    <div className="flex-1">
-      <h2 className="text-2xl font-medium md:text-3xl">
+    <div className="min-w-0 flex-1 break-words">
+      <h2 className="text-2xl font-medium leading-snug md:text-3xl">
         <Editable prop={propKey}>{name}</Editable>
       </h2>
-      <p className="mt-2 text-xs uppercase tracking-widest opacity-70">
+      <p className="mt-2 text-xs uppercase leading-relaxed tracking-widest opacity-70">
         <Editable prop={`${propKey}_parents`}>{parents}</Editable>
       </p>
     </div>
@@ -176,14 +176,14 @@ export function CoupleBlock({ props }: { props: BlockProps }) {
             </p>
           )}
         {side ? (
-          <div className="items-center gap-8 md:flex">
-            <div className="text-center">
+          <div className="mx-auto grid w-full max-w-2xl items-center gap-6 md:grid-cols-[1fr_auto_1fr] md:gap-8">
+            <div className="min-w-0 text-center">
               <CouplePerson propKey="groom" name={str(props, 'groom')} parents={str(props, 'groom_parents')} />
             </div>
-            <div className="my-6 flex justify-center md:my-0">
+            <div className="my-2 flex min-w-0 justify-center md:my-0">
               <Ornament className="text-current opacity-60" />
             </div>
-            <div className="text-center">
+            <div className="min-w-0 text-center">
               <CouplePerson propKey="bride" name={str(props, 'bride')} parents={str(props, 'bride_parents')} />
             </div>
           </div>
