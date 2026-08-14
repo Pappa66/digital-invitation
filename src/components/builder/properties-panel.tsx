@@ -8,7 +8,7 @@ import { useBuilderStore } from '@/store/builder-store';
 import { RELIGIONS } from '@/lib/religions';
 import type { BlockProps } from '@/lib/types';
 
-const FONTS = ['Playfair Display', 'Cormorant Garamond', 'Montserrat', 'Quicksand', 'Cinzel', 'Marcellus', 'Great Vibes', 'Lora', 'Jost', 'Poppins', 'Nunito Sans', 'Inter', 'Lato'];
+const FONTS = ['Playfair Display', 'Cormorant Garamond', 'Montserrat', 'Quicksand', 'Cinzel', 'Marcellus', 'Great Vibes', 'Lora', 'Jost', 'Poppins', 'Nunito Sans', 'Inter', 'Lato', 'Karla'];
 
 const TITLE_PROPS: Record<string, { label: string; multiline?: boolean }[]> = {
   Hero: [

@@ -18,6 +18,12 @@ const ELEMENTS: { type: BlockType; label: string; icon: React.ElementType }[] = 
   { type: 'Thanks', label: 'Penutup', icon: HeartHandshake }
 ];
 
+const QUICK_STARTS: { label: string; blocks: BlockType[] }[] = [
+  { label: 'Hero + Mempelai', blocks: ['Hero', 'Couple'] },
+  { label: 'Galeri + Countdown', blocks: ['Gallery', 'Countdown'] },
+  { label: 'RSVP + Maps', blocks: ['RSVP', 'Maps'] }
+];
+
 function DraggableElement({ type, label, icon: Icon }: { type: BlockType; label: string; icon: React.ElementType }) {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({ id: `widget-${type}` });
   return (
@@ -53,14 +59,16 @@ export default function ElementsSidebar() {
         <div className="pt-4">
           <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-400">Templates</p>
           <div className="space-y-2">
-            {['Hero + Mempelai', 'Galeri + Countdown', 'RSVP + Maps'].map((t) => (
+            {QUICK_STARTS.map((t) => (
               <button
-                key={t}
-                onClick={() => {}}
+                key={t.label}
+                onClick={() => {
+                  t.blocks.forEach((b) => addBlock(b));
+                }}
                 className="flex w-full items-center gap-3 rounded-md border border-dashed border-gray-300 px-3 py-2.5 text-sm text-gray-600 hover:border-gray-400"
               >
                 <ImageIcon className="h-4 w-4 text-gray-400" />
-                {t}
+                {t.label}
               </button>
             ))}
           </div>

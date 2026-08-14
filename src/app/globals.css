@@ -16,6 +16,18 @@ body {
   height: 100%;
 }
 
+@layer utilities {
+  .font-heading {
+    font-family: var(--font-heading), 'Playfair Display', serif;
+  }
+  .font-script {
+    font-family: var(--font-script), 'Great Vibes', cursive;
+  }
+  .font-body {
+    font-family: var(--font-body), 'Jost', 'Montserrat', sans-serif;
+  }
+}
+
 /* Guest output theme vars driven by JSON */
 .guest-root {
   --color-primary: var(--gc-primary);

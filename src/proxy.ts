@@ -7,7 +7,7 @@ import { isAllowedEmail } from '@/lib/auth-allowed';
 // token akses (?t=...) bagi pihak yang terikat desain tanpa login.
 // Catatan: /templates/{id} (preview publik) TIDAK boleh dikunci;
 // hanya halaman pengelolaan "/templates" (admin) yang butuh login.
-const AUTH_PREFIXES = ['/dashboard', '/builder', '/orders'];
+const AUTH_PREFIXES = ['/dashboard', '/builder', '/orders', '/settings'];
 const AUTH_EXACT = ['/templates'];
 
 export async function proxy(request: NextRequest) {

@@ -22,9 +22,10 @@ export function buildOrderMessage({ template, name, whatsapp, note }: OrderInput
   return lines.filter((l): l is string => Boolean(l)).join('\n');
 }
 
-export function whatsappOrderUrl(message: string): string {
-  if (!ORDER_WHATSAPP) return '';
-  return `https://wa.me/${ORDER_WHATSAPP}?text=${encodeURIComponent(message)}`;
+export function whatsappOrderUrl(message: string, whatsappNumber: string = ORDER_WHATSAPP): string {
+  const number = normalizePhone(whatsappNumber);
+  if (!number) return '';
+  return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
 }
 
 export function normalizePhone(input: string): string {

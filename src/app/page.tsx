@@ -6,14 +6,10 @@ import Image from 'next/image';
 import {
   ArrowRight,
   Camera,
-  Check,
   FileText,
-  Heart,
   MapPin,
   MessageCircle,
   Music,
-  PenTool,
-  Send,
   Sparkles,
   Users,
   ChevronLeft,
@@ -76,19 +72,33 @@ const BAHAN = [
 ];
 
 const STEPS = [
-  { icon: Check, title: 'Pilih Template', body: 'Jelajahi 32 desain, lihat hasil aslinya, lalu pilih favorit Anda untuk diproses tim kami.' },
-  { icon: PenTool, title: 'Sesuaikan Sesuai Selera', body: 'Ganti foto, nama, jadwal, musik latar, dan warna tanpa perlu menulis kode.' },
-  { icon: Send, title: 'Bagikan & Pantau', body: 'Terbitkan link, kirim ucapan per tamu via WhatsApp, dan pantau konfirmasi kehadiran.' }
+  {
+    numeral: 'I',
+    title: 'Pilih Desain',
+    body: 'Jelajahi puluhan template, lihat hasil aslinya langsung, dan pilih yang paling dekat dengan cerita Anda.'
+  },
+  {
+    numeral: 'II',
+    title: 'Kami yang Menyusun',
+    body: 'Tim desainer menyetel foto, nama, jadwal, musik latar, dan warna — tanpa perlu menulis kode.'
+  },
+  {
+    numeral: 'III',
+    title: 'Bagikan & Rayakan',
+    body: 'Terbitkan link undangan, kirim ucapan per tamu lewat WhatsApp, dan pantau konfirmasi kehadiran.'
+  }
 ];
 
 const FITUR = [
-  { icon: Music, title: 'Musik latar', body: 'MP3 atau YouTube, autoplay dan mulai di section tertentu.' },
-  { icon: Camera, title: 'Galeri animasi', body: 'Grid, kolom, atau carousel dengan 12 pilihan efek foto.' },
-  { icon: Users, title: 'RSVP & buku tamu', body: 'Konfirmasi kehadiran dan ucapan tamu tampil di undangan.' },
-  { icon: MapPin, title: 'Petunjuk arah', body: 'Tombol Maps satu klik ke lokasi acara.' },
-  { icon: Heart, title: 'Amplop digital', body: 'Nomor rekening untuk tanda kasih tamu.' },
-  { icon: MessageCircle, title: 'Kelola & kirim tamu', body: 'Ucapan per tamu dan tandai yang sudah menerima.' }
+  { title: 'Musik latar', body: 'MP3 atau YouTube, autoplay dan mulai di section tertentu.' },
+  { title: 'Galeri animasi', body: 'Grid, kolom, atau carousel dengan 12 pilihan efek foto.' },
+  { title: 'RSVP & buku tamu', body: 'Konfirmasi kehadiran dan ucapan tamu tampil di undangan.' },
+  { title: 'Petunjuk arah', body: 'Tombol Maps satu klik ke lokasi acara.' },
+  { title: 'Amplop digital', body: 'Nomor rekening untuk tanda kasih tamu.' },
+  { title: 'Kelola & kirim tamu', body: 'Ucapan per tamu dan tandai yang sudah menerima.' }
 ];
+
+const FEATURED = ['elegant-gold', 'blush-romance', 'ivory-dawn'];
 
 const PER_PAGE = 8;
 
@@ -113,6 +123,18 @@ function useFontsLink() {
   }, []);
 }
 
+function Ornament({ className = '' }: { className?: string }) {
+  return (
+    <div className={`flex items-center justify-center gap-3 ${className}`} aria-hidden>
+      <span className="h-px w-14 bg-gradient-to-r from-transparent to-[#c9a45c] sm:w-20" />
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+        <rect x="0.5" y="0.5" width="9" height="9" transform="rotate(45 5 5)" stroke="#c9a45c" />
+      </svg>
+      <span className="h-px w-14 bg-gradient-to-l from-transparent to-[#c9a45c] sm:w-20" />
+    </div>
+  );
+}
+
 export default function LandingPage() {
   const [category, setCategory] = useState<TemplateCategory | 'semua'>('semua');
   const [page, setPage] = useState(1);
@@ -134,6 +156,14 @@ export default function LandingPage() {
     return cards.filter((c) => (c.meta.category ?? '').toLowerCase() === category);
   }, [cards, category]);
 
+  const featuredCards = useMemo(
+    () =>
+      TEMPLATE_LIST.filter((t) => FEATURED.includes(t.id))
+        .map((meta) => ({ meta, canvas: getTemplate(meta.id)! }))
+        .slice(0, 3),
+    []
+  );
+
   const totalPages = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
   const safePage = Math.min(page, totalPages);
   const paged = filtered.slice((safePage - 1) * PER_PAGE, safePage * PER_PAGE);
@@ -146,34 +176,44 @@ export default function LandingPage() {
   useFontsLink();
 
   return (
-    <div className="min-h-screen bg-[#0e0e13] text-gray-100 antialiased">
-      {/* ORNAMENT BACKGROUND */}
+    <div className="min-h-screen bg-[#faf7f2] text-[#2b2620] antialiased">
+      {/* ORNAMEN LATAR */}
       <div aria-hidden className="pointer-events-none fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(212,175,55,0.12),transparent_55%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(90,60,20,0.18),transparent_55%)]" />
-        <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(201,164,92,0.14),transparent_55%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(200,155,138,0.08),transparent_50%)]" />
+        <div
+          className="absolute inset-0 opacity-[0.025]"
+          style={{ backgroundImage: 'radial-gradient(circle, #2b2620 1px, transparent 1px)', backgroundSize: '28px 28px' }}
+        />
       </div>
 
       <div className="relative z-10">
-        <header className="sticky top-0 z-40 border-b border-white/10 bg-[#0e0e13]/85 backdrop-blur">
+        {/* HEADER */}
+        <header className="sticky top-0 z-40 border-b border-[#e7ddcc]/80 bg-[#faf7f2]/90 backdrop-blur">
           <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-            <div className="flex items-center gap-2.5">
-              <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg bg-black ring-1 ring-white/10">
-                <Image src="/logo/prasha.png" width={36} height={36} alt="Prasha Digital" className="h-9 w-9 object-cover" />
+            <div className="flex items-center gap-3">
+              <span className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-white ring-1 ring-[#d9c795]">
+                <Image src="/logo/prasha.png" width={40} height={40} alt="Prasha Digital" className="h-10 w-10 object-cover" />
               </span>
-              <span className="text-sm font-semibold tracking-wide sm:text-base">Prasha Digital</span>
+              <div className="leading-tight">
+                <p className="font-script text-2xl text-[#b98a3e]">Prasha</p>
+                <p className="-mt-1 text-[9px] font-semibold uppercase tracking-[0.35em] text-[#8a7a66]">Digital</p>
+              </div>
             </div>
-            <nav className="hidden items-center gap-6 text-sm text-gray-400 md:flex">
-              <a href="#template" className="hover:text-white">Template</a>
-              <a href="#cara" className="hover:text-white">Cara Kerja</a>
-              <a href="#syarat" className="hover:text-white">Syarat & Ketentuan</a>
-              <a href="#bahan" className="hover:text-white">Bahan Pendukung</a>
+            <nav className="hidden items-center gap-8 text-sm text-[#8a7a66] md:flex">
+              <a href="#catalog" className="transition-colors hover:text-[#2b2620]">Template</a>
+              <a href="#cara" className="transition-colors hover:text-[#2b2620]">Cara Kerja</a>
+              <a href="#bahan" className="transition-colors hover:text-[#2b2620]">Bahan</a>
+              <a href="#syarat" className="transition-colors hover:text-[#2b2620]">Syarat</a>
             </nav>
-            <div className="flex items-center gap-2">
-              <Link href="/login" className="rounded-md border border-white/15 px-3 py-1.5 text-sm font-medium text-gray-200 hover:bg-white/5">
+            <div className="flex items-center gap-3">
+              <Link href="/login" className="rounded-md border border-[#e0d6c2] bg-white px-4 py-1.5 text-sm font-medium text-[#4a443c] transition-colors hover:border-[#c9a45c]">
                 Masuk
               </Link>
-              <button onClick={() => openOrder()} className="rounded-md bg-amber-400 px-3 py-1.5 text-sm font-semibold text-black hover:bg-amber-300">
+              <button
+                onClick={() => openOrder()}
+                className="rounded-md bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-4 py-1.5 text-sm font-semibold text-white shadow-sm transition-transform hover:scale-[1.03]"
+              >
                 Pesan Undangan
               </button>
             </div>
@@ -181,289 +221,355 @@ export default function LandingPage() {
         </header>
 
         {/* HERO */}
-        <section className="mx-auto max-w-6xl px-4 pb-14 pt-20 text-center sm:px-6 sm:pt-24">
-          <span className="inline-flex items-center gap-2 rounded-full border border-amber-400/30 bg-amber-400/10 px-4 py-1.5 text-xs font-medium text-amber-300">
-            <Sparkles className="h-3.5 w-3.5" /> {TEMPLATE_LIST.length} template siap pakai · 4 kategori
-          </span>
-          <h1 className="mx-auto mt-6 max-w-3xl text-4xl font-bold leading-tight tracking-tight sm:text-6xl">
-            Undangan digital yang{' '}
-            <span className="bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600 bg-clip-text text-transparent">
-              mewah
-            </span>{' '}
-            dan personal
-          </h1>
-          <div className="mx-auto mt-6 flex max-w-[240px] items-center gap-3 text-amber-400/70">
-            <span className="h-px flex-1 bg-gradient-to-r from-transparent to-amber-400/60" />
-            <Heart className="h-4 w-4" />
-            <span className="h-px flex-1 bg-gradient-to-l from-transparent to-amber-400/60" />
+        <section className="mx-auto max-w-6xl px-4 pb-16 pt-14 sm:px-6 sm:pt-20">
+          <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
+            <div className="text-center lg:text-left">
+              <p className="font-script text-3xl text-[#b98a3e] sm:text-4xl">Undangan Digital Pernikahan</p>
+              <Ornament className="mt-3 lg:justify-start" />
+
+              <h1 className="mt-6 font-heading text-4xl font-medium leading-[1.15] tracking-tight text-[#2b2620] sm:text-6xl">
+                Merayakan cinta,
+                <br />
+                <em className="bg-gradient-to-r from-[#b98a3e] to-[#8a6d2f] bg-clip-text font-semibold italic text-transparent">
+                  dalam karya yang abadi.
+                </em>
+              </h1>
+
+              <p className="mx-auto mt-6 max-w-xl text-[15px] leading-relaxed text-[#8a7a66] lg:mx-0">
+                Pilih desain favorit, isi form pemesanan singkat, dan tim kami yang menyusun teks, foto, musik, serta link undangannya — Anda tinggal
+                menerima hasilnya dan membagikannya kepada para tamu.
+              </p>
+
+              <div className="mt-9 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
+                <a
+                  href="#catalog"
+                  className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-7 py-3 text-sm font-semibold text-white shadow-sm transition-transform hover:scale-[1.02]"
+                >
+                  Jelajahi Template <ArrowRight className="h-4 w-4" />
+                </a>
+                <button
+                  onClick={() => openOrder()}
+                  className="rounded-lg border border-[#c9a45c] px-7 py-3 text-sm font-medium text-[#8a6d2f] transition-colors hover:bg-[#c9a45c]/10"
+                >
+                  Pesan Undangan
+                </button>
+              </div>
+
+              <p className="mt-7 text-xs text-[#b3a69a]">
+                {TEMPLATE_LIST.length} template siap pakai &middot; 4 tema &middot; dipesan lewat form, dibalas via WhatsApp — tanpa perlu akun.
+              </p>
+            </div>
+
+            {/* KOMPOSISI PRATINJAU */}
+            <div className="relative mx-auto hidden w-full max-w-md lg:block" aria-hidden>
+              <div className="relative h-[540px]">
+                {featuredCards.map(({ meta, canvas }, i) => {
+                  const positions = [
+                    'absolute left-1/2 top-1/2 z-20 aspect-[3/4] w-64 -translate-x-[78%] -translate-y-1/2 rotate-[-6deg]',
+                    'absolute left-1/2 top-1/2 z-30 aspect-[3/4] w-72 -translate-x-1/2 -translate-y-[55%]',
+                    'absolute left-1/2 top-1/2 z-10 aspect-[3/4] w-60 -translate-x-[2%] -translate-y-[30%] rotate-[7deg]'
+                  ];
+                  return (
+                    <div key={meta.id} className={`${positions[i]} overflow-hidden rounded-lg bg-white p-2 shadow-xl shadow-[#2b2620]/15 ring-1 ring-[#d9c795]`}>
+                      <div className="overflow-hidden rounded-[4px]">
+                        <TemplatePreview canvas={canvas} bg={canvas.theme.background} />
+                      </div>
+                      <p className="mt-1.5 truncate text-center font-heading text-xs italic text-[#8a7a66]">{meta.name}</p>
+                    </div>
+                  );
+                })}
+              </div>
+              <span className="pointer-events-none absolute -bottom-4 left-1/2 select-none -translate-x-1/2 text-[11px] uppercase tracking-[0.4em] text-[#c9a45c]/70">
+                Prasha Digital
+              </span>
+            </div>
           </div>
-          <p className="mx-auto mt-6 max-w-2xl text-sm leading-relaxed text-gray-400 sm:text-base">
-            Pilih desain favorit, isi form pemesanan singkat, dan tim kami yang menyusun teks, foto, musik, serta link undangannya — kamu tinggal terima hasilnya.
-          </p>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <a href="#template" className="flex items-center gap-2 rounded-xl bg-amber-400 px-6 py-3 text-sm font-semibold text-black transition-transform hover:scale-[1.02]">
-              Lihat Template <ArrowRight className="h-4 w-4" />
-            </a>
-            <button onClick={() => openOrder()} className="rounded-xl border border-white/15 px-6 py-3 text-sm font-medium text-gray-200 hover:bg-white/5">
-              Pesan Undangan
-            </button>
-          </div>
-          <p className="mt-6 text-xs text-gray-500">Tanpa perlu membuat akun — pemesanan lewat form dan dibalas lewat WhatsApp.</p>
         </section>
 
-        {/* TEMPLATE CATALOG */}
-        <section id="template" className="mx-auto max-w-6xl scroll-mt-20 px-4 pb-14 sm:px-6">
-          <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
-            <div>
-              <h2 className="text-2xl font-bold">Katalog Template</h2>
-              <p className="mt-1 text-sm text-gray-400">
+        {/* KATALOG TEMPLATE */}
+        <section id="catalog" className="scroll-mt-20 border-t border-[#e7ddcc] bg-white/40">
+          <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+            <div className="text-center">
+              <p className="font-script text-3xl text-[#b98a3e]">Koleksi Kami</p>
+              <Ornament className="mt-3" />
+              <h2 className="mt-5 font-heading text-3xl font-medium text-[#2b2620] sm:text-4xl">Katalog Template</h2>
+              <p className="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-[#8a7a66]">
                 Pratinjau asli setiap desain — klik untuk melihat detail, lalu pesan untuk dikerjakan tim kami.
               </p>
             </div>
-            <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-gray-400">
-              {filtered.length} template
-            </span>
-          </div>
 
-          {/* FILTER KATEGORI */}
-          <div className="mb-3 flex flex-wrap gap-2">
-            <button
-              onClick={() => selectCategory('semua')}
-              className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
-                category === 'semua' ? 'bg-amber-400 text-black' : 'border border-white/15 text-gray-300 hover:bg-white/5'
-              }`}
-            >
-              Semua
-            </button>
-            {CATEGORIES.map((c) => (
+            {/* FILTER KATEGORI */}
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-2">
               <button
-                key={c.key}
-                onClick={() => selectCategory(c.key)}
-                className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
-                  category === c.key ? 'bg-amber-400 text-black' : 'border border-white/15 text-gray-300 hover:bg-white/5'
+                onClick={() => selectCategory('semua')}
+                className={`rounded-full px-5 py-1.5 text-sm transition-colors ${
+                  category === 'semua'
+                    ? 'bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] font-medium text-white shadow-sm'
+                    : 'border border-[#e0d6c2] bg-white text-[#4a443c] hover:border-[#c9a45c]'
                 }`}
               >
-                {c.label}
+                Semua
               </button>
-            ))}
-          </div>
-
-          <div className="mb-9 max-w-3xl rounded-2xl border border-amber-400/15 bg-gradient-to-r from-amber-400/[0.06] to-transparent px-5 py-4">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-amber-400/90">
-              {category === 'semua' ? 'Filosofi Kategori' : `Makna ${categoryLabel(category)}`}
-            </p>
-            <p className="mt-1.5 text-sm leading-relaxed text-gray-300">
-              {category === 'semua'
-                ? 'Setiap gaya membawa makna dan suasana tersendiri — pilih kategori yang paling dekat dengan cerita cinta kalian, lalu lihat apa yang dilambangkannya.'
-                : CATEGORIES.find((c) => c.key === category)?.desc}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {paged.map(({ meta, canvas }) => {
-              const number = cards.findIndex((c) => c.meta.id === meta.id) + 1;
-              return (
-                <Link
-                  key={meta.id}
-                  href={`/templates/${meta.id}`}
-                  className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] transition-all hover:-translate-y-1 hover:border-amber-400/40 hover:shadow-2xl hover:shadow-amber-500/10"
-                >
-                  <div className="relative">
-                    <TemplatePreview canvas={canvas} bg={canvas.theme.background} />
-                    <span className="pointer-events-none absolute -left-1 bottom-0 select-none text-7xl font-bold text-white/[0.07] transition-colors group-hover:text-white/15">
-                      {String(number).padStart(2, '0')}
-                    </span>
-                    <span className="absolute right-3 top-3 rounded-full border border-white/20 bg-black/40 px-2.5 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm">
-                      {categoryLabel(meta.category)}
-                    </span>
-                  </div>
-                  <div className="flex flex-1 flex-col p-4">
-                    <div className="flex items-center gap-2">
-                      <span className="h-3.5 w-3.5 rounded-full border border-white/20" style={{ background: meta.primary }} />
-                      <span className="h-3.5 w-3.5 rounded-full border border-white/20" style={{ background: meta.secondary }} />
-                      <p className="ml-1 truncate text-sm font-semibold text-white">{meta.name}</p>
-                    </div>
-                    <p className="mt-1.5 line-clamp-2 flex-1 text-xs leading-relaxed text-gray-400">{meta.description}</p>
-                    <span className="mt-4 flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-amber-400 to-amber-500 px-3 py-2 text-sm font-semibold text-black">
-                      <Eye className="h-4 w-4" /> Lihat Template
-                    </span>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-
-          {totalPages > 1 && (
-            <div className="mt-10 flex items-center justify-center gap-2">
-              <button
-                onClick={() => setPage((p) => Math.max(1, p - 1))}
-                disabled={safePage === 1}
-                className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/15 text-gray-300 hover:bg-white/5 disabled:opacity-40"
-                aria-label="Halaman sebelumnya"
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </button>
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
+              {CATEGORIES.map((c) => (
                 <button
-                  key={n}
-                  onClick={() => setPage(n)}
-                  className={`h-9 w-9 rounded-lg text-sm ${
-                    n === safePage ? 'bg-amber-400 font-semibold text-black' : 'border border-white/15 text-gray-300 hover:bg-white/5'
+                  key={c.key}
+                  onClick={() => selectCategory(c.key)}
+                  className={`rounded-full px-5 py-1.5 text-sm transition-colors ${
+                    category === c.key
+                      ? 'bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] font-medium text-white shadow-sm'
+                      : 'border border-[#e0d6c2] bg-white text-[#4a443c] hover:border-[#c9a45c]'
                   }`}
                 >
-                  {n}
+                  {c.label}
                 </button>
               ))}
-              <button
-                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                disabled={safePage === totalPages}
-                className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/15 text-gray-300 hover:bg-white/5 disabled:opacity-40"
-                aria-label="Halaman berikutnya"
-              >
-                <ChevronRight className="h-4 w-4" />
-              </button>
             </div>
-          )}
-        </section>
 
-        {/* CARA KERJA + FITUR */}
-        <section id="cara" className="scroll-mt-20 border-t border-white/10 bg-[#12121a]">
-          <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-            <div className="mb-10 text-center">
-              <h2 className="text-2xl font-bold">Mulai dalam Tiga Langkah</h2>
-              <div className="mx-auto mt-4 flex max-w-[200px] items-center gap-3 text-amber-400/60">
-                <span className="h-px flex-1 bg-gradient-to-r from-transparent to-amber-400/60" />
-                <Heart className="h-4 w-4" />
-                <span className="h-px flex-1 bg-gradient-to-l from-transparent to-amber-400/60" />
-              </div>
-            </div>
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-              {STEPS.map((s, i) => {
-                const Icon = s.icon;
+            {/* DESKRIPSI KATEGORI */}
+            <p className="mx-auto mt-6 max-w-2xl text-center font-heading text-[15px] italic leading-relaxed text-[#8a7a66]">
+              {category === 'semua'
+                ? 'Setiap gaya membawa makna dan suasana tersendiri — pilih kategori yang paling dekat dengan cerita cinta Anda.'
+                : CATEGORIES.find((c) => c.key === category)?.desc}
+            </p>
+
+            <div className="mt-12 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+              {paged.map(({ meta, canvas }) => {
+                const number = cards.findIndex((c) => c.meta.id === meta.id) + 1;
                 return (
-                  <div key={s.title} className="relative rounded-2xl border border-white/10 bg-white/[0.04] p-6">
-                    <span className="pointer-events-none absolute right-5 top-4 select-none text-5xl font-bold text-white/[0.06]">
-                      {String(i + 1).padStart(2, '0')}
-                    </span>
-                    <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-amber-300 to-amber-500 text-black">
-                      <Icon className="h-5 w-5" />
-                    </span>
-                    <h3 className="mt-4 text-sm font-semibold text-white">{s.title}</h3>
-                    <p className="mt-1.5 text-sm leading-relaxed text-gray-400">{s.body}</p>
-                  </div>
+                  <Link
+                    key={meta.id}
+                    href={`/templates/${meta.id}`}
+                    className="group relative flex flex-col overflow-hidden rounded-xl border border-[#e7ddcc] bg-white transition-all hover:-translate-y-1.5 hover:border-[#c9a45c] hover:shadow-xl hover:shadow-[#b98a3e]/10"
+                  >
+                    <div className="relative overflow-hidden">
+                      <TemplatePreview canvas={canvas} bg={canvas.theme.background} />
+                      <span className="pointer-events-none absolute -left-1 bottom-0 select-none font-heading text-7xl font-semibold text-[#b98a3e]/[0.08] transition-colors group-hover:text-[#b98a3e]/20">
+                        {String(number).padStart(2, '0')}
+                      </span>
+                      <span className="absolute right-3 top-3 rounded-full border border-[#d9c795]/70 bg-white/85 px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-[0.15em] text-[#8a6d2f] backdrop-blur-sm">
+                        {categoryLabel(meta.category)}
+                      </span>
+                    </div>
+                    <div className="flex flex-1 flex-col p-5">
+                      <div className="flex items-center gap-2">
+                        <span className="h-3.5 w-3.5 rounded-full border border-[#e0d6c2]" style={{ background: meta.primary }} />
+                        <span className="h-3.5 w-3.5 rounded-full border border-[#e0d6c2]" style={{ background: meta.secondary }} />
+                        <p className="ml-1 font-heading text-base font-medium text-[#2b2620]">{meta.name}</p>
+                      </div>
+                      <p className="mt-1.5 line-clamp-2 flex-1 text-xs leading-relaxed text-[#8a7a66]">{meta.description}</p>
+                      <span className="mt-4 flex items-center justify-center gap-2 rounded-lg border border-[#d9c795] bg-[#faf7f2] px-3 py-2 text-sm font-medium text-[#8a6d2f] transition-colors group-hover:bg-gradient-to-r group-hover:from-[#c9a45c] group-hover:to-[#b98a3e] group-hover:text-white">
+                        <Eye className="h-4 w-4" /> Lihat Template
+                      </span>
+                    </div>
+                  </Link>
                 );
               })}
             </div>
 
-            <div className="mt-20">
-              <div className="mx-auto mb-10 max-w-2xl text-center">
-                <h2 className="text-2xl font-bold">Semua kebutuhan undangan dalam satu tempat</h2>
-                <p className="mt-1 text-sm text-gray-400">Fitur yang dipakai setiap hari oleh keluarga mempelai.</p>
+            {totalPages > 1 && (
+              <div className="mt-12 flex items-center justify-center gap-2">
+                <button
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  disabled={safePage === 1}
+                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#e0d6c2] bg-white text-[#4a443c] transition-colors hover:border-[#c9a45c] disabled:opacity-40"
+                  aria-label="Halaman sebelumnya"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </button>
+                {Array.from({ length: totalPages }, (_, n) => n + 1).map((n) => (
+                  <button
+                    key={n}
+                    onClick={() => setPage(n)}
+                    className={`h-9 w-9 rounded-lg text-sm transition-colors ${
+                      n === safePage
+                        ? 'bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] font-medium text-white shadow-sm'
+                        : 'border border-[#e0d6c2] bg-white text-[#4a443c] hover:border-[#c9a45c]'
+                    }`}
+                  >
+                    {n}
+                  </button>
+                ))}
+                <button
+                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                  disabled={safePage === totalPages}
+                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#e0d6c2] bg-white text-[#4a443c] transition-colors hover:border-[#c9a45c] disabled:opacity-40"
+                  aria-label="Halaman berikutnya"
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </button>
               </div>
-              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                {FITUR.map((f) => {
-                  const Icon = f.icon;
+            )}
+          </div>
+        </section>
+
+        {/* CARA KERJA */}
+        <section id="cara" className="scroll-mt-20 border-t border-[#e7ddcc] bg-[#f4eee1]">
+          <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+            <div className="mb-14 text-center">
+              <p className="font-script text-3xl text-[#b98a3e]">Mari memulai</p>
+              <Ornament className="mt-3" />
+              <h2 className="mt-5 font-heading text-3xl font-medium text-[#2b2620] sm:text-4xl">Tiga Langkah yang Ringan</h2>
+            </div>
+
+            <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
+              {STEPS.map((s) => (
+                <div key={s.numeral} className="relative border-t border-[#c9a45c]/50 pt-7">
+                  <span className="font-script text-5xl text-[#c9a45c]" aria-hidden>
+                    {s.numeral}
+                  </span>
+                  <h3 className="mt-3 font-heading text-xl font-medium text-[#2b2620]">{s.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-[#8a7a66]">{s.body}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* FITUR */}
+            <div className="mt-24 grid grid-cols-1 gap-x-16 gap-y-8 lg:grid-cols-2">
+              <div>
+                <p className="font-script text-3xl text-[#b98a3e]">Yang menyempurnakan</p>
+                <h3 className="mt-3 font-heading text-3xl font-medium text-[#2b2620]">
+                  Semua kebutuhan undangan, <em className="italic">dalam satu tempat.</em>
+                </h3>
+                <p className="mt-3 max-w-md text-sm leading-relaxed text-[#8a7a66]">
+                  Fitur yang dipakai setiap hari oleh keluarga mempelai — dipasang dengan rapi oleh tim kami.
+                </p>
+              </div>
+              <ul className="divide-y divide-[#e7ddcc]">
+                {FITUR.map((f) => (
+                  <li key={f.title} className="flex items-start gap-4 py-4">
+                    <span className="mt-1 h-2 w-2 shrink-0 rotate-45 border border-[#c9a45c] bg-[#f4eee1]" aria-hidden />
+                    <div>
+                      <p className="text-sm font-semibold text-[#2b2620]">{f.title}</p>
+                      <p className="mt-0.5 text-sm leading-relaxed text-[#8a7a66]">{f.body}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        {/* BAHAN PENDUKUNG */}
+        <section id="bahan" className="scroll-mt-20 border-t border-[#e7ddcc]">
+          <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+            <div className="grid grid-cols-1 gap-12 lg:grid-cols-[0.8fr_1.2fr]">
+              <div>
+                <p className="font-script text-3xl text-[#b98a3e]">Persiapan</p>
+                <Ornament className="mt-3 justify-start" />
+                <h2 className="mt-5 font-heading text-3xl font-medium text-[#2b2620] sm:text-4xl">Bahan Pendukung</h2>
+                <p className="mt-3 max-w-md text-sm leading-relaxed text-[#8a7a66]">
+                  File dan informasi yang perlu disiapkan sebagai materi pembuatan undangan digital Anda.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 gap-x-10 gap-y-8 sm:grid-cols-2">
+                {BAHAN.map((g) => {
+                  const Icon = g.icon;
                   return (
-                    <div key={f.title} className="flex gap-4 rounded-2xl border border-white/10 bg-white/[0.04] p-5 transition-colors hover:border-amber-400/30">
-                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-amber-400/10 text-amber-300">
-                        <Icon className="h-5 w-5" />
-                      </span>
-                      <div>
-                        <h3 className="text-sm font-semibold text-white">{f.title}</h3>
-                        <p className="mt-1 text-sm leading-relaxed text-gray-400">{f.body}</p>
+                    <div key={g.title}>
+                      <div className="flex items-center gap-3">
+                        <span className="flex h-9 w-9 items-center justify-center rounded-full border border-[#d9c795] bg-white text-[#8a6d2f]">
+                          <Icon className="h-4 w-4" />
+                        </span>
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#8a6d2f]">{g.title}</p>
                       </div>
+                      <ul className="mt-3 space-y-2">
+                        {g.items.map((item, i) => (
+                          <li key={i} className="flex gap-2.5 text-sm leading-relaxed text-[#8a7a66]">
+                            <span className="mt-1.5 h-1 w-1 shrink-0 rotate-45 border border-[#c9a45c]/70" aria-hidden />
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
                     </div>
                   );
                 })}
               </div>
             </div>
+
+            <div className="mt-12 flex items-center gap-4 rounded-lg border border-[#d9c795] bg-[#faf7f2] px-5 py-4 text-sm text-[#8a7a66]">
+              <FileText className="h-4 w-4 shrink-0 text-[#b98a3e]" />
+              Rasio &amp; format yang dianjurkan: foto JPG/PNG min. 1200 px, musik MP3 maks. ±10 MB, dan teks siap salin dari undangan fisik jika ada.
+            </div>
           </div>
         </section>
 
         {/* SYARAT & KETENTUAN */}
-        <section id="syarat" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-20 sm:px-6">
-          <div className="mb-10 max-w-2xl">
-            <h2 className="text-2xl font-bold">Syarat & Ketentuan</h2>
-            <p className="mt-1 text-sm text-gray-400">Hal-hal yang perlu dipahami sebelum membuat undangan digital bersama kami.</p>
-          </div>
-          <ul className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            {SYARAT.map((s, i) => (
-              <li key={i} className="flex gap-3 rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-                <Check className="mt-0.5 h-4 w-4 shrink-0 text-amber-400" />
-                <p className="text-sm leading-relaxed text-gray-300">{s}</p>
-              </li>
-            ))}
-          </ul>
-        </section>
+        <section id="syarat" className="scroll-mt-20 border-t border-[#e7ddcc] bg-[#f4eee1]">
+          <div className="mx-auto max-w-4xl px-4 py-20 sm:px-6">
+            <div className="text-center">
+              <p className="font-script text-3xl text-[#b98a3e]">Sebelum memesan</p>
+              <Ornament className="mt-3" />
+              <h2 className="mt-5 font-heading text-3xl font-medium text-[#2b2620] sm:text-4xl">Syarat &amp; Ketentuan</h2>
+              <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-[#8a7a66]">
+                Hal-hal yang perlu dipahami sebelum membuat undangan digital bersama kami.
+              </p>
+            </div>
 
-        {/* BAHAN PENDUKUNG */}
-        <section id="bahan" className="scroll-mt-20 border-t border-white/10 bg-[#12121a]">
-          <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-            <div className="mb-10 max-w-2xl">
-              <h2 className="text-2xl font-bold">Bahan Pendukung</h2>
-              <p className="mt-1 text-sm text-gray-400">File dan informasi yang perlu disiapkan sebagai materi pembuatan undangan digital.</p>
-            </div>
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {BAHAN.map((g) => {
-                const Icon = g.icon;
-                return (
-                  <div key={g.title} className="rounded-2xl border border-white/10 bg-white/[0.04] p-5">
-                    <div className="mb-3 flex items-center gap-3">
-                      <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-400/10 text-amber-300">
-                        <Icon className="h-5 w-5" />
-                      </span>
-                      <h3 className="text-sm font-semibold text-white">{g.title}</h3>
-                    </div>
-                    <ul className="space-y-2">
-                      {g.items.map((item, i) => (
-                        <li key={i} className="flex gap-2 text-sm leading-relaxed text-gray-400">
-                          <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-400/50" />
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="mt-6 flex items-center gap-3 rounded-2xl border border-dashed border-amber-400/20 bg-amber-400/5 px-4 py-3 text-sm text-gray-400">
-              <FileText className="h-4 w-4 shrink-0 text-amber-300" />
-              Rasio &amp; format yang dianjurkan: foto JPG/PNG min. 1200 px, musik MP3 maks. ±10 MB, dan teks siap salin (copy-paste) dari undangan fisik jika ada.
-            </div>
+            <ol className="mt-12 space-y-5">
+              {SYARAT.map((s, i) => (
+                <li key={i} className="flex gap-4">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[#c9a45c]/60 font-heading text-sm text-[#8a6d2f]">
+                    {i + 1}
+                  </span>
+                  <p className="pt-1.5 text-sm leading-relaxed text-[#4a443c]">{s}</p>
+                </li>
+              ))}
+            </ol>
           </div>
         </section>
 
         {/* CTA */}
-        <section className="mx-auto max-w-6xl px-4 py-20 text-center sm:px-6">
-          <h2 className="text-3xl font-bold sm:text-4xl">
-            Siap membuat undangan{' '}
-            <span className="bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600 bg-clip-text text-transparent">impian</span> Anda?
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-sm text-gray-400">Pilih template favorit, dan tim kami yang menyusun, menyesuaikan, dan mengirim link undangannya.</p>
-          <button onClick={() => openOrder()} className="mt-8 inline-flex items-center gap-2 rounded-xl bg-amber-400 px-7 py-3 text-sm font-semibold text-black transition-transform hover:scale-[1.02]">
-            Pesan Undangan <ArrowRight className="h-4 w-4" />
-          </button>
+        <section className="border-t border-[#e7ddcc]">
+          <div className="mx-auto max-w-4xl px-4 py-24 text-center sm:px-6">
+            <p className="font-script text-4xl text-[#b98a3e]">Undangan Anda menanti.</p>
+            <h2 className="mx-auto mt-5 max-w-2xl font-heading text-3xl font-medium leading-snug text-[#2b2620] sm:text-5xl">
+              Siap merayakan hari besar Anda dengan <em className="italic">elegan</em>?
+            </h2>
+            <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-[#8a7a66]">
+              Pilih template favorit — tim kami yang menyusun, menyesuaikan, dan mengirimkan link undangannya kepada Anda.
+            </p>
+            <button
+              onClick={() => openOrder()}
+              className="mt-9 inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-8 py-3.5 text-sm font-semibold text-white shadow-md shadow-[#b98a3e]/20 transition-transform hover:scale-[1.02]"
+            >
+              Pesan Undangan <ArrowRight className="h-4 w-4" />
+            </button>
+            <p className="mt-5 text-xs text-[#b3a69a]">Dibalas lewat WhatsApp — tanpa perlu membuat akun.</p>
+          </div>
         </section>
 
-        <footer className="border-t border-white/10 bg-[#0a0a0f]">
-          <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-6 text-xs text-gray-500 sm:px-6">
-            <div className="flex items-center gap-2">
-              <span className="flex h-7 w-7 items-center justify-center overflow-hidden rounded-md bg-black ring-1 ring-white/10">
-                <Image src="/logo/prasha.png" width={28} height={28} alt="Prasha Digital" className="h-7 w-7 object-cover" />
-              </span>
-              Prasha Digital Indonesia
+        {/* FOOTER */}
+        <footer className="border-t border-[#e7ddcc] bg-[#faf7f2]">
+          <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+            <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
+              <div className="flex items-center gap-3">
+                <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-white ring-1 ring-[#d9c795]">
+                  <Image src="/logo/prasha.png" width={36} height={36} alt="Prasha Digital" className="h-9 w-9 object-cover" />
+                </span>
+                <div className="leading-tight">
+                  <p className="font-script text-xl text-[#b98a3e]">Prasha</p>
+                  <p className="-mt-1 text-[8px] font-semibold uppercase tracking-[0.35em] text-[#8a7a66]">Digital Indonesia</p>
+                </div>
+              </div>
+              <nav className="flex flex-wrap items-center justify-center gap-6 text-xs text-[#8a7a66]">
+                <a href="#catalog" className="transition-colors hover:text-[#2b2620]">Template</a>
+                <a href="#cara" className="transition-colors hover:text-[#2b2620]">Cara Kerja</a>
+                <a href="#bahan" className="transition-colors hover:text-[#2b2620]">Bahan</a>
+                <a href="#syarat" className="transition-colors hover:text-[#2b2620]">Syarat</a>
+              </nav>
             </div>
-            <div className="flex items-center gap-4">
-              <a href="#template" className="hover:text-white">Template</a>
-              <a href="#cara" className="hover:text-white">Cara Kerja</a>
-              <a href="#syarat" className="hover:text-white">Syarat & Ketentuan</a>
-              <a href="#bahan" className="hover:text-white">Bahan Pendukung</a>
+            <div className="mt-8 border-t border-[#e7ddcc] pt-5 text-center">
+              <Ornament className="mb-3" />
+              <p className="text-xs text-[#b3a69a]">
+                &copy; {new Date().getFullYear()} Prasha Digital Indonesia &middot; Undangan digital mewah dan personal.
+              </p>
             </div>
           </div>
         </footer>
       </div>
 
-      <OrderDialog open={orderOpen} templateName={orderTemplate} onClose={() => setOrderOpen(false)} />
+      {orderOpen && <OrderDialog templateName={orderTemplate} onClose={() => setOrderOpen(false)} />}
     </div>
   );
 }

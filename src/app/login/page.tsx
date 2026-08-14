@@ -10,7 +10,10 @@ import { ALLOWED_EMAIL } from '@/lib/auth-allowed';
 const ERROR_MSG: Record<string, string> = {
   forbidden: `Akun tidak diizinkan. Hanya ${ALLOWED_EMAIL} yang dapat masuk.`,
   auth_failed: 'Gagal masuk melalui Google. Silakan coba lagi.',
-  no_code: 'Sesi login tidak valid. Silakan coba lagi.'
+  no_code: 'Sesi login tidak valid. Silakan coba lagi.',
+  cancelled: 'Login dibatalkan. Silakan coba lagi bila ingin masuk.',
+  oauth: 'Login Google tidak dapat diproses. Periksa konfigurasi Google provider (Client ID/Secret & redirect URL) di Supabase.',
+  session_expired: 'Kode login telah kedaluwarsa. Silakan coba lagi.'
 };
 
 function GoogleIcon() {
@@ -31,8 +34,10 @@ export default function LoginPage() {
   const isDemo = demoIsDemoMode();
 
   useEffect(() => {
-    const err = new URLSearchParams(window.location.search).get('error');
-    if (err && ERROR_MSG[err]) setError(ERROR_MSG[err]);
+    const params = new URLSearchParams(window.location.search);
+    const err = params.get('error');
+    const description = params.get('description');
+    if (err && ERROR_MSG[err]) setError(description ? `${ERROR_MSG[err]}\n${description}` : ERROR_MSG[err]);
 
     if (!isDemo) {
       supabase.auth.getUser().then(({ data }) => {

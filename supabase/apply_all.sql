@@ -311,5 +311,77 @@ create trigger rsvps_validate
   before insert on public.rsvps
   for each row execute function public.validate_rsvp();
 
+-- ============================================================
+-- Digital Invitation Builder — Migration 0003: Orders (Kontak Masuk)
+-- ============================================================
+create table if not exists public.orders (
+  id uuid primary key default gen_random_uuid(),
+  template_name text,
+  name text not null,
+  whatsapp text,
+  note text,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists orders_created_idx on public.orders (created_at desc);
+alter table public.orders enable row level security;
+
+drop policy if exists "orders_insert_public" on public.orders;
+create policy "orders_insert_public"
+  on public.orders for insert
+  to anon, authenticated
+  with check (name is not null and length(trim(name)) >= 2);
+
+drop policy if exists "orders_select_staff" on public.orders;
+create policy "orders_select_staff"
+  on public.orders for select
+  to authenticated
+  using (true);
+
+drop policy if exists "orders_delete_staff" on public.orders;
+create policy "orders_delete_staff"
+  on public.orders for delete
+  to authenticated
+  using (true);
+
+-- ============================================================
+-- Digital Invitation Builder — Migration 0004: Settings
+-- ============================================================
+create table if not exists public.settings (
+  key text primary key,
+  value text,
+  updated_at timestamptz not null default now()
+);
+
+alter table public.settings enable row level security;
+
+drop policy if exists "settings_select_public" on public.settings;
+create policy "settings_select_public"
+  on public.settings for select
+  to anon, authenticated
+  using (true);
+
+drop policy if exists "settings_upsert_staff" on public.settings;
+create policy "settings_upsert_staff"
+  on public.settings for insert
+  to authenticated
+  with check (true);
+
+drop policy if exists "settings_update_staff" on public.settings;
+create policy "settings_update_staff"
+  on public.settings for update
+  to authenticated
+  using (true);
+
+drop policy if exists "settings_delete_staff" on public.settings;
+create policy "settings_delete_staff"
+  on public.settings for delete
+  to authenticated
+  using (true);
+
+insert into public.settings (key, value)
+values ('order_whatsapp', '')
+on conflict (key) do nothing;
+
 -- Catatan: pembatasan frekuensi (mis. maks. 1 RSVP/30 detik per IP)
 -- sebaiknya ditangani aplikasi (server action/edge) — lihat rsvp.tsx.
