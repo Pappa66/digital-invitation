@@ -97,12 +97,17 @@ function StyledSection({ style, children }: { style?: BlockStyle; children: Reac
   }
 
   const css: React.CSSProperties = {};
-  if (style.textColor) css.color = style.textColor;
+  if (style.textColor) {
+    css.color = style.textColor;
+    (css as Record<string, string>)['--section-text-color'] = style.textColor;
+  }
   if (style.bgColor) css.backgroundColor = style.bgColor;
+
+  const textOverride = style.textColor ? ' data-text-override' : '';
 
   if (style.bgImage) {
     return (
-      <div className="relative" style={css}>
+      <div className={`relative${textOverride}`} style={css}>
         <div className="absolute inset-0 z-0">
           <Image
             src={style.bgImage}
@@ -121,5 +126,5 @@ function StyledSection({ style, children }: { style?: BlockStyle; children: Reac
     );
   }
 
-  return <div style={css}>{children}</div>;
+  return <div className={textOverride || undefined} style={css}>{children}</div>;
 }

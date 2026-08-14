@@ -36,6 +36,10 @@ export function Editable({ prop, index, multiline, className, children }: Editab
   const blockId = ctx?.blockId ?? '';
   const block = useBuilderStore((s) => (blockId ? s.canvas.blocks.find((x) => x.id === blockId) : undefined));
   const setBlockProps = useBuilderStore((s) => s.setBlockProps);
+  const setSelectedText = useBuilderStore((s) => s.setSelectedText);
+
+  const key = index === undefined ? prop : `${prop}.${index}`;
+  const fontOverride = block?.style?.textSizes?.[key];
 
   const raw = block?.props[prop];
   const value =
@@ -56,7 +60,7 @@ export function Editable({ prop, index, multiline, className, children }: Editab
   });
 
   if (!ctx) {
-    return <span className={className}>{children}</span>;
+    return <span className={className} style={fontOverride ? { fontSize: fontOverride } : undefined}>{children}</span>;
   }
 
   function commit() {
@@ -80,9 +84,11 @@ export function Editable({ prop, index, multiline, className, children }: Editab
       suppressContentEditableWarning
       spellCheck={false}
       data-ph={humanize(prop)}
+      style={fontOverride ? { fontSize: fontOverride } : undefined}
       className={`inline-block cursor-text rounded-sm outline-dashed outline-1 outline-offset-2 outline-transparent transition-colors hover:outline-blue-300 focus:outline-blue-500 empty:before:content-[attr(data-ph)] empty:before:text-gray-400 empty:before:italic ${
         className ?? ''
       }`}
+      onFocus={() => setSelectedText(key)}
       onBlur={commit}
       onKeyDown={(e) => {
         if (!multiline && e.key === 'Enter') {

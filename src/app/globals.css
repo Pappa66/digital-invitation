@@ -47,6 +47,25 @@ body {
   font-family: var(--font-heading);
 }
 
+/*
+ * Override warna teks per-section (dari panel "Warna & Background Section").
+ * Pakai !important agar mengalahkan kelas warna eksplisit (mis. text-white)
+ * dan ikon/elemen yang memakai currentColor di dalam section.
+ */
+.guest-root [data-text-override],
+.guest-root [data-text-override] h1,
+.guest-root [data-text-override] h2,
+.guest-root [data-text-override] h3,
+.guest-root [data-text-override] h4,
+.guest-root [data-text-override] p,
+.guest-root [data-text-override] span,
+.guest-root [data-text-override] a,
+.guest-root [data-text-override] li,
+.guest-root [data-text-override] div,
+.guest-root [data-text-override] small {
+  color: var(--section-text-color) !important;
+}
+
 /* Utility: hide scrollbar on 100vh builder canvas */
 .no-scrollbar::-webkit-scrollbar {
   display: none;

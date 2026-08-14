@@ -6,6 +6,7 @@ import MusicPlayer from '@/components/guest/music-player';
 import GuestBookWall from '@/components/guest/guest-book';
 import ShareBar from '@/components/guest/share-bar';
 import { PreviewContext } from '@/components/guest/preview-context';
+import OpeningOverlay from '@/components/guest/opening-overlay';
 
 interface GuestRendererProps {
   canvas: CanvasData;
@@ -54,6 +55,7 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
           {!preview && <MusicPlayer settings={canvas.settings} />}
           {!preview && <ShareBar />}
         </div>
+        {!preview && <OpeningOverlay />}
       </PreviewContext.Provider>
     );
   }
@@ -68,6 +70,7 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
         {!preview && <MusicPlayer settings={canvas.settings} />}
         {!preview && <ShareBar />}
       </div>
+      {!preview && <OpeningOverlay />}
     </PreviewContext.Provider>
   );
 }

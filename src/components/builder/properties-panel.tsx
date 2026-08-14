@@ -60,7 +60,7 @@ const FONTS = [
   'Cardo'
 ];
 
-const TITLE_PROPS: Record<string, { label: string; multiline?: boolean }[]> = {
+const TITLE_PROPS: Record<string, { label: string; multiline?: boolean; url?: boolean; labelText?: string }[]> = {
   Hero: [
     { label: 'caption' },
     { label: 'groom' },
@@ -100,7 +100,7 @@ const TITLE_PROPS: Record<string, { label: string; multiline?: boolean }[]> = {
     { label: 'account_number' },
     { label: 'account_holder' }
   ],
-  Maps: [{ label: 'title' }, { label: 'address' }],
+  Maps: [{ label: 'title' }, { label: 'address' }, { label: 'embed_url', url: true, labelText: 'Link Google Maps' }],
   Thanks: [
     { label: 'title' },
     { label: 'message', multiline: true },
@@ -164,6 +164,9 @@ export default function PropertiesPanel() {
   const setBlockLayout = useBuilderStore((s) => s.setBlockLayout);
   const setBlockStyle = useBuilderStore((s) => s.setBlockStyle);
   const clearBlockStyle = useBuilderStore((s) => s.clearBlockStyle);
+  const setBlockTextSize = useBuilderStore((s) => s.setBlockTextSize);
+  const setSelectedText = useBuilderStore((s) => s.setSelectedText);
+  const selectedText = useBuilderStore((s) => s.selectedText);
   const setFlow = useBuilderStore((s) => s.setFlow);
   const setReligion = useBuilderStore((s) => s.setReligion);
 
@@ -365,9 +368,10 @@ export default function PropertiesPanel() {
                       key={prop.label}
                       blockId={block.id}
                       propKey={prop.label}
-                      label={humanize(prop.label)}
+                      label={prop.labelText ?? humanize(prop.label)}
                       value={(block.props[prop.label] as string) ?? ''}
                       multiline={prop.multiline}
+                      url={prop.url}
                       onChange={(v) => setBlockProps(block.id, { [prop.label]: v })}
                     />
                   ))}
@@ -563,6 +567,20 @@ export default function PropertiesPanel() {
                         </div>
                       }
                     />
+                  {selectedText && (
+                    <Section
+                      title="Ukuran Teks"
+                      desc={`Elemen "${humanize(selectedText)}"`}
+                      render={
+                        <TextSizeControl
+                          key={selectedText}
+                          value={block.style?.textSizes?.[selectedText]}
+                          onCommit={(size) => setBlockTextSize(block.id, selectedText, size)}
+                          onDone={() => setSelectedText(null)}
+                        />
+                      }
+                    />
+                  )}
                   {(canvas.flow ?? 'stack') === 'free' && (
                     <Section
                       title="Posisi & Ukuran"
@@ -739,11 +757,13 @@ function Field({
   label,
   value,
   multiline,
+  url,
   onChange
 }: {
   label: string;
   value: string;
   multiline?: boolean;
+  url?: boolean;
   blockId?: string;
   propKey?: string;
   onChange: (v: string) => void;
@@ -760,8 +780,10 @@ function Field({
         />
       ) : (
         <input
+          type={url ? 'url' : 'text'}
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          placeholder={url ? 'https://maps.app.goo.gl/... atau link share Google Maps' : undefined}
           className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
         />
       )}
@@ -804,4 +826,55 @@ function FontSelect({
 
 function humanize(s: string) {
   return s.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
+function parsePx(v?: string) {
+  if (!v) return undefined;
+  const n = parseFloat(v);
+  return Number.isFinite(n) ? Math.round(n) : undefined;
+}
+
+/** Kontrol ukuran font per elemen teks. value = string CSS fontSize (mis. "32px"). */
+function TextSizeControl({
+  value,
+  onCommit,
+  onDone
+}: {
+  value?: string;
+  onCommit: (size: string) => void;
+  onDone: () => void;
+}) {
+  const current = parsePx(value);
+  return (
+    <div className="space-y-3">
+      <div>
+        <label className="mb-1 block text-xs font-medium text-[#4a443c]">
+          Ukuran (px){current !== undefined ? ` · ${current}px` : ''}
+        </label>
+        <input
+          type="range"
+          min={8}
+          max={96}
+          value={current ?? 16}
+          onChange={(e) => onCommit(`${e.target.value}px`)}
+          className="w-full accent-[#c9a45c]"
+        />
+      </div>
+      <p className="text-[11px] text-[#8a7a66]">Geser untuk mengubah ukuran teks elemen ini saja.</p>
+      <div className="flex gap-2">
+        <button
+          onClick={() => onCommit('')}
+          className="flex-1 rounded-md border border-[#e0d6c2] py-1.5 text-xs text-[#6b5f4d] hover:border-red-300 hover:text-red-600"
+        >
+          Reset ke default
+        </button>
+        <button
+          onClick={onDone}
+          className="flex-1 rounded-md border border-[#c9a45c] bg-[#c9a45c] py-1.5 text-xs text-white"
+        >
+          Selesai
+        </button>
+      </div>
+    </div>
+  );
 }

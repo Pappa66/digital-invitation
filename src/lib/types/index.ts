@@ -48,6 +48,8 @@ export interface BlockLayout {
 /** Override tampilan per-section (teks, background warna/gambar). */
 export interface BlockStyle {
   textColor?: string;
+  /** Ukuran font override per elemen teks. Kunci = `${prop}` atau `${prop}.${index}`. Value = CSS fontSize (mis. "2rem"). */
+  textSizes?: Record<string, string>;
   bgColor?: string;
   bgImage?: string;
   /** Cara menyesuaikan gambar latar. Default: 'cover'. */

@@ -8,6 +8,8 @@ import { getReligion, isKnownDefault, type ReligionKey } from '@/lib/religions';
 interface BuilderState {
   canvas: CanvasData;
   selectedBlockId: string | null;
+  /** Elemen teks yang sedang difokus di kanvas (kunci = `${prop}` atau `${prop}.${index}`). */
+  selectedText: string | null;
   initialized: boolean;
 
   init: (data: CanvasData) => void;
@@ -18,6 +20,10 @@ interface BuilderState {
   setBlockLayout: (blockId: string, partial: Partial<BlockLayout>) => void;
   setBlockStyle: (blockId: string, partial: Partial<BlockStyle>) => void;
   clearBlockStyle: (blockId: string) => void;
+  /** Set ukuran font override per elemen teks. size kosong = reset ke default. */
+  setBlockTextSize: (blockId: string, key: string, size: string) => void;
+  /** Tandai elemen teks yang sedang difokus (kunci `${prop}.${index}` atau `${prop}`). */
+  setSelectedText: (key: string | null) => void;
   setBlockInner: (blockId: string, key: string, pos: { x: number; y: number }) => void;
   setFlow: (flow: 'stack' | 'free') => void;
   addBlock: (type: BlockType, index?: number) => void;
@@ -157,6 +163,7 @@ const BLOCK_PRESETS: Record<BlockType, Block> = {
 export const useBuilderStore = create<BuilderState>((set, get) => ({
   canvas: emptyCanvas(),
   selectedBlockId: null,
+  selectedText: null,
   initialized: false,
 
   init: (data) => {
@@ -256,6 +263,22 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
       }
     })),
 
+  setBlockTextSize: (blockId, key, size) =>
+    set((state) => ({
+      canvas: {
+        ...state.canvas,
+        blocks: state.canvas.blocks.map((b) => {
+          if (b.id !== blockId) return b;
+          const next = { ...(b.style?.textSizes ?? {}) };
+          if (size) next[key] = size;
+          else delete next[key];
+          return { ...b, style: { ...(b.style ?? {}), textSizes: next } };
+        })
+      }
+    })),
+
+  setSelectedText: (key) => set({ selectedText: key }),
+
   setBlockInner: (blockId, key, pos) =>
     set((state) => ({
       canvas: {
@@ -330,6 +353,7 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
     set({
       canvas: emptyCanvas(),
       selectedBlockId: null,
+      selectedText: null,
       initialized: false
     })
 }));

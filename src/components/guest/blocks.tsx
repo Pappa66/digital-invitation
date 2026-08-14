@@ -687,15 +687,16 @@ function GalleryCarousel({
 }
 
 export function MapsBlock({ props }: { props: BlockProps }) {
+  const embedSrc = mapsEmbedSrc(str(props, 'embed_url'), str(props, 'address'));
   return (
     <section className="px-6 py-14 text-center">
       <Inner name="title">
         <h2 className="text-xl md:text-2xl">{str(props, 'title')}</h2>
       </Inner>
-      <p className="mt-2 text-sm opacity-80">{str(props, 'address')}</p>
+      {str(props, 'address') && <p className="mt-2 text-sm opacity-80">{str(props, 'address')}</p>}
       <div className="mx-auto mt-6 w-full overflow-hidden rounded-xl border border-current/10">
         <iframe
-          src={`https://maps.google.com/maps?q=${encodeURIComponent(str(props, 'address'))}&output=embed`}
+          src={embedSrc}
           className="h-64 w-full"
           loading="lazy"
           title={str(props, 'address')}
@@ -703,6 +704,29 @@ export function MapsBlock({ props }: { props: BlockProps }) {
       </div>
     </section>
   );
+}
+
+/** Ubah berbagai format tautan Google Maps menjadi src iframe embed. */
+function mapsEmbedSrc(embedUrl: string, address: string): string {
+  const raw = (embedUrl || '').trim();
+  if (raw) {
+    // sudah format embed pb
+    if (/^https?:\/\/[^/]+\/maps\/embed/.test(raw) || /[?&]output=embed/.test(raw)) return raw;
+    // tautan pendek maps.app.goo.gl -> ikuti redirect
+    if (/maps\.app\.goo\.gl/i.test(raw)) return raw;
+    // place/@{lat},{lng},{z}z
+    const at = raw.match(/@(-?\d+\.\d+),(-?\d+\.\d+),(\d+)z/);
+    if (at) return `https://www.google.com/maps?q=${at[1]},${at[2]}&z=${at[3]}&output=embed`;
+    // ?q=... atau /maps/search/...
+    const q = raw.match(/[?&]q=([^&#]+)/) || raw.match(/maps\/search\/([^/#?]+)/);
+    if (q) return `https://www.google.com/maps?q=${q[1]}&output=embed`;
+    // place/<loc> + query di ?query= membawa koordinat di @ ...
+    const place = raw.match(/maps\/place\/([^/#?@]+)/);
+    if (place) return `https://www.google.com/maps?q=${place[1]}&output=embed`;
+    // fallback: langsung pakai link yang diberikan bila mengandung maps
+    return raw;
+  }
+  return `https://maps.google.com/maps?q=${encodeURIComponent(address)}&output=embed`;
 }
 
 export function ThanksBlock({ props }: { props: BlockProps }) {

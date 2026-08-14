@@ -31,11 +31,13 @@ export default function MusicPreview({ url, offsetSec, onOffsetChange }: MusicPr
   const [playing, setPlaying] = useState(false);
   const [dur, setDur] = useState(0);
   const [cur, setCur] = useState(0);
+  const [ytPlay, setYtPlay] = useState(false);
 
   useEffect(() => {
     setPlaying(false);
     setDur(0);
     setCur(0);
+    setYtPlay(false);
   }, [url]);
 
   useEffect(() => {
@@ -60,7 +62,16 @@ export default function MusicPreview({ url, offsetSec, onOffsetChange }: MusicPr
   };
 
   const onPlayPause = () => {
-    if (!isAudio) return;
+    if (!isAudio) {
+      // YouTube: remount iframe dengan autoplay=1 (klik = interaksi → diizinkan).
+      if (ytPlay) {
+        setYtPlay(false);
+      } else {
+        setYtPlay(true);
+        setPlaying(true);
+      }
+      return;
+    }
     if (!playing) {
       const a = audioRef.current;
       if (a) a.currentTime = offsetSec;
@@ -78,7 +89,7 @@ export default function MusicPreview({ url, offsetSec, onOffsetChange }: MusicPr
         <button
           onClick={onPlayPause}
           disabled={!isAudio && !yt}
-          title={isAudio ? (playing ? 'Jeda' : 'Putar') : 'Pratinjau di panel sebelah'}
+          title={isAudio ? (playing ? 'Jeda' : 'Putar') : yt ? (ytPlay ? 'Jeda' : 'Putar') : 'Tidak ada musik'}
           className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#141414]/90 text-white transition hover:bg-[#c9a45c] disabled:opacity-40"
         >
           {playing ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
@@ -106,7 +117,8 @@ export default function MusicPreview({ url, offsetSec, onOffsetChange }: MusicPr
       {yt && (
         <iframe
           title="Pratinjau musik (YouTube)"
-          src={`https://www.youtube-nocookie.com/embed/${yt.id}?playsinline=1&rel=0`}
+          key={ytPlay ? `playing-${yt.id}-${offsetSec}` : `idle-${yt.id}`}
+          src={`https://www.youtube-nocookie.com/embed/${yt.id}?playsinline=1&rel=0${ytPlay ? `&autoplay=1&start=${yt.t + offsetSec}` : ''}`}
           allow="autoplay; encrypted-media"
           className="aspect-video w-full rounded-md"
         />
