@@ -543,15 +543,20 @@ export default function LandingPage() {
         <footer className="border-t border-[#e7ddcc] bg-[#faf7f2]">
           <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
             <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
-              <div className="flex items-center gap-3">
+              <a
+                href="https://prashadigitalindonesia.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 transition-opacity hover:opacity-80"
+              >
                 <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-black ring-1 ring-[#3a332b]">
-                  <Image src="/logo/prasha.png" width={36} height={36} alt="Prasha Digital" className="h-9 w-9 object-cover" />
+                  <Image src="/logo/prasha.png" width={36} height={36} alt="Prasha Digital Indonesia" className="h-9 w-9 object-cover" />
                 </span>
                 <div className="leading-tight">
                   <p className="font-script text-xl text-[#b98a3e]">Prasha</p>
                   <p className="-mt-1 text-[8px] font-semibold uppercase tracking-[0.35em] text-[#8a7a66]">Digital Indonesia</p>
                 </div>
-              </div>
+              </a>
               <nav className="flex flex-wrap items-center justify-center gap-6 text-xs text-[#8a7a66]">
                 <a href="#catalog" className="transition-colors hover:text-[#2b2620]">Template</a>
                 <a href="#cara" className="transition-colors hover:text-[#2b2620]">Cara Kerja</a>
