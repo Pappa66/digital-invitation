@@ -1171,6 +1171,47 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
     );
   }
 
+  if (layout === 'arch') {
+    const hero = images[0];
+    const rest = images.slice(1);
+    return (
+      <section className="px-6 py-16">
+        <Inner name="title">
+          <h2 className="mb-8 text-center text-xl md:text-2xl"><Editable prop="title">{str(props, 'title')}</Editable></h2>
+        </Inner>
+        <div className="mx-auto w-full">
+          {hero && (
+            <motion.div
+              {...a}
+              whileInView={a.animate}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+              className="relative mx-auto aspect-[3/4.2] w-full max-w-[300px] overflow-hidden rounded-t-[999px] shadow-[0_18px_40px_rgba(0,0,0,0.18)]"
+            >
+              <Image src={hero} alt="" fill sizes="(max-width: 768px) 100vw, 420px" quality={80} loading="lazy" className="object-cover" />
+            </motion.div>
+          )}
+          {rest.length > 0 && (
+            <div className="mt-6 grid grid-cols-2 gap-3">
+              {rest.map((src, i) => (
+                <motion.div
+                  key={`${src}-${i}`}
+                  {...a}
+                  whileInView={a.animate}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.05 }}
+                  className="relative aspect-square overflow-hidden rounded-lg"
+                >
+                  <Image src={src} alt="" fill sizes="(max-width: 768px) 50vw, 33vw" quality={70} loading="lazy" className="object-cover" />
+                </motion.div>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="px-6 py-16">
       <Inner name="title">

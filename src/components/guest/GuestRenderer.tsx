@@ -25,6 +25,13 @@ const CANVAS_W = 420;
 
 export default function GuestRenderer({ canvas, projectId, greetingName, preview, width = 'mobile' }: GuestRendererProps) {
   const flow = canvas.flow ?? 'stack';
+  const heroBlock = canvas.blocks.find((b) => b.type === 'Hero');
+  const coupleNames = [heroBlock?.props.bride, heroBlock?.props.groom].filter(Boolean).join(' & ');
+  const shareMeta = {
+    coupleNames,
+    date: typeof heroBlock?.props.date === 'string' ? heroBlock.props.date : undefined,
+    theme: { primary: canvas.theme.primary, secondary: canvas.theme.secondary, background: canvas.theme.background }
+  };
   const styleVars = {
     '--color-primary': canvas.theme.primary,
     '--color-secondary': canvas.theme.secondary,
@@ -56,7 +63,7 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
             )
           )}
 {!preview && <MusicPlayer settings={canvas.settings} />}
-        {!preview && <ShareBar />}
+        {!preview && <ShareBar {...shareMeta} />}
         <GuestFrame mode={canvas.theme.frame} color={canvas.theme.secondary} fixed={!preview} />
         </div>
         </ThemeContext.Provider>
@@ -76,7 +83,7 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
           <CheckIn projectId={projectId} greetingName={greetingName} preview={preview} />
         )}
         {!preview && <MusicPlayer settings={canvas.settings} />}
-        {!preview && <ShareBar />}
+        {!preview && <ShareBar {...shareMeta} />}
         <GuestFrame mode={canvas.theme.frame} color={canvas.theme.secondary} fixed={!preview} />
       </div>
       </ThemeContext.Provider>

@@ -126,6 +126,7 @@ const GALLERY_LAYOUTS: { key: string; label: string; desc: string }[] = [
   { key: 'masonry', label: 'Masonry', desc: 'Kolom menurun dengan tinggi beragam' },
   { key: 'mosaic', label: 'Kolase', desc: 'Kuadran mosaik dengan foto besar pertama' },
   { key: 'polaroid', label: 'Polaroid', desc: 'Foto dengan bingkai seperti foto kenangan' },
+  { key: 'arch', label: 'Lengkung (Arch)', desc: 'Foto utama lengkung atas — ikonik undangan Indonesia' },
   { key: 'column', label: 'Ke Bawah', desc: 'Foto tersusun menurun penuh lebar' },
   { key: 'carousel', label: 'Carousel Otomatis', desc: 'Slide berganti otomatis' }
 ];
