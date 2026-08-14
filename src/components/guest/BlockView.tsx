@@ -17,6 +17,7 @@ import {
 import RSVPForm from '@/components/guest/rsvp';
 import { BuilderEditableContext } from '@/components/builder/inline-edit';
 import { usePreview } from '@/components/guest/preview-context';
+import { InnerProvider } from '@/components/guest/inner-context';
 
 interface BlockViewProps {
   block: Block;
@@ -71,20 +72,22 @@ export default function BlockView({ block, projectId, editable = false, greeting
   }
 
   return (
-    <div data-block-type={block.type}>
-      {!preview && !editable ? (
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.15 }}
-          transition={{ duration: 0.55, ease: 'easeOut' }}
-        >
+    <InnerProvider value={block.inner ?? undefined}>
+      <div data-block-type={block.type}>
+        {!preview && !editable ? (
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.55, ease: 'easeOut' }}
+          >
+            <StyledSection style={block.style}>{view}</StyledSection>
+          </motion.div>
+        ) : (
           <StyledSection style={block.style}>{view}</StyledSection>
-        </motion.div>
-      ) : (
-        <StyledSection style={block.style}>{view}</StyledSection>
-      )}
-    </div>
+        )}
+      </div>
+    </InnerProvider>
   );
 }
 
@@ -108,7 +111,8 @@ function StyledSection({ style, children }: { style?: BlockStyle; children: Reac
             sizes="(min-width: 768px) 420px, 100vw"
             quality={75}
             loading="lazy"
-            className="object-cover"
+            className={`${style.bgFit === 'contain' ? 'object-contain' : 'object-cover'}`}
+            style={{ objectPosition: style.bgPosition || 'center' }}
           />
           <div className="absolute inset-0 bg-black/40" />
         </div>

@@ -50,6 +50,10 @@ export interface BlockStyle {
   textColor?: string;
   bgColor?: string;
   bgImage?: string;
+  /** Cara menyesuaikan gambar latar. Default: 'cover'. */
+  bgFit?: 'cover' | 'contain';
+  /** Posisi gambar latar (sumbu utama). Default: 'center'. */
+  bgPosition?: string;
 }
 
 export interface Block {
@@ -60,6 +64,12 @@ export interface Block {
   layout?: BlockLayout;
   /** Override warna/gambar untuk section ini. */
   style?: BlockStyle;
+  /**
+   * Posisi sub-elemen DI DALAM blok (offset px relatif ke kiri-atas blok).
+   * Kunci = nama elemen (mis. `title`, `photo_left`). Diisi hanya saat
+   * mode free positioning + elemen sudah digeser pengguna.
+   */
+  inner?: Record<string, { x: number; y: number }> | null;
 }
 
 export interface CanvasData {

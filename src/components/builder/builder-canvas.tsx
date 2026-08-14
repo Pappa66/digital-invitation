@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useRef, useState } from 'react';
 import {
   SortableContext,
   verticalListSortingStrategy,
@@ -25,6 +26,7 @@ interface BuilderCanvasProps {
   onToggleGrid: () => void;
   freeCanvasRef: React.MutableRefObject<HTMLDivElement | null>;
   saveState: 'idle' | 'saving' | 'saved';
+  guides: { x?: number; y?: number };
 }
 
 export default function BuilderCanvas({
@@ -34,7 +36,8 @@ export default function BuilderCanvas({
   showGrid,
   onToggleGrid,
   freeCanvasRef,
-  saveState
+  saveState,
+  guides
 }: BuilderCanvasProps) {
   const canvas = useBuilderStore((s) => s.canvas);
   const selectBlock = useBuilderStore((s) => s.selectBlock);
@@ -85,7 +88,7 @@ export default function BuilderCanvas({
             }}
           >
             {flow === 'free' ? (
-              <FreeCanvas blocks={canvas.blocks} canvasRef={freeCanvasRef} />
+              <FreeCanvas blocks={canvas.blocks} canvasRef={freeCanvasRef} guides={guides} />
             ) : (
               <SortableContext items={canvas.blocks.map((b) => b.id)} strategy={verticalListSortingStrategy}>
                 <div className="guest-root" style={guestStyle(canvas)}>
@@ -106,7 +109,7 @@ export default function BuilderCanvas({
       )}
       {flow === 'free' && (
         <span className="pointer-events-none absolute right-4 top-3 rounded bg-[#2b2620]/90 px-2 py-1 text-[10px] text-[#e8ddc6]">
-          Mode Bebas — seret handle &ldquo;Geser&rdquo; untuk pindah, tepi emas untuk ubah lebar
+          Mode Bebas — seret &ldquo;Geser&rdquo; atas blok untuk pindah, handle emas di dalam blok untuk menggeser elemen (snap ke tengah/tepi)
         </span>
       )}
     </div>
@@ -206,7 +209,7 @@ function SortableBlock({ block, dimmed, dropTarget }: { block: Block; dimmed: bo
   );
 }
 
-function FreeCanvas({ blocks, canvasRef }: { blocks: Block[]; canvasRef: React.MutableRefObject<HTMLDivElement | null> }) {
+function FreeCanvas({ blocks, canvasRef, guides }: { blocks: Block[]; canvasRef: React.MutableRefObject<HTMLDivElement | null>; guides: { x?: number; y?: number } }) {
   const selectBlock = useBuilderStore((s) => s.selectBlock);
   const { setNodeRef } = useDroppable({ id: 'free-canvas' });
   const height = blocks.reduce((m, b) => (b.layout ? Math.max(m, b.layout.y) : m), 0) + 800;
@@ -223,6 +226,12 @@ function FreeCanvas({ blocks, canvasRef }: { blocks: Block[]; canvasRef: React.M
         if (e.target === e.currentTarget) selectBlock(null);
       }}
     >
+      {(guides.x !== undefined || guides.y !== undefined) && (
+        <div className="pointer-events-none absolute inset-0 z-40">
+          {guides.x !== undefined && <div className="absolute top-0 h-full w-px bg-[#c9a45c]" style={{ left: guides.x }} />}
+          {guides.y !== undefined && <div className="absolute left-0 w-full bg-[#c9a45c]" style={{ top: guides.y }} />}
+        </div>
+      )}
       {blocks.map((block) => (
         <FreeBlock key={block.id} block={block} />
       ))}
@@ -231,6 +240,153 @@ function FreeCanvas({ blocks, canvasRef }: { blocks: Block[]; canvasRef: React.M
           Seret widget dari panel kiri ke sini, atau klik widget untuk menambah blok.
         </div>
       )}
+    </div>
+  );
+}
+
+/**
+ * Fitur "geser elemen di dalam blok" (mode bebas saja): saat blok terpilih,
+ * sub-elemen ber-`data-inner` diberi handle seret. Pergerakan disimpan ke
+ * `block.inner` dan menampilkan alignment guide + snap ke tengah/tepi blok.
+ */
+function InnerDragLayer({ block, blockWidth }: { block: Block; blockWidth: number }) {
+  const setBlockInner = useBuilderStore((s) => s.setBlockInner);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [handles, setHandles] = useState<{ name: string; left: number; top: number; width: number; height: number }[]>(
+    []
+  );
+  const [guides, setGuides] = useState<{ x?: number; y?: number }>({});
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const host = el.closest<HTMLElement>('[data-block]');
+    if (!host) return;
+    const hostRect = host.getBoundingClientRect();
+    const items = Array.from(host.querySelectorAll('[data-inner]')) as HTMLElement[];
+    setHandles(
+      items.map((node) => {
+        const r = node.getBoundingClientRect();
+        return {
+          name: node.dataset.inner ?? '',
+          left: r.left - hostRect.left,
+          top: r.top - hostRect.top,
+          width: r.width,
+          height: r.height
+        };
+      })
+    );
+  }, [block.inner, block.id]);
+
+  function onDragStart(e: React.PointerEvent, name: string) {
+    e.stopPropagation();
+    e.preventDefault();
+    const el = containerRef.current;
+    const host = el?.closest<HTMLElement>('[data-block]');
+    if (!el || !host) return;
+    const startX = e.clientX;
+    const startY = e.clientY;
+    const current = block.inner?.[name] ?? { x: 0, y: 0 };
+    let lastGuides: { x?: number; y?: number } = {};
+
+    const onMove = (ev: PointerEvent) => {
+      const dx = ev.clientX - startX;
+      const dy = ev.clientY - startY;
+      let nx = current.x + dx;
+      let ny = current.y + dy;
+
+      const node = host.querySelector<HTMLElement>(`[data-inner="${name}"]`);
+      const nodeW = node?.getBoundingClientRect().width ?? 100;
+      const nodeH = node?.getBoundingClientRect().height ?? 40;
+      const SNAP = 8;
+
+      const cx = blockWidth / 2;
+
+      let guideX: number | undefined;
+      const candX: { v: number; kind: 'left' | 'center' | 'right' }[] = [
+        { v: 0, kind: 'left' },
+        { v: cx - nodeW / 2, kind: 'center' },
+        { v: blockWidth - nodeW, kind: 'right' }
+      ];
+      for (const c of candX) {
+        if (Math.abs(nx - c.v) <= SNAP) {
+          nx = c.v;
+          guideX = c.kind === 'center' ? cx : c.v;
+          break;
+        }
+      }
+
+      let guideY: number | undefined;
+      const hostH = host.getBoundingClientRect().height;
+      const cy = hostH / 2;
+      const candY: { v: number; kind: 'top' | 'center' | 'bottom' }[] = [
+        { v: 0, kind: 'top' },
+        { v: cy - nodeH / 2, kind: 'center' },
+        { v: hostH - nodeH, kind: 'bottom' }
+      ];
+      for (const c of candY) {
+        if (Math.abs(ny - c.v) <= SNAP) {
+          ny = c.v;
+          guideY = c.kind === 'center' ? cy : c.v;
+          break;
+        }
+      }
+
+      setBlockInner(block.id, name, {
+        x: Math.max(-nodeW + 8, Math.min(blockWidth - 8, nx)),
+        y: Math.max(-nodeH + 8, ny)
+      });
+      lastGuides = { x: guideX, y: guideY };
+      setGuides(lastGuides);
+    };
+    const onUp = () => {
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+      const host2 = containerRef.current?.closest<HTMLElement>('[data-block]');
+      if (host2) {
+        const hostR = host2.getBoundingClientRect();
+        const node = host2.querySelector<HTMLElement>(`[data-inner="${name}"]`);
+        const nR = node?.getBoundingClientRect();
+        if (nR) {
+          setHandles((prev) =>
+            prev.map((h) =>
+              h.name === name
+                ? { ...h, left: nR.left - hostR.left, top: nR.top - hostR.top, width: nR.width, height: nR.height }
+                : h
+            )
+          );
+        }
+      }
+      setGuides({});
+    };
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  }
+
+  return (
+    <div ref={containerRef} className="pointer-events-none absolute inset-0 z-20" onPointerDown={(e) => e.stopPropagation()}>
+      {guides.x !== undefined && (
+        <div className="absolute top-0 h-full w-px bg-[#c9a45c]" style={{ left: guides.x }} />
+      )}
+      {guides.y !== undefined && (
+        <div className="absolute left-0 w-full bg-[#c9a45c]" style={{ top: guides.y }} />
+      )}
+      {handles.map((h) => (
+        <div
+          key={h.name}
+          className="absolute z-30 flex scale-50 items-center gap-3 border border-[#c9a45c] bg-[#c9a45c]/10 text-[#c9a45c]"
+          style={{ left: h.left, top: h.top, width: h.width, height: h.height }}
+        >
+          <span
+            className="pointer-events-auto absolute -top-3 left-1/2 flex -translate-x-1/2 cursor-move items-center gap-1 rounded-full bg-[#c9a45c] px-2 py-0.5 text-[10px] text-white shadow ring-1 ring-white/30 active:cursor-grabbing"
+            title={`Geser elemen "${h.name}"`}
+            onPointerDown={(e) => onDragStart(e, h.name)}
+          >
+            <GripVertical className="h-3 w-3" />
+            Geser
+          </span>
+        </div>
+      ))}
     </div>
   );
 }
@@ -274,6 +430,7 @@ function FreeBlock({ block }: { block: Block }) {
         Geser
       </button>
       <BlockView block={block} editable />
+      {selected && <InnerDragLayer block={block} blockWidth={layout.width} />}
       {selected && (
         <>
           <div className="absolute right-0 top-0 z-30 flex gap-1 rounded-bl-md bg-[#141414]/90 p-1 shadow ring-1 ring-white/10" onClick={(e) => e.stopPropagation()}>

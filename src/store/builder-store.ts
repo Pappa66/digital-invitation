@@ -18,6 +18,7 @@ interface BuilderState {
   setBlockLayout: (blockId: string, partial: Partial<BlockLayout>) => void;
   setBlockStyle: (blockId: string, partial: Partial<BlockStyle>) => void;
   clearBlockStyle: (blockId: string) => void;
+  setBlockInner: (blockId: string, key: string, pos: { x: number; y: number }) => void;
   setFlow: (flow: 'stack' | 'free') => void;
   addBlock: (type: BlockType, index?: number) => void;
   removeBlock: (blockId: string) => void;
@@ -252,6 +253,16 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
       canvas: {
         ...state.canvas,
         blocks: state.canvas.blocks.map((b) => (b.id === blockId ? { ...b, style: undefined } : b))
+      }
+    })),
+
+  setBlockInner: (blockId, key, pos) =>
+    set((state) => ({
+      canvas: {
+        ...state.canvas,
+        blocks: state.canvas.blocks.map((b) =>
+          b.id === blockId ? { ...b, inner: { ...(b.inner ?? {}), [key]: pos } } : b
+        )
       }
     })),
 

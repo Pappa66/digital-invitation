@@ -39,6 +39,7 @@ export default function BuilderWorkspace({ projectId }: { projectId: string }) {
   const dragStartLayoutRef = useRef<Record<string, { x: number; y: number }>>({});
   const dragTranslatedRef = useRef<Record<string, { left: number; top: number }>>({});
   const freeCanvasRef = useRef<HTMLDivElement | null>(null);
+  const [guides, setGuides] = useState<{ x?: number; y?: number }>({});
 
   const flow = canvas.flow ?? 'stack';
   const canvasW = device === 'desktop' ? CANVAS_W_DESKTOP : CANVAS_W;
@@ -64,6 +65,43 @@ export default function BuilderWorkspace({ projectId }: { projectId: string }) {
     const id = String(event.active.id);
     const r = event.active.rect.current.translated;
     if (r) dragTranslatedRef.current[id] = { left: r.left, top: r.top };
+
+    if (flow === 'free' && !id.startsWith('widget-') && freeCanvasRef.current && r) {
+      const cb = freeCanvasRef.current.getBoundingClientRect();
+      const store = useBuilderStore.getState();
+      const b = store.canvas.blocks.find((x) => x.id === id);
+      if (!b?.layout) return;
+      const x = Math.max(0, Math.min(canvasW - 40, r.left - cb.left));
+      const y = Math.max(0, r.top - cb.top);
+      const width = b.layout.width;
+      const SNAP = 8;
+      const cx = canvasW / 2;
+
+      let guideX: number | undefined;
+      for (const [tx, kind] of [
+        [cx - width / 2, 'center'],
+        [0, 'left'],
+        [canvasW - width, 'right']
+      ] as [number, string][]) {
+        if (Math.abs(x - tx) <= SNAP) {
+          guideX = kind === 'center' ? cx : tx;
+          break;
+        }
+      }
+
+      let guideY: number | undefined;
+      for (const [ty, kind] of [
+        [cb.height / 2, 'center'],
+        [0, 'top']
+      ] as [number, string][]) {
+        if (Math.abs(y - ty) <= SNAP) {
+          guideY = kind === 'center' ? ty : ty;
+          break;
+        }
+      }
+
+      setGuides({ x: guideX, y: guideY });
+    }
   }
 
   function handleDragEnd(event: DragEndEvent) {
@@ -72,6 +110,7 @@ export default function BuilderWorkspace({ projectId }: { projectId: string }) {
     const activeString = String(active.id);
     const overString = over ? String(over.id) : null;
     const store = useBuilderStore.getState();
+    setGuides({});
 
     if (activeString.startsWith('widget-')) {
       const type = activeString.replace('widget-', '') as BlockType;
@@ -100,10 +139,19 @@ export default function BuilderWorkspace({ projectId }: { projectId: string }) {
       const rect = dragTranslatedRef.current[activeString];
       if (rect && freeCanvasRef.current) {
         const cb = freeCanvasRef.current.getBoundingClientRect();
-        store.setBlockLayout(activeString, {
-          x: Math.max(0, Math.min(canvasW - 40, rect.left - cb.left)),
-          y: Math.max(0, rect.top - cb.top)
-        });
+        const b = store.canvas.blocks.find((x) => x.id === activeString);
+        const width = b?.layout?.width ?? 420;
+        const x = Math.max(0, Math.min(canvasW - 40, rect.left - cb.left));
+        const y = Math.max(0, rect.top - cb.top);
+        const SNAP = 8;
+        const cx = canvasW / 2;
+        const targetX = (() => {
+          if (Math.abs(x - (cx - width / 2)) <= SNAP) return cx - width / 2;
+          if (Math.abs(x - 0) <= SNAP) return 0;
+          if (Math.abs(x - (canvasW - width)) <= SNAP) return canvasW - width;
+          return x;
+        })();
+        store.setBlockLayout(activeString, { x: targetX, y });
       } else {
         const start = dragStartLayoutRef.current[activeString];
         const b = store.canvas.blocks.find((x) => x.id === activeString);
@@ -114,6 +162,7 @@ export default function BuilderWorkspace({ projectId }: { projectId: string }) {
           });
         }
       }
+      setGuides({});
       triggerSave();
       return;
     }
@@ -156,6 +205,7 @@ export default function BuilderWorkspace({ projectId }: { projectId: string }) {
           onToggleGrid={() => setShowGrid((v) => !v)}
           freeCanvasRef={freeCanvasRef}
           saveState={saveState}
+          guides={guides}
         />
         <PropertiesPanel />
 

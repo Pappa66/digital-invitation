@@ -7,6 +7,7 @@ import { Calendar, MapPin, Heart, Sparkles, Gem, BookOpen, Sprout } from 'lucide
 import type { BlockProps } from '@/lib/types';
 import { Editable } from '@/components/builder/inline-edit';
 import { usePreview } from '@/components/guest/preview-context';
+import { useInnerPositions } from '@/components/guest/inner-context';
 
 /** Akses props sebagai string dengan fallback aman (''). */
 function str(props: BlockProps, key: string): string {
@@ -21,6 +22,25 @@ function bool(props: BlockProps, key: string): boolean {
 function arr(props: BlockProps, key: string): string[] {
   const v = props[key];
   return Array.isArray(v) ? (v as string[]) : [];
+}
+
+/**
+ * Sub-elemen bergeser di dalam blok (hanya mode bebas): menerapkan offset
+ * tersimpan pada `block.inner` sebagai transform translate + menandai elemen
+ * dengan `data-inner` agar builder menampilkan handle drag.
+ */
+function Inner({ name, className, children }: { name: string; className?: string; children: React.ReactNode }) {
+  const inner = useInnerPositions();
+  const pos = inner?.[name];
+  return (
+    <div
+      data-inner={name}
+      className={className}
+      style={pos ? { transform: `translate(${pos.x}px, ${pos.y}px)` } : undefined}
+    >
+      {children}
+    </div>
+  );
 }
 
 function Ornament({ className = '' }: { className?: string }) {
@@ -58,7 +78,7 @@ function HeroSparkles() {
   );
 }
 
-function BackgroundImage({ src }: { src: string }) {
+function BackgroundImage({ src, fit, position }: { src: string; fit?: string; position?: string }) {
   if (!src) return null;
   return (
     <div className="absolute inset-0 z-0">
@@ -69,7 +89,8 @@ function BackgroundImage({ src }: { src: string }) {
         priority
         sizes="100vw"
         quality={75}
-        className="object-cover"
+        className={fit === 'contain' ? 'object-contain' : 'object-cover'}
+        style={{ objectPosition: position || 'center' }}
       />
       <div className="absolute inset-0 bg-black/40" />
     </div>
@@ -99,50 +120,52 @@ export function HeroBlock({ props, greetingName }: { props: BlockProps; greeting
         isLeft ? 'items-start justify-center text-left' : 'items-center justify-center text-center'
       }`}
     >
-      <BackgroundImage src={str(props, 'bg_image')} />
+      <BackgroundImage src={str(props, 'bg_image')} fit={str(props, 'bg_fit')} position={str(props, 'bg_position')} />
       <HeroSparkles />
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.7 }}
-        className={`relative z-10 flex w-full flex-col ${isLeft ? 'items-start' : 'items-center'}`}
-      >
-        <p className="text-xs uppercase tracking-[0.3em]">
-          <Editable prop="caption">{str(props, 'caption')}</Editable>
-        </p>
-        {showOrnament && <Ornament className={isLeft ? 'mt-4 mr-auto text-white opacity-80' : 'mt-4 text-white opacity-80'} />}
-        <h1 className="mt-6 text-3xl font-medium leading-tight sm:text-4xl md:text-5xl">
-          <Editable prop="bride">{str(props, 'bride')}</Editable>
-        </h1>
-        <p className="my-4 text-xl sm:text-2xl">&amp;</p>
-        <h1 className="text-3xl font-medium leading-tight sm:text-4xl md:text-5xl">
-          <Editable prop="groom">{str(props, 'groom')}</Editable>
-        </h1>
-        <p className="mt-8 text-sm uppercase tracking-widest opacity-90">
-          <Editable prop="date">{str(props, 'date')}</Editable>
-        </p>
-        <div className="mt-3 flex items-center gap-2 text-xs opacity-80">
-          <MapPin className="h-3.5 w-3.5" />
-          <span>
-            <Editable prop="place">{str(props, 'place')}</Editable>
-          </span>
-        </div>
-        {greetingName && (
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="mt-10"
-          >
-            <div className="inline-flex flex-col items-center rounded-full border border-white/25 bg-white/10 px-6 py-3 backdrop-blur-sm">
-              <span className="text-[10px] uppercase tracking-[0.25em] opacity-80">Kepada Yth.</span>
-              <span className="mt-0.5 text-sm font-medium">{greetingName}</span>
-            </div>
-          </motion.div>
-        )}
-      </motion.div>
+      <Inner name="content">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          className={`relative z-10 flex w-full flex-col ${isLeft ? 'items-start' : 'items-center'}`}
+        >
+          <p className="text-xs uppercase tracking-[0.3em]">
+            <Editable prop="caption">{str(props, 'caption')}</Editable>
+          </p>
+          {showOrnament && <Ornament className={isLeft ? 'mt-4 mr-auto text-white opacity-80' : 'mt-4 text-white opacity-80'} />}
+          <h1 className="mt-6 text-3xl font-medium leading-tight sm:text-4xl md:text-5xl">
+            <Editable prop="bride">{str(props, 'bride')}</Editable>
+          </h1>
+          <p className="my-4 text-xl sm:text-2xl">&amp;</p>
+          <h1 className="text-3xl font-medium leading-tight sm:text-4xl md:text-5xl">
+            <Editable prop="groom">{str(props, 'groom')}</Editable>
+          </h1>
+          <p className="mt-8 text-sm uppercase tracking-widest opacity-90">
+            <Editable prop="date">{str(props, 'date')}</Editable>
+          </p>
+          <div className="mt-3 flex items-center gap-2 text-xs opacity-80">
+            <MapPin className="h-3.5 w-3.5" />
+            <span>
+              <Editable prop="place">{str(props, 'place')}</Editable>
+            </span>
+          </div>
+          {greetingName && (
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="mt-10"
+            >
+              <div className="inline-flex flex-col items-center rounded-full border border-white/25 bg-white/10 px-6 py-3 backdrop-blur-sm">
+                <span className="text-[10px] uppercase tracking-[0.25em] opacity-80">Kepada Yth.</span>
+                <span className="mt-0.5 text-sm font-medium">{greetingName}</span>
+              </div>
+            </motion.div>
+          )}
+        </motion.div>
+      </Inner>
     </section>
   );
 }
@@ -176,17 +199,19 @@ export function CoupleBlock({ props }: { props: BlockProps }) {
             </p>
           )}
         {side ? (
-          <div className="mx-auto grid w-full max-w-2xl items-center gap-6 md:grid-cols-[1fr_auto_1fr] md:gap-8">
-            <div className="min-w-0 text-center">
-              <CouplePerson propKey="groom" name={str(props, 'groom')} parents={str(props, 'groom_parents')} />
+          <Inner name="groom">
+            <div className="mx-auto grid w-full max-w-2xl items-center gap-6 md:grid-cols-[1fr_auto_1fr] md:gap-8">
+              <div className="min-w-0 text-center">
+                <CouplePerson propKey="groom" name={str(props, 'groom')} parents={str(props, 'groom_parents')} />
+              </div>
+              <div className="my-2 flex min-w-0 justify-center md:my-0">
+                <Ornament className="text-current opacity-60" />
+              </div>
+              <div className="min-w-0 text-center">
+                <CouplePerson propKey="bride" name={str(props, 'bride')} parents={str(props, 'bride_parents')} />
+              </div>
             </div>
-            <div className="my-2 flex min-w-0 justify-center md:my-0">
-              <Ornament className="text-current opacity-60" />
-            </div>
-            <div className="min-w-0 text-center">
-              <CouplePerson propKey="bride" name={str(props, 'bride')} parents={str(props, 'bride_parents')} />
-            </div>
-          </div>
+          </Inner>
         ) : (
           <>
             <div className="mb-10">
@@ -211,7 +236,9 @@ export function CountdownBlock({ props }: { props: BlockProps }) {
       <h2 className="text-xl md:text-2xl">
         <Editable prop="title">{str(props, 'title')}</Editable>
       </h2>
-      <CountdownTimer target={target} variant={variant} />
+      <Inner name="timer">
+        <CountdownTimer target={target} variant={variant} />
+      </Inner>
     </section>
   );
 }
@@ -299,36 +326,38 @@ export function EventDetailBlock({ props }: { props: BlockProps }) {
             : 'mx-auto w-full rounded-xl border border-current/10 p-8'
         }`}
       >
-        <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        >
-          <Icon className="mx-auto h-7 w-7" />
-          <h2 className="mt-4 text-2xl font-medium">
-            <Editable prop="title">{str(props, 'title')}</Editable>
-          </h2>
-          <div className="mt-6 space-y-3 text-sm">
-            <div className="flex items-start justify-center gap-2">
-              <Calendar className="mt-0.5 h-4 w-4 shrink-0" />
-              <span>
-                <Editable prop="date">{str(props, 'date')}</Editable> •{' '}
-                <Editable prop="time">{str(props, 'time')}</Editable>
-              </span>
-            </div>
-            <div className="flex items-start justify-center gap-2">
-              <MapPin className="mt-0.5 h-4 w-4 shrink-0" />
-              <span>
-                <Editable prop="location">{str(props, 'location')}</Editable>
-                <br />
-                <span className="opacity-70">
-                  <Editable prop="address">{str(props, 'address')}</Editable>
+        <Inner name="content">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.96 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <Icon className="mx-auto h-7 w-7" />
+            <h2 className="mt-4 text-2xl font-medium">
+              <Editable prop="title">{str(props, 'title')}</Editable>
+            </h2>
+            <div className="mt-6 space-y-3 text-sm">
+              <div className="flex items-start justify-center gap-2">
+                <Calendar className="mt-0.5 h-4 w-4 shrink-0" />
+                <span>
+                  <Editable prop="date">{str(props, 'date')}</Editable> •{' '}
+                  <Editable prop="time">{str(props, 'time')}</Editable>
                 </span>
-              </span>
+              </div>
+              <div className="flex items-start justify-center gap-2">
+                <MapPin className="mt-0.5 h-4 w-4 shrink-0" />
+                <span>
+                  <Editable prop="location">{str(props, 'location')}</Editable>
+                  <br />
+                  <span className="opacity-70">
+                    <Editable prop="address">{str(props, 'address')}</Editable>
+                  </span>
+                </span>
+              </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </Inner>
       </div>
     </section>
   );
@@ -341,17 +370,19 @@ export function StoryBlock({ props }: { props: BlockProps }) {
   const count = titles.length;
   return (
     <section className="px-6 py-16 md:py-24">
-      <div className="mx-auto w-full text-center">
-        <h2 className="text-2xl font-medium md:text-3xl">
-          <Editable prop="title">{str(props, 'title')}</Editable>
-        </h2>
-        {str(props, 'subtitle') && (
-          <p className="mt-2 text-sm italic opacity-70">
-            <Editable prop="subtitle">{str(props, 'subtitle')}</Editable>
-          </p>
-        )}
-        <Ornament className="mt-6 opacity-60" />
-      </div>
+      <Inner name="title">
+        <div className="mx-auto w-full text-center">
+          <h2 className="text-2xl font-medium md:text-3xl">
+            <Editable prop="title">{str(props, 'title')}</Editable>
+          </h2>
+          {str(props, 'subtitle') && (
+            <p className="mt-2 text-sm italic opacity-70">
+              <Editable prop="subtitle">{str(props, 'subtitle')}</Editable>
+            </p>
+          )}
+          <Ornament className="mt-6 opacity-60" />
+        </div>
+      </Inner>
       <div className="mx-auto mt-10 w-full space-y-8">
         {count === 0 && <p className="text-center text-sm opacity-50">Belum ada cerita.</p>}
         {Array.from({ length: count }).map((_, i) => (
@@ -433,7 +464,9 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
   if (layout === 'column') {
     return (
       <section className="px-6 py-16">
-        <h2 className="mb-8 text-center text-xl md:text-2xl">{str(props, 'title')}</h2>
+        <Inner name="title">
+          <h2 className="mb-8 text-center text-xl md:text-2xl">{str(props, 'title')}</h2>
+        </Inner>
         <div className="mx-auto flex w-full flex-col gap-5">
           {images.map((src, i) => (
             <motion.div
@@ -452,9 +485,122 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
     );
   }
 
+  if (layout === 'grid3') {
+    return (
+      <section className="px-6 py-16">
+        <Inner name="title">
+          <h2 className="mb-8 text-center text-xl md:text-2xl">{str(props, 'title')}</h2>
+        </Inner>
+        <div className="mx-auto grid w-full grid-cols-3 gap-2.5">
+          {images.map((src, i) => (
+            <motion.div
+              key={`${src}-${i}`}
+              {...a}
+              whileInView={a.animate}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: i * 0.05 }}
+              className="relative aspect-square overflow-hidden rounded-md"
+            >
+              <Image src={src} alt="" fill sizes="(max-width: 768px) 100vw, 33vw" quality={70} loading="lazy" className="object-cover" />
+            </motion.div>
+          ))}
+        </div>
+      </section>
+    );
+  }
+
+  if (layout === 'masonry') {
+    return (
+      <section className="px-6 py-16">
+        <Inner name="title">
+          <h2 className="mb-8 text-center text-xl md:text-2xl">{str(props, 'title')}</h2>
+        </Inner>
+        <div className="mx-auto w-full">
+          <div className="columns-2 gap-3 [column-fill:_balance] md:columns-3">
+            {images.map((src, i) => (
+              <motion.div
+                key={`${src}-${i}`}
+                {...a}
+                whileInView={a.animate}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: (i % 6) * 0.05 }}
+                className="mb-3 break-inside-avoid overflow-hidden rounded-lg"
+              >
+                <Image
+                  src={src}
+                  alt=""
+                  width={600}
+                  height={700}
+                  sizes="(max-width: 768px) 50vw, 33vw"
+                  quality={70}
+                  loading="lazy"
+                  className="h-auto w-full object-cover"
+                  style={{ aspectRatio: `${[3, 4, 5, 3][i % 4]}/4` }}
+                />
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (layout === 'mosaic') {
+    return (
+      <section className="px-6 py-16">
+        <Inner name="title">
+          <h2 className="mb-8 text-center text-xl md:text-2xl">{str(props, 'title')}</h2>
+        </Inner>
+        <div className="mx-auto grid w-full grid-cols-3 gap-2">
+          {images.map((src, i) => (
+            <motion.div
+              key={`${src}-${i}`}
+              {...a}
+              whileInView={a.animate}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: Math.min(i, 5) * 0.06 }}
+              className={`relative overflow-hidden rounded-md ${i % 5 === 0 ? 'col-span-2 row-span-2 aspect-square' : 'aspect-[3/4]'}`}
+            >
+              <Image src={src} alt="" fill sizes="(max-width: 768px) 100vw, 33vw" quality={75} loading="lazy" className="object-cover" />
+            </motion.div>
+          ))}
+        </div>
+      </section>
+    );
+  }
+
+  if (layout === 'polaroid') {
+    return (
+      <section className="px-6 py-16">
+        <Inner name="title">
+          <h2 className="mb-8 text-center text-xl md:text-2xl">{str(props, 'title')}</h2>
+        </Inner>
+        <div className="mx-auto grid w-full grid-cols-2 gap-6 md:grid-cols-3">
+          {images.map((src, i) => (
+            <motion.div
+              key={`${src}-${i}`}
+              {...a}
+              whileInView={a.animate}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: (i % 6) * 0.07 }}
+              className="break-inside-avoid rounded-sm bg-white p-2 pb-8 shadow-[0_6px_16px_rgba(0,0,0,0.18)]"
+              style={{ transform: `rotate(${[-3, 2, -1, 3, -2, 2][i % 6]}deg)` }}
+            >
+              <div className="relative aspect-square w-full overflow-hidden bg-[#e8e2d5]">
+                <Image src={src} alt="" fill sizes="(max-width: 768px) 50vw, 33vw" quality={70} loading="lazy" className="object-cover" />
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="px-6 py-16">
-      <h2 className="mb-8 text-center text-xl md:text-2xl">{str(props, 'title')}</h2>
+      <Inner name="title">
+        <h2 className="mb-8 text-center text-xl md:text-2xl">{str(props, 'title')}</h2>
+      </Inner>
       <div className="mx-auto grid w-full grid-cols-2 gap-3">
         {images.map((src, i) => (
           <motion.div
@@ -499,7 +645,9 @@ function GalleryCarousel({
 
   return (
     <section className="px-6 py-16">
-      <h2 className="mb-8 text-center text-xl md:text-2xl">{title}</h2>
+      <Inner name="title">
+        <h2 className="mb-8 text-center text-xl md:text-2xl">{title}</h2>
+      </Inner>
       <div className="mx-auto w-full">
         <div className="relative aspect-[4/5] w-full overflow-hidden rounded-lg">
           {animKey === 'ken-burns' ? (
@@ -541,7 +689,9 @@ function GalleryCarousel({
 export function MapsBlock({ props }: { props: BlockProps }) {
   return (
     <section className="px-6 py-14 text-center">
-      <h2 className="text-xl md:text-2xl">{str(props, 'title')}</h2>
+      <Inner name="title">
+        <h2 className="text-xl md:text-2xl">{str(props, 'title')}</h2>
+      </Inner>
       <p className="mt-2 text-sm opacity-80">{str(props, 'address')}</p>
       <div className="mx-auto mt-6 w-full overflow-hidden rounded-xl border border-current/10">
         <iframe
@@ -558,8 +708,12 @@ export function MapsBlock({ props }: { props: BlockProps }) {
 export function ThanksBlock({ props }: { props: BlockProps }) {
   return (
     <section className="px-6 py-20 text-center">
-      <Ornament className="mb-6 opacity-60" />
-      <h2 className="text-2xl font-medium md:text-3xl">{str(props, 'title')}</h2>
+      <Inner name="title">
+        <div>
+          <Ornament className="mb-6 opacity-60" />
+          <h2 className="text-2xl font-medium md:text-3xl">{str(props, 'title')}</h2>
+        </div>
+      </Inner>
       <p className="mx-auto mt-6 w-full text-sm leading-relaxed opacity-80">
         {str(props, 'message')}
       </p>

@@ -8,7 +8,56 @@ import { useBuilderStore } from '@/store/builder-store';
 import { RELIGIONS } from '@/lib/religions';
 import type { BlockProps } from '@/lib/types';
 
-const FONTS = ['Playfair Display', 'Cormorant Garamond', 'Montserrat', 'Quicksand', 'Cinzel', 'Marcellus', 'Great Vibes', 'Lora', 'Jost', 'Poppins', 'Nunito Sans', 'Inter', 'Lato', 'Karla'];
+const FONTS = [
+  'Playfair Display',
+  'Cormorant Garamond',
+  'Montserrat',
+  'Quicksand',
+  'Cinzel',
+  'Marcellus',
+  'Great Vibes',
+  'Lora',
+  'Jost',
+  'Poppins',
+  'Nunito Sans',
+  'Inter',
+  'Lato',
+  'Karla',
+  'Dancing Script',
+  'Caveat',
+  'Pacifico',
+  'Raleway',
+  'DM Serif Display',
+  'EB Garamond',
+  'Alex Brush',
+  'Parisienne',
+  'Allura',
+  'Tangerine',
+  'Satisfy',
+  'Cookie',
+  'Bad Script',
+  'Pinyon Script',
+  'Sacramento',
+  'Amatic SC',
+  'Bebas Neue',
+  'Oswald',
+  'Roboto Condensed',
+  'Work Sans',
+  'Source Serif 4',
+  'Libre Baskerville',
+  'Merriweather',
+  'Bodoni Moda',
+  'Prata',
+  'Playfair Display SC',
+  'Josefin Sans',
+  'Cormorant Infant',
+  'Cormorant Upright',
+  'Tenor Sans',
+  'Spectral',
+  'Fraunces',
+  'Yeseva One',
+  'Cardo'
+];
 
 const TITLE_PROPS: Record<string, { label: string; multiline?: boolean }[]> = {
   Hero: [
@@ -69,9 +118,13 @@ const VARIANTS: Partial<Record<string, { key: string; options: string[] }>> = {
 };
 
 const GALLERY_LAYOUTS: { key: string; label: string; desc: string }[] = [
+  { key: 'grid', label: 'Grid', desc: 'Susunan kolom 2 dengan foto besar' },
+  { key: 'grid3', label: 'Grid 3 Kolom', desc: 'Kolom 3 dengan foto persegi rapi' },
+  { key: 'masonry', label: 'Masonry', desc: 'Kolom menurun dengan tinggi beragam' },
+  { key: 'mosaic', label: 'Kolase', desc: 'Kuadran mosaik dengan foto besar pertama' },
+  { key: 'polaroid', label: 'Polaroid', desc: 'Foto dengan bingkai seperti foto kenangan' },
   { key: 'column', label: 'Ke Bawah', desc: 'Foto tersusun menurun penuh lebar' },
-  { key: 'carousel', label: 'Carousel Otomatis', desc: 'Slide berganti otomatis' },
-  { key: 'grid', label: 'Grid', desc: 'Susunan kolom 2 dengan foto besar' }
+  { key: 'carousel', label: 'Carousel Otomatis', desc: 'Slide berganti otomatis' }
 ];
 
 const GALLERY_ANIMATIONS = [
@@ -322,6 +375,33 @@ export default function PropertiesPanel() {
                       >
                         {block.props.bg_image ? 'Change Image' : 'Pilih Gambar'}
                       </button>
+                      <div className="mt-2 grid grid-cols-2 gap-2">
+                        <div>
+                          <label className="mb-1 block text-xs font-medium text-[#4a443c]">Ukuran</label>
+                          <select
+                            value={(block.props.bg_fit as string) || 'cover'}
+                            onChange={(e) => setBlockProps(block.id, { bg_fit: e.target.value })}
+                            className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-2 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
+                          >
+                            <option value="cover">Penuhi (cover)</option>
+                            <option value="contain">Utuh (contain)</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="mb-1 block text-xs font-medium text-[#4a443c]">Posisi</label>
+                          <select
+                            value={(block.props.bg_position as string) || 'center'}
+                            onChange={(e) => setBlockProps(block.id, { bg_position: e.target.value })}
+                            className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-2 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
+                          >
+                            <option value="center">Tengah</option>
+                            <option value="top">Atas</option>
+                            <option value="bottom">Bawah</option>
+                            <option value="left">Kiri</option>
+                            <option value="right">Kanan</option>
+                          </select>
+                        </div>
+                      </div>
                     </div>
                   )}
                   {VARIANTS[block.type] && (
@@ -438,6 +518,33 @@ export default function PropertiesPanel() {
                             >
                               {block.style?.bgImage ? 'Ganti Gambar Latar' : 'Pilih Gambar Latar'}
                             </button>
+                            <div className="mt-2 grid grid-cols-2 gap-2">
+                              <div>
+                                <label className="mb-1 block text-xs font-medium text-[#4a443c]">Ukuran</label>
+                                <select
+                                  value={block.style?.bgFit ?? 'cover'}
+                                  onChange={(e) => setBlockStyle(block.id, { bgFit: e.target.value as 'cover' | 'contain' })}
+                                  className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-2 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
+                                >
+                                  <option value="cover">Penuhi (cover)</option>
+                                  <option value="contain">Utuh (contain)</option>
+                                </select>
+                              </div>
+                              <div>
+                                <label className="mb-1 block text-xs font-medium text-[#4a443c]">Posisi</label>
+                                <select
+                                  value={block.style?.bgPosition ?? 'center'}
+                                  onChange={(e) => setBlockStyle(block.id, { bgPosition: e.target.value })}
+                                  className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-2 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
+                                >
+                                  <option value="center">Tengah</option>
+                                  <option value="top">Atas</option>
+                                  <option value="bottom">Bawah</option>
+                                  <option value="left">Kiri</option>
+                                  <option value="right">Kanan</option>
+                                </select>
+                              </div>
+                            </div>
                           </div>
                           <button
                             onClick={() => clearBlockStyle(block.id)}
