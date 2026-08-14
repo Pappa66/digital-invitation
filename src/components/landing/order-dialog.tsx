@@ -7,12 +7,11 @@ import { getOrderWhatsapp, toWaNumber } from '@/lib/settings';
 import { clientSubmitOrder } from '@/lib/api/order-client';
 
 interface OrderDialogProps {
-  open?: boolean;
   templateName?: string;
   onClose: () => void;
 }
 
-export default function OrderDialog({ open, templateName, onClose }: OrderDialogProps) {
+export default function OrderDialog({ templateName, onClose }: OrderDialogProps) {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [note, setNote] = useState('');
@@ -24,8 +23,6 @@ export default function OrderDialog({ open, templateName, onClose }: OrderDialog
   useEffect(() => {
     getOrderWhatsapp().then((n) => setWaNumber(n));
   }, []);
-
-  if (!open) return null;
 
   const phoneValid = normalizePhone(phone).length >= 8;
 

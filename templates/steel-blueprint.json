@@ -1,0 +1,164 @@
+{
+  "theme": {
+    "primary": "#1B4965",
+    "secondary": "#4AA3C9",
+    "background": "#F4F7FA",
+    "text": "#22303A",
+    "font_heading": "Jost",
+    "font_body": "Lato",
+    "layout": "left",
+    "hero_style": "solid"
+  },
+  "settings": {
+    "music_url": "",
+    "guest_book_enabled": true,
+    "religion": "islam"
+  },
+  "blocks": [
+    {
+      "id": "b-1",
+      "type": "Hero",
+      "props": {
+        "groom": "Bima Pratama",
+        "bride": "Nadia Safira",
+        "date": "Sabtu, 12 September 2026",
+        "place": "The Westin, Surabaya",
+        "caption": "The Wedding Of",
+        "bg_image": "",
+        "show_ornament": true,
+        "variant": "left"
+      }
+    },
+    {
+      "id": "b-2",
+      "type": "Couple",
+      "props": {
+        "introduction": "Assalamu’alaikum Warahmatullahi Wabarakatuh",
+        "bismillah": "Bismillahirrahmanirrahim",
+        "groom": "Bima Pratama, S.Kom.",
+        "groom_parents": "Putra pertama dari Bpk. H. Joko Susilo & Ibu Hj. Sri Rahayu",
+        "bride": "Nadia Safira, S.Psi.",
+        "bride_parents": "Putri kedua dari Bpk. Ir. Bambang & Ibu Susi Purwanti",
+        "quote": "Sebaik-baik rencana adalah kehendak-Nya yang telah kita jalani bersama.",
+        "variant": "side"
+      }
+    },
+    {
+      "id": "b-3",
+      "type": "Countdown",
+      "props": {
+        "target_date": "2026-09-12T09:00:00+07:00",
+        "title": "Menghitung Hari",
+        "variant": "line"
+      }
+    },
+    {
+      "id": "b-4",
+      "type": "Divider",
+      "props": {
+        "variant": "line"
+      }
+    },
+    {
+      "id": "b-5",
+      "type": "EventDetail",
+      "props": {
+        "title": "Akad Nikah",
+        "icon": "rings",
+        "date": "Sabtu, 12 September 2026",
+        "time": "09.00 - 10.30 WIB",
+        "location": "The Westin Grand Ballroom",
+        "address": "Jl. Basuki Rahmat No. 95, Surabaya",
+        "maps_url": "https://maps.google.com/?q=The%20Westin%20Grand%20Ballroom",
+        "variant": "band"
+      }
+    },
+    {
+      "id": "b-6",
+      "type": "EventDetail",
+      "props": {
+        "title": "Resepsi",
+        "icon": "glass",
+        "date": "Sabtu, 12 September 2026",
+        "time": "11.00 - 14.00 WIB",
+        "location": "The Westin Grand Ballroom",
+        "address": "Kawasan Basuki Rahmat, Surabaya",
+        "maps_url": "https://maps.google.com/?q=The%20Westin%20Grand%20Ballroom",
+        "variant": "band"
+      }
+    },
+    {
+      "id": "b-7",
+      "type": "Story",
+      "props": {
+        "title": "Our Story",
+        "subtitle": "Cerita dua insan",
+        "ev_title": [
+          "Awal Perkenalan",
+          "Menjadi Sahabat",
+          "Resmi Berdua"
+        ],
+        "ev_date": [
+          "2017",
+          "2019",
+          "2025"
+        ],
+        "ev_desc": [
+          "Bima dan Nadia bertemu di acara sukarelawan peduli lingkungan.",
+          "Persahabatan mereka tumbuh dari kebiasaan berbagi kopi dan cerita.",
+          "Bima menyatakan cintanya saat keduanya mendaki Gunung Bromo."
+        ]
+      }
+    },
+    {
+      "id": "b-8",
+      "type": "Gallery",
+      "props": {
+        "title": "Kebersamaan Kami",
+        "images": [
+          "https://picsum.photos/seed/steel-blueprint-g1/900/1200",
+          "https://picsum.photos/seed/steel-blueprint-g2/900/1200",
+          "https://picsum.photos/seed/steel-blueprint-g3/900/1200",
+          "https://picsum.photos/seed/steel-blueprint-g4/900/1200"
+        ],
+        "variant": "column",
+        "animation": "zoom"
+      }
+    },
+    {
+      "id": "b-9",
+      "type": "RSVP",
+      "props": {
+        "title": "Konfirmasi Kehadiran",
+        "note": "Mohon kirim konfirmasi kehadiran sebelum 27 Agustus 2026",
+        "deadline": "2026-08-27",
+        "button_text": "Kirim Konfirmasi",
+        "success_message": "Terima kasih, konfirmasi Anda sudah kami terima.",
+        "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "bank_name": "Mandiri",
+        "account_number": "144 001 2345",
+        "account_holder": "Bima Pratama"
+      }
+    },
+    {
+      "id": "b-10",
+      "type": "Thanks",
+      "props": {
+        "title": "Doa Restu Anda",
+        "message": "Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu kepada kami.",
+        "closing": "Wassalamu’alaikum Warahmatullahi Wabarakatuh",
+        "names": "Bima & Nadia"
+      }
+    },
+    {
+      "id": "b-11",
+      "type": "Maps",
+      "props": {
+        "title": "Lokasi Acara",
+        "address": "The Westin, Surabaya",
+        "embed_url": "https://maps.google.com/?q=The%20Westin%2C%20Surabaya"
+      }
+    }
+  ],
+  "flow": "stack"
+}

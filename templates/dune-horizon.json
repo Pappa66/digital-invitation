@@ -1,0 +1,164 @@
+{
+  "theme": {
+    "primary": "#B0652A",
+    "secondary": "#E0B07A",
+    "background": "#FAF4EA",
+    "text": "#5C4630",
+    "font_heading": "Cormorant Garamond",
+    "font_body": "Montserrat",
+    "layout": "left",
+    "hero_style": "image"
+  },
+  "settings": {
+    "music_url": "",
+    "guest_book_enabled": true,
+    "religion": "islam"
+  },
+  "blocks": [
+    {
+      "id": "b-1",
+      "type": "Hero",
+      "props": {
+        "groom": "Desta Anugrah",
+        "bride": "Citra Maharani",
+        "date": "Minggu, 4 Oktober 2026",
+        "place": "Amanti Resort, Ubud",
+        "caption": "Save The Date",
+        "bg_image": "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c",
+        "show_ornament": true,
+        "variant": "left"
+      }
+    },
+    {
+      "id": "b-2",
+      "type": "Couple",
+      "props": {
+        "introduction": "Assalamu’alaikum Warahmatullahi Wabarakatuh",
+        "bismillah": "Bismillahirrahmanirrahim",
+        "groom": "Desta Anugrah, S.T.",
+        "groom_parents": "Putra ketiga dari Bpk. H. Sumarno & Ibu Hj. Rina",
+        "bride": "Citra Maharani, S.S.",
+        "bride_parents": "Putri pertama dari Bpk. Drs. Gunawan & Ibu Lilis Suryani",
+        "quote": "Rumah kita adalah tempat dua hati memilih untuk saling tumbuh.",
+        "variant": "side"
+      }
+    },
+    {
+      "id": "b-3",
+      "type": "Countdown",
+      "props": {
+        "target_date": "2026-10-04T09:00:00+07:00",
+        "title": "Menanti Hari Itu",
+        "variant": "circles"
+      }
+    },
+    {
+      "id": "b-4",
+      "type": "Story",
+      "props": {
+        "title": "Our Story",
+        "subtitle": "Cinta yang tumbuh di antara sawah",
+        "ev_title": [
+          "Bertemu di Ubud",
+          "Menjelajah Bersama",
+          "Ikatan Sehidup"
+        ],
+        "ev_date": [
+          "2018",
+          "2020",
+          "2026"
+        ],
+        "ev_desc": [
+          "Desta dan Citra bertemu saat keduanya mengikuti retret yoga di Ubud.",
+          "Mereka berkelana ke berbagai pelosok Bali sambil merajut cerita.",
+          "Desta melamar Citra di bawah cahaya purnama di tepi hutan bambu."
+        ]
+      }
+    },
+    {
+      "id": "b-5",
+      "type": "Divider",
+      "props": {
+        "variant": "leaves"
+      }
+    },
+    {
+      "id": "b-6",
+      "type": "EventDetail",
+      "props": {
+        "title": "Upacara Adat",
+        "icon": "rings",
+        "date": "Minggu, 4 Oktober 2026",
+        "time": "09.00 - 11.00 WITA",
+        "location": "Amanti Resort, Ubud",
+        "address": "Jl. Raya Sanggingan, Ubud, Gianyar",
+        "maps_url": "https://maps.google.com/?q=Amanti%20Resort%20Ubud",
+        "variant": "band"
+      }
+    },
+    {
+      "id": "b-7",
+      "type": "EventDetail",
+      "props": {
+        "title": "Resepsi",
+        "icon": "glass",
+        "date": "Minggu, 4 Oktober 2026",
+        "time": "12.00 - 15.00 WITA",
+        "location": "Amanti Resort, Ubud",
+        "address": "Taman atap dengan panorama hutan, Ubud",
+        "maps_url": "https://maps.google.com/?q=Amanti%20Resort%20Ubud",
+        "variant": "band"
+      }
+    },
+    {
+      "id": "b-8",
+      "type": "Gallery",
+      "props": {
+        "title": "Petualangan Kami",
+        "images": [
+          "https://picsum.photos/seed/dune-horizon-g1/900/1200",
+          "https://picsum.photos/seed/dune-horizon-g2/900/1200",
+          "https://picsum.photos/seed/dune-horizon-g3/900/1200",
+          "https://picsum.photos/seed/dune-horizon-g4/900/1200"
+        ],
+        "variant": "grid",
+        "animation": "pop"
+      }
+    },
+    {
+      "id": "b-9",
+      "type": "RSVP",
+      "props": {
+        "title": "Konfirmasi Kehadiran",
+        "note": "Mohon kirim konfirmasi kehadiran sebelum 18 September 2026",
+        "deadline": "2026-09-18",
+        "button_text": "Kirim Konfirmasi",
+        "success_message": "Terima kasih, konfirmasi Anda sudah kami terima.",
+        "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "bank_name": "BNI",
+        "account_number": "889 012 3456",
+        "account_holder": "Desta Anugrah"
+      }
+    },
+    {
+      "id": "b-10",
+      "type": "Thanks",
+      "props": {
+        "title": "Doa Restu Anda",
+        "message": "Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu kepada kami.",
+        "closing": "Wassalamu’alaikum Warahmatullahi Wabarakatuh",
+        "names": "Desta & Citra"
+      }
+    },
+    {
+      "id": "b-11",
+      "type": "Maps",
+      "props": {
+        "title": "Lokasi Acara",
+        "address": "Amanti Resort, Ubud",
+        "embed_url": "https://maps.google.com/?q=Amanti%20Resort%2C%20Ubud"
+      }
+    }
+  ],
+  "flow": "stack"
+}

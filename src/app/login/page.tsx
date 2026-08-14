@@ -27,6 +27,18 @@ function GoogleIcon() {
   );
 }
 
+function Ornament({ className = '' }: { className?: string }) {
+  return (
+    <div className={`flex items-center justify-center gap-3 ${className}`} aria-hidden>
+      <span className="h-px w-14 bg-gradient-to-r from-transparent to-[#c9a45c]" />
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+        <rect x="0.5" y="0.5" width="9" height="9" transform="rotate(45 5 5)" stroke="#c9a45c" />
+      </svg>
+      <span className="h-px w-14 bg-gradient-to-l from-transparent to-[#c9a45c]" />
+    </div>
+  );
+}
+
 export default function LoginPage() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
@@ -75,21 +87,38 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-dashboard-bg px-4">
-      <div className="w-full max-w-sm">
-        <div className="rounded-xl border border-dashboard-border bg-white p-8 shadow-sm">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center overflow-hidden rounded-xl bg-black shadow-sm">
-            <Image src="/logo/prasha.png" width={56} height={56} alt="Prasha Digital" className="h-14 w-14 object-cover" />
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#faf7f2] px-4">
+      {/* ORNAMEN LATAR */}
+      <div aria-hidden className="pointer-events-none fixed inset-0 z-0">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(201,164,92,0.14),transparent_55%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(200,155,138,0.08),transparent_50%)]" />
+        <div
+          className="absolute inset-0 opacity-[0.025]"
+          style={{ backgroundImage: 'radial-gradient(circle, #2b2620 1px, transparent 1px)', backgroundSize: '28px 28px' }}
+        />
+      </div>
+
+      <div className="relative z-10 w-full max-w-sm">
+        <div className="rounded-2xl border border-[#e7ddcc] bg-white/80 p-8 shadow-2xl shadow-[#2b2620]/10 backdrop-blur">
+          <div className="flex flex-col items-center">
+            <span className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-black ring-1 ring-[#3a332b] shadow-md">
+              <Image src="/logo/prasha.png" width={64} height={64} alt="Prasha Digital" className="h-16 w-16 object-cover" />
+            </span>
+            <p className="mt-4 font-script text-3xl text-[#b98a3e]">Prasha</p>
+            <p className="-mt-1 text-[10px] font-semibold uppercase tracking-[0.35em] text-[#8a7a66]">Digital Indonesia</p>
           </div>
-          <h1 className="mt-4 text-center text-xl font-semibold text-gray-900">Prasha Digital</h1>
-          <p className="mt-1 text-center text-sm text-gray-500">
-            {isDemo ? 'Mode Demo — masuk otomatis tanpa login Google' : 'Masuk tim internal'}
+
+          <Ornament className="mt-4" />
+
+          <h1 className="mt-4 text-center font-heading text-2xl font-medium text-[#2b2620]">Area Tim Prasha</h1>
+          <p className="mt-1 text-center text-sm text-[#8a7a66]">
+            {isDemo ? 'Mode Demo — masuk otomatis tanpa login Google' : 'Masuk untuk mengelola undangan & pesanan'}
           </p>
 
           {isDemo ? (
             <button
               onClick={enterDemo}
-              className="mt-8 flex w-full items-center justify-center gap-3 rounded-md bg-gray-900 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
+              className="mt-8 flex w-full items-center justify-center gap-3 rounded-lg bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] py-3 text-sm font-semibold text-white shadow-sm transition-transform hover:scale-[1.02]"
             >
               Masuk Mode Demo
             </button>
@@ -97,16 +126,20 @@ export default function LoginPage() {
             <button
               onClick={handleGoogle}
               disabled={loading}
-              className="mt-8 flex w-full items-center justify-center gap-3 rounded-md border border-gray-300 bg-white py-2.5 text-sm font-medium text-gray-800 transition-colors hover:bg-gray-50 disabled:opacity-60"
+              className="mt-8 flex w-full items-center justify-center gap-3 rounded-lg border border-[#e0d6c2] bg-white py-3 text-sm font-medium text-[#4a443c] transition-colors hover:border-[#c9a45c] hover:bg-[#faf7f2] disabled:opacity-60"
             >
               <GoogleIcon />
               {loading ? 'Mengarahkan ke Google...' : 'Masuk dengan Google'}
             </button>
           )}
 
-          {!isDemo && <p className="mt-4 text-center text-xs text-gray-400">Hanya akun {ALLOWED_EMAIL} yang diizinkan.</p>}
-          {error && <p className="mt-4 rounded-md bg-red-50 px-3 py-2 text-center text-xs text-red-600">{error}</p>}
+          {!isDemo && <p className="mt-4 text-center text-xs text-[#b3a69a]">Hanya akun {ALLOWED_EMAIL} yang diizinkan.</p>}
+          {error && <p className="mt-4 whitespace-pre-line rounded-lg bg-red-50 px-3 py-2 text-center text-xs text-red-600">{error}</p>}
         </div>
+
+        <p className="mt-5 text-center text-xs text-[#b3a69a]">
+          Undangan digital mewah &amp; personal &middot; {new Date().getFullYear()} Prasha Digital Indonesia
+        </p>
       </div>
     </div>
   );

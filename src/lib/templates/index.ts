@@ -32,6 +32,10 @@ import sunshineCitrus from '../../../templates/sunshine-citrus.json';
 import glacierBlue from '../../../templates/glacier-blue.json';
 import ivoryDawn from '../../../templates/ivory-dawn.json';
 import sapphireNight from '../../../templates/sapphire-night.json';
+import obsidianNoir from '../../../templates/obsidian-noir.json';
+import steelBlueprint from '../../../templates/steel-blueprint.json';
+import duneHorizon from '../../../templates/dune-horizon.json';
+import mauveReverie from '../../../templates/mauve-reverie.json';
 import templateIndex from '../../../templates/index.json';
 
 export const TEMPLATE_LIST: TemplateMeta[] = templateIndex as TemplateMeta[];
@@ -68,7 +72,11 @@ const RAW_TEMPLATES: Record<string, CanvasData> = {
   'sunshine-citrus': sunshineCitrus as unknown as CanvasData,
   'glacier-blue': glacierBlue as unknown as CanvasData,
   'ivory-dawn': ivoryDawn as unknown as CanvasData,
-  'sapphire-night': sapphireNight as unknown as CanvasData
+  'sapphire-night': sapphireNight as unknown as CanvasData,
+  'obsidian-noir': obsidianNoir as unknown as CanvasData,
+  'steel-blueprint': steelBlueprint as unknown as CanvasData,
+  'dune-horizon': duneHorizon as unknown as CanvasData,
+  'mauve-reverie': mauveReverie as unknown as CanvasData
 };
 
 /**

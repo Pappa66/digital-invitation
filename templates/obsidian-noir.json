@@ -1,0 +1,164 @@
+{
+  "theme": {
+    "primary": "#C9A24B",
+    "secondary": "#6B5B3E",
+    "background": "#141414",
+    "text": "#F3EAD9",
+    "font_heading": "Cinzel",
+    "font_body": "Karla",
+    "layout": "center",
+    "hero_style": "solid"
+  },
+  "settings": {
+    "music_url": "",
+    "guest_book_enabled": true,
+    "religion": "islam"
+  },
+  "blocks": [
+    {
+      "id": "b-1",
+      "type": "Hero",
+      "props": {
+        "groom": "Arka Wicaksono",
+        "bride": "Maya Kirana",
+        "date": "Sabtu, 21 November 2026",
+        "place": "The Grand Majestic, Jakarta",
+        "caption": "Undangan Pernikahan",
+        "bg_image": "",
+        "show_ornament": true,
+        "variant": "center"
+      }
+    },
+    {
+      "id": "b-2",
+      "type": "Couple",
+      "props": {
+        "introduction": "Assalamu’alaikum Warahmatullahi Wabarakatuh",
+        "bismillah": "Bismillahirrahmanirrahim",
+        "groom": "Arka Wicaksono, S.Ars.",
+        "groom_parents": "Putra pertama dari Bpk. H. Sutrisno & Ibu Hj. Ratna",
+        "bride": "Maya Kirana, S.H.",
+        "bride_parents": "Putri kedua dari Bpk. Ir. Hendra & Ibu Dewi Lestari",
+        "quote": "Dan Kami ciptakan kamu berpasang-pasangan.",
+        "variant": "vertical"
+      }
+    },
+    {
+      "id": "b-3",
+      "type": "Countdown",
+      "props": {
+        "target_date": "2026-11-21T08:00:00+07:00",
+        "title": "Menuju Hari Bahagia",
+        "variant": "cards"
+      }
+    },
+    {
+      "id": "b-4",
+      "type": "Story",
+      "props": {
+        "title": "Our Story",
+        "subtitle": "Dua garis takdir yang bertemu",
+        "ev_title": [
+          "Takdir Di Bandara",
+          "Janji Di Senja",
+          "Lamaran"
+        ],
+        "ev_date": [
+          "2019",
+          "2021",
+          "2025"
+        ],
+        "ev_desc": [
+          "Pertemuan pertama kami terjadi di bandara saat keduanya terlambat mengejar penerbangan yang sama.",
+          "Setelah tiga tahun berkenalan, kami menguatkan komitmen di tepi senja Pantai Sanur.",
+          "Arka melamar Maya di atas menara kota dengan deretan lentera yang menyala."
+        ]
+      }
+    },
+    {
+      "id": "b-5",
+      "type": "Divider",
+      "props": {
+        "variant": "diamond"
+      }
+    },
+    {
+      "id": "b-6",
+      "type": "EventDetail",
+      "props": {
+        "title": "Akad Nikah",
+        "icon": "rings",
+        "date": "Sabtu, 21 November 2026",
+        "time": "08.00 - 10.00 WIB",
+        "location": "The Grand Majestic Ballroom",
+        "address": "Jl. MH. Thamrin No. 10, Jakarta Pusat",
+        "maps_url": "https://maps.google.com/?q=The%20Grand%20Majestic%20Ballroom",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "b-7",
+      "type": "EventDetail",
+      "props": {
+        "title": "Resepsi",
+        "icon": "glass",
+        "date": "Sabtu, 21 November 2026",
+        "time": "11.00 - 14.00 WIB",
+        "location": "The Grand Majestic Ballroom",
+        "address": "Kawasan Thamrin, Jakarta Pusat",
+        "maps_url": "https://maps.google.com/?q=The%20Grand%20Majestic%20Ballroom",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "b-8",
+      "type": "Gallery",
+      "props": {
+        "title": "Momen Bahagia Kami",
+        "images": [
+          "https://picsum.photos/seed/obsidian-noir-g1/900/1200",
+          "https://picsum.photos/seed/obsidian-noir-g2/900/1200",
+          "https://picsum.photos/seed/obsidian-noir-g3/900/1200",
+          "https://picsum.photos/seed/obsidian-noir-g4/900/1200"
+        ],
+        "variant": "grid",
+        "animation": "slide-up"
+      }
+    },
+    {
+      "id": "b-9",
+      "type": "RSVP",
+      "props": {
+        "title": "Konfirmasi Kehadiran",
+        "note": "Mohon kirim konfirmasi kehadiran sebelum 5 November 2026",
+        "deadline": "2026-11-05",
+        "button_text": "Kirim Konfirmasi",
+        "success_message": "Terima kasih, konfirmasi Anda sudah kami terima.",
+        "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "bank_name": "BCA",
+        "account_number": "528 012 3456",
+        "account_holder": "Arka Wicaksono"
+      }
+    },
+    {
+      "id": "b-10",
+      "type": "Thanks",
+      "props": {
+        "title": "Doa Restu Anda",
+        "message": "Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu kepada kami.",
+        "closing": "Wassalamu’alaikum Warahmatullahi Wabarakatuh",
+        "names": "Arka & Maya"
+      }
+    },
+    {
+      "id": "b-11",
+      "type": "Maps",
+      "props": {
+        "title": "Lokasi Acara",
+        "address": "The Grand Majestic, Jakarta",
+        "embed_url": "https://maps.google.com/?q=The%20Grand%20Majestic%2C%20Jakarta"
+      }
+    }
+  ],
+  "flow": "stack"
+}

@@ -100,7 +100,7 @@ const FITUR = [
 
 const FEATURED = ['elegant-gold', 'blush-romance', 'ivory-dawn'];
 
-const PER_PAGE = 8;
+const PER_PAGE = 9;
 
 function useFontsLink() {
   useEffect(() => {
@@ -192,7 +192,7 @@ export default function LandingPage() {
         <header className="sticky top-0 z-40 border-b border-[#e7ddcc]/80 bg-[#faf7f2]/90 backdrop-blur">
           <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
             <div className="flex items-center gap-3">
-              <span className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-white ring-1 ring-[#d9c795]">
+              <span className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-black ring-1 ring-[#3a332b]">
                 <Image src="/logo/prasha.png" width={40} height={40} alt="Prasha Digital" className="h-10 w-10 object-cover" />
               </span>
               <div className="leading-tight">
@@ -544,7 +544,7 @@ export default function LandingPage() {
           <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
             <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
               <div className="flex items-center gap-3">
-                <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-white ring-1 ring-[#d9c795]">
+                <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-black ring-1 ring-[#3a332b]">
                   <Image src="/logo/prasha.png" width={36} height={36} alt="Prasha Digital" className="h-9 w-9 object-cover" />
                 </span>
                 <div className="leading-tight">

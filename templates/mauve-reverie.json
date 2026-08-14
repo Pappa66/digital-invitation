@@ -1,0 +1,165 @@
+{
+  "theme": {
+    "primary": "#9B6A8C",
+    "secondary": "#C9A3BE",
+    "background": "#FBF5F8",
+    "text": "#5A4153",
+    "font_heading": "Great Vibes",
+    "font_body": "Nunito Sans",
+    "layout": "center",
+    "hero_style": "image"
+  },
+  "settings": {
+    "music_url": "",
+    "guest_book_enabled": true,
+    "religion": "islam"
+  },
+  "blocks": [
+    {
+      "id": "b-1",
+      "type": "Hero",
+      "props": {
+        "groom": "Rama Aditya",
+        "bride": "Alya Salsabila",
+        "date": "Sabtu, 19 Desember 2026",
+        "place": "Hotel Tugu, Malang",
+        "caption": "Undangan Pernikahan",
+        "bg_image": "https://images.unsplash.com/photo-1505236858219-8359eb29e329",
+        "show_ornament": true,
+        "variant": "center"
+      }
+    },
+    {
+      "id": "b-2",
+      "type": "Couple",
+      "props": {
+        "introduction": "Assalamu’alaikum Warahmatullahi Wabarakatuh",
+        "bismillah": "Bismillahirrahmanirrahim",
+        "groom": "Rama Aditya, S.E.",
+        "groom_parents": "Putra kedua dari Bpk. H. Edi Santoso & Ibu Hj. Wati",
+        "bride": "Alya Salsabila, S.Ked.",
+        "bride_parents": "Putri pertama dari Bpk. dr. Fajar & Ibu Retno Wulandari",
+        "quote": "Cinta adalah dua jiwa yang akhirnya menemukan rumahnya.",
+        "variant": "vertical"
+      }
+    },
+    {
+      "id": "b-3",
+      "type": "Countdown",
+      "props": {
+        "target_date": "2026-12-19T08:00:00+07:00",
+        "title": "Menghitung Hari Bahagia",
+        "variant": "cards"
+      }
+    },
+    {
+      "id": "b-4",
+      "type": "Story",
+      "props": {
+        "title": "Our Story",
+        "subtitle": "Tentang kita, dari awal hingga selamanya",
+        "ev_title": [
+          "Pertama Saling Menyapa",
+          "Cinta Yang Dipertemukan",
+          "Mengikat Janji"
+        ],
+        "ev_date": [
+          "2019",
+          "2022",
+          "2026"
+        ],
+        "ev_desc": [
+          "Rama dan Alya bertemu di perpustakaan kota saat keduanya berebut buku terakhir.",
+          "Mereka saling mengenal lewat diskusi panjang tentang mimpi-mimpi kecil.",
+          "Rama melamar Alya di pagi buta, tepat saat matahari terbit di puncak Gunung Bromo."
+        ]
+      }
+    },
+    {
+      "id": "b-5",
+      "type": "Divider",
+      "props": {
+        "variant": "hearts"
+      }
+    },
+    {
+      "id": "b-6",
+      "type": "EventDetail",
+      "props": {
+        "title": "Akad Nikah",
+        "icon": "rings",
+        "date": "Sabtu, 19 Desember 2026",
+        "time": "08.00 - 10.00 WIB",
+        "location": "Hotel Tugu, Malang",
+        "address": "Jl. Tugu No. 12, Malang, Jawa Timur",
+        "maps_url": "https://maps.google.com/?q=Hotel%20Tugu%20Malang",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "b-7",
+      "type": "EventDetail",
+      "props": {
+        "title": "Resepsi",
+        "icon": "glass",
+        "date": "Sabtu, 19 Desember 2026",
+        "time": "11.00 - 14.00 WIB",
+        "location": "Hotel Tugu, Malang",
+        "address": "Taman belakang bergaya kolonial, Malang",
+        "maps_url": "https://maps.google.com/?q=Hotel%20Tugu%20Malang",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "b-8",
+      "type": "Gallery",
+      "props": {
+        "title": "Momen Berharga",
+        "images": [
+          "https://picsum.photos/seed/mauve-reverie-g1/900/1200",
+          "https://picsum.photos/seed/mauve-reverie-g2/900/1200",
+          "https://picsum.photos/seed/mauve-reverie-g3/900/1200",
+          "https://picsum.photos/seed/mauve-reverie-g4/900/1200"
+        ],
+        "variant": "carousel",
+        "animation": "zoom-out",
+        "interval_sec": 3
+      }
+    },
+    {
+      "id": "b-9",
+      "type": "RSVP",
+      "props": {
+        "title": "Konfirmasi Kehadiran",
+        "note": "Mohon kirim konfirmasi kehadiran sebelum 3 Desember 2026",
+        "deadline": "2026-12-03",
+        "button_text": "Kirim Konfirmasi",
+        "success_message": "Terima kasih, konfirmasi Anda sudah kami terima.",
+        "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "bank_name": "BRI",
+        "account_number": "009 012 3456",
+        "account_holder": "Rama Aditya"
+      }
+    },
+    {
+      "id": "b-10",
+      "type": "Thanks",
+      "props": {
+        "title": "Doa Restu Anda",
+        "message": "Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu kepada kami.",
+        "closing": "Wassalamu’alaikum Warahmatullahi Wabarakatuh",
+        "names": "Rama & Alya"
+      }
+    },
+    {
+      "id": "b-11",
+      "type": "Maps",
+      "props": {
+        "title": "Lokasi Acara",
+        "address": "Hotel Tugu, Malang",
+        "embed_url": "https://maps.google.com/?q=Hotel%20Tugu%2C%20Malang"
+      }
+    }
+  ],
+  "flow": "stack"
+}

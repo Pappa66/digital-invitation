@@ -254,5 +254,37 @@
     "description": "Navy safir yang dalam dengan aksen emas — mewah untuk pernikahan malam.",
     "primary": "#1B2A4A",
     "secondary": "#C9A227"
+  },
+  {
+    "id": "obsidian-noir",
+    "name": "Obsidian Noir",
+    "category": "classic",
+    "description": "Hitam pekat dengan aksen emas art deco — mewah untuk pernikahan malam yang megah.",
+    "primary": "#C9A24B",
+    "secondary": "#6B5B3E"
+  },
+  {
+    "id": "steel-blueprint",
+    "name": "Steel Blueprint",
+    "category": "modern",
+    "description": "Biru baja bersih dengan tipografi tegas, modern dan berani.",
+    "primary": "#1B4965",
+    "secondary": "#4AA3C9"
+  },
+  {
+    "id": "dune-horizon",
+    "name": "Dune Horizon",
+    "category": "outdoor",
+    "description": "Pasir terakota dan krem gurun yang hangat untuk pesta di alam terbuka.",
+    "primary": "#B0652A",
+    "secondary": "#E0B07A"
+  },
+  {
+    "id": "mauve-reverie",
+    "name": "Mauve Reverie",
+    "category": "romance",
+    "description": "Mauve lembut dan carousel foto yang romantis, puitis dan tenang.",
+    "primary": "#9B6A8C",
+    "secondary": "#C9A3BE"
   }
 ]
