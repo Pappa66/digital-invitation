@@ -92,9 +92,8 @@ export default function MediaLibrary({ open, onClose, onSelect }: MediaLibraryPr
             <input type="file" accept="image/*" multiple className="hidden" onChange={handleUpload} disabled={uploading} />
           </label>
           <span className="text-xs text-gray-500">
-            {uploading ? `Mengunggah ${uploadingCount} gambar...` : 'Pilih banyak gambar sekaligus — akan dikompresi sebelum diunggah.'}
-          </label>
-          <span className="text-xs text-gray-500">Gambar otomatis dikompresi sebelum diunggah.</span>
+            {uploading ? `Mengunggah ${uploadingCount} gambar...` : 'Pilih banyak gambar sekaligus; akan dikompresi sebelum diunggah.'}
+          </span>
         </div>
 
         <div className="flex-1 overflow-auto p-6">
