@@ -635,26 +635,67 @@ export function HeroBlock({ props, greetingName }: { props: BlockProps; greeting
           animate={opened ? { opacity: 0, y: -40, transition: { duration: 0.6, ease: 'easeInOut' } } : {}}
           className={`relative z-10 flex w-full flex-col ${isLeft ? 'items-start' : 'items-center'}`}
         >
-          <p className="text-xs uppercase tracking-[0.3em]">
+          <motion.p
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-xs uppercase tracking-[0.3em]"
+          >
             <Editable prop="caption">{str(props, 'caption')}</Editable>
-          </p>
-          {showOrnament && <Ornament className={isLeft ? 'mt-4 mr-auto text-white opacity-80' : 'mt-4 text-white opacity-80'} />}
-          <h1 className="mt-6 text-3xl font-medium leading-tight sm:text-4xl md:text-5xl">
+          </motion.p>
+          {showOrnament && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className={isLeft ? 'mt-4 mr-auto text-white opacity-80' : 'mt-4 text-white opacity-80'}
+            >
+              <Ornament />
+            </motion.div>
+          )}
+          <motion.h1
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.45 }}
+            className="mt-6 text-3xl font-medium leading-tight sm:text-4xl md:text-5xl"
+          >
             <Editable prop="bride">{str(props, 'bride')}</Editable>
-          </h1>
-          <p className="my-4 text-xl sm:text-2xl">&amp;</p>
-          <h1 className="text-3xl font-medium leading-tight sm:text-4xl md:text-5xl">
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.7 }}
+            className="my-4 text-xl sm:text-2xl"
+          >
+            &amp;
+          </motion.p>
+          <motion.h1
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.8 }}
+            className="text-3xl font-medium leading-tight sm:text-4xl md:text-5xl"
+          >
             <Editable prop="groom">{str(props, 'groom')}</Editable>
-          </h1>
-          <p className="mt-8 text-sm uppercase tracking-widest opacity-90">
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 1.05 }}
+            className="mt-8 text-sm uppercase tracking-widest opacity-90"
+          >
             <Editable prop="date">{str(props, 'date')}</Editable>
-          </p>
-          <div className="mt-3 flex items-center gap-2 text-xs opacity-80">
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 1.2 }}
+            className="mt-3 flex items-center gap-2 text-xs opacity-80"
+          >
             <MapPin className="h-3.5 w-3.5" />
             <span>
               <Editable prop="place">{str(props, 'place')}</Editable>
             </span>
-          </div>
+          </motion.div>
           {greetingName && (
             <motion.div
               initial={{ opacity: 0, y: 8 }}
