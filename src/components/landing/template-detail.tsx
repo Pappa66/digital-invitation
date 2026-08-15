@@ -6,8 +6,7 @@ import { ArrowLeft, ArrowRight, MessageCircle, Sparkles } from 'lucide-react';
 import type { CanvasData, TemplateMeta } from '@/lib/types';
 import GuestRenderer from '@/components/guest/GuestRenderer';
 import OrderDialog from '@/components/landing/order-dialog';
-import DeviceToggle from '@/components/ui/device-toggle';
-import type { Device } from '@/components/ui/device-toggle';
+import PhoneFrame from '@/components/ui/phone-frame';
 
 interface TemplateDetailProps {
   meta: TemplateMeta;
@@ -33,7 +32,6 @@ function Ornament() {
 
 export default function TemplateDetail({ meta, index, canvas, categoryLabel, total, prev, next }: TemplateDetailProps) {
   const [orderOpen, setOrderOpen] = useState(false);
-  const [device, setDevice] = useState<Device>('mobile');
 
   return (
     <div className="min-h-screen bg-[#faf7f2] text-[#2b2620]">
@@ -51,7 +49,6 @@ export default function TemplateDetail({ meta, index, canvas, categoryLabel, tot
           <Link href="/" className="flex items-center gap-2 text-sm text-[#8a7a66] transition-colors hover:text-[#2b2620]">
             <ArrowLeft className="h-4 w-4" /> Semua Template
           </Link>
-          <DeviceToggle device={device} onChange={setDevice} />
           <span className="hidden text-xs text-[#b3a69a] sm:block">
             Template {String(index + 1).padStart(2, '0')} / {total}
           </span>
@@ -71,16 +68,10 @@ export default function TemplateDetail({ meta, index, canvas, categoryLabel, tot
           <span className="font-medium text-[#8a6d2f]">{meta.name}</span>
         </nav>
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1fr)_360px]">
-          <div className="min-w-0">
-            <div
-              className={`mx-auto rounded-[1.5rem] border border-[#d9c795] bg-white p-3 shadow-2xl shadow-[#2b2620]/10 ${
-                device === 'mobile' ? 'max-w-[430px]' : 'max-w-full'
-              }`}
-            >
-              <div className="h-[calc(100dvh-10.5rem)] overflow-auto rounded-[1rem] bg-white">
-                <GuestRenderer canvas={canvas} preview demo width={device} />
-              </div>
-            </div>
+          <div className="min-w-0 pt-2">
+            <PhoneFrame accent={meta.secondary}>
+              <GuestRenderer canvas={canvas} preview demo width="mobile" />
+            </PhoneFrame>
           </div>
 
           <div className="lg:sticky lg:top-24 lg:self-start">
