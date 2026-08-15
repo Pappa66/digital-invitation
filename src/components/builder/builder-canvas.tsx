@@ -177,6 +177,7 @@ function SortableBlock({ block, dimmed, dropTarget }: { block: Block; dimmed: bo
       {...listeners}
     >
       <BlockView block={block} editable />
+      {selected && <InnerDragLayer block={block} blockWidth={420} />}
       {selected && (
         <div className="absolute right-2 top-2 z-30 flex gap-1 rounded-md bg-[#141414]/90 p-1 shadow-lg ring-1 ring-white/10" onClick={(e) => e.stopPropagation()}>
           <button
@@ -380,16 +381,16 @@ function InnerDragLayer({ block, blockWidth }: { block: Block; blockWidth: numbe
       {handles.map((h) => (
         <div
           key={h.name}
-          className="absolute z-30 flex scale-50 items-center gap-3 border border-[#c9a45c] bg-[#c9a45c]/10 text-[#c9a45c]"
+          className="absolute z-30 border-2 border-dashed border-[#c9a45c]/60 bg-[#c9a45c]/5"
           style={{ left: h.left, top: h.top, width: h.width, height: h.height }}
         >
           <span
-            className="pointer-events-auto absolute -top-3 left-1/2 flex -translate-x-1/2 cursor-move items-center gap-1 rounded-full bg-[#c9a45c] px-2 py-0.5 text-[10px] text-white shadow ring-1 ring-white/30 active:cursor-grabbing"
-            title={`Geser elemen "${h.name}"`}
+            className="pointer-events-auto absolute -top-4 left-1/2 flex -translate-x-1/2 cursor-grab items-center gap-1 rounded-full bg-[#c9a45c] px-2 py-1 text-[10px] font-medium text-white shadow-lg ring-1 ring-white/30 hover:bg-[#b98a3e] active:cursor-grabbing"
+            title={`Geser "${h.name}" — tarik ke posisi yang diinginkan`}
             onPointerDown={(e) => onDragStart(e, h.name)}
           >
             <GripVertical className="h-3 w-3" />
-            Geser
+            {h.name}
           </span>
         </div>
       ))}

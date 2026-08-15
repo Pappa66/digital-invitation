@@ -1954,3 +1954,14 @@ function useLightbox(images: string[]) {
 
   return { open, lightbox };
 }
+
+/** Blok kosong — placeholder yang bisa diisi blok lain atau diberi dekor. */
+export function EmptyBlock() {
+  return (
+    <section className="px-6 py-10 sm:py-12 md:py-14">
+      <div className="flex h-24 items-center justify-center rounded-xl border-2 border-dashed border-current/20 text-xs text-current/30">
+        Blok Kosong — tambahkan konten atau geser blok lain ke sini
+      </div>
+    </section>
+  );
+}

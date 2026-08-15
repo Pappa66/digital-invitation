@@ -16,7 +16,8 @@ import {
   TextBlock,
   PhotoBlock,
   QuoteBlock,
-  LiveStreamingBlock
+  LiveStreamingBlock,
+  EmptyBlock
 } from '@/components/guest/blocks';
 import RSVPForm from '@/components/guest/rsvp';
 import EnvelopeBlock from '@/components/guest/envelope';
@@ -92,6 +93,9 @@ export default function BlockView({ block, projectId, editable = false, greeting
       break;
     case 'LiveStreaming':
       view = <LiveStreamingBlock props={block.props} />;
+      break;
+    case 'Empty':
+      view = <EmptyBlock />;
       break;
     default:
       return null;

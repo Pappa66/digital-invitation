@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { MailOpen } from 'lucide-react';
@@ -25,9 +25,10 @@ interface CoverModalProps {
 }
 
 /**
- * Layar pembuka fullscreen "Buka Undangan" — ciri khas webvitation.com:
+ * Layar pembuka fullscreen "Buka Undangan" — ciri khas wevitation.com:
  * cover foto penuh + nama pasangan + sapaan "Kepada: [tamu]" + tombol.
  * Dismiss (klik tombol) memunculkan event 'invite-opened' (memulai musik).
+ * Scroll diblokir selama cover terbuka.
  */
 export default function CoverModal({
   caption,
@@ -45,8 +46,17 @@ export default function CoverModal({
 }: CoverModalProps) {
   const [open, setOpen] = useState(true);
 
+  // Block scroll when cover is open
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = 'hidden';
+      return () => { document.body.style.overflow = ''; };
+    }
+  }, [open]);
+
   function openInvitation() {
     setOpen(false);
+    document.body.style.overflow = '';
     window.dispatchEvent(new CustomEvent('invite-opened'));
     window.setTimeout(() => {
       window.scrollTo({ top: 0, behavior: 'smooth' });

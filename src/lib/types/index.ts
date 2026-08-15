@@ -14,7 +14,8 @@ export type BlockType =
   | 'Photo'
   | 'GiftList'
   | 'Quote'
-  | 'LiveStreaming';
+  | 'LiveStreaming'
+  | 'Empty';
 
 export interface Theme {
   primary: string;

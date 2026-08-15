@@ -155,7 +155,8 @@ const BLOCK_CATEGORIES: BlockCategory[] = [
         ],
         defaultVariant: 'line'
       },
-      { type: 'Thanks', label: 'Penutup', icon: HeartHandshake, desc: 'Ucapan terima kasih' }
+      { type: 'Thanks', label: 'Penutup', icon: HeartHandshake, desc: 'Ucapan terima kasih' },
+      { type: 'Empty', label: 'Blok Kosong', icon: LayoutPanelTop, desc: 'Placeholder kosong' }
     ]
   }
 ];

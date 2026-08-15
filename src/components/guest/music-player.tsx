@@ -126,8 +126,8 @@ export default function MusicPlayer({ settings }: MusicPlayerProps) {
     player.playVideo();
   }, [wantStart]);
 
-  // Mulai musik: dari tombol "Buka Undangan" (event invite-opened) ATAU
-  // interaksi pertama (sc switch). Browser butuh interaksi pengguna dulu.
+  // Mulai musik: HANYA dari tombol "Buka Undangan" (event invite-opened).
+  // Tidak ada fallback onFirstInteraction — musik TIDAK boleh jalan sebelum user klik Buka Undangan.
   useEffect(() => {
     if (!autoplay || !armed) return;
     if (startRequestedRef.current) return;
@@ -138,7 +138,6 @@ export default function MusicPlayer({ settings }: MusicPlayerProps) {
       else if (yt) {
         if (playerReadyRef.current) startYt();
         else {
-          // Player belum siap — coba lagi begitu API siap.
           const retry = () => {
             if (playerReadyRef.current) startYt();
             window.removeEventListener('yt-ready', retry);
@@ -148,13 +147,10 @@ export default function MusicPlayer({ settings }: MusicPlayerProps) {
       }
     };
 
-    // Tombol "Buka Undangan" di overlay pembuka.
+    // Hanya mulai dari tombol "Buka Undangan"
     window.addEventListener('invite-opened', kick);
-    // Jaminan: kalau tanpa overlay atau keyboard, mulai di interaksi pertama.
-    const off = onFirstInteraction(kick);
     return () => {
       window.removeEventListener('invite-opened', kick);
-      off();
     };
   }, [autoplay, armed, isAudio, yt, startAudio, startYt]);
 

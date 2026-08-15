@@ -220,6 +220,11 @@ const BLOCK_PRESETS: Record<BlockType, Block> = {
       platform: 'youtube',
       note: 'Saksikan secara langsung melalui tautan berikut.'
     }
+  },
+  Empty: {
+    id: '',
+    type: 'Empty',
+    props: {}
   }
 };
 
