@@ -59,6 +59,17 @@ export default function TemplateDetail({ meta, index, canvas, categoryLabel, tot
       </header>
 
       <main className="relative z-10 mx-auto max-w-6xl px-4 py-10 sm:px-6">
+        <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-1.5 text-xs text-[#b3a69a]">
+          <Link href="/" className="transition-colors hover:text-[#8a6d2f]">
+            Beranda
+          </Link>
+          <span aria-hidden>/</span>
+          <Link href="/#catalog" className="transition-colors hover:text-[#8a6d2f]">
+            Template
+          </Link>
+          <span aria-hidden>/</span>
+          <span className="font-medium text-[#8a6d2f]">{meta.name}</span>
+        </nav>
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1fr)_360px]">
           <div className="min-w-0">
             <div
@@ -67,7 +78,7 @@ export default function TemplateDetail({ meta, index, canvas, categoryLabel, tot
               }`}
             >
               <div className="max-h-[85vh] overflow-auto rounded-[1rem] bg-white">
-                <GuestRenderer canvas={canvas} preview width={device} />
+                <GuestRenderer canvas={canvas} preview demo width={device} />
               </div>
             </div>
           </div>

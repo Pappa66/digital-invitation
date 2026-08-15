@@ -46,7 +46,10 @@
         "groom_parents": "Son of Mr. Richard Tanu & Mrs. Maria",
         "bride": "Giselle Tanuwijaya, S.E.",
         "bride_parents": "Daughter of Mr. Hendra Wijaya & Mrs. Susan",
-        "variant": "side"
+        "variant": "side",
+        "photo_shape": "circle",
+        "groom_photo": "https://picsum.photos/seed/moonlightsilver-groom/600/700",
+        "bride_photo": "https://picsum.photos/seed/moonlightsilver-bride/600/700"
       }
     },
     {

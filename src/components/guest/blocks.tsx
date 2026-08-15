@@ -7,7 +7,7 @@ import { Calendar, MapPin, Heart, Sparkles, Gem, BookOpen, Sprout, MailOpen, Plu
 import type { BlockProps, DecorAsset, DecorShapeKind } from '@/lib/types';
 import type { ReligionKey } from '@/lib/religions';
 import { Editable, BuilderEditableContext } from '@/components/builder/inline-edit';
-import { OrnamentArt, ORNAMENTS, type OrnamentKey } from '@/components/builder/ornaments';
+import { OrnamentArt, ORNAMENT_LABELS, type OrnamentKey } from '@/components/builder/ornaments';
 import { usePreview } from '@/components/guest/preview-context';
 import { useTheme } from '@/components/guest/theme-context';
 import { useInnerPositions } from '@/components/guest/inner-context';
@@ -48,7 +48,7 @@ function Inner({ name, className, children }: { name: string; className?: string
 }
 
 function Ornament({ className = '', ornament }: { className?: string; ornament?: string }) {
-  if (ornament && (ORNAMENTS as unknown as Record<string, string>)[ornament]) {
+  if (ornament && ORNAMENT_LABELS[ornament as OrnamentKey]) {
     const key = ornament as OrnamentKey;
     return (
       <div className={`flex items-center justify-center ${className}`} aria-hidden>
@@ -555,9 +555,42 @@ function BackgroundImage({ src, fit, position }: { src: string; fit?: string; po
   );
 }
 
-function CouplePerson({ propKey, name, parents }: { propKey: string; name: string; parents: string }) {
+function CouplePhoto({ src, shape, alt }: { src: string; shape: string; alt: string }) {
+  if (!src) return null;
+  const base = 'relative h-48 w-48 overflow-hidden bg-black/10';
+  const frame =
+    shape === 'circle'
+      ? 'rounded-full'
+      : shape === 'arch'
+      ? 'rounded-t-full'
+      : shape === 'tilt'
+      ? 'rounded-2xl -rotate-2'
+      : shape === 'frame'
+      ? 'rounded-2xl border-4 border-white p-1.5 shadow-lg'
+      : 'rounded-full';
+  const innerRound =
+    shape === 'circle' || !shape
+      ? 'rounded-full'
+      : shape === 'arch'
+      ? 'rounded-t-full'
+      : 'rounded-2xl';
+  const inner = 'absolute inset-1.5 overflow-hidden ' + innerRound;
+  return (
+    <div className={`${base} ${frame} mx-auto mb-4`}>
+      <div className={inner}>
+        <img src={src} alt={alt} className="h-full w-full object-cover" style={{ objectPosition: 'center top' }} />
+      </div>
+      {shape === 'tilt' && (
+        <div className="pointer-events-none absolute -inset-1 -z-10 rounded-2xl border border-current/10" />
+      )}
+    </div>
+  );
+}
+
+function CouplePerson({ propKey, name, parents, photo, photoShape }: { propKey: string; name: string; parents: string; photo?: string; photoShape?: string }) {
   return (
     <div className="min-w-0 flex-1 break-words">
+      {photo && <CouplePhoto src={photo} shape={photoShape ?? ''} alt={name} />}
       <h2 className="text-2xl font-medium leading-snug md:text-3xl">
         <Editable prop={propKey}>{name}</Editable>
       </h2>
@@ -763,6 +796,9 @@ export function HeroBlock({ props, greetingName }: { props: BlockProps; greeting
 
 export function CoupleBlock({ props }: { props: BlockProps }) {
   const side = str(props, 'variant') === 'side';
+  const photoShape = str(props, 'photo_shape') || '';
+  const groomPhoto = str(props, 'groom_photo');
+  const bridePhoto = str(props, 'bride_photo');
   const title = (children: React.ReactNode) => (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -801,24 +837,24 @@ export function CoupleBlock({ props }: { props: BlockProps }) {
           <Inner name="groom">
             <div className="mx-auto grid w-full max-w-2xl items-center gap-6 md:grid-cols-[1fr_auto_1fr] md:gap-8">
               <div className="min-w-0 text-center">
-                <CouplePerson propKey="groom" name={str(props, 'groom')} parents={str(props, 'groom_parents')} />
+                <CouplePerson propKey="groom" name={str(props, 'groom')} parents={str(props, 'groom_parents')} photo={groomPhoto} photoShape={photoShape} />
               </div>
               <div className="my-2 flex min-w-0 justify-center md:my-0">
                 <GiantAmp />
               </div>
               <div className="min-w-0 text-center">
-                <CouplePerson propKey="bride" name={str(props, 'bride')} parents={str(props, 'bride_parents')} />
+                <CouplePerson propKey="bride" name={str(props, 'bride')} parents={str(props, 'bride_parents')} photo={bridePhoto} photoShape={photoShape} />
               </div>
             </div>
           </Inner>
         ) : (
           <>
             <div className="mb-0">
-              <CouplePerson propKey="groom" name={str(props, 'groom')} parents={str(props, 'groom_parents')} />
+              <CouplePerson propKey="groom" name={str(props, 'groom')} parents={str(props, 'groom_parents')} photo={groomPhoto} photoShape={photoShape} />
             </div>
             <GiantAmp />
             <div className="mt-0">
-              <CouplePerson propKey="bride" name={str(props, 'bride')} parents={str(props, 'bride_parents')} />
+              <CouplePerson propKey="bride" name={str(props, 'bride')} parents={str(props, 'bride_parents')} photo={bridePhoto} photoShape={photoShape} />
             </div>
           </>
         )}
@@ -844,14 +880,18 @@ export function CountdownBlock({ props }: { props: BlockProps }) {
 
 function CountdownTimer({ target, variant }: { target: number; variant: string }) {
   const preview = usePreview();
-  const [now, setNow] = useState(() => Date.now());
+  const [now, setNow] = useState<number | null>(null);
   useEffect(() => {
-    if (preview) return;
+    if (preview) {
+      setNow(target);
+      return;
+    }
+    setNow(Date.now());
     const id = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(id);
-  }, [preview]);
+  }, [preview, target]);
 
-  const diff = Math.max(0, target - now);
+  const diff = now === null ? 0 : Math.max(0, target - now);
   const days = Math.floor(diff / 86400000);
   const hours = Math.floor((diff % 86400000) / 3600000);
   const minutes = Math.floor((diff % 3600000) / 60000);
@@ -916,6 +956,7 @@ export function EventDetailBlock({ props }: { props: BlockProps }) {
   const icon = str(props, 'icon') === 'glass' ? Sparkles : Gem;
   const Icon = icon;
   const band = str(props, 'variant') === 'band';
+  const preview = usePreview();
 
   const title = str(props, 'title');
   const dateStr = str(props, 'date');
@@ -970,36 +1011,51 @@ export function EventDetailBlock({ props }: { props: BlockProps }) {
               </div>
               {(str(props, 'maps_url') || address) && (
                 <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
-                  {str(props, 'live_url') && bool(props, 'show_live') !== false && (
-                    <a
-                      href={str(props, 'live_url')}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 rounded-full border border-current/25 px-4 py-2 text-xs font-medium transition-colors hover:bg-current/10"
-                    >
-                      <Radio className="h-3.5 w-3.5" /> Siaran Langsung
-                    </a>
-                  )}
-                  {str(props, 'maps_url') && (
-                    <a
-                      href={str(props, 'maps_url')}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 rounded-full border border-current/25 px-4 py-2 text-xs font-medium transition-colors hover:bg-current/10"
-                    >
-                      <MapPin className="h-3.5 w-3.5" /> Buka Maps
-                    </a>
-                  )}
-                  {address && (
-                    <a
-                      href={calendarHref}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 rounded-full border border-current/25 px-4 py-2 text-xs font-medium transition-colors hover:bg-current/10"
-                    >
-                      <Calendar className="h-3.5 w-3.5" /> Simpan ke Kalender
-                    </a>
-                  )}
+                  {str(props, 'live_url') && bool(props, 'show_live') !== false &&
+                    (preview ? (
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-current/25 px-4 py-2 text-xs font-medium">
+                        <Radio className="h-3.5 w-3.5" /> Siaran Langsung
+                      </span>
+                    ) : (
+                      <a
+                        href={str(props, 'live_url')}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 rounded-full border border-current/25 px-4 py-2 text-xs font-medium transition-colors hover:bg-current/10"
+                      >
+                        <Radio className="h-3.5 w-3.5" /> Siaran Langsung
+                      </a>
+                    ))}
+                  {str(props, 'maps_url') &&
+                    (preview ? (
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-current/25 px-4 py-2 text-xs font-medium">
+                        <MapPin className="h-3.5 w-3.5" /> Buka Maps
+                      </span>
+                    ) : (
+                      <a
+                        href={str(props, 'maps_url')}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 rounded-full border border-current/25 px-4 py-2 text-xs font-medium transition-colors hover:bg-current/10"
+                      >
+                        <MapPin className="h-3.5 w-3.5" /> Buka Maps
+                      </a>
+                    ))}
+                  {address &&
+                    (preview ? (
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-current/25 px-4 py-2 text-xs font-medium">
+                        <Calendar className="h-3.5 w-3.5" /> Simpan ke Kalender
+                      </span>
+                    ) : (
+                      <a
+                        href={calendarHref}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 rounded-full border border-current/25 px-4 py-2 text-xs font-medium transition-colors hover:bg-current/10"
+                      >
+                        <Calendar className="h-3.5 w-3.5" /> Simpan ke Kalender
+                      </a>
+                    ))}
                 </div>
               )}
             </div>

@@ -46,7 +46,10 @@
         "groom_parents": "Son of Mr. Hendra Basuki & Mrs. Ratna",
         "bride": "Ariana Basuki, S.E.",
         "bride_parents": "Daughter of Mr. Felix Pratama & Mrs. Sanny",
-        "variant": "side"
+        "variant": "side",
+        "photo_shape": "circle",
+        "groom_photo": "https://picsum.photos/seed/pearlwhite-groom/600/700",
+        "bride_photo": "https://picsum.photos/seed/pearlwhite-bride/600/700"
       }
     },
     {

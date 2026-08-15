@@ -46,7 +46,10 @@
         "groom_parents": "Son of Mr. Johanes Widodo & Mrs. Sisca",
         "bride": "Vanessa Putri, S.E.",
         "bride_parents": "Daughter of Mr. Tommy Limanto & Mrs. Helen",
-        "variant": "side"
+        "variant": "side",
+        "photo_shape": "circle",
+        "groom_photo": "https://picsum.photos/seed/platinumluxe-groom/600/700",
+        "bride_photo": "https://picsum.photos/seed/platinumluxe-bride/600/700"
       }
     },
     {

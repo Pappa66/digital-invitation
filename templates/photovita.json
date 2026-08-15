@@ -13,7 +13,7 @@
     "ornament": "arch-geometric"
   },
   "settings": {
-    "music_url": "",
+    "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
     "guest_book_enabled": true,
     "checkin_enabled": true,
     "religion": "islam"
@@ -44,7 +44,10 @@
         "bride": "Vinna Lissa",
         "bride_parents": "Putri dari Bapak Agung Raharjo & Ibu Siti Khadijah",
         "quote": "Perkenankanlah kami memohon doa dan restu dari Bapak/Ibu sekalian.",
-        "variant": "vertical"
+        "variant": "vertical",
+        "photo_shape": "arch",
+        "groom_photo": "https://picsum.photos/seed/photovita-groom/600/700",
+        "bride_photo": "https://picsum.photos/seed/photovita-bride/600/700"
       }
     },
     {

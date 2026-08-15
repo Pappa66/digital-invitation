@@ -46,7 +46,10 @@
         "groom_parents": "Anak pertama dari Bpk. Dedi Kurniawan & Ibu Ratih",
         "bride": "Chintya Ayu, S.E.",
         "bride_parents": "Anak pertama dari Bpk. Hendar Ginanjar & Ibu Maya",
-        "variant": "vertical"
+        "variant": "vertical",
+        "photo_shape": "circle",
+        "groom_photo": "https://picsum.photos/seed/autumnmaple-groom/600/700",
+        "bride_photo": "https://picsum.photos/seed/autumnmaple-bride/600/700"
       }
     },
     {

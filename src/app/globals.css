@@ -80,11 +80,10 @@ body {
 }
 
 /* Cetak (print): sembunyikan elemen mengambang, rapikan section */
-.print-hidden {
-  display: none;
-}
-
 @media print {
+  .print-hidden {
+    display: none;
+  }
   body {
     background: #fff !important;
   }

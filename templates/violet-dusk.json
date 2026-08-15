@@ -46,7 +46,10 @@
         "groom_parents": "Putra dari Bpk. Hendra Santosa & Ibu Ratna",
         "bride": "Kirana Maharani, S.E.",
         "bride_parents": "Putri dari Bpk. Gunawan Wibisono & Ibu Mira",
-        "variant": "vertical"
+        "variant": "vertical",
+        "photo_shape": "arch",
+        "groom_photo": "https://picsum.photos/seed/violetdusk-groom/600/700",
+        "bride_photo": "https://picsum.photos/seed/violetdusk-bride/600/700"
       }
     },
     {

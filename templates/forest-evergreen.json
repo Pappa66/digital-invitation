@@ -46,7 +46,10 @@
         "groom_parents": "Anak pertama dari Bpk. Hadi Suwarno & Ibu Sri Wahyuni",
         "bride": "Syifa Rahma, S.E.",
         "bride_parents": "Anak pertama dari Bpk. Agus Salim & Ibu Ida Farida",
-        "variant": "side"
+        "variant": "side",
+        "photo_shape": "frame",
+        "groom_photo": "https://picsum.photos/seed/forestevergreen-groom/600/700",
+        "bride_photo": "https://picsum.photos/seed/forestevergreen-bride/600/700"
       }
     },
     {

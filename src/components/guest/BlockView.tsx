@@ -92,6 +92,8 @@ export default function BlockView({ block, projectId, editable = false, greeting
 
   const isHero = block.type === 'Hero';
   const renderCard = cardStyle && !isHero;
+  const cardCls =
+    'card-mask overflow-hidden rounded-2xl bg-[var(--color-background)] shadow-[0_8px_26px_rgba(0,0,0,0.12)] ring-1 ring-black/5';
   const body = (
     <StyledSection style={block.style}>{view}</StyledSection>
   );
@@ -107,10 +109,10 @@ export default function BlockView({ block, projectId, editable = false, greeting
               viewport={{ once: true, amount: 0.15 }}
               transition={{ duration: 0.55, ease: 'easeOut' }}
             >
-              {renderCard ? <div className="card-mask overflow-hidden rounded-2xl shadow-[0_8px_26px_rgba(0,0,0,0.12)] ring-1 ring-black/5">{body}</div> : body}
+              {renderCard ? <div className={`${cardCls} mx-3 mb-5 mt-5`}>{body}</div> : body}
             </motion.div>
           ) : (
-            renderCard ? <div className="overflow-hidden rounded-2xl shadow-[0_8px_26px_rgba(0,0,0,0.12)] ring-1 ring-black/5">{body}</div> : body
+            renderCard ? <div className={`${cardCls} mx-3 mb-5 mt-5`}>{body}</div> : body
           )}
           <DecorLayer blockId={block.id} decor={block.decor} />
         </div>

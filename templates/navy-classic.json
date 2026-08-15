@@ -13,7 +13,7 @@
     "card_style": false
   },
   "settings": {
-    "music_url": "",
+    "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-11.mp3",
     "guest_book_enabled": true,
     "religion": "islam",
     "checkin_enabled": true
@@ -43,7 +43,10 @@
         "groom_parents": "Putra dari Dr. H. Yudha Prasetya, S.H., M.H. & Ibu Hj. Niken",
         "bride": "Kirana Maharani, S.E., M.M.",
         "bride_parents": "Putri dari H. Bagus Nugroho, S.E., M.M. & Ibu Hj. Ratna",
-        "variant": "vertical"
+        "variant": "vertical",
+        "photo_shape": "circle",
+        "groom_photo": "https://picsum.photos/seed/navyclassic-groom/600/700",
+        "bride_photo": "https://picsum.photos/seed/navyclassic-bride/600/700"
       }
     },
     {

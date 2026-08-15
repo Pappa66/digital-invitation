@@ -13,7 +13,7 @@
     "ornament": "eucalyptus"
   },
   "settings": {
-    "music_url": "",
+    "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
     "guest_book_enabled": true,
     "checkin_enabled": true,
     "religion": "islam"
@@ -44,7 +44,10 @@
         "bride": "Alya Mushabah",
         "bride_parents": "Putri dari Bapak Irwan & Ibu Dewi",
         "quote": "Perkenankanlah kami memohon doa dan restu Bapak/Ibu sekalian.",
-        "variant": "vertical"
+        "variant": "vertical",
+        "photo_shape": "arch",
+        "groom_photo": "https://picsum.photos/seed/serene-groom/600/700",
+        "bride_photo": "https://picsum.photos/seed/serene-bride/600/700"
       }
     },
     {

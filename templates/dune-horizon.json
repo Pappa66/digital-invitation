@@ -13,7 +13,7 @@
     "card_style": true
   },
   "settings": {
-    "music_url": "",
+    "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
     "guest_book_enabled": true,
     "religion": "islam",
     "checkin_enabled": true
@@ -43,7 +43,10 @@
         "groom_parents": "Putra ketiga dari Bpk. H. Sumarno & Ibu Hj. Rina",
         "bride": "Citra Maharani, S.S.",
         "bride_parents": "Putri pertama dari Bpk. Drs. Gunawan & Ibu Lilis Suryani",
-        "variant": "side"
+        "variant": "side",
+        "photo_shape": "frame",
+        "groom_photo": "https://picsum.photos/seed/dunehorizon-groom/600/700",
+        "bride_photo": "https://picsum.photos/seed/dunehorizon-bride/600/700"
       }
     },
     {

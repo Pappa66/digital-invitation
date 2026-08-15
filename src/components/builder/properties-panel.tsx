@@ -547,6 +547,44 @@ export default function PropertiesPanel() {
                     </div>
                   )}
                   {block.type === 'Quote' && <QuotePicker blockId={block.id} props={block.props} setBlockProps={setBlockProps} />}
+                  {block.type === 'Couple' && (
+                    <div className="space-y-3">
+                      <div>
+                        <p className="mb-1 text-xs font-medium text-[#4a443c]">Bingkai Foto Mempelai</p>
+                        <div className="flex flex-wrap gap-2">
+                          {(['circle', 'arch', 'tilt', 'frame', 'none'] as const).map((s) => (
+                            <button
+                              key={s}
+                              onClick={() => setBlockProps(block.id, { photo_shape: s === 'none' ? '' : s })}
+                              className={`rounded-md border px-2 py-1.5 text-xs capitalize ${
+                                ((block.props.photo_shape as string) || 'circle') === (s === 'none' ? '' : s)
+                                  ? 'border-[#c9a45c] bg-[#c9a45c] text-white'
+                                  : 'border-[#e0d6c2] text-[#6b5f4d]'
+                              }`}
+                            >
+                              {s === 'circle' ? 'Bulat' : s === 'arch' ? 'Lengkung' : s === 'tilt' ? 'Miring' : s === 'frame' ? 'Bingkai' : 'Tanpa'}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                      <Field
+                        blockId={block.id}
+                        propKey="groom_photo"
+                        label="Foto Pria (URL)"
+                        value={(block.props.groom_photo as string) ?? ''}
+                        url
+                        onChange={(v) => setBlockProps(block.id, { groom_photo: v })}
+                      />
+                      <Field
+                        blockId={block.id}
+                        propKey="bride_photo"
+                        label="Foto Wanita (URL)"
+                        value={(block.props.bride_photo as string) ?? ''}
+                        url
+                        onChange={(v) => setBlockProps(block.id, { bride_photo: v })}
+                      />
+                    </div>
+                  )}
                   {block.type === 'Photo' && (
                     <div>
                       <p className="mb-1 text-xs font-medium text-[#4a443c]">Gambar</p>

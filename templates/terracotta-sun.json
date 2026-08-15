@@ -46,7 +46,10 @@
         "groom_parents": "Anak pertama dari Bpk. Rudi Hartono & Ibu Sri",
         "bride": "Amara Kinanti, S.E.",
         "bride_parents": "Anak kedua dari Bpk. Eka Putra & Ibu Yani",
-        "variant": "side"
+        "variant": "side",
+        "photo_shape": "frame",
+        "groom_photo": "https://picsum.photos/seed/terracottasun-groom/600/700",
+        "bride_photo": "https://picsum.photos/seed/terracottasun-bride/600/700"
       }
     },
     {

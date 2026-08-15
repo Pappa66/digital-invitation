@@ -46,7 +46,10 @@
         "groom_parents": "Putra dari Bpk. H. Suryanto & Ibu Hj. Murni",
         "bride": "Ayu Sekar, S.E.",
         "bride_parents": "Putri dari Bpk. H. Sudirman & Ibu Hj. Amanah",
-        "variant": "vertical"
+        "variant": "vertical",
+        "photo_shape": "circle",
+        "groom_photo": "https://picsum.photos/seed/burgundyclassic-groom/600/700",
+        "bride_photo": "https://picsum.photos/seed/burgundyclassic-bride/600/700"
       }
     },
     {

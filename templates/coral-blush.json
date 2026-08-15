@@ -46,7 +46,10 @@
         "groom_parents": "Putra dari Bpk. Fikri Ramdani & Ibu Yuli",
         "bride": "Bella Salsabila, S.E.",
         "bride_parents": "Putri dari Bpk. Ahmad Syafii & Ibu Rina",
-        "variant": "vertical"
+        "variant": "vertical",
+        "photo_shape": "arch",
+        "groom_photo": "https://picsum.photos/seed/coralblush-groom/600/700",
+        "bride_photo": "https://picsum.photos/seed/coralblush-bride/600/700"
       }
     },
     {

@@ -13,7 +13,7 @@
     "card_style": false
   },
   "settings": {
-    "music_url": "",
+    "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
     "guest_book_enabled": true,
     "religion": "islam",
     "checkin_enabled": true
@@ -43,7 +43,10 @@
         "groom_parents": "Putra dari H. Muhammad Sholeh & Hj. Aminah",
         "bride": "Naila Zahra, S.Pd.",
         "bride_parents": "Putri dari H. Abdul Malik & Hj. Fatimah",
-        "variant": "vertical"
+        "variant": "vertical",
+        "photo_shape": "circle",
+        "groom_photo": "https://picsum.photos/seed/emeraldkhaki-groom/600/700",
+        "bride_photo": "https://picsum.photos/seed/emeraldkhaki-bride/600/700"
       }
     },
     {

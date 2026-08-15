@@ -46,7 +46,10 @@
         "groom_parents": "Putra dari Bpk. Samsul Hadi & Ibu Susi",
         "bride": "Salsa Nabila, S.E.",
         "bride_parents": "Putri dari Bpk. Rachmat Hidayat & Ibu Yeni",
-        "variant": "vertical"
+        "variant": "vertical",
+        "photo_shape": "circle",
+        "groom_photo": "https://picsum.photos/seed/coffeecream-groom/600/700",
+        "bride_photo": "https://picsum.photos/seed/coffeecream-bride/600/700"
       }
     },
     {

@@ -46,7 +46,10 @@
         "groom_parents": "Putra dari I Made Sudana & Ni Ketut Ayu",
         "bride": "Alysia Deandra, S.E.",
         "bride_parents": "Putri dari I Nyoman Arta & Ni Made Dian",
-        "variant": "side"
+        "variant": "side",
+        "photo_shape": "circle",
+        "groom_photo": "https://picsum.photos/seed/glacierblue-groom/600/700",
+        "bride_photo": "https://picsum.photos/seed/glacierblue-bride/600/700"
       }
     },
     {

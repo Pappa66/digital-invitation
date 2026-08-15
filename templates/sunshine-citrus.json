@@ -46,7 +46,10 @@
         "groom_parents": "Putra dari Bpk. Rony Febrian & Ibu Tari",
         "bride": "Alea Putri, S.E.",
         "bride_parents": "Putri dari Bpk. Indra Kusuma & Ibu Sari",
-        "variant": "side"
+        "variant": "side",
+        "photo_shape": "arch",
+        "groom_photo": "https://picsum.photos/seed/sunshinecitrus-groom/600/700",
+        "bride_photo": "https://picsum.photos/seed/sunshinecitrus-bride/600/700"
       }
     },
     {

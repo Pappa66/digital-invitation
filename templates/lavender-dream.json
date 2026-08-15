@@ -46,7 +46,10 @@
         "groom_parents": "Putra dari Bpk. Haryo Kusumo & Ibu Sita",
         "bride": "Lavina Ayu, S.E.",
         "bride_parents": "Putri dari Bpk. Andra Wijaya & Ibu Fitri",
-        "variant": "side"
+        "variant": "side",
+        "photo_shape": "frame",
+        "groom_photo": "https://picsum.photos/seed/lavenderdream-groom/600/700",
+        "bride_photo": "https://picsum.photos/seed/lavenderdream-bride/600/700"
       }
     },
     {

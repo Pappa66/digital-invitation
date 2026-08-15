@@ -46,7 +46,10 @@
         "groom_parents": "Putra dari Bpk. Rendra Kurnia & Ibu Wulan",
         "bride": "Kiara Anindya, S.E.",
         "bride_parents": "Putri dari Bpk. Hartono & Ibu Ratih",
-        "variant": "vertical"
+        "variant": "vertical",
+        "photo_shape": "circle",
+        "groom_photo": "https://picsum.photos/seed/emeraldmist-groom/600/700",
+        "bride_photo": "https://picsum.photos/seed/emeraldmist-bride/600/700"
       }
     },
     {

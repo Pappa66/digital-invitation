@@ -46,7 +46,10 @@
         "groom_parents": "Putra dari Bpk. Yudi Hartono & Ibu Rina",
         "bride": "Nadia Larasati, S.E.",
         "bride_parents": "Putri dari Bpk. Agus Salim & Ibu Maya",
-        "variant": "side"
+        "variant": "side",
+        "photo_shape": "arch",
+        "groom_photo": "https://picsum.photos/seed/sapphirenight-groom/600/700",
+        "bride_photo": "https://picsum.photos/seed/sapphirenight-bride/600/700"
       }
     },
     {

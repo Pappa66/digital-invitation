@@ -46,7 +46,10 @@
         "groom_parents": "Anak pertama dari Bpk. Paul Mananta & Ibu Grace",
         "bride": "Maharani Putri, S.E.",
         "bride_parents": "Anak pertama dari Bpk. Doni Siahaan & Ibu Merry",
-        "variant": "side"
+        "variant": "side",
+        "photo_shape": "frame",
+        "groom_photo": "https://picsum.photos/seed/tropicalsunset-groom/600/700",
+        "bride_photo": "https://picsum.photos/seed/tropicalsunset-bride/600/700"
       }
     },
     {

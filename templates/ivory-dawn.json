@@ -46,7 +46,10 @@
         "groom_parents": "Putra dari Bpk. Bambang Prasetyo & Ibu Wulan",
         "bride": "Alyssa Prameswari, S.E.",
         "bride_parents": "Putri dari Bpk. Hendra Gunawan & Ibu Sinta",
-        "variant": "vertical"
+        "variant": "vertical",
+        "photo_shape": "arch",
+        "groom_photo": "https://picsum.photos/seed/ivorydawn-groom/600/700",
+        "bride_photo": "https://picsum.photos/seed/ivorydawn-bride/600/700"
       }
     },
     {

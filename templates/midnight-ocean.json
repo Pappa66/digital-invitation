@@ -46,7 +46,10 @@
         "groom_parents": "Son of Mr. Anton Wijaya & Mrs. Lina",
         "bride": "Stella Wijaya, S.E.",
         "bride_parents": "Daughter of Mr. Kevin Kusuma & Mrs. Yuli",
-        "variant": "vertical"
+        "variant": "vertical",
+        "photo_shape": "circle",
+        "groom_photo": "https://picsum.photos/seed/midnightocean-groom/600/700",
+        "bride_photo": "https://picsum.photos/seed/midnightocean-bride/600/700"
       }
     },
     {

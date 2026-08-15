@@ -46,7 +46,10 @@
         "groom_parents": "Putra dari Bpk. Bambang Sutopo & Ibu Endang",
         "bride": "Rania Anggraini, S.E.",
         "bride_parents": "Putri dari Bpk. Sukarno & Ibu Ida",
-        "variant": "side"
+        "variant": "side",
+        "photo_shape": "frame",
+        "groom_photo": "https://picsum.photos/seed/rosegarden-groom/600/700",
+        "bride_photo": "https://picsum.photos/seed/rosegarden-bride/600/700"
       }
     },
     {

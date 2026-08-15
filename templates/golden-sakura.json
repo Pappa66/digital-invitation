@@ -46,7 +46,10 @@
         "groom_parents": "Putra dari Bpk. Arief Hidayat & Ibu Dewi",
         "bride": "Sakura Ayudia, S.E.",
         "bride_parents": "Putri dari Bpk. Yusuf Ramli & Ibu Nur",
-        "variant": "side"
+        "variant": "side",
+        "photo_shape": "circle",
+        "groom_photo": "https://picsum.photos/seed/goldensakura-groom/600/700",
+        "bride_photo": "https://picsum.photos/seed/goldensakura-bride/600/700"
       }
     },
     {
