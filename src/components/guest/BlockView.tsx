@@ -108,8 +108,8 @@ export default function BlockView({ block, projectId, editable = false, greeting
         <div data-block-type={block.type} className="relative">
           {animateEntrance ? (
             <motion.div
-              initial={{ opacity: 0, y: 44, scale: 0.985, filter: 'blur(6px)' }}
-              whileInView={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
+              initial={{ opacity: 0, y: 44, filter: 'blur(6px)' }}
+              whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
               viewport={{ once: true, amount: 0.12 }}
               transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             >
