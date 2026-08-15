@@ -150,19 +150,6 @@
       }
     },
     {
-      "id": "b-giftlist-dao6",
-      "type": "GiftList",
-      "props": {
-        "title": "Daftar Kado",
-        "note": "Kehadiran Anda adalah hadiah terindah bagi kami. Namun bila ingin berbagi kebahagiaan, berikut beberapa referensi tanda kasih.",
-        "items": [
-          "Amplop / Tanda Kasih",
-          "Perlengkapan Rumah Tangga",
-          "Gift / yang bermanfaat"
-        ]
-      }
-    },
-    {
       "id": "b-rsvp-ej5s",
       "type": "RSVP",
       "props": {

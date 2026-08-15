@@ -589,7 +589,13 @@ function CouplePhoto({ src, shape, alt }: { src: string; shape: string; alt: str
 
 function CouplePerson({ propKey, name, parents, photo, photoShape }: { propKey: string; name: string; parents: string; photo?: string; photoShape?: string }) {
   return (
-    <div className="min-w-0 flex-1 break-words">
+    <motion.div
+      className="min-w-0 flex-1 break-words"
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{ type: 'spring', stiffness: 120, damping: 16 }}
+    >
       {photo && <CouplePhoto src={photo} shape={photoShape ?? ''} alt={name} />}
       <h2 className="text-2xl font-medium leading-snug md:text-3xl">
         <Editable prop={propKey}>{name}</Editable>
@@ -597,7 +603,7 @@ function CouplePerson({ propKey, name, parents, photo, photoShape }: { propKey: 
       <p className="mt-2 text-xs uppercase leading-relaxed tracking-widest opacity-70">
         <Editable prop={`${propKey}_parents`}>{parents}</Editable>
       </p>
-    </div>
+    </motion.div>
   );
 }
 
@@ -605,10 +611,10 @@ function CouplePerson({ propKey, name, parents, photo, photoShape }: { propKey: 
 function GiantAmp() {
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.7 }}
+      initial={{ opacity: 0, scale: 0.6 }}
       whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6 }}
+      viewport={{ once: true, amount: 0.4 }}
+      transition={{ type: 'spring', stiffness: 200, damping: 16 }}
       aria-hidden
       className="flex items-center justify-center py-4"
     >
@@ -700,43 +706,43 @@ export function HeroBlock({ props, greetingName }: { props: BlockProps; greeting
           className={`relative z-10 flex w-full flex-col ${isLeft ? 'items-start' : 'items-center'}`}
         >
           <motion.p
-            initial={{ opacity: 0, y: 14 }}
+            initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
+            transition={{ type: 'spring', stiffness: 140, damping: 18, delay: 0.15 }}
             className="text-xs uppercase tracking-[0.3em]"
           >
             <Editable prop="caption">{str(props, 'caption')}</Editable>
           </motion.p>
           {showOrnament && (
             <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
+              initial={{ opacity: 0, scale: 0.5, y: 8 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ type: 'spring', stiffness: 220, damping: 17, delay: 0.4 }}
               className={isLeft ? 'mt-4 mr-auto text-white opacity-80' : 'mt-4 text-white opacity-80'}
             >
               <Ornament ornament={str(props, 'ornament') || theme?.ornament} />
             </motion.div>
           )}
           <motion.h1
-            initial={{ opacity: 0, y: 18 }}
+            initial={{ opacity: 0, y: 26 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.45 }}
+            transition={{ type: 'spring', stiffness: 130, damping: 17, delay: 0.55 }}
             className="mt-6 text-3xl font-medium leading-tight sm:text-4xl md:text-5xl"
           >
             <Editable prop="bride">{str(props, 'bride')}</Editable>
           </motion.h1>
           <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.7 }}
+            initial={{ opacity: 0, scale: 0.6 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ type: 'spring', stiffness: 240, damping: 15, delay: 0.8 }}
             className="my-4 text-xl sm:text-2xl"
           >
             &amp;
           </motion.p>
           <motion.h1
-            initial={{ opacity: 0, y: 18 }}
+            initial={{ opacity: 0, y: 26 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.8 }}
+            transition={{ type: 'spring', stiffness: 130, damping: 17, delay: 0.95 }}
             className="text-3xl font-medium leading-tight sm:text-4xl md:text-5xl"
           >
             <Editable prop="groom">{str(props, 'groom')}</Editable>
@@ -801,10 +807,10 @@ export function CoupleBlock({ props }: { props: BlockProps }) {
   const bridePhoto = str(props, 'bride_photo');
   const title = (children: React.ReactNode) => (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.6 }}
+      transition={{ type: 'spring', stiffness: 130, damping: 18 }}
     >
       {children}
     </motion.div>
@@ -1132,7 +1138,7 @@ export function StoryBlock({ props }: { props: BlockProps }) {
 
 /** Daftar animasi foto (≥10 pilihan) yang bisa dipilih per blok Galeri. */
 const PHOTO_ANIMS: Record<string, { initial: Target; animate: Target }> = {
-  fade: { initial: { opacity: 0 }, animate: { opacity: 1 } },
+  fade: { initial: { opacity: 0, y: 8 }, animate: { opacity: 1, y: 0 } },
   zoom: { initial: { opacity: 0, scale: 0.7 }, animate: { opacity: 1, scale: 1 } },
   'zoom-out': { initial: { opacity: 0, scale: 1.3 }, animate: { opacity: 1, scale: 1 } },
   'slide-left': { initial: { opacity: 0, x: -56 }, animate: { opacity: 1, x: 0 } },
@@ -1179,9 +1185,10 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
               whileInView={a.animate}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: Math.min(i, 4) * 0.08 }}
-              className="relative aspect-[4/5] w-full overflow-hidden rounded-lg"
+              className="group relative aspect-[4/5] w-full overflow-hidden rounded-lg"
             >
-              <Image src={src} alt="" fill sizes="(max-width: 768px) 100vw, 420px" quality={75} loading="lazy" className="object-cover" />
+              <Image src={src} alt="" fill sizes="(max-width: 768px) 100vw, 420px" quality={75} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
+              <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-400 group-hover:bg-black/15" />
             </motion.div>
           ))}
         </div>
@@ -1203,9 +1210,10 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
               whileInView={a.animate}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.05 }}
-              className="relative aspect-square overflow-hidden rounded-md"
+              className="group relative aspect-square overflow-hidden rounded-md"
             >
-              <Image src={src} alt="" fill sizes="(max-width: 768px) 100vw, 33vw" quality={70} loading="lazy" className="object-cover" />
+              <Image src={src} alt="" fill sizes="(max-width: 768px) 100vw, 33vw" quality={70} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
+              <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-400 group-hover:bg-black/15" />
             </motion.div>
           ))}
         </div>
@@ -1228,7 +1236,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
                 whileInView={a.animate}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: (i % 6) * 0.05 }}
-                className="mb-3 break-inside-avoid overflow-hidden rounded-lg"
+                className="group mb-3 break-inside-avoid overflow-hidden rounded-lg"
               >
                 <Image
                   src={src}
@@ -1238,7 +1246,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
                   sizes="(max-width: 768px) 50vw, 33vw"
                   quality={70}
                   loading="lazy"
-                  className="h-auto w-full object-cover"
+                  className="h-auto w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                   style={{ aspectRatio: `${[3, 4, 5, 3][i % 4]}/4` }}
                 />
               </motion.div>
@@ -1263,9 +1271,10 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
               whileInView={a.animate}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: Math.min(i, 5) * 0.06 }}
-              className={`relative overflow-hidden rounded-md ${i % 5 === 0 ? 'col-span-2 row-span-2 aspect-square' : 'aspect-[3/4]'}`}
+              className={`group relative overflow-hidden rounded-md ${i % 5 === 0 ? 'col-span-2 row-span-2 aspect-square' : 'aspect-[3/4]'}`}
             >
-              <Image src={src} alt="" fill sizes="(max-width: 768px) 100vw, 33vw" quality={75} loading="lazy" className="object-cover" />
+              <Image src={src} alt="" fill sizes="(max-width: 768px) 100vw, 33vw" quality={75} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
+              <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-400 group-hover:bg-black/15" />
             </motion.div>
           ))}
         </div>
@@ -1287,11 +1296,11 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
               whileInView={a.animate}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: (i % 6) * 0.07 }}
-              className="break-inside-avoid rounded-sm bg-white p-2 pb-8 shadow-[0_6px_16px_rgba(0,0,0,0.18)]"
+              className="group break-inside-avoid rounded-sm bg-white p-2 pb-8 shadow-[0_6px_16px_rgba(0,0,0,0.18)]"
               style={{ transform: `rotate(${[-3, 2, -1, 3, -2, 2][i % 6]}deg)` }}
             >
               <div className="relative aspect-square w-full overflow-hidden bg-[#e8e2d5]">
-                <Image src={src} alt="" fill sizes="(max-width: 768px) 50vw, 33vw" quality={70} loading="lazy" className="object-cover" />
+                <Image src={src} alt="" fill sizes="(max-width: 768px) 50vw, 33vw" quality={70} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
               </div>
             </motion.div>
           ))}
@@ -1315,9 +1324,9 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
               whileInView={a.animate}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
-              className="relative mx-auto aspect-[3/4.2] w-full max-w-[300px] overflow-hidden rounded-t-[999px] shadow-[0_18px_40px_rgba(0,0,0,0.18)]"
+              className="group relative mx-auto aspect-[3/4.2] w-full max-w-[300px] overflow-hidden rounded-t-[999px] shadow-[0_18px_40px_rgba(0,0,0,0.18)]"
             >
-              <Image src={hero} alt="" fill sizes="(max-width: 768px) 100vw, 420px" quality={80} loading="lazy" className="object-cover" />
+              <Image src={hero} alt="" fill sizes="(max-width: 768px) 100vw, 420px" quality={80} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
             </motion.div>
           )}
           {rest.length > 0 && (
@@ -1329,9 +1338,10 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
                   whileInView={a.animate}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: i * 0.05 }}
-                  className="relative aspect-square overflow-hidden rounded-lg"
+                  className="group relative aspect-square overflow-hidden rounded-lg"
                 >
-                  <Image src={src} alt="" fill sizes="(max-width: 768px) 50vw, 33vw" quality={70} loading="lazy" className="object-cover" />
+                  <Image src={src} alt="" fill sizes="(max-width: 768px) 50vw, 33vw" quality={70} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
+                  <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-400 group-hover:bg-black/15" />
                 </motion.div>
               ))}
             </div>
@@ -1354,9 +1364,12 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
             whileInView={a.animate}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: i * 0.06 }}
-            className={`relative aspect-[3/4] overflow-hidden rounded-lg ${i === 0 || i === 3 ? 'col-span-2' : ''}`}
+            className={`group relative overflow-hidden rounded-lg ${i === 0 || i === 3 ? 'col-span-2' : ''} ${
+              i === 0 || i === 3 ? 'aspect-[16/10]' : 'aspect-[3/4]'
+            }`}
           >
-            <Image src={src} alt="" fill sizes="(max-width: 768px) 100vw, 50vw" quality={75} loading="lazy" className="object-cover" />
+            <Image src={src} alt="" fill sizes="(max-width: 768px) 100vw, 50vw" quality={75} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
           </motion.div>
         ))}
       </div>

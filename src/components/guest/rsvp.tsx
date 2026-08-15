@@ -116,17 +116,20 @@ export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormPr
           />
           <div>
             <p className="mb-2 text-sm opacity-80">Kehadiran</p>
-            <div className="flex rounded-full border border-current/15 p-1">
+            <div className="flex rounded-full border border-current/15 p-1" role="radiogroup" aria-label="Kehadiran">
               {(['hadir', 'ragu', 'tidak'] as const).map((opt) => (
                 <button
                   key={opt}
                   type="button"
+                  role="radio"
+                  aria-checked={attendance === opt}
+                  aria-label={opt === 'hadir' ? 'Hadir' : opt === 'ragu' ? 'Ragu-ragu' : 'Tidak Hadir'}
                   onClick={() => setAttendance(opt)}
-                  className={`flex-1 rounded-full px-2 py-2 text-xs uppercase tracking-wide transition-colors ${
+                  className={`whitespace-nowrap rounded-full px-1 py-2 text-[10px] font-semibold uppercase tracking-wide transition-colors sm:text-[11px] ${
                     attendance === opt ? 'bg-current text-[var(--color-background)]' : 'hover:bg-current/10'
                   }`}
                 >
-                  {opt === 'hadir' ? 'Hadir' : opt === 'ragu' ? 'Ragu-ragu' : 'Tidak Hadir'}
+                  {opt === 'hadir' ? 'Hadir' : opt === 'ragu' ? 'Ragu' : 'Tidak'}
                 </button>
               ))}
             </div>

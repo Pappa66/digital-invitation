@@ -30,7 +30,7 @@ export default function TemplatePreview({ canvas, bg }: TemplatePreviewProps) {
   return (
     <div
       ref={ref}
-      className="pointer-events-none relative h-96 select-none overflow-hidden"
+      className="pointer-events-none relative aspect-[3/4] w-full select-none overflow-hidden"
       style={{ background: `linear-gradient(135deg, ${canvas.theme.primary}11 0%, ${canvas.theme.secondary}22 60%, ${bg ?? '#ffffff'} 100%)` }}
     >
       <div

@@ -35,10 +35,13 @@ interface BlockViewProps {
   greetingName?: string;
   /** Mode card-template: bungkus section (kecuali Hero) sebagai kartu. */
   cardStyle?: boolean;
+  /** Mode demo interaktif: tetap jalankan animasi entrance walau preview. */
+  demo?: boolean;
 }
 
-export default function BlockView({ block, projectId, editable = false, greetingName, cardStyle }: BlockViewProps) {
+export default function BlockView({ block, projectId, editable = false, greetingName, cardStyle, demo }: BlockViewProps) {
   const preview = usePreview();
+  const animateEntrance = (!preview || demo) && !editable;
   let view: React.ReactNode;
   switch (block.type) {
     case 'Hero':
@@ -94,6 +97,7 @@ export default function BlockView({ block, projectId, editable = false, greeting
   const renderCard = cardStyle && !isHero;
   const cardCls =
     'card-mask overflow-hidden rounded-2xl bg-[var(--color-background)] shadow-[0_8px_26px_rgba(0,0,0,0.12)] ring-1 ring-black/5';
+  const cardWrapCls = `${cardCls} mx-0 mb-6 mt-6 w-full`;
   const body = (
     <StyledSection style={block.style}>{view}</StyledSection>
   );
@@ -102,17 +106,17 @@ export default function BlockView({ block, projectId, editable = false, greeting
     <InnerProvider value={block.inner ?? undefined}>
       <BuilderEditableContext.Provider value={editable ? { blockId: block.id } : null}>
         <div data-block-type={block.type} className="relative">
-          {!preview && !editable ? (
+          {animateEntrance ? (
             <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.15 }}
-              transition={{ duration: 0.55, ease: 'easeOut' }}
+              initial={{ opacity: 0, y: 44, scale: 0.985, filter: 'blur(6px)' }}
+              whileInView={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
+              viewport={{ once: true, amount: 0.12 }}
+              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             >
-              {renderCard ? <div className={`${cardCls} mx-3 mb-5 mt-5`}>{body}</div> : body}
+              {renderCard ? <div className={cardWrapCls}>{body}</div> : body}
             </motion.div>
           ) : (
-            renderCard ? <div className={`${cardCls} mx-3 mb-5 mt-5`}>{body}</div> : body
+            renderCard ? <div className={cardWrapCls}>{body}</div> : body
           )}
           <DecorLayer blockId={block.id} decor={block.decor} />
         </div>

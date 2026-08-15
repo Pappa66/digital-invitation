@@ -77,7 +77,7 @@ export default function TemplateDetail({ meta, index, canvas, categoryLabel, tot
                 device === 'mobile' ? 'max-w-[430px]' : 'max-w-full'
               }`}
             >
-              <div className="max-h-[85vh] overflow-auto rounded-[1rem] bg-white">
+              <div className="h-[calc(100dvh-10.5rem)] overflow-auto rounded-[1rem] bg-white">
                 <GuestRenderer canvas={canvas} preview demo width={device} />
               </div>
             </div>
