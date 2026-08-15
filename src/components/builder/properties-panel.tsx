@@ -166,6 +166,18 @@ const GRADIENTS: { name: string; value: string }[] = [
   { name: 'Olive', value: 'linear-gradient(160deg, #606C38 0%, #DDA15E 120%)' }
 ];
 
+/** Generate gradient presets based on theme colors */
+function makeThemeGradients(primary: string, secondary: string, background: string): { name: string; value: string }[] {
+  return [
+    { name: 'Primer → Sekunder', value: `linear-gradient(160deg, ${primary} 0%, ${secondary} 100%)` },
+    { name: 'Primer → Latar', value: `linear-gradient(160deg, ${primary} 0%, ${background} 120%)` },
+    { name: 'Sekunder → Latar', value: `linear-gradient(160deg, ${secondary} 0%, ${background} 100%)` },
+    { name: 'Latar → Primer', value: `linear-gradient(160deg, ${background} 0%, ${primary} 120%)` },
+    { name: 'Primer solid', value: `linear-gradient(160deg, ${primary} 0%, ${primary} 100%)` },
+    { name: 'Sekunder solid', value: `linear-gradient(160deg, ${secondary} 0%, ${secondary} 100%)` },
+  ];
+}
+
 const SECTION_TRIGGERS: { value: string; label: string }[] = [
   { value: '', label: 'Mulai di awal halaman' },
   { value: 'Hero', label: 'Saat masuk Hero' },
@@ -487,7 +499,8 @@ export default function PropertiesPanel() {
                   )}
                   {block.type === 'Hero' && (
                     <div>
-                      <p className="mb-1 text-xs font-medium text-[#4a443c]">Gambar Hero</p>
+                      <p className="mb-1 text-xs font-medium text-[#4a443c]">Foto Latar Hero</p>
+                      <p className="mb-2 text-[10px] text-[#8a7a66]">Gambar utama yang menutupi seluruh bagian hero</p>
                       <button
                         onClick={() => {
                           setMediaMode('hero');
@@ -495,35 +508,37 @@ export default function PropertiesPanel() {
                         }}
                         className="flex w-full items-center gap-2 rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2 text-sm text-[#6b5f4d] hover:border-[#c9a45c]"
                       >
-                        {block.props.bg_image ? 'Change Image' : 'Pilih Gambar'}
+                        {block.props.bg_image ? 'Ganti Foto Hero' : 'Pilih Foto Hero'}
                       </button>
-                      <div className="mt-2 grid grid-cols-2 gap-2">
-                        <div>
-                          <label className="mb-1 block text-xs font-medium text-[#4a443c]">Ukuran</label>
-                          <select
-                            value={(block.props.bg_fit as string) || 'cover'}
-                            onChange={(e) => setBlockProps(block.id, { bg_fit: e.target.value })}
-                            className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-2 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
-                          >
-                            <option value="cover">Penuhi (cover)</option>
-                            <option value="contain">Utuh (contain)</option>
-                          </select>
+                      {block.props.bg_image && (
+                        <div className="mt-2 grid grid-cols-2 gap-2">
+                          <div>
+                            <label className="mb-1 block text-xs font-medium text-[#4a443c]">Ukuran</label>
+                            <select
+                              value={(block.props.bg_fit as string) || 'cover'}
+                              onChange={(e) => setBlockProps(block.id, { bg_fit: e.target.value })}
+                              className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-2 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
+                            >
+                              <option value="cover">Penuhi (cover)</option>
+                              <option value="contain">Utuh (contain)</option>
+                            </select>
+                          </div>
+                          <div>
+                            <label className="mb-1 block text-xs font-medium text-[#4a443c]">Posisi</label>
+                            <select
+                              value={(block.props.bg_position as string) || 'center'}
+                              onChange={(e) => setBlockProps(block.id, { bg_position: e.target.value })}
+                              className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-2 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
+                            >
+                              <option value="center">Tengah</option>
+                              <option value="top">Atas</option>
+                              <option value="bottom">Bawah</option>
+                              <option value="left">Kiri</option>
+                              <option value="right">Kanan</option>
+                            </select>
+                          </div>
                         </div>
-                        <div>
-                          <label className="mb-1 block text-xs font-medium text-[#4a443c]">Posisi</label>
-                          <select
-                            value={(block.props.bg_position as string) || 'center'}
-                            onChange={(e) => setBlockProps(block.id, { bg_position: e.target.value })}
-                            className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-2 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
-                          >
-                            <option value="center">Tengah</option>
-                            <option value="top">Atas</option>
-                            <option value="bottom">Bawah</option>
-                            <option value="left">Kiri</option>
-                            <option value="right">Kanan</option>
-                          </select>
-                        </div>
-                      </div>
+                      )}
                     </div>
                   )}
                   {VARIANTS[block.type] && (
@@ -808,7 +823,7 @@ export default function PropertiesPanel() {
                             value={block.style?.bgColor ?? ''}
                             onChange={(c) => setBlockStyle(block.id, { bgColor: c })}
                           />
-                          <div>
+                           <div>
                             <p className="mb-1 text-xs font-medium text-[#4a443c]">Gradien Latar</p>
                             <div className="grid grid-cols-3 gap-1.5">
                               <button
@@ -817,7 +832,7 @@ export default function PropertiesPanel() {
                               >
                                 Tidak ada
                               </button>
-                              {GRADIENTS.map((g) => (
+                              {makeThemeGradients(canvas.theme.primary, canvas.theme.secondary, canvas.theme.background).map((g) => (
                                 <button
                                   key={g.name}
                                   onClick={() => setBlockStyle(block.id, { bgGradient: g.value })}
@@ -827,9 +842,23 @@ export default function PropertiesPanel() {
                                 />
                               ))}
                             </div>
+                            <p className="mt-2 mb-1 text-[10px] text-[#8a7a66]">Gradien preset:</p>
+                            <div className="grid grid-cols-4 gap-1.5">
+                              {GRADIENTS.map((g) => (
+                                <button
+                                  key={g.name}
+                                  onClick={() => setBlockStyle(block.id, { bgGradient: g.value })}
+                                  className={`h-8 rounded-md border ${block.style?.bgGradient === g.value ? 'border-[#c9a45c] ring-2 ring-[#c9a45c]' : 'border-[#e0d6c2]'}`}
+                                  style={{ background: g.value }}
+                                  title={g.name}
+                                />
+                              ))}
+                            </div>
                           </div>
-                          <div>
-                            <p className="mb-1 text-xs font-medium text-[#4a443c]">Gambar Latar</p>
+                           {block.type !== 'Hero' && (
+                           <div>
+                            <p className="mb-1 text-xs font-medium text-[#4a443c]">Gambar Latar Section</p>
+                            <p className="mb-2 text-[10px] text-[#8a7a66]">Gambar overlay di belakang konten section ini</p>
                             <button
                               onClick={() => {
                                 setMediaMode('bg');
@@ -867,6 +896,7 @@ export default function PropertiesPanel() {
                               </div>
                             </div>
                           </div>
+                           )}
                           <button
                             onClick={() => clearBlockStyle(block.id)}
                             className="w-full rounded-md border border-[#e0d6c2] py-1.5 text-xs text-[#6b5f4d] hover:border-red-300 hover:text-red-600"
