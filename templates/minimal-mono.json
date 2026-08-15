@@ -8,7 +8,7 @@
     "font_body": "Inter",
     "layout": "left",
     "hero_style": "solid",
-    "ornament": "celestial",
+    "ornament": "mandala",
     "frame": "none",
     "card_style": false
   },
@@ -45,8 +45,8 @@
         "bride_parents": "Daughter of Mr. Hendra Wijaya & Mrs. Elisa",
         "variant": "side",
         "photo_shape": "circle",
-        "groom_photo": "https://picsum.photos/seed/minimalmono-groom/600/700",
-        "bride_photo": "https://picsum.photos/seed/minimalmono-bride/600/700"
+        "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
+        "bride_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80"
       }
     },
     {

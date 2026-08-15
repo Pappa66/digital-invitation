@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { MailOpen } from 'lucide-react';
 import { OrnamentArt, type OrnamentKey } from '@/components/builder/ornaments';
+import { FloralCorner, FloatingPetals, DecorativeFrame } from './cover-florals';
 
 interface CoverModalProps {
   caption: string;
@@ -80,8 +81,25 @@ export default function CoverModal({
             />
           )}
 
-          <div className="relative z-10 flex h-full w-full flex-col items-center justify-between px-6 py-12 text-center text-white" style={{ paddingBottom: 'max(3rem, env(safe-area-inset-bottom))' }}>
-            <div className="mt-2 flex flex-col items-center">
+          {/* Floral corners — 4 sudut */}
+          <FloralCorner position="top-left" color={primary} />
+          <FloralCorner position="top-right" color={primary} />
+          <FloralCorner position="bottom-left" color={primary} />
+          <FloralCorner position="bottom-right" color={primary} />
+
+          {/* Floating petals animation */}
+          <FloatingPetals color={primary} />
+
+          {/* Decorative frame overlay */}
+          <DecorativeFrame color={primary} />
+
+          <div className="relative z-40 flex h-full w-full flex-col items-center justify-between px-6 py-12 text-center text-white" style={{ paddingBottom: 'max(3rem, env(safe-area-inset-bottom))' }}>
+            <motion.div
+              className="mt-2 flex flex-col items-center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+            >
               {ornament && (
                 <OrnamentArt ornament={ornament as OrnamentKey} width={180} className="mb-3 text-white opacity-60" />
               )}
@@ -92,9 +110,14 @@ export default function CoverModal({
               >
                 {bride} &amp; {groom}
               </h1>
-            </div>
+            </motion.div>
 
-            <div className="flex w-full flex-col items-center">
+            <motion.div
+              className="flex w-full flex-col items-center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+            >
               <div className="mb-5 flex w-full flex-col items-center gap-1">
                 <span className="text-[10px] uppercase tracking-[0.3em] opacity-80">Kepada:</span>
                 <span className="text-base font-semibold">{greetingName || 'Bapak/Ibu/Saudara/i'}</span>
@@ -108,7 +131,7 @@ export default function CoverModal({
               >
                 <MailOpen className="h-4 w-4" /> Buka Undangan
               </button>
-            </div>
+            </motion.div>
           </div>
         </motion.div>
       )}

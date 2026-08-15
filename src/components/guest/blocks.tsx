@@ -10,7 +10,7 @@ import { Editable, BuilderEditableContext } from '@/components/builder/inline-ed
 import { OrnamentArt, ORNAMENT_LABELS, type OrnamentKey } from '@/components/builder/ornaments';
 import { usePreview } from '@/components/guest/preview-context';
 import { useTheme } from '@/components/guest/theme-context';
-import { useInnerPositions } from '@/components/guest/inner-context';
+import { useInnerPositions, Inner } from '@/components/guest/inner-context';
 import { useBuilderStore } from '@/store/builder-store';
 
 /** Akses props sebagai string dengan fallback aman (''). */
@@ -33,20 +33,6 @@ function arr(props: BlockProps, key: string): string[] {
  * tersimpan pada `block.inner` sebagai transform translate + menandai elemen
  * dengan `data-inner` agar builder menampilkan handle drag.
  */
-function Inner({ name, className, children }: { name: string; className?: string; children: React.ReactNode }) {
-  const inner = useInnerPositions();
-  const pos = inner?.[name];
-  return (
-    <div
-      data-inner={name}
-      className={className}
-      style={pos ? { transform: `translate(${pos.x}px, ${pos.y}px)` } : undefined}
-    >
-      {children}
-    </div>
-  );
-}
-
 function Ornament({ className = '', ornament }: { className?: string; ornament?: string }) {
   if (ornament && ORNAMENT_LABELS[ornament as OrnamentKey]) {
     const key = ornament as OrnamentKey;
@@ -666,7 +652,7 @@ export function HeroBlock({ props, greetingName }: { props: BlockProps; greeting
   return (
     <section
       ref={sectionRef}
-      className={`relative flex min-h-[100dvh] w-full flex-col overflow-hidden px-6 py-20 text-white ${
+       className={`relative flex min-h-[100dvh] w-full flex-col overflow-hidden px-6 py-10 sm:py-14 md:py-20 text-white ${
         isLeft ? 'items-start justify-center text-left' : 'items-center justify-center text-center'
       }`}
     >
@@ -696,15 +682,15 @@ export function HeroBlock({ props, greetingName }: { props: BlockProps; greeting
         </div>
       )}
       <HeroSparkles />
-      <Inner name="content">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          animate={opened ? { opacity: 0, y: -40, transition: { duration: 0.6, ease: 'easeInOut' } } : {}}
-          className={`relative z-10 flex w-full flex-col ${isLeft ? 'items-start' : 'items-center'}`}
-        >
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.7 }}
+        animate={opened ? { opacity: 0, y: -40, transition: { duration: 0.6, ease: 'easeInOut' } } : {}}
+        className={`relative z-10 flex w-full flex-col ${isLeft ? 'items-start' : 'items-center'}`}
+      >
+        <Inner name="caption">
           <motion.p
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
@@ -713,7 +699,9 @@ export function HeroBlock({ props, greetingName }: { props: BlockProps; greeting
           >
             <Editable prop="caption">{str(props, 'caption')}</Editable>
           </motion.p>
-          {showOrnament && (
+        </Inner>
+        {showOrnament && (
+          <Inner name="ornament">
             <motion.div
               initial={{ opacity: 0, scale: 0.5, y: 8 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -722,7 +710,9 @@ export function HeroBlock({ props, greetingName }: { props: BlockProps; greeting
             >
               <Ornament ornament={str(props, 'ornament') || theme?.ornament} />
             </motion.div>
-          )}
+          </Inner>
+        )}
+        <Inner name="bride_name">
           <motion.h1
             initial={{ opacity: 0, y: 26 }}
             animate={{ opacity: 1, y: 0 }}
@@ -731,6 +721,8 @@ export function HeroBlock({ props, greetingName }: { props: BlockProps; greeting
           >
             <Editable prop="bride">{str(props, 'bride')}</Editable>
           </motion.h1>
+        </Inner>
+        <Inner name="ampersand">
           <motion.p
             initial={{ opacity: 0, scale: 0.6 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -739,6 +731,8 @@ export function HeroBlock({ props, greetingName }: { props: BlockProps; greeting
           >
             &amp;
           </motion.p>
+        </Inner>
+        <Inner name="groom_name">
           <motion.h1
             initial={{ opacity: 0, y: 26 }}
             animate={{ opacity: 1, y: 0 }}
@@ -747,6 +741,8 @@ export function HeroBlock({ props, greetingName }: { props: BlockProps; greeting
           >
             <Editable prop="groom">{str(props, 'groom')}</Editable>
           </motion.h1>
+        </Inner>
+        <Inner name="date">
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -755,6 +751,8 @@ export function HeroBlock({ props, greetingName }: { props: BlockProps; greeting
           >
             <Editable prop="date">{str(props, 'date')}</Editable>
           </motion.p>
+        </Inner>
+        <Inner name="location">
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -766,7 +764,9 @@ export function HeroBlock({ props, greetingName }: { props: BlockProps; greeting
               <Editable prop="place">{str(props, 'place')}</Editable>
             </span>
           </motion.div>
-          {greetingName && (
+        </Inner>
+        {greetingName && (
+          <Inner name="greeting">
             <motion.div
               initial={{ opacity: 0, y: 8 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -779,8 +779,10 @@ export function HeroBlock({ props, greetingName }: { props: BlockProps; greeting
                 <span className="mt-0.5 text-sm font-medium">{greetingName}</span>
               </div>
             </motion.div>
-          )}
-          {!preview && !inBuilder && (
+          </Inner>
+        )}
+        {!preview && !inBuilder && (
+          <Inner name="button">
             <motion.button
               initial={{ opacity: 0, y: 8 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -793,9 +795,9 @@ export function HeroBlock({ props, greetingName }: { props: BlockProps; greeting
               <MailOpen className="h-4 w-4" />
               Buka Undangan
             </motion.button>
-          )}
-        </motion.div>
-      </Inner>
+          </Inner>
+        )}
+      </motion.div>
     </section>
   );
 }
@@ -817,51 +819,70 @@ export function CoupleBlock({ props }: { props: BlockProps }) {
   );
 
   return (
-    <section className="px-6 py-16 md:py-24">
+    <section className="px-6 py-10 sm:py-12 md:py-16">
       <div className={`mx-auto w-full ${side ? '' : 'text-center'}`}>
-        {str(props, 'introduction') &&
-          title(
-            <p className="mb-6 text-sm leading-relaxed opacity-80">
-              <Editable prop="introduction" multiline>
-                {str(props, 'introduction')}
-              </Editable>
-            </p>
-          )}
-        {str(props, 'bismillah') &&
-          title(
-            <p className={`mb-6 text-sm italic opacity-70 ${side ? 'text-center' : ''}`}>
-              <Editable prop="bismillah">{str(props, 'bismillah')}</Editable>
-            </p>
-          )}
-        {str(props, 'quote') &&
-          title(
-            <p className="mb-8 border-y border-current/10 py-6 text-sm italic leading-relaxed opacity-80">
-              &ldquo;<Editable prop="quote">{str(props, 'quote')}</Editable>&rdquo;
-            </p>
-          )}
+        {str(props, 'introduction') && (
+          <Inner name="introduction">
+            {title(
+              <p className="mb-6 text-sm leading-relaxed opacity-80">
+                <Editable prop="introduction" multiline>
+                  {str(props, 'introduction')}
+                </Editable>
+              </p>
+            )}
+          </Inner>
+        )}
+        {str(props, 'bismillah') && (
+          <Inner name="bismillah">
+            {title(
+              <p className={`mb-6 text-sm italic opacity-70 ${side ? 'text-center' : ''}`}>
+                <Editable prop="bismillah">{str(props, 'bismillah')}</Editable>
+              </p>
+            )}
+          </Inner>
+        )}
+        {str(props, 'quote') && (
+          <Inner name="quote">
+            {title(
+              <p className="mb-8 border-y border-current/10 py-6 text-sm italic leading-relaxed opacity-80">
+                &ldquo;<Editable prop="quote">{str(props, 'quote')}</Editable>&rdquo;
+              </p>
+            )}
+          </Inner>
+        )}
         {side ? (
-          <Inner name="groom">
-            <div className="mx-auto grid w-full max-w-2xl items-center gap-6 md:grid-cols-[1fr_auto_1fr] md:gap-8">
+          <div className="mx-auto grid w-full max-w-2xl items-center gap-6 md:grid-cols-[1fr_auto_1fr] md:gap-8">
+            <Inner name="groom">
               <div className="min-w-0 text-center">
                 <CouplePerson propKey="groom" name={str(props, 'groom')} parents={str(props, 'groom_parents')} photo={groomPhoto} photoShape={photoShape} />
               </div>
+            </Inner>
+            <Inner name="ampersand">
               <div className="my-2 flex min-w-0 justify-center md:my-0">
                 <GiantAmp />
               </div>
+            </Inner>
+            <Inner name="bride">
               <div className="min-w-0 text-center">
                 <CouplePerson propKey="bride" name={str(props, 'bride')} parents={str(props, 'bride_parents')} photo={bridePhoto} photoShape={photoShape} />
               </div>
-            </div>
-          </Inner>
+            </Inner>
+          </div>
         ) : (
           <>
-            <div className="mb-0">
-              <CouplePerson propKey="groom" name={str(props, 'groom')} parents={str(props, 'groom_parents')} photo={groomPhoto} photoShape={photoShape} />
-            </div>
-            <GiantAmp />
-            <div className="mt-0">
-              <CouplePerson propKey="bride" name={str(props, 'bride')} parents={str(props, 'bride_parents')} photo={bridePhoto} photoShape={photoShape} />
-            </div>
+            <Inner name="groom">
+              <div className="mb-0">
+                <CouplePerson propKey="groom" name={str(props, 'groom')} parents={str(props, 'groom_parents')} photo={groomPhoto} photoShape={photoShape} />
+              </div>
+            </Inner>
+            <Inner name="ampersand">
+              <GiantAmp />
+            </Inner>
+            <Inner name="bride">
+              <div className="mt-0">
+                <CouplePerson propKey="bride" name={str(props, 'bride')} parents={str(props, 'bride_parents')} photo={bridePhoto} photoShape={photoShape} />
+              </div>
+            </Inner>
           </>
         )}
       </div>
@@ -873,7 +894,7 @@ export function CountdownBlock({ props }: { props: BlockProps }) {
   const target = new Date(str(props, 'target_date')).getTime();
   const variant = str(props, 'variant') || 'circles';
   return (
-    <section className="px-6 py-16 text-center">
+    <section className="px-6 py-10 sm:py-12 md:py-16 text-center">
       <h2 className="text-xl md:text-2xl">
         <Editable prop="title">{str(props, 'title')}</Editable>
       </h2>
@@ -978,25 +999,29 @@ export function EventDetailBlock({ props }: { props: BlockProps }) {
     );
   })();
   return (
-    <section className={`px-6 py-14 text-center ${band ? 'py-20' : ''}`}>
+    <section className={`px-6 py-8 sm:py-10 md:py-14 text-center ${band ? 'py-10 sm:py-14 md:py-20' : ''}`}>
       <div
         className={`${
           band
-            ? 'mx-auto w-full border-y border-current/10 py-12'
-            : 'mx-auto w-full rounded-xl border border-current/10 p-8'
+            ? 'mx-auto w-full border-y border-current/10 py-8 sm:py-10 md:py-12'
+            : 'mx-auto w-full rounded-xl border border-current/10 p-6 sm:p-8'
         }`}
       >
-        <Inner name="content">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
+        <motion.div
+          initial={{ opacity: 0, scale: 0.96 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
+          <Inner name="icon">
             <Icon className="mx-auto h-7 w-7" />
+          </Inner>
+          <Inner name="title">
             <h2 className="mt-4 text-2xl font-medium">
               <Editable prop="title">{str(props, 'title')}</Editable>
             </h2>
+          </Inner>
+          <Inner name="datetime">
             <div className="mt-6 space-y-3 text-sm">
               <div className="flex items-start justify-center gap-2">
                 <Calendar className="mt-0.5 h-4 w-4 shrink-0" />
@@ -1005,6 +1030,10 @@ export function EventDetailBlock({ props }: { props: BlockProps }) {
                   <Editable prop="time">{str(props, 'time')}</Editable>
                 </span>
               </div>
+            </div>
+          </Inner>
+          <Inner name="location">
+            <div className="mt-3 text-sm">
               <div className="flex items-start justify-center gap-2">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0" />
                 <span>
@@ -1015,8 +1044,11 @@ export function EventDetailBlock({ props }: { props: BlockProps }) {
                   </span>
                 </span>
               </div>
-              {(str(props, 'maps_url') || address || dateStr) && (
-                <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
+            </div>
+          </Inner>
+          {(str(props, 'maps_url') || address || dateStr) && (
+            <Inner name="actions">
+              <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
                   {str(props, 'live_url') && bool(props, 'show_live') !== false &&
                     (preview ? (
                       <span className="inline-flex items-center gap-1.5 rounded-full border border-current/25 px-4 py-2 text-xs font-medium">
@@ -1062,10 +1094,9 @@ export function EventDetailBlock({ props }: { props: BlockProps }) {
                     </a>
                   ))}
                 </div>
-              )}
-            </div>
-          </motion.div>
-        </Inner>
+              </Inner>
+            )}
+        </motion.div>
       </div>
     </section>
   );
@@ -1078,7 +1109,7 @@ export function StoryBlock({ props }: { props: BlockProps }) {
   const descs = arr(props, 'ev_desc');
   const count = titles.length;
   return (
-    <section className="px-6 py-16 md:py-24">
+    <section className="px-6 py-10 sm:py-12 md:py-16">
       <Inner name="title">
         <div className="mx-auto w-full text-center">
           <h2 className="text-2xl font-medium md:text-3xl">
@@ -1172,9 +1203,9 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
     );
   }
 
-  if (layout === 'column') {
+   if (layout === 'column') {
     return (
-      <section className="px-6 py-16">
+      <section className="px-6 py-8 sm:py-10 md:py-14">
         {lightbox}
         <Inner name="title">
           <h2 className="mb-8 text-center text-xl md:text-2xl"><Editable prop="title">{str(props, 'title')}</Editable></h2>
@@ -1199,9 +1230,9 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
     );
   }
 
-  if (layout === 'grid3') {
+   if (layout === 'grid3') {
     return (
-      <section className="px-6 py-16">
+      <section className="px-6 py-8 sm:py-10 md:py-14">
         {lightbox}
         <Inner name="title">
           <h2 className="mb-8 text-center text-xl md:text-2xl"><Editable prop="title">{str(props, 'title')}</Editable></h2>
@@ -1226,9 +1257,9 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
     );
   }
 
-  if (layout === 'masonry') {
+   if (layout === 'masonry') {
     return (
-      <section className="px-6 py-16">
+      <section className="px-6 py-8 sm:py-10 md:py-14">
         {lightbox}
         <Inner name="title">
           <h2 className="mb-8 text-center text-xl md:text-2xl"><Editable prop="title">{str(props, 'title')}</Editable></h2>
@@ -1264,9 +1295,9 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
     );
   }
 
-  if (layout === 'mosaic') {
+   if (layout === 'mosaic') {
     return (
-      <section className="px-6 py-16">
+      <section className="px-6 py-8 sm:py-10 md:py-14">
         {lightbox}
         <Inner name="title">
           <h2 className="mb-8 text-center text-xl md:text-2xl"><Editable prop="title">{str(props, 'title')}</Editable></h2>
@@ -1291,9 +1322,9 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
     );
   }
 
-  if (layout === 'polaroid') {
+   if (layout === 'polaroid') {
     return (
-      <section className="px-6 py-16">
+      <section className="px-6 py-8 sm:py-10 md:py-14">
         {lightbox}
         <Inner name="title">
           <h2 className="mb-8 text-center text-xl md:text-2xl"><Editable prop="title">{str(props, 'title')}</Editable></h2>
@@ -1320,11 +1351,11 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
     );
   }
 
-  if (layout === 'arch') {
+   if (layout === 'arch') {
     const hero = images[0];
     const rest = images.slice(1);
     return (
-      <section className="px-6 py-16">
+      <section className="px-6 py-8 sm:py-10 md:py-14">
         {lightbox}
         <Inner name="title">
           <h2 className="mb-8 text-center text-xl md:text-2xl"><Editable prop="title">{str(props, 'title')}</Editable></h2>
@@ -1366,7 +1397,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
   }
 
   return (
-    <section className="px-6 py-16">
+    <section className="px-6 py-8 sm:py-10 md:py-14">
       {lightbox}
       <Inner name="title">
         <h2 className="mb-8 text-center text-xl md:text-2xl"><Editable prop="title">{str(props, 'title')}</Editable></h2>
@@ -1418,7 +1449,7 @@ function GalleryCarousel({
   if (images.length === 0) return null;
 
   return (
-    <section className="px-6 py-16">
+    <section className="px-6 py-8 sm:py-10 md:py-14">
       <Inner name="title">
         <h2 className="mb-8 text-center text-xl md:text-2xl">{title}</h2>
       </Inner>
@@ -1485,19 +1516,25 @@ export function MapsBlock({ props }: { props: BlockProps }) {
   const resolved = direct ?? (apiSrc?.url === embedUrl ? apiSrc.src : null);
   const src = resolved ?? `https://maps.google.com/maps?q=${encodeURIComponent(address)}&output=embed`;
   return (
-    <section className="px-6 py-14 text-center">
+    <section className="px-6 py-10 sm:py-12 md:py-14 text-center">
       <Inner name="title">
         <h2 className="text-xl md:text-2xl"><Editable prop="title">{str(props, 'title')}</Editable></h2>
       </Inner>
-      {address && <p className="mt-2 text-sm opacity-80">{address}</p>}
-      <div className="mx-auto mt-6 w-full overflow-hidden rounded-xl border border-current/10">
-        <iframe
-          src={src}
-          className="h-64 w-full"
-          loading="lazy"
-          title={address}
-        />
-      </div>
+      {address && (
+        <Inner name="address">
+          <p className="mt-2 text-sm opacity-80">{address}</p>
+        </Inner>
+      )}
+      <Inner name="map">
+        <div className="mx-auto mt-6 w-full overflow-hidden rounded-xl border border-current/10">
+          <iframe
+            src={src}
+            className="h-64 w-full"
+            loading="lazy"
+            title={address}
+          />
+        </div>
+      </Inner>
     </section>
   );
 }
@@ -1514,18 +1551,24 @@ function maybeEmbedSrc(embedUrl: string): string | null {
 
 export function ThanksBlock({ props }: { props: BlockProps }) {
   return (
-    <section className="px-6 py-20 text-center">
-      <Inner name="title">
-        <div>
-          <Ornament className="mb-6 opacity-60" />
-          <h2 className="text-2xl font-medium md:text-3xl"><Editable prop="title">{str(props, 'title')}</Editable></h2>
-        </div>
+    <section className="px-6 py-10 sm:py-14 md:py-20 text-center">
+      <Inner name="ornament">
+        <Ornament className="mb-6 opacity-60" />
       </Inner>
-      <p className="mx-auto mt-6 w-full text-sm leading-relaxed opacity-80">
-        {str(props, 'message')}
-      </p>
-      <p className="mt-8 text-xs uppercase tracking-widest opacity-70">{str(props, 'closing')}</p>
-      <p className="mt-4 text-xl italic">{str(props, 'names')}</p>
+      <Inner name="title">
+        <h2 className="text-2xl font-medium md:text-3xl"><Editable prop="title">{str(props, 'title')}</Editable></h2>
+      </Inner>
+      <Inner name="message">
+        <p className="mx-auto mt-6 w-full text-sm leading-relaxed opacity-80">
+          {str(props, 'message')}
+        </p>
+      </Inner>
+      <Inner name="closing">
+        <p className="mt-8 text-xs uppercase tracking-widest opacity-70">{str(props, 'closing')}</p>
+      </Inner>
+      <Inner name="names">
+        <p className="mt-4 text-xl italic">{str(props, 'names')}</p>
+      </Inner>
     </section>
   );
 }
@@ -1575,47 +1618,53 @@ export function QuoteBlock({ props }: { props: BlockProps }) {
   const religion = (str(props, 'religion') || 'islam') as ReligionKey;
   const isIslamic = religion === 'islam';
   return (
-    <section className="px-6 py-14 text-center">
-      <Inner name="quote">
-        <div>
-          <Ornament className="mb-6 opacity-50" ornament={str(props, 'ornament') || theme?.ornament} />
-          {isIslamic ? (
-            <>
-              <p
-                lang="ar"
-                dir="rtl"
-                className="mx-auto max-w-md font-['Amiri','Scheherazade_New',serif] text-2xl leading-[2] md:text-3xl"
-              >
-                <Editable prop="original" multiline>
-                  {str(props, 'original')}
-                </Editable>
-              </p>
-              {str(props, 'latin') && (
+    <section className="px-6 py-10 sm:py-12 md:py-14 text-center">
+      <Inner name="ornament">
+        <Ornament className="mb-6 opacity-50" ornament={str(props, 'ornament') || theme?.ornament} />
+      </Inner>
+      <Inner name="original">
+        {isIslamic ? (
+          <>
+            <p
+              lang="ar"
+              dir="rtl"
+              className="mx-auto max-w-md font-['Amiri','Scheherazade_New',serif] text-2xl leading-[2] md:text-3xl"
+            >
+              <Editable prop="original" multiline>
+                {str(props, 'original')}
+              </Editable>
+            </p>
+            {str(props, 'latin') && (
+              <Inner name="latin">
                 <p className="mx-auto mt-5 max-w-md text-sm italic leading-relaxed opacity-80">
                   <Editable prop="latin" multiline>
                     {str(props, 'latin')}
                   </Editable>
                 </p>
-              )}
-            </>
-          ) : (
-            <p className={`mx-auto max-w-md text-2xl leading-relaxed md:text-3xl ${religion === 'konghucu' ? 'italic' : 'font-medium'}`}>
-              <Editable prop="original" multiline>
-                {str(props, 'original')}
-              </Editable>
-            </p>
-          )}
-          {str(props, 'translation') && (
-            <p className="mx-auto mt-5 max-w-md text-sm leading-relaxed opacity-70">
-              <Editable prop="translation" multiline>
-                {str(props, 'translation')}
-              </Editable>
-            </p>
-          )}
-          <p className="mt-5 text-xs uppercase tracking-widest opacity-60">
-            <Editable prop="reference">{str(props, 'reference')}</Editable>
+              </Inner>
+            )}
+          </>
+        ) : (
+          <p className={`mx-auto max-w-md text-2xl leading-relaxed md:text-3xl ${religion === 'konghucu' ? 'italic' : 'font-medium'}`}>
+            <Editable prop="original" multiline>
+              {str(props, 'original')}
+            </Editable>
           </p>
-        </div>
+        )}
+      </Inner>
+      {str(props, 'translation') && (
+        <Inner name="translation">
+          <p className="mx-auto mt-5 max-w-md text-sm leading-relaxed opacity-70">
+            <Editable prop="translation" multiline>
+              {str(props, 'translation')}
+            </Editable>
+          </p>
+        </Inner>
+      )}
+      <Inner name="reference">
+        <p className="mt-5 text-xs uppercase tracking-widest opacity-60">
+          <Editable prop="reference">{str(props, 'reference')}</Editable>
+        </p>
       </Inner>
     </section>
   );
@@ -1732,8 +1781,8 @@ export function LiveStreamingBlock({ props }: { props: BlockProps }) {
   const embedUrl = getEmbedUrl(streamUrl);
 
   return (
-    <section className="px-6 py-14 text-center">
-      <Inner name="content">
+    <section className="px-6 py-10 sm:py-12 md:py-14 text-center">
+      <Inner name="title">
         <motion.div
           initial={{ opacity: 0, scale: 0.96 }}
           whileInView={{ opacity: 1, scale: 1 }}
@@ -1744,42 +1793,48 @@ export function LiveStreamingBlock({ props }: { props: BlockProps }) {
           <h2 className="mt-4 text-2xl font-medium">
             <Editable prop="title">{str(props, 'title') || 'Siaran Langsung'}</Editable>
           </h2>
-          <p className="mt-3 text-sm opacity-80">
-            <Editable prop="note">{str(props, 'note') || 'Saksikan secara langsung melalui tautan berikut.'}</Editable>
-          </p>
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
-            {streamUrl ? (
-              preview ? (
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-current/25 px-4 py-2 text-xs font-medium">
-                  <Radio className="h-3.5 w-3.5" /> Tonton Siaran Langsung
-                </span>
-              ) : (
-                <a
-                  href={streamUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-full border border-current/25 px-4 py-2 text-xs font-medium transition-colors hover:bg-current/10"
-                >
-                  <Radio className="h-3.5 w-3.5" /> Tonton Siaran Langsung
-                </a>
-              )
-            ) : (
-              <p className="text-xs italic opacity-60">Tambahkan link streaming di panel kanan.</p>
-            )}
-          </div>
-          {embedUrl && !preview && (
-            <div className="mx-auto mt-6 w-full overflow-hidden rounded-xl border border-current/10">
-              <iframe
-                src={embedUrl}
-                className="h-64 w-full"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                title={str(props, 'title') || 'Siaran Langsung'}
-              />
-            </div>
-          )}
         </motion.div>
       </Inner>
+      <Inner name="note">
+        <p className="mt-3 text-sm opacity-80">
+          <Editable prop="note">{str(props, 'note') || 'Saksikan secara langsung melalui tautan berikut.'}</Editable>
+        </p>
+      </Inner>
+      <Inner name="button">
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
+          {streamUrl ? (
+            preview ? (
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-current/25 px-4 py-2 text-xs font-medium">
+                <Radio className="h-3.5 w-3.5" /> Tonton Siaran Langsung
+              </span>
+            ) : (
+              <a
+                href={streamUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 rounded-full border border-current/25 px-4 py-2 text-xs font-medium transition-colors hover:bg-current/10"
+              >
+                <Radio className="h-3.5 w-3.5" /> Tonton Siaran Langsung
+              </a>
+            )
+          ) : (
+            <p className="text-xs italic opacity-60">Tambahkan link streaming di panel kanan.</p>
+          )}
+        </div>
+      </Inner>
+      {embedUrl && !preview && (
+        <Inner name="embed">
+          <div className="mx-auto mt-6 w-full overflow-hidden rounded-xl border border-current/10">
+            <iframe
+              src={embedUrl}
+              className="h-64 w-full"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              title={str(props, 'title') || 'Siaran Langsung'}
+            />
+          </div>
+        </Inner>
+      )}
     </section>
   );
 }

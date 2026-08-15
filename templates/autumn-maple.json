@@ -8,7 +8,7 @@
     "font_body": "Lora",
     "layout": "left",
     "hero_style": "image",
-    "ornament": "birds",
+    "ornament": "monstera-garland",
     "frame": "double",
     "card_style": false
   },
@@ -48,8 +48,8 @@
         "bride_parents": "Anak pertama dari Bpk. Hendar Ginanjar & Ibu Maya",
         "variant": "vertical",
         "photo_shape": "circle",
-        "groom_photo": "https://picsum.photos/seed/autumnmaple-groom/600/700",
-        "bride_photo": "https://picsum.photos/seed/autumnmaple-bride/600/700"
+        "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
+        "bride_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80"
       }
     },
     {

@@ -8,7 +8,7 @@
     "font_body": "Jost",
     "layout": "left",
     "hero_style": "image",
-    "ornament": "eucalyptus",
+    "ornament": "frangipani",
     "frame": "classic",
     "card_style": true
   },
@@ -48,8 +48,8 @@
         "bride_parents": "Anak pertama dari Bpk. Agus Salim & Ibu Ida Farida",
         "variant": "side",
         "photo_shape": "frame",
-        "groom_photo": "https://picsum.photos/seed/forestevergreen-groom/600/700",
-        "bride_photo": "https://picsum.photos/seed/forestevergreen-bride/600/700"
+        "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
+        "bride_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80"
       }
     },
     {

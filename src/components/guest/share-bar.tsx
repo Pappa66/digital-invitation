@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import QRCode from 'react-qr-code';
-import { Check, Copy, QrCode, Share2, X, Instagram, Loader2 } from 'lucide-react';
+import { Check, Copy, QrCode, Share2, X, Instagram, Loader2, MessageCircle } from 'lucide-react';
 
 interface ShareBarProps {
   /** Nama mempelai (mis. "Raka & Salma") untuk template IG Story. */
@@ -146,6 +146,14 @@ export default function ShareBar({ coupleNames, date, theme }: ShareBarProps) {
             {copied ? <Check className="h-4 w-4" /> : <Share2 className="h-4 w-4" />}
             {copied ? 'Tersalin!' : 'Salin / Bagikan'}
           </button>
+          <a
+            href={`https://wa.me/?text=${encodeURIComponent(`${document.title || 'Undangan Pernikahan'}\n${url}`)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-green-500 px-3 py-2 text-sm font-medium text-white hover:bg-green-600"
+          >
+            <MessageCircle className="h-4 w-4" /> Bagikan via WhatsApp
+          </a>
           <div className="mt-3 flex items-center gap-3">
             <QRCode value={url || ' '} size={84} fgColor="#111827" />
             <div className="text-[11px] leading-relaxed text-gray-500">

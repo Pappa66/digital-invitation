@@ -8,7 +8,7 @@
     "font_body": "Nunito Sans",
     "layout": "center",
     "hero_style": "solid",
-    "ornament": "diamond-lines",
+    "ornament": "art-deco",
     "frame": "classic",
     "card_style": false
   },
@@ -48,8 +48,8 @@
         "bride_parents": "Putri dari Bpk. Wijaya & Ibu Sulastri",
         "variant": "vertical",
         "photo_shape": "circle",
-        "groom_photo": "https://picsum.photos/seed/mintfresh-groom/600/700",
-        "bride_photo": "https://picsum.photos/seed/mintfresh-bride/600/700"
+        "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
+        "bride_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80"
       }
     },
     {

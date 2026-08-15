@@ -8,7 +8,7 @@
     "font_body": "Lora",
     "layout": "left",
     "hero_style": "image",
-    "ornament": "wildflower",
+    "ornament": "botanical-garland",
     "frame": "double",
     "card_style": false
   },
@@ -45,8 +45,8 @@
         "bride_parents": "Anak kedua dari Bpk. H. Bambang Sutrisno & Ibu Lestari",
         "variant": "vertical",
         "photo_shape": "circle",
-        "groom_photo": "https://picsum.photos/seed/rusticgarden-groom/600/700",
-        "bride_photo": "https://picsum.photos/seed/rusticgarden-bride/600/700"
+        "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
+        "bride_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80"
       }
     },
     {

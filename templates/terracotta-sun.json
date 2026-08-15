@@ -8,7 +8,7 @@
     "font_body": "Poppins",
     "layout": "left",
     "hero_style": "image",
-    "ornament": "eucalyptus",
+    "ornament": "frangipani",
     "frame": "classic",
     "card_style": true
   },
@@ -48,8 +48,8 @@
         "bride_parents": "Anak kedua dari Bpk. Eka Putra & Ibu Yani",
         "variant": "side",
         "photo_shape": "frame",
-        "groom_photo": "https://picsum.photos/seed/terracottasun-groom/600/700",
-        "bride_photo": "https://picsum.photos/seed/terracottasun-bride/600/700"
+        "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
+        "bride_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80"
       }
     },
     {

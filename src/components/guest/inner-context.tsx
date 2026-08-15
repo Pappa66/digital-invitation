@@ -19,3 +19,18 @@ export function useInnerPositions(): InnerPositions | undefined {
 export function innerOffset(inner: InnerPositions | undefined, name: string): { x: number; y: number } {
   return inner?.[name] ?? { x: 0, y: 0 };
 }
+
+/** Wrapper sub-elemen di dalam blok yang bisa digeser bebas. */
+export function Inner({ name, className, children }: { name: string; className?: string; children: React.ReactNode }) {
+  const inner = useInnerPositions();
+  const pos = inner?.[name];
+  return (
+    <div
+      data-inner={name}
+      className={className}
+      style={pos ? { transform: `translate(${pos.x}px, ${pos.y}px)` } : undefined}
+    >
+      {children}
+    </div>
+  );
+}

@@ -8,7 +8,7 @@
     "font_body": "Lato",
     "layout": "center",
     "hero_style": "solid",
-    "ornament": "flourish",
+    "ornament": "gardenia-wreath",
     "frame": "classic",
     "card_style": false
   },
@@ -45,8 +45,8 @@
         "bride_parents": "Putri dari H. Bagus Nugroho, S.E., M.M. & Ibu Hj. Ratna",
         "variant": "vertical",
         "photo_shape": "circle",
-        "groom_photo": "https://picsum.photos/seed/navyclassic-groom/600/700",
-        "bride_photo": "https://picsum.photos/seed/navyclassic-bride/600/700"
+        "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
+        "bride_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80"
       }
     },
     {

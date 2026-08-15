@@ -156,7 +156,8 @@ export function emptyCanvas(): CanvasData {
       font_heading: 'Playfair Display',
       font_body: 'Montserrat',
       layout: 'center',
-      hero_style: 'image'
+      hero_style: 'image',
+      ornament: 'gardenia-wreath'
     },
     settings: {
       music_url: '',
