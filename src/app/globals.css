@@ -98,3 +98,63 @@ body {
     page-break-inside: avoid;
   }
 }
+
+/* ===== Background Textures ===== */
+.texture-paper {
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+}
+
+.texture-linen {
+  background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h1v1H0zM4 4h1v1H4zM8 0h1v1H8zM0 8h1v1H0zM12 4h1v1h-1zM4 12h1v1H4zM16 0h1v1h-1zM0 16h1v1H0zM8 8h1v1H8zM20 4h1v1h-1zM12 12h1v1h-1zM4 20h1v1H4zM24 0h1v1h-1zM0 24h1v1H0zM16 8h1v1h-1zM8 16h1v1H8zM28 4h1v1h-1zM20 12h1v1h-1zM12 20h1v1h-1zM4 28h1v1H4z' fill='%23000' fill-opacity='0.02'/%3E%3C/svg%3E");
+}
+
+/* ===== Ornament Stroke Animation ===== */
+@keyframes ornament-draw {
+  from { stroke-dashoffset: 1000; }
+  to { stroke-dashoffset: 0; }
+}
+
+.ornament-animated path,
+.ornament-animated circle,
+.ornament-animated line,
+.ornament-animated ellipse,
+.ornament-animated rect {
+  stroke-dasharray: 1000;
+  animation: ornament-draw 2s ease-out forwards;
+}
+
+/* ===== Text Reveal Animation ===== */
+@keyframes text-reveal {
+  from { clip-path: inset(0 100% 0 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+
+.text-reveal {
+  animation: text-reveal 0.8s ease-out forwards;
+}
+
+/* ===== Scroll Progress Bar ===== */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: var(--color-primary);
+  z-index: 100;
+  transform-origin: left;
+}
+
+/* ===== Reduced Motion ===== */
+@media (prefers-reduced-motion: reduce) {
+  .ornament-animated path,
+  .ornament-animated circle,
+  .ornament-animated line,
+  .ornament-animated ellipse,
+  .ornament-animated rect {
+    animation: none;
+  }
+  .text-reveal {
+    animation: none;
+    clip-path: inset(0 0 0 0);
+  }
+}

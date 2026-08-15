@@ -22,13 +22,16 @@ export default function MediaLibrary({ open, onClose, onSelect }: MediaLibraryPr
 
   const loadFiles = useCallback(async () => {
     setLoading(true);
-    const { data } = await supabase.storage.from(BUCKET).list('', { sortBy: { column: 'created_at', order: 'desc' } });
+    const { data: { user } } = await supabase.auth.getUser();
+    const prefix = user ? `${user.id}/` : '';
+    const { data } = await supabase.storage.from(BUCKET).list(prefix, { sortBy: { column: 'created_at', order: 'desc' } });
     if (data) {
       const items = await Promise.all(
         data
           .filter((f) => f.name && f.id && !f.id.endsWith('.folder'))
           .map(async (f) => {
-            const { data: pubUrl } = supabase.storage.from(BUCKET).getPublicUrl(f.name);
+            const filePath = prefix ? `${prefix}${f.name}` : f.name;
+            const { data: pubUrl } = supabase.storage.from(BUCKET).getPublicUrl(filePath);
             return { name: f.name, url: pubUrl.publicUrl };
           })
       );
@@ -48,13 +51,15 @@ export default function MediaLibrary({ open, onClose, onSelect }: MediaLibraryPr
     setUploading(true);
     setUploadingCount(picked.length);
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      const prefix = user ? `${user.id}/` : '';
       for (const file of picked) {
         const compressed = await imageCompression(file, {
           maxSizeMB: 1,
           maxWidthOrHeight: 1920,
           useWebWorker: true
         });
-        const name = `${Date.now()}-${file.name.replace(/\s+/g, '-')}`;
+        const name = `${prefix}${Date.now()}-${file.name.replace(/\s+/g, '-')}`;
         const { error } = await supabase.storage.from(BUCKET).upload(name, compressed, {
           cacheControl: '3600',
           upsert: false

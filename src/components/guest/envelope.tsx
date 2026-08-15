@@ -10,10 +10,20 @@ function str(props: BlockProps, key: string): string {
   return typeof v === 'string' ? v : '';
 }
 
+function arr(props: BlockProps, key: string): string[] {
+  const v = props[key];
+  return Array.isArray(v) ? (v as string[]) : [];
+}
+
+function bool(props: BlockProps, key: string): boolean {
+  return props[key] === true || props[key] === 'true';
+}
+
 export default function EnvelopeBlock({ props }: { props: BlockProps }) {
   const [open, setOpen] = useState(false);
   const [revealed, setRevealed] = useState<Record<number, boolean>>({});
   const [copied, setCopied] = useState<Record<number, boolean>>({});
+  const [tab, setTab] = useState<'cash' | 'gift'>('cash');
   const inBuilder = useContext(BuilderEditableContext) !== null;
 
   const accounts = (Array.isArray(props.accounts) ? props.accounts : []) as BankAccount[];
@@ -23,8 +33,10 @@ export default function EnvelopeBlock({ props }: { props: BlockProps }) {
     account_holder: str(props, 'account_holder')
   };
   const effectiveAccounts = accounts.length > 0 ? accounts : legacyAccount.account_number ? [legacyAccount] : [];
+  const giftRegistryEnabled = bool(props, 'gift_registry_enabled');
+  const giftItems = arr(props, 'gift_items');
 
-  if (effectiveAccounts.length === 0 && !inBuilder) return null;
+  if (effectiveAccounts.length === 0 && !giftRegistryEnabled && !inBuilder) return null;
 
   async function reveal(i: number) {
     setRevealed((r) => ({ ...r, [i]: true }));
@@ -40,6 +52,8 @@ export default function EnvelopeBlock({ props }: { props: BlockProps }) {
     }
     setTimeout(() => setCopied((c) => ({ ...c, [i]: false })), 1800);
   }
+
+  const showTabs = giftRegistryEnabled && effectiveAccounts.length > 0;
 
   return (
     <section className="mx-auto max-w-sm px-6 py-16 text-center">
@@ -57,55 +71,96 @@ export default function EnvelopeBlock({ props }: { props: BlockProps }) {
           </Editable>
         </p>
 
+        {showTabs && (
+          <div className="mt-4 flex items-center justify-center gap-1 rounded-full border border-current/15 bg-white/5 p-0.5">
+            <button
+              onClick={() => setTab('cash')}
+              className={`rounded-full px-4 py-1.5 text-xs font-medium transition-colors ${
+                tab === 'cash' ? 'bg-[var(--color-primary)] text-white' : 'opacity-60 hover:opacity-100'
+              }`}
+            >
+              Kado Cashless
+            </button>
+            <button
+              onClick={() => setTab('gift')}
+              className={`rounded-full px-4 py-1.5 text-xs font-medium transition-colors ${
+                tab === 'gift' ? 'bg-[var(--color-primary)] text-white' : 'opacity-60 hover:opacity-100'
+              }`}
+            >
+              Daftar Kado
+            </button>
+          </div>
+        )}
+
         {!open ? (
           <button
             onClick={() => setOpen(true)}
-            className="mt-5 inline-flex items-center gap-2 rounded-full bg-[var(--color-primary)] px-6 py-3 text-xs font-semibold uppercase tracking-[0.15em] text-white transition-transform hover:scale-[1.03]"
+            className="mt-5 inline-flex items-center gap-2 rounded-full bg-[var(--color-primary)] px-6 py-3 text-xs font-semibold uppercase tracking-[0.15em] text-white transition-transform hover:scale-[1.03] active:scale-95"
           >
             <Gift className="h-4 w-4" /> Beri Kado
           </button>
         ) : (
           <div className="mt-5 space-y-3 text-sm">
-            {effectiveAccounts.length === 0 && inBuilder && (
-              <p className="text-xs italic opacity-60">Belum ada rekening. Tambah via panel kanan.</p>
-            )}
-            {effectiveAccounts.map((acc, i) => {
-              const isOpen = !!revealed[i];
-              return (
-                <div key={i} className="overflow-hidden rounded-2xl border border-current/10 bg-white/5 text-left">
-                  <button
-                    type="button"
-                    onClick={() => (isOpen ? setRevealed((r) => ({ ...r, [i]: false })) : reveal(i))}
-                    className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left transition-colors hover:bg-current/5"
-                  >
-                    <div className="min-w-0">
-                      {acc.bank_name && <p className="font-medium">{acc.bank_name}</p>}
-                      {acc.account_holder && <p className="truncate text-[11px] opacity-60">a.n. {acc.account_holder}</p>}
-                    </div>
-                    <span className="flex shrink-0 items-center gap-1.5 rounded-full border border-current/20 px-2.5 py-1 text-[11px] uppercase tracking-wide opacity-80">
-                      {isOpen ? <EyeOff className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
-                      {isOpen ? 'Sembunyikan' : 'Lihat'}
-                    </span>
-                  </button>
-                  {isOpen ? (
-                    <div className="flex items-center gap-2 border-t border-current/10 px-4 py-2.5">
-                      <span className="text-sm font-semibold tracking-[0.08em]">{acc.account_number}</span>
+            {showTabs && tab === 'gift' ? (
+              giftItems.length > 0 ? (
+                <ul className="grid grid-cols-2 gap-2 text-left">
+                  {giftItems.map((item, i) => (
+                    <li
+                      key={`${item}-${i}`}
+                      className="flex items-center gap-2 rounded-lg border border-current/10 bg-white/5 px-3 py-2.5 text-xs"
+                    >
+                      <Check className="h-3.5 w-3.5 shrink-0 opacity-60" />
+                      <span className="leading-snug">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-xs italic opacity-60">Belum ada daftar kado. Tambah via panel kanan.</p>
+              )
+            ) : (
+              <>
+                {effectiveAccounts.length === 0 && inBuilder && (
+                  <p className="text-xs italic opacity-60">Belum ada rekening. Tambah via panel kanan.</p>
+                )}
+                {effectiveAccounts.map((acc, i) => {
+                  const isOpen = !!revealed[i];
+                  return (
+                    <div key={i} className="overflow-hidden rounded-2xl border border-current/10 bg-white/5 text-left">
                       <button
-                        onClick={() => copyAccount(i, acc.account_number)}
-                        title="Salin nomor rekening"
-                        className="ml-auto flex h-7 w-7 items-center justify-center rounded-full border border-current/25 transition-colors hover:bg-current/10"
+                        type="button"
+                        onClick={() => (isOpen ? setRevealed((r) => ({ ...r, [i]: false })) : reveal(i))}
+                        className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left transition-colors hover:bg-current/5"
                       >
-                        {copied[i] ? <Check className="h-3.5 w-3.5 text-green-500" /> : <Copy className="h-3.5 w-3.5 opacity-80" />}
+                        <div className="min-w-0">
+                          {acc.bank_name && <p className="font-medium">{acc.bank_name}</p>}
+                          {acc.account_holder && <p className="truncate text-[11px] opacity-60">a.n. {acc.account_holder}</p>}
+                        </div>
+                        <span className="flex shrink-0 items-center gap-1.5 rounded-full border border-current/20 px-2.5 py-1 text-[11px] uppercase tracking-wide opacity-80">
+                          {isOpen ? <EyeOff className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
+                          {isOpen ? 'Sembunyikan' : 'Lihat'}
+                        </span>
                       </button>
+                      {isOpen ? (
+                        <div className="flex items-center gap-2 border-t border-current/10 px-4 py-2.5">
+                          <span className="text-sm font-semibold tracking-[0.08em]">{acc.account_number}</span>
+                          <button
+                            onClick={() => copyAccount(i, acc.account_number)}
+                            title="Salin nomor rekening"
+                            className="ml-auto flex h-7 w-7 items-center justify-center rounded-full border border-current/25 transition-colors hover:bg-current/10"
+                          >
+                            {copied[i] ? <Check className="h-3.5 w-3.5 text-green-500" /> : <Copy className="h-3.5 w-3.5 opacity-80" />}
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="border-t border-current/10 px-4 py-2.5 text-[11px] uppercase tracking-[0.25em] text-current/40">
+                          ••••• ••••• •••••
+                        </div>
+                      )}
                     </div>
-                  ) : (
-                    <div className="border-t border-current/10 px-4 py-2.5 text-[11px] uppercase tracking-[0.25em] text-current/40">
-                      ••••• ••••• •••••
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+                  );
+                })}
+              </>
+            )}
           </div>
         )}
       </div>

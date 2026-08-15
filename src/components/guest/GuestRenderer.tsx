@@ -103,7 +103,14 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
         ))}
         {!preview && canvas.settings.guest_book_enabled && <GuestBookWall projectId={projectId} />}
         {!preview && projectId && canvas.settings.checkin_enabled !== false && (
-          <CheckIn projectId={projectId} greetingName={greetingName} preview={preview} />
+          <CheckIn
+            projectId={projectId}
+            greetingName={greetingName}
+            preview={preview}
+            showSeatInfo={!!canvas.settings.show_seat_info}
+            tableLabel={typeof canvas.settings.table_label === 'string' ? canvas.settings.table_label : undefined}
+            seatLabel={typeof canvas.settings.seat_label === 'string' ? canvas.settings.seat_label : undefined}
+          />
         )}
         {immersive && <MusicPlayer settings={canvas.settings} />}
         {immersive && <ShareBar {...shareMeta} />}

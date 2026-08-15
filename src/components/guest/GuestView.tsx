@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import type { CanvasData } from '@/lib/types';
+import { validateCanvasData } from '@/lib/validations';
 import GuestRenderer from '@/components/guest/GuestRenderer';
 
 interface GuestViewProps {
@@ -12,7 +13,8 @@ interface GuestViewProps {
 }
 
 export default function GuestView({ projectId, canvas, to }: GuestViewProps) {
-  const data = canvas as unknown as CanvasData;
+  const validated = validateCanvasData(canvas);
+  const data = validated ?? (canvas as unknown as CanvasData);
 
   useEffect(() => {
     const fonts = Array.from(new Set([data.theme.font_heading, data.theme.font_body]));

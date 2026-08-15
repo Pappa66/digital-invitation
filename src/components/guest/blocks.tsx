@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect, useState, useRef, useContext } from 'react';
-import { motion, type Target } from 'framer-motion';
+import { motion, AnimatePresence, type Target } from 'framer-motion';
 import Image from 'next/image';
-import { Calendar, MapPin, Heart, Sparkles, Gem, BookOpen, Sprout, MailOpen, Plus, Radio } from 'lucide-react';
+import { Calendar, MapPin, Heart, Sparkles, Gem, BookOpen, Sprout, MailOpen, Plus, Radio, X } from 'lucide-react';
 import type { BlockProps, DecorAsset, DecorShapeKind } from '@/lib/types';
 import type { ReligionKey } from '@/lib/religions';
 import { Editable, BuilderEditableContext } from '@/components/builder/inline-edit';
@@ -666,7 +666,7 @@ export function HeroBlock({ props, greetingName }: { props: BlockProps; greeting
   return (
     <section
       ref={sectionRef}
-      className={`relative flex min-h-screen w-full flex-col overflow-hidden px-6 py-20 text-white ${
+      className={`relative flex min-h-[100dvh] w-full flex-col overflow-hidden px-6 py-20 text-white ${
         isLeft ? 'items-start justify-center text-left' : 'items-center justify-center text-center'
       }`}
     >
@@ -1015,7 +1015,7 @@ export function EventDetailBlock({ props }: { props: BlockProps }) {
                   </span>
                 </span>
               </div>
-              {(str(props, 'maps_url') || address) && (
+              {(str(props, 'maps_url') || address || dateStr) && (
                 <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
                   {str(props, 'live_url') && bool(props, 'show_live') !== false &&
                     (preview ? (
@@ -1047,21 +1047,20 @@ export function EventDetailBlock({ props }: { props: BlockProps }) {
                         <MapPin className="h-3.5 w-3.5" /> Buka Maps
                       </a>
                     ))}
-                  {address &&
-                    (preview ? (
-                      <span className="inline-flex items-center gap-1.5 rounded-full border border-current/25 px-4 py-2 text-xs font-medium">
-                        <Calendar className="h-3.5 w-3.5" /> Simpan ke Kalender
-                      </span>
-                    ) : (
-                      <a
-                        href={calendarHref}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 rounded-full border border-current/25 px-4 py-2 text-xs font-medium transition-colors hover:bg-current/10"
-                      >
-                        <Calendar className="h-3.5 w-3.5" /> Simpan ke Kalender
-                      </a>
-                    ))}
+                  {(preview ? (
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-current/25 px-4 py-2 text-xs font-medium">
+                      <Calendar className="h-3.5 w-3.5" /> Simpan ke Kalender
+                    </span>
+                  ) : (
+                    <a
+                      href={calendarHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-current/25 px-4 py-2 text-xs font-medium transition-colors hover:bg-current/10"
+                    >
+                      <Calendar className="h-3.5 w-3.5" /> Simpan ke Kalender
+                    </a>
+                  ))}
                 </div>
               )}
             </div>
@@ -1158,6 +1157,8 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
   const anim = str(props, 'animation') || 'fade';
   const a = PHOTO_ANIMS[anim] ?? PHOTO_ANIMS.fade;
   const title = str(props, 'title');
+  const preview = usePreview();
+  const { open: openLightbox, lightbox } = useLightbox(images);
 
   if (layout === 'carousel') {
     return (
@@ -1174,6 +1175,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
   if (layout === 'column') {
     return (
       <section className="px-6 py-16">
+        {lightbox}
         <Inner name="title">
           <h2 className="mb-8 text-center text-xl md:text-2xl"><Editable prop="title">{str(props, 'title')}</Editable></h2>
         </Inner>
@@ -1185,7 +1187,8 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
               whileInView={a.animate}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: Math.min(i, 4) * 0.08 }}
-              className="group relative aspect-[4/5] w-full overflow-hidden rounded-lg"
+              className="group relative aspect-[4/5] w-full overflow-hidden rounded-lg cursor-pointer"
+              onClick={() => !preview && openLightbox(i)}
             >
               <Image src={src} alt="" fill sizes="(max-width: 768px) 100vw, 420px" quality={75} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
               <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-400 group-hover:bg-black/15" />
@@ -1199,6 +1202,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
   if (layout === 'grid3') {
     return (
       <section className="px-6 py-16">
+        {lightbox}
         <Inner name="title">
           <h2 className="mb-8 text-center text-xl md:text-2xl"><Editable prop="title">{str(props, 'title')}</Editable></h2>
         </Inner>
@@ -1210,7 +1214,8 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
               whileInView={a.animate}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.05 }}
-              className="group relative aspect-square overflow-hidden rounded-md"
+              className="group relative aspect-square overflow-hidden rounded-md cursor-pointer"
+              onClick={() => !preview && openLightbox(i)}
             >
               <Image src={src} alt="" fill sizes="(max-width: 768px) 100vw, 33vw" quality={70} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
               <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-400 group-hover:bg-black/15" />
@@ -1224,6 +1229,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
   if (layout === 'masonry') {
     return (
       <section className="px-6 py-16">
+        {lightbox}
         <Inner name="title">
           <h2 className="mb-8 text-center text-xl md:text-2xl"><Editable prop="title">{str(props, 'title')}</Editable></h2>
         </Inner>
@@ -1236,7 +1242,8 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
                 whileInView={a.animate}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: (i % 6) * 0.05 }}
-                className="group mb-3 break-inside-avoid overflow-hidden rounded-lg"
+                className="group mb-3 break-inside-avoid overflow-hidden rounded-lg cursor-pointer"
+                onClick={() => !preview && openLightbox(i)}
               >
                 <Image
                   src={src}
@@ -1260,6 +1267,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
   if (layout === 'mosaic') {
     return (
       <section className="px-6 py-16">
+        {lightbox}
         <Inner name="title">
           <h2 className="mb-8 text-center text-xl md:text-2xl"><Editable prop="title">{str(props, 'title')}</Editable></h2>
         </Inner>
@@ -1271,7 +1279,8 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
               whileInView={a.animate}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: Math.min(i, 5) * 0.06 }}
-              className={`group relative overflow-hidden rounded-md ${i % 5 === 0 ? 'col-span-2 row-span-2 aspect-square' : 'aspect-[3/4]'}`}
+              className={`group relative overflow-hidden rounded-md cursor-pointer ${i % 5 === 0 ? 'col-span-2 row-span-2 aspect-square' : 'aspect-[3/4]'}`}
+              onClick={() => !preview && openLightbox(i)}
             >
               <Image src={src} alt="" fill sizes="(max-width: 768px) 100vw, 33vw" quality={75} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
               <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-400 group-hover:bg-black/15" />
@@ -1285,6 +1294,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
   if (layout === 'polaroid') {
     return (
       <section className="px-6 py-16">
+        {lightbox}
         <Inner name="title">
           <h2 className="mb-8 text-center text-xl md:text-2xl"><Editable prop="title">{str(props, 'title')}</Editable></h2>
         </Inner>
@@ -1296,8 +1306,9 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
               whileInView={a.animate}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: (i % 6) * 0.07 }}
-              className="group break-inside-avoid rounded-sm bg-white p-2 pb-8 shadow-[0_6px_16px_rgba(0,0,0,0.18)]"
+              className="group break-inside-avoid rounded-sm bg-white p-2 pb-8 shadow-[0_6px_16px_rgba(0,0,0,0.18)] cursor-pointer"
               style={{ transform: `rotate(${[-3, 2, -1, 3, -2, 2][i % 6]}deg)` }}
+              onClick={() => !preview && openLightbox(i)}
             >
               <div className="relative aspect-square w-full overflow-hidden bg-[#e8e2d5]">
                 <Image src={src} alt="" fill sizes="(max-width: 768px) 50vw, 33vw" quality={70} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
@@ -1314,6 +1325,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
     const rest = images.slice(1);
     return (
       <section className="px-6 py-16">
+        {lightbox}
         <Inner name="title">
           <h2 className="mb-8 text-center text-xl md:text-2xl"><Editable prop="title">{str(props, 'title')}</Editable></h2>
         </Inner>
@@ -1324,7 +1336,8 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
               whileInView={a.animate}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
-              className="group relative mx-auto aspect-[3/4.2] w-full max-w-[300px] overflow-hidden rounded-t-[999px] shadow-[0_18px_40px_rgba(0,0,0,0.18)]"
+              className="group relative mx-auto aspect-[3/4.2] w-full max-w-[300px] overflow-hidden rounded-t-[999px] shadow-[0_18px_40px_rgba(0,0,0,0.18)] cursor-pointer"
+              onClick={() => !preview && openLightbox(0)}
             >
               <Image src={hero} alt="" fill sizes="(max-width: 768px) 100vw, 420px" quality={80} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
             </motion.div>
@@ -1338,7 +1351,8 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
                   whileInView={a.animate}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: i * 0.05 }}
-                  className="group relative aspect-square overflow-hidden rounded-lg"
+                  className="group relative aspect-square overflow-hidden rounded-lg cursor-pointer"
+                  onClick={() => !preview && openLightbox(i + 1)}
                 >
                   <Image src={src} alt="" fill sizes="(max-width: 768px) 50vw, 33vw" quality={70} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
                   <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-400 group-hover:bg-black/15" />
@@ -1353,6 +1367,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
 
   return (
     <section className="px-6 py-16">
+      {lightbox}
       <Inner name="title">
         <h2 className="mb-8 text-center text-xl md:text-2xl"><Editable prop="title">{str(props, 'title')}</Editable></h2>
       </Inner>
@@ -1364,9 +1379,10 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
             whileInView={a.animate}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: i * 0.06 }}
-            className={`group relative overflow-hidden rounded-lg ${i === 0 || i === 3 ? 'col-span-2' : ''} ${
+            className={`group relative overflow-hidden rounded-lg cursor-pointer ${i === 0 || i === 3 ? 'col-span-2' : ''} ${
               i === 0 || i === 3 ? 'aspect-[16/10]' : 'aspect-[3/4]'
             }`}
+            onClick={() => !preview && openLightbox(i)}
           >
             <Image src={src} alt="" fill sizes="(max-width: 768px) 100vw, 50vw" quality={75} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
@@ -1640,6 +1656,45 @@ const DIVIDER_VARIANTS: Record<string, React.ReactNode> = {
       <Sprout className="h-4 w-4 opacity-80" />
       <span className="h-px w-14 bg-current opacity-40" />
     </div>
+  ),
+  floral: (
+    <div className="flex items-center gap-2">
+      <span className="h-px w-12 bg-current opacity-30" />
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" className="opacity-60">
+        <circle cx="12" cy="12" r="3" />
+        <path d="M12 2c0 4-2 6-4 8M12 2c0 4 2 6 4 8" opacity={0.5} />
+        <path d="M12 22c0-4-2-6-4-8M12 22c0-4 2-6 4-8" opacity={0.5} />
+        <path d="M2 12c4 0 6-2 8-4M2 12c4 0 6 2 8 4" opacity={0.5} />
+        <path d="M22 12c-4 0-6-2-8-4M22 12c-4 0-6 2-8 4" opacity={0.5} />
+      </svg>
+      <span className="h-px w-12 bg-current opacity-30" />
+    </div>
+  ),
+  ribbon: (
+    <div className="flex items-center gap-2">
+      <span className="h-px w-10 bg-current opacity-30" />
+      <svg width="32" height="16" viewBox="0 0 32 16" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" className="opacity-50">
+        <path d="M4 8h24" />
+        <path d="M2 4l4 4-4 4" />
+        <path d="M30 4l-4 4 4 4" />
+      </svg>
+      <span className="h-px w-10 bg-current opacity-30" />
+    </div>
+  ),
+  'animated-vine': (
+    <div className="flex items-center gap-2">
+      <span className="h-px w-8 bg-current opacity-20" />
+      <svg width="80" height="20" viewBox="0 0 80 20" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" className="opacity-50">
+        <path d="M4 10c10-8 20 8 30 0s20 8 30 0s10-4 12-4" />
+        <path d="M14 6c-2-3 0-6 3-5 2 1 2 4 0 5" opacity={0.6} />
+        <path d="M34 14c-2-3 0-6 3-5 2 1 2 4 0 5" opacity={0.6} />
+        <path d="M54 6c-2-3 0-6 3-5 2 1 2 4 0 5" opacity={0.6} />
+        <circle cx="14" cy="4" r="1.5" opacity={0.4} />
+        <circle cx="34" cy="12" r="1.5" opacity={0.4} />
+        <circle cx="54" cy="4" r="1.5" opacity={0.4} />
+      </svg>
+      <span className="h-px w-8 bg-current opacity-20" />
+    </div>
   )
 };
 
@@ -1659,4 +1714,188 @@ export function DividerBlock({ props }: { props: BlockProps }) {
       </motion.div>
     </section>
   );
+}
+
+export function LiveStreamingBlock({ props }: { props: BlockProps }) {
+  const streamUrl = str(props, 'stream_url');
+  const preview = usePreview();
+
+  function getEmbedUrl(url: string): string {
+    if (!url) return '';
+    const ytMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([^&?#]+)/);
+    if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}`;
+    const vimeoMatch = url.match(/vimeo\.com\/(\d+)/);
+    if (vimeoMatch) return `https://player.vimeo.com/video/${vimeoMatch[1]}`;
+    return url;
+  }
+
+  const embedUrl = getEmbedUrl(streamUrl);
+
+  return (
+    <section className="px-6 py-14 text-center">
+      <Inner name="content">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.96 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
+          <Radio className="mx-auto h-7 w-7" />
+          <h2 className="mt-4 text-2xl font-medium">
+            <Editable prop="title">{str(props, 'title') || 'Siaran Langsung'}</Editable>
+          </h2>
+          <p className="mt-3 text-sm opacity-80">
+            <Editable prop="note">{str(props, 'note') || 'Saksikan secara langsung melalui tautan berikut.'}</Editable>
+          </p>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
+            {streamUrl ? (
+              preview ? (
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-current/25 px-4 py-2 text-xs font-medium">
+                  <Radio className="h-3.5 w-3.5" /> Tonton Siaran Langsung
+                </span>
+              ) : (
+                <a
+                  href={streamUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-current/25 px-4 py-2 text-xs font-medium transition-colors hover:bg-current/10"
+                >
+                  <Radio className="h-3.5 w-3.5" /> Tonton Siaran Langsung
+                </a>
+              )
+            ) : (
+              <p className="text-xs italic opacity-60">Tambahkan link streaming di panel kanan.</p>
+            )}
+          </div>
+          {embedUrl && !preview && (
+            <div className="mx-auto mt-6 w-full overflow-hidden rounded-xl border border-current/10">
+              <iframe
+                src={embedUrl}
+                className="h-64 w-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                title={str(props, 'title') || 'Siaran Langsung'}
+              />
+            </div>
+          )}
+        </motion.div>
+      </Inner>
+    </section>
+  );
+}
+
+/* ============================ Gallery Lightbox ============================ */
+
+function GalleryLightbox({
+  images,
+  index,
+  onClose,
+  onPrev,
+  onNext
+}: {
+  images: string[];
+  index: number;
+  onClose: () => void;
+  onPrev: () => void;
+  onNext: () => void;
+}) {
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') onClose();
+      if (e.key === 'ArrowLeft') onPrev();
+      if (e.key === 'ArrowRight') onNext();
+    }
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onClose, onPrev, onNext]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.25 }}
+      className="fixed inset-0 z-[200] flex items-center justify-center bg-black/90"
+      onClick={onClose}
+    >
+      <button
+        onClick={onClose}
+        className="absolute right-4 top-4 z-[210] flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition-colors hover:bg-white/20"
+        aria-label="Tutup"
+      >
+        <X className="h-5 w-5" />
+      </button>
+
+      {images.length > 1 && (
+        <button
+          onClick={(e) => { e.stopPropagation(); onPrev(); }}
+          className="absolute left-4 z-[210] flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition-colors hover:bg-white/20"
+          aria-label="Sebelumnya"
+        >
+          ‹
+        </button>
+      )}
+
+      <motion.div
+        key={index}
+        initial={{ opacity: 0, scale: 0.92 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.92 }}
+        transition={{ duration: 0.25 }}
+        className="relative max-h-[85vh] max-w-[90vw]"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <img
+          src={images[index]}
+          alt=""
+          className="max-h-[85vh] max-w-[90vw] rounded-lg object-contain"
+        />
+      </motion.div>
+
+      {images.length > 1 && (
+        <button
+          onClick={(e) => { e.stopPropagation(); onNext(); }}
+          className="absolute right-4 z-[210] flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition-colors hover:bg-white/20"
+          aria-label="Selanjutnya"
+        >
+          ›
+        </button>
+      )}
+
+      {images.length > 1 && (
+        <div className="absolute bottom-6 left-1/2 z-[210] flex -translate-x-1/2 gap-1.5">
+          {images.map((_, i) => (
+            <span
+              key={i}
+              className={`h-1.5 rounded-full transition-all ${
+                i === index ? 'w-5 bg-white' : 'w-1.5 bg-white/40'
+              }`}
+            />
+          ))}
+        </div>
+      )}
+    </motion.div>
+  );
+}
+
+function useLightbox(images: string[]) {
+  const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
+  const open = (i: number) => setLightboxIdx(i);
+  const close = () => setLightboxIdx(null);
+  const prev = () => setLightboxIdx((i) => (i !== null ? (i - 1 + images.length) % images.length : null));
+  const next = () => setLightboxIdx((i) => (i !== null ? (i + 1) % images.length : null));
+
+  const lightbox = lightboxIdx !== null ? (
+    <AnimatePresence>
+      <GalleryLightbox
+        images={images}
+        index={lightboxIdx}
+        onClose={close}
+        onPrev={prev}
+        onNext={next}
+      />
+    </AnimatePresence>
+  ) : null;
+
+  return { open, lightbox };
 }

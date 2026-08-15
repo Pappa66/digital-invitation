@@ -41,6 +41,13 @@ export default function BuilderWorkspace({ projectId }: { projectId: string }) {
   const freeCanvasRef = useRef<HTMLDivElement | null>(null);
   const [guides, setGuides] = useState<{ x?: number; y?: number }>({});
 
+  async function triggerSave() {
+    setSaveState('saving');
+    const { error } = await saveCanvasNow(projectId, useBuilderStore.getState().canvas);
+    setSaveState(error ? 'idle' : 'saved');
+    setTimeout(() => setSaveState('idle'), 1500);
+  }
+
   useEffect(() => {
     const fonts = Array.from(new Set([canvas.theme.font_heading, canvas.theme.font_body]));
     let link = document.getElementById('invitation-fonts') as HTMLLinkElement | null;
@@ -59,6 +66,54 @@ export default function BuilderWorkspace({ projectId }: { projectId: string }) {
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      const target = e.target as HTMLElement;
+      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable) return;
+
+      const store = useBuilderStore.getState();
+      const { selectedBlockId } = store;
+
+      // Ctrl+Z: Undo (reset to initial — simplified)
+      if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
+        e.preventDefault();
+        // TODO: Implement proper undo history
+      }
+
+      // Ctrl+S: Force save
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        triggerSave();
+      }
+
+      // Delete/Backspace: Remove selected block
+      if ((e.key === 'Delete' || e.key === 'Backspace') && selectedBlockId) {
+        e.preventDefault();
+        store.removeBlock(selectedBlockId);
+        store.selectBlock(null);
+        triggerSave();
+      }
+
+      // Ctrl+D: Duplicate selected block
+      if ((e.ctrlKey || e.metaKey) && e.key === 'd' && selectedBlockId) {
+        e.preventDefault();
+        store.duplicateBlock(selectedBlockId);
+        triggerSave();
+      }
+
+      // Escape: Deselect
+      if (e.key === 'Escape') {
+        store.selectBlock(null);
+        store.selectDecor(null);
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function handleDragStart(event: DragStartEvent) {
     const id = String(event.active.id);
@@ -189,13 +244,6 @@ export default function BuilderWorkspace({ projectId }: { projectId: string }) {
       return { canvas: next };
     });
     triggerSave();
-  }
-
-  async function triggerSave() {
-    setSaveState('saving');
-    const { error } = await saveCanvasNow(projectId, useBuilderStore.getState().canvas);
-    setSaveState(error ? 'idle' : 'saved');
-    setTimeout(() => setSaveState('idle'), 1500);
   }
 
   return (

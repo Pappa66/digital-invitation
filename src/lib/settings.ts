@@ -1,5 +1,13 @@
-import { supabase } from '@/lib/supabase/client';
+import { createBrowserClient } from '@supabase/ssr';
 import { ORDER_WHATSAPP } from '@/lib/order';
+
+/** Client Supabase instance untuk settings (hanya dipanggil dari client components). */
+function getClientSupabase() {
+  return createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+}
 
 /** Key untuk nomor WhatsApp bisnis penerima pesanan. */
 export const SETTING_ORDER_WHATSAPP = 'order_whatsapp';
@@ -16,6 +24,7 @@ export interface SettingRow {
  */
 export async function getOrderWhatsapp(): Promise<string> {
   try {
+    const supabase = getClientSupabase();
     const { data, error } = await supabase
       .from('settings')
       .select('value')
@@ -38,6 +47,7 @@ export function toWaNumber(input: string): string {
 
 /** Baca seluruh pengaturan (dipakai halaman pengaturan dashboard). */
 export async function listSettings(): Promise<SettingRow[]> {
+  const supabase = getClientSupabase();
   const { data, error } = await supabase.from('settings').select('key, value').order('key');
   if (error) throw new Error(error.message);
   return (data ?? []) as SettingRow[];
@@ -45,6 +55,7 @@ export async function listSettings(): Promise<SettingRow[]> {
 
 /** Simpan satu pengaturan (hanya user terautentikasi). */
 export async function saveSetting(key: string, value: string): Promise<{ ok: boolean; error?: string }> {
+  const supabase = getClientSupabase();
   const { error } = await supabase
     .from('settings')
     .upsert({ key, value: value.trim(), updated_at: new Date().toISOString() }, { onConflict: 'key' });

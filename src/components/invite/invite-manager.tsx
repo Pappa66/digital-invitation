@@ -25,6 +25,7 @@ interface InviteManagerProps {
 }
 
 const STORAGE_BULK = (id: string) => `gb_bulk_${id}`;
+const STORAGE_SENT = (id: string) => `gb_sent_${id}`;
 
 function fill(template: string, name: string, link: string): string {
   return template.split('{nama}').join(name).split('{link}').join(link);
@@ -108,10 +109,24 @@ export default function InviteManager({ projectId, slug: slugProp, title: titleP
   const [presetId, setPresetId] = useState<string>('');
   const [template, setTemplate] = useState<string>('');
   const [bulkText, setBulkText] = useState<string>(() => loadRaw(STORAGE_BULK(projectId)));
-  const [sentIndexes, setSentIndexes] = useState<Set<number>>(new Set());
+  const [sentIndexes, setSentIndexes] = useState<Set<number>>(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_SENT(projectId));
+      return raw ? new Set(JSON.parse(raw)) : new Set();
+    } catch {
+      return new Set();
+    }
+  });
   const [copied, setCopied] = useState<string | null>(null);
   const [rsvps, setRsvps] = useState<Rsvp[]>([]);
   const [checkins, setCheckins] = useState<Checkin[]>([]);
+
+  // Persist sentIndexes to localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_SENT(projectId), JSON.stringify([...sentIndexes]));
+    } catch { /* ignore */ }
+  }, [sentIndexes, projectId]);
 
   useEffect(() => {
     if (!demoIsDemoMode()) return;

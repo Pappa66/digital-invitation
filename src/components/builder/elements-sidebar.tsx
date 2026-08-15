@@ -1,7 +1,7 @@
 'use client';
 
 import { useDraggable } from '@dnd-kit/core';
-import { Image as ImageIcon, LayoutPanelTop, Clock, CalendarHeart, BookOpen, Images, Mail, MapPin, HeartHandshake, Minus, GripVertical, Type, Gift, ListChecks, Quote as QuoteIcon } from 'lucide-react';
+import { Image as ImageIcon, LayoutPanelTop, Clock, CalendarHeart, BookOpen, Images, Mail, MapPin, HeartHandshake, Minus, GripVertical, Type, Gift, ListChecks, Quote as QuoteIcon, Radio } from 'lucide-react';
 import type { BlockType } from '@/lib/types';
 import { useBuilderStore } from '@/store/builder-store';
 
@@ -20,7 +20,8 @@ const ELEMENTS: { type: BlockType; label: string; icon: React.ElementType }[] = 
   { type: 'Quote', label: 'Kutipan / Ayat', icon: QuoteIcon },
   { type: 'Photo', label: 'Foto / Gambar', icon: ImageIcon },
   { type: 'Divider', label: 'Pemisah', icon: Minus },
-  { type: 'Thanks', label: 'Penutup', icon: HeartHandshake }
+  { type: 'Thanks', label: 'Penutup', icon: HeartHandshake },
+  { type: 'LiveStreaming', label: 'Siaran Langsung', icon: Radio }
 ];
 
 const QUICK_STARTS: { label: string; blocks: BlockType[] }[] = [

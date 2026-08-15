@@ -14,6 +14,8 @@ interface UseAutosaveOptions {
 export function useAutosave({ projectId, canvas }: UseAutosaveOptions) {
   const [status, setStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const firstRun = useRef(true);
+  const abortRef = useRef<AbortController | null>(null);
+  const pendingRef = useRef<CanvasData | null>(null);
 
   useEffect(() => {
     if (firstRun.current) {
@@ -21,7 +23,19 @@ export function useAutosave({ projectId, canvas }: UseAutosaveOptions) {
       return;
     }
 
+    // Cancel previous pending save
+    if (abortRef.current) {
+      abortRef.current.abort();
+    }
+
+    // Store latest canvas data for potential retry
+    pendingRef.current = canvas;
+
     const timeout = setTimeout(async () => {
+      // Create new abort controller for this save
+      const controller = new AbortController();
+      abortRef.current = controller;
+
       setStatus('saving');
 
       if (demoIsDemoMode()) {
@@ -31,23 +45,33 @@ export function useAutosave({ projectId, canvas }: UseAutosaveOptions) {
         return;
       }
 
-      const { error } = await supabase
-        .from('project_designs')
-        .update({
-          canvas_data: canvasToJson(canvas),
-          updated_at: new Date().toISOString()
-        })
-        .eq('project_id', projectId);
+      try {
+        const { error } = await supabase
+          .from('project_designs')
+          .update({
+            canvas_data: canvasToJson(canvas),
+            updated_at: new Date().toISOString()
+          })
+          .eq('project_id', projectId);
 
-      if (error) {
-        setStatus('error');
-      } else {
-        setStatus('saved');
-        setTimeout(() => setStatus('idle'), 1500);
+        if (controller.signal.aborted) return;
+
+        if (error) {
+          setStatus('error');
+        } else {
+          setStatus('saved');
+          setTimeout(() => setStatus('idle'), 1500);
+        }
+      } catch {
+        if (!controller.signal.aborted) {
+          setStatus('error');
+        }
       }
     }, 300);
 
-    return () => clearTimeout(timeout);
+    return () => {
+      clearTimeout(timeout);
+    };
   }, [canvas, projectId]);
 
   return status;

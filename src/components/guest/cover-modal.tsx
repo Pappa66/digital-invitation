@@ -39,7 +39,7 @@ export default function CoverModal({
   secondary,
   background,
   text,
-  namesScale = 'text-4xl',
+  namesScale = 'text-[clamp(1.875rem,6vw,2.5rem)]',
   ornament
 }: CoverModalProps) {
   const [open, setOpen] = useState(true);
@@ -80,7 +80,7 @@ export default function CoverModal({
             />
           )}
 
-          <div className="relative z-10 flex h-full w-full flex-col items-center justify-between px-8 py-12 text-center text-white">
+          <div className="relative z-10 flex h-full w-full flex-col items-center justify-between px-6 py-12 text-center text-white" style={{ paddingBottom: 'max(3rem, env(safe-area-inset-bottom))' }}>
             <div className="mt-2 flex flex-col items-center">
               {ornament && (
                 <OrnamentArt ornament={ornament as OrnamentKey} width={180} className="mb-3 text-white opacity-60" />
@@ -97,10 +97,10 @@ export default function CoverModal({
             <div className="flex w-full flex-col items-center">
               <div className="mb-5 flex w-full flex-col items-center gap-1">
                 <span className="text-[10px] uppercase tracking-[0.3em] opacity-80">Kepada:</span>
-                <span className="text-lg font-semibold">{greetingName || 'Bapak/Ibu/Saudara/i'}</span>
+                <span className="text-base font-semibold">{greetingName || 'Bapak/Ibu/Saudara/i'}</span>
               </div>
               <div className="mb-6 h-px w-3/4 bg-current opacity-40" />
-              <div className="mb-8 text-sm uppercase tracking-[0.25em] opacity-90">{date}</div>
+              <div className="mb-8 text-xs sm:text-sm uppercase tracking-[0.25em] opacity-90">{date}</div>
               <button
                 onClick={openInvitation}
                 className="inline-flex items-center gap-2 rounded-full px-8 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-primary)] transition-transform hover:scale-[1.04] active:scale-95"

@@ -2,6 +2,24 @@ import { NextResponse } from 'next/server';
 
 export const runtime = 'nodejs';
 
+/** Whitelist host yang diizinkan untuk resolve URL. */
+const ALLOWED_HOSTS = [
+  'google.com',
+  'www.google.com',
+  'maps.google.com',
+  'maps.app.goo.gl',
+  'www.google.co.id'
+];
+
+function isAllowedUrl(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    return ALLOWED_HOSTS.some((h) => parsed.hostname === h || parsed.hostname.endsWith('.' + h));
+  } catch {
+    return false;
+  }
+}
+
 /**
  * Resolve tautan Google Maps (termasuk short link maps.app.goo.gl) menjadi
  * src iframe yang bisa di-embed. Browser memblokir iframe ke www.google.com
@@ -14,12 +32,20 @@ export async function GET(request: Request) {
 
   if (!raw) return NextResponse.json({ src: null });
 
+  if (!isAllowedUrl(raw)) {
+    return NextResponse.json({ src: null }, { status: 400 });
+  }
+
   let finalUrl = raw;
   try {
-    const res = await fetch(raw, { redirect: 'follow' });
+    const res = await fetch(raw, { redirect: 'follow', signal: AbortSignal.timeout(5000) });
     finalUrl = res.url || raw;
   } catch {
     /* pakai URL asli bila fetch gagal */
+  }
+
+  if (!isAllowedUrl(finalUrl)) {
+    return NextResponse.json({ src: null }, { status: 400 });
   }
 
   const src = buildEmbedSrc(finalUrl) ?? (raw.includes('google') ? buildEmbedSrc(raw) : null);

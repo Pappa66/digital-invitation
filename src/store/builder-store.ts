@@ -143,7 +143,9 @@ const BLOCK_PRESETS: Record<BlockType, Block> = {
     props: {
       title: 'Amplop Online',
       note: 'Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.',
-      accounts: []
+      accounts: [],
+      gift_registry_enabled: false,
+      gift_items: []
     }
   },
   Maps: {
@@ -207,6 +209,16 @@ const BLOCK_PRESETS: Record<BlockType, Block> = {
       latin: '',
       translation: '',
       reference: ''
+    }
+  },
+  LiveStreaming: {
+    id: '',
+    type: 'LiveStreaming',
+    props: {
+      title: 'Siaran Langsung',
+      stream_url: '',
+      platform: 'youtube',
+      note: 'Saksikan secara langsung melalui tautan berikut.'
     }
   }
 };

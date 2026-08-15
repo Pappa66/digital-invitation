@@ -5,6 +5,38 @@
  * Pola khas undangan digital mewah: border ganda, sudut ornamen,
  * lengkungan atas (arch), atau garis tipis bersih.
  */
+
+interface CornerProps {
+  flip: 'tl' | 'tr' | 'bl' | 'br';
+  color: string;
+}
+
+function Corner({ flip, color }: CornerProps) {
+  const size = 34;
+  const thick = 2;
+  const transform =
+    flip === 'tr' ? 'scaleX(-1)' : flip === 'bl' ? 'scaleY(-1)' : flip === 'br' ? 'scale(-1,-1)' : 'none';
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform }} className="absolute">
+      <path
+        d={`M ${thick} ${size} V ${thick} H ${size}`}
+        fill="none"
+        stroke={color}
+        strokeWidth={thick}
+        strokeLinecap="round"
+      />
+      <path
+        d={`M ${thick + 5} ${size - 4} V ${thick + 5} H ${size - 4}`}
+        fill="none"
+        stroke={color}
+        strokeWidth={thick * 0.6}
+        opacity={0.6}
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
 export function GuestFrame({ mode, color, fixed = true }: { mode?: string; color: string; fixed?: boolean }) {
   if (!mode || mode === 'none') return null;
 
@@ -22,44 +54,19 @@ export function GuestFrame({ mode, color, fixed = true }: { mode?: string; color
   }
 
   if (mode === 'corner') {
-    const size = 34;
-    const thick = 2;
-    const Corner = ({ flip }: { flip: 'tl' | 'tr' | 'bl' | 'br' }) => {
-      const transform =
-        flip === 'tr' ? 'scaleX(-1)' : flip === 'bl' ? 'scaleY(-1)' : flip === 'br' ? 'scale(-1,-1)' : 'none';
-      return (
-        <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform }} className="absolute">
-          <path
-            d={`M ${thick} ${size} V ${thick} H ${size}`}
-            fill="none"
-            stroke={accent}
-            strokeWidth={thick}
-            strokeLinecap="round"
-          />
-          <path
-            d={`M ${thick + 5} ${size - 4} V ${thick + 5} H ${size - 4}`}
-            fill="none"
-            stroke={accent}
-            strokeWidth={thick * 0.6}
-            opacity={0.6}
-            strokeLinecap="round"
-          />
-        </svg>
-      );
-    };
     return (
       <div aria-hidden className={`pointer-events-none z-40 ${placement} inset-0`}>
         <span className="absolute left-4 top-4">
-          <Corner flip="tl" />
+          <Corner flip="tl" color={accent} />
         </span>
         <span className="absolute right-4 top-4">
-          <Corner flip="tr" />
+          <Corner flip="tr" color={accent} />
         </span>
         <span className="absolute bottom-4 left-4">
-          <Corner flip="bl" />
+          <Corner flip="bl" color={accent} />
         </span>
         <span className="absolute bottom-4 right-4">
-          <Corner flip="br" />
+          <Corner flip="br" color={accent} />
         </span>
       </div>
     );

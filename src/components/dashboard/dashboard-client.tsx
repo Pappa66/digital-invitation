@@ -95,12 +95,20 @@ export default function DashboardClient({ projects, isDemo = false, userName = n
 
       {items.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-gray-300 bg-white py-24 text-center">
-          <p className="text-sm text-gray-500">Belum ada undangan.</p>
+          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#c9a45c]/20 to-[#b98a3e]/10">
+            <svg className="h-8 w-8 text-[#c9a45c]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+          </div>
+          <p className="text-base font-medium text-gray-700">Belum ada undangan</p>
+          <p className="mt-1 max-w-xs text-sm text-gray-400">
+            Buat undangan digital pertama Anda dan bagikan ke tamu dalam hitungan menit.
+          </p>
           <button
             onClick={() => setModalOpen(true)}
-            className="mt-4 rounded-md bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-4 py-2 text-sm font-semibold text-white shadow-sm hover:opacity-90"
+            className="mt-5 rounded-md bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:opacity-90"
           >
-            Buat undangan pertama
+            Buat Undangan Pertama
           </button>
         </div>
       ) : (

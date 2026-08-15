@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Playfair_Display, Great_Vibes, Jost } from 'next/font/google';
+import { Toaster } from 'sonner';
 import './globals.css';
 
 const playfair = Playfair_Display({
@@ -31,6 +32,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="id">
       <body className={`${playfair.variable} ${greatVibes.variable} ${jost.variable} bg-dashboard-bg font-body text-gray-900 antialiased`}>
         {children}
+        <Toaster
+          position="top-right"
+          richColors
+          closeButton
+          toastOptions={{
+            duration: 3000,
+            style: {
+              background: '#1f2937',
+              color: '#f9fafb',
+              border: '1px solid #374151'
+            }
+          }}
+        />
       </body>
     </html>
   );

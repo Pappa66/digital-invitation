@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { UserCheck, Check, Loader2 } from 'lucide-react';
+import { UserCheck, Check, Loader2, Armchair } from 'lucide-react';
 import QRCode from 'react-qr-code';
 import { supabase } from '@/lib/supabase/client';
 import { demoIsDemoMode } from '@/lib/env';
@@ -15,6 +15,12 @@ interface CheckInProps {
   greetingName?: string;
   /** Nonaktifkan input saat preview kartu template. */
   preview?: boolean;
+  /** Tampilkan info meja & kursi setelah check-in. */
+  showSeatInfo?: boolean;
+  /** Label meja. */
+  tableLabel?: string;
+  /** Label kursi. */
+  seatLabel?: string;
 }
 
 /**
@@ -22,7 +28,7 @@ interface CheckInProps {
  * tamu memindai -> halaman terbuka dengan ?absen=1 -> mengetuk "Check-in".
  * Pencatatan masuk ke tabel `checkins` (sekali per browser per proyek).
  */
-export default function CheckIn({ projectId, greetingName, preview }: CheckInProps) {
+export default function CheckIn({ projectId, greetingName, preview, showSeatInfo, tableLabel, seatLabel }: CheckInProps) {
   const [name, setName] = useState(greetingName ?? '');
   const [guestCount, setGuestCount] = useState(1);
   const [status, setStatus] = useState<'idle' | 'submitting' | 'done' | 'error'>('idle');
@@ -87,7 +93,7 @@ export default function CheckIn({ projectId, greetingName, preview }: CheckInPro
         {!isAbsenMode ? (
           <button
             onClick={() => setQrOpen((o) => !o)}
-            className="mt-5 inline-flex items-center gap-2 rounded-full border border-current/25 px-5 py-2 text-xs font-medium transition-colors hover:bg-current/10"
+            className="mt-5 inline-flex items-center gap-2 rounded-full border border-current/25 px-5 py-2 text-xs font-medium transition-colors hover:bg-current/10 active:scale-95"
           >
             {qrOpen ? 'Sembunyikan QR Absen' : 'Tampilkan QR Absen'}
           </button>
@@ -125,7 +131,7 @@ export default function CheckIn({ projectId, greetingName, preview }: CheckInPro
             <button
               type="submit"
               disabled={status === 'submitting'}
-              className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-[var(--color-primary)] px-4 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+              className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-[var(--color-primary)] px-4 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-60 active:scale-95"
             >
               {status === 'submitting' ? <Loader2 className="h-4 w-4 animate-spin" /> : <UserCheck className="h-4 w-4" />}
               {status === 'submitting' ? 'Memproses...' : 'Check-in'}
@@ -140,6 +146,17 @@ export default function CheckIn({ projectId, greetingName, preview }: CheckInPro
               <Check className="h-4 w-4" /> Check-in berhasil
             </div>
             <p className="mt-2 text-xs opacity-70">Selamat menikmati acara. Terima kasih sudah hadir!</p>
+            {showSeatInfo && (tableLabel || seatLabel) && (
+              <div className="mt-4 inline-flex flex-col items-center gap-1 rounded-xl border border-current/15 bg-white/5 px-5 py-3">
+                <Armchair className="h-5 w-5 opacity-70" />
+                {tableLabel && (
+                  <p className="text-xs opacity-70">Meja: <span className="font-semibold opacity-100">{tableLabel}</span></p>
+                )}
+                {seatLabel && (
+                  <p className="text-xs opacity-70">Kursi: <span className="font-semibold opacity-100">{seatLabel}</span></p>
+                )}
+              </div>
+            )}
           </div>
         )}
       </div>

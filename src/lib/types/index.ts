@@ -13,7 +13,8 @@ export type BlockType =
   | 'Text'
   | 'Photo'
   | 'GiftList'
-  | 'Quote';
+  | 'Quote'
+  | 'LiveStreaming';
 
 export interface Theme {
   primary: string;
@@ -55,6 +56,12 @@ export interface Settings {
   music_offset_sec?: number;
   /** Mulai musik saat pengunjung masuk section tertentu (nilai BlockType). Kosong = mulai di awal. */
   music_on_section?: string;
+  /** Tampilkan info meja & kursi setelah check-in. */
+  show_seat_info?: boolean;
+  /** Label meja untuk info seat. */
+  table_label?: string;
+  /** Label kursi untuk info seat. */
+  seat_label?: string;
 }
 
 /** Rekening bank / e-wallet untuk amplop online. */

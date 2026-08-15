@@ -36,7 +36,8 @@ export async function GET(request: Request) {
         const bride = typeof hero?.bride === 'string' ? hero.bride : '';
         if (groom || bride) names = `${groom} & ${bride}`;
       }
-    } catch {
+    } catch (e) {
+      console.error('[OG] Failed to fetch design for slug:', slug, e);
       /* fallback ke brand */
     }
   }
