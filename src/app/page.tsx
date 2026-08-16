@@ -4,6 +4,8 @@ import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { formatRupiah } from '@/lib/format';
+import PricingSection from '@/components/landing/pricing-section';
+import PhoneFrame from '@/components/ui/phone-frame';
 import {
   ArrowRight,
   ChevronLeft,
@@ -32,7 +34,7 @@ interface CardData {
 }
 
 const STEPS = [
-  { icon: Palette, title: 'Pilih Desain', body: 'Jelajahi template kami, pilih yang paling dekat dengan cerita Anda.' },
+  { icon: Palette, title: 'Pilih Desain', body: 'Jelajahi demo kami, pilih yang paling dekat dengan cerita Anda.' },
   { icon: MessageCircle, title: 'Isi Form & Bayar', body: 'Isi data mempelai, acara, dan foto. Konfirmasi pembayaran via WhatsApp.' },
   { icon: CheckCircle, title: 'Kami Kerjakan', body: 'Tim kami menyusun teks, foto, musik, dan link undangan — siap dalam 2-5 hari kerja.' },
   { icon: Share2, title: 'Bagikan', body: 'Terbitkan link, kirim per tamu lewat WhatsApp, pantau RSVP dari dasbor.' }
@@ -50,7 +52,7 @@ const FEATURES = [
 ];
 
 const FAQ = [
-  { q: 'Bagaimana cara memesan?', a: 'Pilih template, isi form pemesanan, lalu konfirmasi via WhatsApp. Tim kami akan menghubungi Anda untuk detail selanjutnya.' },
+  { q: 'Bagaimana cara memesan?', a: 'Pilih demo, isi form pemesanan, lalu konfirmasi via WhatsApp. Tim kami akan menghubungi Anda untuk detail selanjutnya.' },
   { q: 'Berapa lama prosesnya?', a: '2-5 hari kerja setelah materi lengkap dan pembayaran dikonfirmasi. Revisi maksimal 2x sudah termasuk.' },
   { q: 'Apakah tamu perlu bayar untuk melihat undangan?', a: 'Tidak. Tamu cukup membuka link — musik, galeri, RSVP, QR check-in, dan buku tamu semuanya gratis.' },
   { q: 'Bisakah saya mengelola daftar tamu?', a: 'Bisa. Kirimkan daftar nama, dan kami personalisasikan link + ucapan WhatsApp per tamu. Anda pantau semuanya dari dasbor.' },
@@ -130,7 +132,7 @@ export default function LandingPage() {
               </div>
             </a>
             <nav className="hidden items-center gap-6 text-sm text-[#8a7a66] md:flex">
-              <a href="#catalog" className="transition-colors hover:text-[#2b2620]">Template</a>
+              <a href="#catalog" className="transition-colors hover:text-[#2b2620]">Demo</a>
               <a href="#cara" className="transition-colors hover:text-[#2b2620]">Cara Kerja</a>
               <a href="#fitur" className="transition-colors hover:text-[#2b2620]">Fitur</a>
               <a href="#faq" className="transition-colors hover:text-[#2b2620]">FAQ</a>
@@ -155,62 +157,59 @@ export default function LandingPage() {
               </p>
               <div className="mt-9 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
                 <a href="#catalog" className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-7 py-3 text-sm font-semibold text-white shadow-sm transition-transform hover:scale-[1.02]">
-                  Jelajahi Template <ArrowRight className="h-4 w-4" />
+                  Jelajahi Demo <ArrowRight className="h-4 w-4" />
                 </a>
                 <button onClick={() => openOrder()} className="rounded-lg border border-[#c9a45c] px-7 py-3 text-sm font-medium text-[#8a6d2f] transition-colors hover:bg-[#c9a45c]/10">
                   Pesan Undangan
                 </button>
               </div>
               <p className="mt-7 text-xs text-[#b3a69a]">
-                {DEMO_TEMPLATES.length} template siap pakai &middot; Dipesan lewat form, dibalas via WhatsApp, tanpa perlu akun.
+                {DEMO_TEMPLATES.length} demo siap dilihat &middot; Pilih desain, isi form, kami kerjakan sisanya.
               </p>
             </div>
-            {/* PREVIEW CARDS */}
+            {/* PREVIEW PHONE MOCKUP */}
             <div className="relative mx-auto hidden w-full max-w-md lg:block" aria-hidden>
-              <div className="relative h-[540px]">
-                {featuredCards.map(({ meta, canvas }, i) => {
-                  const pos = [
-                    'absolute left-1/2 top-1/2 z-20 aspect-[3/4] w-64 -translate-x-[78%] -translate-y-1/2 rotate-[-6deg]',
-                    'absolute left-1/2 top-1/2 z-30 aspect-[3/4] w-72 -translate-x-1/2 -translate-y-[55%]',
-                    'absolute left-1/2 top-1/2 z-10 aspect-[3/4] w-60 -translate-x-[2%] -translate-y-[30%] rotate-[7deg]'
-                  ];
-                  return (
-                    <div key={meta.id} className={`${pos[i]} overflow-hidden rounded-lg bg-white p-2 shadow-xl shadow-[#2b2620]/15 ring-1 ring-[#d9c795]`}>
-                      <div className="overflow-hidden rounded-[4px]"><TemplatePreview canvas={canvas} bg={canvas.theme.background} /></div>
-                      <p className="mt-1.5 truncate text-center font-heading text-xs italic text-[#8a7a66]">{meta.name}</p>
-                    </div>
-                  );
-                })}
-              </div>
+              <PhoneFrame accent={featuredCards[0]?.canvas.theme.primary}>
+                {featuredCards[0] && (
+                  <TemplatePreview canvas={featuredCards[0].canvas} bg={featuredCards[0].canvas.theme.background} />
+                )}
+              </PhoneFrame>
             </div>
+          </div>
+        </section>
+
+        {/* SOCIAL PROOF BAR */}
+        <section className="border-y border-[#e7ddcc] bg-gradient-to-r from-[#c9a45c]/5 via-[#faf7f2] to-[#c9a45c]/5">
+          <div className="mx-auto grid max-w-5xl grid-cols-3 gap-4 px-4 py-10 sm:px-6">
+            {[
+              { value: 500, suffix: '+', label: 'Undangan Dikirim' },
+              { value: 10000, suffix: '+', label: 'Tamu Hadir' },
+              { value: 39, suffix: '+', label: 'Demo Tersedia' },
+            ].map((stat) => (
+              <div key={stat.label} className="text-center">
+                <p className="font-heading text-3xl font-bold text-[#c9a45c] sm:text-4xl">
+                  {stat.value.toLocaleString('id-ID')}{stat.suffix}
+                </p>
+                <p className="mt-1 text-xs text-[#8a7a66] sm:text-sm">{stat.label}</p>
+              </div>
+            ))}
           </div>
         </section>
 
         {/* PRICING */}
         {pricing.show_pricing && pricing.base_price > 0 && (
           <section className="border-t border-[#e7ddcc] bg-white/40">
-            <div className="mx-auto max-w-4xl px-4 py-16 text-center sm:px-6">
-              <p className="font-script text-3xl text-[#b98a3e]">Investasi</p>
-              <h2 className="mt-3 font-heading text-3xl font-medium text-[#2b2620]">Harga Undangan Digital</h2>
-              <div className="mt-8 inline-block rounded-2xl border border-[#e7ddcc] bg-white p-8 shadow-lg">
-                {pricing.discount_percent > 0 && (
-                  <p className="mb-2 text-sm text-[#8a7a66]">
-                    <span className="mr-2 text-xs text-[#b3a69a] line-through">{formatRupiah(pricing.base_price)}</span>
-                    <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">-{pricing.discount_percent}%</span>
-                  </p>
-                )}
-                <p className="font-heading text-4xl font-semibold text-[#2b2620]">
-                  {formatRupiah(Math.round(pricing.base_price * (1 - pricing.discount_percent / 100)))}
-                </p>
-                {pricing.promo_code && (
-                  <p className="mt-2 text-sm text-[#8a7a66]">Gunakan kode <span className="font-semibold text-[#b98a3e]">{pricing.promo_code}</span> saat pemesanan</p>
-                )}
-                {pricing.promo_expires_at && new Date(pricing.promo_expires_at) > new Date() && (
-                  <p className="mt-1 text-xs text-[#b3a69a]">Promo berlaku hingga {new Date(pricing.promo_expires_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
-                )}
-                <button onClick={() => openOrder()} className="mt-6 inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-6 py-2.5 text-sm font-semibold text-white hover:opacity-90">
-                  Pesan Sekarang
-                </button>
+            <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6">
+              <p className="text-center font-script text-3xl text-[#b98a3e]">Investasi</p>
+              <h2 className="mt-3 text-center font-heading text-3xl font-medium text-[#2b2620]">Harga Undangan Digital</h2>
+              <div className="mt-8 flex justify-center">
+                <PricingSection
+                  basePrice={pricing.base_price}
+                  discountPercent={pricing.discount_percent}
+                  promoCode={pricing.promo_code}
+                  promoExpiresAt={pricing.promo_expires_at}
+                  onOrder={() => openOrder()}
+                />
               </div>
             </div>
           </section>
@@ -220,8 +219,8 @@ export default function LandingPage() {
         <section id="catalog" className="scroll-mt-20 border-t border-[#e7ddcc] bg-white/40">
           <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
             <div className="text-center">
-              <p className="font-script text-3xl text-[#b98a3e]">Koleksi Kami</p>
-              <h2 className="mt-5 font-heading text-3xl font-medium text-[#2b2620] sm:text-4xl">Undangan Contoh</h2>
+              <p className="font-script text-3xl text-[#b98a3e]">Lihat Demo</p>
+              <h2 className="mt-5 font-heading text-3xl font-medium text-[#2b2620] sm:text-4xl">Demo Undangan</h2>
               <p className="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-[#8a7a66]">Pratinjau asli setiap desain — klik untuk melihat detail, lalu pesan.</p>
             </div>
             <div className="mt-10 flex flex-wrap items-center justify-center gap-2">
@@ -248,7 +247,7 @@ export default function LandingPage() {
                       </div>
                       <p className="mt-1.5 line-clamp-2 flex-1 text-xs leading-relaxed text-[#8a7a66]">{meta.description}</p>
                       <span className="mt-4 flex items-center justify-center gap-2 rounded-lg border border-[#d9c795] bg-[#faf7f2] px-3 py-2 text-sm font-medium text-[#8a6d2f] transition-colors group-hover:bg-gradient-to-r group-hover:from-[#c9a45c] group-hover:to-[#b98a3e] group-hover:text-white">
-                        <Eye className="h-4 w-4" /> Lihat Undangan
+                        <Eye className="h-4 w-4" /> Lihat Demo
                       </span>
                     </div>
                   </Link>
@@ -335,7 +334,7 @@ export default function LandingPage() {
               Siap merayakan hari besar dengan <em className="italic">elegan</em>?
             </h2>
             <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-[#8a7a66]">
-              Pilih template, isi form, bayar — kami kerjakan sisanya.
+              Pilih demo, isi form, bayar — kami kerjakan sisanya.
             </p>
             <button onClick={() => openOrder()} className="mt-9 inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-8 py-3.5 text-sm font-semibold text-white shadow-md shadow-[#b98a3e]/20 transition-transform hover:scale-[1.02]">
               Pesan Undangan <ArrowRight className="h-4 w-4" />
@@ -346,26 +345,47 @@ export default function LandingPage() {
 
         {/* FOOTER */}
         <footer className="border-t border-[#e7ddcc] bg-[#faf7f2]">
-          <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-            <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
-              <a href="https://prashadigitalindonesia.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 transition-opacity hover:opacity-80">
-                <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-black ring-1 ring-[#3a332b]">
-                  <Image src="/logo/prasha.png" width={36} height={36} alt="Prasha Digital Indonesia" className="h-9 w-9 object-cover" />
-                </span>
-                <div className="leading-tight">
-                  <p className="font-script text-xl text-[#b98a3e]">Prasha</p>
-                  <p className="-mt-1 text-[8px] font-semibold uppercase tracking-[0.35em] text-[#8a7a66]">Digital Indonesia</p>
+          <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+            <div className="grid gap-8 sm:grid-cols-3">
+              {/* Brand */}
+              <div>
+                <a href="https://prashadigitalindonesia.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 transition-opacity hover:opacity-80">
+                  <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-black ring-1 ring-[#3a332b]">
+                    <Image src="/logo/prasha.png" width={36} height={36} alt="Prasha Digital Indonesia" className="h-9 w-9 object-cover" />
+                  </span>
+                  <div className="leading-tight">
+                    <p className="font-script text-xl text-[#b98a3e]">Prasha</p>
+                    <p className="-mt-1 text-[8px] font-semibold uppercase tracking-[0.35em] text-[#8a7a66]">Digital Indonesia</p>
+                  </div>
+                </a>
+                <p className="mt-3 text-xs leading-relaxed text-[#8a7a66]">Undangan digital mewah dan personal untuk hari istimewa Anda.</p>
+              </div>
+
+              {/* Links */}
+              <div>
+                <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-[#2b2620]">Menu</p>
+                <nav className="flex flex-col gap-2 text-xs text-[#8a7a66]">
+                  <a href="#catalog" className="transition-colors hover:text-[#2b2620]">Demo Template</a>
+                  <a href="#cara" className="transition-colors hover:text-[#2b2620]">Cara Kerja</a>
+                  <a href="#fitur" className="transition-colors hover:text-[#2b2620]">Fitur</a>
+                  <a href="#faq" className="transition-colors hover:text-[#2b2620]">FAQ</a>
+                </nav>
+              </div>
+
+              {/* Contact */}
+              <div>
+                <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-[#2b2620]">Hubungi Kami</p>
+                <div className="flex flex-col gap-2 text-xs text-[#8a7a66]">
+                  <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-[#2b2620]">WhatsApp</a>
+                  <a href="https://instagram.com/prashadigitalindonesia" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-[#2b2620]">Instagram</a>
+                  <a href="https://prashadigitalindonesia.com" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-[#2b2620]">Website</a>
                 </div>
-              </a>
-              <nav className="flex flex-wrap items-center justify-center gap-6 text-xs text-[#8a7a66]">
-                <a href="#catalog" className="transition-colors hover:text-[#2b2620]">Template</a>
-                <a href="#cara" className="transition-colors hover:text-[#2b2620]">Cara Kerja</a>
-                <a href="#fitur" className="transition-colors hover:text-[#2b2620]">Fitur</a>
-                <a href="#faq" className="transition-colors hover:text-[#2b2620]">FAQ</a>
-              </nav>
+              </div>
             </div>
+
             <div className="mt-8 border-t border-[#e7ddcc] pt-5 text-center">
-              <p className="text-xs text-[#b3a69a]">&copy; {new Date().getFullYear()} PT. Prasha Digital Indonesia &middot; Undangan digital mewah dan personal.</p>
+              <p className="text-[10px] uppercase tracking-widest text-[#b3a69a]">Made with Love by PT. Prasha Digital Indonesia</p>
+              <p className="mt-1 text-[10px] text-[#b3a69a]">&copy; {new Date().getFullYear()} All rights reserved.</p>
             </div>
           </div>
         </footer>

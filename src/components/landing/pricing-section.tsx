@@ -8,6 +8,7 @@ interface PricingSectionProps {
   discountPercent: number;
   promoCode: string;
   promoExpiresAt: string;
+  onOrder?: () => void;
 }
 
 import { formatRupiah } from '@/lib/format';
@@ -21,7 +22,7 @@ function getTimeRemaining(expiresAt: string) {
   return { days, hours, minutes, total: diff };
 }
 
-export default function PricingSection({ basePrice, discountPercent, promoCode, promoExpiresAt }: PricingSectionProps) {
+export default function PricingSection({ basePrice, discountPercent, promoCode, promoExpiresAt, onOrder }: PricingSectionProps) {
   const [timeLeft, setTimeLeft] = useState(getTimeRemaining(promoExpiresAt));
   const [copied, setCopied] = useState(false);
 
@@ -79,6 +80,16 @@ export default function PricingSection({ basePrice, discountPercent, promoCode, 
                 </span>
               </div>
             )}
+          </div>
+        )}
+        {onOrder && (
+          <div className="border-t border-current/10 px-6 py-4">
+            <button
+              onClick={onOrder}
+              className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-6 py-2.5 text-sm font-semibold text-white hover:opacity-90"
+            >
+              Pesan Sekarang
+            </button>
           </div>
         )}
       </div>
