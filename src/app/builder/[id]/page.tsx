@@ -209,28 +209,48 @@ export default function BuilderPage() {
         title="Panduan Builder"
         steps={[
           {
-            title: 'Tambahkan bagian',
-            body: 'Seret blok dari panel kiri (Hero, Mempelai, Countdown, Pemisah, dst.) ke kanvas. Saat diseret, kanvas meredup dan blok tujuan disorot; blok baru muncul di posisi yang dimaksud.'
+            title: '1. Tambahkan bagian',
+            body: 'Seret blok dari panel kiri (Hero, Mempelai, Countdown, Maps, Gallery, dll.) ke kanvas. Blok baru muncul di posisi yang dimaksud.'
           },
           {
-            title: 'Edit teks langsung',
-            body: 'Klik teks pada kanvas untuk menyunting. Klik tombol "Geser" pada blok untuk memindahkannya; seret dari tombol itu, bukan dari seluruh blok.'
+            title: '2. Edit teks langsung',
+            body: 'Klik teks pada kanvas untuk menyunting inline. Teks otomatis wrap dan bisa dipindah拖 dengan tombol "Geser" (Inner Drag) di pojok kiri atas tiap blok.'
           },
           {
-            title: 'Atur alat bantu tampilan',
-            body: 'Tombol di atas kanvas bisa mengaktif/menonaktifkan garis Grid agar penataan rapi, serta beralih antara tampilan Mobile dan Desktop.'
+            title: '3. Ganti varian blok',
+            body: 'Setiap blok punya beberapa varian (gaya). Pilih blok, lalu pilih varian di panel Properties: "Gaya". Misal Story punya varian Timeline, Cards, Minimal.'
           },
           {
-            title: 'Atur gaya & isi',
-            body: 'Panel kanan (Properties) dipakai untuk mengubah warna, foto latar, varian, hingga teks & isi tiap blok.'
+            title: '4. Gaya Frame & Card',
+            body: 'Di Canvas Settings (atas kanvas), pilih frame (9 opsi: classic, floral, ornate, dll) dan card style (shadow, glass, elevated, dll) untuk seluruh undangan.'
           },
           {
-            title: 'Simpan sebagai template',
-            body: 'Klik "Simpan sebagai Template" agar desain tersimpan di halaman Templates dan bisa dipakai ulang.'
+            title: '5. Animasi Gallery',
+            body: 'Pilih blok Gallery, lalu pilih animasi di Properties: fade, zoom, flip, ken-burns, slide, blur, dll. Total 20+ animasi tersedia.'
           },
           {
-            title: 'Bagikan ke tamu',
-            body: 'Klik "Bagikan" untuk mengirim undangan via WhatsApp satu per satu atau massal, dan kelola daftar tamu lewat "Tautan Kelola Tamu".'
+            title: '6. Hero Background',
+            body: 'Pilih blok Hero, klik "Pilih Foto Hero" untuk memilih gambar. Gunakan tombol "Crop & Posisi" untuk mengatur zoom, posisi, dan crop gambar latar.'
+          },
+          {
+            title: '7. Ornamen & Decor',
+            body: 'Klik blok mana pun, lalu tombol "+" di pojok kanan atas untuk menambah ornamen/decor. Pilih dari 44+ aset ornamen (bunga, geometric, dll).'
+          },
+          {
+            title: '8. Geser elemen bebas (Inner Drag)',
+            body: 'Klik "Geser" pada blok → muncul label nama elemen. Tarik label tersebut untuk memindahkan teks/elemen di dalam blok. Ada penjuru snap otomatis.'
+          },
+          {
+            title: '9. Warna per elemen',
+            body: 'Saat mode geser aktif, klik ikon palet di samping label elemen untuk mengatur warna teks khusus per elemen (judul, subjudul, dll).'
+          },
+          {
+            title: '10. Atur tampilan',
+            body: 'Tombol di atas kanvas: Grid (garis panduan), Mobile/Desktop preview, dan zoom. Geser slider zoom untuk memperbesar/mengecilkan tampilan kanvas.'
+          },
+          {
+            title: '11. Simpan & Bagikan',
+            body: 'Klik "Simpan" untuk menyimpan perubahan. "Simpan sebagai Template" untuk reuse desain. "Bagikan" untuk kirim undangan via WhatsApp atau salin tautan.'
           }
         ]}
       />

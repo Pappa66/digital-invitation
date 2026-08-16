@@ -281,20 +281,24 @@ export default function TemplatesPage() {
         title="Panduan Template"
         steps={[
           {
-            title: 'Mulai dari template jadi',
-            body: 'Pilih template bawaan lalu klik "Pakai Template". Nama undangan diisi dari kolom atas; bisa juga kosong dan diubah nanti di Builder.'
+            title: '1. Template Contoh',
+            body: 'Di bawah "Undangan Contoh", klik kartu template untuk melihat preview lengkap. Setiap template sudah diisi konten demo agar Anda bisa lihat hasil akhirnya.'
           },
           {
-            title: 'Mulai kosong',
-            body: 'Klik "Mulai Kosong" untuk menyusun undangan dari nol. Semua blok (Hero, Mempelai, arah Maps, dll.) bisa ditambahkan di sidebar Builder.'
+            title: '2. Pakai Template',
+            body: 'Klik "Pakai Template" pada kartu yang dipilih. Nama undangan diisi otomatis dari nama template; bisa dikosongkan dan diubah nanti di Builder.'
           },
           {
-            title: 'Simpan desain sebagai template',
-            body: 'Sudah selesai mendesain? Di Builder pilih "Simpan sebagai Template" agar desain muncul di "Template Saya" dan bisa dipakai ulang kapan pun.'
+            title: '3. Mulai Kosong',
+            body: 'Klik "Mulai Kosong" untuk menyusun undangan dari nol. Semua blok (Hero, Mempelai, Maps, Gallery, dll.) tersedia di sidebar Builder.'
           },
           {
-            title: 'Hapus template sendiri',
-            body: 'Klik ikon sampah di pojok kartu "Template Saya" untuk menghapus template buatanmu. Template bawaan tidak bisa dihapus.'
+            title: '4. Template Saya',
+            body: 'Setelah mendesain, klik "Simpan sebagai Template" di Builder. Template tersimpan di "Template Saya" dan bisa dipakai ulang untuk klien lain.'
+          },
+          {
+            title: '5. Hapus Template',
+            body: 'Klik ikon sampah di pojok kanan kartu "Template Saya" untuk menghapus. Template bawaan (Undangan Contoh) tidak bisa dihapus.'
           }
         ]}
       />

@@ -344,24 +344,32 @@ export default function DashboardClient({ projects, isDemo = false, userName = n
         title="Panduan Dashboard"
         steps={[
           {
-            title: 'Buat undangan baru',
+            title: '1. Buat undangan baru',
             body: 'Klik "+ Create New", pilih template di halaman Templates, atau mulai dari kosong. Undangan langsung terbuka di Builder.'
           },
           {
-            title: 'Edit desain',
-            body: 'Di Builder, seret blok dari sidebar kiri ke kanvas. Klik teks untuk menyunting langsung. Variasi & isi blok diatur lewat panel Properties di kanan.'
+            title: '2. Edit desain',
+            body: 'Di Builder, seret blok dari sidebar kiri ke kanvas. Klik teks untuk menyunting langsung. Variasi, warna, frame, dan card style diatur lewat Properties.'
           },
           {
-            title: 'Bagikan ke tamu',
+            title: '3. Template Saya',
+            body: 'Tab "My Designs" menampilkan semua undangan yang sudah dibuat. Klik kartu untuk edit, atau ikon mata untuk preview.'
+          },
+          {
+            title: '4. Client Management',
+            body: 'Tab "Client" untuk kelola daftar klien. Klik "Tambah Client" lalu pilih template → otomatis buat project baru dari template yang dipilih.'
+          },
+          {
+            title: '5. Pencatatan Keuangan',
+            body: 'Tab "Keuangan" untuk mencatat harga, diskon, promo, dan status pembayaran. Klik "Harga Landing Page" untuk mengatur harga & promo yang tampil di halaman publik.'
+          },
+          {
+            title: '6. Harga Landing Page',
+            body: 'Di tab Keuangan, klik "Harga Landing Page" untuk mengatur harga dasar, diskon (%), kode promo, dan masa berlaku promo. Harga ini ditampilkan di halaman depan publik.'
+          },
+          {
+            title: '7. Bagikan ke tamu',
             body: 'Buka undangan → tombol "Bagikan". Kirim via WhatsApp, satu per satu atau massal. Tamu tak perlu login untuk melihat undangan.'
-          },
-          {
-            title: 'Kelola tamu',
-            body: 'Gunakan tab "Client" untuk melihat daftar client, desain yang mereka pesan, dan link undangan yang sudah dibuat.'
-          },
-          {
-            title: 'Pencatatan keuangan',
-            body: 'Gunakan tab "Keuangan" untuk mencatat harga, diskon, promo, dan status pembayaran setiap proyek undangan.'
           }
         ]}
       />
