@@ -73,6 +73,16 @@ export interface Settings {
   seat_label?: string;
   /** Tampilkan cover fullscreen "Buka Undangan" sebelum konten. Default: true. */
   show_cover?: boolean;
+  /** Harga dasar undangan (Rp). */
+  base_price?: number;
+  /** Diskon persen (0-100). */
+  discount_percent?: number;
+  /** Kode promo aktif. */
+  promo_code?: string;
+  /** Masa berlaku promo (ISO date string). */
+  promo_expires_at?: string;
+  /** Tampilkan area pricing di landing page. */
+  show_pricing?: boolean;
 }
 
 /** Rekening bank / e-wallet untuk amplop online. */

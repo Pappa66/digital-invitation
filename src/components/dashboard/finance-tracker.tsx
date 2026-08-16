@@ -1,8 +1,17 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { Plus, Search, DollarSign, TrendingUp, TrendingDown, Trash2, Save, X, Calculator } from 'lucide-react';
+import { Plus, Search, DollarSign, TrendingUp, TrendingDown, Trash2, Save, X, Calculator, Settings, Tag, Clock } from 'lucide-react';
 import { demoIsDemoMode } from '@/lib/env';
+
+interface LandingPricing {
+  base_price: number;
+  discount_percent: number;
+  promo_code: string;
+  promo_expires_at: string;
+}
+
+const defaultPricing: LandingPricing = { base_price: 0, discount_percent: 0, promo_code: '', promo_expires_at: '' };
 
 interface FinanceRecord {
   id: string;
@@ -46,6 +55,20 @@ export default function FinanceTracker() {
     payment_amount: 0,
     notes: ''
   });
+  const [showPricingConfig, setShowPricingConfig] = useState(false);
+  const [landingPricing, setLandingPricing] = useState<LandingPricing>(defaultPricing);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('di_landing_pricing');
+      if (stored) setLandingPricing(JSON.parse(stored));
+    } catch { /* ignore */ }
+  }, []);
+
+  function saveLandingPricing(p: LandingPricing) {
+    setLandingPricing(p);
+    localStorage.setItem('di_landing_pricing', JSON.stringify(p));
+  }
 
   async function loadRecords() {
     setLoading(true);
@@ -156,13 +179,80 @@ export default function FinanceTracker() {
           <h2 className="text-lg font-semibold">Pencatatan Keuangan</h2>
           <p className="text-sm text-gray-500">{records.length} catatan transaksi</p>
         </div>
-        <button
-          onClick={() => setShowAddModal(true)}
-          className="flex items-center gap-2 rounded-md bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-4 py-2 text-sm font-semibold text-white shadow-sm hover:opacity-90"
-        >
-          <Plus className="h-4 w-4" /> Tambah Transaksi
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setShowPricingConfig(!showPricingConfig)}
+            className="flex items-center gap-2 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+          >
+            <Settings className="h-4 w-4" /> Harga Landing Page
+          </button>
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="flex items-center gap-2 rounded-md bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-4 py-2 text-sm font-semibold text-white shadow-sm hover:opacity-90"
+          >
+            <Plus className="h-4 w-4" /> Tambah Transaksi
+          </button>
+        </div>
       </div>
+
+      {/* Landing Page Pricing Config */}
+      {showPricingConfig && (
+        <div className="mb-6 rounded-xl border border-[#c9a45c]/30 bg-[#faf7f2] p-5">
+          <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-[#4a443c]">
+            <Tag className="h-4 w-4 text-[#c9a45c]" /> Pengaturan Harga Landing Page
+          </h3>
+          <p className="mb-4 text-xs text-[#8a7a66]">Harga dan promo ini ditampilkan di halaman depan publik.</p>
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+            <div>
+              <label className="mb-1 block text-xs font-medium text-[#4a443c]">Harga Dasar (Rp)</label>
+              <input
+                type="number"
+                value={landingPricing.base_price || ''}
+                onChange={(e) => saveLandingPricing({ ...landingPricing, base_price: parseInt(e.target.value) || 0 })}
+                className="w-full rounded-md border border-[#e0d6c2] bg-white px-3 py-2 text-sm"
+                placeholder="2500000"
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-medium text-[#4a443c]">Diskon (%)</label>
+              <input
+                type="number"
+                min={0}
+                max={100}
+                value={landingPricing.discount_percent || ''}
+                onChange={(e) => saveLandingPricing({ ...landingPricing, discount_percent: parseInt(e.target.value) || 0 })}
+                className="w-full rounded-md border border-[#e0d6c2] bg-white px-3 py-2 text-sm"
+                placeholder="15"
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-medium text-[#4a443c]">Kode Promo</label>
+              <input
+                type="text"
+                value={landingPricing.promo_code}
+                onChange={(e) => saveLandingPricing({ ...landingPricing, promo_code: e.target.value.toUpperCase() })}
+                className="w-full rounded-md border border-[#e0d6c2] bg-white px-3 py-2 text-sm uppercase"
+                placeholder="WEDDING15"
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-medium text-[#4a443c]">Berlaku Hingga</label>
+              <input
+                type="date"
+                value={landingPricing.promo_expires_at?.split('T')[0] || ''}
+                onChange={(e) => saveLandingPricing({ ...landingPricing, promo_expires_at: e.target.value ? `${e.target.value}T23:59:59` : '' })}
+                className="w-full rounded-md border border-[#e0d6c2] bg-white px-3 py-2 text-sm"
+              />
+            </div>
+          </div>
+          {landingPricing.base_price > 0 && landingPricing.discount_percent > 0 && (
+            <p className="mt-3 text-xs text-[#c9a45c]">
+              Harga final: {formatCurrency(Math.round(landingPricing.base_price * (1 - landingPricing.discount_percent / 100)))}
+              {landingPricing.promo_code && ` (kode: ${landingPricing.promo_code})`}
+            </p>
+          )}
+        </div>
+      )}
 
       {/* Stats Cards */}
       <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-4">

@@ -1,30 +1,53 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Check, Copy, MessageCircle, X } from 'lucide-react';
+import { Check, Copy, MessageCircle, X, Tag, TagIcon } from 'lucide-react';
 import { buildOrderMessage, normalizePhone, whatsappOrderUrl } from '@/lib/order';
 import { getOrderWhatsapp, toWaNumber } from '@/lib/settings';
 import { clientSubmitOrder } from '@/lib/api/order-client';
 
 interface OrderDialogProps {
   templateName?: string;
+  basePrice?: number;
+  discountPercent?: number;
+  promoCode?: string;
   onClose: () => void;
 }
 
-export default function OrderDialog({ templateName, onClose }: OrderDialogProps) {
+function formatPrice(amount: number): string {
+  return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(amount);
+}
+
+export default function OrderDialog({ templateName, basePrice = 0, discountPercent = 0, promoCode, onClose }: OrderDialogProps) {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
   const [note, setNote] = useState('');
   const [sent, setSent] = useState(false);
   const [copied, setCopied] = useState(false);
   const [waNumber, setWaNumber] = useState('');
+  const [promoInput, setPromoInput] = useState('');
+  const [promoApplied, setPromoApplied] = useState(false);
+  const [promoError, setPromoError] = useState('');
 
-  // Komponen di-mount ulang setiap dibuka (lihat parent), jadi state selalu segar.
   useEffect(() => {
     getOrderWhatsapp().then((n) => setWaNumber(n));
   }, []);
 
   const phoneValid = normalizePhone(phone).length >= 8;
+  const hasDiscount = promoApplied && discountPercent > 0 && promoCode;
+  const finalPrice = hasDiscount ? Math.round(basePrice * (1 - discountPercent / 100)) : basePrice;
+
+  function applyPromo() {
+    if (!promoCode) return;
+    if (promoInput.trim().toUpperCase() === promoCode.toUpperCase()) {
+      setPromoApplied(true);
+      setPromoError('');
+    } else {
+      setPromoApplied(false);
+      setPromoError('Kode promo tidak valid');
+    }
+  }
 
   function close() {
     setSent(false);
@@ -36,19 +59,20 @@ export default function OrderDialog({ templateName, onClose }: OrderDialogProps)
     e.preventDefault();
     if (!name.trim() || !phoneValid) return;
     const wa = toWaNumber(phone);
+    const priceInfo = hasDiscount ? `\nHarga: ${formatPrice(finalPrice)} (diskon ${discountPercent}%)` : basePrice > 0 ? `\nHarga: ${formatPrice(basePrice)}` : '';
     const message = buildOrderMessage({
       template: templateName,
       name: name.trim(),
       whatsapp: wa,
-      note: note.trim() || undefined
+      note: (note.trim() || '') + priceInfo
     });
     setSent(true);
-    // Simpan ke tabel orders (Kontak Masuk di dashboard) — publik, tanpa login.
     await clientSubmitOrder({
       templateName,
       name: name.trim(),
       whatsapp: wa,
-      note: note.trim() || undefined
+      email: email.trim() || undefined,
+      note: (note.trim() || '') + priceInfo
     });
     const url = whatsappOrderUrl(message, waNumber);
     if (url) {
@@ -130,6 +154,61 @@ export default function OrderDialog({ templateName, onClose }: OrderDialogProps)
               {phone && !phoneValid && <p className="mt-1 text-xs text-red-500">Nomor WhatsApp tidak valid.</p>}
             </div>
             <div>
+              <label htmlFor="order-email" className="text-xs font-medium text-[#4a443c]">Email (opsional)</label>
+              <input
+                id="order-email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="cth: email@contoh.com"
+                className="mt-1 w-full rounded-md border border-[#e0d6c2] bg-white px-3 py-2 text-sm text-[#2b2620] outline-none placeholder:text-[#b3a69a] focus:border-[#b98a3e] focus:ring-2 focus:ring-[#b98a3e]/30"
+              />
+            </div>
+
+            {basePrice > 0 && (
+              <div className="rounded-lg border border-[#e0d6c2] bg-white p-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-[#8a7a66]">Harga</span>
+                  {hasDiscount ? (
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-sm text-[#8a7a66] line-through">{formatPrice(basePrice)}</span>
+                      <span className="text-lg font-semibold text-[#2b2620]">{formatPrice(finalPrice)}</span>
+                    </div>
+                  ) : (
+                    <span className="text-lg font-semibold text-[#2b2620]">{formatPrice(basePrice)}</span>
+                  )}
+                </div>
+                {hasDiscount && (
+                  <p className="mt-1 text-xs text-[#c9a45c]">Diskon {discountPercent}% dengan kode {promoCode}</p>
+                )}
+              </div>
+            )}
+
+            {basePrice > 0 && promoCode && (
+              <div>
+                <label htmlFor="order-promo" className="text-xs font-medium text-[#4a443c]">Kode Promo</label>
+                <div className="mt-1 flex gap-2">
+                  <input
+                    id="order-promo"
+                    value={promoInput}
+                    onChange={(e) => { setPromoInput(e.target.value); setPromoError(''); setPromoApplied(false); }}
+                    placeholder="Masukkan kode promo"
+                    className="flex-1 rounded-md border border-[#e0d6c2] bg-white px-3 py-2 text-sm text-[#2b2620] outline-none placeholder:text-[#b3a69a] focus:border-[#b98a3e] focus:ring-2 focus:ring-[#b98a3e]/30"
+                  />
+                  <button
+                    type="button"
+                    onClick={applyPromo}
+                    className="rounded-md border border-[#c9a45c] bg-[#c9a45c]/10 px-3 py-2 text-xs font-medium text-[#c9a45c] hover:bg-[#c9a45c]/20"
+                  >
+                    <Tag className="h-4 w-4" />
+                  </button>
+                </div>
+                {promoError && <p className="mt-1 text-xs text-red-500">{promoError}</p>}
+                {promoApplied && <p className="mt-1 text-xs text-green-600">Kode promo berhasil diterapkan!</p>}
+              </div>
+            )}
+
+            <div>
               <label htmlFor="order-note" className="text-xs font-medium text-[#4a443c]">Catatan (opsional)</label>
               <textarea
                 id="order-note"
@@ -144,7 +223,7 @@ export default function OrderDialog({ templateName, onClose }: OrderDialogProps)
               type="submit"
               className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-5 py-3 text-sm font-semibold text-white shadow-sm transition-transform hover:scale-[1.01]"
             >
-              <MessageCircle className="h-4 w-4" /> Kirim Pesanan
+              <MessageCircle className="h-4 w-4" /> {basePrice > 0 ? `Pesan - ${formatPrice(finalPrice)}` : 'Kirim Pesanan'}
             </button>
           </form>
         )}

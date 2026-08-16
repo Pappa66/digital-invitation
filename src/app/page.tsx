@@ -20,6 +20,7 @@ import { TEMPLATE_LIST, getTemplate, DEMO_TEMPLATES } from '@/lib/templates';
 import { CATEGORIES, categoryLabel, type TemplateCategory } from '@/lib/template-categories';
 import TemplatePreview from '@/components/landing/template-preview';
 import OrderDialog from '@/components/landing/order-dialog';
+import PricingSection from '@/components/landing/pricing-section';
 import type { CanvasData, TemplateMeta } from '@/lib/types';
 
 interface CardData {
@@ -337,6 +338,14 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
+
+        {/* PRICING */}
+        <PricingSection
+          basePrice={2500000}
+          discountPercent={15}
+          promoCode="WEDDING15"
+          promoExpiresAt="2026-09-30T23:59:59"
+        />
 
         {/* KATALOG TEMPLATE */}
         <section id="catalog" className="scroll-mt-20 border-t border-[#e7ddcc] bg-white/40">

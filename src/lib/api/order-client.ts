@@ -4,6 +4,7 @@ export interface OrderInput {
   templateName?: string;
   name: string;
   whatsapp: string;
+  email?: string;
   note?: string;
 }
 
