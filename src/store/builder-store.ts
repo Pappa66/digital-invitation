@@ -30,6 +30,7 @@ interface BuilderState {
   /** Tandai elemen teks yang sedang difokus (kunci `${prop}.${index}` atau `${prop}`). */
   setSelectedText: (key: string | null) => void;
   setBlockInner: (blockId: string, key: string, pos: { x: number; y: number }) => void;
+  setInnerColor: (blockId: string, key: string, color: string | undefined) => void;
   addDecor: (blockId: string, asset: DecorAsset) => void;
   updateDecor: (blockId: string, decorId: string, partial: Partial<DecorAsset>) => void;
   removeDecor: (blockId: string, decorId: string) => void;
@@ -372,6 +373,19 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
         blocks: state.canvas.blocks.map((b) =>
           b.id === blockId ? { ...b, inner: { ...(b.inner ?? {}), [key]: pos } } : b
         )
+      }
+    })),
+
+  setInnerColor: (blockId, key, color) =>
+    set((state) => ({
+      canvas: {
+        ...state.canvas,
+        blocks: state.canvas.blocks.map((b) => {
+          if (b.id !== blockId) return b;
+          const prev = b.inner ?? {};
+          const elem = prev[key] ?? { x: 0, y: 0 };
+          return { ...b, inner: { ...prev, [key]: { ...elem, color } } };
+        })
       }
     })),
 

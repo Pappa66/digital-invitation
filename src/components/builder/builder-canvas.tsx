@@ -15,6 +15,7 @@ import { ThemeContext } from '@/components/guest/theme-context';
 import { useBuilderStore } from '@/store/builder-store';
 import DeviceToggle from '@/components/ui/device-toggle';
 import type { Device } from '@/components/ui/device-toggle';
+import { Palette } from 'lucide-react';
 
 const CANVAS_W = 420;
 
@@ -258,11 +259,27 @@ function FreeCanvas({ blocks, canvasRef, guides }: { blocks: Block[]; canvasRef:
  */
 function InnerDragLayer({ block, blockWidth }: { block: Block; blockWidth: number }) {
   const setBlockInner = useBuilderStore((s) => s.setBlockInner);
+  const setInnerColor = useBuilderStore((s) => s.setInnerColor);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [handles, setHandles] = useState<{ name: string; left: number; top: number; width: number; height: number }[]>(
     []
   );
   const [guides, setGuides] = useState<{ x?: number; y?: number }>({});
+  const [colorPickerName, setColorPickerName] = useState<string | null>(null);
+  const dragStateRef = useRef<{
+    name: string;
+    startX: number;
+    startY: number;
+    origX: number;
+    origY: number;
+    hostW: number;
+    hostH: number;
+    nodeW: number;
+    nodeH: number;
+    rafId: number | null;
+    lastDx: number;
+    lastDy: number;
+  } | null>(null);
 
   useEffect(() => {
     const el = containerRef.current;
@@ -291,83 +308,145 @@ function InnerDragLayer({ block, blockWidth }: { block: Block; blockWidth: numbe
     const el = containerRef.current;
     const host = el?.closest<HTMLElement>('[data-block]');
     if (!el || !host) return;
-    const startX = e.clientX;
-    const startY = e.clientY;
+
     const current = block.inner?.[name] ?? { x: 0, y: 0 };
-    let lastGuides: { x?: number; y?: number } = {};
+    const hostRect = host.getBoundingClientRect();
+    const node = host.querySelector<HTMLElement>(`[data-inner="${name}"]`);
+    const nodeRect = node?.getBoundingClientRect();
 
-    const onMove = (ev: PointerEvent) => {
-      const dx = ev.clientX - startX;
-      const dy = ev.clientY - startY;
-      let nx = current.x + dx;
-      let ny = current.y + dy;
+    dragStateRef.current = {
+      name,
+      startX: e.clientX,
+      startY: e.clientY,
+      origX: current.x,
+      origY: current.y,
+      hostW: blockWidth,
+      hostH: hostRect.height,
+      nodeW: nodeRect?.width ?? 100,
+      nodeH: nodeRect?.height ?? 40,
+      rafId: null,
+      lastDx: 0,
+      lastDy: 0
+    };
 
-      const node = host.querySelector<HTMLElement>(`[data-inner="${name}"]`);
-      const nodeW = node?.getBoundingClientRect().width ?? 100;
-      const nodeH = node?.getBoundingClientRect().height ?? 40;
+    // Add will-change for GPU acceleration during drag
+    if (node) {
+      node.style.willChange = 'transform';
+      node.style.transition = 'none';
+    }
+
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  }
+
+  function onMove(ev: PointerEvent) {
+    const ds = dragStateRef.current;
+    if (!ds) return;
+
+    const dx = ev.clientX - ds.startX;
+    const dy = ev.clientY - ds.startY;
+
+    // Deadzone: don't start visual drag until 3px movement
+    if (Math.abs(dx) <= 3 && Math.abs(dy) <= 3 && ds.lastDx === 0 && ds.lastDy === 0) return;
+
+    ds.lastDx = dx;
+    ds.lastDy = dy;
+
+    // Cancel any pending RAF to avoid stacking
+    if (ds.rafId !== null) cancelAnimationFrame(ds.rafId);
+
+    ds.rafId = requestAnimationFrame(() => {
+      let nx = ds.origX + dx;
+      let ny = ds.origY + dy;
+
       const SNAP = 8;
+      const cx = ds.hostW / 2;
+      const cy = ds.hostH / 2;
 
-      const cx = blockWidth / 2;
-
-      let guideX: number | undefined;
-      const candX: { v: number; kind: 'left' | 'center' | 'right' }[] = [
-        { v: 0, kind: 'left' },
-        { v: cx - nodeW / 2, kind: 'center' },
-        { v: blockWidth - nodeW, kind: 'right' }
+      // Snap X
+      const candX = [
+        { v: 0 },
+        { v: cx - ds.nodeW / 2 },
+        { v: ds.hostW - ds.nodeW }
       ];
+      let guideX: number | undefined;
       for (const c of candX) {
         if (Math.abs(nx - c.v) <= SNAP) {
           nx = c.v;
-          guideX = c.kind === 'center' ? cx : c.v;
+          guideX = c.v === 0 ? 0 : c.v === ds.hostW - ds.nodeW ? ds.hostW : cx;
           break;
         }
       }
 
-      let guideY: number | undefined;
-      const hostH = host.getBoundingClientRect().height;
-      const cy = hostH / 2;
-      const candY: { v: number; kind: 'top' | 'center' | 'bottom' }[] = [
-        { v: 0, kind: 'top' },
-        { v: cy - nodeH / 2, kind: 'center' },
-        { v: hostH - nodeH, kind: 'bottom' }
+      // Snap Y
+      const candY = [
+        { v: 0 },
+        { v: cy - ds.nodeH / 2 },
+        { v: ds.hostH - ds.nodeH }
       ];
+      let guideY: number | undefined;
       for (const c of candY) {
         if (Math.abs(ny - c.v) <= SNAP) {
           ny = c.v;
-          guideY = c.kind === 'center' ? cy : c.v;
+          guideY = c.v === 0 ? 0 : c.v === ds.hostH - ds.nodeH ? ds.hostH : cy;
           break;
         }
       }
 
-      setBlockInner(block.id, name, {
-        x: Math.max(-nodeW + 8, Math.min(blockWidth - 8, nx)),
-        y: Math.max(-nodeH + 8, ny)
-      });
-      lastGuides = { x: guideX, y: guideY };
-      setGuides(lastGuides);
-    };
-    const onUp = () => {
-      window.removeEventListener('pointermove', onMove);
-      window.removeEventListener('pointerup', onUp);
-      const host2 = containerRef.current?.closest<HTMLElement>('[data-block]');
-      if (host2) {
-        const hostR = host2.getBoundingClientRect();
-        const node = host2.querySelector<HTMLElement>(`[data-inner="${name}"]`);
-        const nR = node?.getBoundingClientRect();
-        if (nR) {
-          setHandles((prev) =>
-            prev.map((h) =>
-              h.name === name
-                ? { ...h, left: nR.left - hostR.left, top: nR.top - hostR.top, width: nR.width, height: nR.height }
-                : h
-            )
-          );
-        }
+      // Direct DOM update for smoothness (bypass React render)
+      const host = containerRef.current?.closest<HTMLElement>('[data-block]');
+      const node = host?.querySelector<HTMLElement>(`[data-inner="${ds.name}"]`);
+      if (node) {
+        const clampedX = Math.max(-ds.nodeW + 8, Math.min(ds.hostW - 8, nx));
+        const clampedY = Math.max(-ds.nodeH + 8, ny);
+        node.style.transform = `translate(${clampedX}px, ${clampedY}px)`;
       }
-      setGuides({});
-    };
-    window.addEventListener('pointermove', onMove);
-    window.addEventListener('pointerup', onUp);
+
+      setGuides({ x: guideX, y: guideY });
+    });
+  }
+
+  function onUp() {
+    const ds = dragStateRef.current;
+    if (!ds) return;
+
+    if (ds.rafId !== null) cancelAnimationFrame(ds.rafId);
+
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup', onUp);
+
+    // Read final position from DOM and commit to state
+    const host = containerRef.current?.closest<HTMLElement>('[data-block]');
+    const node = host?.querySelector<HTMLElement>(`[data-inner="${ds.name}"]`);
+    if (node) {
+      node.style.willChange = '';
+      node.style.transition = '';
+      // Parse the transform we applied
+      const match = node.style.transform.match(/translate\(([-\d.]+)px,\s*([-\d.]+)px\)/);
+      if (match) {
+        const finalX = parseFloat(match[1]);
+        const finalY = parseFloat(match[2]);
+        setBlockInner(block.id, ds.name, { x: finalX, y: finalY });
+      }
+    }
+
+    // Update handles
+    if (host) {
+      const hostR = host.getBoundingClientRect();
+      const nR = node?.getBoundingClientRect();
+      if (nR) {
+        setHandles((prev) =>
+          prev.map((h) =>
+            h.name === ds.name
+              ? { ...h, left: nR.left - hostR.left, top: nR.top - hostR.top, width: nR.width, height: nR.height }
+              : h
+          )
+        );
+      }
+    }
+
+    setGuides({});
+    dragStateRef.current = null;
   }
 
   return (
@@ -392,6 +471,38 @@ function InnerDragLayer({ block, blockWidth }: { block: Block; blockWidth: numbe
             <GripVertical className="h-3 w-3" />
             {h.name}
           </span>
+          <button
+            className="pointer-events-auto absolute -top-4 right-0 flex h-5 w-5 -translate-y-0 translate-x-1/2 items-center justify-center rounded-full border border-white bg-white text-gray-500 shadow-md hover:text-[#c9a45c]"
+            title={`Warna teks "${h.name}"`}
+            onClick={(e) => {
+              e.stopPropagation();
+              setColorPickerName(colorPickerName === h.name ? null : h.name);
+            }}
+          >
+            <Palette className="h-3 w-3" />
+          </button>
+          {colorPickerName === h.name && (
+            <div className="pointer-events-auto absolute -bottom-8 left-1/2 z-50 flex -translate-x-1/2 items-center gap-1 rounded-lg border border-gray-200 bg-white p-1 shadow-xl">
+              {['', '#000000', '#ffffff', '#c9a45c', '#4a443c', '#8B4513', '#1a5276', '#6c3483'].map((c) => (
+                <button
+                  key={c || 'reset'}
+                  className="h-5 w-5 rounded-full border-2 hover:scale-110"
+                  style={{
+                    backgroundColor: c || 'transparent',
+                    borderColor: c ? c : '#ccc',
+                    backgroundImage: !c ? 'linear-gradient(45deg, #ccc 25%, transparent 25%, transparent 75%, #ccc 75%), linear-gradient(45deg, #ccc 25%, transparent 25%, transparent 75%, #ccc 75%)' : undefined,
+                    backgroundSize: !c ? '6px 6px' : undefined,
+                    backgroundPosition: !c ? '0 0, 3px 3px' : undefined
+                  }}
+                  title={c || 'Default'}
+                  onClick={() => {
+                    setInnerColor(block.id, h.name, c || undefined);
+                    setColorPickerName(null);
+                  }}
+                />
+              ))}
+            </div>
+          )}
         </div>
       ))}
     </div>

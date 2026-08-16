@@ -2,8 +2,8 @@
 
 import { createContext, useContext } from 'react';
 
-/** Posisi sub-elemen di dalam blok (px, relatif kiri-atas blok). Map: nama elemen -> offset. */
-export type InnerPositions = Record<string, { x: number; y: number }>;
+/** Posisi sub-elemen di dalam blok (px, relatif kiri-atas blok). Map: nama elemen -> offset + warna. */
+export type InnerPositions = Record<string, { x: number; y: number; color?: string }>;
 
 const InnerContext = createContext<InnerPositions | undefined>(undefined);
 
@@ -20,7 +20,12 @@ export function innerOffset(inner: InnerPositions | undefined, name: string): { 
   return inner?.[name] ?? { x: 0, y: 0 };
 }
 
-/** Wrapper sub-elemen di dalam blok yang bisa digeser bebas. */
+/** Ambil warna kustom satu elemen inner (undefined jika tidak ada). */
+export function innerColor(inner: InnerPositions | undefined, name: string): string | undefined {
+  return inner?.[name]?.color;
+}
+
+/** Wrapper sub-elemen di dalam blok yang bisa digeser bebas + warna kustom. */
 export function Inner({ name, className, children }: { name: string; className?: string; children: React.ReactNode }) {
   const inner = useInnerPositions();
   const pos = inner?.[name];
@@ -28,7 +33,10 @@ export function Inner({ name, className, children }: { name: string; className?:
     <div
       data-inner={name}
       className={className}
-      style={pos ? { transform: `translate(${pos.x}px, ${pos.y}px)` } : undefined}
+      style={{
+        ...(pos?.x || pos?.y ? { transform: `translate(${pos.x}px, ${pos.y}px)` } : {}),
+        ...(pos?.color ? { color: pos.color } : {})
+      }}
     >
       {children}
     </div>
