@@ -618,8 +618,10 @@ function GiantAmp() {
 
 export function HeroBlock({ props, greetingName, showButton = true }: { props: BlockProps; greetingName?: string; showButton?: boolean }) {
   const showOrnament = bool(props, 'show_ornament');
-  const align = str(props, 'variant') === 'left' ? 'left' : 'center';
+  const variant = str(props, 'variant') || 'center';
+  const align = variant === 'left' ? 'left' : variant === 'right' ? 'right' : 'center';
   const isLeft = align === 'left';
+  const isRight = align === 'right';
   const preview = usePreview();
   const theme = useTheme();
   const inBuilder = useContext(BuilderEditableContext) !== null;
@@ -657,7 +659,7 @@ export function HeroBlock({ props, greetingName, showButton = true }: { props: B
     <section
       ref={sectionRef}
        className={`relative flex min-h-[100dvh] w-full flex-col overflow-hidden px-6 py-10 sm:py-14 md:py-20 ${
-        isLeft ? 'items-start justify-center text-left' : 'items-center justify-center text-center'
+        isRight ? 'items-end justify-center text-right' : isLeft ? 'items-start justify-center text-left' : 'items-center justify-center text-center'
       }`}
       style={{ color: textColor }}
     >
@@ -693,7 +695,7 @@ export function HeroBlock({ props, greetingName, showButton = true }: { props: B
         viewport={{ once: true }}
         transition={{ duration: 0.7 }}
         animate={opened ? { opacity: 0, y: -40, transition: { duration: 0.6, ease: 'easeInOut' } } : {}}
-        className={`relative z-10 flex w-full flex-col ${isLeft ? 'items-start' : 'items-center'}`}
+        className={`relative z-10 flex w-full flex-col ${isRight ? 'items-end' : isLeft ? 'items-start' : 'items-center'}`}
       >
         <Inner name="caption">
           <motion.p
@@ -711,7 +713,7 @@ export function HeroBlock({ props, greetingName, showButton = true }: { props: B
               initial={{ opacity: 0, scale: 0.5, y: 8 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ type: 'spring', stiffness: 220, damping: 17, delay: 0.4 }}
-              className={isLeft ? 'mt-4 mr-auto text-white opacity-80' : 'mt-4 text-white opacity-80'}
+              className={isRight ? 'mt-4 ml-auto text-white opacity-80' : isLeft ? 'mt-4 mr-auto text-white opacity-80' : 'mt-4 text-white opacity-80'}
             >
               <Ornament ornament={str(props, 'ornament') || theme?.ornament} />
             </motion.div>
@@ -808,7 +810,9 @@ export function HeroBlock({ props, greetingName, showButton = true }: { props: B
 }
 
 export function CoupleBlock({ props }: { props: BlockProps }) {
-  const side = str(props, 'variant') === 'side';
+  const variant = str(props, 'variant') || 'vertical';
+  const side = variant === 'side' || variant === 'horizontal' || variant === 'card';
+  const isCard = variant === 'card';
   const photoShape = str(props, 'photo_shape') || 'circle';
   const groomPhoto = str(props, 'groom_photo');
   const bridePhoto = str(props, 'bride_photo');
@@ -856,7 +860,7 @@ export function CoupleBlock({ props }: { props: BlockProps }) {
           </Inner>
         )}
         {side ? (
-          <div className="mx-auto grid w-full max-w-2xl items-center gap-6 md:grid-cols-[1fr_auto_1fr] md:gap-8">
+          <div className={`mx-auto grid w-full gap-6 ${isCard ? 'max-w-3xl rounded-2xl border border-current/10 bg-current/[0.03] p-6 sm:p-8 md:grid-cols-[1fr_auto_1fr] md:gap-8' : 'max-w-2xl items-center md:grid-cols-[1fr_auto_1fr] md:gap-8'}`}>
             <Inner name="groom">
               <div className="min-w-0 text-center">
                 <CouplePerson propKey="groom" name={str(props, 'groom')} parents={str(props, 'groom_parents')} photo={groomPhoto} photoShape={photoShape} />
@@ -947,7 +951,7 @@ function CountdownTimer({ target, variant }: { target: number; variant: string }
     </motion.span>
   );
 
-  if (variant === 'line') {
+  if (variant === 'line' || variant === 'simple') {
     return (
       <div className="mx-auto mt-10 flex w-full items-center justify-center gap-4 text-sm uppercase tracking-widest opacity-90">
         {cells.map((c, i) => (
@@ -964,7 +968,7 @@ function CountdownTimer({ target, variant }: { target: number; variant: string }
   }
 
   const cellBase =
-    variant === 'cards'
+    variant === 'cards' || variant === 'boxes'
       ? 'flex h-16 w-14 flex-col items-center justify-center rounded-lg border border-current/25 px-1 md:h-20 md:w-16'
       : 'flex h-16 w-16 items-center justify-center rounded-full border border-current/20 text-2xl font-semibold md:h-20 md:w-20';
 
@@ -985,7 +989,7 @@ function CountdownTimer({ target, variant }: { target: number; variant: string }
 }
 
 export function EventDetailBlock({ props }: { props: BlockProps }) {
-  const icon = str(props, 'icon') === 'glass' ? Sparkles : Gem;
+  const icon = str(props, 'icon') === 'Sparkles' ? Sparkles : Gem;
   const Icon = icon;
   const band = str(props, 'variant') === 'band';
   const preview = usePreview();
@@ -2065,13 +2069,16 @@ export function LiveStreamingBlock({ props }: { props: BlockProps }) {
   const streamUrl = str(props, 'stream_url');
   const preview = usePreview();
   const variant = str(props, 'variant') || 'full';
+  const platform = str(props, 'platform') || 'youtube';
 
   function getEmbedUrl(url: string): string {
     if (!url) return '';
-    const ytMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([^&?#]+)/);
-    if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}`;
-    const vimeoMatch = url.match(/vimeo\.com\/(\d+)/);
-    if (vimeoMatch) return `https://player.vimeo.com/video/${vimeoMatch[1]}`;
+    if (platform !== 'other') {
+      const ytMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([^&?#]+)/);
+      if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}`;
+      const vimeoMatch = url.match(/vimeo\.com\/(\d+)/);
+      if (vimeoMatch) return `https://player.vimeo.com/video/${vimeoMatch[1]}`;
+    }
     return url;
   }
 

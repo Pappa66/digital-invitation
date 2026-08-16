@@ -118,7 +118,7 @@ const TITLE_PROPS: Record<string, { label: string; multiline?: boolean; url?: bo
     { label: 'translation', multiline: true, labelText: 'Terjemahan' },
     { label: 'reference', labelText: 'Referensi' }
   ],
-  LiveStreaming: [{ label: 'title' }, { label: 'embed_url', url: true, labelText: 'Link YouTube/Vimeo' }, { label: 'note', multiline: true }],
+  LiveStreaming: [{ label: 'title' }, { label: 'stream_url', url: true, labelText: 'Link YouTube/Vimeo' }, { label: 'note', multiline: true }],
   Watermark: [{ label: 'text', labelText: 'Teks Awal' }, { label: 'brand', labelText: 'Nama Brand' }, { label: 'url', url: true, labelText: 'URL (klik)' }],
   Empty: []
 };
@@ -514,6 +514,32 @@ export default function PropertiesPanel() {
             />
 
             <Section
+              title="Buku Tamu"
+              desc="Izinkan tamu menulis ucapan di undangan"
+              render={
+                <label className="flex items-center justify-between gap-3 rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2.5">
+                  <div>
+                    <p className="text-sm font-medium text-[#4a443c]">Aktifkan Buku Tamu</p>
+                    <p className="text-[11px] text-[#8a7a66]">Tamu dapat mengirim ucapan & doa.</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setSettings({ guest_book_enabled: canvas.settings.guest_book_enabled === false })}
+                    className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${
+                      canvas.settings.guest_book_enabled !== false ? 'bg-[#c9a45c]' : 'bg-[#e0d6c2]'
+                    }`}
+                  >
+                    <span
+                      className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-all ${
+                        canvas.settings.guest_book_enabled !== false ? 'left-[22px]' : 'left-0.5'
+                      }`}
+                    />
+                  </button>
+                </label>
+              }
+            />
+
+            <Section
               title="Cover & Pembuka"
               desc="Layar fullscreen 'Buka Undangan' sebelum konten undangan"
               render={
@@ -638,6 +664,37 @@ export default function PropertiesPanel() {
                       onChange={(v) => setBlockProps(block.id, { [prop.label]: v })}
                     />
                   ))}
+                  {block.type === 'RSVP' && (
+                    <label className="block">
+                      <span className="mb-1 block text-xs font-medium text-[#4a443c]">Batas Waktu (Deadline)</span>
+                      <input
+                        type="date"
+                        value={(block.props.deadline as string) || ''}
+                        onChange={(e) => setBlockProps(block.id, { deadline: e.target.value })}
+                        className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
+                      />
+                    </label>
+                  )}
+                  {block.type === 'LiveStreaming' && (
+                    <div>
+                      <p className="mb-1 text-xs font-medium text-[#4a443c]">Platform Streaming</p>
+                      <div className="flex gap-1.5">
+                        {(['youtube', 'vimeo', 'other'] as const).map((platform) => (
+                          <button
+                            key={platform}
+                            onClick={() => setBlockProps(block.id, { platform })}
+                            className={`flex-1 rounded-md border px-2 py-1.5 text-xs font-medium capitalize transition-colors ${
+                              (block.props.platform || 'youtube') === platform
+                                ? 'border-[#c9a45c] bg-[#c9a45c]/10 text-[#8f6a1f]'
+                                : 'border-[#e0d6c2] bg-[#faf7f2] text-[#6b5f4d] hover:border-[#c9a45c]'
+                            }`}
+                          >
+                            {platform === 'other' ? 'Link Langsung' : platform}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                   {block.type === 'EventDetail' && (
                     <div className="space-y-2">
                       <label className="flex items-center gap-2 text-xs font-medium text-[#4a443c]">
@@ -1041,6 +1098,63 @@ export default function PropertiesPanel() {
                       >
                         + Tambah Rekening
                       </button>
+                      <label className="flex items-center justify-between gap-3 rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2.5">
+                        <div>
+                          <p className="text-sm font-medium text-[#4a443c]">Tampilkan Daftar Kado</p>
+                          <p className="text-[11px] text-[#8a7a66]">Tab kedua berisi daftar kado yang dibutuhkan.</p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setBlockProps(block.id, { gift_registry_enabled: (block.props.gift_registry_enabled as boolean) === false })}
+                          className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${
+                            block.props.gift_registry_enabled !== false ? 'bg-[#c9a45c]' : 'bg-[#e0d6c2]'
+                          }`}
+                        >
+                          <span
+                            className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-all ${
+                              block.props.gift_registry_enabled !== false ? 'left-[22px]' : 'left-0.5'
+                            }`}
+                          />
+                        </button>
+                      </label>
+                      {block.props.gift_registry_enabled !== false && (
+                        <div className="rounded-md border border-[#e0d6c2] bg-[#faf7f2] p-2">
+                          <p className="mb-1.5 text-[11px] font-medium text-[#8a7a66]">Item Daftar Kado</p>
+                          {Array.isArray(block.props.gift_items) &&
+                            (block.props.gift_items as string[]).map((item, i) => (
+                              <div key={i} className="mb-1 flex items-center gap-1">
+                                <input
+                                  value={item}
+                                  onChange={(e) => {
+                                    const items = [...(block.props.gift_items as string[])];
+                                    items[i] = e.target.value;
+                                    setBlockProps(block.id, { gift_items: items });
+                                  }}
+                                  className="w-full rounded-md border border-[#e0d6c2] bg-white px-2 py-1.5 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
+                                />
+                                <button
+                                  onClick={() => {
+                                    const items = (block.props.gift_items as string[]).filter((_, j) => j !== i);
+                                    setBlockProps(block.id, { gift_items: items });
+                                  }}
+                                  className="shrink-0 text-[11px] font-medium text-red-600 hover:underline"
+                                >
+                                  Hapus
+                                </button>
+                              </div>
+                            ))}
+                          <button
+                            onClick={() =>
+                              setBlockProps(block.id, {
+                                gift_items: [...(Array.isArray(block.props.gift_items) ? (block.props.gift_items as string[]) : []), '']
+                              })
+                            }
+                            className="mt-1 flex w-full items-center gap-2 rounded-md border border-dashed border-[#e0d6c2] px-2 py-1.5 text-sm text-[#6b5f4d] hover:border-[#c9a45c]"
+                          >
+                            + Tambah Item
+                          </button>
+                        </div>
+                      )}
                     </div>
                   )}
                   {block.type === 'GiftList' &&

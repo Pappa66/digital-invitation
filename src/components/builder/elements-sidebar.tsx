@@ -87,12 +87,11 @@ const BLOCK_CATEGORIES: BlockCategory[] = [
       },
       { type: 'Text', label: 'Teks Box', icon: Type, desc: 'Teks bebas',
         variants: [
-          { name: 'Tengah', value: 'center' },
-          { name: 'Kiri', value: 'left' },
-          { name: 'Kanan', value: 'right' }
+          { name: 'Biasa', value: 'plain' },
+          { name: 'Kartu', value: 'card' },
+          { name: 'Aksen', value: 'accent' }
         ],
-        defaultVariant: 'center',
-        variantKey: 'align'
+        defaultVariant: 'plain'
       },
       { type: 'Quote', label: 'Kutipan / Ayat', icon: QuoteIcon, desc: 'Ayat atau kutipan',
         variants: [
@@ -120,7 +119,11 @@ const BLOCK_CATEGORIES: BlockCategory[] = [
           { name: 'Column', value: 'column' },
           { name: 'Mosaic', value: 'mosaic' },
           { name: 'Polaroid', value: 'polaroid' },
-          { name: 'Arch', value: 'arch' }
+          { name: 'Arch', value: 'arch' },
+          { name: 'Bento', value: 'bento' },
+          { name: 'Hero + Grid', value: 'hero-grid' },
+          { name: 'Filmstrip', value: 'filmstrip' },
+          { name: 'Stack', value: 'stack' }
         ],
         defaultVariant: 'grid'
       },

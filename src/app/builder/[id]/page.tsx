@@ -246,7 +246,7 @@ export default function BuilderPage() {
           },
           {
             title: '10. Atur tampilan',
-            body: 'Tombol di atas kanvas: Grid (garis panduan), Mobile/Desktop preview, dan zoom. Geser slider zoom untuk memperbesar/mengecilkan tampilan kanvas.'
+            body: 'Tombol di atas kanvas: Grid (garis panduan) dan Mobile/Desktop preview untuk melihat hasil di berbagai perangkat.'
           },
           {
             title: '11. Simpan & Bagikan',

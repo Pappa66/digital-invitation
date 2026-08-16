@@ -469,7 +469,8 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
         ...state.canvas,
         blocks: state.canvas.blocks.filter((b) => b.id !== blockId)
       },
-      selectedBlockId: state.selectedBlockId === blockId ? null : state.selectedBlockId
+      selectedBlockId: state.selectedBlockId === blockId ? null : state.selectedBlockId,
+      selectedDecor: state.selectedDecor?.startsWith(`${blockId}::`) ? null : state.selectedDecor
     })),
 
   duplicateBlock: (blockId) =>
@@ -481,13 +482,23 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
         ...src,
         id: uid(),
         props: { ...src.props },
-        layout: src.layout ? { ...src.layout } : undefined
+        layout: src.layout ? { ...src.layout } : undefined,
+        style: src.style
+          ? {
+              ...src.style,
+              textSizes: src.style.textSizes ? { ...src.style.textSizes } : undefined,
+              textFonts: src.style.textFonts ? { ...src.style.textFonts } : undefined
+            }
+          : undefined,
+        inner: src.inner ? { ...src.inner } : null,
+        decor: src.decor ? src.decor.map((d) => ({ ...d, id: uid() })) : undefined
       };
       const blocks = [...state.canvas.blocks];
       blocks.splice(idx + 1, 0, copy);
       return {
         canvas: { ...state.canvas, blocks },
-        selectedBlockId: copy.id
+        selectedBlockId: copy.id,
+        selectedDecor: null
       };
     }),
 
@@ -502,7 +513,7 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
       return { canvas: { ...state.canvas, blocks } };
     }),
 
-  selectBlock: (blockId) => set({ selectedBlockId: blockId }),
+  selectBlock: (blockId) => set({ selectedBlockId: blockId, selectedDecor: null }),
 
   reset: () =>
     set({
