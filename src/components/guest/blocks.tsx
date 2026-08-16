@@ -1242,6 +1242,8 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
   const title = str(props, 'title');
   const preview = usePreview();
   const { open: openLightbox, lightbox } = useLightbox(images);
+  const positions = (Array.isArray(props.image_positions) ? props.image_positions : []) as string[];
+  const getPos = (i: number) => positions[i] || 'center';
 
   if (layout === 'carousel') {
     return (
@@ -1251,6 +1253,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
         animKey={anim}
         title={title}
         intervalSec={Math.max(1, Number(str(props, 'interval_sec')) || 3)}
+        positions={positions}
       />
     );
   }
@@ -1273,7 +1276,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
               className="group relative aspect-[4/5] w-full overflow-hidden rounded-lg cursor-pointer"
               onClick={() => !preview && openLightbox(i)}
             >
-              <Image src={src} alt="" fill sizes="(max-width: 768px) 100vw, 420px" quality={75} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
+              <Image src={src} alt="" fill sizes="(max-width: 768px) 100vw, 420px" quality={75} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" style={{ objectPosition: getPos(i) }} />
               <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-400 group-hover:bg-black/15" />
             </motion.div>
           ))}
@@ -1300,7 +1303,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
               className="group relative aspect-square overflow-hidden rounded-md cursor-pointer"
               onClick={() => !preview && openLightbox(i)}
             >
-              <Image src={src} alt="" fill sizes="(max-width: 768px) 100vw, 33vw" quality={70} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
+              <Image src={src} alt="" fill sizes="(max-width: 768px) 100vw, 33vw" quality={70} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-110" style={{ objectPosition: getPos(i) }} />
               <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-400 group-hover:bg-black/15" />
             </motion.div>
           ))}
@@ -1337,7 +1340,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
                   quality={70}
                   loading="lazy"
                   className="h-auto w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                  style={{ aspectRatio: `${[3, 4, 5, 3][i % 4]}/4` }}
+                  style={{ objectPosition: getPos(i), aspectRatio: `${[3, 4, 5, 3][i % 4]}/4` }}
                 />
               </motion.div>
             ))}
@@ -1365,7 +1368,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
               className={`group relative overflow-hidden rounded-md cursor-pointer ${i % 5 === 0 ? 'col-span-2 row-span-2 aspect-square' : 'aspect-[3/4]'}`}
               onClick={() => !preview && openLightbox(i)}
             >
-              <Image src={src} alt="" fill sizes="(max-width: 768px) 100vw, 33vw" quality={75} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
+              <Image src={src} alt="" fill sizes="(max-width: 768px) 100vw, 33vw" quality={75} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-110" style={{ objectPosition: getPos(i) }} />
               <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-400 group-hover:bg-black/15" />
             </motion.div>
           ))}
@@ -1394,7 +1397,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
               onClick={() => !preview && openLightbox(i)}
             >
               <div className="relative aspect-square w-full overflow-hidden bg-[#e8e2d5]">
-                <Image src={src} alt="" fill sizes="(max-width: 768px) 50vw, 33vw" quality={70} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
+                <Image src={src} alt="" fill sizes="(max-width: 768px) 50vw, 33vw" quality={70} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-110" style={{ objectPosition: getPos(i) }} />
               </div>
             </motion.div>
           ))}
@@ -1422,7 +1425,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
               className="group relative mx-auto aspect-[3/4.2] w-full max-w-[300px] overflow-hidden rounded-t-[999px] shadow-[0_18px_40px_rgba(0,0,0,0.18)] cursor-pointer"
               onClick={() => !preview && openLightbox(0)}
             >
-              <Image src={hero} alt="" fill sizes="(max-width: 768px) 100vw, 420px" quality={80} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
+              <Image src={hero} alt="" fill sizes="(max-width: 768px) 100vw, 420px" quality={80} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" style={{ objectPosition: getPos(0) }} />
             </motion.div>
           )}
           {rest.length > 0 && (
@@ -1437,7 +1440,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
                   className="group relative aspect-square overflow-hidden rounded-lg cursor-pointer"
                   onClick={() => !preview && openLightbox(i + 1)}
                 >
-                  <Image src={src} alt="" fill sizes="(max-width: 768px) 50vw, 33vw" quality={70} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
+                  <Image src={src} alt="" fill sizes="(max-width: 768px) 50vw, 33vw" quality={70} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-110" style={{ objectPosition: getPos(i + 1) }} />
                   <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-400 group-hover:bg-black/15" />
                 </motion.div>
               ))}
@@ -1468,7 +1471,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
                 className={`group relative overflow-hidden rounded-lg cursor-pointer ${span}`}
                 onClick={() => !preview && openLightbox(i)}
               >
-                <Image src={src} alt="" fill sizes="(max-width: 768px) 100vw, 33vw" quality={75} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
+                <Image src={src} alt="" fill sizes="(max-width: 768px) 100vw, 33vw" quality={75} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" style={{ objectPosition: getPos(i) }} />
                 <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-400 group-hover:bg-black/10" />
               </motion.div>
             );
@@ -1495,7 +1498,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
               className="group relative aspect-[16/10] w-full overflow-hidden rounded-lg cursor-pointer"
               onClick={() => !preview && openLightbox(0)}
             >
-              <Image src={images[0]} alt="" fill sizes="(max-width: 768px) 100vw, 420px" quality={80} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
+              <Image src={images[0]} alt="" fill sizes="(max-width: 768px) 100vw, 420px" quality={80} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" style={{ objectPosition: getPos(0) }} />
             </motion.div>
           )}
           {images.length > 1 && (
@@ -1510,7 +1513,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
                   className="group relative aspect-square overflow-hidden rounded-lg cursor-pointer"
                   onClick={() => !preview && openLightbox(i + 1)}
                 >
-                  <Image src={src} alt="" fill sizes="(max-width: 768px) 33vw, 140px" quality={75} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
+                  <Image src={src} alt="" fill sizes="(max-width: 768px) 33vw, 140px" quality={75} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" style={{ objectPosition: getPos(i + 1) }} />
                 </motion.div>
               ))}
             </div>
@@ -1539,7 +1542,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
                 className="group relative h-48 w-72 shrink-0 overflow-hidden rounded-lg cursor-pointer sm:h-56 sm:w-80"
                 onClick={() => !preview && openLightbox(i)}
               >
-                <Image src={src} alt="" fill sizes="320px" quality={75} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
+                <Image src={src} alt="" fill sizes="320px" quality={75} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" style={{ objectPosition: getPos(i) }} />
                 <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-400 group-hover:bg-black/15" />
               </motion.div>
             ))}
@@ -1576,7 +1579,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
                   }}
                   onClick={() => !preview && openLightbox(i)}
                 >
-                  <Image src={src} alt="" fill sizes="380px" quality={80} loading="lazy" className="object-cover" />
+                  <Image src={src} alt="" fill sizes="380px" quality={80} loading="lazy" className="object-cover" style={{ objectPosition: getPos(i) }} />
                 </motion.div>
               );
             })}
@@ -1605,7 +1608,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
             }`}
             onClick={() => !preview && openLightbox(i)}
           >
-            <Image src={src} alt="" fill sizes="(max-width: 768px) 100vw, 50vw" quality={75} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
+            <Image src={src} alt="" fill sizes="(max-width: 768px) 100vw, 50vw" quality={75} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-110" style={{ objectPosition: getPos(i) }} />
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
           </motion.div>
         ))}
@@ -1619,13 +1622,15 @@ function GalleryCarousel({
   anim,
   animKey,
   title,
-  intervalSec
+  intervalSec,
+  positions
 }: {
   images: string[];
   anim: { initial: Target; animate: Target };
   animKey: string;
   title: string;
   intervalSec: number;
+  positions?: string[];
 }) {
   const [idx, setIdx] = useState(0);
   const preview = usePreview();
@@ -1652,12 +1657,12 @@ function GalleryCarousel({
                 animate={{ scale: [1, 1.15] }}
                 transition={{ duration: Math.max(8, intervalSec * 2), repeat: Infinity, ease: 'linear' }}
               >
-                <Image src={images[idx]} alt="" fill sizes="(max-width: 768px) 100vw, 420px" quality={80} className="object-cover" />
+                <Image src={images[idx]} alt="" fill sizes="(max-width: 768px) 100vw, 420px" quality={80} className="object-cover" style={{ objectPosition: positions?.[idx] || 'center' }} />
               </motion.div>
             </motion.div>
           ) : (
             <motion.div key={idx} {...anim} transition={{ duration: 0.7 }} className="absolute inset-0 h-full w-full">
-              <Image src={images[idx]} alt="" fill sizes="(max-width: 768px) 100vw, 420px" quality={80} className="object-cover" />
+              <Image src={images[idx]} alt="" fill sizes="(max-width: 768px) 100vw, 420px" quality={80} className="object-cover" style={{ objectPosition: positions?.[idx] || 'center' }} />
             </motion.div>
           )}
         </div>

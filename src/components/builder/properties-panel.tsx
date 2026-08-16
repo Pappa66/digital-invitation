@@ -155,6 +155,18 @@ const GALLERY_LAYOUTS: { key: string; label: string; desc: string }[] = [
   { key: 'stack', label: 'Tumpuk', desc: 'Foto bertumpuk dengan efek kedalaman' }
 ];
 
+const IMAGE_POSITIONS = [
+  { value: 'center', label: 'Tengah' },
+  { value: 'top', label: 'Atas' },
+  { value: 'bottom', label: 'Bawah' },
+  { value: 'left', label: 'Kiri' },
+  { value: 'right', label: 'Kanan' },
+  { value: 'top left', label: 'Kiri Atas' },
+  { value: 'top right', label: 'Kanan Atas' },
+  { value: 'bottom left', label: 'Kiri Bawah' },
+  { value: 'bottom right', label: 'Kanan Bawah' }
+];
+
 const GALLERY_ANIMATIONS = [
   ['fade', 'Fade'],
   ['zoom', 'Zoom In'],
@@ -918,22 +930,42 @@ export default function PropertiesPanel() {
                       <div>
                         <p className="mb-1 text-xs font-medium text-[#4a443c]">Galeri ({Array.isArray(block.props.images) ? block.props.images.length : 0})</p>
                         {Array.isArray(block.props.images) && block.props.images.length > 0 && (
-                          <div className="mb-2 grid grid-cols-4 gap-1.5">
-                            {(block.props.images as string[]).map((src, i) => (
-                              <div key={i} className="group relative aspect-square overflow-hidden rounded-md border border-[#e0d6c2]">
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img src={src} alt="" className="h-full w-full object-cover" />
-                                <button
-                                  onClick={() =>
-                                    setBlockProps(block.id, { images: (block.props.images as string[]).filter((_, j) => j !== i) })
-                                  }
-                                  aria-label="Hapus foto"
-                                  className="absolute right-0.5 top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-[9px] text-white opacity-0 shadow transition-opacity group-hover:opacity-100"
-                                >
-                                  ×
-                                </button>
-                              </div>
-                            ))}
+                          <div className="mb-2 grid grid-cols-3 gap-1.5">
+                            {(block.props.images as string[]).map((src, i) => {
+                              const positions = (block.props.image_positions as string[] | undefined) ?? [];
+                              return (
+                                <div key={i} className="group relative overflow-hidden rounded-md border border-[#e0d6c2]">
+                                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                                  <img src={src} alt="" className="aspect-square w-full object-cover" style={{ objectPosition: positions[i] || 'center' }} />
+                                  <div className="flex items-center gap-0.5 p-0.5">
+                                    <select
+                                      value={positions[i] || 'center'}
+                                      onChange={(e) => {
+                                        const next = [...positions];
+                                        next[i] = e.target.value;
+                                        setBlockProps(block.id, { image_positions: next });
+                                      }}
+                                      className="w-full rounded border border-[#e0d6c2] bg-[#faf7f2] px-0.5 py-0.5 text-[9px] text-[#6b5f4d] outline-none"
+                                    >
+                                      {IMAGE_POSITIONS.map((p) => (
+                                        <option key={p.value} value={p.value}>{p.label}</option>
+                                      ))}
+                                    </select>
+                                    <button
+                                      onClick={() => {
+                                        const imgs = (block.props.images as string[]).filter((_, j) => j !== i);
+                                        const next = positions.filter((_, j) => j !== i);
+                                        setBlockProps(block.id, { images: imgs, image_positions: next });
+                                      }}
+                                      aria-label="Hapus foto"
+                                      className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-red-600 text-[9px] text-white opacity-0 shadow transition-opacity group-hover:opacity-100"
+                                    >
+                                      ×
+                                    </button>
+                                  </div>
+                                </div>
+                              );
+                            })}
                           </div>
                         )}
                         <button
