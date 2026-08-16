@@ -125,6 +125,18 @@ export interface BlockStyle {
   bgFit?: 'cover' | 'contain';
   /** Posisi gambar latar (sumbu utama). Default: 'center'. */
   bgPosition?: string;
+  /** Radius sudut section (CSS, mis. "24px"). */
+  borderRadius?: string;
+  /** Border sekeliling section (CSS, mis. "2px solid #c9a45c"). */
+  border?: string;
+  /** Bayangan section (CSS box-shadow). */
+  boxShadow?: string;
+  /** Padding dalam section (CSS shorthand, mis. "48px 24px"). */
+  padding?: string;
+  /** Opacity section 0–1. */
+  opacity?: number;
+  /** Perataan teks section. */
+  textAlign?: 'left' | 'center' | 'right';
 }
 
 /** Bentuk dekor support shape. */

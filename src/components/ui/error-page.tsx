@@ -38,6 +38,8 @@ export default function ErrorPage({
   onReset,
   resetLabel = 'Coba Lagi'
 }: ErrorPageProps) {
+  /** Tampilkan tautan sekunder "Beranda" hanya saat bukan halaman beranda. */
+  const showSecondaryHome = onReset ? true : actionHref !== '/';
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-[#faf7f2] px-6 py-16 text-center">
       {/* Ornamen latar: kilauan emas lembut + tekstur titik halus */}
@@ -81,12 +83,14 @@ export default function ErrorPage({
               {actionLabel}
             </Link>
           )}
-          <Link
-            href="/"
-            className="rounded-lg border border-[#e0d6c2] bg-white px-6 py-2.5 text-sm font-medium text-[#4a443c] transition-colors hover:border-[#c9a45c] hover:text-[#2b2620]"
-          >
-            Beranda
-          </Link>
+          {showSecondaryHome && (
+            <Link
+              href="/"
+              className="rounded-lg border border-[#e0d6c2] bg-white px-6 py-2.5 text-sm font-medium text-[#4a443c] transition-colors hover:border-[#c9a45c] hover:text-[#2b2620]"
+            >
+              Beranda
+            </Link>
+          )}
         </div>
 
         <p className="mt-8 text-xs text-[#b3a69a]">&copy; {new Date().getFullYear()} Prasha Digital Indonesia</p>

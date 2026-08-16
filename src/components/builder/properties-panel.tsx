@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Type, Clapperboard } from 'lucide-react';
 import ColorPicker from '@/components/builder/color-picker';
 import { OrnamentArt, ORNAMENT_CATEGORIES, ORNAMENT_LABELS, type OrnamentKey } from '@/components/builder/ornaments';
@@ -244,6 +244,11 @@ export default function PropertiesPanel() {
   const [mediaOpen, setMediaOpen] = useState(false);
   const [mediaMode, setMediaMode] = useState<'hero' | 'gallery' | 'bg' | 'photo' | 'decor' | 'couple_groom' | 'couple_bride' | 'cover' | null>(null);
   const [cropOpen, setCropOpen] = useState(false);
+  const [panelTab, setPanelTab] = useState<'content' | 'style' | 'advanced'>('content');
+
+  useEffect(() => {
+    setPanelTab('content');
+  }, [selectedBlockId]);
 
   function updateAccount(blockId: string, index: number, key: 'bank_name' | 'account_number' | 'account_holder', value: string) {
     const b = canvas.blocks.find((x) => x.id === blockId);
@@ -268,6 +273,29 @@ export default function PropertiesPanel() {
     <aside className="flex h-full w-80 shrink-0 flex-col border-l border-[#e7ddcc] bg-white">
       <div className="border-b border-[#e7ddcc] px-4 py-3">
         <h3 className="text-sm font-semibold text-[#2b2620]">{block ? `Edit ${block.type}` : 'Pengaturan Halaman'}</h3>
+        {block && (
+          <div className="mt-2 flex gap-1 rounded-lg bg-[#f4efe6] p-0.5" role="tablist" aria-label="Mode pengeditan">
+            {(
+              [
+                { key: 'content', label: 'Konten' },
+                { key: 'style', label: 'Style' },
+                { key: 'advanced', label: 'Lanjutan' }
+              ] as const
+            ).map((t) => (
+              <button
+                key={t.key}
+                role="tab"
+                aria-selected={panelTab === t.key}
+                onClick={() => setPanelTab(t.key)}
+                className={`flex-1 rounded-md px-2 py-1 text-xs font-medium transition-colors ${
+                  panelTab === t.key ? 'bg-white text-[#2b2620] shadow-sm' : 'text-[#8a7a66] hover:text-[#4a443c]'
+                }`}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="flex-1 space-y-5 overflow-auto p-4">
@@ -648,10 +676,9 @@ export default function PropertiesPanel() {
 
         {block && (
           <>
-            <Section
-              title="Konten"
-              render={
-                <div className="space-y-3">
+            {panelTab === 'content' && (
+              <>
+                <div className="space-y-5">
                   {TITLE_PROPS[block.type].map((prop) => (
                     <Field
                       key={prop.label}
@@ -1202,6 +1229,12 @@ export default function PropertiesPanel() {
                         </div>
                       );
                     })()}
+                  </div>
+              </>
+            )}
+            {panelTab === 'style' && (
+              <>
+                <div className="space-y-5">
                   <Section
                     title="Warna & Background Section"
                     desc="Override warna teks, latar, atau gambar untuk section ini saja"
@@ -1291,6 +1324,93 @@ export default function PropertiesPanel() {
                             </div>
                           </div>
                            )}
+                          <div className="grid grid-cols-2 gap-2">
+                            <div>
+                              <label className="mb-1 block text-xs font-medium text-[#4a443c]">Radius Sudut</label>
+                              <select
+                                value={block.style?.borderRadius ?? ''}
+                                onChange={(e) => setBlockStyle(block.id, { borderRadius: e.target.value })}
+                                className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-2 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
+                              >
+                                <option value="">Default</option>
+                                <option value="0px">0 (kotak)</option>
+                                <option value="12px">12px</option>
+                                <option value="24px">24px</option>
+                                <option value="32px">32px</option>
+                                <option value="9999px">Lingkaran</option>
+                              </select>
+                            </div>
+                            <div>
+                              <label className="mb-1 block text-xs font-medium text-[#4a443c]">Bayangan</label>
+                              <select
+                                value={block.style?.boxShadow ?? ''}
+                                onChange={(e) => setBlockStyle(block.id, { boxShadow: e.target.value })}
+                                className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-2 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
+                              >
+                                <option value="">Tanpa</option>
+                                <option value="0 8px 24px rgba(0,0,0,0.12)">Lembut</option>
+                                <option value="0 12px 40px rgba(0,0,0,0.18)">Sedang</option>
+                                <option value="0 22px 60px rgba(0,0,0,0.22)">Tinggi</option>
+                                <option value="0 0 0 2px #c9a45c">Cincin emas</option>
+                              </select>
+                            </div>
+                            <div>
+                              <label className="mb-1 block text-xs font-medium text-[#4a443c]">Border</label>
+                              <select
+                                value={block.style?.border ?? ''}
+                                onChange={(e) => setBlockStyle(block.id, { border: e.target.value })}
+                                className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-2 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
+                              >
+                                <option value="">Tanpa</option>
+                                <option value="1px solid #e0d6c2">Tipis netral</option>
+                                <option value="2px solid #c9a45c">Emas 2px</option>
+                                <option value="3px double #c9a45c">Emas dobel</option>
+                                <option value="1px dashed #c9a45c">Emas putus</option>
+                              </select>
+                            </div>
+                            <div>
+                              <label className="mb-1 block text-xs font-medium text-[#4a443c]">Perataan Teks</label>
+                              <select
+                                value={block.style?.textAlign ?? ''}
+                                onChange={(e) => setBlockStyle(block.id, { textAlign: e.target.value as 'left' | 'center' | 'right' })}
+                                className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-2 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
+                              >
+                                <option value="">Default</option>
+                                <option value="left">Kiri</option>
+                                <option value="center">Tengah</option>
+                                <option value="right">Kanan</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div className="grid grid-cols-2 gap-2">
+                            <div>
+                              <label className="mb-1 block text-xs font-medium text-[#4a443c]">Padding</label>
+                              <select
+                                value={block.style?.padding ?? ''}
+                                onChange={(e) => setBlockStyle(block.id, { padding: e.target.value })}
+                                className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-2 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
+                              >
+                                <option value="">Default</option>
+                                <option value="16px">Sempit</option>
+                                <option value="32px 24px">Kecil</option>
+                                <option value="48px 24px">Normal</option>
+                                <option value="64px 24px">Legak</option>
+                                <option value="96px 24px">Sangat legak</option>
+                              </select>
+                            </div>
+                            <div>
+                              <label className="mb-1 block text-xs font-medium text-[#4a443c]">Transparansi</label>
+                              <input
+                                type="range"
+                                min={0.2}
+                                max={1}
+                                step={0.05}
+                                value={block.style?.opacity ?? 1}
+                                onChange={(e) => setBlockStyle(block.id, { opacity: Number(e.target.value) })}
+                                className="mt-2 w-full accent-[#c9a45c]"
+                              />
+                            </div>
+                          </div>
                           <button
                             onClick={() => clearBlockStyle(block.id)}
                             className="w-full rounded-md border border-[#e0d6c2] py-1.5 text-xs text-[#6b5f4d] hover:border-red-300 hover:text-red-600"
@@ -1316,6 +1436,12 @@ export default function PropertiesPanel() {
                       }
                     />
                   )}
+                </div>
+              </>
+            )}
+            {panelTab === 'advanced' && (
+              <>
+                <div className="space-y-5">
                   {(canvas.flow ?? 'stack') === 'free' && (
                     <Section
                       title="Posisi & Ukuran"
@@ -1330,8 +1456,8 @@ export default function PropertiesPanel() {
                     />
                   )}
                 </div>
-              }
-            />
+              </>
+            )}
           </>
 
         )}

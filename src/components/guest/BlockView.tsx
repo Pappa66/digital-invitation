@@ -157,7 +157,7 @@ export default function BlockView({ block, projectId, editable = false, greeting
 }
 
 function StyledSection({ style, children }: { style?: BlockStyle; children: React.ReactNode }) {
-  if (!style || (!style.textColor && !style.bgColor && !style.bgGradient && !style.bgImage)) {
+  if (!style || (!style.textColor && !style.bgColor && !style.bgGradient && !style.bgImage && !style.borderRadius && !style.border && !style.boxShadow && !style.padding && style.opacity === undefined && !style.textAlign)) {
     return <>{children}</>;
   }
 
@@ -168,6 +168,12 @@ function StyledSection({ style, children }: { style?: BlockStyle; children: Reac
   }
   if (style.bgGradient) css.backgroundImage = style.bgGradient;
   else if (style.bgColor) css.backgroundColor = style.bgColor;
+  if (style.borderRadius) css.borderRadius = style.borderRadius;
+  if (style.border) css.border = style.border;
+  if (style.boxShadow) css.boxShadow = style.boxShadow;
+  if (style.padding) css.padding = style.padding;
+  if (style.opacity !== undefined) css.opacity = style.opacity;
+  if (style.textAlign) css.textAlign = style.textAlign;
 
   const textOverride = style.textColor ? ' data-text-override' : '';
 
