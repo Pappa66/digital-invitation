@@ -75,23 +75,26 @@ export default function AppLayout({ children }: AppLayoutProps) {
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="flex h-16 items-center justify-between border-b border-dashboard-border bg-dashboard-surface px-6">
           <h1 className="font-semibold">{title}</h1>
-          <div className="flex items-center gap-3 md:hidden">
-            <Link href="/dashboard" className={`flex flex-col items-center gap-0.5 text-[10px] ${pathname.startsWith('/dashboard') ? 'text-[#c9a45c]' : 'text-[#8a7a66]'}`}>
-              <LayoutDashboard className="h-4 w-4" /> Undangan
-            </Link>
-            <Link href="/orders" className={`flex flex-col items-center gap-0.5 text-[10px] ${pathname.startsWith('/orders') ? 'text-[#c9a45c]' : 'text-[#8a7a66]'}`}>
-              <Inbox className="h-4 w-4" /> Pesanan
-            </Link>
-            <Link href="/templates" className={`flex flex-col items-center gap-0.5 text-[10px] ${pathname.startsWith('/templates') ? 'text-[#c9a45c]' : 'text-[#8a7a66]'}`}>
-              <LayoutTemplate className="h-4 w-4" /> Template
-            </Link>
-            <Link href="/settings" className={`flex flex-col items-center gap-0.5 text-[10px] ${pathname.startsWith('/settings') ? 'text-[#c9a45c]' : 'text-[#8a7a66]'}`}>
-              <Settings className="h-4 w-4" /> Pengaturan
-            </Link>
-          </div>
         </header>
-        <main className="flex-1 overflow-auto p-6">{children}</main>
+        <main className="flex-1 overflow-auto p-6 pb-20 md:pb-6">{children}</main>
       </div>
+      {/* Mobile bottom nav */}
+      <nav className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around border-t border-dashboard-border bg-dashboard-surface px-2 py-1.5 md:hidden">
+        {NAV.map((item) => {
+          const active = pathname === item.href || pathname.startsWith(item.href + '/');
+          const Icon = item.icon;
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`flex flex-col items-center gap-0.5 text-[10px] ${active ? 'text-[#c9a45c]' : 'text-[#8a7a66]'}`}
+            >
+              <Icon className="h-5 w-5" />
+              {item.label}
+            </Link>
+          );
+        })}
+      </nav>
     </div>
   );
 }
