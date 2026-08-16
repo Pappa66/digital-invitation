@@ -37,8 +37,8 @@ function Corner({ flip, color }: CornerProps) {
   );
 }
 
-export function GuestFrame({ mode, color, fixed = true }: { mode?: string; color: string; fixed?: boolean }) {
-  if (!mode || mode === 'none') return null;
+export function GuestFrame({ mode, color, fixed = true, enabled = true }: { mode?: string; color: string; fixed?: boolean; enabled?: boolean }) {
+  if (!mode || mode === 'none' || !enabled) return null;
 
   const accent = color;
   const placement = fixed ? 'fixed' : 'absolute';

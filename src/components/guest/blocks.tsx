@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef, useContext } from 'react';
 import { motion, AnimatePresence, type Target } from 'framer-motion';
 import Image from 'next/image';
-import { Calendar, MapPin, Heart, Sparkles, Gem, BookOpen, Sprout, MailOpen, Plus, Radio, X } from 'lucide-react';
+import { Calendar, MapPin, Heart, Sparkles, Gem, BookOpen, Sprout, MailOpen, Plus, Radio, X, Dot, Type, Image as ImageIcon } from 'lucide-react';
 import type { BlockProps, DecorAsset, DecorShapeKind } from '@/lib/types';
 import type { ReligionKey } from '@/lib/religions';
 import { Editable, BuilderEditableContext } from '@/components/builder/inline-edit';
@@ -451,12 +451,12 @@ function BuilderDecorLayer({ blockId, decor }: { blockId: string; decor?: DecorA
       {blockSelected && (
         <div className="pointer-events-auto absolute -top-3 left-1/2 z-[300] flex w-40 -translate-x-1/2 justify-center">
           {addMenu === 'ornament' ? (
-            <div className="max-h-72 w-44 overflow-y-auto rounded-md bg-[#141414]/95 p-1.5 shadow-lg ring-1 ring-white/10">
-              <p className="px-1 pb-1 text-[9px] uppercase tracking-wide text-[#c9a45c]">Pilih Ornamen</p>
+            <div className="max-h-72 w-48 overflow-y-auto rounded-lg border border-[#e7ddcc] bg-[#fffdf8] p-2 shadow-xl ring-1 ring-black/5">
+              <p className="px-1 pb-1.5 text-[10px] font-semibold uppercase tracking-wide text-[#b39a65]">Pilih Ornamen</p>
               <div className="space-y-2">
                 {Object.entries(ORNAMENT_CATEGORIES).map(([cat, { label, keys }]) => (
                   <div key={cat}>
-                    <p className="px-1 py-0.5 text-[9px] text-white/50">{label}</p>
+                    <p className="px-1 py-0.5 text-[10px] font-medium text-[#8a7a66]">{label}</p>
                     <div className="grid grid-cols-3 gap-1">
                       {keys.map((k) => (
                         <button
@@ -466,9 +466,9 @@ function BuilderDecorLayer({ blockId, decor }: { blockId: string; decor?: DecorA
                             e.stopPropagation();
                             addOrnament(k as OrnamentKey);
                           }}
-                          className="flex flex-col items-center gap-0.5 rounded p-1 text-white/80 hover:bg-[#c9a45c]/30"
+                          className="group flex flex-col items-center gap-0.5 rounded-md border border-[#eee4cf] bg-white p-1.5 text-[#6b5f4d] transition-colors hover:border-[#c9a45c] hover:bg-[#c9a45c]/10"
                         >
-                          <OrnamentArt ornament={k} width={32} className="text-current opacity-90" />
+                          <OrnamentArt ornament={k} width={30} className="text-[#b39a65] transition-colors group-hover:text-[#8a6d2f]" />
                         </button>
                       ))}
                     </div>
@@ -476,7 +476,7 @@ function BuilderDecorLayer({ blockId, decor }: { blockId: string; decor?: DecorA
                 ))}
               </div>
               <button
-                className="mt-1 w-full rounded px-2 py-1 text-left text-[11px] text-[#c9a45c] hover:bg-[#c9a45c]/30"
+                className="mt-1.5 w-full rounded-md bg-[#6b5f4d] px-2 py-1.5 text-left text-[11px] font-medium text-white hover:bg-[#4a443c]"
                 onClick={(e) => {
                   e.stopPropagation();
                   setAddMenu(null);
@@ -486,45 +486,46 @@ function BuilderDecorLayer({ blockId, decor }: { blockId: string; decor?: DecorA
               </button>
             </div>
           ) : addMenu === 'main' ? (
-            <div className="flex flex-col gap-1 rounded-md bg-[#141414]/95 p-1.5 shadow-lg ring-1 ring-white/10">
+            <div className="flex flex-col gap-0.5 rounded-lg border border-[#e7ddcc] bg-[#fffdf8] p-1.5 shadow-xl ring-1 ring-black/5">
               <button
-                className="rounded px-2 py-1 text-left text-[11px] text-white hover:bg-[#c9a45c]/30"
+                className="flex items-center justify-between rounded-md px-2.5 py-1.5 text-left text-[11px] font-medium text-[#3a332b] hover:bg-[#f2ead9]"
                 onClick={(e) => {
                   e.stopPropagation();
                   addShape();
                 }}
               >
-                {DECOR_SHAPES.find((s) => s.key === shapePick)?.label ?? 'Shape'} ({shapePick})
+                <span className="flex items-center gap-1.5"><Dot className="h-2.5 w-2.5 text-[#c9a45c]" />{DECOR_SHAPES.find((s) => s.key === shapePick)?.label ?? 'Shape'}</span>
+                <span className="rounded bg-[#eee4cf] px-1.5 py-0.5 text-[10px] text-[#8a6d2f]">{shapePick}</span>
               </button>
               <button
-                className="rounded px-2 py-1 text-left text-[11px] text-white hover:bg-[#c9a45c]/30"
+                className="rounded-md px-2.5 py-1.5 text-left text-[11px] font-medium text-[#3a332b] hover:bg-[#f2ead9]"
                 onClick={(e) => {
                   e.stopPropagation();
                   addText();
                 }}
               >
-                Teks
+                <span className="flex items-center gap-1.5"><Type className="h-3 w-3 text-[#c9a45c]" />Teks</span>
               </button>
               <button
-                className="rounded px-2 py-1 text-left text-[11px] text-white hover:bg-[#c9a45c]/30"
+                className="rounded-md px-2.5 py-1.5 text-left text-[11px] font-medium text-[#3a332b] hover:bg-[#f2ead9]"
                 onClick={(e) => {
                   e.stopPropagation();
                   addImage();
                 }}
               >
-                Gambar
+                <span className="flex items-center gap-1.5"><ImageIcon className="h-3 w-3 text-[#c9a45c]" />Gambar</span>
               </button>
               <button
-                className="rounded px-2 py-1 text-left text-[11px] text-white hover:bg-[#c9a45c]/30"
+                className="rounded-md px-2.5 py-1.5 text-left text-[11px] font-medium text-[#3a332b] hover:bg-[#f2ead9]"
                 onClick={(e) => {
                   e.stopPropagation();
                   setAddMenu('ornament');
                 }}
               >
-                Ornamen SVG
+                <span className="flex items-center gap-1.5"><Sparkles className="h-3 w-3 text-[#c9a45c]" />Ornamen SVG</span>
               </button>
-              <div className="my-1 h-px bg-white/10" />
-              <p className="px-2 pb-1 text-[9px] uppercase tracking-wide text-[#c9a45c]">Shape</p>
+              <div className="my-1 h-px bg-[#eee4cf]" />
+              <p className="px-2 pb-1 text-[9px] font-semibold uppercase tracking-wide text-[#b39a65]">Shape</p>
               <div className="flex flex-wrap gap-1 px-1">
                 {DECOR_SHAPES.map((s) => (
                   <button
@@ -533,14 +534,14 @@ function BuilderDecorLayer({ blockId, decor }: { blockId: string; decor?: DecorA
                       e.stopPropagation();
                       setShapePick(s.key as DecorShapeKind);
                     }}
-                    className={`rounded px-1.5 py-0.5 text-[10px] ${shapePick === s.key ? 'bg-[#c9a45c] text-white' : 'text-white/80 hover:bg-white/10'}`}
+                    className={`rounded-md px-1.5 py-1 text-[10px] font-medium transition-colors ${shapePick === s.key ? 'bg-[#c9a45c] text-white' : 'bg-[#f4efe6] text-[#6b5f4d] hover:bg-[#eee4cf]'}`}
                   >
                     {s.label}
                   </button>
                 ))}
               </div>
               <button
-                className="mt-1 rounded px-2 py-1 text-left text-[11px] text-[#c9a45c] hover:bg-[#c9a45c]/30"
+                className="mt-1 rounded-md bg-[#6b5f4d] px-2.5 py-1.5 text-left text-[11px] font-medium text-white hover:bg-[#4a443c]"
                 onClick={(e) => {
                   e.stopPropagation();
                   setAddMenu(null);
@@ -551,7 +552,7 @@ function BuilderDecorLayer({ blockId, decor }: { blockId: string; decor?: DecorA
             </div>
           ) : (
             <button
-              className="inline-flex items-center gap-1 rounded-md bg-[#141414]/90 px-2.5 py-1 text-xs font-medium text-white shadow-lg ring-1 ring-white/10 transition-colors hover:bg-[#c9a45c]/30"
+              className="inline-flex items-center gap-1.5 rounded-full border border-[#c9a45c] bg-[#fffdf8] px-3 py-1 text-xs font-semibold text-[#8a6d2f] shadow-md transition-colors hover:bg-[#c9a45c] hover:text-white"
               title="Tambah asset di dalam blok"
               onPointerDown={(e) => e.stopPropagation()}
               onClick={(e) => {

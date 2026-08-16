@@ -93,7 +93,7 @@ export default function CoverModal({
               />
             </div>
           )}
-          {!bgImage && (
+          {!coverBgImage && !bgImage && (
             <div
               className="absolute inset-0"
               style={{ background: `linear-gradient(165deg, ${primary} 0%, color-mix(in srgb, ${primary} 60%, ${secondary}) 55%, ${background} 130%)` }}

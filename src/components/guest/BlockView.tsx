@@ -130,7 +130,7 @@ export default function BlockView({ block, projectId, editable = false, greeting
     gold: 'overflow-hidden rounded-2xl bg-gradient-to-b from-[var(--color-background)] to-[color-mix(in srgb,var(--color-primary) 8%,var(--color-background))] shadow-[0_12px_36px_rgba(0,0,0,0.16)] ring-1 ring-[var(--color-primary)]/30',
   };
   const cardCls = cardVariants[cardVariant] || cardVariants.shadow;
-  const cardWrapCls = `${cardCls} mx-0 mb-2 mt-2 w-full`;
+  const cardWrapCls = `${cardCls} mx-0 mb-1 mt-1 w-full`;
   
   const entranceVariants = {
     fade: { opacity: 0, y: 44, filter: 'blur(6px)' },

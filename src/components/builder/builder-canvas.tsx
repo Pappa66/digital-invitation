@@ -125,7 +125,7 @@ export default function BuilderCanvas({
                   <div className="guest-root" style={guestStyle(canvas)}>
                     <StackList blocks={canvas.blocks} dimmed={!!activeType} />
                     {canvas.blocks.length === 0 && <EmptyHint />}
-                    <GuestFrame mode={canvas.theme.frame} color={canvas.theme.secondary} fixed={false} />
+                    <GuestFrame mode={canvas.theme.frame} color={canvas.theme.secondary} fixed={false} enabled={!canvas.theme.card_style} />
                   </div>
                 </ThemeContext.Provider>
               </SortableContext>
@@ -349,7 +349,7 @@ function FreeCanvas({ blocks, canvasRef, guides }: { blocks: Block[]; canvasRef:
           Seret widget dari panel kiri ke sini, atau klik widget untuk menambah blok.
         </div>
       )}
-      <GuestFrame mode={theme.frame} color={theme.secondary} fixed={false} />
+      <GuestFrame mode={theme.frame} color={theme.secondary} fixed={false} enabled={!theme.card_style} />
     </div>
     </ThemeContext.Provider>
   );
@@ -563,7 +563,7 @@ function InnerDragLayer({ block, blockWidth }: { block: Block; blockWidth: numbe
       {handles.map((h) => (
         <div
           key={h.name}
-          className="absolute z-30 cursor-grab border-2 border-dashed border-[#c9a45c]/60 bg-[#c9a45c]/5 active:cursor-grabbing"
+          className="pointer-events-auto absolute z-30 cursor-grab touch-none border-2 border-dashed border-[#c9a45c]/60 bg-[#c9a45c]/5 active:cursor-grabbing"
           style={{ left: h.left, top: h.top, width: h.width, height: h.height }}
           onPointerDown={(e) => onDragStart(e, h.name)}
         >
