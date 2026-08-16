@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Copy, Check, Send, Users, ListChecks, Link2, ExternalLink, ShieldCheck, Radio, Download, UserCheck, QrCode, CalendarClock } from 'lucide-react';
+import { Copy, Check, Send, Users, ListChecks, Link2, ExternalLink, ShieldCheck, Radio, Download, UserCheck, QrCode, CalendarClock, Mail } from 'lucide-react';
 import { demoIsDemoMode } from '@/lib/env';
 import {
   RELIGIONS,
@@ -219,6 +219,18 @@ export default function InviteManager({ projectId, slug: slugProp, title: titleP
     }
   }
 
+  function openEmail(row: { name: string; email: string }, index: number) {
+    const rowLink = `${base}/${slug}?to=${encodeURIComponent(row.name)}`;
+    const subject = encodeURIComponent(`Undangan ${title || 'Pernikahan'}`);
+    const body = encodeURIComponent(fill(template, row.name, rowLink));
+    window.open(`mailto:${row.email}?subject=${subject}&body=${body}`, '_blank', 'noopener,noreferrer');
+    setSentIndexes((prev) => {
+      const next = new Set(prev);
+      next.add(index);
+      return next;
+    });
+  }
+
   function toggleSent(index: number) {
     setSentIndexes((prev) => {
       const next = new Set(prev);
@@ -250,8 +262,8 @@ export default function InviteManager({ projectId, slug: slugProp, title: titleP
     download(
       `rsvp-${slug || 'undangan'}.csv`,
       toCsv(
-        ['Nama', 'Kehadiran', 'Jumlah Tamu', 'Pesan', 'Waktu'],
-        rsvps.map((r) => [r.name, r.attendance, r.guest_count, r.message ?? '', new Date(r.created_at).toLocaleString('id-ID')])
+        ['Nama', 'Kehadiran', 'Jumlah Tamu', 'Pilihan Menu', 'Pesan', 'Waktu'],
+        rsvps.map((r) => [r.name, r.attendance, r.guest_count, r.meal_choice ?? '', r.message ?? '', new Date(r.created_at).toLocaleString('id-ID')])
       )
     );
   }
@@ -260,8 +272,8 @@ export default function InviteManager({ projectId, slug: slugProp, title: titleP
     download(
       `daftar-tamu-${slug || 'undangan'}.csv`,
       toCsv(
-        ['Nama', 'Nomor HP'],
-        rows.map((r) => [r.name, r.phone ?? ''])
+        ['Nama', 'Nomor HP', 'Email'],
+        rows.map((r) => [r.name, r.phone ?? '', r.email ?? ''])
       )
     );
   }
@@ -440,7 +452,9 @@ export default function InviteManager({ projectId, slug: slugProp, title: titleP
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-medium text-[#2b2620]">{row.name}</p>
                       <p className="truncate text-[10px] text-[#b3a69a]">
-                        {row.phone ? `+${row.phone.replace(/[^0-9+]/g, '')}` : 'tanpa nomor'}
+                        {row.phone ? `+${row.phone.replace(/[^0-9+]/g, '')}` : ''}
+                        {row.phone && row.email ? ' · ' : ''}
+                        {row.email || (row.phone ? '' : 'tanpa kontak')}
                       </p>
                     </div>
                     <button
@@ -451,6 +465,16 @@ export default function InviteManager({ projectId, slug: slugProp, title: titleP
                       {copied === `row-msg-${i}` ? <Check className="h-3 w-3 text-emerald-600" /> : <Copy className="h-3 w-3" />}
                       Salin
                     </button>
+                    {row.email && (
+                      <button
+                        onClick={() => openEmail(row, i)}
+                        title="Kirim undangan via email"
+                        className="flex shrink-0 items-center gap-1.5 rounded-lg border border-[#c9a45c]/60 bg-white px-2.5 py-1.5 text-xs font-medium text-[#8a6d2f] transition-colors hover:bg-[#c9a45c]/10"
+                      >
+                        <Mail className="h-3.5 w-3.5" />
+                        Email
+                      </button>
+                    )}
                     <button
                       onClick={() => openWa(row, i)}
                       className={`flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-white transition-colors ${
@@ -496,6 +520,9 @@ export default function InviteManager({ projectId, slug: slugProp, title: titleP
                         {r.attendance === 'hadir' ? 'Hadir' : r.attendance === 'ragu' ? 'Ragu' : 'Tidak Hadir'}
                       </span>
                     </div>
+                    {r.meal_choice ? (
+                      <p className="mt-0.5 inline-block rounded bg-[#f4efe6] px-1.5 py-0.5 text-[10px] text-[#8a6d2f]">Menu: {r.meal_choice}</p>
+                    ) : null}
                     {r.message ? <p className="mt-0.5 text-xs leading-relaxed text-[#8a7a66]">{r.message}</p> : null}
                     <p className="mt-0.5 text-[10px] text-[#b3a69a]">
                       {r.guest_count} tamu · {new Date(r.created_at).toLocaleString('id-ID')}

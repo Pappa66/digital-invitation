@@ -12,7 +12,7 @@ import { GripVertical, Grid3x3, Undo2, Redo2, Copy, ClipboardPaste, ArrowUp, Arr
 import type { Block, BlockType } from '@/lib/types';
 import BlockView from '@/components/guest/BlockView';
 import { ThemeContext } from '@/components/guest/theme-context';
-import { useBuilderStore, undoBuilder, redoBuilder, useBuilderHistory } from '@/store/builder-store';
+import { useBuilderStore, undoBuilder, redoBuilder, useBuilderHistory, COVER_BLOCK_ID } from '@/store/builder-store';
 import DeviceToggle from '@/components/ui/device-toggle';
 import type { Device } from '@/components/ui/device-toggle';
 import { Palette } from 'lucide-react';
@@ -166,6 +166,42 @@ function EmptyHint() {
   );
 }
 
+/** Preview cover "Buka Undangan" — elemen pertama di kanvas, selectable untuk edit. */
+function CoverPreview() {
+  const canvas = useBuilderStore((s) => s.canvas);
+  const selected = useBuilderStore((s) => s.selectedBlockId === COVER_BLOCK_ID);
+  const selectBlock = useBuilderStore((s) => s.selectBlock);
+  if (canvas.settings.show_cover === false) return null;
+  const hero = canvas.blocks.find((b) => b.type === 'Hero');
+  const bg = canvas.settings.cover_bg_image || (typeof hero?.props.bg_image === 'string' ? hero.props.bg_image : undefined);
+  const names = [hero?.props.bride, hero?.props.groom].filter(Boolean).join(' & ');
+  const caption = typeof hero?.props.caption === 'string' ? hero.props.caption : 'Undangan Pernikahan';
+  return (
+    <button
+      type="button"
+      onClick={() => selectBlock(COVER_BLOCK_ID)}
+      className={`relative flex h-64 w-full flex-col items-center justify-center overflow-hidden px-6 text-center transition-shadow ${
+        selected ? 'ring-2 ring-[#c9a45c] ring-inset' : 'hover:ring-2 hover:ring-[#c9a45c]/60 hover:ring-inset'
+      }`}
+      style={{ background: bg ? `url(${bg}) center / cover no-repeat` : `linear-gradient(160deg, ${canvas.theme.primary} 0%, ${canvas.theme.secondary} 100%)` }}
+    >
+      <span className="pointer-events-none absolute left-2 top-2 rounded bg-black/45 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-white">
+        Cover — Buka Undangan
+      </span>
+      <span className="absolute inset-y-6 inset-x-4 rounded-lg border border-white/25" aria-hidden />
+      {!bg && <span aria-hidden className="absolute inset-0 bg-black/20" />}
+      <div className="relative">
+        <p className="font-heading text-sm tracking-[0.3em] text-white/85 uppercase">{caption}</p>
+        <p className="font-heading mt-2 text-2xl font-medium text-white">{names || 'Nama & Nama'}</p>
+        <p className="mt-1 text-xs text-white/80">{typeof hero?.props.date === 'string' ? hero.props.date : ''}</p>
+        <span className="mt-4 inline-block rounded-full bg-white/90 px-5 py-1.5 text-xs font-semibold text-[#4a443c] shadow-sm">
+          {canvas.settings.cover_button_text || 'Buka Undangan'}
+        </span>
+      </div>
+    </button>
+  );
+}
+
 /** List blok mode stack — menyorot posisi target saat widget diseret dari sidebar. */
 function StackList({ blocks, dimmed }: { blocks: Block[]; dimmed: boolean }) {
   const { over, active } = useDndContext();
@@ -173,6 +209,7 @@ function StackList({ blocks, dimmed }: { blocks: Block[]; dimmed: boolean }) {
   const overId = over ? String(over.id) : null;
   return (
     <>
+      <CoverPreview />
       {blocks.map((block) => {
         const isOver = isWidgetDrag && overId === block.id;
         return (
@@ -191,6 +228,9 @@ function SortableBlock({ block, dimmed, dropTarget }: { block: Block; dimmed: bo
   const selectBlock = useBuilderStore((s) => s.selectBlock);
   const removeBlock = useBuilderStore((s) => s.removeBlock);
   const duplicateBlock = useBuilderStore((s) => s.duplicateBlock);
+  const copyStyle = useBuilderStore((s) => s.copyStyle);
+  const pasteStyle = useBuilderStore((s) => s.pasteStyle);
+  const hasCopiedStyle = useBuilderStore((s) => s.copiedStyle !== null);
 
   return (
     <div
@@ -221,6 +261,36 @@ function SortableBlock({ block, dimmed, dropTarget }: { block: Block; dimmed: bo
               <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 1.732 1" />
             </svg>
           </button>
+          <button
+            className="rounded p-1 text-white transition-colors hover:bg-[#c9a45c]/30"
+            aria-label="Salin style blok"
+            title="Salin style (Warna, border, radius, dll)"
+            onClick={(e) => {
+              e.stopPropagation();
+              copyStyle(block.id);
+            }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1" />
+            </svg>
+          </button>
+          {hasCopiedStyle && (
+            <button
+              className="rounded p-1 text-white transition-colors hover:bg-[#c9a45c]/30"
+              aria-label="Tempel style blok"
+              title="Tempel style"
+              onClick={(e) => {
+                e.stopPropagation();
+                pasteStyle(block.id);
+              }}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="8" y="2" width="8" height="4" rx="1" />
+                <path d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2" />
+              </svg>
+            </button>
+          )}
           <button
             className="rounded p-1 text-white transition-colors hover:bg-red-500/30"
             aria-label="Hapus blok"
@@ -266,6 +336,9 @@ function FreeCanvas({ blocks, canvasRef, guides }: { blocks: Block[]; canvasRef:
           {guides.y !== undefined && <div className="absolute left-0 w-full bg-[#c9a45c]" style={{ top: guides.y }} />}
         </div>
       )}
+      <div className="relative h-64 w-full">
+        <CoverPreview />
+      </div>
       {blocks.map((block) => (
         <FreeBlock key={block.id} block={block} />
       ))}

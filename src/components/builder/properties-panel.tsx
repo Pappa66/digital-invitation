@@ -7,7 +7,7 @@ import { OrnamentArt, ORNAMENT_CATEGORIES, ORNAMENT_LABELS, type OrnamentKey } f
 import MediaLibrary from '@/components/dashboard/media-library';
 import MusicPreview from '@/components/builder/music-preview';
 import ImageCropTool from '@/components/builder/image-crop-tool';
-import { useBuilderStore } from '@/store/builder-store';
+import { useBuilderStore, COVER_BLOCK_ID } from '@/store/builder-store';
 import { RELIGIONS, type ReligionKey } from '@/lib/religions';
 import { getQuotesByReligion, RELIGION_LABELS, type WeddingQuote } from '@/lib/quotes';
 import type { Block, BlockProps, DecorAsset, BankAccount, BlockStyle } from '@/lib/types';
@@ -222,6 +222,20 @@ const TITLE_PROPS: Record<string, { label: string; multiline?: boolean; url?: bo
   ],
   LiveStreaming: [{ label: 'title' }, { label: 'stream_url', url: true, labelText: 'Link YouTube/Vimeo' }, { label: 'note', multiline: true }],
   Watermark: [{ label: 'text', labelText: 'Teks Awal' }, { label: 'brand', labelText: 'Nama Brand' }, { label: 'url', url: true, labelText: 'URL (klik)' }],
+  Popup: [
+    { label: 'button_text', labelText: 'Teks Tombol' },
+    { label: 'title', labelText: 'Judul Popup' },
+    { label: 'mode', labelText: 'Mode: content | image | link' },
+    { label: 'content', multiline: true, labelText: 'Isi Teks' },
+    { label: 'image', labelText: 'URL Gambar (mode image)' },
+    { label: 'link_url', url: true, labelText: 'URL Tautan (mode link)' }
+  ],
+  CopyText: [
+    { label: 'title', labelText: 'Judul' },
+    { label: 'note', multiline: true, labelText: 'Catatan' },
+    { label: 'text_to_copy', multiline: true, labelText: 'Teks yang Disalin' },
+    { label: 'button_text', labelText: 'Teks Tombol' }
+  ],
   Empty: []
 };
 
@@ -330,6 +344,7 @@ export default function PropertiesPanel() {
   const canvas = useBuilderStore((s) => s.canvas);
   const selectedBlockId = useBuilderStore((s) => s.selectedBlockId);
   const block = canvas.blocks.find((b) => b.id === selectedBlockId) ?? null;
+  const isCoverSelected = selectedBlockId === COVER_BLOCK_ID;
   const setTheme = useBuilderStore((s) => s.setTheme);
   const setBlockProps = useBuilderStore((s) => s.setBlockProps);
   const setSettings = useBuilderStore((s) => s.setSettings);
@@ -351,6 +366,13 @@ export default function PropertiesPanel() {
   useEffect(() => {
     setPanelTab('content');
   }, [selectedBlockId]);
+
+  useEffect(() => {
+    if (isCoverSelected) {
+      const el = document.getElementById('panel-section-cover');
+      el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [isCoverSelected]);
 
   function updateAccount(blockId: string, index: number, key: 'bank_name' | 'account_number' | 'account_holder', value: string) {
     const b = canvas.blocks.find((x) => x.id === blockId);
@@ -374,7 +396,7 @@ export default function PropertiesPanel() {
   return (
     <aside className="flex h-full w-80 shrink-0 flex-col border-l border-[#e7ddcc] bg-white">
       <div className="border-b border-[#e7ddcc] px-4 py-3">
-        <h3 className="text-sm font-semibold text-[#2b2620]">{block ? `Edit ${block.type}` : 'Pengaturan Halaman'}</h3>
+        <h3 className="text-sm font-semibold text-[#2b2620]">{block ? `Edit ${block.type}` : isCoverSelected ? 'Edit Cover Undangan' : 'Pengaturan Halaman'}</h3>
         {block && (
           <div className="mt-2 flex gap-1 rounded-lg bg-[#f4efe6] p-0.5" role="tablist" aria-label="Mode pengeditan">
             {(
@@ -718,6 +740,7 @@ export default function PropertiesPanel() {
             <Section
               title="Cover & Pembuka"
               desc="Layar fullscreen 'Buka Undangan' sebelum konten undangan"
+              id="panel-section-cover"
               render={
                 <div className="space-y-3">
                   <label className="flex items-center justify-between gap-3 rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2.5">
@@ -850,6 +873,25 @@ export default function PropertiesPanel() {
                       />
                     </label>
                   )}
+                  {block.type === 'RSVP' && (
+                    <div>
+                      <p className="mb-1 text-xs font-medium text-[#4a443c]">Pilihan Menu</p>
+                      <p className="mb-2 text-[11px] leading-relaxed text-[#8a7a66]">
+                        Satu baris per kategori lalu opsi dipisah koma — misal:
+                        <span className="mt-1 block rounded bg-[#f4efe6] px-2 py-1 font-mono text-[10px]">
+                          {`Pembuka: Sup Krim, Salad\nMenu Utama: Ayam Bakar, Rendang\nPenutup: Es Krim, Puding`}
+                        </span>
+                        Kosongkan untuk menonaktifkan.
+                      </p>
+                      <textarea
+                        value={(block.props.menu_config as string) || ''}
+                        onChange={(e) => setBlockProps(block.id, { menu_config: e.target.value })}
+                        rows={5}
+                        placeholder={'Pembuka: Sup Krim, Salad\nMenu Utama: Ayam Bakar, Rendang'}
+                        className="w-full resize-y rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
+                      />
+                    </div>
+                  )}
                   {block.type === 'LiveStreaming' && (
                     <div>
                       <p className="mb-1 text-xs font-medium text-[#4a443c]">Platform Streaming</p>
@@ -865,6 +907,32 @@ export default function PropertiesPanel() {
                             }`}
                           >
                             {platform === 'other' ? 'Link Langsung' : platform}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {block.type === 'Popup' && (
+                    <div>
+                      <p className="mb-1 text-xs font-medium text-[#4a443c]">Isi Popup</p>
+                      <div className="flex gap-1.5">
+                        {(
+                          [
+                            { key: 'content', label: 'Teks' },
+                            { key: 'image', label: 'Gambar' },
+                            { key: 'link', label: 'Tautan' }
+                          ] as const
+                        ).map((m) => (
+                          <button
+                            key={m.key}
+                            onClick={() => setBlockProps(block.id, { mode: m.key })}
+                            className={`flex-1 rounded-md border px-2 py-1.5 text-xs font-medium transition-colors ${
+                              (block.props.mode || 'content') === m.key
+                                ? 'border-[#c9a45c] bg-[#c9a45c]/10 text-[#8f6a1f]'
+                                : 'border-[#e0d6c2] bg-[#faf7f2] text-[#6b5f4d] hover:border-[#c9a45c]'
+                            }`}
+                          >
+                            {m.label}
                           </button>
                         ))}
                       </div>
@@ -1637,6 +1705,48 @@ export default function PropertiesPanel() {
                       </div>
                     }
                   />
+                  <Section
+                    title="Responsif"
+                    desc="Sembunyikan blok pada perangkat tertentu (gaya Elementor)."
+                    render={
+                      <div className="space-y-1.5">
+                        {(
+                          [
+                            { key: 'mobile', label: 'Sembunyikan di Mobile' },
+                            { key: 'tablet', label: 'Sembunyikan di Tablet' },
+                            { key: 'desktop', label: 'Sembunyikan di Desktop' }
+                          ] as const
+                        ).map((t) => {
+                          const hideOn = block.style?.hideOn ?? [];
+                          const active = hideOn.includes(t.key);
+                          return (
+                            <label key={t.key} className="flex items-center justify-between gap-3 rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2">
+                              <span className="text-xs font-medium text-[#4a443c]">{t.label}</span>
+                              <button
+                                type="button"
+                                role="switch"
+                                aria-checked={active}
+                                onClick={() =>
+                                  setBlockStyle(block.id, {
+                                    hideOn: active ? hideOn.filter((h) => h !== t.key) : [...hideOn, t.key]
+                                  })
+                                }
+                                className={`relative h-5 w-9 shrink-0 rounded-full transition-colors ${
+                                  active ? 'bg-[#c9a45c]' : 'bg-[#e0d6c2]'
+                                }`}
+                              >
+                                <span
+                                  className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-all ${
+                                    active ? 'left-[18px]' : 'left-0.5'
+                                  }`}
+                                />
+                              </button>
+                            </label>
+                          );
+                        })}
+                      </div>
+                    }
+                  />
                 </div>
               </>
             )}
@@ -2030,14 +2140,16 @@ function DecorSettings({
 function Section({
   title,
   desc,
-  render
+  render,
+  id
 }: {
   title: string;
   desc?: string;
   render: React.ReactNode;
+  id?: string;
 }) {
   return (
-    <div>
+    <div id={id}>
       <h4 className="text-xs font-semibold uppercase tracking-wide text-[#b39a65]">{title}</h4>
       {desc && <p className="mb-2 text-[11px] text-[#8a7a66]">{desc}</p>}
       <div className="mt-2">{render}</div>

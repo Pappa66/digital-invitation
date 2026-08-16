@@ -295,6 +295,7 @@ export function isKnownDefault(prop: 'bismillah' | 'closing' | 'introduction', v
 export interface GuestRow {
   name: string;
   phone: string;
+  email: string;
 }
 
 /** Normalisasi nomor HP Indonesia → format internasional (628xxx). */
@@ -321,7 +322,13 @@ export function parseGuestLines(text: string): GuestRow[] {
     const parts = line.split(/[|,;\t]/).map((s) => s.trim()).filter(Boolean);
     let name = line;
     let phone = '';
-    if (parts.length >= 2) {
+    let email = '';
+    const emailIdx = parts.findIndex((p) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(p));
+    if (emailIdx >= 0) {
+      email = parts[emailIdx];
+      parts.splice(emailIdx, 1);
+    }
+    if (parts.length >= 1) {
       const phoneIdx = parts.findIndex((p) => /^(\+?62|0)8\d{7,12}$/.test(p.replace(/[\s.-]/g, '')));
       if (phoneIdx >= 0) {
         phone = parts[phoneIdx];
@@ -332,7 +339,7 @@ export function parseGuestLines(text: string): GuestRow[] {
       }
     }
     if (!name) continue;
-    rows.push({ name, phone });
+    rows.push({ name, phone, email });
   }
   return rows;
 }

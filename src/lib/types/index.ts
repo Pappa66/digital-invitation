@@ -16,6 +16,8 @@ export type BlockType =
   | 'Quote'
   | 'LiveStreaming'
   | 'Watermark'
+  | 'Popup'
+  | 'CopyText'
   | 'Empty';
 
 export interface Theme {
@@ -141,6 +143,8 @@ export interface BlockStyle {
   entrance?: 'fade' | 'slide' | 'zoom' | 'blur' | 'rise' | 'none';
   /** Tunda animasi masuk (ms). */
   entranceDelay?: number;
+  /** Sembunyikan blok pada perangkat tertentu (responsive). Array device hsl. */
+  hideOn?: ('mobile' | 'tablet' | 'desktop')[];
 }
 
 /** Bentuk dekor support shape. */
@@ -236,6 +240,10 @@ export interface Rsvp {
   guest_count: number;
   message: string | null;
   created_at: string;
+  /** Pilihan menu tamu (mis. kuliner utamanya). */
+  meal_choice?: string | null;
+  /** Detail pilihan menu per kursi/kolom jika memakai menu multi-bagian. */
+  menu_options?: { label: string; value: string }[] | null;
 }
 
 /** Check-in kehadiran hari-H dari QR absensi. */

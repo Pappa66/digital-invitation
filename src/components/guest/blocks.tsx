@@ -2310,6 +2310,127 @@ export function WatermarkBlock({ props }: { props: BlockProps }) {
   );
 }
 
+/** Blok Popup — tombol yang membuka modal (prokes/info/gambar/link). */
+export function PopupBlock({ props }: { props: BlockProps }) {
+  const theme = useTheme();
+  const preview = usePreview();
+  const [open, setOpen] = useState(false);
+  const mode = str(props, 'mode') || 'content';
+  const title = str(props, 'title') || 'Informasi';
+  const content = str(props, 'content');
+  const image = str(props, 'image');
+  const linkUrl = str(props, 'link_url');
+
+  const body =
+    mode === 'image' && image ? (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img src={image} alt={title} className="max-h-[60vh] w-full rounded-xl object-cover" />
+    ) : mode === 'link' && linkUrl ? (
+      <a
+        href={linkUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-block rounded-full px-6 py-3 text-sm font-semibold text-white shadow"
+        style={{ background: theme?.primary }}
+      >
+        Buka Tautan
+      </a>
+    ) : (
+      <p className="whitespace-pre-line text-sm leading-relaxed opacity-90">{content || 'Konten popup belum diisi.'}</p>
+    );
+
+  return (
+    <section className="px-6 py-10 text-center sm:py-12">
+      <button
+        type="button"
+        onClick={() => !preview && setOpen(true)}
+        className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-white shadow-sm transition-transform hover:scale-[1.03]"
+        style={{ background: theme?.primary }}
+      >
+        <MailOpen className="h-4 w-4" />
+        {str(props, 'button_text') || 'Buka Popup'}
+      </button>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 p-6"
+            onClick={() => setOpen(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 24, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 24, scale: 0.96 }}
+              transition={{ duration: 0.22 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-sm rounded-2xl bg-white p-6 text-left text-gray-800 shadow-2xl"
+            >
+              <button
+                type="button"
+                aria-label="Tutup popup"
+                onClick={() => setOpen(false)}
+                className="absolute right-3 top-3 rounded-full p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-700"
+              >
+                <X className="h-4 w-4" />
+              </button>
+              <h3 className="text-lg" style={{ color: theme?.primary }}>
+                {title}
+              </h3>
+              <div className="mt-3 text-sm text-gray-600">{body}</div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </section>
+  );
+}
+
+/** Blok Salin Teks — tombol copy-to-clipboard (rekening, teks undangan, dll). */
+export function CopyTextBlock({ props }: { props: BlockProps }) {
+  const theme = useTheme();
+  const [copied, setCopied] = useState(false);
+  const text = str(props, 'text_to_copy');
+
+  async function handleCopy() {
+    if (!text) return;
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      /* ignore */
+    }
+  }
+
+  return (
+    <section className="px-6 py-10 text-center sm:py-12">
+      <Inner name="title">
+        <h2 className="text-xl font-medium uppercase tracking-wide opacity-60 md:text-2xl">
+          <Editable prop="title">{str(props, 'title')}</Editable>
+        </h2>
+      </Inner>
+      <Inner name="note">
+        <p className="mt-2 text-sm opacity-80">
+          <Editable prop="note">{str(props, 'note')}</Editable>
+        </p>
+      </Inner>
+      {text && (
+        <button
+          type="button"
+          onClick={handleCopy}
+          disabled={copied}
+          className="mt-6 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:scale-[1.03] disabled:opacity-80"
+          style={{ background: theme?.primary }}
+        >
+          {copied ? 'Tersalin ✓' : str(props, 'button_text') || 'Salin'}
+        </button>
+      )}
+    </section>
+  );
+}
+
 /** Blok kosong — placeholder yang bisa diisi blok lain atau diberi dekor. */
 export function EmptyBlock() {
   return (

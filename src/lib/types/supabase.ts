@@ -82,6 +82,8 @@ export interface Database {
           attendance: 'hadir' | 'tidak' | 'ragu';
           guest_count: number;
           message: string | null;
+          meal_choice: string | null;
+          menu_options: { label: string; value: string }[] | null;
           created_at: string;
         };
         Insert: {
@@ -91,6 +93,8 @@ export interface Database {
           attendance: 'hadir' | 'tidak' | 'ragu';
           guest_count?: number;
           message?: string | null;
+          meal_choice?: string | null;
+          menu_options?: { label: string; value: string }[] | null;
           created_at?: string;
         };
         Update: {
@@ -100,6 +104,8 @@ export interface Database {
           attendance?: 'hadir' | 'tidak' | 'ragu';
           guest_count?: number;
           message?: string | null;
+          meal_choice?: string | null;
+          menu_options?: { label: string; value: string }[] | null;
           created_at?: string;
         };
         Relationships: [

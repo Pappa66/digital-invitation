@@ -13,6 +13,23 @@ function str(props: BlockProps, key: string): string {
   return typeof v === 'string' ? v : '';
 }
 
+/** Parse konfigurasi menu RSVP: satu baris per kategori "Label: A, B, C". */
+export function parseMenuConfig(raw: string): { label: string; options: string[] }[] {
+  return (raw || '')
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => {
+      const [label, ...rest] = line.split(':');
+      const options = (rest.join(':') || '')
+        .split(',')
+        .map((o) => o.trim())
+        .filter(Boolean);
+      return { label: label.trim(), options };
+    })
+    .filter((g) => g.label && g.options.length > 0);
+}
+
 const THROTTLE_MS = 30_000;
 const throttleKey = (projectId: string) => `di_rsvp_last_${projectId}`;
 
@@ -31,6 +48,8 @@ export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormPr
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
   const variant = str(blockProps, 'variant') || 'centered';
+  const menuGroups = parseMenuConfig(str(blockProps, 'menu_config'));
+  const [menuSelections, setMenuSelections] = useState<Record<string, string>>({});
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -51,7 +70,7 @@ export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormPr
     // Throttle sederhana: satu konfirmasi per 30 detik per browser.
     try {
       const last = Number(localStorage.getItem(throttleKey(projectId)) ?? 0);
-      if (Date.now() - last < THROTTLE_MS) {
+      if (Date.now() - last < THROTTLE_MS) { // eslint-disable-line react-hooks/purity
         setErrorMsg('Terlalu cepat. Silakan tunggu sebentar lalu coba lagi.');
         setStatus('error');
         return;
@@ -61,6 +80,14 @@ export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormPr
     }
 
     setStatus('submitting');
+
+    const menuOptions =
+      menuGroups.length > 0
+        ? menuGroups
+            .map((g) => ({ label: g.label, value: menuSelections[g.label] ?? '' }))
+            .filter((m) => m.value)
+        : null;
+    const mealChoice = menuOptions?.map((m) => m.value).join(' / ') ?? null;
 
     let error: { message?: string } | null = null;
     if (demoIsDemoMode()) {
@@ -83,7 +110,7 @@ export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormPr
       setStatus('error');
     } else {
       try {
-        localStorage.setItem(throttleKey(projectId), String(Date.now()));
+        localStorage.setItem(throttleKey(projectId), String(Date.now())); // eslint-disable-line react-hooks/purity
       } catch {
         /* ignore */
       }
@@ -147,6 +174,13 @@ export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormPr
             ))}
           </select>
         </div>
+        {menuGroups.length > 0 && (
+          <div className="space-y-3">
+            {menuGroups.map((g) => (
+              <label key={g.label} className="block"><span className="mb-1 block text-sm opacity-80">{g.label}</span></label>
+            ))}
+          </div>
+        )}
         <textarea
           value={message}
           onChange={(e) => setMessage(e.target.value)}

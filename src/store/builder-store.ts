@@ -7,6 +7,9 @@ import type { Block, BlockLayout, BlockProps, BlockStyle, BlockType, CanvasData,
 import { emptyCanvas } from '@/lib/templates';
 import { getReligion, isKnownDefault, type ReligionKey } from '@/lib/religions';
 
+/** Sentinel selectedBlockId untuk seleksi cover "Buka Undangan" di kanvas. */
+export const COVER_BLOCK_ID = '__cover__';
+
 interface BuilderState {
   canvas: CanvasData;
   selectedBlockId: string | null;
@@ -19,6 +22,8 @@ interface BuilderState {
   lastProjectId: string | null;
   /** Blok yang disalin pengguna (clipboard internal builder). */
   copiedBlock: Block | null;
+  /** Style blok yang disalin (copy/paste style antar blok). */
+  copiedStyle: BlockStyle | null;
 
   init: (data: CanvasData, projectToken?: string) => void;
   setTheme: (theme: Partial<Theme>) => void;
@@ -48,6 +53,10 @@ interface BuilderState {
   copyBlock: (blockId: string) => void;
   /** Tempel blok dari clipboard internal ke akhir kanvas. Valah tanpa isi clipboard. */
   pasteBlock: () => void;
+  /** Salin style blok (border/radius/shadow/dll) untuk ditempel ke blok lain. */
+  copyStyle: (blockId: string) => void;
+  /** Tempel style ke blok target. */
+  pasteStyle: (blockId: string) => void;
   /** Pindah satu langkah ke depan dalam urutan (z-index naik di mode free). */
   bringForward: (blockId: string) => void;
   /** Pindah satu langkah ke belakang dalam urutan (z-index turun di mode free). */
@@ -247,6 +256,28 @@ const BLOCK_PRESETS: Record<BlockType, Block> = {
       url: 'https://prashadigitalindonesia.com'
     }
   },
+  Popup: {
+    id: '',
+    type: 'Popup',
+    props: {
+      button_text: 'Buka Popup',
+      title: 'Informasi Penting',
+      mode: 'content',
+      content: 'Tulis isi popup di sini (protokol kesehatan, info acara, dsb.).',
+      image: '',
+      link_url: ''
+    }
+  },
+  CopyText: {
+    id: '',
+    type: 'CopyText',
+    props: {
+      title: 'Amplop Online',
+      note: 'Salin nomor rekening lalu tempel di aplikasi bank Anda.',
+      text_to_copy: '',
+      button_text: 'Salin'
+    }
+  },
   Empty: {
     id: '',
     type: 'Empty',
@@ -264,6 +295,7 @@ selectedDecor: null,
   initialized: false,
   lastProjectId: '',
   copiedBlock: null,
+  copiedStyle: null,
 
   init: (data, projectToken) => {
     const token = projectToken ?? '';
@@ -541,6 +573,27 @@ selectedDecor: null,
       return { copiedBlock: structuredClone(src) };
     }),
 
+  copyStyle: (blockId) =>
+    set((state) => {
+      const src = state.canvas.blocks.find((b) => b.id === blockId);
+      if (!src) return state;
+      return { copiedStyle: src.style ? structuredClone(src.style) : null };
+    }),
+
+  pasteStyle: (blockId) =>
+    set((state) => {
+      if (!state.copiedStyle) return state;
+      const style: BlockStyle = structuredClone(state.copiedStyle);
+      return {
+        canvas: {
+          ...state.canvas,
+          blocks: state.canvas.blocks.map((b) =>
+            b.id === blockId ? { ...b, style } : b
+          )
+        }
+      };
+    }),
+
   pasteBlock: () =>
     set((state) => {
       if (!state.copiedBlock) return state;
@@ -610,7 +663,8 @@ selectedDecor: null,
       selectedDecor: null,
       initialized: false,
       lastProjectId: null,
-      copiedBlock: null
+      copiedBlock: null,
+      copiedStyle: null
     })
     }),
     {

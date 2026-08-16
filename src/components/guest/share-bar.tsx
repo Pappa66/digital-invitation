@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import QRCode from 'react-qr-code';
-import { Check, Copy, QrCode, Share2, X, Instagram, Loader2, MessageCircle } from 'lucide-react';
+import { Check, Copy, QrCode, Share2, X, Instagram, Loader2, MessageCircle, Printer } from 'lucide-react';
 
 interface ShareBarProps {
   /** Nama mempelai (mis. "Raka & Salma") untuk template IG Story. */
@@ -171,6 +171,12 @@ export default function ShareBar({ coupleNames, date, theme }: ShareBarProps) {
               {storyLoading ? 'Membuat...' : 'Download Template IG Story'}
             </button>
           )}
+          <button
+            onClick={() => window.print()}
+            className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+          >
+            <Printer className="h-4 w-4" /> Cetak / Simpan PDF
+          </button>
           <p className="mt-2 truncate rounded-md bg-gray-50 px-2 py-1 font-mono text-[10px] text-gray-400">{url}</p>
         </div>
       )}

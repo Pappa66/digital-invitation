@@ -6,7 +6,7 @@ import {
   Image as ImageIcon, LayoutPanelTop, Clock, CalendarHeart, BookOpen, Images,
   Mail, MapPin, HeartHandshake, Minus, GripVertical, Type, Gift, ListChecks,
   Quote as QuoteIcon, Radio, ChevronDown, ChevronRight, Sparkles, PenTool,
-  Layout, Users, MessageSquare, Palette
+  Layout, Users, MessageSquare, Palette, MousePointerClick, Copy as CopyIcon
 } from 'lucide-react';
 import type { BlockType } from '@/lib/types';
 import { useBuilderStore } from '@/store/builder-store';
@@ -177,7 +177,9 @@ const BLOCK_CATEGORIES: BlockCategory[] = [
           { name: 'Minimal', value: 'minimal' }
         ],
         defaultVariant: 'full'
-      }
+      },
+      { type: 'Popup', label: 'Popup / Prokes', icon: MousePointerClick, desc: 'Tombol modal info, protokol kesehatan, gambar, tautan' },
+      { type: 'CopyText', label: 'Salin Teks', icon: CopyIcon, desc: 'Tombol salin rekening / teks apa pun' }
     ]
   },
   {

@@ -18,7 +18,9 @@ import {
   QuoteBlock,
   LiveStreamingBlock,
   EmptyBlock,
-  WatermarkBlock
+  WatermarkBlock,
+  PopupBlock,
+  CopyTextBlock
 } from '@/components/guest/blocks';
 import RSVPForm from '@/components/guest/rsvp';
 import EnvelopeBlock from '@/components/guest/envelope';
@@ -101,6 +103,12 @@ export default function BlockView({ block, projectId, editable = false, greeting
     case 'Watermark':
       view = <WatermarkBlock props={block.props} />;
       break;
+    case 'Popup':
+      view = <PopupBlock props={block.props} />;
+      break;
+    case 'CopyText':
+      view = <CopyTextBlock props={block.props} />;
+      break;
     default:
       return null;
   }
@@ -132,6 +140,12 @@ export default function BlockView({ block, projectId, editable = false, greeting
   const blockEntrance = block.style?.entrance;
   const entranceAnim = entranceVariants[(blockEntrance ?? (theme?.card_entrance as EntranceKey)) ?? 'fade'] ?? entranceVariants.fade;
   const entranceDelay = block.style?.entranceDelay ?? 0;
+  const hideOn = block.style?.hideOn ?? [];
+  const hideClasses = [
+    hideOn.includes('mobile') ? ' max-sm:hidden' : '',
+    hideOn.includes('tablet') ? ' sm:hidden md:block' : '',
+    hideOn.includes('desktop') ? ' md:hidden' : ''
+  ].join('');
   const body = (
     <StyledSection style={block.style}>{view}</StyledSection>
   );
@@ -139,7 +153,10 @@ export default function BlockView({ block, projectId, editable = false, greeting
   return (
     <InnerProvider value={block.inner ?? undefined}>
       <BuilderEditableContext.Provider value={editable ? { blockId: block.id } : null}>
-        <div data-block-type={block.type} className="relative">
+        <div
+          data-block-type={block.type}
+          className={`relative${hideClasses}`}
+        >
           {animateEntrance && blockEntrance !== 'none' && entranceAnim !== entranceVariants.none ? (
             <motion.div
               initial={entranceAnim}

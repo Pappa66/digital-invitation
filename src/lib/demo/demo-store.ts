@@ -225,7 +225,14 @@ export function demoListRsvps(projectId: string): Rsvp[] {
 
 export function demoAddRsvp(
   projectId: string,
-  input: { name: string; attendance: 'hadir' | 'tidak' | 'ragu'; guest_count: number; message: string }
+  input: {
+    name: string;
+    attendance: 'hadir' | 'tidak' | 'ragu';
+    guest_count: number;
+    message: string;
+    meal_choice?: string | null;
+    menu_options?: { label: string; value: string }[] | null;
+  }
 ): { error?: string } {
   const all = read<Record<string, Rsvp[]>>(RSVPS_KEY, {});
   const list = all[projectId] ?? [];
@@ -236,6 +243,8 @@ export function demoAddRsvp(
     attendance: input.attendance,
     guest_count: input.guest_count,
     message: input.message.trim() || null,
+    meal_choice: input.meal_choice ?? null,
+    menu_options: input.menu_options ?? null,
     created_at: new Date().toISOString()
   });
   all[projectId] = list;

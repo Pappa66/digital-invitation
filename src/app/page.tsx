@@ -107,10 +107,7 @@ export default function LandingPage() {
 
   const content = landingContent ?? LANDING_CONTENT_DEFAULTS;
   const heroImages = content.hero.images.filter((img) => img.url.trim().length > 0).slice(0, 3);
-  const collageImages =
-    heroImages.length > 0
-      ? heroImages
-      : featuredCards.map((c) => ({ url: c.canvas.theme.background, alt: c.meta.name })).slice(0, 3);
+  const collageImages = heroImages;
   const collagePreviews = featuredCards.slice(0, 3);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
