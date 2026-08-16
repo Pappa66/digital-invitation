@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import PricingSection from '@/components/landing/pricing-section';
-import PhoneFrame from '@/components/ui/phone-frame';
 import {
   ArrowRight,
   ChevronLeft,
@@ -19,12 +18,19 @@ import {
   Gift,
   CheckCircle,
   QrCode,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Sparkles,
+  Heart,
+  Clock,
+  Mail,
+  Star,
+  Camera
 } from 'lucide-react';
 import { DEMO_TEMPLATES, getTemplate } from '@/lib/templates';
 import { CATEGORIES, categoryLabel, type TemplateCategory } from '@/lib/template-categories';
 import TemplatePreview from '@/components/landing/template-preview';
 import OrderDialog from '@/components/landing/order-dialog';
+import { getLandingContent, LANDING_CONTENT_DEFAULTS, type LandingContent } from '@/lib/settings';
 import type { CanvasData, TemplateMeta } from '@/lib/types';
 
 interface CardData {
@@ -32,34 +38,30 @@ interface CardData {
   canvas: CanvasData;
 }
 
-const STEPS = [
-  { icon: Palette, title: 'Pilih Desain', body: 'Jelajahi demo kami, pilih yang paling dekat dengan cerita Anda.' },
-  { icon: MessageCircle, title: 'Isi Form & Bayar', body: 'Isi data mempelai, acara, dan foto. Konfirmasi pembayaran via WhatsApp.' },
-  { icon: CheckCircle, title: 'Kami Kerjakan', body: 'Tim kami menyusun teks, foto, musik, dan link undangan — siap dalam 2-5 hari kerja.' },
-  { icon: Share2, title: 'Bagikan', body: 'Terbitkan link, kirim per tamu lewat WhatsApp, pantau RSVP dari dasbor.' }
-];
-
-const FEATURES = [
-  { icon: MessageCircle, title: 'RSVP & Buku Tamu', desc: 'Konfirmasi kehadiran dalam sekali ketuk, ucapan & doa tampil langsung.' },
-  { icon: Gift, title: 'Amplop Digital', desc: 'Nomor rekening tersembunyi, muncul saat tombol "Beri Kado" ditekan.' },
-  { icon: QrCode, title: 'QR Check-in', desc: 'Tamu memindai QR di venue untuk absen masuk — daftar kehadiran siap diunduh.' },
-  { icon: Music, title: 'Musik Latar', desc: 'Autoplay atau on-demand, dengan offset untuk mulai dari bagian tertentu.' },
-  { icon: ImageIcon, title: 'Galeri Animasi', desc: '20 efek foto termasuk ken-burns, flip, carousel, dan zoom.' },
-  { icon: MapPin, title: 'Detail Acara & Peta', desc: 'Tombol Maps satu klik, "Simpan ke Kalender", dan opsi live streaming.' },
-  { icon: Smartphone, title: 'Responsif Mobile', desc: 'Optimal di semua ukuran layar — tamu buka dari HP tanpa masalah.' },
-  { icon: Palette, title: 'Bingkai & Gaya Kartu', desc: '9 pilihan frame dekoratif, 6 gaya kartu, animasi masuk.' }
-];
-
-const FAQ = [
-  { q: 'Bagaimana cara memesan?', a: 'Pilih demo, isi form pemesanan, lalu konfirmasi via WhatsApp. Tim kami akan menghubungi Anda untuk detail selanjutnya.' },
-  { q: 'Berapa lama prosesnya?', a: '2-5 hari kerja setelah materi lengkap dan pembayaran dikonfirmasi. Revisi maksimal 2x sudah termasuk.' },
-  { q: 'Apakah tamu perlu bayar untuk melihat undangan?', a: 'Tidak. Tamu cukup membuka link — musik, galeri, RSVP, QR check-in, dan buku tamu semuanya gratis.' },
-  { q: 'Bisakah saya mengelola daftar tamu?', a: 'Bisa. Kirimkan daftar nama, dan kami personalisasikan link + ucapan WhatsApp per tamu. Anda pantau semuanya dari dasbor.' },
-  { q: 'Apa yang saya terima?', a: 'Link undangan digital yang sudah diisi lengkap dengan panel kelola tamu, RSVP, dan daftar kehadiran hari-H.' }
-];
+const ICON_MAP: Record<string, typeof Palette> = {
+  Palette,
+  MessageCircle,
+  CheckCircle,
+  Share2,
+  Gift,
+  QrCode,
+  Music,
+  Image: ImageIcon,
+  MapPin,
+  Smartphone,
+  Sparkles,
+  Heart,
+  Clock,
+  Mail,
+  Star,
+  Camera
+};
 
 const PER_PAGE = 9;
 const FEATURED = ['elegant-gold', 'blush-romance', 'ivory-dawn'];
+
+/** Struktur konten landing yang dinamis. Fallback ke default bila kosong. */
+const EMPTY_CONTENT = null as LandingContent | null;
 
 export default function LandingPage() {
   const [category, setCategory] = useState<TemplateCategory | 'semua'>('semua');
@@ -67,9 +69,11 @@ export default function LandingPage() {
   const [orderOpen, setOrderOpen] = useState(false);
   const [orderTemplate, setOrderTemplate] = useState<string | undefined>(undefined);
   const [pricing, setPricing] = useState({ base_price: 0, discount_percent: 0, promo_code: '', promo_expires_at: '', show_pricing: false });
+  const [landingContent, setLandingContent] = useState<LandingContent | null>(EMPTY_CONTENT);
 
   useEffect(() => {
     import('@/lib/settings').then(({ getPricing }) => getPricing().then(setPricing)).catch(() => {});
+    import('@/lib/settings').then(({ getLandingContent }) => getLandingContent().then(setLandingContent)).catch(() => {});
   }, []);
 
   function openOrder(templateName?: string) {
@@ -77,21 +81,15 @@ export default function LandingPage() {
     setOrderOpen(true);
   }
 
-  const [demoIds, setDemoIds] = useState<Set<string>>(new Set());
+  const [demoIds, setDemoIds] = useState<Set<string> | null>(null);
 
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem('di_demo_templates');
-      if (stored) {
-        const ids = JSON.parse(stored);
-        if (Array.isArray(ids) && ids.length > 0) setDemoIds(new Set(ids));
-      }
-    } catch { /* ignore */ }
+    import('@/lib/demo/demo-templates').then(({ demoReadEnabledIds }) => setDemoIds(demoReadEnabledIds())).catch(() => setDemoIds(null));
   }, []);
 
   const cards = useMemo<CardData[]>(
     () => {
-      const source = demoIds.size > 0 ? DEMO_TEMPLATES.filter((t) => demoIds.has(t.id)) : DEMO_TEMPLATES;
+      const source = demoIds === null ? DEMO_TEMPLATES : DEMO_TEMPLATES.filter((t) => demoIds.has(t.id));
       return source.map((meta) => ({ meta, canvas: getTemplate(meta.id)! }));
     },
     [demoIds]
@@ -106,6 +104,14 @@ export default function LandingPage() {
     () => DEMO_TEMPLATES.filter((t) => FEATURED.includes(t.id)).map((meta) => ({ meta, canvas: getTemplate(meta.id)! })).slice(0, 3),
     []
   );
+
+  const content = landingContent ?? LANDING_CONTENT_DEFAULTS;
+  const heroImages = content.hero.images.filter((img) => img.url.trim().length > 0).slice(0, 3);
+  const collageImages =
+    heroImages.length > 0
+      ? heroImages
+      : featuredCards.map((c) => ({ url: c.canvas.theme.background, alt: c.meta.name })).slice(0, 3);
+  const collagePreviews = featuredCards.slice(0, 3);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
   const safePage = Math.min(page, totalPages);
@@ -158,33 +164,57 @@ export default function LandingPage() {
         <section className="mx-auto max-w-6xl px-4 pb-16 pt-14 sm:px-6 sm:pt-20">
           <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
             <div className="text-center lg:text-left">
-              <p className="font-script text-3xl text-[#b98a3e] sm:text-4xl">Undangan Digital Pernikahan</p>
+              <p className="font-script text-3xl text-[#b98a3e] sm:text-4xl">{content.hero.kicker}</p>
               <h1 className="mt-6 font-heading text-4xl font-medium leading-[1.15] tracking-tight text-[#2b2620] sm:text-6xl">
-                Merayakan cinta,<br />
-                <em className="bg-gradient-to-r from-[#b98a3e] to-[#8a6d2f] bg-clip-text font-semibold italic text-transparent">dalam karya yang abadi.</em>
+                {content.hero.title_a}<br />
+                <em className="bg-gradient-to-r from-[#b98a3e] to-[#8a6d2f] bg-clip-text font-semibold italic text-transparent">{content.hero.title_b}</em>
               </h1>
               <p className="mx-auto mt-6 max-w-xl text-[15px] leading-relaxed text-[#8a7a66] lg:mx-0">
-                Pilih desain favorit, isi form pemesanan, dan tim kami menyusun teks, foto, musik, serta link undangannya — Anda tinggal terima hasilnya.
+                {content.hero.subtitle}
               </p>
               <div className="mt-9 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
                 <a href="#catalog" className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-7 py-3 text-sm font-semibold text-white shadow-sm transition-transform hover:scale-[1.02]">
-                  Jelajahi Demo <ArrowRight className="h-4 w-4" />
+                  {content.hero.cta_primary} <ArrowRight className="h-4 w-4" />
                 </a>
                 <button onClick={() => openOrder()} className="rounded-lg border border-[#c9a45c] px-7 py-3 text-sm font-medium text-[#8a6d2f] transition-colors hover:bg-[#c9a45c]/10">
-                  Pesan Undangan
+                  {content.hero.cta_secondary}
                 </button>
               </div>
               <p className="mt-7 text-xs text-[#b3a69a]">
                 {DEMO_TEMPLATES.length} demo siap dilihat &middot; Pilih desain, isi form, kami kerjakan sisanya.
               </p>
             </div>
-            {/* PREVIEW PHONE MOCKUP */}
-            <div className="relative mx-auto hidden w-full max-w-md lg:block" aria-hidden>
-              <PhoneFrame accent={featuredCards[0]?.canvas.theme.primary}>
-                {featuredCards[0] && (
-                  <TemplatePreview canvas={featuredCards[0].canvas} bg={featuredCards[0].canvas.theme.background} />
-                )}
-              </PhoneFrame>
+            {/* KOLASE 3 GAMBAR */}
+            <div className="relative mx-auto w-full max-w-md lg:block" aria-hidden>
+              <div className="grid grid-cols-12 grid-rows-2 gap-4" style={{ height: 460 }}>
+                {/* foto besar kiri */}
+                <div className="relative col-span-7 row-span-2 overflow-hidden rounded-2xl border border-[#e7ddcc] bg-white shadow-lg shadow-[#b98a3e]/10">
+                  {collageImages[0] ? (
+                    <Image src={collageImages[0].url} alt={collageImages[0].alt || 'Undangan'} fill className="object-cover" sizes="(max-width: 768px) 60vw, 280px" />
+                  ) : collagePreviews[0] ? (
+                    <TemplatePreview canvas={collagePreviews[0].canvas} bg={collagePreviews[0].canvas.theme.background} />
+                  ) : null}
+                </div>
+                {/* foto kecil kanan atas */}
+                <div className="relative col-span-5 overflow-hidden rounded-2xl border border-[#e7ddcc] bg-white shadow-md shadow-[#b98a3e]/5">
+                  {collageImages[1] ? (
+                    <Image src={collageImages[1].url} alt={collageImages[1].alt || 'Undangan'} fill className="object-cover" sizes="(max-width: 768px) 40vw, 210px" />
+                  ) : collagePreviews[1] ? (
+                    <TemplatePreview canvas={collagePreviews[1].canvas} bg={collagePreviews[1].canvas.theme.background} />
+                  ) : null}
+                </div>
+                {/* foto kecil kanan bawah */}
+                <div className="relative col-span-5 overflow-hidden rounded-2xl border border-[#e7ddcc] bg-white shadow-md shadow-[#b98a3e]/5">
+                  {collageImages[2] ? (
+                    <Image src={collageImages[2].url} alt={collageImages[2].alt || 'Undangan'} fill className="object-cover" sizes="(max-width: 768px) 40vw, 210px" />
+                  ) : collagePreviews[2] ? (
+                    <TemplatePreview canvas={collagePreviews[2].canvas} bg={collagePreviews[2].canvas.theme.background} />
+                  ) : null}
+                </div>
+              </div>
+              {/* ornament dekoratif */}
+              <div className="absolute -right-3 -top-3 -z-10 h-24 w-24 rounded-full bg-gradient-to-br from-[#c9a45c]/20 to-transparent" />
+              <div className="absolute -bottom-5 -left-5 -z-10 h-32 w-32 rounded-full border border-[#c9a45c]/20" />
             </div>
           </div>
         </section>
@@ -192,12 +222,8 @@ export default function LandingPage() {
         {/* SOCIAL PROOF BAR */}
         <section className="border-y border-[#e7ddcc] bg-gradient-to-r from-[#c9a45c]/5 via-[#faf7f2] to-[#c9a45c]/5">
           <div className="mx-auto grid max-w-5xl grid-cols-3 gap-4 px-4 py-10 sm:px-6">
-            {[
-              { value: 500, suffix: '+', label: 'Undangan Dikirim' },
-              { value: 10000, suffix: '+', label: 'Tamu Hadir' },
-              { value: 39, suffix: '+', label: 'Demo Tersedia' },
-            ].map((stat) => (
-              <div key={stat.label} className="text-center">
+            {content.stats.map((stat) => (
+              <div key={stat.label || String(stat.value)} className="text-center">
                 <p className="font-heading text-3xl font-bold text-[#c9a45c] sm:text-4xl">
                   {stat.value.toLocaleString('id-ID')}{stat.suffix}
                 </p>
@@ -285,14 +311,14 @@ export default function LandingPage() {
               <h2 className="mt-3 font-heading text-3xl font-medium text-[#2b2620] sm:text-4xl">4 Langkah Saja</h2>
             </div>
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-              {STEPS.map((s, i) => {
-                const Icon = s.icon;
+              {content.steps.map((s, i) => {
+                const IconTrail = ICON_MAP[s.icon] ?? Sparkles;
                 return (
                   <div key={i} className="relative rounded-xl border border-[#e7ddcc] bg-white p-6 text-center shadow-sm">
                     <span className="absolute -top-3 left-6 flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] text-[10px] font-bold text-white">{i + 1}</span>
-                    <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#faf7f2] text-[#b98a3e]"><Icon className="h-5 w-5" /></span>
+                    <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#faf7f2] text-[#b98a3e]"><IconTrail className="h-5 w-5" /></span>
                     <h3 className="mt-4 font-heading text-base font-medium text-[#2b2620]">{s.title}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-[#8a7a66]">{s.body}</p>
+                    <p className="mt-2 text-sm leading-relaxed text-[#8a7a66]">{s.desc}</p>
                   </div>
                 );
               })}
@@ -308,11 +334,11 @@ export default function LandingPage() {
               <h2 className="mt-3 font-heading text-3xl font-medium text-[#2b2620] sm:text-4xl">Semua Kebutuhan Undangan</h2>
             </div>
             <div className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {FEATURES.map((f) => {
-                const Icon = f.icon;
+              {content.features.map((f) => {
+                const IconTrail = ICON_MAP[f.icon] ?? Sparkles;
                 return (
                   <div key={f.title} className="rounded-xl border border-[#e7ddcc] bg-white p-5 shadow-sm transition-shadow hover:shadow-md">
-                    <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#faf7f2] text-[#b98a3e]"><Icon className="h-5 w-5" /></span>
+                    <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#faf7f2] text-[#b98a3e]"><IconTrail className="h-5 w-5" /></span>
                     <h3 className="mt-3 font-heading text-sm font-medium text-[#2b2620]">{f.title}</h3>
                     <p className="mt-1.5 text-xs leading-relaxed text-[#8a7a66]">{f.desc}</p>
                   </div>
@@ -330,7 +356,7 @@ export default function LandingPage() {
               <h2 className="mt-3 font-heading text-3xl font-medium text-[#2b2620] sm:text-4xl">FAQ</h2>
             </div>
             <div className="mt-12 space-y-3">
-              {FAQ.map((item, i) => (
+              {content.faq.map((item, i) => (
                 <FAQItem key={i} q={item.q} a={item.a} defaultOpen={i === 0} />
               ))}
             </div>
@@ -340,15 +366,15 @@ export default function LandingPage() {
         {/* CTA */}
         <section className="border-t border-[#e7ddcc]">
           <div className="mx-auto max-w-4xl px-4 py-24 text-center sm:px-6">
-            <p className="font-script text-4xl text-[#b98a3e]">Undangan Anda menanti.</p>
+            <p className="font-script text-4xl text-[#b98a3e]">{content.cta.kicker}</p>
             <h2 className="mx-auto mt-5 max-w-2xl font-heading text-3xl font-medium leading-snug text-[#2b2620] sm:text-5xl">
-              Siap merayakan hari besar dengan <em className="italic">elegan</em>?
+              {content.cta.title}
             </h2>
             <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-[#8a7a66]">
-              Pilih demo, isi form, bayar — kami kerjakan sisanya.
+              {content.cta.body}
             </p>
             <button onClick={() => openOrder()} className="mt-9 inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-8 py-3.5 text-sm font-semibold text-white shadow-md shadow-[#b98a3e]/20 transition-transform hover:scale-[1.02]">
-              Pesan Undangan <ArrowRight className="h-4 w-4" />
+              {content.cta.button_text} <ArrowRight className="h-4 w-4" />
             </button>
             <p className="mt-5 text-xs text-[#b3a69a]">Dibalas lewat WhatsApp — tanpa perlu membuat akun.</p>
           </div>
@@ -369,7 +395,7 @@ export default function LandingPage() {
                     <p className="-mt-1 text-[8px] font-semibold uppercase tracking-[0.35em] text-[#8a7a66]">Digital Indonesia</p>
                   </div>
                 </a>
-                <p className="mt-3 text-xs leading-relaxed text-[#8a7a66]">Undangan digital mewah dan personal untuk hari istimewa Anda.</p>
+                <p className="mt-3 text-xs leading-relaxed text-[#8a7a66]">{content.footer.description}</p>
               </div>
 
               {/* Links */}
@@ -387,15 +413,15 @@ export default function LandingPage() {
               <div>
                 <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-[#2b2620]">Hubungi Kami</p>
                 <div className="flex flex-col gap-2 text-xs text-[#8a7a66]">
-                  <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-[#2b2620]">WhatsApp</a>
-                  <a href="https://instagram.com/prashadigitalindonesia" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-[#2b2620]">Instagram</a>
-                  <a href="https://prashadigitalindonesia.com" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-[#2b2620]">Website</a>
+                  <a href={`https://wa.me/${content.footer.whatsapp}`} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-[#2b2620]">WhatsApp</a>
+                  <a href={`https://instagram.com/${content.footer.instagram}`} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-[#2b2620]">Instagram</a>
+                  <a href={content.footer.website} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-[#2b2620]">Website</a>
                 </div>
               </div>
             </div>
 
             <div className="mt-8 border-t border-[#e7ddcc] pt-5 text-center">
-              <p className="text-[10px] uppercase tracking-widest text-[#b3a69a]">Made with Love by PT. Prasha Digital Indonesia</p>
+              <p className="text-[10px] uppercase tracking-widest text-[#b3a69a]">{content.footer.tagline}</p>
               <p className="mt-1 text-[10px] text-[#b3a69a]">&copy; {new Date().getFullYear()} All rights reserved.</p>
             </div>
           </div>

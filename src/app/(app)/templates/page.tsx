@@ -8,6 +8,7 @@ import { CATEGORIES, categoryLabel, type TemplateCategory } from '@/lib/template
 import { clientCreateProject, clientCreateProjectFromData } from '@/lib/api/project-client';
 import { userTemplatesList, userTemplateDelete } from '@/lib/demo/user-templates';
 import type { UserTemplate } from '@/lib/demo/user-templates';
+import { demoReadEnabledIds, demoWriteEnabledIds } from '@/lib/demo/demo-templates';
 import GuideModal from '@/components/ui/guide-modal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -23,21 +24,21 @@ export default function TemplatesPage() {
   const [guideOpen, setGuideOpen] = useState(false);
   const [category, setCategory] = useState<TemplateCategory | 'semua'>('semua');
   const [page, setPage] = useState(1);
-  const [demoIds, setDemoIds] = useState<Set<string>>(new Set());
+  const [demoIds, setDemoIds] = useState<Set<string> | null>(null);
 
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem('di_demo_templates');
-      if (stored) setDemoIds(new Set(JSON.parse(stored)));
-    } catch { /* ignore */ }
+    setDemoIds(demoReadEnabledIds());
   }, []);
 
   function toggleDemo(id: string) {
     setDemoIds((prev) => {
-      const next = new Set(prev);
+      // Belum pernah diatur -> semua template tampil. Saat toggle pertama,
+      // set berisi SEMUA id, lalu satu dihapus/ditambah sesuai aksi.
+      const base = prev ?? new Set(TEMPLATE_LIST.map((t) => t.id));
+      const next = new Set(base);
       if (next.has(id)) next.delete(id);
       else next.add(id);
-      localStorage.setItem('di_demo_templates', JSON.stringify(Array.from(next)));
+      demoWriteEnabledIds(Array.from(next));
       return next;
     });
   }
@@ -239,13 +240,13 @@ export default function TemplatesPage() {
                   <button
                     onClick={() => toggleDemo(t.id)}
                     className={`mt-2 flex items-center justify-center gap-1.5 rounded-md border px-3 py-1.5 text-xs font-medium transition-colors ${
-                      demoIds.has(t.id)
+                      (demoIds === null || demoIds.has(t.id))
                         ? 'border-green-300 bg-green-50 text-green-700 hover:bg-green-100'
                         : 'border-gray-200 bg-gray-50 text-gray-500 hover:bg-gray-100'
                     }`}
                   >
-                    {demoIds.has(t.id) ? <Eye className="h-3 w-3" /> : <EyeOff className="h-3 w-3" />}
-                    {demoIds.has(t.id) ? 'Demo Aktif' : 'Tampilkan di Landing'}
+                    {demoIds === null || demoIds.has(t.id) ? <Eye className="h-3 w-3" /> : <EyeOff className="h-3 w-3" />}
+                    {demoIds === null || demoIds.has(t.id) ? 'Demo Aktif' : 'Tampilkan di Landing'}
                   </button>
                 </div>
               </div>

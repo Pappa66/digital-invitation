@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
-import { LayoutDashboard, LayoutTemplate, Inbox, Settings, LogOut } from 'lucide-react';
+import { LayoutDashboard, LayoutTemplate, Inbox, Settings, LogOut, Globe } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
 
@@ -15,6 +15,7 @@ interface AppLayoutProps {
 const NAV = [
   { href: '/dashboard', label: 'Undangan', icon: LayoutDashboard },
   { href: '/templates', label: 'Template', icon: LayoutTemplate },
+  { href: '/dashboard/landing', label: 'Landing', icon: Globe },
   { href: '/orders', label: 'Kontak Masuk', icon: Inbox },
   { href: '/settings', label: 'Pengaturan', icon: Settings }
 ];
