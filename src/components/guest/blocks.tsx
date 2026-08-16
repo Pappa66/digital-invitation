@@ -1520,6 +1520,72 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
     );
   }
 
+  if (layout === 'filmstrip') {
+    return (
+      <section className="py-8 sm:py-10 md:py-14">
+        {lightbox}
+        <Inner name="title">
+          <h2 className="mb-8 text-center text-xl md:text-2xl"><Editable prop="title">{str(props, 'title')}</Editable></h2>
+        </Inner>
+        <div className="mx-auto w-full overflow-x-auto scrollbar-hide">
+          <div className="flex gap-3 px-6" style={{ width: 'max-content' }}>
+            {images.map((src: string, i: number) => (
+              <motion.div
+                key={`${src}-${i}`}
+                {...a}
+                whileInView={a.animate}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.08 }}
+                className="group relative h-48 w-72 shrink-0 overflow-hidden rounded-lg cursor-pointer sm:h-56 sm:w-80"
+                onClick={() => !preview && openLightbox(i)}
+              >
+                <Image src={src} alt="" fill sizes="320px" quality={75} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
+                <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-400 group-hover:bg-black/15" />
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (layout === 'stack') {
+    return (
+      <section className="px-6 py-8 sm:py-10 md:py-14">
+        {lightbox}
+        <Inner name="title">
+          <h2 className="mb-8 text-center text-xl md:text-2xl"><Editable prop="title">{str(props, 'title')}</Editable></h2>
+        </Inner>
+        <div className="mx-auto flex w-full flex-col items-center">
+          <div className="relative h-[320px] w-full max-w-[320px] sm:h-[380px] sm:max-w-[380px]">
+            {images.map((src: string, i: number) => {
+              const offset = i * 4;
+              const scale = 1 - i * 0.03;
+              const rotate = (i % 2 === 0 ? 1 : -1) * (i * 1.5);
+              return (
+                <motion.div
+                  key={`${src}-${i}`}
+                  {...a}
+                  whileInView={a.animate}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                  className="absolute inset-0 cursor-pointer overflow-hidden rounded-lg shadow-lg border border-white/20"
+                  style={{
+                    zIndex: images.length - i,
+                    transform: `translateY(${offset}px) scale(${scale}) rotate(${rotate}deg)`,
+                  }}
+                  onClick={() => !preview && openLightbox(i)}
+                >
+                  <Image src={src} alt="" fill sizes="380px" quality={80} loading="lazy" className="object-cover" />
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="px-6 py-8 sm:py-10 md:py-14">
       {lightbox}

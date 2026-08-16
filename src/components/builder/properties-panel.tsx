@@ -150,7 +150,9 @@ const GALLERY_LAYOUTS: { key: string; label: string; desc: string }[] = [
   { key: 'column', label: 'Ke Bawah', desc: 'Foto tersusun menurun penuh lebar' },
   { key: 'bento', label: 'Bento Grid', desc: 'Grid bervariasi seperti Apple Photo layout' },
   { key: 'hero-grid', label: 'Hero + Grid', desc: 'Foto pertama hero, sisanya grid' },
-  { key: 'carousel', label: 'Carousel Otomatis', desc: 'Slide otomatis satu per satu dengan efek animasi' }
+  { key: 'carousel', label: 'Carousel Otomatis', desc: 'Slide otomatis satu per satu dengan efek animasi' },
+  { key: 'filmstrip', label: 'Filmstrip', desc: 'Foto tersusun horizontal seperti gulungan film' },
+  { key: 'stack', label: 'Tumpuk', desc: 'Foto bertumpuk dengan efek kedalaman' }
 ];
 
 const GALLERY_ANIMATIONS = [
