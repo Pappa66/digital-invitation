@@ -81,9 +81,24 @@ export default function LandingPage() {
     setOrderOpen(true);
   }
 
+  const [demoIds, setDemoIds] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('di_demo_templates');
+      if (stored) {
+        const ids = JSON.parse(stored);
+        if (Array.isArray(ids) && ids.length > 0) setDemoIds(new Set(ids));
+      }
+    } catch { /* ignore */ }
+  }, []);
+
   const cards = useMemo<CardData[]>(
-    () => DEMO_TEMPLATES.map((meta) => ({ meta, canvas: getTemplate(meta.id)! })),
-    []
+    () => {
+      const source = demoIds.size > 0 ? DEMO_TEMPLATES.filter((t) => demoIds.has(t.id)) : DEMO_TEMPLATES;
+      return source.map((meta) => ({ meta, canvas: getTemplate(meta.id)! }));
+    },
+    [demoIds]
   );
 
   const filtered = useMemo(() => {

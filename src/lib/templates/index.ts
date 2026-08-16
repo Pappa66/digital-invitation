@@ -43,10 +43,9 @@ import templateIndex from '../../../templates/index.json';
 
 export const TEMPLATE_LIST: TemplateMeta[] = templateIndex as TemplateMeta[];
 
-/** Templates with demo flag enabled, sorted by demo_order. */
+/** All templates as demo, sorted by demo_order (then name). */
 export const DEMO_TEMPLATES: TemplateMeta[] = (templateIndex as TemplateMeta[])
-  .filter((t) => t.show_as_demo === true)
-  .sort((a, b) => (a.demo_order ?? 999) - (b.demo_order ?? 999));
+  .sort((a, b) => (a.demo_order ?? 999) - (b.demo_order ?? 999) || a.name.localeCompare(b.name));
 
 const RAW_TEMPLATES: Record<string, CanvasData> = {
   'elegant-gold': elegantGold as unknown as CanvasData,

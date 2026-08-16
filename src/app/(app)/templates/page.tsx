@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { HelpCircle, Loader2, Plus, Sparkles, Trash2, ChevronLeft, ChevronRight, Eye } from 'lucide-react';
+import { HelpCircle, Loader2, Plus, Sparkles, Trash2, ChevronLeft, ChevronRight, Eye, EyeOff } from 'lucide-react';
 import { TEMPLATE_LIST } from '@/lib/templates';
 import { CATEGORIES, categoryLabel, type TemplateCategory } from '@/lib/template-categories';
 import { clientCreateProject, clientCreateProjectFromData } from '@/lib/api/project-client';
@@ -21,6 +21,24 @@ export default function TemplatesPage() {
   const [guideOpen, setGuideOpen] = useState(false);
   const [category, setCategory] = useState<TemplateCategory | 'semua'>('semua');
   const [page, setPage] = useState(1);
+  const [demoIds, setDemoIds] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('di_demo_templates');
+      if (stored) setDemoIds(new Set(JSON.parse(stored)));
+    } catch { /* ignore */ }
+  }, []);
+
+  function toggleDemo(id: string) {
+    setDemoIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      localStorage.setItem('di_demo_templates', JSON.stringify(Array.from(next)));
+      return next;
+    });
+  }
 
   const refreshUserTemplates = useCallback(() => setUserTemplates(userTemplatesList()), []);
 
@@ -235,6 +253,17 @@ export default function TemplatesPage() {
                   >
                     {busyId === t.id ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
                     Pakai Template
+                  </button>
+                  <button
+                    onClick={() => toggleDemo(t.id)}
+                    className={`mt-2 flex items-center justify-center gap-1.5 rounded-md border px-3 py-1.5 text-xs font-medium transition-colors ${
+                      demoIds.has(t.id)
+                        ? 'border-green-300 bg-green-50 text-green-700 hover:bg-green-100'
+                        : 'border-gray-200 bg-gray-50 text-gray-500 hover:bg-gray-100'
+                    }`}
+                  >
+                    {demoIds.has(t.id) ? <Eye className="h-3 w-3" /> : <EyeOff className="h-3 w-3" />}
+                    {demoIds.has(t.id) ? 'Demo Aktif' : 'Tampilkan di Landing'}
                   </button>
                 </div>
               </div>
