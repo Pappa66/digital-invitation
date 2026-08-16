@@ -119,6 +119,7 @@ const TITLE_PROPS: Record<string, { label: string; multiline?: boolean; url?: bo
     { label: 'reference', labelText: 'Referensi' }
   ],
   LiveStreaming: [{ label: 'title' }, { label: 'embed_url', url: true, labelText: 'Link YouTube/Vimeo' }, { label: 'note', multiline: true }],
+  Watermark: [{ label: 'text', labelText: 'Teks Awal' }, { label: 'brand', labelText: 'Nama Brand' }, { label: 'url', url: true, labelText: 'URL (klik)' }],
   Empty: []
 };
 

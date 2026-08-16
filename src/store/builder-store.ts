@@ -222,6 +222,15 @@ const BLOCK_PRESETS: Record<BlockType, Block> = {
       note: 'Saksikan secara langsung melalui tautan berikut.'
     }
   },
+  Watermark: {
+    id: '',
+    type: 'Watermark',
+    props: {
+      text: 'Made with Love by',
+      brand: '',
+      url: 'https://prashadigitalindonesia.com'
+    }
+  },
   Empty: {
     id: '',
     type: 'Empty',
@@ -433,6 +442,13 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
   addBlock: (type, index) =>
     set((state) => {
       const block: Block = { ...BLOCK_PRESETS[type], id: uid() };
+      // Auto-fill brand for Watermark from localStorage
+      if (type === 'Watermark') {
+        try {
+          const bn = localStorage.getItem('di_business_name');
+          if (bn) block.props = { ...block.props, brand: bn };
+        } catch { /* ignore */ }
+      }
       const flow = state.canvas.flow ?? 'stack';
       if (flow === 'free') {
         const maxY = state.canvas.blocks.reduce((m, b) => (b.layout ? Math.max(m, b.layout.y) : m), 0);

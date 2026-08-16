@@ -19,6 +19,7 @@ interface BlockItem {
   variants?: { name: string; value: string }[];
   defaultVariant?: string;
   variantKey?: string;
+  defaultProps?: Record<string, string>;
 }
 
 interface BlockCategory {
@@ -199,6 +200,9 @@ const BLOCK_CATEGORIES: BlockCategory[] = [
           { name: 'Minimal', value: 'minimal' }
         ],
         defaultVariant: 'center'
+      },
+      { type: 'Watermark', label: 'Watermark', icon: PenTool, desc: 'Made with Love — branding di akhir undangan',
+        defaultProps: { text: 'Made with Love by', brand: '', url: 'https://prashadigitalindonesia.com' }
       },
       { type: 'Empty', label: 'Blok Kosong', icon: LayoutPanelTop, desc: 'Placeholder kosong' }
     ]

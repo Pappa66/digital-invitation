@@ -2177,6 +2177,41 @@ function useLightbox(images: string[]) {
   return { open, lightbox };
 }
 
+/** Watermark — "Made with Love by [brand]" dengan link. */
+export function WatermarkBlock({ props }: { props: BlockProps }) {
+  const text = str(props, 'text') || 'Made with Love by';
+  const brand = str(props, 'brand') || 'PT. Prasha Digital Indonesia';
+  const url = str(props, 'url');
+  const theme = useTheme();
+  const content = (
+    <p className="font-body text-xs tracking-wide opacity-40">
+      {text}{' '}
+      <span className="font-heading font-medium opacity-70">{brand}</span>
+    </p>
+  );
+
+  return (
+    <section className="px-6 py-8 sm:py-10">
+      <div className="flex items-center justify-center gap-3">
+        <span className="h-px w-10 bg-current/20" />
+        {url ? (
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="transition-opacity hover:opacity-70"
+          >
+            {content}
+          </a>
+        ) : (
+          content
+        )}
+        <span className="h-px w-10 bg-current/20" />
+      </div>
+    </section>
+  );
+}
+
 /** Blok kosong — placeholder yang bisa diisi blok lain atau diberi dekor. */
 export function EmptyBlock() {
   return (

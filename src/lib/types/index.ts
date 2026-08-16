@@ -15,6 +15,7 @@ export type BlockType =
   | 'GiftList'
   | 'Quote'
   | 'LiveStreaming'
+  | 'Watermark'
   | 'Empty';
 
 export interface Theme {
