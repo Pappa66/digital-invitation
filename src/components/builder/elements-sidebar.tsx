@@ -80,7 +80,7 @@ const BLOCK_CATEGORIES: BlockCategory[] = [
         variants: [
           { name: 'Timeline', value: 'timeline' },
           { name: 'Cards', value: 'cards' },
-          { name: 'Slider', value: 'slider' }
+          { name: 'Minimal', value: 'minimal' }
         ],
         defaultVariant: 'timeline'
       },
@@ -113,12 +113,13 @@ const BLOCK_CATEGORIES: BlockCategory[] = [
       { type: 'Gallery', label: 'Galeri', icon: Images, desc: 'Galeri foto',
         variants: [
           { name: 'Grid', value: 'grid' },
+          { name: 'Grid 3', value: 'grid3' },
           { name: 'Masonry', value: 'masonry' },
           { name: 'Carousel', value: 'carousel' },
-          { name: 'Slider', value: 'slider' },
+          { name: 'Column', value: 'column' },
           { name: 'Mosaic', value: 'mosaic' },
-          { name: 'Fullscreen', value: 'fullscreen' },
-          { name: 'Scatter', value: 'scatter' }
+          { name: 'Polaroid', value: 'polaroid' },
+          { name: 'Arch', value: 'arch' }
         ],
         defaultVariant: 'grid'
       },
@@ -137,11 +138,42 @@ const BLOCK_CATEGORIES: BlockCategory[] = [
     icon: MessageSquare,
     color: '#5a7a8e',
     blocks: [
-      { type: 'RSVP', label: 'RSVP', icon: Mail, desc: 'Konfirmasi kehadiran' },
-      { type: 'Envelope', label: 'Amplop Online', icon: Gift, desc: 'Hadiah & rekening' },
-      { type: 'GiftList', label: 'Daftar Kado', icon: ListChecks, desc: 'Referensi hadiah' },
-      { type: 'Maps', label: 'Maps', icon: MapPin, desc: 'Peta lokasi acara' },
-      { type: 'LiveStreaming', label: 'Siaran Langsung', icon: Radio, desc: 'Streaming YouTube/Vimeo' }
+      { type: 'RSVP', label: 'RSVP', icon: Mail, desc: 'Konfirmasi kehadiran',
+        variants: [
+          { name: 'Pusat', value: 'centered' },
+          { name: 'Kartu', value: 'card' },
+          { name: 'Minimal', value: 'minimal' }
+        ],
+        defaultVariant: 'centered'
+      },
+      { type: 'Envelope', label: 'Amplop Online', icon: Gift, desc: 'Hadiah & rekening',
+        variants: [
+          { name: 'Standar', value: 'standard' },
+          { name: 'Minimal', value: 'minimal' }
+        ],
+        defaultVariant: 'standard'
+      },
+      { type: 'GiftList', label: 'Daftar Kado', icon: ListChecks, desc: 'Referensi hadiah',
+        variants: [
+          { name: 'Grid', value: 'grid' },
+          { name: 'List', value: 'list' }
+        ],
+        defaultVariant: 'grid'
+      },
+      { type: 'Maps', label: 'Maps', icon: MapPin, desc: 'Peta lokasi acara',
+        variants: [
+          { name: 'Penuh', value: 'full' },
+          { name: 'Kartu', value: 'card' }
+        ],
+        defaultVariant: 'full'
+      },
+      { type: 'LiveStreaming', label: 'Siaran Langsung', icon: Radio, desc: 'Streaming YouTube/Vimeo',
+        variants: [
+          { name: 'Penuh', value: 'full' },
+          { name: 'Minimal', value: 'minimal' }
+        ],
+        defaultVariant: 'full'
+      }
     ]
   },
   {

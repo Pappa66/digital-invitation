@@ -23,6 +23,7 @@ function arr(props: BlockProps, key: string): string[] {
 export default function GiftListBlock({ props }: { props: BlockProps }) {
   const items = arr(props, 'items');
   const inBuilder = useContext(BuilderEditableContext) !== null;
+  const variant = str(props, 'variant') || 'grid';
 
   if (items.length === 0 && !inBuilder) return null;
 
@@ -49,6 +50,20 @@ export default function GiftListBlock({ props }: { props: BlockProps }) {
         <Inner name="items">
           {items.length === 0 && inBuilder ? (
             <p className="mt-4 text-xs italic opacity-60">Belum ada item. Tambah via panel kanan.</p>
+          ) : variant === 'list' ? (
+            <ul className="mt-5 space-y-2 text-left">
+              {items.map((item, i) => (
+                <li
+                  key={`${item}-${i}`}
+                  className="flex items-center gap-3 rounded-lg border border-current/10 bg-white/5 px-4 py-3 text-sm"
+                >
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-current/10 text-[10px] font-semibold">
+                    {i + 1}
+                  </span>
+                  <span className="leading-snug">{item}</span>
+                </li>
+              ))}
+            </ul>
           ) : (
             <ul className="mt-5 grid grid-cols-2 gap-2 text-left">
               {items.map((item, i) => (

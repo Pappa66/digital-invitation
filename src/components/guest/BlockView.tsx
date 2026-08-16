@@ -26,6 +26,8 @@ import { BuilderEditableContext } from '@/components/builder/inline-edit';
 import { usePreview } from '@/components/guest/preview-context';
 import { InnerProvider } from '@/components/guest/inner-context';
 import { DecorLayer } from '@/components/guest/blocks';
+import { useTheme } from '@/components/guest/theme-context';
+import type { Theme } from '@/lib/types';
 
 interface BlockViewProps {
   block: Block;
@@ -40,6 +42,7 @@ interface BlockViewProps {
 
 export default function BlockView({ block, projectId, editable = false, greetingName, cardStyle, demo, showCoverButton = true }: BlockViewProps) {
   const preview = usePreview();
+  const theme = useTheme();
   const animateEntrance = (!preview || demo) && !editable;
   let view: React.ReactNode;
   switch (block.type) {
@@ -100,9 +103,28 @@ export default function BlockView({ block, projectId, editable = false, greeting
 
   const isHero = block.type === 'Hero';
   const renderCard = cardStyle && !isHero;
-  const cardCls =
-    'card-mask overflow-hidden rounded-2xl bg-[var(--color-background)] shadow-[0_8px_26px_rgba(0,0,0,0.12)] ring-1 ring-black/5';
+  const cardVariant = theme?.card_variant ?? 'shadow';
+  
+  const cardVariants: Record<string, string> = {
+    shadow: 'overflow-hidden rounded-2xl bg-[var(--color-background)] shadow-[0_8px_26px_rgba(0,0,0,0.12)] ring-1 ring-black/5',
+    outline: 'overflow-hidden rounded-2xl bg-[var(--color-background)] ring-1 ring-current/10',
+    glass: 'overflow-hidden rounded-2xl bg-white/10 backdrop-blur-md ring-1 ring-white/15',
+    minimal: 'overflow-hidden rounded-xl bg-[var(--color-background)]',
+    elevated: 'overflow-hidden rounded-2xl bg-[var(--color-background)] shadow-[0_12px_40px_rgba(0,0,0,0.18)]',
+    flat: 'overflow-hidden rounded-2xl bg-current/[0.03]',
+  };
+  const cardCls = cardVariants[cardVariant] || cardVariants.shadow;
   const cardWrapCls = `${cardCls} mx-0 mb-6 mt-6 w-full`;
+  
+  const entranceVariants = {
+    fade: { opacity: 0, y: 44, filter: 'blur(6px)' },
+    slide: { opacity: 0, x: -30 },
+    zoom: { opacity: 0, scale: 0.92 },
+    blur: { opacity: 0, filter: 'blur(12px)' },
+    rise: { opacity: 0, y: 60 },
+  } as const;
+  type EntranceKey = keyof typeof entranceVariants;
+  const entranceAnim = entranceVariants[(theme?.card_entrance as EntranceKey) ?? 'fade'] ?? entranceVariants.fade;
   const body = (
     <StyledSection style={block.style}>{view}</StyledSection>
   );
@@ -113,8 +135,8 @@ export default function BlockView({ block, projectId, editable = false, greeting
         <div data-block-type={block.type} className="relative">
           {animateEntrance ? (
             <motion.div
-              initial={{ opacity: 0, y: 44, filter: 'blur(6px)' }}
-              whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              initial={entranceAnim}
+              whileInView={{ opacity: 1, y: 0, x: 0, scale: 1, filter: 'blur(0px)' }}
               viewport={{ once: true, amount: 0.12 }}
               transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             >

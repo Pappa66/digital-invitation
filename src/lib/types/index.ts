@@ -28,7 +28,7 @@ export interface Theme {
   hero_style: 'image' | 'solid' | 'gradient';
   /**
    * Bingkai dekoratif mengelilingi undangan (mode stack).
-   * 'none' | 'classic' | 'double' | 'corner' | 'arch'.
+   * 'none' | 'classic' | 'double' | 'corner' | 'arch' | 'floral' | 'thick' | 'dashed' | 'ornate'.
    */
   frame?: string;
   /**
@@ -36,6 +36,14 @@ export interface Theme {
    * seperti webvitation Simple Rustic). Hero tetap penuh layar.
    */
   card_style?: boolean;
+  /**
+   * Gaya visual kartu: 'shadow' | 'outline' | 'glass' | 'minimal' | 'elevated' | 'flat'
+   */
+  card_variant?: string;
+  /**
+   * Animasi masuk kartu: 'fade' | 'slide' | 'zoom' | 'blur' | 'rise'
+   */
+  card_entrance?: string;
   /**
    * Ornamen dekoratif (SVG library) untuk section pengantar/sepanjang undangan.
    * Nilai: kunci di ornaments.tsx (mis. 'flourish', 'eucalyptus', 'rose-branch').

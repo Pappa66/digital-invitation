@@ -26,6 +26,7 @@ export default function EnvelopeBlock({ props }: { props: BlockProps }) {
   const [copied, setCopied] = useState<Record<number, boolean>>({});
   const [tab, setTab] = useState<'cash' | 'gift'>('cash');
   const inBuilder = useContext(BuilderEditableContext) !== null;
+  const variant = str(props, 'variant') || 'standard';
 
   const accounts = (Array.isArray(props.accounts) ? props.accounts : []) as BankAccount[];
   const legacyAccount = {
@@ -58,10 +59,10 @@ export default function EnvelopeBlock({ props }: { props: BlockProps }) {
 
   return (
     <section className="mx-auto max-w-sm px-6 py-8 sm:py-10 md:py-12 text-center">
-      <div className="rounded-2xl border border-dashed border-current/25 bg-white/5 px-6 py-6 text-center">
+      <div className={`${variant === 'minimal' ? 'rounded-xl border border-current/10 bg-current/[0.03]' : 'rounded-2xl border border-dashed border-current/25 bg-white/5'} px-6 py-6 text-center`}>
         <Inner name="title">
           <div className="flex flex-col items-center gap-1">
-            <Gift className="h-5 w-5 opacity-70" />
+            {variant !== 'minimal' && <Gift className="h-5 w-5 opacity-70" />}
             <p className="text-xs font-medium uppercase tracking-[0.2em] opacity-70">
               <Editable prop="title">{str(props, 'title') || 'Amplop Online'}</Editable>
             </p>

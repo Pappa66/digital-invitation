@@ -1110,21 +1110,93 @@ export function StoryBlock({ props }: { props: BlockProps }) {
   const dates = arr(props, 'ev_date');
   const descs = arr(props, 'ev_desc');
   const count = titles.length;
+  const variant = str(props, 'variant') || 'timeline';
+
+  const storyHeader = (
+    <Inner name="title">
+      <div className="mx-auto w-full text-center">
+        <h2 className="text-2xl font-medium md:text-3xl">
+          <Editable prop="title">{str(props, 'title')}</Editable>
+        </h2>
+        {str(props, 'subtitle') && (
+          <p className="mt-2 text-sm italic opacity-70">
+            <Editable prop="subtitle">{str(props, 'subtitle')}</Editable>
+          </p>
+        )}
+        <Ornament className="mt-6 opacity-60" ornament={str(props, 'ornament') || theme?.ornament} />
+      </div>
+    </Inner>
+  );
+
+  if (variant === 'cards') {
+    return (
+      <section className="px-6 py-10 sm:py-12 md:py-16">
+        {storyHeader}
+        <div className="mx-auto mt-10 grid w-full gap-4 sm:grid-cols-2">
+          {count === 0 && <p className="text-center text-sm opacity-50 sm:col-span-2">Belum ada cerita.</p>}
+          {Array.from({ length: count }).map((_, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: i * 0.06 }}
+              className="rounded-xl border border-current/10 bg-current/[0.03] px-5 py-4 text-left"
+            >
+              {dates[i] && (
+                <p className="text-xs uppercase tracking-widest opacity-60">
+                  <Editable prop="ev_date" index={i}>{dates[i]}</Editable>
+                </p>
+              )}
+              <h3 className="mt-2 text-base font-medium">
+                <Editable prop="ev_title" index={i}>{titles[i]}</Editable>
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed opacity-80">
+                <Editable prop="ev_desc" index={i} multiline>{descs[i]}</Editable>
+              </p>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+    );
+  }
+
+  if (variant === 'minimal') {
+    return (
+      <section className="px-6 py-10 sm:py-12 md:py-16">
+        {storyHeader}
+        <div className="mx-auto mt-10 w-full space-y-6">
+          {count === 0 && <p className="text-center text-sm opacity-50">Belum ada cerita.</p>}
+          {Array.from({ length: count }).map((_, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: i * 0.05 }}
+              className="border-l-2 border-current/20 pl-5"
+            >
+              {dates[i] && (
+                <p className="text-xs uppercase tracking-widest opacity-60">
+                  <Editable prop="ev_date" index={i}>{dates[i]}</Editable>
+                </p>
+              )}
+              <h3 className="mt-1 text-base font-medium">
+                <Editable prop="ev_title" index={i}>{titles[i]}</Editable>
+              </h3>
+              <p className="mt-1 text-sm leading-relaxed opacity-80">
+                <Editable prop="ev_desc" index={i} multiline>{descs[i]}</Editable>
+              </p>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="px-6 py-10 sm:py-12 md:py-16">
-      <Inner name="title">
-        <div className="mx-auto w-full text-center">
-          <h2 className="text-2xl font-medium md:text-3xl">
-            <Editable prop="title">{str(props, 'title')}</Editable>
-          </h2>
-          {str(props, 'subtitle') && (
-            <p className="mt-2 text-sm italic opacity-70">
-              <Editable prop="subtitle">{str(props, 'subtitle')}</Editable>
-            </p>
-          )}
-          <Ornament className="mt-6 opacity-60" ornament={str(props, 'ornament') || theme?.ornament} />
-        </div>
-      </Inner>
+      {storyHeader}
       <div className="mx-auto mt-10 w-full space-y-8">
         {count === 0 && <p className="text-center text-sm opacity-50">Belum ada cerita.</p>}
         {Array.from({ length: count }).map((_, i) => (
@@ -1176,12 +1248,20 @@ const PHOTO_ANIMS: Record<string, { initial: Target; animate: Target }> = {
   'slide-left': { initial: { opacity: 0, x: -56 }, animate: { opacity: 1, x: 0 } },
   'slide-right': { initial: { opacity: 0, x: 56 }, animate: { opacity: 1, x: 0 } },
   'slide-up': { initial: { opacity: 0, y: 56 }, animate: { opacity: 1, y: 0 } },
+  'slide-down': { initial: { opacity: 0, y: -56 }, animate: { opacity: 1, y: 0 } },
   flip: { initial: { opacity: 0, rotateY: 90 }, animate: { opacity: 1, rotateY: 0 } },
+  'flip-x': { initial: { opacity: 0, rotateX: 90 }, animate: { opacity: 1, rotateX: 0 } },
   blur: { initial: { opacity: 0, filter: 'blur(14px)' }, animate: { opacity: 1, filter: 'blur(0px)' } },
   rise: { initial: { opacity: 0, y: 90, scale: 0.92 }, animate: { opacity: 1, y: 0, scale: 1 } },
   swing: { initial: { opacity: 0, x: -28, rotate: -7 }, animate: { opacity: 1, x: 0, rotate: 0 } },
   pop: { initial: { opacity: 0, scale: 0.55 }, animate: { opacity: 1, scale: 1 } },
-  'ken-burns': { initial: { opacity: 0 }, animate: { opacity: 1 } }
+  'ken-burns': { initial: { opacity: 0 }, animate: { opacity: 1 } },
+  drop: { initial: { opacity: 0, y: -60, scale: 1.05 }, animate: { opacity: 1, y: 0, scale: 1 } },
+  reveal: { initial: { opacity: 0, clipPath: 'inset(0 100% 0 0)' }, animate: { opacity: 1, clipPath: 'inset(0 0% 0 0)' } },
+  'reveal-up': { initial: { opacity: 0, clipPath: 'inset(100% 0 0 0)' }, animate: { opacity: 1, clipPath: 'inset(0% 0 0 0)' } },
+  rotate: { initial: { opacity: 0, rotate: -180, scale: 0.5 }, animate: { opacity: 1, rotate: 0, scale: 1 } },
+  shrink: { initial: { opacity: 0, scale: 2 }, animate: { opacity: 1, scale: 1 } },
+  'blur-up': { initial: { opacity: 0, y: 30, filter: 'blur(10px)' }, animate: { opacity: 1, y: 0, filter: 'blur(0px)' } },
 };
 
 export function GalleryBlock({ props }: { props: BlockProps }) {
@@ -1498,6 +1578,7 @@ export function MapsBlock({ props }: { props: BlockProps }) {
   const address = str(props, 'address');
   const direct = maybeEmbedSrc(embedUrl);
   const [apiSrc, setApiSrc] = useState<{ url: string; src: string } | null>(null);
+  const variant = str(props, 'variant') || 'full';
 
   useEffect(() => {
     let alive = true;
@@ -1517,6 +1598,40 @@ export function MapsBlock({ props }: { props: BlockProps }) {
 
   const resolved = direct ?? (apiSrc?.url === embedUrl ? apiSrc.src : null);
   const src = resolved ?? `https://maps.google.com/maps?q=${encodeURIComponent(address)}&output=embed`;
+
+  const mapIframe = (
+    <iframe
+      src={src}
+      className="h-64 w-full"
+      loading="lazy"
+      title={address}
+    />
+  );
+
+  if (variant === 'card') {
+    return (
+      <section className="px-6 py-10 sm:py-12 md:py-14 text-center">
+        <div className="mx-auto max-w-md overflow-hidden rounded-2xl border border-current/10 bg-current/[0.03]">
+          <div className="px-6 pt-6">
+            <Inner name="title">
+              <h2 className="text-xl md:text-2xl"><Editable prop="title">{str(props, 'title')}</Editable></h2>
+            </Inner>
+            {address && (
+              <Inner name="address">
+                <p className="mt-2 text-sm opacity-80">{address}</p>
+              </Inner>
+            )}
+          </div>
+          <Inner name="map">
+            <div className="mt-4 overflow-hidden border-t border-current/10">
+              {mapIframe}
+            </div>
+          </Inner>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="px-6 py-10 sm:py-12 md:py-14 text-center">
       <Inner name="title">
@@ -1529,12 +1644,7 @@ export function MapsBlock({ props }: { props: BlockProps }) {
       )}
       <Inner name="map">
         <div className="mx-auto mt-6 w-full overflow-hidden rounded-xl border border-current/10">
-          <iframe
-            src={src}
-            className="h-64 w-full"
-            loading="lazy"
-            title={address}
-          />
+          {mapIframe}
         </div>
       </Inner>
     </section>
@@ -1860,6 +1970,7 @@ export function DividerBlock({ props }: { props: BlockProps }) {
 export function LiveStreamingBlock({ props }: { props: BlockProps }) {
   const streamUrl = str(props, 'stream_url');
   const preview = usePreview();
+  const variant = str(props, 'variant') || 'full';
 
   function getEmbedUrl(url: string): string {
     if (!url) return '';
@@ -1872,15 +1983,56 @@ export function LiveStreamingBlock({ props }: { props: BlockProps }) {
 
   const embedUrl = getEmbedUrl(streamUrl);
 
+  const streamButton = streamUrl ? (
+    preview ? (
+      <span className="inline-flex items-center gap-1.5 rounded-full border border-current/25 px-4 py-2 text-xs font-medium">
+        <Radio className="h-3.5 w-3.5" /> Tonton Siaran Langsung
+      </span>
+    ) : (
+      <a
+        href={streamUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-1.5 rounded-full border border-current/25 px-4 py-2 text-xs font-medium transition-colors hover:bg-current/10"
+      >
+        <Radio className="h-3.5 w-3.5" /> Tonton Siaran Langsung
+      </a>
+    )
+  ) : (
+    <p className="text-xs italic opacity-60">Tambahkan link streaming di panel kanan.</p>
+  );
+
+  if (variant === 'minimal') {
+    return (
+      <section className="px-6 py-10 sm:py-12 md:py-14 text-center">
+        <Inner name="title">
+          <h2 className="text-xl font-medium md:text-2xl">
+            <Editable prop="title">{str(props, 'title') || 'Siaran Langsung'}</Editable>
+          </h2>
+        </Inner>
+        <Inner name="note">
+          <p className="mt-2 text-sm opacity-80">
+            <Editable prop="note">{str(props, 'note') || 'Saksikan secara langsung melalui tautan berikut.'}</Editable>
+          </p>
+        </Inner>
+        <Inner name="button">
+          <div className="mt-5 flex flex-wrap items-center justify-center gap-2">{streamButton}</div>
+        </Inner>
+        {embedUrl && !preview && (
+          <Inner name="embed">
+            <div className="mx-auto mt-5 w-full max-w-md overflow-hidden rounded-lg border border-current/10">
+              <iframe src={embedUrl} className="h-48 w-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen title={str(props, 'title') || 'Siaran Langsung'} />
+            </div>
+          </Inner>
+        )}
+      </section>
+    );
+  }
+
   return (
     <section className="px-6 py-10 sm:py-12 md:py-14 text-center">
       <Inner name="title">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        >
+        <motion.div initial={{ opacity: 0, scale: 0.96 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
           <Radio className="mx-auto h-7 w-7" />
           <h2 className="mt-4 text-2xl font-medium">
             <Editable prop="title">{str(props, 'title') || 'Siaran Langsung'}</Editable>
@@ -1893,37 +2045,12 @@ export function LiveStreamingBlock({ props }: { props: BlockProps }) {
         </p>
       </Inner>
       <Inner name="button">
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
-          {streamUrl ? (
-            preview ? (
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-current/25 px-4 py-2 text-xs font-medium">
-                <Radio className="h-3.5 w-3.5" /> Tonton Siaran Langsung
-              </span>
-            ) : (
-              <a
-                href={streamUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-full border border-current/25 px-4 py-2 text-xs font-medium transition-colors hover:bg-current/10"
-              >
-                <Radio className="h-3.5 w-3.5" /> Tonton Siaran Langsung
-              </a>
-            )
-          ) : (
-            <p className="text-xs italic opacity-60">Tambahkan link streaming di panel kanan.</p>
-          )}
-        </div>
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-2">{streamButton}</div>
       </Inner>
       {embedUrl && !preview && (
         <Inner name="embed">
           <div className="mx-auto mt-6 w-full overflow-hidden rounded-xl border border-current/10">
-            <iframe
-              src={embedUrl}
-              className="h-64 w-full"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              title={str(props, 'title') || 'Siaran Langsung'}
-            />
+            <iframe src={embedUrl} className="h-64 w-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen title={str(props, 'title') || 'Siaran Langsung'} />
           </div>
         </Inner>
       )}

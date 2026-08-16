@@ -128,6 +128,12 @@ const VARIANTS: Partial<Record<string, { key: string; options: string[] }>> = {
   Thanks: { key: 'variant', options: ['center', 'elegant', 'minimal'] },
   Quote: { key: 'variant', options: ['center', 'card'] },
   Text: { key: 'variant', options: ['plain', 'card', 'accent'] },
+  Story: { key: 'variant', options: ['timeline', 'cards', 'minimal'] },
+  Maps: { key: 'variant', options: ['full', 'card'] },
+  LiveStreaming: { key: 'variant', options: ['full', 'minimal'] },
+  RSVP: { key: 'variant', options: ['centered', 'card', 'minimal'] },
+  Envelope: { key: 'variant', options: ['standard', 'minimal'] },
+  GiftList: { key: 'variant', options: ['grid', 'list'] },
 };
 
 const GALLERY_LAYOUTS: { key: string; label: string; desc: string }[] = [
@@ -148,12 +154,20 @@ const GALLERY_ANIMATIONS = [
   ['slide-left', 'Slide Kiri'],
   ['slide-right', 'Slide Kanan'],
   ['slide-up', 'Slide Atas'],
+  ['slide-down', 'Slide Bawah'],
   ['flip', 'Flip 3D'],
+  ['flip-x', 'Flip Vertikal'],
   ['blur', 'Blur'],
   ['rise', 'Muncul Naik'],
   ['swing', 'Ayun'],
   ['pop', 'Pop'],
-  ['ken-burns', 'Ken Burns']
+  ['ken-burns', 'Ken Burns'],
+  ['drop', 'Drop'],
+  ['reveal', 'Reveal Kanan'],
+  ['reveal-up', 'Reveal Atas'],
+  ['rotate', 'Rotate'],
+  ['shrink', 'Shrink'],
+  ['blur-up', 'Blur + Naik']
 ] as const;
 
 const GRADIENTS: { name: string; value: string }[] = [
@@ -319,7 +333,7 @@ export default function PropertiesPanel() {
                   </div>
                 <label className="block text-xs font-medium text-[#4a443c]">Bingkai Undangan</label>
                   <div className="flex flex-wrap gap-2">
-                    {(['none', 'classic', 'double', 'corner', 'arch'] as const).map((f) => (
+                    {(['none', 'classic', 'double', 'corner', 'arch', 'floral', 'thick', 'dashed', 'ornate'] as const).map((f) => (
                       <button
                         key={f}
                         onClick={() => setTheme({ frame: f })}
@@ -342,6 +356,59 @@ export default function PropertiesPanel() {
                     />
                     Gaya Kartu (tiap section berbentuk card)
                   </label>
+                  {canvas.theme.card_style && (
+                    <>
+                      <div className="mt-2">
+                        <label className="mb-1 block text-xs font-medium text-[#4a443c]">Gaya Kartu</label>
+                        <div className="flex flex-wrap gap-1.5">
+                          {[
+                            { value: 'shadow', label: 'Bayangan' },
+                            { value: 'outline', label: 'Garis' },
+                            { value: 'glass', label: 'Kaca' },
+                            { value: 'minimal', label: 'Minimal' },
+                            { value: 'elevated', label: 'Tinggi' },
+                            { value: 'flat', label: 'Datar' },
+                          ].map((v) => (
+                            <button
+                              key={v.value}
+                              onClick={() => setTheme({ card_variant: v.value })}
+                              className={`rounded-md border px-2 py-1 text-[10px] ${
+                                (canvas.theme.card_variant ?? 'shadow') === v.value
+                                  ? 'border-[#c9a45c] bg-[#c9a45c] text-white'
+                                  : 'border-[#e0d6c2] text-[#6b5f4d]'
+                              }`}
+                            >
+                              {v.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="mt-2">
+                        <label className="mb-1 block text-xs font-medium text-[#4a443c]">Animasi Masuk</label>
+                        <div className="flex flex-wrap gap-1.5">
+                          {[
+                            { value: 'fade', label: 'Fade' },
+                            { value: 'slide', label: 'Slide' },
+                            { value: 'zoom', label: 'Zoom' },
+                            { value: 'blur', label: 'Blur' },
+                            { value: 'rise', label: 'Naik' },
+                          ].map((v) => (
+                            <button
+                              key={v.value}
+                              onClick={() => setTheme({ card_entrance: v.value })}
+                              className={`rounded-md border px-2 py-1 text-[10px] ${
+                                (canvas.theme.card_entrance ?? 'fade') === v.value
+                                  ? 'border-[#c9a45c] bg-[#c9a45c] text-white'
+                                  : 'border-[#e0d6c2] text-[#6b5f4d]'
+                              }`}
+                            >
+                              {v.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </>
+                  )}
                   <p className="mt-1 text-[11px] text-[#8a7a66]">
                     Bingkai dekoratif yang mengelilingi seluruh undangan. Sesuaikan dengan gaya tema Anda.
                   </p>
