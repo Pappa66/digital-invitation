@@ -345,31 +345,27 @@ export default function DashboardClient({ projects, isDemo = false, userName = n
         steps={[
           {
             title: '1. Buat undangan baru',
-            body: 'Klik "+ Create New", pilih template di halaman Templates, atau mulai dari kosong. Undangan langsung terbuka di Builder.'
+            body: 'Klik "+ Create New", pilih template, atau mulai dari kosong. Undangan langsung terbuka di Builder.'
           },
           {
             title: '2. Edit desain',
-            body: 'Di Builder, seret blok dari sidebar kiri ke kanvas. Klik teks untuk menyunting langsung. Variasi, warna, frame, dan card style diatur lewat Properties.'
+            body: 'Di Builder, seret blok dari sidebar kiri ke kanvas. Klik teks untuk menyunting langsung. Properties panel di kanan untuk varian, warna, frame.'
           },
           {
-            title: '3. Template Saya',
-            body: 'Tab "My Designs" menampilkan semua undangan yang sudah dibuat. Klik kartu untuk edit, atau ikon mata untuk preview.'
+            title: '3. Pesanan masuk',
+            body: 'Buka tab "Pesanan" untuk melihat order dari landing page. Klik "Balas WA" untuk konfirmasi ke client dengan pesan template.'
           },
           {
-            title: '4. Client Management',
-            body: 'Tab "Client" untuk kelola daftar klien. Klik "Tambah Client" lalu pilih template → otomatis buat project baru dari template yang dipilih.'
+            title: '4. Buat proyek dari pesanan',
+            body: 'Setelah pesanan disetujui, klik "Buat Proyek" untuk otomatis membuat undangan dari template yang dipesan.'
           },
           {
-            title: '5. Pencatatan Keuangan',
-            body: 'Tab "Keuangan" untuk mencatat harga, diskon, promo, dan status pembayaran. Klik "Harga Landing Page" untuk mengatur harga & promo yang tampil di halaman publik.'
+            title: '5. Pengaturan',
+            body: 'Tab "Pengaturan" untuk mengatur nomor WhatsApp, harga & promo landing page, dan nama bisnis untuk watermark.'
           },
           {
-            title: '6. Harga Landing Page',
-            body: 'Di tab Keuangan, klik "Harga Landing Page" untuk mengatur harga dasar, diskon (%), kode promo, dan masa berlaku promo. Harga ini ditampilkan di halaman depan publik.'
-          },
-          {
-            title: '7. Bagikan ke tamu',
-            body: 'Buka undangan → tombol "Bagikan". Kirim via WhatsApp, satu per satu atau massal. Tamu tak perlu login untuk melihat undangan.'
+            title: '6. Bagikan ke tamu',
+            body: 'Buka undangan → tombol "Bagikan". Kirim via WhatsApp satu per satu atau massal. Tamu tak perlu login.'
           }
         ]}
       />

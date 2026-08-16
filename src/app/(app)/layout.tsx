@@ -76,18 +76,18 @@ export default function AppLayout({ children }: AppLayoutProps) {
         <header className="flex h-16 items-center justify-between border-b border-dashboard-border bg-dashboard-surface px-6">
           <h1 className="font-semibold">{title}</h1>
           <div className="flex items-center gap-3 md:hidden">
-            <Link href="/orders" className={`text-xs ${pathname.startsWith('/orders') ? 'font-semibold text-[#8a6d2f]' : 'text-[#8a7a66] hover:text-[#8a6d2f]'}`}>
-              Kontak
+            <Link href="/dashboard" className={`flex flex-col items-center gap-0.5 text-[10px] ${pathname.startsWith('/dashboard') ? 'text-[#c9a45c]' : 'text-[#8a7a66]'}`}>
+              <LayoutDashboard className="h-4 w-4" /> Undangan
             </Link>
-            <Link href="/templates" className={`text-xs ${pathname.startsWith('/templates') ? 'font-semibold text-[#8a6d2f]' : 'text-[#8a7a66] hover:text-[#8a6d2f]'}`}>
-              Template
+            <Link href="/orders" className={`flex flex-col items-center gap-0.5 text-[10px] ${pathname.startsWith('/orders') ? 'text-[#c9a45c]' : 'text-[#8a7a66]'}`}>
+              <Inbox className="h-4 w-4" /> Pesanan
             </Link>
-            <Link href="/dashboard" className={`text-xs ${pathname.startsWith('/dashboard') ? 'font-semibold text-[#8a6d2f]' : 'text-[#8a7a66] hover:text-[#8a6d2f]'}`}>
-              Undangan
+            <Link href="/templates" className={`flex flex-col items-center gap-0.5 text-[10px] ${pathname.startsWith('/templates') ? 'text-[#c9a45c]' : 'text-[#8a7a66]'}`}>
+              <LayoutTemplate className="h-4 w-4" /> Template
             </Link>
-            <button onClick={handleLogout} className="text-xs text-[#8a7a66] hover:text-[#8a6d2f]">
-              Keluar
-            </button>
+            <Link href="/settings" className={`flex flex-col items-center gap-0.5 text-[10px] ${pathname.startsWith('/settings') ? 'text-[#c9a45c]' : 'text-[#8a7a66]'}`}>
+              <Settings className="h-4 w-4" /> Pengaturan
+            </Link>
           </div>
         </header>
         <main className="flex-1 overflow-auto p-6">{children}</main>
