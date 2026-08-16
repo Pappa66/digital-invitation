@@ -359,7 +359,7 @@ function InnerDragLayer({ block, blockWidth }: { block: Block; blockWidth: numbe
       let nx = ds.origX + dx;
       let ny = ds.origY + dy;
 
-      const SNAP = 8;
+      const SNAP = 3;
       const cx = ds.hostW / 2;
       const cy = ds.hostH / 2;
 
@@ -398,7 +398,7 @@ function InnerDragLayer({ block, blockWidth }: { block: Block; blockWidth: numbe
       const node = host?.querySelector<HTMLElement>(`[data-inner="${ds.name}"]`);
       if (node) {
         const clampedX = Math.max(-ds.nodeW + 8, Math.min(ds.hostW - 8, nx));
-        const clampedY = Math.max(-ds.nodeH + 8, ny);
+        const clampedY = Math.max(-ds.nodeH + 8, Math.min(ds.hostH - 8, ny));
         node.style.transform = `translate(${clampedX}px, ${clampedY}px)`;
       }
 
@@ -460,15 +460,14 @@ function InnerDragLayer({ block, blockWidth }: { block: Block; blockWidth: numbe
       {handles.map((h) => (
         <div
           key={h.name}
-          className="absolute z-30 border-2 border-dashed border-[#c9a45c]/60 bg-[#c9a45c]/5"
+          className="absolute z-30 cursor-grab border-2 border-dashed border-[#c9a45c]/60 bg-[#c9a45c]/5 active:cursor-grabbing"
           style={{ left: h.left, top: h.top, width: h.width, height: h.height }}
+          onPointerDown={(e) => onDragStart(e, h.name)}
         >
           <span
-            className="pointer-events-auto absolute -top-4 left-1/2 flex -translate-x-1/2 cursor-grab items-center gap-1 rounded-full bg-[#c9a45c] px-2 py-1 text-[10px] font-medium text-white shadow-lg ring-1 ring-white/30 hover:bg-[#b98a3e] active:cursor-grabbing"
-            title={`Geser "${h.name}" — tarik ke posisi yang diinginkan`}
-            onPointerDown={(e) => onDragStart(e, h.name)}
+            className="pointer-events-none absolute -top-5 left-1/2 flex -translate-x-1/2 items-center gap-1 rounded-full bg-[#c9a45c] px-2.5 py-1 text-[11px] font-medium text-white shadow-lg ring-1 ring-white/30"
           >
-            <GripVertical className="h-3 w-3" />
+            <GripVertical className="h-3.5 w-3.5" />
             {h.name}
           </span>
           <button
