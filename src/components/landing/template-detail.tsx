@@ -35,13 +35,9 @@ export default function TemplateDetail({ meta, index, canvas, categoryLabel, tot
   const [pricing, setPricing] = useState({ base_price: 0, discount_percent: 0, promo_code: '' });
 
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem('di_landing_pricing');
-      if (stored) {
-        const p = JSON.parse(stored);
-        setPricing({ base_price: p.base_price || 0, discount_percent: p.discount_percent || 0, promo_code: p.promo_code || '' });
-      }
-    } catch { /* ignore */ }
+    import('@/lib/settings').then(({ getPricing }) =>
+      getPricing().then((p) => setPricing({ base_price: p.base_price, discount_percent: p.discount_percent, promo_code: p.promo_code }))
+    ).catch(() => {});
   }, []);
 
   return (

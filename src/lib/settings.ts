@@ -62,3 +62,55 @@ export async function saveSetting(key: string, value: string): Promise<{ ok: boo
   if (error) return { ok: false, error: error.message };
   return { ok: true };
 }
+
+/** Key untuk pricing settings. */
+export const SETTING_PRICING = 'landing_pricing';
+
+export interface LandingPricing {
+  base_price: number;
+  discount_percent: number;
+  promo_code: string;
+  promo_expires_at: string;
+  show_pricing: boolean;
+}
+
+/** Ambil pricing dari Supabase (dipakai landing page). */
+export async function getPricing(): Promise<LandingPricing> {
+  const fallback: LandingPricing = { base_price: 0, discount_percent: 0, promo_code: '', promo_expires_at: '', show_pricing: false };
+  try {
+    const supabase = getClientSupabase();
+    const { data, error } = await supabase
+      .from('settings')
+      .select('value')
+      .eq('key', SETTING_PRICING)
+      .maybeSingle();
+    if (error || !data?.value) return fallback;
+    return { ...fallback, ...JSON.parse(data.value) };
+  } catch {
+    return fallback;
+  }
+}
+
+/** Simpan pricing ke Supabase. */
+export async function savePricing(pricing: LandingPricing): Promise<{ ok: boolean; error?: string }> {
+  return saveSetting(SETTING_PRICING, JSON.stringify(pricing));
+}
+
+/** Key untuk business name. */
+export const SETTING_BUSINESS_NAME = 'business_name';
+
+/** Ambil business name dari Supabase. */
+export async function getBusinessName(): Promise<string> {
+  try {
+    const supabase = getClientSupabase();
+    const { data, error } = await supabase
+      .from('settings')
+      .select('value')
+      .eq('key', SETTING_BUSINESS_NAME)
+      .maybeSingle();
+    if (error || !data?.value) return '';
+    return data.value;
+  } catch {
+    return '';
+  }
+}

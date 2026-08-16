@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Loader2, MessageCircle, Save, Tag, Eye, EyeOff } from 'lucide-react';
-import { getOrderWhatsapp, saveSetting, SETTING_ORDER_WHATSAPP, toWaNumber } from '@/lib/settings';
+import { getOrderWhatsapp, saveSetting, SETTING_ORDER_WHATSAPP, toWaNumber, getPricing, savePricing, SETTING_BUSINESS_NAME, getBusinessName } from '@/lib/settings';
 import { formatRupiah } from '@/lib/format';
 
 interface SiteSettings {
@@ -31,32 +31,24 @@ export default function SettingsPage() {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ ok: boolean; text: string } | null>(null);
 
-  function loadPricing() {
-    try {
-      const stored = localStorage.getItem('di_landing_pricing');
-      if (stored) {
-        const p = JSON.parse(stored);
-        setSettings((s) => ({
-          ...s,
-          base_price: p.base_price ?? defaults.base_price,
-          discount_percent: p.discount_percent ?? defaults.discount_percent,
-          promo_code: p.promo_code ?? defaults.promo_code,
-          promo_expires_at: p.promo_expires_at ?? defaults.promo_expires_at,
-          show_pricing: p.show_pricing ?? defaults.show_pricing
-        }));
-      }
-    } catch { /* ignore */ }
-    try {
-      const bn = localStorage.getItem('di_business_name');
-      if (bn) setSettings((s) => ({ ...s, business_name: bn }));
-    } catch { /* ignore */ }
+  async function loadPricing() {
+    const [pricing, bn] = await Promise.all([getPricing(), getBusinessName()]);
+    setSettings((s) => ({
+      ...s,
+      base_price: pricing.base_price,
+      discount_percent: pricing.discount_percent,
+      promo_code: pricing.promo_code,
+      promo_expires_at: pricing.promo_expires_at,
+      show_pricing: pricing.show_pricing,
+      business_name: bn || defaults.business_name
+    }));
   }
 
   useEffect(() => {
     getOrderWhatsapp()
       .then((n) => {
         setSettings((s) => ({ ...s, whatsapp: n }));
-        loadPricing();
+        return loadPricing();
       })
       .catch(() => {})
       .finally(() => setLoading(false));
@@ -67,22 +59,24 @@ export default function SettingsPage() {
     setSaving(true);
     setMessage(null);
 
-    const res = await saveSetting(SETTING_ORDER_WHATSAPP, toWaNumber(settings.whatsapp));
-    localStorage.setItem('di_landing_pricing', JSON.stringify({
-      base_price: settings.base_price,
-      discount_percent: settings.discount_percent,
-      promo_code: settings.promo_code,
-      promo_expires_at: settings.promo_expires_at,
-      show_pricing: settings.show_pricing
-    }));
-    localStorage.setItem('di_business_name', settings.business_name);
+    const [whatsAppRes, pricingRes] = await Promise.all([
+      saveSetting(SETTING_ORDER_WHATSAPP, toWaNumber(settings.whatsapp)),
+      savePricing({
+        base_price: settings.base_price,
+        discount_percent: settings.discount_percent,
+        promo_code: settings.promo_code,
+        promo_expires_at: settings.promo_expires_at,
+        show_pricing: settings.show_pricing
+      }),
+      saveSetting(SETTING_BUSINESS_NAME || 'business_name', settings.business_name)
+    ]);
 
     setSaving(false);
-    if (res.ok) {
+    if (whatsAppRes.ok && pricingRes.ok) {
       setSettings((s) => ({ ...s, whatsapp: toWaNumber(s.whatsapp) }));
       setMessage({ ok: true, text: 'Pengaturan berhasil disimpan.' });
     } else {
-      setMessage({ ok: false, text: `Gagal menyimpan: ${res.error}` });
+      setMessage({ ok: false, text: `Gagal menyimpan: ${whatsAppRes.error || pricingRes.error}` });
     }
   }
 

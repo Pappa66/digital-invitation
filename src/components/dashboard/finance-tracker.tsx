@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Plus, Search, DollarSign, TrendingUp, TrendingDown, Trash2, Save, X, Calculator, Settings, Tag, Clock } from 'lucide-react';
 import { demoIsDemoMode } from '@/lib/env';
+import { listFinanceRecords, addFinanceRecord, updateFinanceRecord, deleteFinanceRecord } from '@/lib/api/finance-client';
 
 interface LandingPricing {
   base_price: number;
@@ -25,7 +26,7 @@ interface FinanceRecord {
   final_price: number;
   payment_status: 'unpaid' | 'paid';
   payment_amount: number;
-  payment_date: string;
+  payment_date: string | null;
   notes: string;
   created_at: string;
 }
@@ -74,8 +75,8 @@ export default function FinanceTracker() {
         const stored = localStorage.getItem('di_finance');
         if (stored) setRecords(JSON.parse(stored));
       } else {
-        const stored = localStorage.getItem('di_finance');
-        if (stored) setRecords(JSON.parse(stored));
+        const data = await listFinanceRecords();
+        setRecords(data);
       }
     } catch (error) {
       console.error('Error loading finance records:', error);
@@ -88,63 +89,83 @@ export default function FinanceTracker() {
     loadRecords();
   }, []);
 
-  function saveRecords(updatedRecords: FinanceRecord[]) {
+  async function saveRecords(updatedRecords: FinanceRecord[]) {
     setRecords(updatedRecords);
-    localStorage.setItem('di_finance', JSON.stringify(updatedRecords));
+    if (demoIsDemoMode()) {
+      localStorage.setItem('di_finance', JSON.stringify(updatedRecords));
+    }
   }
 
   function calculateFinalPrice(base: number, discount: number, promoAmount: number): number {
     return Math.max(0, base - discount - promoAmount);
   }
 
-  function handleAddRecord() {
+  async function handleAddRecord() {
     if (!newRecord.client_name.trim()) return;
 
     const finalPrice = calculateFinalPrice(newRecord.base_price, newRecord.discount, newRecord.promo_amount);
     const paymentStatus = newRecord.payment_amount >= finalPrice ? 'paid' : 'unpaid';
 
-    const record: FinanceRecord = {
-      id: `finance-${Date.now()}`,
-      project_id: '',
-      client_name: newRecord.client_name,
-      design_name: newRecord.design_name,
-      base_price: newRecord.base_price,
-      discount: newRecord.discount,
-      promo_code: newRecord.promo_code,
-      promo_amount: newRecord.promo_amount,
-      final_price: finalPrice,
-      payment_status: paymentStatus,
-      payment_amount: newRecord.payment_amount,
-      payment_date: new Date().toISOString(),
-      notes: newRecord.notes,
-      created_at: new Date().toISOString()
-    };
-
-    saveRecords([record, ...records]);
+    if (demoIsDemoMode()) {
+      const record: FinanceRecord = {
+        id: `finance-${Date.now()}`,
+        project_id: '',
+        client_name: newRecord.client_name,
+        design_name: newRecord.design_name,
+        base_price: newRecord.base_price,
+        discount: newRecord.discount,
+        promo_code: newRecord.promo_code,
+        promo_amount: newRecord.promo_amount,
+        final_price: finalPrice,
+        payment_status: paymentStatus,
+        payment_amount: newRecord.payment_amount,
+        payment_date: new Date().toISOString(),
+        notes: newRecord.notes,
+        created_at: new Date().toISOString()
+      };
+      saveRecords([record, ...records]);
+    } else {
+      const created = await addFinanceRecord({
+        project_id: '',
+        client_name: newRecord.client_name,
+        design_name: newRecord.design_name,
+        base_price: newRecord.base_price,
+        discount: newRecord.discount,
+        promo_code: newRecord.promo_code,
+        promo_amount: newRecord.promo_amount,
+        final_price: finalPrice,
+        payment_status: paymentStatus,
+        payment_amount: newRecord.payment_amount,
+        payment_date: new Date().toISOString(),
+        notes: newRecord.notes
+      });
+      setRecords((prev) => [created, ...prev]);
+    }
     setShowAddModal(false);
     setNewRecord({ client_name: '', design_name: '', base_price: 0, discount: 0, promo_code: '', promo_amount: 0, payment_amount: 0, notes: '' });
   }
 
-  function handleDeleteRecord(id: string) {
+  async function handleDeleteRecord(id: string) {
     if (confirm('Hapus catatan keuangan ini?')) {
-      saveRecords(records.filter((r) => r.id !== id));
+      if (!demoIsDemoMode()) {
+        await deleteFinanceRecord(id);
+      }
+      setRecords((prev) => prev.filter((r) => r.id !== id));
     }
   }
 
-  function handleUpdatePayment(id: string, amount: number) {
+  async function handleUpdatePayment(id: string, amount: number) {
     const record = records.find((r) => r.id === id);
     if (!record) return;
 
     const newAmount = record.payment_amount + amount;
-    const paymentStatus = newAmount >= record.final_price ? 'paid' : 'unpaid';
+    const paymentStatus: 'unpaid' | 'paid' = newAmount >= record.final_price ? 'paid' : 'unpaid';
+    const updates = { payment_amount: Math.max(0, newAmount), payment_status: paymentStatus as 'unpaid' | 'paid', payment_date: new Date().toISOString() };
 
-    saveRecords(
-      records.map((r) =>
-        r.id === id
-          ? { ...r, payment_amount: Math.max(0, newAmount), payment_status: paymentStatus, payment_date: new Date().toISOString() }
-          : r
-      )
-    );
+    if (!demoIsDemoMode()) {
+      await updateFinanceRecord(id, updates);
+    }
+    setRecords((prev) => prev.map((r) => r.id === id ? { ...r, ...updates } : r));
   }
 
   // Statistics

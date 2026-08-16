@@ -70,10 +70,7 @@ export default function LandingPage() {
   const [pricing, setPricing] = useState({ base_price: 0, discount_percent: 0, promo_code: '', promo_expires_at: '', show_pricing: false });
 
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem('di_landing_pricing');
-      if (stored) setPricing(JSON.parse(stored));
-    } catch { /* ignore */ }
+    import('@/lib/settings').then(({ getPricing }) => getPricing().then(setPricing)).catch(() => {});
   }, []);
 
   function openOrder(templateName?: string) {
