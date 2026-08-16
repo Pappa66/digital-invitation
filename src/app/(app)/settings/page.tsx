@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Loader2, MessageCircle, Save, Tag, Eye, EyeOff } from 'lucide-react';
+import { Loader2, MessageCircle, Save, Tag } from 'lucide-react';
 import { getOrderWhatsapp, saveSetting, SETTING_ORDER_WHATSAPP, toWaNumber, getPricing, savePricing, SETTING_BUSINESS_NAME, getBusinessName } from '@/lib/settings';
 import { formatRupiah } from '@/lib/format';
 
@@ -59,7 +59,7 @@ export default function SettingsPage() {
     setSaving(true);
     setMessage(null);
 
-    const [whatsAppRes, pricingRes] = await Promise.all([
+    const [whatsAppRes, pricingRes, brandRes] = await Promise.all([
       saveSetting(SETTING_ORDER_WHATSAPP, toWaNumber(settings.whatsapp)),
       savePricing({
         base_price: settings.base_price,
@@ -68,15 +68,21 @@ export default function SettingsPage() {
         promo_expires_at: settings.promo_expires_at,
         show_pricing: settings.show_pricing
       }),
-      saveSetting(SETTING_BUSINESS_NAME || 'business_name', settings.business_name)
+      saveSetting(SETTING_BUSINESS_NAME, settings.business_name)
     ]);
 
+    // Mirror business name ke localStorage — dibaca sinkron oleh builder-store
+    // saat menambah blok Watermark (auto-fill brand).
+    try {
+      localStorage.setItem('di_business_name', settings.business_name);
+    } catch { /* ignore */ }
+
     setSaving(false);
-    if (whatsAppRes.ok && pricingRes.ok) {
+    if (whatsAppRes.ok && pricingRes.ok && brandRes.ok) {
       setSettings((s) => ({ ...s, whatsapp: toWaNumber(s.whatsapp) }));
       setMessage({ ok: true, text: 'Pengaturan berhasil disimpan.' });
     } else {
-      setMessage({ ok: false, text: `Gagal menyimpan: ${whatsAppRes.error || pricingRes.error}` });
+      setMessage({ ok: false, text: `Gagal menyimpan: ${whatsAppRes.error || pricingRes.error || brandRes.error}` });
     }
   }
 

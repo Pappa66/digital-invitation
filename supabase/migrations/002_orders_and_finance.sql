@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS finance_records (
   promo_code text,
   promo_amount numeric DEFAULT 0,
   final_price numeric DEFAULT 0,
-  payment_status text DEFAULT 'belum',
+  payment_status text DEFAULT 'unpaid',
   payment_amount numeric DEFAULT 0,
   payment_date timestamptz,
   notes text,

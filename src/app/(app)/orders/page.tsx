@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { Inbox, Loader2, Trash2, MessageCircle, Search, CheckCircle, Clock, XCircle, Send, ExternalLink } from 'lucide-react';
+import { Inbox, Loader2, Trash2, Search, CheckCircle, Clock, XCircle, Send, ExternalLink } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
 import { formatDate } from '@/lib/api/order-client';
 import { clientCreateProject } from '@/lib/api/project-client';

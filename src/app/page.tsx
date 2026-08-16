@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { formatRupiah } from '@/lib/format';
 import PricingSection from '@/components/landing/pricing-section';
 import PhoneFrame from '@/components/ui/phone-frame';
 import {
