@@ -22,6 +22,12 @@ interface CoverModalProps {
   namesScale?: string;
   /** Ornamen SVG dekoratif (kunci di ornaments.tsx). */
   ornament?: string;
+  /** Teks sapaan di cover (misal: "Kepada Yth."). */
+  coverGreeting?: string;
+  /** Teks tombol "Buka Undangan". */
+  coverButtonText?: string;
+  /** Background image cover (terpisah dari Hero bg_image). */
+  coverBgImage?: string;
 }
 
 /**
@@ -42,7 +48,10 @@ export default function CoverModal({
   background,
   text,
   namesScale = 'text-[clamp(1.875rem,6vw,2.5rem)]',
-  ornament
+  ornament,
+  coverGreeting,
+  coverButtonText,
+  coverBgImage
 }: CoverModalProps) {
   const [open, setOpen] = useState(true);
 
@@ -73,9 +82,9 @@ export default function CoverModal({
           className="fixed inset-0 z-50 overflow-hidden"
           style={{ background, color: text }}
         >
-          {bgImage && (
+          {(coverBgImage || bgImage) && (
             <div className="absolute inset-0">
-              <Image src={bgImage} alt="" fill priority sizes="100vw" className="object-cover" />
+              <Image src={coverBgImage || bgImage || ''} alt="" fill priority sizes="100vw" className="object-cover" />
               <div
                 className="absolute inset-0"
                 style={{
@@ -129,7 +138,7 @@ export default function CoverModal({
               transition={{ duration: 0.8, delay: 0.6 }}
             >
               <div className="mb-5 flex w-full flex-col items-center gap-1">
-                <span className="text-[10px] uppercase tracking-[0.3em] opacity-80">Kepada:</span>
+                <span className="text-[10px] uppercase tracking-[0.3em] opacity-80">{coverGreeting || 'Kepada:'}</span>
                 <span className="text-base font-semibold">{greetingName || 'Bapak/Ibu/Saudara/i'}</span>
               </div>
               <div className="mb-6 h-px w-3/4 bg-current opacity-40" />
@@ -139,7 +148,7 @@ export default function CoverModal({
                 className="inline-flex items-center gap-2 rounded-full px-8 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-primary)] transition-transform hover:scale-[1.04] active:scale-95"
                 style={{ background, color: primary }}
               >
-                <MailOpen className="h-4 w-4" /> Buka Undangan
+                <MailOpen className="h-4 w-4" /> {coverButtonText || 'Buka Undangan'}
               </button>
             </motion.div>
           </div>

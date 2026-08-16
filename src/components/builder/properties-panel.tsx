@@ -228,7 +228,7 @@ export default function PropertiesPanel() {
   const setReligion = useBuilderStore((s) => s.setReligion);
 
   const [mediaOpen, setMediaOpen] = useState(false);
-  const [mediaMode, setMediaMode] = useState<'hero' | 'gallery' | 'bg' | 'photo' | 'decor' | 'couple_groom' | 'couple_bride' | null>(null);
+  const [mediaMode, setMediaMode] = useState<'hero' | 'gallery' | 'bg' | 'photo' | 'decor' | 'couple_groom' | 'couple_bride' | 'cover' | null>(null);
   const [cropOpen, setCropOpen] = useState(false);
 
   function updateAccount(blockId: string, index: number, key: 'bank_name' | 'account_number' | 'account_holder', value: string) {
@@ -503,25 +503,76 @@ export default function PropertiesPanel() {
               title="Cover & Pembuka"
               desc="Layar fullscreen 'Buka Undangan' sebelum konten undangan"
               render={
-                <label className="flex items-center justify-between gap-3 rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2.5">
-                  <div>
-                    <p className="text-sm font-medium text-[#4a443c]">Tampilkan Cover</p>
-                    <p className="text-[11px] text-[#8a7a66]">Fullscreen overlay dengan nama mempelai & tombol Buka Undangan. Musik mulai setelah diklik.</p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setSettings({ show_cover: canvas.settings.show_cover === false })}
-                    className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${
-                      canvas.settings.show_cover !== false ? 'bg-[#c9a45c]' : 'bg-[#e0d6c2]'
-                    }`}
-                  >
-                    <span
-                      className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-all ${
-                        canvas.settings.show_cover !== false ? 'left-[22px]' : 'left-0.5'
+                <div className="space-y-3">
+                  <label className="flex items-center justify-between gap-3 rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2.5">
+                    <div>
+                      <p className="text-sm font-medium text-[#4a443c]">Tampilkan Cover</p>
+                      <p className="text-[11px] text-[#8a7a66]">Fullscreen overlay dengan nama mempelai & tombol Buka Undangan.</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setSettings({ show_cover: canvas.settings.show_cover === false })}
+                      className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${
+                        canvas.settings.show_cover !== false ? 'bg-[#c9a45c]' : 'bg-[#e0d6c2]'
                       }`}
-                    />
-                  </button>
-                </label>
+                    >
+                      <span
+                        className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-all ${
+                          canvas.settings.show_cover !== false ? 'left-[22px]' : 'left-0.5'
+                        }`}
+                      />
+                    </button>
+                  </label>
+                  {canvas.settings.show_cover !== false && (
+                    <>
+                      <label className="block">
+                        <span className="text-xs font-medium text-[#4a443c]">Teks Sapaan</span>
+                        <input
+                          type="text"
+                          value={canvas.settings.cover_greeting || ''}
+                          onChange={(e) => setSettings({ cover_greeting: e.target.value })}
+                          placeholder="Kepada Yth."
+                          className="mt-1 w-full rounded-md border border-[#e0d6c2] bg-white px-3 py-1.5 text-sm focus:border-[#c9a45c] focus:outline-none"
+                        />
+                      </label>
+                      <label className="block">
+                        <span className="text-xs font-medium text-[#4a443c]">Teks Tombol</span>
+                        <input
+                          type="text"
+                          value={canvas.settings.cover_button_text || ''}
+                          onChange={(e) => setSettings({ cover_button_text: e.target.value })}
+                          placeholder="Buka Undangan"
+                          className="mt-1 w-full rounded-md border border-[#e0d6c2] bg-white px-3 py-1.5 text-sm focus:border-[#c9a45c] focus:outline-none"
+                        />
+                      </label>
+                      <label className="block">
+                        <span className="text-xs font-medium text-[#4a443c]">Background Cover</span>
+                        <p className="text-[11px] text-[#8a7a66]">Kosongkan = pakai background Hero.</p>
+                        <button
+                          type="button"
+                          onClick={() => setMediaMode('cover')}
+                          className="mt-1 flex w-full items-center gap-2 rounded-md border border-dashed border-[#c9a45c]/40 bg-[#faf7f2] px-3 py-2 text-xs text-[#8a7a66] hover:border-[#c9a45c] hover:bg-white"
+                        >
+                          <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="8.5" cy="8.5" r="1.5" /><path d="m21 15-5-5L5 21" /></svg>
+                          {canvas.settings.cover_bg_image ? 'Ganti Gambar' : 'Pilih Gambar'}
+                        </button>
+                        {canvas.settings.cover_bg_image && (
+                          <div className="relative mt-1 h-16 w-full overflow-hidden rounded-md border border-[#e0d6c2]">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={canvas.settings.cover_bg_image} alt="" className="h-full w-full object-cover" />
+                            <button
+                              type="button"
+                              onClick={() => setSettings({ cover_bg_image: '' })}
+                              className="absolute right-1 top-1 rounded bg-black/50 p-0.5 text-white hover:bg-black/70"
+                            >
+                              <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6 6 18M6 6l12 12" /></svg>
+                            </button>
+                          </div>
+                        )}
+                      </label>
+                    </>
+                  )}
+                </div>
               }
             />
 
@@ -1185,6 +1236,7 @@ export default function PropertiesPanel() {
           if (mediaMode === 'photo' && block?.type === 'Photo') setBlockProps(block.id, { image: url });
           if (mediaMode === 'couple_groom' && block?.type === 'Couple') setBlockProps(block.id, { groom_photo: url });
           if (mediaMode === 'couple_bride' && block?.type === 'Couple') setBlockProps(block.id, { bride_photo: url });
+          if (mediaMode === 'cover') setSettings({ cover_bg_image: url });
           if (mediaMode === 'decor' && activeDecor)
             updateDecor(activeDecor.block.id, activeDecor.asset.id, { imageUrl: url });
           setMediaMode(null);

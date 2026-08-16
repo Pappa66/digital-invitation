@@ -59,7 +59,10 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
     secondary: canvas.theme.secondary,
     background: canvas.theme.background,
     text: canvas.theme.text,
-    ornament: typeof canvas.theme.ornament === 'string' ? canvas.theme.ornament : undefined
+    ornament: typeof canvas.theme.ornament === 'string' ? canvas.theme.ornament : undefined,
+    coverGreeting: canvas.settings.cover_greeting,
+    coverButtonText: canvas.settings.cover_button_text,
+    coverBgImage: canvas.settings.cover_bg_image
   };
 
   if (flow === 'free') {

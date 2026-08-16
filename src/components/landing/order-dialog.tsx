@@ -14,9 +14,7 @@ interface OrderDialogProps {
   onClose: () => void;
 }
 
-function formatPrice(amount: number): string {
-  return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(amount);
-}
+import { formatRupiah } from '@/lib/format';
 
 export default function OrderDialog({ templateName, basePrice = 0, discountPercent = 0, promoCode, onClose }: OrderDialogProps) {
   const [name, setName] = useState('');
@@ -59,7 +57,7 @@ export default function OrderDialog({ templateName, basePrice = 0, discountPerce
     e.preventDefault();
     if (!name.trim() || !phoneValid) return;
     const wa = toWaNumber(phone);
-    const priceInfo = hasDiscount ? `\nHarga: ${formatPrice(finalPrice)} (diskon ${discountPercent}%)` : basePrice > 0 ? `\nHarga: ${formatPrice(basePrice)}` : '';
+    const priceInfo = hasDiscount ? `\nHarga: ${formatRupiah(finalPrice)} (diskon ${discountPercent}%)` : basePrice > 0 ? `\nHarga: ${formatRupiah(basePrice)}` : '';
     const message = buildOrderMessage({
       template: templateName,
       name: name.trim(),
@@ -173,11 +171,11 @@ export default function OrderDialog({ templateName, basePrice = 0, discountPerce
                   <span className="text-sm text-[#8a7a66]">Harga</span>
                   {hasDiscount ? (
                     <div className="flex items-baseline gap-2">
-                      <span className="text-sm text-[#8a7a66] line-through">{formatPrice(basePrice)}</span>
-                      <span className="text-lg font-semibold text-[#2b2620]">{formatPrice(finalPrice)}</span>
+                      <span className="text-sm text-[#8a7a66] line-through">{formatRupiah(basePrice)}</span>
+                      <span className="text-lg font-semibold text-[#2b2620]">{formatRupiah(finalPrice)}</span>
                     </div>
                   ) : (
-                    <span className="text-lg font-semibold text-[#2b2620]">{formatPrice(basePrice)}</span>
+                    <span className="text-lg font-semibold text-[#2b2620]">{formatRupiah(basePrice)}</span>
                   )}
                 </div>
                 {hasDiscount && (
@@ -225,7 +223,7 @@ export default function OrderDialog({ templateName, basePrice = 0, discountPerce
               type="submit"
               className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-5 py-3 text-sm font-semibold text-white shadow-sm transition-transform hover:scale-[1.01]"
             >
-              <MessageCircle className="h-4 w-4" /> {basePrice > 0 ? `Pesan - ${formatPrice(finalPrice)}` : 'Kirim Pesanan'}
+              <MessageCircle className="h-4 w-4" /> {basePrice > 0 ? `Pesan - ${formatRupiah(finalPrice)}` : 'Kirim Pesanan'}
             </button>
           </form>
         )}

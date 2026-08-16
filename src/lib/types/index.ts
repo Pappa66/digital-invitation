@@ -74,6 +74,12 @@ export interface Settings {
   seat_label?: string;
   /** Tampilkan cover fullscreen "Buka Undangan" sebelum konten. Default: true. */
   show_cover?: boolean;
+  /** Teks sapaan di cover (misal: "Kepada Yth."). */
+  cover_greeting?: string;
+  /** Teks tombol "Buka Undangan". */
+  cover_button_text?: string;
+  /** Background image cover (terpisah dari Hero bg_image). */
+  cover_bg_image?: string;
   /** Harga dasar undangan (Rp). */
   base_price?: number;
   /** Diskon persen (0-100). */

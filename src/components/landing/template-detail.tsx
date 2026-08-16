@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight, MessageCircle, Sparkles } from 'lucide-react';
 import type { CanvasData, TemplateMeta } from '@/lib/types';
@@ -32,6 +32,17 @@ function Ornament() {
 
 export default function TemplateDetail({ meta, index, canvas, categoryLabel, total, prev, next }: TemplateDetailProps) {
   const [orderOpen, setOrderOpen] = useState(false);
+  const [pricing, setPricing] = useState({ base_price: 0, discount_percent: 0, promo_code: '' });
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('di_landing_pricing');
+      if (stored) {
+        const p = JSON.parse(stored);
+        setPricing({ base_price: p.base_price || 0, discount_percent: p.discount_percent || 0, promo_code: p.promo_code || '' });
+      }
+    } catch { /* ignore */ }
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#faf7f2] text-[#2b2620]">
@@ -124,7 +135,15 @@ export default function TemplateDetail({ meta, index, canvas, categoryLabel, tot
         </div>
       </main>
 
-      {orderOpen && <OrderDialog templateName={meta.name} onClose={() => setOrderOpen(false)} />}
+      {orderOpen && (
+        <OrderDialog
+          templateName={meta.name}
+          basePrice={pricing.base_price}
+          discountPercent={pricing.discount_percent}
+          promoCode={pricing.promo_code}
+          onClose={() => setOrderOpen(false)}
+        />
+      )}
     </div>
   );
 }

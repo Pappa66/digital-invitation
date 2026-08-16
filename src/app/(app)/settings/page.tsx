@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Loader2, MessageCircle, Save, Tag, Eye, EyeOff } from 'lucide-react';
 import { getOrderWhatsapp, saveSetting, SETTING_ORDER_WHATSAPP, toWaNumber } from '@/lib/settings';
+import { formatRupiah } from '@/lib/format';
 
 interface SiteSettings {
   whatsapp: string;
@@ -188,7 +189,7 @@ export default function SettingsPage() {
           )}
           {settings.base_price > 0 && settings.discount_percent > 0 && (
             <p className="mt-3 text-xs text-[#c9a45c]">
-              Harga final: Rp {(Math.round(settings.base_price * (1 - settings.discount_percent / 100))).toLocaleString('id-ID')}
+              Harga final: {formatRupiah(Math.round(settings.base_price * (1 - settings.discount_percent / 100)))}
               {settings.promo_code && ` (kode: ${settings.promo_code})`}
             </p>
           )}

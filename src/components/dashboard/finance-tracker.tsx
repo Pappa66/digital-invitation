@@ -23,7 +23,7 @@ interface FinanceRecord {
   promo_code: string;
   promo_amount: number;
   final_price: number;
-  payment_status: 'belum' | 'dp' | 'lunas';
+  payment_status: 'unpaid' | 'paid';
   payment_amount: number;
   payment_date: string;
   notes: string;
@@ -31,14 +31,11 @@ interface FinanceRecord {
 }
 
 const PAYMENT_STATUS_OPTIONS = [
-  { value: 'belum', label: 'Belum Bayar', color: 'bg-red-100 text-red-700' },
-  { value: 'dp', label: 'DP Terbayar', color: 'bg-yellow-100 text-yellow-700' },
-  { value: 'lunas', label: 'Lunas', color: 'bg-green-100 text-green-700' }
+  { value: 'unpaid', label: 'Belum Dibayar', color: 'bg-red-100 text-red-700' },
+  { value: 'paid', label: 'Lunas', color: 'bg-green-100 text-green-700' }
 ];
 
-function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(amount);
-}
+import { formatRupiah } from '@/lib/format';
 
 export default function FinanceTracker() {
   const [records, setRecords] = useState<FinanceRecord[]>([]);
@@ -104,7 +101,7 @@ export default function FinanceTracker() {
     if (!newRecord.client_name.trim()) return;
 
     const finalPrice = calculateFinalPrice(newRecord.base_price, newRecord.discount, newRecord.promo_amount);
-    const paymentStatus = newRecord.payment_amount <= 0 ? 'belum' : newRecord.payment_amount >= finalPrice ? 'lunas' : 'dp';
+    const paymentStatus = newRecord.payment_amount >= finalPrice ? 'paid' : 'unpaid';
 
     const record: FinanceRecord = {
       id: `finance-${Date.now()}`,
@@ -139,7 +136,7 @@ export default function FinanceTracker() {
     if (!record) return;
 
     const newAmount = record.payment_amount + amount;
-    const paymentStatus = newAmount <= 0 ? 'belum' : newAmount >= record.final_price ? 'lunas' : 'dp';
+    const paymentStatus = newAmount >= record.final_price ? 'paid' : 'unpaid';
 
     saveRecords(
       records.map((r) =>
@@ -155,11 +152,10 @@ export default function FinanceTracker() {
     const totalRevenue = records.reduce((sum, r) => sum + r.final_price, 0);
     const totalPaid = records.reduce((sum, r) => sum + r.payment_amount, 0);
     const totalPending = totalRevenue - totalPaid;
-    const lunasCount = records.filter((r) => r.payment_status === 'lunas').length;
-    const dpCount = records.filter((r) => r.payment_status === 'dp').length;
-    const belumCount = records.filter((r) => r.payment_status === 'belum').length;
+    const paidCount = records.filter((r) => r.payment_status === 'paid').length;
+    const unpaidCount = records.filter((r) => r.payment_status === 'unpaid').length;
 
-    return { totalRevenue, totalPaid, totalPending, lunasCount, dpCount, belumCount };
+    return { totalRevenue, totalPaid, totalPending, paidCount, unpaidCount };
   }, [records]);
 
   const filteredRecords = records.filter((r) => {
@@ -247,7 +243,7 @@ export default function FinanceTracker() {
           </div>
           {landingPricing.base_price > 0 && landingPricing.discount_percent > 0 && (
             <p className="mt-3 text-xs text-[#c9a45c]">
-              Harga final: {formatCurrency(Math.round(landingPricing.base_price * (1 - landingPricing.discount_percent / 100)))}
+              Harga final: {formatRupiah(Math.round(landingPricing.base_price * (1 - landingPricing.discount_percent / 100)))}
               {landingPricing.promo_code && ` (kode: ${landingPricing.promo_code})`}
             </p>
           )}
@@ -263,7 +259,7 @@ export default function FinanceTracker() {
             </div>
             <div>
               <p className="text-xs text-gray-500">Total Pendapatan</p>
-              <p className="text-lg font-bold text-gray-900">{formatCurrency(stats.totalRevenue)}</p>
+              <p className="text-lg font-bold text-gray-900">{formatRupiah(stats.totalRevenue)}</p>
             </div>
           </div>
         </div>
@@ -274,7 +270,7 @@ export default function FinanceTracker() {
             </div>
             <div>
               <p className="text-xs text-gray-500">Sudah Dibayar</p>
-              <p className="text-lg font-bold text-green-600">{formatCurrency(stats.totalPaid)}</p>
+              <p className="text-lg font-bold text-green-600">{formatRupiah(stats.totalPaid)}</p>
             </div>
           </div>
         </div>
@@ -285,7 +281,7 @@ export default function FinanceTracker() {
             </div>
             <div>
               <p className="text-xs text-gray-500">Belum Dibayar</p>
-              <p className="text-lg font-bold text-yellow-600">{formatCurrency(stats.totalPending)}</p>
+              <p className="text-lg font-bold text-yellow-600">{formatRupiah(stats.totalPending)}</p>
             </div>
           </div>
         </div>
@@ -297,9 +293,8 @@ export default function FinanceTracker() {
             <div>
               <p className="text-xs text-gray-500">Status</p>
               <div className="flex gap-2 text-xs">
-                <span className="text-green-600">{stats.lunasCount} Lunas</span>
-                <span className="text-yellow-600">{stats.dpCount} DP</span>
-                <span className="text-red-600">{stats.belumCount} Belum</span>
+                <span className="text-green-600">{stats.paidCount} Lunas</span>
+                <span className="text-red-600">{stats.unpaidCount} Belum</span>
               </div>
             </div>
           </div>
@@ -351,21 +346,21 @@ export default function FinanceTracker() {
                       <p className="font-medium text-gray-900">{record.client_name}</p>
                     </td>
                     <td className="px-4 py-3 text-sm text-gray-700">{record.design_name || '-'}</td>
-                    <td className="px-4 py-3 text-right text-sm text-gray-700">{formatCurrency(record.base_price)}</td>
+                    <td className="px-4 py-3 text-right text-sm text-gray-700">{formatRupiah(record.base_price)}</td>
                     <td className="px-4 py-3 text-right text-sm text-red-600">
-                      {record.discount > 0 ? `-${formatCurrency(record.discount)}` : '-'}
+                      {record.discount > 0 ? `-${formatRupiah(record.discount)}` : '-'}
                     </td>
                     <td className="px-4 py-3 text-right text-sm">
                       {record.promo_code ? (
                         <span className="rounded bg-purple-100 px-2 py-0.5 text-xs text-purple-700">
-                          {record.promo_code} (-{formatCurrency(record.promo_amount)})
+                          {record.promo_code} (-{formatRupiah(record.promo_amount)})
                         </span>
                       ) : (
                         '-'
                       )}
                     </td>
-                    <td className="px-4 py-3 text-right text-sm font-semibold text-gray-900">{formatCurrency(record.final_price)}</td>
-                    <td className="px-4 py-3 text-right text-sm text-green-600">{formatCurrency(record.payment_amount)}</td>
+                    <td className="px-4 py-3 text-right text-sm font-semibold text-gray-900">{formatRupiah(record.final_price)}</td>
+                    <td className="px-4 py-3 text-right text-sm text-green-600">{formatRupiah(record.payment_amount)}</td>
                     <td className="px-4 py-3">
                       <span
                         className={`inline-block rounded-full px-2 py-1 text-xs font-medium ${
@@ -377,7 +372,7 @@ export default function FinanceTracker() {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
-                        {record.payment_status !== 'lunas' && (
+                        {record.payment_status !== 'paid' && (
                           <button
                             onClick={() => {
                               const amount = prompt('Masukkan jumlah pembayaran:');
@@ -507,7 +502,7 @@ export default function FinanceTracker() {
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-gray-500">Harga Final:</span>
                   <span className="font-bold text-gray-900">
-                    {formatCurrency(
+                    {formatRupiah(
                       calculateFinalPrice(newRecord.base_price, newRecord.discount, newRecord.promo_amount)
                     )}
                   </span>

@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { formatRupiah } from '@/lib/format';
 import {
   ArrowRight,
   ChevronLeft,
@@ -194,12 +195,12 @@ export default function LandingPage() {
               <div className="mt-8 inline-block rounded-2xl border border-[#e7ddcc] bg-white p-8 shadow-lg">
                 {pricing.discount_percent > 0 && (
                   <p className="mb-2 text-sm text-[#8a7a66]">
-                    <span className="mr-2 text-xs text-[#b3a69a] line-through">Rp {pricing.base_price.toLocaleString('id-ID')}</span>
+                    <span className="mr-2 text-xs text-[#b3a69a] line-through">{formatRupiah(pricing.base_price)}</span>
                     <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">-{pricing.discount_percent}%</span>
                   </p>
                 )}
                 <p className="font-heading text-4xl font-semibold text-[#2b2620]">
-                  Rp {(Math.round(pricing.base_price * (1 - pricing.discount_percent / 100))).toLocaleString('id-ID')}
+                  {formatRupiah(Math.round(pricing.base_price * (1 - pricing.discount_percent / 100)))}
                 </p>
                 {pricing.promo_code && (
                   <p className="mt-2 text-sm text-[#8a7a66]">Gunakan kode <span className="font-semibold text-[#b98a3e]">{pricing.promo_code}</span> saat pemesanan</p>
@@ -369,7 +370,15 @@ export default function LandingPage() {
           </div>
         </footer>
       </div>
-      {orderOpen && <OrderDialog templateName={orderTemplate} onClose={() => setOrderOpen(false)} />}
+      {orderOpen && (
+        <OrderDialog
+          templateName={orderTemplate}
+          basePrice={pricing.base_price}
+          discountPercent={pricing.discount_percent}
+          promoCode={pricing.promo_code}
+          onClose={() => setOrderOpen(false)}
+        />
+      )}
     </div>
   );
 }

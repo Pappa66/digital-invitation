@@ -10,9 +10,7 @@ interface PricingSectionProps {
   promoExpiresAt: string;
 }
 
-function formatPrice(amount: number): string {
-  return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(amount);
-}
+import { formatRupiah } from '@/lib/format';
 
 function getTimeRemaining(expiresAt: string) {
   const diff = new Date(expiresAt).getTime() - Date.now();
@@ -50,11 +48,11 @@ export default function PricingSection({ basePrice, discountPercent, promoCode, 
           <p className="text-xs uppercase tracking-widest opacity-60">Mulai dari</p>
           {hasDiscount ? (
             <div className="mt-2 flex items-baseline justify-center gap-3">
-              <span className="text-lg text-current/40 line-through">{formatPrice(basePrice)}</span>
-              <span className="text-3xl font-heading font-medium">{formatPrice(discountedPrice)}</span>
+              <span className="text-lg text-current/40 line-through">{formatRupiah(basePrice)}</span>
+              <span className="text-3xl font-heading font-medium">{formatRupiah(discountedPrice)}</span>
             </div>
           ) : (
-            <p className="mt-2 text-3xl font-heading font-medium">{formatPrice(basePrice)}</p>
+            <p className="mt-2 text-3xl font-heading font-medium">{formatRupiah(basePrice)}</p>
           )}
         </div>
 
