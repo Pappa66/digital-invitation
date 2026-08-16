@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { LayoutDashboard, LayoutTemplate, Inbox, Settings, LogOut } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
+import { Button } from '@/components/ui/button';
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -63,13 +64,10 @@ export default function AppLayout({ children }: AppLayoutProps) {
         </nav>
         <div className="border-t border-dashboard-border p-3">
           <div className="mb-2 truncate px-3 text-xs text-[#8a7a66]">{email}</div>
-          <button
-            onClick={handleLogout}
-            className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-[#4a443c] hover:bg-white"
-          >
+          <Button variant="ghost" onClick={handleLogout} className="w-full justify-start text-[#4a443c]">
             <LogOut className="h-4 w-4" />
             Keluar
-          </button>
+          </Button>
         </div>
       </aside>
       <div className="flex min-w-0 flex-1 flex-col">

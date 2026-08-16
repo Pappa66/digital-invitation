@@ -5,6 +5,9 @@ import { Inbox, Loader2, Trash2, Search, CheckCircle, Clock, XCircle, Send, Exte
 import { supabase } from '@/lib/supabase/client';
 import { formatDate } from '@/lib/api/order-client';
 import { clientCreateProject } from '@/lib/api/project-client';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
 
 interface OrderRow {
   id: string;
@@ -132,9 +135,9 @@ export default function OrdersPage() {
           <h2 className="text-lg font-semibold">Kontak Masuk</h2>
           <p className="mt-1 text-sm text-gray-500">{orders.length} pesanan dari form pemesanan.</p>
         </div>
-        <button onClick={load} className="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
+        <Button variant="outline" onClick={load}>
           Muat Ulang
-        </button>
+        </Button>
       </div>
 
       {error && (
@@ -146,23 +149,23 @@ export default function OrdersPage() {
       {/* Filters */}
       <div className="mb-4 flex flex-wrap items-center gap-2">
         {(['all', 'pending', 'approved', 'rejected'] as FilterStatus[]).map((f) => (
-          <button
+          <Button
             key={f}
+            variant={filter === f ? 'default' : 'outline'}
+            size="sm"
+            className="rounded-full px-3 text-xs"
             onClick={() => setFilter(f)}
-            className={`rounded-full px-3 py-1.5 text-xs font-medium transition ${
-              filter === f ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            }`}
           >
             {f === 'all' ? 'Semua' : STATUS_CONFIG[f].label} ({counts[f]})
-          </button>
+          </Button>
         ))}
         <div className="relative ml-auto">
           <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-400" />
-          <input
+          <Input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Cari nama, template, WA..."
-            className="rounded-md border border-gray-200 bg-white py-1.5 pl-8 pr-3 text-xs outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300"
+            className="h-8 w-56 pl-8 text-xs"
           />
         </div>
       </div>
@@ -188,11 +191,13 @@ export default function OrdersPage() {
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
                       <p className="text-sm font-semibold text-gray-900">{o.name}</p>
-                      <span className={`flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium ${st.color}`}>
+                      <Badge className={`gap-1 ${st.color} border-transparent`}>
                         <StatusIcon className="h-3 w-3" /> {st.label}
-                      </span>
+                      </Badge>
                       {o.template_name && (
-                        <span className="rounded-full bg-purple-50 px-2 py-0.5 text-[10px] font-medium text-purple-700">{o.template_name}</span>
+                        <Badge variant="secondary" className="gap-1">
+                          {o.template_name}
+                        </Badge>
                       )}
                     </div>
                     {o.email && <p className="mt-0.5 text-xs text-gray-400">{o.email}</p>}
@@ -229,13 +234,13 @@ export default function OrdersPage() {
                       </>
                     )}
                     {(o.status || 'pending') === 'approved' && !o.project_id && o.template_id && (
-                      <button
+                      <Button
                         onClick={() => createProjectFromOrder(o)}
-                        className="flex items-center gap-1.5 rounded-md bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-3 py-1.5 text-xs font-medium text-white hover:opacity-90"
+                        className="h-7 px-3 text-xs"
                         title="Buat proyek undangan dari pesanan ini"
                       >
                         Buat Proyek
-                      </button>
+                      </Button>
                     )}
                     {o.project_id && (
                       <a

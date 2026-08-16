@@ -9,6 +9,27 @@
   --gc-text: #4a443c;
   --font-heading: 'Playfair Display', serif;
   --font-body: 'Montserrat', sans-serif;
+
+  --background: 40 33% 98%;
+  --foreground: 33 8% 25%;
+  --card: 0 0% 100%;
+  --card-foreground: 33 8% 25%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 33 8% 25%;
+  --primary: 42 65% 52%;
+  --primary-foreground: 40 33% 98%;
+  --secondary: 40 20% 94%;
+  --secondary-foreground: 33 8% 25%;
+  --muted: 40 20% 94%;
+  --muted-foreground: 35 8% 45%;
+  --accent: 42 65% 94%;
+  --accent-foreground: 42 65% 30%;
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 40 33% 98%;
+  --border: 38 16% 87%;
+  --input: 38 16% 87%;
+  --ring: 42 65% 52%;
+  --radius: 0.5rem;
 }
 
 html,

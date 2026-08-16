@@ -9,6 +9,8 @@ import { clientCreateProject, clientCreateProjectFromData } from '@/lib/api/proj
 import { userTemplatesList, userTemplateDelete } from '@/lib/demo/user-templates';
 import type { UserTemplate } from '@/lib/demo/user-templates';
 import GuideModal from '@/components/ui/guide-modal';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 const PER_PAGE = 8;
 
@@ -95,36 +97,29 @@ export default function TemplatesPage() {
             Mulai dari template jadi, buat dari kosong, atau pakai lagi desain yang kamu simpan sebagai template.
           </p>
           <label className="mt-4 block text-xs font-medium text-gray-700">Nama undangan</label>
-          <input
+          <Input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="cth: Perkawinan Panca & Sena"
-            className="mt-1 w-full max-w-md rounded-md border border-gray-300 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-900"
+            className="mt-1 w-full max-w-md"
           />
           {error && <p className="mt-2 text-xs text-red-600">{error}</p>}
         </div>
-        <button
-          onClick={() => setGuideOpen(true)}
-          className="flex items-center gap-2 rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-        >
+        <Button variant="outline" onClick={() => setGuideOpen(true)}>
           <HelpCircle className="h-4 w-4" /> Panduan
-        </button>
+        </Button>
       </div>
 
-      <div className="mb-6 flex flex-wrap items-center gap-2 rounded-lg border border-dashed border-gray-300 bg-white/60 px-4 py-4">
+      <div className="mb-6 flex flex-wrap items-center gap-2 rounded-lg border border-dashed bg-card px-4 py-4">
         <Sparkles className="h-5 w-5 text-gray-400" />
         <div className="flex-1">
           <p className="text-sm font-medium text-gray-800">Mulai dari halaman kosong</p>
           <p className="text-xs text-gray-500">Lewati template dan susun sendiri semuanya di Builder.</p>
         </div>
-        <button
-          onClick={startBlank}
-          disabled={busyId !== null}
-          className="flex items-center gap-2 rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white hover:opacity-90 disabled:opacity-60"
-        >
+        <Button onClick={startBlank} disabled={busyId !== null}>
           {busyId === '_blank' ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
           Mulai Kosong
-        </button>
+        </Button>
       </div>
 
       {userTemplates.length > 0 && (
@@ -151,22 +146,18 @@ export default function TemplatesPage() {
                     <Trash2 className="h-3.5 w-3.5" />
                   </button>
                 </div>
-                <div className="flex flex-1 flex-col p-4">
-                  <div className="flex items-center gap-2">
-                    <span className="h-4 w-4 rounded-full border border-black/5" style={{ background: t.primary }} />
-                    <span className="h-4 w-4 rounded-full border border-black/5" style={{ background: t.secondary }} />
-                    <p className="ml-1 truncate text-sm font-semibold text-gray-900">{t.name}</p>
-                  </div>
-                  <p className="mt-1.5 line-clamp-2 flex-1 text-xs leading-relaxed text-gray-500">{t.description}</p>
-                  <button
-                    onClick={() => startUser(t)}
-                    disabled={busyId !== null}
-                    className="mt-4 flex items-center justify-center gap-2 rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white hover:opacity-90 disabled:opacity-60"
-                  >
-                    {busyId === t.id ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-                    Pakai Template
-                  </button>
-                </div>
+<div className="flex flex-1 flex-col p-4">
+                      <div className="flex items-center gap-2">
+                        <span className="h-4 w-4 rounded-full border border-black/5" style={{ background: t.primary }} />
+                        <span className="h-4 w-4 rounded-full border border-black/5" style={{ background: t.secondary }} />
+                        <p className="ml-1 truncate text-sm font-semibold text-gray-900">{t.name}</p>
+                      </div>
+                      <p className="mt-1.5 line-clamp-2 flex-1 text-xs leading-relaxed text-gray-500">{t.description}</p>
+                      <Button onClick={() => startUser(t)} disabled={busyId !== null} className="mt-4 w-full">
+                        {busyId === t.id ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+                        Pakai Template
+                      </Button>
+                    </div>
               </div>
             ))}
           </div>
@@ -185,24 +176,19 @@ export default function TemplatesPage() {
         </div>
 
         <div className="mb-2 flex flex-wrap gap-2">
-          <button
-            onClick={() => selectCategory('semua')}
-            className={`rounded-full px-3 py-1.5 text-xs font-medium ${
-              category === 'semua' ? 'bg-gray-900 text-white' : 'border border-gray-300 text-gray-600 hover:bg-gray-50'
-            }`}
-          >
+          <Button key="semua" variant={category === 'semua' ? 'default' : 'outline'} size="sm" className="rounded-full px-3 text-xs" onClick={() => selectCategory('semua')}>
             Semua
-          </button>
+          </Button>
           {CATEGORIES.map((c) => (
-            <button
+            <Button
               key={c.key}
+              variant={category === c.key ? 'default' : 'outline'}
+              size="sm"
+              className="rounded-full px-3 text-xs"
               onClick={() => selectCategory(c.key)}
-              className={`rounded-full px-3 py-1.5 text-xs font-medium ${
-                category === c.key ? 'bg-gray-900 text-white' : 'border border-gray-300 text-gray-600 hover:bg-gray-50'
-              }`}
             >
               {c.label}
-            </button>
+            </Button>
           ))}
         </div>
         <div className="mb-6 max-w-3xl rounded-xl border border-gray-200 bg-amber-50/60 px-4 py-3">
@@ -246,14 +232,10 @@ export default function TemplatesPage() {
                     <p className="ml-1 text-sm font-semibold text-gray-900">{t.name}</p>
                   </div>
                   <p className="mt-1.5 line-clamp-3 flex-1 text-xs leading-relaxed text-gray-500">{t.description}</p>
-                  <button
-                    onClick={() => startBuiltIn(t.id)}
-                    disabled={busyId !== null}
-                    className="mt-4 flex items-center justify-center gap-2 rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white hover:opacity-90 disabled:opacity-60"
-                  >
+                  <Button onClick={() => startBuiltIn(t.id)} disabled={busyId !== null} className="mt-4 w-full">
                     {busyId === t.id ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
                     Pakai Template
-                  </button>
+                  </Button>
                   <button
                     onClick={() => toggleDemo(t.id)}
                     className={`mt-2 flex items-center justify-center gap-1.5 rounded-md border px-3 py-1.5 text-xs font-medium transition-colors ${
@@ -273,33 +255,34 @@ export default function TemplatesPage() {
 
         {totalPages > 1 && (
           <div className="mt-6 flex items-center justify-center gap-2">
-            <button
+            <Button
+              variant="outline"
+              size="icon"
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={safePage === 1}
-              className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 disabled:opacity-40"
               aria-label="Halaman sebelumnya"
             >
               <ChevronLeft className="h-4 w-4" />
-            </button>
+            </Button>
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
-              <button
+              <Button
                 key={n}
+                variant={n === safePage ? 'default' : 'outline'}
+                size="icon"
                 onClick={() => setPage(n)}
-                className={`h-9 w-9 rounded-lg text-sm ${
-                  n === safePage ? 'bg-gray-900 font-semibold text-white' : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
-                }`}
               >
                 {n}
-              </button>
+              </Button>
             ))}
-            <button
+            <Button
+              variant="outline"
+              size="icon"
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={safePage === totalPages}
-              className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 disabled:opacity-40"
               aria-label="Halaman berikutnya"
             >
               <ChevronRight className="h-4 w-4" />
-            </button>
+            </Button>
           </div>
         )}
       </section>

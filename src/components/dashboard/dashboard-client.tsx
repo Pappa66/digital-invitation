@@ -1,12 +1,16 @@
 'use client';
 
 import { useEffect, useState, useMemo } from 'react';
-import { HelpCircle, Plus, Search, Calendar, Filter, Users, DollarSign } from 'lucide-react';
+import { HelpCircle, Plus, Search, Calendar, Users, DollarSign } from 'lucide-react';
 import ProjectCard from '@/components/dashboard/project-card';
 import NewProjectModal from '@/components/dashboard/new-project-modal';
 import ClientManagement from '@/components/dashboard/client-management';
 import FinanceTracker from '@/components/dashboard/finance-tracker';
 import GuideModal from '@/components/ui/guide-modal';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import type { Project } from '@/lib/types';
 import { demoListProjects } from '@/lib/demo/demo-store';
 
@@ -122,44 +126,21 @@ export default function DashboardClient({ projects, isDemo = false, userName = n
   return (
     <div>
       {/* Tab Navigation */}
-      <div className="mb-6 border-b border-gray-200">
-        <nav className="flex gap-6">
-          <button
-            onClick={() => setActiveTab('invitations')}
-            className={`flex items-center gap-2 border-b-2 px-1 py-3 text-sm font-medium transition-colors ${
-              activeTab === 'invitations'
-                ? 'border-[#c9a45c] text-[#c9a45c]'
-                : 'border-transparent text-gray-500 hover:text-gray-700'
-            }`}
-          >
+      <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as TabType)} className="mb-6">
+        <TabsList>
+          <TabsTrigger value="invitations">
             <Calendar className="h-4 w-4" /> Undangan
-          </button>
-          <button
-            onClick={() => setActiveTab('clients')}
-            className={`flex items-center gap-2 border-b-2 px-1 py-3 text-sm font-medium transition-colors ${
-              activeTab === 'clients'
-                ? 'border-[#c9a45c] text-[#c9a45c]'
-                : 'border-transparent text-gray-500 hover:text-gray-700'
-            }`}
-          >
+          </TabsTrigger>
+          <TabsTrigger value="clients">
             <Users className="h-4 w-4" /> Client
-          </button>
-          <button
-            onClick={() => setActiveTab('finance')}
-            className={`flex items-center gap-2 border-b-2 px-1 py-3 text-sm font-medium transition-colors ${
-              activeTab === 'finance'
-                ? 'border-[#c9a45c] text-[#c9a45c]'
-                : 'border-transparent text-gray-500 hover:text-gray-700'
-            }`}
-          >
+          </TabsTrigger>
+          <TabsTrigger value="finance">
             <DollarSign className="h-4 w-4" /> Keuangan
-          </button>
-        </nav>
-      </div>
+          </TabsTrigger>
+        </TabsList>
 
-      {/* Invitations Tab */}
-      {activeTab === 'invitations' && (
-        <>
+        {/* Invitations Tab */}
+        <TabsContent value="invitations">
           <div className="mb-6 flex items-center justify-between">
             <div>
               <h2 className="text-lg font-semibold">Daftar Undangan</h2>
@@ -176,85 +157,76 @@ export default function DashboardClient({ projects, isDemo = false, userName = n
               </p>
             </div>
             <div className="flex items-center gap-2">
-              <button
-                onClick={() => setGuideOpen(true)}
-                className="flex items-center gap-2 rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-              >
+              <Button variant="outline" onClick={() => setGuideOpen(true)}>
                 <HelpCircle className="h-4 w-4" /> Panduan
-              </button>
-              <button
-                onClick={() => setModalOpen(true)}
-                className="flex items-center gap-2 rounded-md bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-4 py-2 text-sm font-semibold text-white shadow-sm hover:opacity-90"
-              >
+              </Button>
+              <Button onClick={() => setModalOpen(true)}>
                 <Plus className="h-4 w-4" /> Create New
-              </button>
+              </Button>
             </div>
           </div>
 
           {/* Search and Filters */}
-          <div className="mb-6 rounded-lg border border-gray-200 bg-white p-4">
+          <div className="mb-6 rounded-lg border bg-card p-4">
             <div className="flex flex-col gap-4 lg:flex-row">
               {/* Search */}
               <div className="flex-1">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                  <input
+                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <Input
                     type="text"
                     placeholder="Cari undangan..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full rounded-lg border border-gray-300 py-2 pl-10 pr-4 text-sm focus:border-[#c9a45c] focus:outline-none focus:ring-1 focus:ring-[#c9a45c]"
+                    className="pl-10"
                   />
                 </div>
               </div>
 
               {/* Filters */}
               <div className="flex flex-wrap items-center gap-3">
-                <div className="flex items-center gap-2">
-                  <Filter className="h-4 w-4 text-gray-400" />
-                  <span className="text-xs text-gray-500">Filter:</span>
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  <span className="text-xs">Filter:</span>
                 </div>
 
-                <select
-                  value={filterStatus}
-                  onChange={(e) => setFilterStatus(e.target.value)}
-                  className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#c9a45c] focus:outline-none"
-                >
-                  <option value="">Semua Status</option>
-                  <option value="published">Published</option>
-                  <option value="draft">Draft</option>
-                </select>
+                <Select value={filterStatus} onValueChange={setFilterStatus}>
+                  <SelectTrigger className="w-auto gap-2 text-sm">
+                    <SelectValue placeholder="Semua Status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="">Semua Status</SelectItem>
+                    <SelectItem value="published">Published</SelectItem>
+                    <SelectItem value="draft">Draft</SelectItem>
+                  </SelectContent>
+                </Select>
 
-                <select
-                  value={filterMonth}
-                  onChange={(e) => setFilterMonth(e.target.value)}
-                  className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#c9a45c] focus:outline-none"
-                >
-                  <option value="">Semua Bulan</option>
-                  <option value="1">Januari</option>
-                  <option value="2">Februari</option>
-                  <option value="3">Maret</option>
-                  <option value="4">April</option>
-                  <option value="5">Mei</option>
-                  <option value="6">Juni</option>
-                  <option value="7">Juli</option>
-                  <option value="8">Agustus</option>
-                  <option value="9">September</option>
-                  <option value="10">Oktober</option>
-                  <option value="11">November</option>
-                  <option value="12">Desember</option>
-                </select>
+                <Select value={filterMonth} onValueChange={setFilterMonth}>
+                  <SelectTrigger className="w-auto gap-2 text-sm">
+                    <SelectValue placeholder="Semua Bulan" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="">Semua Bulan</SelectItem>
+                    {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
+                      <SelectItem key={m} value={String(m)}>
+                        {new Date(0, m - 1).toLocaleDateString('id-ID', { month: 'long' })}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
 
-                <select
-                  value={filterYear}
-                  onChange={(e) => setFilterYear(e.target.value)}
-                  className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#c9a45c] focus:outline-none"
-                >
-                  <option value="">Semua Tahun</option>
-                  {availableYears.map((year) => (
-                    <option key={year} value={year}>{year}</option>
-                  ))}
-                </select>
+                <Select value={filterYear} onValueChange={setFilterYear}>
+                  <SelectTrigger className="w-auto gap-2 text-sm">
+                    <SelectValue placeholder="Semua Tahun" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="">Semua Tahun</SelectItem>
+                    {availableYears.map((year) => (
+                      <SelectItem key={year} value={String(year)}>
+                        {year}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
           </div>
@@ -267,7 +239,7 @@ export default function DashboardClient({ projects, isDemo = false, userName = n
           )}
 
           {filteredItems.length === 0 ? (
-            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-gray-300 bg-white py-24 text-center">
+            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed bg-card py-24 text-center">
               <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#c9a45c]/20 to-[#b98a3e]/10">
                 <svg className="h-8 w-8 text-[#c9a45c]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -282,12 +254,9 @@ export default function DashboardClient({ projects, isDemo = false, userName = n
                   : 'Buat undangan digital pertama Anda dan bagikan ke tamu dalam hitungan menit.'}
               </p>
               {!hasActiveFilters && (
-                <button
-                  onClick={() => setModalOpen(true)}
-                  className="mt-5 rounded-md bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:opacity-90"
-                >
+                <Button onClick={() => setModalOpen(true)} className="mt-5">
                   Buat Undangan Pertama
-                </button>
+                </Button>
               )}
             </div>
           ) : (
@@ -300,41 +269,42 @@ export default function DashboardClient({ projects, isDemo = false, userName = n
 
           {filteredItems.length > PER_PAGE && (
             <div className="mt-6 flex items-center justify-center gap-2">
-              <button
-                onClick={() => setPage((p) => Math.max(1, p - 1))}
-                disabled={safePage === 1}
-                className="rounded-md border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-40"
-              >
+              <Button variant="outline" size="sm" onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={safePage === 1}>
                 ← Sebelumnya
-              </button>
+              </Button>
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
-                <button
+                <Button
                   key={n}
+                  variant={n === safePage ? 'default' : 'outline'}
+                  size="icon"
+                  className="h-8 w-8 text-sm"
                   onClick={() => setPage(n)}
-                  className={`h-8 w-8 rounded-md text-sm ${
-                    n === safePage ? 'bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] font-semibold text-white' : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
-                  }`}
                 >
                   {n}
-                </button>
+                </Button>
               ))}
-              <button
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                 disabled={safePage === totalPages}
-                className="rounded-md border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-40"
               >
                 Berikutnya →
-              </button>
+              </Button>
             </div>
           )}
-        </>
-      )}
+        </TabsContent>
 
-      {/* Clients Tab */}
-      {activeTab === 'clients' && <ClientManagement />}
+        {/* Clients Tab */}
+        <TabsContent value="clients">
+          <ClientManagement />
+        </TabsContent>
 
-      {/* Finance Tab */}
-      {activeTab === 'finance' && <FinanceTracker />}
+        {/* Finance Tab */}
+        <TabsContent value="finance">
+          <FinanceTracker />
+        </TabsContent>
+      </Tabs>
 
       <NewProjectModal open={modalOpen} onClose={() => setModalOpen(false)} />
 

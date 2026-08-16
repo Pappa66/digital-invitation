@@ -4,6 +4,10 @@ import { useEffect, useState } from 'react';
 import { Loader2, MessageCircle, Save, Tag } from 'lucide-react';
 import { getOrderWhatsapp, saveSetting, SETTING_ORDER_WHATSAPP, toWaNumber, getPricing, savePricing, SETTING_BUSINESS_NAME, getBusinessName } from '@/lib/settings';
 import { formatRupiah } from '@/lib/format';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 
 interface SiteSettings {
   whatsapp: string;
@@ -108,12 +112,12 @@ export default function SettingsPage() {
           </p>
           <div className="relative">
             <MessageCircle className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-            <input
+            <Input
               value={settings.whatsapp}
               onChange={(e) => update('whatsapp', e.target.value)}
               inputMode="tel"
               placeholder="cth: 6281234567890"
-              className="w-full rounded-md border border-gray-300 py-2.5 pl-10 pr-3 text-sm text-gray-900 outline-none placeholder:text-gray-400 focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10"
+              className="pl-10"
             />
           </div>
           <p className="mt-1.5 text-xs text-gray-400">
@@ -132,12 +136,7 @@ export default function SettingsPage() {
 
           <div className="mb-4 flex items-center gap-3">
             <label className="flex items-center gap-2 text-xs font-medium text-[#4a443c]">
-              <input
-                type="checkbox"
-                checked={settings.show_pricing}
-                onChange={(e) => update('show_pricing', e.target.checked)}
-                className="h-4 w-4 rounded border-[#e0d6c2] accent-[#c9a45c]"
-              />
+              <Switch checked={settings.show_pricing} onCheckedChange={(v) => update('show_pricing', v)} />
               Tampilkan harga di landing page
             </label>
           </div>
@@ -145,44 +144,41 @@ export default function SettingsPage() {
           {settings.show_pricing && (
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="mb-1 block text-xs font-medium text-[#4a443c]">Harga Dasar (Rp)</label>
-                <input
+                <Label className="mb-1 block text-xs font-medium text-[#4a443c]">Harga Dasar (Rp)</Label>
+                <Input
                   type="number"
                   value={settings.base_price || ''}
                   onChange={(e) => update('base_price', parseInt(e.target.value) || 0)}
-                  className="w-full rounded-md border border-[#e0d6c2] bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
                   placeholder="2500000"
                 />
               </div>
               <div>
-                <label className="mb-1 block text-xs font-medium text-[#4a443c]">Diskon (%)</label>
-                <input
+                <Label className="mb-1 block text-xs font-medium text-[#4a443c]">Diskon (%)</Label>
+                <Input
                   type="number"
                   min={0}
                   max={100}
                   value={settings.discount_percent || ''}
                   onChange={(e) => update('discount_percent', parseInt(e.target.value) || 0)}
-                  className="w-full rounded-md border border-[#e0d6c2] bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
                   placeholder="15"
                 />
               </div>
               <div>
-                <label className="mb-1 block text-xs font-medium text-[#4a443c]">Kode Promo</label>
-                <input
+                <Label className="mb-1 block text-xs font-medium text-[#4a443c]">Kode Promo</Label>
+                <Input
                   type="text"
                   value={settings.promo_code}
                   onChange={(e) => update('promo_code', e.target.value.toUpperCase())}
-                  className="w-full rounded-md border border-[#e0d6c2] bg-white px-3 py-2 text-sm uppercase outline-none focus:ring-2 focus:ring-[#c9a45c]"
                   placeholder="WEDDING15"
+                  className="uppercase"
                 />
               </div>
               <div>
-                <label className="mb-1 block text-xs font-medium text-[#4a443c]">Berlaku Hingga</label>
-                <input
+                <Label className="mb-1 block text-xs font-medium text-[#4a443c]">Berlaku Hingga</Label>
+                <Input
                   type="date"
                   value={settings.promo_expires_at?.split('T')[0] || ''}
                   onChange={(e) => update('promo_expires_at', e.target.value ? `${e.target.value}T23:59:59` : '')}
-                  className="w-full rounded-md border border-[#e0d6c2] bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
                 />
               </div>
             </div>
@@ -200,11 +196,10 @@ export default function SettingsPage() {
           <h3 className="mb-3 text-sm font-semibold text-gray-900">Branding</h3>
           <div>
             <label className="mb-1 block text-xs font-medium text-gray-700">Nama Bisnis (untuk Watermark)</label>
-            <input
+            <Input
               type="text"
               value={settings.business_name}
               onChange={(e) => update('business_name', e.target.value)}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-gray-900 focus:ring-2 focus:ring-gray-900/10"
               placeholder="PT. Prasha Digital Indonesia"
             />
             <p className="mt-1 text-xs text-gray-400">Muncul di watermark &quot;Made with Love by ...&quot; di bagian akhir undangan.</p>
@@ -215,14 +210,10 @@ export default function SettingsPage() {
           <p className={`rounded-md px-3 py-2 text-xs ${message.ok ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>{message.text}</p>
         )}
 
-        <button
-          type="submit"
-          disabled={saving || loading}
-          className="flex items-center gap-2 rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:opacity-90 disabled:opacity-60"
-        >
+        <Button type="submit" disabled={saving || loading}>
           {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
           {saving ? 'Menyimpan...' : 'Simpan Pengaturan'}
-        </button>
+        </Button>
       </form>
 
       {loading && (
