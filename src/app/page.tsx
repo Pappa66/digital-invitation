@@ -16,7 +16,7 @@ import {
   ChevronRight,
   Eye
 } from 'lucide-react';
-import { TEMPLATE_LIST, getTemplate } from '@/lib/templates';
+import { TEMPLATE_LIST, getTemplate, DEMO_TEMPLATES } from '@/lib/templates';
 import { CATEGORIES, categoryLabel, type TemplateCategory } from '@/lib/template-categories';
 import TemplatePreview from '@/components/landing/template-preview';
 import OrderDialog from '@/components/landing/order-dialog';
@@ -196,7 +196,7 @@ export default function LandingPage() {
   }
 
   const cards = useMemo<CardData[]>(
-    () => TEMPLATE_LIST.map((meta) => ({ meta, canvas: getTemplate(meta.id)! })),
+    () => DEMO_TEMPLATES.map((meta) => ({ meta, canvas: getTemplate(meta.id)! })),
     []
   );
 
@@ -207,7 +207,7 @@ export default function LandingPage() {
 
   const featuredCards = useMemo(
     () =>
-      TEMPLATE_LIST.filter((t) => FEATURED.includes(t.id))
+      DEMO_TEMPLATES.filter((t) => FEATURED.includes(t.id))
         .map((meta) => ({ meta, canvas: getTemplate(meta.id)! }))
         .slice(0, 3),
     []
@@ -344,7 +344,7 @@ export default function LandingPage() {
             <div className="text-center">
               <p className="font-script text-3xl text-[#b98a3e]">Koleksi Kami</p>
               <Ornament className="mt-3" />
-              <h2 className="mt-5 font-heading text-3xl font-medium text-[#2b2620] sm:text-4xl">Katalog Template</h2>
+              <h2 className="mt-5 font-heading text-3xl font-medium text-[#2b2620] sm:text-4xl">Undangan Contoh</h2>
               <p className="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-[#8a7a66]">
                 Pratinjau asli setiap desain — klik untuk melihat detail, lalu pesan untuk dikerjakan tim kami.
               </p>
@@ -410,7 +410,7 @@ export default function LandingPage() {
                       </div>
                       <p className="mt-1.5 line-clamp-2 flex-1 text-xs leading-relaxed text-[#8a7a66]">{meta.description}</p>
                       <span className="mt-4 flex items-center justify-center gap-2 rounded-lg border border-[#d9c795] bg-[#faf7f2] px-3 py-2 text-sm font-medium text-[#8a6d2f] transition-colors group-hover:bg-gradient-to-r group-hover:from-[#c9a45c] group-hover:to-[#b98a3e] group-hover:text-white">
-                        <Eye className="h-4 w-4" /> Lihat Template
+                        <Eye className="h-4 w-4" /> Lihat Undangan
                       </span>
                     </div>
                   </Link>
@@ -468,7 +468,7 @@ export default function LandingPage() {
 
             <div className="mt-16 grid grid-cols-1 gap-x-12 gap-y-16 md:grid-cols-2">
               {CATEGORIES.map((c, i) => {
-                const meta = TEMPLATE_LIST.find((t) => t.id === CATEGORY_FEATURED[c.key]);
+                const meta = DEMO_TEMPLATES.find((t) => t.id === CATEGORY_FEATURED[c.key]);
                 const canvas = meta?.id ? getTemplate(meta.id) : null;
                 return (
                   <div key={c.key} className={`group flex flex-col gap-8 md:flex-row md:items-center ${i % 2 === 1 ? 'md:flex-row-reverse' : ''}`}>

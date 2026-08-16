@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { TEMPLATE_LIST, getTemplate } from '@/lib/templates';
+import { DEMO_TEMPLATES, getTemplate } from '@/lib/templates';
 import { categoryLabel } from '@/lib/template-categories';
 import TemplateDetail from '@/components/landing/template-detail';
 
@@ -14,12 +14,15 @@ export default async function TemplatePreviewPage({ params }: PageProps) {
   const canvas = getTemplate(id);
   if (!canvas) notFound();
 
-  const index = TEMPLATE_LIST.findIndex((t) => t.id === id);
-  const meta = TEMPLATE_LIST[index];
-  const total = TEMPLATE_LIST.length;
+  const isDemo = DEMO_TEMPLATES.some((t) => t.id === id);
+  if (!isDemo) notFound();
 
-  const prev = index > 0 ? TEMPLATE_LIST[index - 1] : null;
-  const next = index < total - 1 ? TEMPLATE_LIST[index + 1] : null;
+  const index = DEMO_TEMPLATES.findIndex((t) => t.id === id);
+  const meta = DEMO_TEMPLATES[index];
+  const total = DEMO_TEMPLATES.length;
+
+  const prev = index > 0 ? DEMO_TEMPLATES[index - 1] : null;
+  const next = index < total - 1 ? DEMO_TEMPLATES[index + 1] : null;
 
   return (
     <TemplateDetail

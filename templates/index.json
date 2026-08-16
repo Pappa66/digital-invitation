@@ -5,7 +5,9 @@
     "category": "classic",
     "description": "Kesannya mewah klasik dengan aksen emas di atas latar ivory.",
     "primary": "#D4AF37",
-    "secondary": "#8A6D2F"
+    "secondary": "#8A6D2F",
+    "show_as_demo": true,
+    "demo_order": 1
   },
   {
     "id": "rustic-garden",
@@ -13,7 +15,9 @@
     "category": "outdoor",
     "description": "Nuansa taman hijau sage dan putih krem yang hangat dan natural.",
     "primary": "#7C9885",
-    "secondary": "#A9B7A6"
+    "secondary": "#A9B7A6",
+    "show_as_demo": true,
+    "demo_order": 2
   },
   {
     "id": "bali-tropical",
@@ -21,7 +25,9 @@
     "category": "outdoor",
     "description": "Hijau hutan dan aksen terakota, cocok untuk wedding outdoor ala Bali.",
     "primary": "#2F5D50",
-    "secondary": "#C77B4E"
+    "secondary": "#C77B4E",
+    "show_as_demo": true,
+    "demo_order": 3
   },
   {
     "id": "minimal-mono",
@@ -29,7 +35,9 @@
     "category": "modern",
     "description": "Hitam putih bersih dengan tipografi besar, fokus pada substansi.",
     "primary": "#111827",
-    "secondary": "#6B7280"
+    "secondary": "#6B7280",
+    "show_as_demo": true,
+    "demo_order": 4
   },
   {
     "id": "blush-romance",
@@ -37,7 +45,9 @@
     "category": "romance",
     "description": "Pink lembut dan krem, feminin, dreamy, dan romantis.",
     "primary": "#E8A0B4",
-    "secondary": "#F3C7D3"
+    "secondary": "#F3C7D3",
+    "show_as_demo": true,
+    "demo_order": 5
   },
   {
     "id": "navy-classic",
@@ -45,7 +55,9 @@
     "category": "classic",
     "description": "Biru navy formal dengan aksen garis emas tipis.",
     "primary": "#1F3A5F",
-    "secondary": "#C9A227"
+    "secondary": "#C9A227",
+    "show_as_demo": true,
+    "demo_order": 6
   },
   {
     "id": "boho-earth",
@@ -53,7 +65,8 @@
     "category": "outdoor",
     "description": "Terakota, krem dan tone earthy dengan kesan bohemian bebas.",
     "primary": "#B5651D",
-    "secondary": "#C9A28A"
+    "secondary": "#C9A28A",
+    "show_as_demo": false
   },
   {
     "id": "forest-celadon",
@@ -61,7 +74,9 @@
     "category": "modern",
     "description": "Hijau hutan dalam dengan kombinasi celadon yang segar.",
     "primary": "#324F43",
-    "secondary": "#A9C5B4"
+    "secondary": "#A9C5B4",
+    "show_as_demo": true,
+    "demo_order": 7
   },
   {
     "id": "pastel-dream",
@@ -69,7 +84,8 @@
     "category": "romance",
     "description": "Palet pastel cerah: mint, krem dan peach yang ceria.",
     "primary": "#7FB5A8",
-    "secondary": "#F6C6A8"
+    "secondary": "#F6C6A8",
+    "show_as_demo": false
   },
   {
     "id": "modern-dark",
@@ -77,7 +93,9 @@
     "category": "modern",
     "description": "Latar gelap elegan dengan emas keemasan, premium dan mewah.",
     "primary": "#C9A227",
-    "secondary": "#2A2A2A"
+    "secondary": "#2A2A2A",
+    "show_as_demo": true,
+    "demo_order": 8
   },
   {
     "id": "emerald-khaki",
@@ -85,7 +103,8 @@
     "category": "outdoor",
     "description": "Hijau emerald yang dalam dipadukan aksen khaki hangat, mewah dan natural.",
     "primary": "#046A38",
-    "secondary": "#B5A27C"
+    "secondary": "#B5A27C",
+    "show_as_demo": false
   },
   {
     "id": "violet-dusk",
@@ -93,7 +112,9 @@
     "category": "romance",
     "description": "Nuansa ungu senja yang elegan dengan ornamen tipis.",
     "primary": "#6C4A9B",
-    "secondary": "#C9A9E8"
+    "secondary": "#C9A9E8",
+    "show_as_demo": true,
+    "demo_order": 9
   },
   {
     "id": "terracotta-sun",
@@ -101,7 +122,8 @@
     "category": "outdoor",
     "description": "Terakota hangat dan krem, cocok untuk pernikahan sore di Ubud.",
     "primary": "#C25938",
-    "secondary": "#E8A87C"
+    "secondary": "#E8A87C",
+    "show_as_demo": false
   },
   {
     "id": "midnight-ocean",
@@ -109,7 +131,9 @@
     "category": "classic",
     "description": "Navy biru laut yang dalam dan tenang dengan tipografi klasik.",
     "primary": "#123C4E",
-    "secondary": "#2E7D8C"
+    "secondary": "#2E7D8C",
+    "show_as_demo": true,
+    "demo_order": 10
   },
   {
     "id": "golden-sakura",
@@ -117,7 +141,8 @@
     "category": "classic",
     "description": "Emas dan pink sakura yang lembut, nafas Jepang dalam kesan klasik.",
     "primary": "#D4A03C",
-    "secondary": "#E8C5CD"
+    "secondary": "#E8C5CD",
+    "show_as_demo": false
   },
   {
     "id": "platinum-luxe",
@@ -125,7 +150,9 @@
     "category": "modern",
     "description": "Perak dan monokrom berkelas untuk undangan yang bersahaja.",
     "primary": "#3D3D3D",
-    "secondary": "#A8A8A8"
+    "secondary": "#A8A8A8",
+    "show_as_demo": true,
+    "demo_order": 11
   },
   {
     "id": "rose-garden",
@@ -133,7 +160,9 @@
     "category": "romance",
     "description": "Mawar lembut dengan sentuhan hijaunya taman yang teduh.",
     "primary": "#A63D5F",
-    "secondary": "#5E7C6B"
+    "secondary": "#5E7C6B",
+    "show_as_demo": true,
+    "demo_order": 12
   },
   {
     "id": "autumn-maple",
@@ -141,7 +170,8 @@
     "category": "outdoor",
     "description": "Nuansa oranye daun maple yang hangat dan romantis.",
     "primary": "#B4552D",
-    "secondary": "#8C4A1E"
+    "secondary": "#8C4A1E",
+    "show_as_demo": false
   },
   {
     "id": "mint-fresh",
@@ -149,7 +179,8 @@
     "category": "modern",
     "description": "Mint segar berpadu aksen navy untuk kesan muda dan cerah.",
     "primary": "#3E8E7E",
-    "secondary": "#1F3A5F"
+    "secondary": "#1F3A5F",
+    "show_as_demo": false
   },
   {
     "id": "burgundy-classic",
@@ -157,7 +188,8 @@
     "category": "classic",
     "description": "Merah burgundy anggun berpadu aksen emas klasik.",
     "primary": "#6E1423",
-    "secondary": "#C08552"
+    "secondary": "#C08552",
+    "show_as_demo": false
   },
   {
     "id": "pearl-white",
@@ -165,7 +197,8 @@
     "category": "modern",
     "description": "Krem mutiara yang bersih dan tenang, simbol kesucian.",
     "primary": "#B7B1A0",
-    "secondary": "#8C8577"
+    "secondary": "#8C8577",
+    "show_as_demo": false
   },
   {
     "id": "tropical-sunset",
@@ -173,7 +206,8 @@
     "category": "outdoor",
     "description": "Koral senja tropis dengan biru laut yang menyegarkan.",
     "primary": "#F26D5D",
-    "secondary": "#1B7A72"
+    "secondary": "#1B7A72",
+    "show_as_demo": false
   },
   {
     "id": "lavender-dream",
@@ -181,7 +215,8 @@
     "category": "romance",
     "description": "Lavender pastel yang dreamy dengan tulisan kaligrafi.",
     "primary": "#7C6FA8",
-    "secondary": "#C6B8E8"
+    "secondary": "#C6B8E8",
+    "show_as_demo": false
   },
   {
     "id": "coffee-cream",
@@ -189,7 +224,8 @@
     "category": "classic",
     "description": "Kopi hangat dan krem lembut, hangat seperti cerita kami.",
     "primary": "#6F4E37",
-    "secondary": "#A67C52"
+    "secondary": "#A67C52",
+    "show_as_demo": false
   },
   {
     "id": "emerald-mist",
@@ -197,7 +233,8 @@
     "category": "classic",
     "description": "Zamrud pekat berbalut kabut putih, elegan dan teduh.",
     "primary": "#0F5132",
-    "secondary": "#82A396"
+    "secondary": "#82A396",
+    "show_as_demo": false
   },
   {
     "id": "moonlight-silver",
@@ -205,7 +242,8 @@
     "category": "modern",
     "description": "Perak di bawah cahaya bulan, misterius namun berkelas.",
     "primary": "#2B3A42",
-    "secondary": "#9DB4C0"
+    "secondary": "#9DB4C0",
+    "show_as_demo": false
   },
   {
     "id": "coral-blush",
@@ -213,7 +251,8 @@
     "category": "romance",
     "description": "Koral dan blush yang hangat, manis seperti cerita pertama.",
     "primary": "#F08080",
-    "secondary": "#F5B7B1"
+    "secondary": "#F5B7B1",
+    "show_as_demo": false
   },
   {
     "id": "forest-evergreen",
@@ -221,7 +260,8 @@
     "category": "outdoor",
     "description": "Hutan hijau sepanjang tahun, teduh dan penuh kehidupan.",
     "primary": "#1C3D2F",
-    "secondary": "#7AA874"
+    "secondary": "#7AA874",
+    "show_as_demo": false
   },
   {
     "id": "sunshine-citrus",
@@ -229,7 +269,8 @@
     "category": "romance",
     "description": "Kuning cerah dan oranye citrus, penuh energi dan sukacita.",
     "primary": "#F0A202",
-    "secondary": "#F2560D"
+    "secondary": "#F2560D",
+    "show_as_demo": false
   },
   {
     "id": "glacier-blue",
@@ -237,7 +278,8 @@
     "category": "classic",
     "description": "Biru gletser yang jernih dan dingin, elegan dan menyejukkan.",
     "primary": "#4E7FA3",
-    "secondary": "#8FB6CE"
+    "secondary": "#8FB6CE",
+    "show_as_demo": false
   },
   {
     "id": "ivory-dawn",
@@ -245,7 +287,8 @@
     "category": "romance",
     "description": "Gading lembut berpadu rose gold, hangat dan menenangkan seperti fajar.",
     "primary": "#B98A5E",
-    "secondary": "#E6D3B8"
+    "secondary": "#E6D3B8",
+    "show_as_demo": false
   },
   {
     "id": "sapphire-night",
@@ -253,7 +296,8 @@
     "category": "modern",
     "description": "Navy safir yang dalam dengan aksen emas — mewah untuk pernikahan malam.",
     "primary": "#1B2A4A",
-    "secondary": "#C9A227"
+    "secondary": "#C9A227",
+    "show_as_demo": false
   },
   {
     "id": "obsidian-noir",
@@ -261,7 +305,8 @@
     "category": "classic",
     "description": "Hitam pekat dengan aksen emas art deco — mewah untuk pernikahan malam yang megah.",
     "primary": "#C9A24B",
-    "secondary": "#6B5B3E"
+    "secondary": "#6B5B3E",
+    "show_as_demo": false
   },
   {
     "id": "steel-blueprint",
@@ -269,7 +314,8 @@
     "category": "modern",
     "description": "Biru baja bersih dengan tipografi tegas, modern dan berani.",
     "primary": "#1B4965",
-    "secondary": "#4AA3C9"
+    "secondary": "#4AA3C9",
+    "show_as_demo": false
   },
   {
     "id": "dune-horizon",
@@ -277,7 +323,8 @@
     "category": "outdoor",
     "description": "Pasir terakota dan krem gurun yang hangat untuk pesta di alam terbuka.",
     "primary": "#B0652A",
-    "secondary": "#E0B07A"
+    "secondary": "#E0B07A",
+    "show_as_demo": false
   },
   {
     "id": "mauve-reverie",
@@ -285,7 +332,8 @@
     "category": "romance",
     "description": "Mauve lembut dan carousel foto yang romantis, puitis dan tenang.",
     "primary": "#9B6A8C",
-    "secondary": "#C9A3BE"
+    "secondary": "#C9A3BE",
+    "show_as_demo": false
   },
   {
     "id": "simple-rustic",
@@ -293,7 +341,8 @@
     "category": "outdoor",
     "description": "Gaya kartu rustic hangat: kopi-krem, bingkai ganda, ayat doa, dan setiap section berbentuk card yang rapi.",
     "primary": "#7A5C3E",
-    "secondary": "#A98D6F"
+    "secondary": "#A98D6F",
+    "show_as_demo": false
   },
   {
     "id": "serene",
@@ -301,7 +350,8 @@
     "category": "modern",
     "description": "Tenang dan segar: palet sage hijau, ayat doa, section berbentuk kartu dengan lengkungan arch.",
     "primary": "#6B9080",
-    "secondary": "#A4C3B2"
+    "secondary": "#A4C3B2",
+    "show_as_demo": false
   },
   {
     "id": "photovita",
@@ -309,6 +359,7 @@
     "category": "modern",
     "description": "Fokus tajam pada foto: monokrom gelap, ayat doa, dan bingkai minimalis agar foto menjadi bintangnya.",
     "primary": "#2B2B2B",
-    "secondary": "#6B6B6B"
+    "secondary": "#6B6B6B",
+    "show_as_demo": false
   }
 ]

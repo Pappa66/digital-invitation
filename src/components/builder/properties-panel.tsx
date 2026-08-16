@@ -303,20 +303,6 @@ export default function PropertiesPanel() {
                         : 'Elemen tersusun vertikal, bisa diurutkan dengan seret.'}
                     </p>
                   </div>
-                  <label className="block text-xs font-medium text-[#4a443c]">Layout</label>
-                  <div className="flex gap-2">
-                    {(['center', 'left', 'right'] as const).map((l) => (
-                      <button
-                        key={l}
-                        onClick={() => setTheme({ layout: l })}
-                        className={`flex-1 rounded-md border px-2 py-1.5 text-xs capitalize ${
-                          canvas.theme.layout === l ? 'border-[#c9a45c] bg-[#c9a45c] text-white' : 'border-[#e0d6c2] text-[#6b5f4d]'
-                        }`}
-                      >
-                        {l}
-                      </button>
-                    ))}
-                  </div>
                   <label className="block text-xs font-medium text-[#4a443c]">Gaya Hero</label>
                   <div className="flex gap-2">
                     {(['image', 'solid', 'gradient'] as const).map((h) => (

@@ -221,4 +221,6 @@ export interface TemplateMeta {
   description: string;
   primary: string;
   secondary: string;
+  show_as_demo?: boolean;
+  demo_order?: number;
 }

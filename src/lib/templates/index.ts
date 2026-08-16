@@ -43,6 +43,11 @@ import templateIndex from '../../../templates/index.json';
 
 export const TEMPLATE_LIST: TemplateMeta[] = templateIndex as TemplateMeta[];
 
+/** Templates with demo flag enabled, sorted by demo_order. */
+export const DEMO_TEMPLATES: TemplateMeta[] = (templateIndex as TemplateMeta[])
+  .filter((t) => t.show_as_demo === true)
+  .sort((a, b) => (a.demo_order ?? 999) - (b.demo_order ?? 999));
+
 const RAW_TEMPLATES: Record<string, CanvasData> = {
   'elegant-gold': elegantGold as unknown as CanvasData,
   'rustic-garden': rusticGarden as unknown as CanvasData,
