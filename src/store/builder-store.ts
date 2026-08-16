@@ -1,6 +1,8 @@
 'use client';
 
 import { create } from 'zustand';
+import { temporal } from 'zundo';
+import { useSyncExternalStore } from 'react';
 import type { Block, BlockLayout, BlockProps, BlockStyle, BlockType, CanvasData, DecorAsset, Settings, Theme } from '@/lib/types';
 import { emptyCanvas } from '@/lib/templates';
 import { getReligion, isKnownDefault, type ReligionKey } from '@/lib/religions';
@@ -15,6 +17,8 @@ interface BuilderState {
   initialized: boolean;
   /** Project id terakhir yang dimuat lewat init(), agar ganti project bisa dimuat ulang. */
   lastProjectId: string | null;
+  /** Blok yang disalin pengguna (clipboard internal builder). */
+  copiedBlock: Block | null;
 
   init: (data: CanvasData, projectToken?: string) => void;
   setTheme: (theme: Partial<Theme>) => void;
@@ -40,6 +44,18 @@ interface BuilderState {
   removeBlock: (blockId: string) => void;
   duplicateBlock: (blockId: string) => void;
   reorderBlock: (activeId: string, overId: string) => void;
+  /** Salin blok ke clipboard internal (tanpa mengubah kanvas). */
+  copyBlock: (blockId: string) => void;
+  /** Tempel blok dari clipboard internal ke akhir kanvas. Valah tanpa isi clipboard. */
+  pasteBlock: () => void;
+  /** Pindah satu langkah ke depan dalam urutan (z-index naik di mode free). */
+  bringForward: (blockId: string) => void;
+  /** Pindah satu langkah ke belakang dalam urutan (z-index turun di mode free). */
+  sendBackward: (blockId: string) => void;
+  /** Pindah ke paling depan. */
+  bringToFront: (blockId: string) => void;
+  /** Pindah ke paling belakang. */
+  sendToBack: (blockId: string) => void;
   selectBlock: (blockId: string | null) => void;
   reset: () => void;
 }
@@ -238,13 +254,16 @@ const BLOCK_PRESETS: Record<BlockType, Block> = {
   }
 };
 
-export const useBuilderStore = create<BuilderState>((set, get) => ({
-  canvas: emptyCanvas(),
-  selectedBlockId: null,
-  selectedText: null,
-  selectedDecor: null,
+export const useBuilderStore = create<BuilderState>()(
+  temporal(
+    (set, get) => ({
+      canvas: emptyCanvas(),
+      selectedBlockId: null,
+      selectedText: null,
+selectedDecor: null,
   initialized: false,
   lastProjectId: '',
+  copiedBlock: null,
 
   init: (data, projectToken) => {
     const token = projectToken ?? '';
@@ -257,6 +276,8 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
       lastProjectId: token,
       selectedBlockId: null
     });
+    // Muat awal bukan aksi user — buang history agar undo dimulai dari state ini.
+    useBuilderStore.temporal.getState().clear();
   },
 
   setTheme: (theme) =>
@@ -513,6 +534,72 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
       return { canvas: { ...state.canvas, blocks } };
     }),
 
+  copyBlock: (blockId) =>
+    set((state) => {
+      const src = state.canvas.blocks.find((b) => b.id === blockId);
+      if (!src) return state;
+      return { copiedBlock: structuredClone(src) };
+    }),
+
+  pasteBlock: () =>
+    set((state) => {
+      if (!state.copiedBlock) return state;
+      const copy: Block = {
+        ...structuredClone(state.copiedBlock),
+        id: uid(),
+        layout: state.copiedBlock.layout
+          ? {
+              ...state.copiedBlock.layout,
+              x: (state.copiedBlock.layout.x ?? 0) + 16,
+              y: (state.copiedBlock.layout.y ?? 0) + 16
+            }
+          : undefined
+      };
+      return {
+        canvas: { ...state.canvas, blocks: [...state.canvas.blocks, copy] },
+        selectedBlockId: copy.id,
+        selectedDecor: null
+      };
+    }),
+
+  bringForward: (blockId) =>
+    set((state) => {
+      const blocks = [...state.canvas.blocks];
+      const idx = blocks.findIndex((b) => b.id === blockId);
+      if (idx === -1 || idx === blocks.length - 1) return state;
+      [blocks[idx], blocks[idx + 1]] = [blocks[idx + 1], blocks[idx]];
+      return { canvas: { ...state.canvas, blocks } };
+    }),
+
+  sendBackward: (blockId) =>
+    set((state) => {
+      const blocks = [...state.canvas.blocks];
+      const idx = blocks.findIndex((b) => b.id === blockId);
+      if (idx <= 0) return state;
+      [blocks[idx], blocks[idx - 1]] = [blocks[idx - 1], blocks[idx]];
+      return { canvas: { ...state.canvas, blocks } };
+    }),
+
+  bringToFront: (blockId) =>
+    set((state) => {
+      const blocks = [...state.canvas.blocks];
+      const idx = blocks.findIndex((b) => b.id === blockId);
+      if (idx === -1 || idx === blocks.length - 1) return state;
+      const [moved] = blocks.splice(idx, 1);
+      blocks.push(moved);
+      return { canvas: { ...state.canvas, blocks } };
+    }),
+
+  sendToBack: (blockId) =>
+    set((state) => {
+      const blocks = [...state.canvas.blocks];
+      const idx = blocks.findIndex((b) => b.id === blockId);
+      if (idx <= 0) return state;
+      const [moved] = blocks.splice(idx, 1);
+      blocks.unshift(moved);
+      return { canvas: { ...state.canvas, blocks } };
+    }),
+
   selectBlock: (blockId) => set({ selectedBlockId: blockId, selectedDecor: null }),
 
   reset: () =>
@@ -522,6 +609,47 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
       selectedText: null,
       selectedDecor: null,
       initialized: false,
-      lastProjectId: null
+      lastProjectId: null,
+      copiedBlock: null
     })
-}));
+    }),
+    {
+      partialize: (state) => ({ canvas: state.canvas }),
+      limit: 60,
+      equality: (past, current) => (past as { canvas: CanvasData } | undefined)?.canvas === (current as { canvas: CanvasData } | undefined)?.canvas
+    }
+  )
+);
+
+/** Operasi undo/redo untuk builder. */
+export function undoBuilder() {
+  useBuilderStore.temporal.getState().undo();
+}
+
+export function redoBuilder() {
+  useBuilderStore.temporal.getState().redo();
+}
+
+export function canUndoBuilder(): boolean {
+  return useBuilderStore.temporal.getState().pastStates.length > 0;
+}
+
+export function canRedoBuilder(): boolean {
+  return useBuilderStore.temporal.getState().futureStates.length > 0;
+}
+
+/** Hook reactive: berapa banyak past/future di history undo/redo. */
+export function useBuilderHistory() {
+  return useSyncExternalStore(
+    (cb) => {
+      const storeApi = useBuilderStore.temporal;
+      const unsub = storeApi.subscribe(cb);
+      return unsub;
+    },
+    () => ({
+      canUndo: useBuilderStore.temporal.getState().pastStates.length > 0,
+      canRedo: useBuilderStore.temporal.getState().futureStates.length > 0
+    }),
+    () => ({ canUndo: false, canRedo: false })
+  );
+}

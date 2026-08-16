@@ -8,11 +8,11 @@ import {
 } from '@dnd-kit/sortable';
 import { useDraggable, useDroppable, useDndContext } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
-import { GripVertical, Grid3x3 } from 'lucide-react';
+import { GripVertical, Grid3x3, Undo2, Redo2, Copy, ClipboardPaste, ArrowUp, ArrowDown } from 'lucide-react';
 import type { Block, BlockType } from '@/lib/types';
 import BlockView from '@/components/guest/BlockView';
 import { ThemeContext } from '@/components/guest/theme-context';
-import { useBuilderStore } from '@/store/builder-store';
+import { useBuilderStore, undoBuilder, redoBuilder, useBuilderHistory } from '@/store/builder-store';
 import DeviceToggle from '@/components/ui/device-toggle';
 import type { Device } from '@/components/ui/device-toggle';
 import { Palette } from 'lucide-react';
@@ -44,10 +44,37 @@ export default function BuilderCanvas({
   const canvas = useBuilderStore((s) => s.canvas);
   const selectBlock = useBuilderStore((s) => s.selectBlock);
   const flow = canvas.flow ?? 'stack';
+  const { canUndo, canRedo } = useBuilderHistory();
 
   return (
     <div className="relative flex h-full flex-1 flex-col items-center justify-center overflow-hidden bg-[#f1ece1]">
       <div className="flex w-full items-center justify-end gap-3 px-4 pt-3">
+        <button
+          onClick={redoBuilder}
+          disabled={!canRedo}
+          title="Redo (Ctrl+Shift+Z)"
+          aria-label="Redo"
+          className={`flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs font-medium transition-colors disabled:opacity-40 ${
+            canRedo
+              ? 'border-[#e0d6c2] bg-white text-[#6b5f4d] hover:border-[#c9a45c] hover:text-[#8a6d2f]'
+              : 'border-[#e0d6c2] bg-white text-[#b3a69a]'
+          }`}
+        >
+          <Redo2 className="h-3.5 w-3.5" />
+        </button>
+        <button
+          onClick={undoBuilder}
+          disabled={!canUndo}
+          title="Undo (Ctrl+Z)"
+          aria-label="Undo"
+          className={`flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs font-medium transition-colors disabled:opacity-40 ${
+            canUndo
+              ? 'border-[#e0d6c2] bg-white text-[#6b5f4d] hover:border-[#c9a45c] hover:text-[#8a6d2f]'
+              : 'border-[#e0d6c2] bg-white text-[#b3a69a]'
+          }`}
+        >
+          <Undo2 className="h-3.5 w-3.5" />
+        </button>
         <button
           onClick={onToggleGrid}
           aria-pressed={showGrid}
@@ -70,7 +97,7 @@ export default function BuilderCanvas({
         }}
       >        <div
           className="relative h-full overflow-hidden rounded-md bg-white shadow-xl shadow-[#b98a3e]/20 ring-1 ring-[#e7ddcc]"
-          style={{ width: device === 'desktop' ? '100%' : CANVAS_W, maxWidth: '100%' }}
+          style={{ width: device === 'desktop' ? '100%' : device === 'tablet' ? 640 : CANVAS_W, maxWidth: '100%' }}
         >
           {showGrid && (
             <div
@@ -512,6 +539,11 @@ function FreeBlock({ block }: { block: Block }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ id: block.id });
   const selected = useBuilderStore((s) => s.selectedBlockId === block.id);
   const selectBlock = useBuilderStore((s) => s.selectBlock);
+  const copyBlock = useBuilderStore((s) => s.copyBlock);
+  const pasteBlock = useBuilderStore((s) => s.pasteBlock);
+  const canPaste = useBuilderStore((s) => s.copiedBlock !== null);
+  const bringForward = useBuilderStore((s) => s.bringForward);
+  const sendBackward = useBuilderStore((s) => s.sendBackward);
   const removeBlock = useBuilderStore((s) => s.removeBlock);
   const duplicateBlock = useBuilderStore((s) => s.duplicateBlock);
   const setBlockLayout = useBuilderStore((s) => s.setBlockLayout);
@@ -551,6 +583,52 @@ function FreeBlock({ block }: { block: Block }) {
       {selected && (
         <>
           <div className="absolute right-0 top-0 z-30 flex gap-1 rounded-bl-md bg-[#141414]/90 p-1 shadow ring-1 ring-white/10" onClick={(e) => e.stopPropagation()}>
+            <button
+              className="rounded p-1 text-white transition-colors hover:bg-[#c9a45c]/30"
+              aria-label="Salin blok"
+              title="Salin (Ctrl+C)"
+              onClick={(e) => {
+                e.stopPropagation();
+                copyBlock(block.id);
+              }}
+            >
+              <Copy className="h-3.5 w-3.5" />
+            </button>
+            <button
+              className="rounded p-1 text-white transition-colors hover:bg-[#c9a45c]/30 disabled:opacity-40"
+              aria-label="Tempel blok"
+              title="Tempel (Ctrl+V)"
+              disabled={!canPaste}
+              onClick={(e) => {
+                e.stopPropagation();
+                pasteBlock();
+              }}
+            >
+              <ClipboardPaste className="h-3.5 w-3.5" />
+            </button>
+            <button
+              className="rounded p-1 text-white transition-colors hover:bg-[#c9a45c]/30"
+              aria-label="Maju satu lapis"
+              title="Maju satu lapis"
+              onClick={(e) => {
+                e.stopPropagation();
+                bringForward(block.id);
+              }}
+            >
+              <ArrowUp className="h-3.5 w-3.5" />
+            </button>
+            <button
+              className="rounded p-1 text-white transition-colors hover:bg-[#c9a45c]/30"
+              aria-label="Mundur satu lapis"
+              title="Mundur satu lapis"
+              onClick={(e) => {
+                e.stopPropagation();
+                sendBackward(block.id);
+              }}
+            >
+              <ArrowDown className="h-3.5 w-3.5" />
+            </button>
+            <span className="mx-0.5 self-stretch border-l border-white/20" />
             <button
               className="rounded p-1 text-white transition-colors hover:bg-[#c9a45c]/30"
               aria-label="Duplikat blok"

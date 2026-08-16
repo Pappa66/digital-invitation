@@ -19,10 +19,12 @@ import ElementsSidebar from '@/components/builder/elements-sidebar';
 import BuilderCanvas from '@/components/builder/builder-canvas';
 import PropertiesPanel from '@/components/builder/properties-panel';
 import { useBuilderStore } from '@/store/builder-store';
+import { undoBuilder, redoBuilder } from '@/store/builder-store';
 import { saveCanvasNow } from '@/hooks/use-autosave';
 import type { Device } from '@/components/ui/device-toggle';
 
 const CANVAS_W = 420;
+const CANVAS_W_TABLET = 640;
 const CANVAS_W_DESKTOP = 900;
 
 /**
@@ -65,7 +67,7 @@ export default function BuilderWorkspace({ projectId }: { projectId: string }) {
   }, [canvas.theme.font_heading, canvas.theme.font_body]);
 
   const flow = canvas.flow ?? 'stack';
-  const canvasW = device === 'desktop' ? CANVAS_W_DESKTOP : CANVAS_W;
+  const canvasW = device === 'desktop' ? CANVAS_W_DESKTOP : device === 'tablet' ? CANVAS_W_TABLET : CANVAS_W;
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
@@ -80,10 +82,15 @@ export default function BuilderWorkspace({ projectId }: { projectId: string }) {
       const store = useBuilderStore.getState();
       const { selectedBlockId } = store;
 
-      // Ctrl+Z: Undo (reset to initial — simplified)
-      if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
+      // Ctrl+Z: Undo | Ctrl+Shift+Z / Ctrl+Y: Redo
+      if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
         e.preventDefault();
-        // TODO: Implement proper undo history
+        if (e.shiftKey) redoBuilder();
+        else undoBuilder();
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key === 'y') {
+        e.preventDefault();
+        redoBuilder();
       }
 
       // Ctrl+S: Force save
@@ -105,6 +112,33 @@ export default function BuilderWorkspace({ projectId }: { projectId: string }) {
         e.preventDefault();
         store.duplicateBlock(selectedBlockId);
         triggerSave();
+      }
+
+      // Ctrl+C / Ctrl+V: Copy & paste selected block
+      if ((e.ctrlKey || e.metaKey) && e.key === 'c' && selectedBlockId) {
+        e.preventDefault();
+        store.copyBlock(selectedBlockId);
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key === 'v') {
+        e.preventDefault();
+        store.pasteBlock();
+        triggerSave();
+      }
+
+      // Arrow keys: nudge selected block (free layout only)
+      const nudge = (dx: number, dy: number) => {
+        e.preventDefault();
+        const block = store.canvas.blocks.find((b) => b.id === selectedBlockId);
+        if (block?.layout) {
+          store.setBlockLayout(selectedBlockId!, { x: block.layout.x + dx, y: block.layout.y + dy });
+          triggerSave();
+        }
+      };
+      if (selectedBlockId) {
+        if (e.key === 'ArrowLeft') nudge(-1, 0);
+        else if (e.key === 'ArrowRight') nudge(1, 0);
+        else if (e.key === 'ArrowUp') nudge(0, -1);
+        else if (e.key === 'ArrowDown') nudge(0, 1);
       }
 
       // Escape: Deselect
