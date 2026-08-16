@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Check, Copy, MessageCircle, X, Tag, TagIcon } from 'lucide-react';
+import { Check, Copy, MessageCircle, X, Tag } from 'lucide-react';
 import { buildOrderMessage, normalizePhone, whatsappOrderUrl } from '@/lib/order';
 import { getOrderWhatsapp, toWaNumber } from '@/lib/settings';
 import { clientSubmitOrder } from '@/lib/api/order-client';
@@ -66,14 +66,16 @@ export default function OrderDialog({ templateName, basePrice = 0, discountPerce
       whatsapp: wa,
       note: (note.trim() || '') + priceInfo
     });
+    try {
+      await clientSubmitOrder({
+        templateName,
+        name: name.trim(),
+        whatsapp: wa,
+        email: email.trim() || undefined,
+        note: (note.trim() || '') + priceInfo
+      });
+    } catch { /* order save failed, still open WA */ }
     setSent(true);
-    await clientSubmitOrder({
-      templateName,
-      name: name.trim(),
-      whatsapp: wa,
-      email: email.trim() || undefined,
-      note: (note.trim() || '') + priceInfo
-    });
     const url = whatsappOrderUrl(message, waNumber);
     if (url) {
       window.open(url, '_blank', 'noopener');

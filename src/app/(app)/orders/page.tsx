@@ -81,7 +81,8 @@ export default function OrdersPage() {
   }, [load]);
 
   async function updateStatus(id: string, status: string) {
-    await supabase.from('orders').update({ status } as never).eq('id', id);
+    const { error } = await supabase.from('orders').update({ status } as never).eq('id', id);
+    if (error) { alert('Gagal update status: ' + error.message); return; }
     setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, status } : o)));
     if (status === 'approved') {
       const order = orders.find((o) => o.id === id);
@@ -103,7 +104,8 @@ export default function OrdersPage() {
   }
 
   async function remove(id: string) {
-    await supabase.from('orders').delete().eq('id', id);
+    const { error } = await supabase.from('orders').delete().eq('id', id);
+    if (error) { alert('Gagal menghapus: ' + error.message); return; }
     setOrders((prev) => prev.filter((o) => o.id !== id));
   }
 
