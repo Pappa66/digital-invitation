@@ -1,10 +1,14 @@
 -- Migration: Add new columns to orders table + create finance_records table
 -- Run this in Supabase SQL Editor
 
--- Orders: add status, email, template_id
+-- Orders: add status, email, template_id, project_id
 ALTER TABLE orders ADD COLUMN IF NOT EXISTS status text DEFAULT 'pending';
 ALTER TABLE orders ADD COLUMN IF NOT EXISTS email text;
 ALTER TABLE orders ADD COLUMN IF NOT EXISTS template_id text;
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS project_id text;
+
+-- Projects: add thumbnail
+ALTER TABLE projects ADD COLUMN IF NOT EXISTS thumbnail text;
 
 -- Finance records table
 CREATE TABLE IF NOT EXISTS finance_records (

@@ -1,9 +1,10 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { Inbox, Loader2, Trash2, MessageCircle, Search, CheckCircle, Clock, XCircle, Send } from 'lucide-react';
+import { Inbox, Loader2, Trash2, MessageCircle, Search, CheckCircle, Clock, XCircle, Send, ExternalLink } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
 import { formatDate } from '@/lib/api/order-client';
+import { clientCreateProject } from '@/lib/api/project-client';
 
 interface OrderRow {
   id: string;
@@ -14,6 +15,7 @@ interface OrderRow {
   email: string | null;
   note: string | null;
   status: string | null;
+  project_id: string | null;
   created_at: string;
 }
 
@@ -63,7 +65,7 @@ export default function OrdersPage() {
     setLoading(true);
     const { data, error } = await supabase
       .from('orders')
-      .select('id, template_name, template_id, name, whatsapp, email, note, status, created_at')
+      .select('id, template_name, template_id, name, whatsapp, email, note, status, project_id, created_at')
       .order('created_at', { ascending: false })
       .limit(200) as { data: OrderRow[] | null; error: { message: string } | null };
     if (error) {
@@ -81,6 +83,23 @@ export default function OrdersPage() {
   async function updateStatus(id: string, status: string) {
     await supabase.from('orders').update({ status } as never).eq('id', id);
     setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, status } : o)));
+    if (status === 'approved') {
+      const order = orders.find((o) => o.id === id);
+      if (order?.template_id && !order.project_id) {
+        createProjectFromOrder({ ...order, status });
+      }
+    }
+  }
+
+  async function createProjectFromOrder(order: OrderRow) {
+    const title = `${order.name} - ${order.template_name || 'Undangan'}`;
+    const res = await clientCreateProject(title, order.template_id ?? undefined);
+    if (res.id) {
+      const pid = res.id;
+      await supabase.from('orders').update({ project_id: pid, status: 'approved' } as never).eq('id', order.id);
+      setOrders((prev) => prev.map((o) => (o.id === order.id ? { ...o, project_id: pid, status: 'approved' } : o)));
+      window.open(`/builder/${pid}`, '_blank');
+    }
   }
 
   async function remove(id: string) {
@@ -206,6 +225,25 @@ export default function OrdersPage() {
                           <XCircle className="h-3.5 w-3.5" />
                         </button>
                       </>
+                    )}
+                    {(o.status || 'pending') === 'approved' && !o.project_id && o.template_id && (
+                      <button
+                        onClick={() => createProjectFromOrder(o)}
+                        className="flex items-center gap-1.5 rounded-md bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-3 py-1.5 text-xs font-medium text-white hover:opacity-90"
+                        title="Buat proyek undangan dari pesanan ini"
+                      >
+                        Buat Proyek
+                      </button>
+                    )}
+                    {o.project_id && (
+                      <a
+                        href={`/builder/${o.project_id}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1.5 rounded-md border border-[#c9a45c] px-3 py-1.5 text-xs font-medium text-[#c9a45c] hover:bg-[#c9a45c]/5"
+                      >
+                        <ExternalLink className="h-3 w-3" /> Buka Proyek
+                      </a>
                     )}
                     <button
                       onClick={() => remove(o.id)}

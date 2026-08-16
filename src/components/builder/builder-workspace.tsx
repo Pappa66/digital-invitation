@@ -44,6 +44,10 @@ export default function BuilderWorkspace({ projectId }: { projectId: string }) {
   async function triggerSave() {
     setSaveState('saving');
     const { error } = await saveCanvasNow(projectId, useBuilderStore.getState().canvas);
+    if (!error && freeCanvasRef.current) {
+      const { captureAndSaveThumbnail } = await import('@/lib/thumbnail');
+      captureAndSaveThumbnail(projectId, freeCanvasRef.current);
+    }
     setSaveState(error ? 'idle' : 'saved');
     setTimeout(() => setSaveState('idle'), 1500);
   }
