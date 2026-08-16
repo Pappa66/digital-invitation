@@ -148,7 +148,9 @@ const GALLERY_LAYOUTS: { key: string; label: string; desc: string }[] = [
   { key: 'polaroid', label: 'Polaroid', desc: 'Foto dengan bingkai seperti foto kenangan' },
   { key: 'arch', label: 'Lengkung (Arch)', desc: 'Foto utama lengkung atas — ikonik undangan Indonesia' },
   { key: 'column', label: 'Ke Bawah', desc: 'Foto tersusun menurun penuh lebar' },
-  { key: 'carousel', label: 'Carousel Otomatis', desc: 'Slide berganti otomatis' }
+  { key: 'bento', label: 'Bento Grid', desc: 'Grid bervariasi seperti Apple Photo layout' },
+  { key: 'hero-grid', label: 'Hero + Grid', desc: 'Foto pertama hero, sisanya grid' },
+  { key: 'carousel', label: 'Carousel Otomatis', desc: 'Slide otomatis satu per satu dengan efek animasi' }
 ];
 
 const GALLERY_ANIMATIONS = [

@@ -1164,39 +1164,6 @@ export function StoryBlock({ props }: { props: BlockProps }) {
     );
   }
 
-  if (variant === 'minimal') {
-    return (
-      <section className="px-6 py-10 sm:py-12 md:py-16">
-        {storyHeader}
-        <div className="mx-auto mt-10 w-full space-y-6">
-          {count === 0 && <p className="text-center text-sm opacity-50">Belum ada cerita.</p>}
-          {Array.from({ length: count }).map((_, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.05 }}
-              className="border-l-2 border-current/20 pl-5"
-            >
-              {dates[i] && (
-                <p className="text-xs uppercase tracking-widest opacity-60">
-                  <Editable prop="ev_date" index={i}>{dates[i]}</Editable>
-                </p>
-              )}
-              <h3 className="mt-1 text-base font-medium">
-                <Editable prop="ev_title" index={i}>{titles[i]}</Editable>
-              </h3>
-              <p className="mt-1 text-sm leading-relaxed opacity-80">
-                <Editable prop="ev_desc" index={i} multiline>{descs[i]}</Editable>
-              </p>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-    );
-  }
-
   return (
     <section className="px-6 py-10 sm:py-12 md:py-16">
       {storyHeader}
@@ -1481,6 +1448,78 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
     );
   }
 
+  if (layout === 'bento') {
+    return (
+      <section className="px-6 py-8 sm:py-10 md:py-14">
+        {lightbox}
+        <Inner name="title">
+          <h2 className="mb-8 text-center text-xl md:text-2xl"><Editable prop="title">{str(props, 'title')}</Editable></h2>
+        </Inner>
+        <div className="mx-auto grid w-full grid-cols-3 gap-2.5 auto-rows-[120px]">
+          {images.map((src: string, i: number) => {
+            const span = i === 0 ? 'col-span-2 row-span-2' : i % 5 === 0 ? 'col-span-1 row-span-2' : '';
+            return (
+              <motion.div
+                key={`${src}-${i}`}
+                {...a}
+                whileInView={a.animate}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.06 }}
+                className={`group relative overflow-hidden rounded-lg cursor-pointer ${span}`}
+                onClick={() => !preview && openLightbox(i)}
+              >
+                <Image src={src} alt="" fill sizes="(max-width: 768px) 100vw, 33vw" quality={75} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
+                <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-400 group-hover:bg-black/10" />
+              </motion.div>
+            );
+          })}
+        </div>
+      </section>
+    );
+  }
+
+  if (layout === 'hero-grid') {
+    return (
+      <section className="px-6 py-8 sm:py-10 md:py-14">
+        {lightbox}
+        <Inner name="title">
+          <h2 className="mb-8 text-center text-xl md:text-2xl"><Editable prop="title">{str(props, 'title')}</Editable></h2>
+        </Inner>
+        <div className="mx-auto w-full space-y-3">
+          {images[0] && (
+            <motion.div
+              {...a}
+              whileInView={a.animate}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="group relative aspect-[16/10] w-full overflow-hidden rounded-lg cursor-pointer"
+              onClick={() => !preview && openLightbox(0)}
+            >
+              <Image src={images[0]} alt="" fill sizes="(max-width: 768px) 100vw, 420px" quality={80} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
+            </motion.div>
+          )}
+          {images.length > 1 && (
+            <div className="grid grid-cols-3 gap-2.5">
+              {images.slice(1).map((src: string, i: number) => (
+                <motion.div
+                  key={`${src}-${i}`}
+                  {...a}
+                  whileInView={a.animate}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: (i + 1) * 0.06 }}
+                  className="group relative aspect-square overflow-hidden rounded-lg cursor-pointer"
+                  onClick={() => !preview && openLightbox(i + 1)}
+                >
+                  <Image src={src} alt="" fill sizes="(max-width: 768px) 33vw, 140px" quality={75} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
+                </motion.div>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="px-6 py-8 sm:py-10 md:py-14">
       {lightbox}
@@ -1691,26 +1730,7 @@ export function ThanksBlock({ props }: { props: BlockProps }) {
       </section>
     );
   }
-  if (variant === 'minimal') {
-    return (
-      <section className="px-6 py-10 sm:py-14 md:py-20 text-center">
-        <Inner name="title">
-          <h2 className="text-xl font-medium tracking-wide uppercase opacity-60"><Editable prop="title">{str(props, 'title')}</Editable></h2>
-        </Inner>
-        <Inner name="message">
-          <p className="mx-auto mt-6 max-w-sm text-sm leading-relaxed opacity-80">
-            {str(props, 'message')}
-          </p>
-        </Inner>
-        <Inner name="names">
-          <p className="mt-8 text-lg italic">{str(props, 'names')}</p>
-        </Inner>
-        <Inner name="closing">
-          <p className="mt-4 text-xs opacity-50">{str(props, 'closing')}</p>
-        </Inner>
-      </section>
-    );
-  }
+
   return (
     <section className="px-6 py-10 sm:py-14 md:py-20 text-center">
       {ornament}

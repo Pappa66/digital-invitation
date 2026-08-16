@@ -30,16 +30,6 @@ export default function SettingsPage() {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ ok: boolean; text: string } | null>(null);
 
-  useEffect(() => {
-    getOrderWhatsapp()
-      .then((n) => {
-        setSettings((s) => ({ ...s, whatsapp: n }));
-        loadPricing();
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  }, []);
-
   function loadPricing() {
     try {
       const stored = localStorage.getItem('di_landing_pricing');
@@ -60,6 +50,16 @@ export default function SettingsPage() {
       if (bn) setSettings((s) => ({ ...s, business_name: bn }));
     } catch { /* ignore */ }
   }
+
+  useEffect(() => {
+    getOrderWhatsapp()
+      .then((n) => {
+        setSettings((s) => ({ ...s, whatsapp: n }));
+        loadPricing();
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
