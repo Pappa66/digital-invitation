@@ -4,6 +4,9 @@ import { useState, useEffect } from 'react';
 import { Plus, Search, ExternalLink, Edit2, Trash2, Save, X } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
 import { demoIsDemoMode } from '@/lib/env';
+import { TEMPLATE_LIST } from '@/lib/templates';
+import { clientCreateProject } from '@/lib/api/project-client';
+import { useRouter } from 'next/navigation';
 
 interface Client {
   id: string;
@@ -26,11 +29,13 @@ const STATUS_OPTIONS = [
 ];
 
 export default function ClientManagement() {
+  const router = useRouter();
   const [clients, setClients] = useState<Client[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [showAddModal, setShowAddModal] = useState(false);
-  const [newClient, setNewClient] = useState({ name: '', email: '', phone: '', project_id: '', design_name: '' });
+  const [newClient, setNewClient] = useState({ name: '', email: '', phone: '', project_id: '', design_name: '', template_id: '' });
+  const [creating, setCreating] = useState(false);
 
   async function loadClients() {
     setLoading(true);
@@ -81,26 +86,46 @@ export default function ClientManagement() {
     }
   }
 
-  function handleAddClient() {
+  async function handleAddClient() {
     if (!newClient.name.trim()) return;
+    setCreating(true);
 
-    const client: Client = {
-      id: `client-${Date.now()}`,
-      name: newClient.name,
-      email: newClient.email,
-      phone: newClient.phone,
-      project_id: newClient.project_id,
-      project_title: newClient.project_id ? clients.find((c) => c.project_id === newClient.project_id)?.project_title || '' : '',
-      project_slug: newClient.project_id ? clients.find((c) => c.project_id === newClient.project_id)?.project_slug || '' : '',
-      design_name: newClient.design_name,
-      invitation_link: newClient.project_id ? `/${clients.find((c) => c.project_id === newClient.project_id)?.project_slug || ''}` : '',
-      status: 'proses',
-      created_at: new Date().toISOString()
-    };
+    try {
+      let projectId = newClient.project_id;
+      let projectTitle = '';
+      let projectSlug = '';
 
-    saveClients([client, ...clients]);
-    setShowAddModal(false);
-    setNewClient({ name: '', email: '', phone: '', project_id: '', design_name: '' });
+      // Auto-create project from template if selected
+      if (newClient.template_id) {
+        const title = newClient.design_name || `${newClient.name} - Undangan`;
+        const res = await clientCreateProject(title, newClient.template_id);
+        if (res?.id) {
+          projectId = res.id;
+          projectTitle = title;
+          projectSlug = res.id; // slug is generated server-side
+        }
+      }
+
+      const client: Client = {
+        id: `client-${Date.now()}`,
+        name: newClient.name,
+        email: newClient.email,
+        phone: newClient.phone,
+        project_id: projectId,
+        project_title: projectTitle,
+        project_slug: projectSlug,
+        design_name: newClient.design_name || TEMPLATE_LIST.find(t => t.id === newClient.template_id)?.name || '',
+        invitation_link: projectSlug ? `/${projectSlug}` : '',
+        status: 'proses',
+        created_at: new Date().toISOString()
+      };
+
+      saveClients([client, ...clients]);
+      setShowAddModal(false);
+      setNewClient({ name: '', email: '', phone: '', project_id: '', design_name: '', template_id: '' });
+    } finally {
+      setCreating(false);
+    }
   }
 
   function handleDeleteClient(id: string) {
@@ -185,14 +210,24 @@ export default function ClientManagement() {
                   <td className="px-4 py-3 text-sm text-gray-700">{client.design_name || '-'}</td>
                   <td className="px-4 py-3">
                     {client.invitation_link ? (
-                      <a
-                        href={client.invitation_link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-sm text-[#c9a45c] hover:underline"
-                      >
-                        {client.project_slug} <ExternalLink className="h-3 w-3" />
-                      </a>
+                      <div className="flex flex-col gap-1">
+                        <a
+                          href={client.invitation_link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-sm text-[#c9a45c] hover:underline"
+                        >
+                          Lihat Undangan <ExternalLink className="h-3 w-3" />
+                        </a>
+                        {client.project_id && (
+                          <a
+                            href={`/builder/${client.project_id}`}
+                            className="inline-flex items-center gap-1 text-xs text-gray-500 hover:text-[#c9a45c]"
+                          >
+                            Edit Design
+                          </a>
+                        )}
+                      </div>
                     ) : (
                       <span className="text-sm text-gray-400">-</span>
                     )}
@@ -284,6 +319,20 @@ export default function ClientManagement() {
                   placeholder="Contoh: Wedding Theme Gold"
                 />
               </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-700">Pilih Template</label>
+                <select
+                  value={newClient.template_id}
+                  onChange={(e) => setNewClient({ ...newClient, template_id: e.target.value })}
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#c9a45c] focus:outline-none"
+                >
+                  <option value="">-- Pilih Template (otomatis buat project) --</option>
+                  {TEMPLATE_LIST.map((t) => (
+                    <option key={t.id} value={t.id}>{t.name} ({t.category})</option>
+                  ))}
+                </select>
+                <p className="mt-1 text-[11px] text-gray-500">Jika dipilih, project undangan akan otomatis dibuat.</p>
+              </div>
               <div className="flex justify-end gap-3 pt-4">
                 <button
                   onClick={() => setShowAddModal(false)}
@@ -293,10 +342,10 @@ export default function ClientManagement() {
                 </button>
                 <button
                   onClick={handleAddClient}
-                  disabled={!newClient.name.trim()}
+                  disabled={!newClient.name.trim() || creating}
                   className="rounded-lg bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-4 py-2 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-50"
                 >
-                  <Save className="mr-1 inline h-4 w-4" /> Simpan
+                  {creating ? 'Membuat...' : <><Save className="mr-1 inline h-4 w-4" /> Simpan</>}
                 </button>
               </div>
             </div>
