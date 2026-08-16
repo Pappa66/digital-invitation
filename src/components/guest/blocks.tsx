@@ -651,12 +651,15 @@ export function HeroBlock({ props, greetingName, showButton = true }: { props: B
     }, 650);
   }
 
+  const textColor = str(props, 'text_color') || '#ffffff';
+
   return (
     <section
       ref={sectionRef}
-       className={`relative flex min-h-[100dvh] w-full flex-col overflow-hidden px-6 py-10 sm:py-14 md:py-20 text-white ${
+       className={`relative flex min-h-[100dvh] w-full flex-col overflow-hidden px-6 py-10 sm:py-14 md:py-20 ${
         isLeft ? 'items-start justify-center text-left' : 'items-center justify-center text-center'
       }`}
+      style={{ color: textColor }}
     >
       <BackgroundImage src={str(props, 'bg_image')} fit={str(props, 'bg_fit')} position={str(props, 'bg_position')} />
       {showGradient && (
@@ -697,7 +700,7 @@ export function HeroBlock({ props, greetingName, showButton = true }: { props: B
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ type: 'spring', stiffness: 140, damping: 18, delay: 0.15 }}
-            className="text-xs uppercase tracking-[0.3em]"
+            className="font-body text-xs uppercase tracking-[0.3em]"
           >
             <Editable prop="caption">{str(props, 'caption')}</Editable>
           </motion.p>
@@ -719,7 +722,7 @@ export function HeroBlock({ props, greetingName, showButton = true }: { props: B
             initial={{ opacity: 0, y: 26 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ type: 'spring', stiffness: 130, damping: 17, delay: 0.55 }}
-            className="mt-6 text-3xl font-medium leading-tight sm:text-4xl md:text-5xl"
+            className="font-heading mt-6 text-3xl font-medium leading-tight sm:text-4xl md:text-5xl"
           >
             <Editable prop="bride">{str(props, 'bride')}</Editable>
           </motion.h1>
@@ -739,7 +742,7 @@ export function HeroBlock({ props, greetingName, showButton = true }: { props: B
             initial={{ opacity: 0, y: 26 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ type: 'spring', stiffness: 130, damping: 17, delay: 0.95 }}
-            className="text-3xl font-medium leading-tight sm:text-4xl md:text-5xl"
+            className="font-heading text-3xl font-medium leading-tight sm:text-4xl md:text-5xl"
           >
             <Editable prop="groom">{str(props, 'groom')}</Editable>
           </motion.h1>
@@ -749,7 +752,7 @@ export function HeroBlock({ props, greetingName, showButton = true }: { props: B
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 1.05 }}
-            className="mt-8 text-sm uppercase tracking-widest opacity-90"
+            className="font-body mt-8 text-sm uppercase tracking-widest opacity-90"
           >
             <Editable prop="date">{str(props, 'date')}</Editable>
           </motion.p>

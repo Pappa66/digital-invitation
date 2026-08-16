@@ -2,6 +2,7 @@ import { supabase } from '@/lib/supabase/client';
 
 export interface OrderInput {
   templateName?: string;
+  templateId?: string;
   name: string;
   whatsapp: string;
   email?: string;
@@ -13,10 +14,13 @@ export async function clientSubmitOrder(input: OrderInput): Promise<{ ok: boolea
   try {
     const { error } = await supabase.from('orders').insert({
       template_name: input.templateName ?? null,
+      template_id: input.templateId ?? null,
       name: input.name,
       whatsapp: input.whatsapp ?? null,
-      note: input.note ?? null
-    });
+      email: input.email ?? null,
+      note: input.note ?? null,
+      status: 'pending'
+    } as never);
     if (error) return { ok: false, error: error.message };
     return { ok: true };
   } catch (e) {

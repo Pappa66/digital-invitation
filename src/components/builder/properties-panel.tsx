@@ -117,7 +117,9 @@ const TITLE_PROPS: Record<string, { label: string; multiline?: boolean; url?: bo
     { label: 'latin', multiline: true, labelText: 'Latin / Bacaan' },
     { label: 'translation', multiline: true, labelText: 'Terjemahan' },
     { label: 'reference', labelText: 'Referensi' }
-  ]
+  ],
+  LiveStreaming: [{ label: 'title' }, { label: 'embed_url', url: true, labelText: 'Link YouTube/Vimeo' }, { label: 'note', multiline: true }],
+  Empty: []
 };
 
 const VARIANTS: Partial<Record<string, { key: string; options: string[] }>> = {
@@ -223,7 +225,7 @@ export default function PropertiesPanel() {
   const setReligion = useBuilderStore((s) => s.setReligion);
 
   const [mediaOpen, setMediaOpen] = useState(false);
-  const [mediaMode, setMediaMode] = useState<'hero' | 'gallery' | 'bg' | 'photo' | 'decor' | null>(null);
+  const [mediaMode, setMediaMode] = useState<'hero' | 'gallery' | 'bg' | 'photo' | 'decor' | 'couple_groom' | 'couple_bride' | null>(null);
   const [cropOpen, setCropOpen] = useState(false);
 
   function updateAccount(blockId: string, index: number, key: 'bank_name' | 'account_number' | 'account_holder', value: string) {
@@ -672,6 +674,30 @@ export default function PropertiesPanel() {
                       Tampilkan Ornamen
                     </label>
                   )}
+                  {block.type === 'Hero' && (
+                    <div>
+                      <label className="mb-1 block text-xs font-medium text-[#4a443c]">Warna Teks Hero</label>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="color"
+                          value={(block.props.text_color as string) || '#ffffff'}
+                          onChange={(e) => setBlockProps(block.id, { text_color: e.target.value })}
+                          className="h-8 w-8 cursor-pointer rounded-md border border-[#e0d6c2]"
+                        />
+                        <span className="text-xs text-[#8a7a66]">
+                          {(block.props.text_color as string) || '#ffffff'} (default: putih)
+                        </span>
+                        {(block.props.text_color as string) && (
+                          <button
+                            onClick={() => setBlockProps(block.id, { text_color: '' })}
+                            className="text-[10px] text-red-400 hover:text-red-600"
+                          >
+                            Reset
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  )}
                   {VARIANTS[block.type] && (
                     <div>
                       <label className="mb-1 block text-xs font-medium text-[#4a443c]">Gaya</label>
@@ -713,22 +739,46 @@ export default function PropertiesPanel() {
                           ))}
                         </div>
                       </div>
-                      <Field
-                        blockId={block.id}
-                        propKey="groom_photo"
-                        label="Foto Pria (URL)"
-                        value={(block.props.groom_photo as string) ?? ''}
-                        url
-                        onChange={(v) => setBlockProps(block.id, { groom_photo: v })}
-                      />
-                      <Field
-                        blockId={block.id}
-                        propKey="bride_photo"
-                        label="Foto Wanita (URL)"
-                        value={(block.props.bride_photo as string) ?? ''}
-                        url
-                        onChange={(v) => setBlockProps(block.id, { bride_photo: v })}
-                      />
+                      <div>
+                        <p className="mb-1 text-xs font-medium text-[#4a443c]">Foto Pria</p>
+                        <button
+                          onClick={() => {
+                            setMediaMode('couple_groom');
+                            setMediaOpen(true);
+                          }}
+                          className="flex w-full items-center gap-2 rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2 text-sm text-[#6b5f4d] hover:border-[#c9a45c]"
+                        >
+                          {block.props.groom_photo ? 'Ganti Foto Pria' : 'Pilih Foto Pria'}
+                        </button>
+                        {block.props.groom_photo && (
+                          <button
+                            onClick={() => setBlockProps(block.id, { groom_photo: '' })}
+                            className="mt-1 text-[10px] text-red-400 hover:text-red-600"
+                          >
+                            Hapus foto
+                          </button>
+                        )}
+                      </div>
+                      <div>
+                        <p className="mb-1 text-xs font-medium text-[#4a443c]">Foto Wanita</p>
+                        <button
+                          onClick={() => {
+                            setMediaMode('couple_bride');
+                            setMediaOpen(true);
+                          }}
+                          className="flex w-full items-center gap-2 rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2 text-sm text-[#6b5f4d] hover:border-[#c9a45c]"
+                        >
+                          {block.props.bride_photo ? 'Ganti Foto Wanita' : 'Pilih Foto Wanita'}
+                        </button>
+                        {block.props.bride_photo && (
+                          <button
+                            onClick={() => setBlockProps(block.id, { bride_photo: '' })}
+                            className="mt-1 text-[10px] text-red-400 hover:text-red-600"
+                          >
+                            Hapus foto
+                          </button>
+                        )}
+                      </div>
                     </div>
                   )}
                   {block.type === 'Photo' && (
@@ -1130,6 +1180,8 @@ export default function PropertiesPanel() {
           }
           if (mediaMode === 'bg' && block) setBlockStyle(block.id, { bgImage: url });
           if (mediaMode === 'photo' && block?.type === 'Photo') setBlockProps(block.id, { image: url });
+          if (mediaMode === 'couple_groom' && block?.type === 'Couple') setBlockProps(block.id, { groom_photo: url });
+          if (mediaMode === 'couple_bride' && block?.type === 'Couple') setBlockProps(block.id, { bride_photo: url });
           if (mediaMode === 'decor' && activeDecor)
             updateDecor(activeDecor.block.id, activeDecor.asset.id, { imageUrl: url });
           setMediaMode(null);
