@@ -15,13 +15,9 @@ import CoverModal from '@/components/guest/cover-modal';
 interface GuestRendererProps {
   canvas: CanvasData;
   projectId?: string;
-  /** Nama tamu dari query ?to= untuk sapaan personal di Hero. */
   greetingName?: string;
-  /** Mode preview (kartu template): matikan musik & timer agar ringan. */
   preview?: boolean;
-  /** Mode demo interaktif (halaman detail template): tampilkan cover & musik seperti asli. */
   demo?: boolean;
-  /** Lebar tampilan yang dirender: ponsel (default) atau desktop. */
   width?: 'mobile' | 'desktop';
 }
 
@@ -32,6 +28,7 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
   const flow = canvas.flow ?? 'stack';
   const heroBlock = canvas.blocks.find((b) => b.type === 'Hero');
   const coupleNames = [heroBlock?.props.bride, heroBlock?.props.groom].filter(Boolean).join(' & ');
+  const showCover = canvas.settings.show_cover !== false;
   const shareMeta = {
     coupleNames,
     date: typeof heroBlock?.props.date === 'string' ? heroBlock.props.date : undefined,
@@ -51,6 +48,20 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
     (canvas.theme.card_style ? 'guest-card-style ' : '') +
     (width === 'desktop' ? 'max-w-full' : 'max-w-[430px]');
 
+  const coverProps = {
+    caption: typeof heroBlock?.props.caption === 'string' ? heroBlock.props.caption : 'Undangan Pernikahan',
+    bride: typeof heroBlock?.props.bride === 'string' ? heroBlock.props.bride : '',
+    groom: typeof heroBlock?.props.groom === 'string' ? heroBlock.props.groom : '',
+    date: typeof heroBlock?.props.date === 'string' ? heroBlock.props.date : '',
+    bgImage: typeof heroBlock?.props.bg_image === 'string' ? heroBlock.props.bg_image : undefined,
+    greetingName,
+    primary: canvas.theme.primary,
+    secondary: canvas.theme.secondary,
+    background: canvas.theme.background,
+    text: canvas.theme.text,
+    ornament: typeof canvas.theme.ornament === 'string' ? canvas.theme.ornament : undefined
+  };
+
   if (flow === 'free') {
     const height = canvas.blocks.reduce((m, b) => (b.layout ? Math.max(m, b.layout.y) : m), 0) + 900;
     return (
@@ -63,31 +74,17 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
                 key={block.id}
                 style={{ position: 'absolute', left: block.layout.x, top: block.layout.y, width: block.layout.width, maxWidth: CANVAS_W }}
               >
-                <BlockView block={block} projectId={projectId} greetingName={greetingName} cardStyle={canvas.theme.card_style} demo={immersive && !!demo} />
+                <BlockView block={block} projectId={projectId} greetingName={greetingName} cardStyle={canvas.theme.card_style} demo={immersive && !!demo} showCoverButton={!showCover} />
               </div>
             ) : (
-              <BlockView key={block.id} block={block} projectId={projectId} greetingName={greetingName} cardStyle={canvas.theme.card_style} demo={immersive && !!demo} />
+              <BlockView key={block.id} block={block} projectId={projectId} greetingName={greetingName} cardStyle={canvas.theme.card_style} demo={immersive && !!demo} showCoverButton={!showCover} />
             )
           )}
-{immersive && <MusicPlayer settings={canvas.settings} />}
-        {immersive && <ShareBar {...shareMeta} />}
-        <GuestNav />
-        <GuestFrame mode={canvas.theme.frame} color={canvas.theme.secondary} fixed={!preview} />
-        {immersive && (
-          <CoverModal
-            caption={typeof heroBlock?.props.caption === 'string' ? heroBlock.props.caption : 'Undangan Pernikahan'}
-            bride={typeof heroBlock?.props.bride === 'string' ? heroBlock.props.bride : ''}
-            groom={typeof heroBlock?.props.groom === 'string' ? heroBlock.props.groom : ''}
-            date={typeof heroBlock?.props.date === 'string' ? heroBlock.props.date : ''}
-            bgImage={typeof heroBlock?.props.bg_image === 'string' ? heroBlock.props.bg_image : undefined}
-            greetingName={greetingName}
-            primary={canvas.theme.primary}
-            secondary={canvas.theme.secondary}
-            background={canvas.theme.background}
-            text={canvas.theme.text}
-            ornament={typeof canvas.theme.ornament === 'string' ? canvas.theme.ornament : undefined}
-          />
-        )}
+          {immersive && <MusicPlayer settings={canvas.settings} />}
+          {immersive && <ShareBar {...shareMeta} />}
+          <GuestNav />
+          <GuestFrame mode={canvas.theme.frame} color={canvas.theme.secondary} fixed={!preview} />
+          {immersive && showCover && <CoverModal {...coverProps} />}
         </div>
         </ThemeContext.Provider>
       </PreviewContext.Provider>
@@ -99,7 +96,7 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
       <ThemeContext.Provider value={canvas.theme}>
       <div className={rootClass} style={styleVars}>
         {canvas.blocks.map((block) => (
-          <BlockView key={block.id} block={block} projectId={projectId} greetingName={greetingName} cardStyle={canvas.theme.card_style} demo={immersive && !!demo} />
+          <BlockView key={block.id} block={block} projectId={projectId} greetingName={greetingName} cardStyle={canvas.theme.card_style} demo={immersive && !!demo} showCoverButton={!showCover} />
         ))}
         {!preview && canvas.settings.guest_book_enabled && <GuestBookWall projectId={projectId} />}
         {!preview && projectId && canvas.settings.checkin_enabled !== false && (
@@ -116,21 +113,7 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
         {immersive && <ShareBar {...shareMeta} />}
         <GuestNav />
         <GuestFrame mode={canvas.theme.frame} color={canvas.theme.secondary} fixed={!preview} />
-        {immersive && (
-          <CoverModal
-            caption={typeof heroBlock?.props.caption === 'string' ? heroBlock.props.caption : 'Undangan Pernikahan'}
-            bride={typeof heroBlock?.props.bride === 'string' ? heroBlock.props.bride : ''}
-            groom={typeof heroBlock?.props.groom === 'string' ? heroBlock.props.groom : ''}
-            date={typeof heroBlock?.props.date === 'string' ? heroBlock.props.date : ''}
-            bgImage={typeof heroBlock?.props.bg_image === 'string' ? heroBlock.props.bg_image : undefined}
-            greetingName={greetingName}
-            primary={canvas.theme.primary}
-            secondary={canvas.theme.secondary}
-            background={canvas.theme.background}
-            text={canvas.theme.text}
-            ornament={typeof canvas.theme.ornament === 'string' ? canvas.theme.ornament : undefined}
-          />
-        )}
+        {immersive && showCover && <CoverModal {...coverProps} />}
       </div>
       </ThemeContext.Provider>
     </PreviewContext.Provider>

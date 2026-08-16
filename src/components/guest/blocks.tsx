@@ -553,14 +553,16 @@ function CouplePhoto({ src, shape, alt }: { src: string; shape: string; alt: str
       ? 'rounded-2xl -rotate-2'
       : shape === 'frame'
       ? 'rounded-2xl border-4 border-white p-1.5 shadow-lg'
+      : shape === 'none'
+      ? ''
       : 'rounded-full';
   const innerRound =
-    shape === 'circle' || !shape
-      ? 'rounded-full'
+    shape === 'circle' || shape === 'none'
+      ? shape === 'none' ? 'rounded-none' : 'rounded-full'
       : shape === 'arch'
       ? 'rounded-t-full'
       : 'rounded-2xl';
-  const inner = 'absolute inset-1.5 overflow-hidden ' + innerRound;
+  const inner = shape === 'none' ? 'absolute inset-0 overflow-hidden' : 'absolute inset-1.5 overflow-hidden ' + innerRound;
   return (
     <div className={`${base} ${frame} mx-auto mb-4`}>
       <div className={inner}>
@@ -614,7 +616,7 @@ function GiantAmp() {
   );
 }
 
-export function HeroBlock({ props, greetingName }: { props: BlockProps; greetingName?: string }) {
+export function HeroBlock({ props, greetingName, showButton = true }: { props: BlockProps; greetingName?: string; showButton?: boolean }) {
   const showOrnament = bool(props, 'show_ornament');
   const align = str(props, 'variant') === 'left' ? 'left' : 'center';
   const isLeft = align === 'left';
@@ -781,7 +783,7 @@ export function HeroBlock({ props, greetingName }: { props: BlockProps; greeting
             </motion.div>
           </Inner>
         )}
-        {!preview && !inBuilder && (
+        {showButton && !preview && !inBuilder && (
           <Inner name="button">
             <motion.button
               initial={{ opacity: 0, y: 8 }}
@@ -804,7 +806,7 @@ export function HeroBlock({ props, greetingName }: { props: BlockProps; greeting
 
 export function CoupleBlock({ props }: { props: BlockProps }) {
   const side = str(props, 'variant') === 'side';
-  const photoShape = str(props, 'photo_shape') || '';
+  const photoShape = str(props, 'photo_shape') || 'circle';
   const groomPhoto = str(props, 'groom_photo');
   const bridePhoto = str(props, 'bride_photo');
   const title = (children: React.ReactNode) => (
@@ -1550,11 +1552,55 @@ function maybeEmbedSrc(embedUrl: string): string | null {
 }
 
 export function ThanksBlock({ props }: { props: BlockProps }) {
+  const variant = str(props, 'variant') || 'center';
+  const ornament = <Inner name="ornament"><Ornament className="mb-6 opacity-60" /></Inner>;
+  if (variant === 'elegant') {
+    return (
+      <section className="px-6 py-10 sm:py-14 md:py-20 text-center">
+        {ornament}
+        <div className="mx-auto max-w-md rounded-2xl border border-current/10 bg-current/[0.03] px-8 py-10">
+          <Inner name="title">
+            <h2 className="text-2xl font-medium md:text-3xl"><Editable prop="title">{str(props, 'title')}</Editable></h2>
+          </Inner>
+          <Inner name="message">
+            <p className="mx-auto mt-6 w-full text-sm leading-relaxed opacity-80">
+              {str(props, 'message')}
+            </p>
+          </Inner>
+          <div className="mx-auto my-6 h-px w-16 bg-current/20" />
+          <Inner name="closing">
+            <p className="mt-4 text-xs uppercase tracking-widest opacity-70">{str(props, 'closing')}</p>
+          </Inner>
+          <Inner name="names">
+            <p className="mt-3 text-xl italic">{str(props, 'names')}</p>
+          </Inner>
+        </div>
+      </section>
+    );
+  }
+  if (variant === 'minimal') {
+    return (
+      <section className="px-6 py-10 sm:py-14 md:py-20 text-center">
+        <Inner name="title">
+          <h2 className="text-xl font-medium tracking-wide uppercase opacity-60"><Editable prop="title">{str(props, 'title')}</Editable></h2>
+        </Inner>
+        <Inner name="message">
+          <p className="mx-auto mt-6 max-w-sm text-sm leading-relaxed opacity-80">
+            {str(props, 'message')}
+          </p>
+        </Inner>
+        <Inner name="names">
+          <p className="mt-8 text-lg italic">{str(props, 'names')}</p>
+        </Inner>
+        <Inner name="closing">
+          <p className="mt-4 text-xs opacity-50">{str(props, 'closing')}</p>
+        </Inner>
+      </section>
+    );
+  }
   return (
     <section className="px-6 py-10 sm:py-14 md:py-20 text-center">
-      <Inner name="ornament">
-        <Ornament className="mb-6 opacity-60" />
-      </Inner>
+      {ornament}
       <Inner name="title">
         <h2 className="text-2xl font-medium md:text-3xl"><Editable prop="title">{str(props, 'title')}</Editable></h2>
       </Inner>
@@ -1575,17 +1621,41 @@ export function ThanksBlock({ props }: { props: BlockProps }) {
 
 export function TextBlock({ props }: { props: BlockProps }) {
   const align = str(props, 'align') === 'left' ? 'left' : str(props, 'align') === 'right' ? 'right' : 'center';
+  const variant = str(props, 'variant') || 'plain';
+  const alignClass = align === 'left' ? 'text-left' : align === 'right' ? 'text-right' : 'text-center';
+  const content = (
+    <Inner name="text">
+      <p className={`text-sm leading-relaxed opacity-90 ${alignClass}`}>
+        <Editable prop="text" multiline>
+          {str(props, 'text')}
+        </Editable>
+      </p>
+    </Inner>
+  );
+
+  if (variant === 'card') {
+    return (
+      <section className="px-6 py-8">
+        <div className={`mx-auto max-w-md rounded-2xl border border-current/10 bg-current/[0.03] px-6 py-6 ${alignClass}`}>
+          {content}
+        </div>
+      </section>
+    );
+  }
+
+  if (variant === 'accent') {
+    return (
+      <section className="px-6 py-8">
+        <div className={`mx-auto max-w-md border-l-2 border-current/30 pl-5 ${alignClass}`}>
+          {content}
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="px-6 py-8">
-      <Inner name="text">
-        <p
-          className={`text-sm leading-relaxed opacity-90 ${align === 'left' ? 'text-left' : align === 'right' ? 'text-right' : 'text-center'}`}
-        >
-          <Editable prop="text" multiline>
-            {str(props, 'text')}
-          </Editable>
-        </p>
-      </Inner>
+      {content}
     </section>
   );
 }
@@ -1617,11 +1687,10 @@ export function QuoteBlock({ props }: { props: BlockProps }) {
   const theme = useTheme();
   const religion = (str(props, 'religion') || 'islam') as ReligionKey;
   const isIslamic = religion === 'islam';
-  return (
-    <section className="px-6 py-10 sm:py-12 md:py-14 text-center">
-      <Inner name="ornament">
-        <Ornament className="mb-6 opacity-50" ornament={str(props, 'ornament') || theme?.ornament} />
-      </Inner>
+  const variant = str(props, 'variant') || 'center';
+
+  const quoteContent = (
+    <>
       <Inner name="original">
         {isIslamic ? (
           <>
@@ -1666,6 +1735,29 @@ export function QuoteBlock({ props }: { props: BlockProps }) {
           <Editable prop="reference">{str(props, 'reference')}</Editable>
         </p>
       </Inner>
+    </>
+  );
+
+  if (variant === 'card') {
+    return (
+      <section className="px-6 py-10 sm:py-12 md:py-14 text-center">
+        <Inner name="ornament">
+          <Ornament className="mb-6 opacity-50" ornament={str(props, 'ornament') || theme?.ornament} />
+        </Inner>
+        <div className="mx-auto max-w-md rounded-2xl border border-current/10 bg-current/[0.03] px-6 py-8">
+          <p className="mb-4 text-4xl leading-none opacity-30">&ldquo;</p>
+          {quoteContent}
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section className="px-6 py-10 sm:py-12 md:py-14 text-center">
+      <Inner name="ornament">
+        <Ornament className="mb-6 opacity-50" ornament={str(props, 'ornament') || theme?.ornament} />
+      </Inner>
+      {quoteContent}
     </section>
   );
 }

@@ -18,6 +18,7 @@ interface BlockItem {
   desc: string;
   variants?: { name: string; value: string }[];
   defaultVariant?: string;
+  variantKey?: string;
 }
 
 interface BlockCategory {
@@ -89,7 +90,8 @@ const BLOCK_CATEGORIES: BlockCategory[] = [
           { name: 'Kiri', value: 'left' },
           { name: 'Kanan', value: 'right' }
         ],
-        defaultVariant: 'center'
+        defaultVariant: 'center',
+        variantKey: 'align'
       },
       { type: 'Quote', label: 'Kutipan / Ayat', icon: QuoteIcon, desc: 'Ayat atau kutipan',
         variants: [
@@ -97,7 +99,8 @@ const BLOCK_CATEGORIES: BlockCategory[] = [
           { name: 'Kristen', value: 'kristen' },
           { name: 'Konghucu', value: 'konghucu' }
         ],
-        defaultVariant: 'islam'
+        defaultVariant: 'islam',
+        variantKey: 'religion'
       }
     ]
   },
@@ -150,12 +153,21 @@ const BLOCK_CATEGORIES: BlockCategory[] = [
       { type: 'Divider', label: 'Pemisah', icon: Minus, desc: 'Garis pemisah',
         variants: [
           { name: 'Garis', value: 'line' },
-          { name: 'Ornamen', value: 'ornament' },
-          { name: 'Bunga', value: 'floral' }
+          { name: 'Titik', value: 'dots' },
+          { name: 'Diamond', value: 'diamond' },
+          { name: 'Hati', value: 'hearts' },
+          { name: 'Daun', value: 'leaves' }
         ],
         defaultVariant: 'line'
       },
-      { type: 'Thanks', label: 'Penutup', icon: HeartHandshake, desc: 'Ucapan terima kasih' },
+      { type: 'Thanks', label: 'Penutup', icon: HeartHandshake, desc: 'Ucapan terima kasih',
+        variants: [
+          { name: 'Tengah', value: 'center' },
+          { name: 'Elegan', value: 'elegant' },
+          { name: 'Minimal', value: 'minimal' }
+        ],
+        defaultVariant: 'center'
+      },
       { type: 'Empty', label: 'Blok Kosong', icon: LayoutPanelTop, desc: 'Placeholder kosong' }
     ]
   }
@@ -196,7 +208,7 @@ function CategorySection({ category, isExpanded, onToggle, onSelectVariant }: {
   category: BlockCategory;
   isExpanded: boolean;
   onToggle: () => void;
-  onSelectVariant: (type: BlockType, variant: string) => void;
+  onSelectVariant: (type: BlockType, variant: string, variantKey?: string) => void;
 }) {
   const Icon = category.icon;
   return (
@@ -226,7 +238,7 @@ function CategorySection({ category, isExpanded, onToggle, onSelectVariant }: {
   );
 }
 
-function BlockWithVariants({ block, onSelectVariant }: { block: BlockItem; onSelectVariant: (type: BlockType, variant: string) => void }) {
+function BlockWithVariants({ block, onSelectVariant }: { block: BlockItem; onSelectVariant: (type: BlockType, variant: string, variantKey?: string) => void }) {
   const [showVariants, setShowVariants] = useState(false);
 
   return (
@@ -247,7 +259,7 @@ function BlockWithVariants({ block, onSelectVariant }: { block: BlockItem; onSel
             <button
               key={v.value}
               onClick={() => {
-                onSelectVariant(block.type, v.value);
+                onSelectVariant(block.type, v.value, block.variantKey);
                 setShowVariants(false);
               }}
               className="flex w-full items-center gap-2 rounded-md border border-dashed border-[#e0d6c2] px-2.5 py-1.5 text-[11px] text-[#6b5f4d] transition-colors hover:border-[#c9a45c] hover:bg-[#faf7f2]"
@@ -278,13 +290,13 @@ export default function ElementsSidebar() {
     });
   }
 
-  function handleSelectVariant(type: BlockType, variant: string) {
+  function handleSelectVariant(type: BlockType, variant: string, variantKey?: string) {
     addBlock(type);
     // Update the variant after adding
     const state = useBuilderStore.getState();
     const lastBlock = state.canvas.blocks[state.canvas.blocks.length - 1];
     if (lastBlock) {
-      setBlockProps(lastBlock.id, { variant });
+      setBlockProps(lastBlock.id, { [variantKey || 'variant']: variant });
     }
   }
 

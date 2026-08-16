@@ -63,6 +63,8 @@ export interface Settings {
   table_label?: string;
   /** Label kursi untuk info seat. */
   seat_label?: string;
+  /** Tampilkan cover fullscreen "Buka Undangan" sebelum konten. Default: true. */
+  show_cover?: boolean;
 }
 
 /** Rekening bank / e-wallet untuk amplop online. */

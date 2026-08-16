@@ -95,7 +95,6 @@ const TITLE_PROPS: Record<string, { label: string; multiline?: boolean; url?: bo
   RSVP: [
     { label: 'title' },
     { label: 'note', multiline: true },
-    { label: 'deadline' },
     { label: 'button_text' },
     { label: 'success_message', multiline: true }
   ],
@@ -126,7 +125,9 @@ const VARIANTS: Partial<Record<string, { key: string; options: string[] }>> = {
   Countdown: { key: 'variant', options: ['circles', 'cards', 'line'] },
   EventDetail: { key: 'variant', options: ['card', 'band'] },
   Divider: { key: 'variant', options: ['line', 'dots', 'diamond', 'hearts', 'leaves'] },
-  Text: { key: 'align', options: ['left', 'center', 'right'] }
+  Thanks: { key: 'variant', options: ['center', 'elegant', 'minimal'] },
+  Quote: { key: 'variant', options: ['center', 'card'] },
+  Text: { key: 'variant', options: ['plain', 'card', 'accent'] },
 };
 
 const GALLERY_LAYOUTS: { key: string; label: string; desc: string }[] = [
@@ -439,6 +440,32 @@ export default function PropertiesPanel() {
             />
 
             <Section
+              title="Cover & Pembuka"
+              desc="Layar fullscreen 'Buka Undangan' sebelum konten undangan"
+              render={
+                <label className="flex items-center justify-between gap-3 rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2.5">
+                  <div>
+                    <p className="text-sm font-medium text-[#4a443c]">Tampilkan Cover</p>
+                    <p className="text-[11px] text-[#8a7a66]">Fullscreen overlay dengan nama mempelai & tombol Buka Undangan. Musik mulai setelah diklik.</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setSettings({ show_cover: canvas.settings.show_cover === false })}
+                    className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${
+                      canvas.settings.show_cover !== false ? 'bg-[#c9a45c]' : 'bg-[#e0d6c2]'
+                    }`}
+                  >
+                    <span
+                      className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-all ${
+                        canvas.settings.show_cover !== false ? 'left-[22px]' : 'left-0.5'
+                      }`}
+                    />
+                  </button>
+                </label>
+              }
+            />
+
+            <Section
               title="Agama & Ucapan"
               desc="Menyesuaikan pembuka/penutup undangan dan preset ucapan tamu"
               render={
@@ -487,15 +514,35 @@ export default function PropertiesPanel() {
                     />
                   ))}
                   {block.type === 'EventDetail' && (
-                    <label className="flex items-center gap-2 text-xs font-medium text-[#4a443c]">
-                      <input
-                        type="checkbox"
-                        checked={block.props.show_live !== false}
-                        onChange={(e) => setBlockProps(block.id, { show_live: e.target.checked })}
-                        className="h-4 w-4 rounded border-[#e0d6c2] accent-[#c9a45c]"
-                      />
-                      Tampilkan tombol Siaran Langsung
-                    </label>
+                    <div className="space-y-2">
+                      <label className="flex items-center gap-2 text-xs font-medium text-[#4a443c]">
+                        <input
+                          type="checkbox"
+                          checked={block.props.show_live !== false}
+                          onChange={(e) => setBlockProps(block.id, { show_live: e.target.checked })}
+                          className="h-4 w-4 rounded border-[#e0d6c2] accent-[#c9a45c]"
+                        />
+                        Tampilkan tombol Siaran Langsung
+                      </label>
+                      <div>
+                        <p className="mb-1 text-xs font-medium text-[#4a443c]">Ikon</p>
+                        <div className="flex gap-2">
+                          {(['Gem', 'Sparkles'] as const).map((icon) => (
+                            <button
+                              key={icon}
+                              onClick={() => setBlockProps(block.id, { icon })}
+                              className={`flex-1 rounded-md border px-2 py-1.5 text-xs ${
+                                (block.props.icon as string) === icon
+                                  ? 'border-[#c9a45c] bg-[#c9a45c] text-white'
+                                  : 'border-[#e0d6c2] text-[#6b5f4d]'
+                              }`}
+                            >
+                              {icon === 'Gem' ? 'Diamond' : 'Sparkle'}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
                   )}
                   {block.type === 'Hero' && (
                     <div>
@@ -541,6 +588,17 @@ export default function PropertiesPanel() {
                       )}
                     </div>
                   )}
+                  {block.type === 'Hero' && (
+                    <label className="flex items-center gap-2 text-xs font-medium text-[#4a443c]">
+                      <input
+                        type="checkbox"
+                        checked={block.props.show_ornament !== false}
+                        onChange={(e) => setBlockProps(block.id, { show_ornament: e.target.checked })}
+                        className="h-4 w-4 rounded border-[#e0d6c2] accent-[#c9a45c]"
+                      />
+                      Tampilkan Ornamen
+                    </label>
+                  )}
                   {VARIANTS[block.type] && (
                     <div>
                       <label className="mb-1 block text-xs font-medium text-[#4a443c]">Gaya</label>
@@ -570,9 +628,9 @@ export default function PropertiesPanel() {
                           {(['circle', 'arch', 'tilt', 'frame', 'none'] as const).map((s) => (
                             <button
                               key={s}
-                              onClick={() => setBlockProps(block.id, { photo_shape: s === 'none' ? '' : s })}
+                              onClick={() => setBlockProps(block.id, { photo_shape: s })}
                               className={`rounded-md border px-2 py-1.5 text-xs capitalize ${
-                                ((block.props.photo_shape as string) || 'circle') === (s === 'none' ? '' : s)
+                                ((block.props.photo_shape as string) || 'circle') === s
                                   ? 'border-[#c9a45c] bg-[#c9a45c] text-white'
                                   : 'border-[#e0d6c2] text-[#6b5f4d]'
                               }`}
@@ -601,17 +659,28 @@ export default function PropertiesPanel() {
                     </div>
                   )}
                   {block.type === 'Photo' && (
-                    <div>
-                      <p className="mb-1 text-xs font-medium text-[#4a443c]">Gambar</p>
-                      <button
-                        onClick={() => {
-                          setMediaMode('photo');
-                          setMediaOpen(true);
-                        }}
-                        className="flex w-full items-center gap-2 rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2 text-sm text-[#6b5f4d] hover:border-[#c9a45c]"
-                      >
-                        {block.props.image ? 'Ganti Gambar' : 'Pilih Gambar'}
-                      </button>
+                    <div className="space-y-2">
+                      <div>
+                        <p className="mb-1 text-xs font-medium text-[#4a443c]">Gambar</p>
+                        <button
+                          onClick={() => {
+                            setMediaMode('photo');
+                            setMediaOpen(true);
+                          }}
+                          className="flex w-full items-center gap-2 rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2 text-sm text-[#6b5f4d] hover:border-[#c9a45c]"
+                        >
+                          {block.props.image ? 'Ganti Gambar' : 'Pilih Gambar'}
+                        </button>
+                      </div>
+                      <label className="flex items-center gap-2 text-xs font-medium text-[#4a443c]">
+                        <input
+                          type="checkbox"
+                          checked={block.props.rounded === true}
+                          onChange={(e) => setBlockProps(block.id, { rounded: e.target.checked })}
+                          className="h-4 w-4 rounded border-[#e0d6c2] accent-[#c9a45c]"
+                        />
+                        Sudut Membulat
+                      </label>
                     </div>
                   )}
                   {block.type === 'Gallery' && (

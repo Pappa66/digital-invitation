@@ -29,25 +29,22 @@ import { DecorLayer } from '@/components/guest/blocks';
 
 interface BlockViewProps {
   block: Block;
-  /** projectId untuk RSVP DB insert. Kosong = readonly preview. */
   projectId?: string;
-  /** Aktifkan edit-inline (hanya di builder). */
   editable?: boolean;
-  /** Nama tamu (dari ?to=) untuk sapaan di Hero. */
   greetingName?: string;
-  /** Mode card-template: bungkus section (kecuali Hero) sebagai kartu. */
   cardStyle?: boolean;
-  /** Mode demo interaktif: tetap jalankan animasi entrance walau preview. */
   demo?: boolean;
+  /** Show "Buka Undangan" button in Hero (false when cover is enabled). */
+  showCoverButton?: boolean;
 }
 
-export default function BlockView({ block, projectId, editable = false, greetingName, cardStyle, demo }: BlockViewProps) {
+export default function BlockView({ block, projectId, editable = false, greetingName, cardStyle, demo, showCoverButton = true }: BlockViewProps) {
   const preview = usePreview();
   const animateEntrance = (!preview || demo) && !editable;
   let view: React.ReactNode;
   switch (block.type) {
     case 'Hero':
-      view = <HeroBlock props={block.props} greetingName={greetingName} />;
+      view = <HeroBlock props={block.props} greetingName={greetingName} showButton={showCoverButton} />;
       break;
     case 'Couple':
       view = <CoupleBlock props={block.props} />;
