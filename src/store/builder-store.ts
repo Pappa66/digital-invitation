@@ -694,16 +694,21 @@ export function canRedoBuilder(): boolean {
 
 /** Hook reactive: berapa banyak past/future di history undo/redo. */
 export function useBuilderHistory() {
-  return useSyncExternalStore(
+  const canUndo = useSyncExternalStore(
     (cb) => {
-      const storeApi = useBuilderStore.temporal;
-      const unsub = storeApi.subscribe(cb);
+      const unsub = useBuilderStore.temporal.subscribe(cb);
       return unsub;
     },
-    () => ({
-      canUndo: useBuilderStore.temporal.getState().pastStates.length > 0,
-      canRedo: useBuilderStore.temporal.getState().futureStates.length > 0
-    }),
-    () => ({ canUndo: false, canRedo: false })
+    () => useBuilderStore.temporal.getState().pastStates.length > 0,
+    () => false
   );
+  const canRedo = useSyncExternalStore(
+    (cb) => {
+      const unsub = useBuilderStore.temporal.subscribe(cb);
+      return unsub;
+    },
+    () => useBuilderStore.temporal.getState().futureStates.length > 0,
+    () => false
+  );
+  return { canUndo, canRedo };
 }
