@@ -84,7 +84,7 @@ export default function ProjectCard({ project, onDuplicated, onDeleted }: Projec
             </span>
           </div>
           <p className="mt-0.5 text-xs text-gray-500">
-            Dibuat {new Date(project.created_at).toLocaleDateString('id-ID')}
+            Diperbarui {new Date(project.updated_at || project.created_at).toLocaleDateString('id-ID')}
           </p>
         </div>
         <div className="flex shrink-0 items-center gap-0.5">
