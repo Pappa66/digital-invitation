@@ -254,9 +254,11 @@ function deepMerge<T>(base: T, patch: Partial<T>): T {
     const baseVal = result[key];
     const patchVal = pb[key];
     result[key] =
-      typeof baseVal === 'object' && baseVal !== null && typeof patchVal === 'object' && patchVal !== null
-        ? deepMerge(baseVal, patchVal as unknown as object)
-        : patchVal ?? baseVal;
+      Array.isArray(baseVal) || Array.isArray(patchVal)
+        ? (patchVal as unknown) ?? baseVal
+        : typeof baseVal === 'object' && baseVal !== null && typeof patchVal === 'object' && patchVal !== null
+          ? deepMerge(baseVal, patchVal as unknown as object)
+          : patchVal ?? baseVal;
   }
   return result as T;
 }
