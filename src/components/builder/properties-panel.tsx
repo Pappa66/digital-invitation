@@ -6,6 +6,7 @@ import ColorPicker from '@/components/builder/color-picker';
 import { OrnamentArt, ORNAMENT_CATEGORIES, ORNAMENT_LABELS, type OrnamentKey } from '@/components/builder/ornaments';
 import MediaLibrary from '@/components/dashboard/media-library';
 import MusicPreview from '@/components/builder/music-preview';
+import ImageCropTool from '@/components/builder/image-crop-tool';
 import { useBuilderStore } from '@/store/builder-store';
 import { RELIGIONS, type ReligionKey } from '@/lib/religions';
 import { getQuotesByReligion, RELIGION_LABELS, type WeddingQuote } from '@/lib/quotes';
@@ -223,6 +224,7 @@ export default function PropertiesPanel() {
 
   const [mediaOpen, setMediaOpen] = useState(false);
   const [mediaMode, setMediaMode] = useState<'hero' | 'gallery' | 'bg' | 'photo' | 'decor' | null>(null);
+  const [cropOpen, setCropOpen] = useState(false);
 
   function updateAccount(blockId: string, index: number, key: 'bank_name' | 'account_number' | 'account_holder', value: string) {
     const b = canvas.blocks.find((x) => x.id === blockId);
@@ -623,21 +625,39 @@ export default function PropertiesPanel() {
                               <option value="contain">Utuh (contain)</option>
                             </select>
                           </div>
-                          <div>
+                           <div>
                             <label className="mb-1 block text-xs font-medium text-[#4a443c]">Posisi</label>
-                            <select
-                              value={(block.props.bg_position as string) || 'center'}
-                              onChange={(e) => setBlockProps(block.id, { bg_position: e.target.value })}
-                              className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-2 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
-                            >
-                              <option value="center">Tengah</option>
-                              <option value="top">Atas</option>
-                              <option value="bottom">Bawah</option>
-                              <option value="left">Kiri</option>
-                              <option value="right">Kanan</option>
-                            </select>
+                            {['center', 'top', 'bottom', 'left', 'right'].includes((block.props.bg_position as string) || 'center') ? (
+                              <select
+                                value={(block.props.bg_position as string) || 'center'}
+                                onChange={(e) => setBlockProps(block.id, { bg_position: e.target.value })}
+                                className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-2 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
+                              >
+                                <option value="center">Tengah</option>
+                                <option value="top">Atas</option>
+                                <option value="bottom">Bawah</option>
+                                <option value="left">Kiri</option>
+                                <option value="right">Kanan</option>
+                              </select>
+                            ) : (
+                              <input
+                                type="text"
+                                value={(block.props.bg_position as string) || 'center'}
+                                onChange={(e) => setBlockProps(block.id, { bg_position: e.target.value })}
+                                className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-2 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
+                                placeholder="center"
+                              />
+                            )}
                           </div>
                         </div>
+                      )}
+                      {block.props.bg_image && (
+                        <button
+                          onClick={() => setCropOpen(true)}
+                          className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-md border border-[#c9a45c]/40 bg-[#c9a45c]/5 px-3 py-2 text-xs font-medium text-[#c9a45c] hover:bg-[#c9a45c]/10"
+                        >
+                          ✂️ Crop & Posisi Gambar
+                        </button>
                       )}
                     </div>
                   )}
@@ -1085,6 +1105,19 @@ export default function PropertiesPanel() {
           />
         )}
       </div>
+
+      {cropOpen && block?.type === 'Hero' && typeof block.props.bg_image === 'string' && block.props.bg_image && (
+        <ImageCropTool
+          src={block.props.bg_image}
+          initialPosition={(block.props.bg_position as string) || 'center'}
+          initialFit={(block.props.bg_fit as string) || 'cover'}
+          onApply={(position, fit) => {
+            setBlockProps(block.id, { bg_position: position, bg_fit: fit });
+            setCropOpen(false);
+          }}
+          onClose={() => setCropOpen(false)}
+        />
+      )}
 
       <MediaLibrary
         open={mediaOpen}
