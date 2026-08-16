@@ -10,7 +10,7 @@ import ImageCropTool from '@/components/builder/image-crop-tool';
 import { useBuilderStore } from '@/store/builder-store';
 import { RELIGIONS, type ReligionKey } from '@/lib/religions';
 import { getQuotesByReligion, RELIGION_LABELS, type WeddingQuote } from '@/lib/quotes';
-import type { Block, BlockProps, DecorAsset, BankAccount } from '@/lib/types';
+import type { Block, BlockProps, DecorAsset, BankAccount, BlockStyle } from '@/lib/types';
 
 const FONTS = [
   'Playfair Display',
@@ -61,6 +61,108 @@ const FONTS = [
   'Fraunces',
   'Yeseva One',
   'Cardo'
+];
+
+const DESIGN_PRESETS = [
+  {
+    name: 'Emas Klasik',
+    theme: {
+      primary: '#D4AF37',
+      secondary: '#8A6D2F',
+      background: '#FAF6EF',
+      text: '#4A443C',
+      font_heading: 'Playfair Display',
+      font_body: 'Montserrat'
+    }
+  },
+  {
+    name: 'Taman Rustic',
+    theme: {
+      primary: '#7C9885',
+      secondary: '#A9B7A6',
+      background: '#F6F4EC',
+      text: '#56544A',
+      font_heading: 'Marcellus',
+      font_body: 'Lora'
+    }
+  },
+  {
+    name: 'Minimal Mono',
+    theme: {
+      primary: '#111827',
+      secondary: '#6B7280',
+      background: '#FFFFFF',
+      text: '#111827',
+      font_heading: 'Jost',
+      font_body: 'Inter'
+    }
+  },
+  {
+    name: 'Malam Gelap',
+    theme: {
+      primary: '#C9A227',
+      secondary: '#2A2A2A',
+      background: '#1A1A1A',
+      text: '#EDEDED',
+      font_heading: 'Cinzel',
+      font_body: 'Nunito Sans'
+    }
+  },
+  {
+    name: 'Senja Tropis',
+    theme: {
+      primary: '#F26D5D',
+      secondary: '#1B7A72',
+      background: '#FFF7F0',
+      text: '#4A3F38',
+      font_heading: 'Jost',
+      font_body: 'Quicksand'
+    }
+  },
+  {
+    name: 'Kopi Krem',
+    theme: {
+      primary: '#6F4E37',
+      secondary: '#A67C52',
+      background: '#F6EFE3',
+      text: '#43352A',
+      font_heading: 'Lora',
+      font_body: 'Poppins'
+    }
+  },
+  {
+    name: 'Samudra Malam',
+    theme: {
+      primary: '#123C4E',
+      secondary: '#2E7D8C',
+      background: '#0E2230',
+      text: '#E7EEF2',
+      font_heading: 'Playfair Display',
+      font_body: 'Inter'
+    }
+  },
+  {
+    name: 'Coral Blush',
+    theme: {
+      primary: '#F08080',
+      secondary: '#F5B7B1',
+      background: '#FFF7F5',
+      text: '#5F4442',
+      font_heading: 'Great Vibes',
+      font_body: 'Nunito Sans'
+    }
+  },
+  {
+    name: 'Rustic Sederhana',
+    theme: {
+      primary: '#7A5C3E',
+      secondary: '#A98D6F',
+      background: '#F5EFE6',
+      text: '#3E362E',
+      font_heading: 'Dancing Script',
+      font_body: 'Baskervville'
+    }
+  }
 ];
 
 const TITLE_PROPS: Record<string, { label: string; multiline?: boolean; url?: boolean; labelText?: string }[]> = {
@@ -301,6 +403,52 @@ export default function PropertiesPanel() {
       <div className="flex-1 space-y-5 overflow-auto p-4">
         {!block && (
           <>
+            <Section
+              title="Preset Desain"
+              desc="Kombinasi palette & font siap pakai ala template"
+              render={
+                <div className="space-y-3">
+                  <div className="grid grid-cols-2 gap-2">
+                    {DESIGN_PRESETS.map((p) => {
+                      const active =
+                        canvas.theme.primary === p.theme.primary &&
+                        canvas.theme.secondary === p.theme.secondary &&
+                        canvas.theme.font_heading === p.theme.font_heading &&
+                        canvas.theme.font_body === p.theme.font_body;
+                      return (
+                        <button
+                          key={p.name}
+                          onClick={() =>
+                            setTheme({
+                              primary: p.theme.primary,
+                              secondary: p.theme.secondary,
+                              background: p.theme.background,
+                              text: p.theme.text,
+                              font_heading: p.theme.font_heading,
+                              font_body: p.theme.font_body
+                            })
+                          }
+                          className={`group rounded-lg border p-2 text-left transition-colors ${
+                            active ? 'border-[#c9a45c] ring-2 ring-[#c9a45c]/40' : 'border-[#e0d6c2] hover:border-[#c9a45c]'
+                          }`}
+                        >
+                          <div className="flex items-center gap-1">
+                            <span className="h-4 w-4 rounded-full border border-black/5" style={{ background: p.theme.primary }} />
+                            <span className="h-4 w-4 rounded-full border border-black/5" style={{ background: p.theme.secondary }} />
+                            <span className="h-4 w-4 rounded-full border border-black/5" style={{ background: p.theme.background }} />
+                          </div>
+                          <p className="mt-1.5 truncate text-xs font-semibold text-[#2b2620]">{p.name}</p>
+                          <p className="truncate text-[10px] text-[#8a7a66]">
+                            {p.theme.font_heading.split(' ')[0]} × {p.theme.font_body.split(' ')[0]}
+                          </p>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              }
+            />
+
             <Section
               title="Warna Tema"
               desc="Menggantikan token warna global"
@@ -1455,6 +1603,40 @@ export default function PropertiesPanel() {
                       }
                     />
                   )}
+                  <Section
+                    title="Animasi Masuk"
+                    desc="Efek saat section muncul di layar (saat dibuka tamu)."
+                    render={
+                      <div className="space-y-3">
+                        <div>
+                          <label className="mb-1 block text-xs font-medium text-[#4a443c]">Efek</label>
+                          <select
+                            value={block.style?.entrance ?? ''}
+                            onChange={(e) => setBlockStyle(block.id, { entrance: (e.target.value || undefined) as BlockStyle['entrance'] })}
+                            className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-2 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
+                          >
+                            <option value="">Default tema</option>
+                            <option value="fade">Fade naik</option>
+                            <option value="slide">Geser masuk</option>
+                            <option value="zoom">Zoom</option>
+                            <option value="blur">Blur ke jernih</option>
+                            <option value="rise">Naik perlahan</option>
+                            <option value="none">Tanpa animasi</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="mb-1 block text-xs font-medium text-[#4a443c]">Tunda (ms)</label>
+                          <NumberField
+                            label=""
+                            value={block.style?.entranceDelay ?? 0}
+                            onChange={(v) => setBlockStyle(block.id, { entranceDelay: v })}
+                            min={0}
+                            max={3000}
+                          />
+                        </div>
+                      </div>
+                    }
+                  />
                 </div>
               </>
             )}

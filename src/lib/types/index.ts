@@ -137,6 +137,10 @@ export interface BlockStyle {
   opacity?: number;
   /** Perataan teks section. */
   textAlign?: 'left' | 'center' | 'right';
+  /** Animasi masuk section ini (override theme.card_entrance). 'none' = tanpa animasi. */
+  entrance?: 'fade' | 'slide' | 'zoom' | 'blur' | 'rise' | 'none';
+  /** Tunda animasi masuk (ms). */
+  entranceDelay?: number;
 }
 
 /** Bentuk dekor support shape. */

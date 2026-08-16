@@ -126,9 +126,12 @@ export default function BlockView({ block, projectId, editable = false, greeting
     zoom: { opacity: 0, scale: 0.92 },
     blur: { opacity: 0, filter: 'blur(12px)' },
     rise: { opacity: 0, y: 60 },
+    none: { opacity: 1 },
   } as const;
   type EntranceKey = keyof typeof entranceVariants;
-  const entranceAnim = entranceVariants[(theme?.card_entrance as EntranceKey) ?? 'fade'] ?? entranceVariants.fade;
+  const blockEntrance = block.style?.entrance;
+  const entranceAnim = entranceVariants[(blockEntrance ?? (theme?.card_entrance as EntranceKey)) ?? 'fade'] ?? entranceVariants.fade;
+  const entranceDelay = block.style?.entranceDelay ?? 0;
   const body = (
     <StyledSection style={block.style}>{view}</StyledSection>
   );
@@ -137,12 +140,12 @@ export default function BlockView({ block, projectId, editable = false, greeting
     <InnerProvider value={block.inner ?? undefined}>
       <BuilderEditableContext.Provider value={editable ? { blockId: block.id } : null}>
         <div data-block-type={block.type} className="relative">
-          {animateEntrance ? (
+          {animateEntrance && blockEntrance !== 'none' && entranceAnim !== entranceVariants.none ? (
             <motion.div
               initial={entranceAnim}
               whileInView={{ opacity: 1, y: 0, x: 0, scale: 1, filter: 'blur(0px)' }}
               viewport={{ once: true, amount: 0.12 }}
-              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: entranceDelay }}
             >
               {renderCard ? <div className={cardWrapCls}>{body}</div> : body}
             </motion.div>

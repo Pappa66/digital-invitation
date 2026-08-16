@@ -2,11 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight, MessageCircle, Sparkles } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { ArrowLeft, ArrowRight, Loader2, MessageCircle, Sparkles, Wand2 } from 'lucide-react';
 import type { CanvasData, TemplateMeta } from '@/lib/types';
 import GuestRenderer from '@/components/guest/GuestRenderer';
 import OrderDialog from '@/components/landing/order-dialog';
 import PhoneFrame from '@/components/ui/phone-frame';
+import { clientCreateProject } from '@/lib/api/project-client';
 
 interface TemplateDetailProps {
   meta: TemplateMeta;
@@ -31,8 +33,25 @@ function Ornament() {
 }
 
 export default function TemplateDetail({ meta, index, canvas, categoryLabel, total, prev, next }: TemplateDetailProps) {
+  const router = useRouter();
   const [orderOpen, setOrderOpen] = useState(false);
+  const [editBusy, setEditBusy] = useState(false);
+  const [editError, setEditError] = useState('');
   const [pricing, setPricing] = useState({ base_price: 0, discount_percent: 0, promo_code: '' });
+
+  async function editInBuilder() {
+    setEditBusy(true);
+    setEditError('');
+    try {
+      const res = await clientCreateProject(meta.name, meta.id);
+      if (res.error) return setEditError(res.error);
+      router.push(`/builder/${res.id}`);
+    } catch {
+      setEditError('Gagal membuka builder. Coba lagi.');
+    } finally {
+      setEditBusy(false);
+    }
+  }
 
   useEffect(() => {
     import('@/lib/settings').then(({ getPricing }) =>
@@ -103,6 +122,15 @@ export default function TemplateDetail({ meta, index, canvas, categoryLabel, tot
               <MessageCircle className="h-4 w-4" />
               Pesan Template Ini
             </button>
+            <button
+              onClick={editInBuilder}
+              disabled={editBusy}
+              className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-[#c9a45c]/70 bg-white px-5 py-3 text-sm font-semibold text-[#8a6d2f] transition-colors hover:bg-[#c9a45c]/10 disabled:opacity-60"
+            >
+              {editBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Wand2 className="h-4 w-4" />}
+              {editBusy ? 'Membuka Builder…' : 'Edit Langsung di Builder'}
+            </button>
+            {editError && <p className="mt-2 text-center text-xs text-red-600">{editError}</p>}
             <p className="mt-3 text-center text-xs text-[#b3a69a]">Isi form pemesanan — tim kami yang akan mengerjakan desainnya untuk Anda.</p>
 
             <div className="mt-8 flex justify-between gap-3 border-t border-[#e7ddcc] pt-6">
