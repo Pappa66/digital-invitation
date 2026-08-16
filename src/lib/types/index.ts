@@ -159,11 +159,15 @@ export type PhotoDecorShape = 'square' | 'circle' | 'rounded' | 'tilt';
  */
 export interface DecorAsset {
   id: string;
-  kind: 'shape' | 'text' | 'image';
+  kind: 'shape' | 'text' | 'image' | 'ornament';
   x: number;
   y: number;
   opacity?: number;
   rotation?: number;
+  /** Balik horizontal (scaleX -1). */
+  flipX?: boolean;
+  /** Balik vertikal (scaleY -1). */
+  flipY?: boolean;
   /** 0 = di belakang konten bawaan, 1+ = di depan. Default 0. */
   layer?: number;
   // shape
@@ -181,6 +185,8 @@ export interface DecorAsset {
   imageUrl?: string;
   photoShape?: PhotoDecorShape;
   width?: number;
+  // ornament (SVG library)
+  ornament?: string;
 }
 
 export interface Block {

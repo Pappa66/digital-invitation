@@ -118,15 +118,19 @@ export default function BlockView({ block, projectId, editable = false, greeting
   const cardVariant = theme?.card_variant ?? 'shadow';
   
   const cardVariants: Record<string, string> = {
-    shadow: 'overflow-hidden rounded-2xl bg-[var(--color-background)] shadow-[0_8px_26px_rgba(0,0,0,0.12)] ring-1 ring-black/5',
-    outline: 'overflow-hidden rounded-2xl bg-[var(--color-background)] ring-1 ring-current/10',
-    glass: 'overflow-hidden rounded-2xl bg-white/10 backdrop-blur-md ring-1 ring-white/15',
+    shadow: 'overflow-hidden rounded-2xl bg-[var(--color-background)] shadow-[0_10px_30px_rgba(0,0,0,0.14)] ring-1 ring-black/5',
+    outline: 'overflow-hidden rounded-2xl bg-[var(--color-background)] ring-2 ring-[var(--color-primary)]/30',
+    glass: 'overflow-hidden rounded-2xl bg-white/10 backdrop-blur-md ring-1 ring-white/20 shadow-[0_8px_30px_rgba(0,0,0,0.12)]',
     minimal: 'overflow-hidden rounded-xl bg-[var(--color-background)]',
-    elevated: 'overflow-hidden rounded-2xl bg-[var(--color-background)] shadow-[0_12px_40px_rgba(0,0,0,0.18)]',
-    flat: 'overflow-hidden rounded-2xl bg-current/[0.03]',
+    elevated: 'overflow-hidden rounded-3xl bg-[var(--color-background)] shadow-[0_16px_45px_rgba(0,0,0,0.18)]',
+    flat: 'overflow-hidden rounded-none bg-current/[0.03] border border-current/10',
+    arch: 'overflow-hidden rounded-t-[999px] bg-[var(--color-background)] shadow-[0_10px_30px_rgba(0,0,0,0.14)] ring-1 ring-black/5',
+    tilt: 'overflow-hidden rounded-2xl rotate-1 bg-[var(--color-background)] shadow-[0_12px_34px_rgba(0,0,0,0.15)] ring-1 ring-black/5',
+    double: 'overflow-hidden rounded-2xl bg-[var(--color-background)] shadow-[0_8px_26px_rgba(0,0,0,0.12)] outline outline-1 outline-offset-[-7px] outline-[var(--color-secondary)]/50',
+    gold: 'overflow-hidden rounded-2xl bg-gradient-to-b from-[var(--color-background)] to-[color-mix(in srgb,var(--color-primary) 8%,var(--color-background))] shadow-[0_12px_36px_rgba(0,0,0,0.16)] ring-1 ring-[var(--color-primary)]/30',
   };
   const cardCls = cardVariants[cardVariant] || cardVariants.shadow;
-  const cardWrapCls = `${cardCls} mx-0 mb-6 mt-6 w-full`;
+  const cardWrapCls = `${cardCls} mx-0 mb-2 mt-2 w-full`;
   
   const entranceVariants = {
     fade: { opacity: 0, y: 44, filter: 'blur(6px)' },

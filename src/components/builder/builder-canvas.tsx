@@ -12,6 +12,7 @@ import { GripVertical, Grid3x3, Undo2, Redo2, Copy, ClipboardPaste, ArrowUp, Arr
 import type { Block, BlockType } from '@/lib/types';
 import BlockView from '@/components/guest/BlockView';
 import { ThemeContext } from '@/components/guest/theme-context';
+import { GuestFrame } from '@/components/guest/guest-frame';
 import { useBuilderStore, undoBuilder, redoBuilder, useBuilderHistory, COVER_BLOCK_ID } from '@/store/builder-store';
 import DeviceToggle from '@/components/ui/device-toggle';
 import type { Device } from '@/components/ui/device-toggle';
@@ -124,6 +125,7 @@ export default function BuilderCanvas({
                   <div className="guest-root" style={guestStyle(canvas)}>
                     <StackList blocks={canvas.blocks} dimmed={!!activeType} />
                     {canvas.blocks.length === 0 && <EmptyHint />}
+                    <GuestFrame mode={canvas.theme.frame} color={canvas.theme.secondary} fixed={false} />
                   </div>
                 </ThemeContext.Provider>
               </SortableContext>
@@ -347,6 +349,7 @@ function FreeCanvas({ blocks, canvasRef, guides }: { blocks: Block[]; canvasRef:
           Seret widget dari panel kiri ke sini, atau klik widget untuk menambah blok.
         </div>
       )}
+      <GuestFrame mode={theme.frame} color={theme.secondary} fixed={false} />
     </div>
     </ThemeContext.Provider>
   );

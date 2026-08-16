@@ -149,6 +149,23 @@ export function getTemplate(id: string): CanvasData | null {
   return clone;
 }
 
+/**
+ * Preset desain untuk panel builder: ONE preset per template (39 total),
+ * berisi tema warna/font + ornamen + bingkai + card style.
+ * Dipakai menampilkan semua template sebagai preset, bukan hanya 10 hardcoded.
+ */
+export function getDesignPresets(): { id: string; name: string; theme: CanvasData['theme'] }[] {
+  return TEMPLATE_LIST.map((t) => {
+    const tpl = getTemplate(t.id);
+    if (!tpl) return null;
+    return {
+      id: t.id,
+      name: t.name,
+      theme: tpl.theme
+    };
+  }).filter((p): p is { id: string; name: string; theme: CanvasData['theme'] } => p !== null);
+}
+
 /** Mengembalikan canvas_data kosong dengan theme default. */
 export function emptyCanvas(): CanvasData {
   return {

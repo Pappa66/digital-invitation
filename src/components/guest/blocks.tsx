@@ -7,7 +7,7 @@ import { Calendar, MapPin, Heart, Sparkles, Gem, BookOpen, Sprout, MailOpen, Plu
 import type { BlockProps, DecorAsset, DecorShapeKind } from '@/lib/types';
 import type { ReligionKey } from '@/lib/religions';
 import { Editable, BuilderEditableContext } from '@/components/builder/inline-edit';
-import { OrnamentArt, ORNAMENT_LABELS, type OrnamentKey } from '@/components/builder/ornaments';
+import { OrnamentArt, ORNAMENT_CATEGORIES, ORNAMENT_LABELS, type OrnamentKey } from '@/components/builder/ornaments';
 import { usePreview } from '@/components/guest/preview-context';
 import { useTheme } from '@/components/guest/theme-context';
 import { useInnerPositions, Inner } from '@/components/guest/inner-context';
@@ -165,6 +165,14 @@ function DecorImage({ props }: { props: DecorAsset }) {
 export function DecorAssetView({ asset }: { asset: DecorAsset }) {
   if (asset.kind === 'text') return <DecorText props={asset} />;
   if (asset.kind === 'image') return <DecorImage props={asset} />;
+  if (asset.kind === 'ornament') {
+    const key = (asset.ornament as OrnamentKey) || 'gardenia-wreath';
+    return (
+      <div className="leading-none" style={{ color: asset.color ?? '#c9a45c' }}>
+        <OrnamentArt ornament={key} width={asset.size ?? 96} className="block" />
+      </div>
+    );
+  }
   const shape = asset.shape ?? 'circle';
   return (
     <ShapeSvg
@@ -194,13 +202,15 @@ export function DecorLayer({ blockId, decor }: { blockId: string; decor?: DecorA
 }
 
 function DecorNode({ asset }: { asset: DecorAsset }) {
+  const flip = `${asset.flipX ? ' scaleX(-1)' : ''}${asset.flipY ? ' scaleY(-1)' : ''}`;
+  const transform = `${asset.rotation ? `rotate(${asset.rotation}deg)` : ''}${flip}`;
   return (
     <div
       className="absolute"
       style={{
         left: asset.x,
         top: asset.y,
-        transform: asset.rotation ? `rotate(${asset.rotation}deg)` : undefined,
+        transform: transform || undefined,
         zIndex: asset.layer ?? 0
       }}
     >
@@ -232,7 +242,7 @@ function BuilderDecorLayer({ blockId, decor }: { blockId: string; decor?: DecorA
   const updateDecor = useBuilderStore((s) => s.updateDecor);
   const removeDecor = useBuilderStore((s) => s.removeDecor);
   const addDecor = useBuilderStore((s) => s.addDecor);
-  const [addMenu, setAddMenu] = useState<'main' | 'text' | 'image' | null>(null);
+  const [addMenu, setAddMenu] = useState<'main' | 'text' | 'image' | 'ornament' | null>(null);
   const [shapePick, setShapePick] = useState<DecorShapeKind>('circle');
   const dragRef = useRef<{
     assetId: string;
@@ -367,6 +377,21 @@ function BuilderDecorLayer({ blockId, decor }: { blockId: string; decor?: DecorA
     setAddMenu(null);
   }
 
+  function addOrnament(key: OrnamentKey) {
+    addDecor(blockId, {
+      id: decorUid(),
+      kind: 'ornament',
+      ornament: key,
+      color: '#c9a45c',
+      size: 96,
+      x: 150,
+      y: 40,
+      opacity: 0.9,
+      layer: 1
+    });
+    setAddMenu(null);
+  }
+
   const items = decor ?? [];
 
   return (
@@ -380,7 +405,9 @@ function BuilderDecorLayer({ blockId, decor }: { blockId: string; decor?: DecorA
       )}
 
       {/* Kontrol pilihan & drag pada tiap asset */}
-      {items.map((asset) => (
+      {items.map((asset) => {
+        const flip = `${asset.flipX ? ' scaleX(-1)' : ''}${asset.flipY ? ' scaleY(-1)' : ''}`;
+        return (
         <div
           key={asset.id}
           data-decor
@@ -388,7 +415,7 @@ function BuilderDecorLayer({ blockId, decor }: { blockId: string; decor?: DecorA
           style={{
             left: asset.x,
             top: asset.y,
-            transform: asset.rotation ? `rotate(${asset.rotation}deg)` : undefined,
+            transform: `${asset.rotation ? `rotate(${asset.rotation}deg)` : ''}${flip}` || undefined,
             zIndex: (asset.layer ?? 0) + 100
           }}
           onPointerDown={(e) => startDrag(e, asset)}
@@ -417,12 +444,48 @@ function BuilderDecorLayer({ blockId, decor }: { blockId: string; decor?: DecorA
             </>
           )}
         </div>
-      ))}
+      );
+      })}
 
       {/* Tombol tambah asset pada blok terpilih */}
       {blockSelected && (
         <div className="pointer-events-auto absolute -top-3 left-1/2 z-[300] flex w-40 -translate-x-1/2 justify-center">
-          {addMenu === 'main' ? (
+          {addMenu === 'ornament' ? (
+            <div className="max-h-72 w-44 overflow-y-auto rounded-md bg-[#141414]/95 p-1.5 shadow-lg ring-1 ring-white/10">
+              <p className="px-1 pb-1 text-[9px] uppercase tracking-wide text-[#c9a45c]">Pilih Ornamen</p>
+              <div className="space-y-2">
+                {Object.entries(ORNAMENT_CATEGORIES).map(([cat, { label, keys }]) => (
+                  <div key={cat}>
+                    <p className="px-1 py-0.5 text-[9px] text-white/50">{label}</p>
+                    <div className="grid grid-cols-3 gap-1">
+                      {keys.map((k) => (
+                        <button
+                          key={k}
+                          title={ORNAMENT_LABELS[k]}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            addOrnament(k as OrnamentKey);
+                          }}
+                          className="flex flex-col items-center gap-0.5 rounded p-1 text-white/80 hover:bg-[#c9a45c]/30"
+                        >
+                          <OrnamentArt ornament={k} width={32} className="text-current opacity-90" />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <button
+                className="mt-1 w-full rounded px-2 py-1 text-left text-[11px] text-[#c9a45c] hover:bg-[#c9a45c]/30"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setAddMenu(null);
+                }}
+              >
+                Tutup
+              </button>
+            </div>
+          ) : addMenu === 'main' ? (
             <div className="flex flex-col gap-1 rounded-md bg-[#141414]/95 p-1.5 shadow-lg ring-1 ring-white/10">
               <button
                 className="rounded px-2 py-1 text-left text-[11px] text-white hover:bg-[#c9a45c]/30"
@@ -450,6 +513,15 @@ function BuilderDecorLayer({ blockId, decor }: { blockId: string; decor?: DecorA
                 }}
               >
                 Gambar
+              </button>
+              <button
+                className="rounded px-2 py-1 text-left text-[11px] text-white hover:bg-[#c9a45c]/30"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setAddMenu('ornament');
+                }}
+              >
+                Ornamen SVG
               </button>
               <div className="my-1 h-px bg-white/10" />
               <p className="px-2 pb-1 text-[9px] uppercase tracking-wide text-[#c9a45c]">Shape</p>

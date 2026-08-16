@@ -11,6 +11,9 @@ import { useBuilderStore, COVER_BLOCK_ID } from '@/store/builder-store';
 import { RELIGIONS, type ReligionKey } from '@/lib/religions';
 import { getQuotesByReligion, RELIGION_LABELS, type WeddingQuote } from '@/lib/quotes';
 import type { Block, BlockProps, DecorAsset, BankAccount, BlockStyle } from '@/lib/types';
+import { getDesignPresets } from '@/lib/templates';
+
+const DESIGN_PRESETS = getDesignPresets();
 
 const FONTS = [
   'Playfair Display',
@@ -63,107 +66,7 @@ const FONTS = [
   'Cardo'
 ];
 
-const DESIGN_PRESETS = [
-  {
-    name: 'Emas Klasik',
-    theme: {
-      primary: '#D4AF37',
-      secondary: '#8A6D2F',
-      background: '#FAF6EF',
-      text: '#4A443C',
-      font_heading: 'Playfair Display',
-      font_body: 'Montserrat'
-    }
-  },
-  {
-    name: 'Taman Rustic',
-    theme: {
-      primary: '#7C9885',
-      secondary: '#A9B7A6',
-      background: '#F6F4EC',
-      text: '#56544A',
-      font_heading: 'Marcellus',
-      font_body: 'Lora'
-    }
-  },
-  {
-    name: 'Minimal Mono',
-    theme: {
-      primary: '#111827',
-      secondary: '#6B7280',
-      background: '#FFFFFF',
-      text: '#111827',
-      font_heading: 'Jost',
-      font_body: 'Inter'
-    }
-  },
-  {
-    name: 'Malam Gelap',
-    theme: {
-      primary: '#C9A227',
-      secondary: '#2A2A2A',
-      background: '#1A1A1A',
-      text: '#EDEDED',
-      font_heading: 'Cinzel',
-      font_body: 'Nunito Sans'
-    }
-  },
-  {
-    name: 'Senja Tropis',
-    theme: {
-      primary: '#F26D5D',
-      secondary: '#1B7A72',
-      background: '#FFF7F0',
-      text: '#4A3F38',
-      font_heading: 'Jost',
-      font_body: 'Quicksand'
-    }
-  },
-  {
-    name: 'Kopi Krem',
-    theme: {
-      primary: '#6F4E37',
-      secondary: '#A67C52',
-      background: '#F6EFE3',
-      text: '#43352A',
-      font_heading: 'Lora',
-      font_body: 'Poppins'
-    }
-  },
-  {
-    name: 'Samudra Malam',
-    theme: {
-      primary: '#123C4E',
-      secondary: '#2E7D8C',
-      background: '#0E2230',
-      text: '#E7EEF2',
-      font_heading: 'Playfair Display',
-      font_body: 'Inter'
-    }
-  },
-  {
-    name: 'Coral Blush',
-    theme: {
-      primary: '#F08080',
-      secondary: '#F5B7B1',
-      background: '#FFF7F5',
-      text: '#5F4442',
-      font_heading: 'Great Vibes',
-      font_body: 'Nunito Sans'
-    }
-  },
-  {
-    name: 'Rustic Sederhana',
-    theme: {
-      primary: '#7A5C3E',
-      secondary: '#A98D6F',
-      background: '#F5EFE6',
-      text: '#3E362E',
-      font_heading: 'Dancing Script',
-      font_body: 'Baskervville'
-    }
-  }
-];
+
 
 const TITLE_PROPS: Record<string, { label: string; multiline?: boolean; url?: boolean; labelText?: string }[]> = {
   Hero: [
@@ -447,7 +350,10 @@ export default function PropertiesPanel() {
                               background: p.theme.background,
                               text: p.theme.text,
                               font_heading: p.theme.font_heading,
-                              font_body: p.theme.font_body
+                              font_body: p.theme.font_body,
+                              frame: p.theme.frame,
+                              ornament: p.theme.ornament,
+                              card_style: p.theme.card_style
                             })
                           }
                           className={`group rounded-lg border p-2 text-left transition-colors ${
@@ -573,6 +479,10 @@ export default function PropertiesPanel() {
                             { value: 'minimal', label: 'Minimal' },
                             { value: 'elevated', label: 'Tinggi' },
                             { value: 'flat', label: 'Datar' },
+                            { value: 'arch', label: 'Lengkung' },
+                            { value: 'tilt', label: 'Miring' },
+                            { value: 'double', label: 'Ganda' },
+                            { value: 'gold', label: 'Emas' },
                           ].map((v) => (
                             <button
                               key={v.value}
@@ -789,7 +699,10 @@ export default function PropertiesPanel() {
                         <p className="text-[11px] text-[#8a7a66]">Kosongkan = pakai background Hero.</p>
                         <button
                           type="button"
-                          onClick={() => setMediaMode('cover')}
+                          onClick={() => {
+                            setMediaMode('cover');
+                            setMediaOpen(true);
+                          }}
                           className="mt-1 flex w-full items-center gap-2 rounded-md border border-dashed border-[#c9a45c]/40 bg-[#faf7f2] px-3 py-2 text-xs text-[#8a7a66] hover:border-[#c9a45c] hover:bg-white"
                         >
                           <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="8.5" cy="8.5" r="1.5" /><path d="m21 15-5-5L5 21" /></svg>
@@ -1996,6 +1909,23 @@ function DecorSettings({
           </div>
         </div>
       </div>
+      <div>
+        <label className="mb-1 block text-xs font-medium text-[#4a443c]">Flip</label>
+        <div className="flex gap-2">
+          <button
+            onClick={() => set({ flipX: !asset.flipX })}
+            className={`flex-1 rounded-md border px-2 py-1.5 text-xs ${asset.flipX ? 'border-[#c9a45c] bg-[#c9a45c] text-white' : 'border-[#e0d6c2] text-[#6b5f4d]'}`}
+          >
+            Balik Horizontal
+          </button>
+          <button
+            onClick={() => set({ flipY: !asset.flipY })}
+            className={`flex-1 rounded-md border px-2 py-1.5 text-xs ${asset.flipY ? 'border-[#c9a45c] bg-[#c9a45c] text-white' : 'border-[#e0d6c2] text-[#6b5f4d]'}`}
+          >
+            Balik Vertikal
+          </button>
+        </div>
+      </div>
 
       {asset.kind === 'shape' && (
         <>
@@ -2014,6 +1944,39 @@ function DecorSettings({
             </div>
           </div>
           <NumberField label="Ukuran (px)" value={asset.size ?? 48} min={8} max={200} onChange={(v) => set({ size: v })} />
+          <ColorPicker label="Warna" value={asset.color ?? '#c9a45c'} onChange={(c) => set({ color: c })} />
+        </>
+      )}
+
+      {asset.kind === 'ornament' && (
+        <>
+          <div>
+            <p className="mb-1 text-xs font-medium text-[#4a443c]">Ornamen SVG</p>
+            <div className="grid grid-cols-2 gap-1.5">
+              {Object.entries(ORNAMENT_CATEGORIES).map(([cat, { keys }]) => (
+                <div key={cat} className="col-span-2">
+                  <p className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-[#8a7a66]">
+                    {ORNAMENT_CATEGORIES[cat].label}
+                  </p>
+                  <div className="grid grid-cols-4 gap-1.5">
+                    {keys.map((k) => (
+                      <button
+                        key={k}
+                        title={ORNAMENT_LABELS[k]}
+                        onClick={() => set({ ornament: k })}
+                        className={`flex items-center justify-center rounded-md border p-1 transition-colors ${
+                          asset.ornament === k ? 'border-[#c9a45c] bg-[#c9a45c]/10' : 'border-[#e0d6c2] bg-white hover:border-[#c9a45c]'
+                        }`}
+                      >
+                        <OrnamentArt ornament={k} width={32} className="text-[#6b5f4d]" />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <NumberField label="Ukuran (px)" value={asset.size ?? 96} min={16} max={420} onChange={(v) => set({ size: v })} />
           <ColorPicker label="Warna" value={asset.color ?? '#c9a45c'} onChange={(c) => set({ color: c })} />
         </>
       )}
