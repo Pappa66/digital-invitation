@@ -2,10 +2,16 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { X, Plus, LayoutTemplate, FilePlus } from 'lucide-react';
+import { Plus, LayoutTemplate, FilePlus } from 'lucide-react';
 import { TEMPLATE_LIST } from '@/lib/templates';
 import { CATEGORIES, categoryLabel, type TemplateCategory } from '@/lib/template-categories';
 import { clientCreateProject } from '@/lib/api/project-client';
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogDescription
+} from '@/components/ui/dialog';
 
 interface NewProjectModalProps {
   open: boolean;
@@ -19,8 +25,6 @@ export default function NewProjectModal({ open, onClose }: NewProjectModalProps)
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [catFilter, setCatFilter] = useState<TemplateCategory | 'semua'>('semua');
-
-  if (!open) return null;
 
   async function startFromScratch() {
     setBusy(true);
@@ -44,26 +48,35 @@ export default function NewProjectModal({ open, onClose }: NewProjectModalProps)
       : TEMPLATE_LIST.filter((t) => (t.category ?? '').toLowerCase() === catFilter);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-      <div className="flex max-h-[90vh] w-full max-w-3xl flex-col rounded-2xl bg-white shadow-xl">
+    <Dialog open={open} onOpenChange={(o) => { if (!o) onClose(); }}>
+      <DialogContent className="flex max-h-[90vh] max-w-3xl flex-col gap-0 overflow-hidden p-0 sm:rounded-2xl">
         <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
-          <h2 className="font-semibold">
+          <DialogTitle className="font-semibold">
             {view === 'blank' ? 'Buat Undangan Baru' : 'Pilih Template'}
-          </h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-900">
-            <X className="h-5 w-5" />
-          </button>
+          </DialogTitle>
         </div>
+        {/* Deskripsi untuk pembaca layar — konten visual sudah cukup jelas. */}
+        <DialogDescription className="sr-only">
+          Buat undangan digital baru dengan nama pilihan Anda, mulai dari kosong atau dari template.
+        </DialogDescription>
 
         <div className="flex-1 overflow-y-auto p-6">
-          <label className="text-xs font-medium text-gray-700">Nama undangan</label>
+          <label htmlFor="new-project-title" className="text-xs font-medium text-gray-700">
+            Nama undangan
+          </label>
           <input
+            id="new-project-title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="cth: Perkawinan Panca & Sena"
+            aria-describedby={error ? 'new-project-error' : undefined}
             className="mt-1 w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-900"
           />
-          {error && <p className="mt-2 text-xs text-red-600">{error}</p>}
+          {error && (
+            <p id="new-project-error" role="alert" className="mt-2 text-xs text-red-600">
+              {error}
+            </p>
+          )}
 
           <div className="mt-5 space-y-3">
             {view === 'blank' && (
@@ -74,8 +87,8 @@ export default function NewProjectModal({ open, onClose }: NewProjectModalProps)
               >
                 <FilePlus className="h-5 w-5 text-gray-700" />
                 <div>
-                  <p className="text-sm font-medium">Start from Scratch</p>
-                  <p className="text-xs text-gray-500">Mulai dari kanvas kosong</p>
+                  <p className="text-sm font-medium">Mulai dari Kosong</p>
+                  <p className="text-xs text-gray-500">Buka kanvas kosong dan bangun desain sendiri</p>
                 </div>
               </button>
             )}
@@ -160,7 +173,7 @@ export default function NewProjectModal({ open, onClose }: NewProjectModalProps)
             Batal
           </button>
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

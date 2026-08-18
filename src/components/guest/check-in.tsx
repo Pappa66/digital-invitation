@@ -33,6 +33,7 @@ export default function CheckIn({ projectId, greetingName, preview, showSeatInfo
   const [name, setName] = useState(greetingName ?? '');
   const [guestCount, setGuestCount] = useState(1);
   const [status, setStatus] = useState<'idle' | 'submitting' | 'done' | 'error'>('idle');
+  const [errorMsg, setErrorMsg] = useState('');
   const [isAbsenMode, setIsAbsenMode] = useState(false);
   const [qrOpen, setQrOpen] = useState(false);
   const [url, setUrl] = useState('');
@@ -53,9 +54,17 @@ export default function CheckIn({ projectId, greetingName, preview, showSeatInfo
     const clean = name.trim();
     if (clean.length < 2) return;
 
+    setErrorMsg('');
     try {
       const last = Number(localStorage.getItem(throttleKey(projectId)) ?? 0);
-      if (!isAbsenMode && Date.now() - last < THROTTLE_MS) return;
+      // Throttle aktif di SEMUA mode (termasuk mode absen saat tamu check-in
+      // ulang cepat / pindai ganda), jadi satu browser tidak bisa mencatat
+      // check-in beruntun dalam jendela 60 detik.
+      if (Date.now() - last < THROTTLE_MS) {
+        setErrorMsg('Tunggu sebentar sebelum check-in lagi');
+        setStatus('error');
+        return;
+      }
     } catch {
       /* ignore */
     }
@@ -69,6 +78,7 @@ export default function CheckIn({ projectId, greetingName, preview, showSeatInfo
       error = r.error;
     }
     if (error) {
+      setErrorMsg('Gagal menyimpan. Silakan coba lagi.');
       setStatus('error');
     } else {
       try {
@@ -146,7 +156,7 @@ export default function CheckIn({ projectId, greetingName, preview, showSeatInfo
                 {status === 'submitting' ? <Loader2 className="h-4 w-4 animate-spin" /> : <UserCheck className="h-4 w-4" />}
                 {status === 'submitting' ? 'Memproses...' : 'Check-in'}
               </button>
-              {status === 'error' && <p className="text-center text-xs text-red-500">Gagal menyimpan. Silakan coba lagi.</p>}
+              {status === 'error' && <p role="alert" className="text-center text-xs text-red-500">{errorMsg || 'Gagal menyimpan. Silakan coba lagi.'}</p>}
             </form>
           </Inner>
         )}

@@ -1,9 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import QRCode from 'react-qr-code';
 import { supabase } from '@/lib/supabase/client';
 import { demoIsDemoMode } from '@/lib/env';
-import { demoAddRsvp } from '@/lib/demo/demo-store';
+import { demoAddRsvp, demoListRsvps } from '@/lib/demo/demo-store';
 import type { BlockProps } from '@/lib/types';
 import { Editable } from '@/components/builder/inline-edit';
 import { Inner } from '@/components/guest/inner-context';
@@ -47,6 +48,8 @@ export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormPr
   const [message, setMessage] = useState('');
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
+  /** Token check-in personal dari RSVP yang baru dibuat (untuk QR absen). */
+  const [checkinToken, setCheckinToken] = useState<string | null>(null);
   const variant = str(blockProps, 'variant') || 'centered';
   const menuGroups = parseMenuConfig(str(blockProps, 'menu_config'));
   const [menuSelections, setMenuSelections] = useState<Record<string, string>>({});
@@ -90,19 +93,33 @@ export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormPr
     const mealChoice = menuOptions?.map((m) => m.value).join(' / ') ?? null;
 
     let error: { message?: string } | null = null;
+    let newToken: string | null = null;
     if (demoIsDemoMode()) {
       const res = demoAddRsvp(projectId, {
         name: cleanName,
         attendance,
         guest_count: guestCount,
-        message: message.trim()
+        message: message.trim(),
+        meal_choice: mealChoice,
+        menu_options: menuOptions
       });
       error = res.error ? { message: res.error } : null;
+      if (!error) {
+        // demo-store mengisi checkin_token saat RSVP disimpan; ambil RSVP
+        // terbaru proyek ini untuk token QR personal.
+        const latest = demoListRsvps(projectId)[0];
+        newToken = typeof latest?.checkin_token === 'string' ? latest.checkin_token : null;
+      }
     } else {
       const r = await supabase
         .from('rsvps')
-        .insert({ project_id: projectId, name: cleanName, attendance, guest_count: guestCount, message: message.trim() || null });
+        .insert({ project_id: projectId, name: cleanName, attendance, guest_count: guestCount, message: message.trim() || null, meal_choice: mealChoice, menu_options: menuOptions })
+        .select('checkin_token');
       error = r.error;
+      if (!r.error) {
+        const row = Array.isArray(r.data) ? r.data[0] : null;
+        newToken = typeof row?.checkin_token === 'string' ? row.checkin_token : null;
+      }
     }
 
     if (error) {
@@ -114,6 +131,7 @@ export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormPr
       } catch {
         /* ignore */
       }
+      setCheckinToken(newToken);
       setStatus('success');
     }
   }
@@ -121,22 +139,45 @@ export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormPr
   const inputClass =
     'w-full rounded-xl border border-current/15 bg-transparent px-4 py-2.5 text-sm outline-none transition-colors focus:border-current';
 
+  const qrUrl =
+    typeof window !== 'undefined' && checkinToken
+      ? `${window.location.origin}/absen/${projectId}?t=${checkinToken}`
+      : '';
+
   const formContent = status === 'success' ? (
     <Inner name="success">
       <div className={`mx-auto mt-8 max-w-sm px-6 py-10 ${variant === 'card' ? 'rounded-2xl border border-current/10' : ''}`}>
         <p className="text-lg">{str(blockProps, 'success_message') || 'Terima kasih atas konfirmasinya.'}</p>
+        <div className="mt-6">
+          {checkinToken ? (
+            <div className="rounded-2xl border border-current/10 bg-white/60 p-4">
+              <div className="mx-auto w-fit rounded-xl bg-white p-3 shadow-soft">
+                <QRCode value={qrUrl} size={150} fgColor="#2B2620" title={qrUrl} />
+              </div>
+              <p className="mt-3 text-xs leading-relaxed opacity-75">Pindai QR ini oleh panitia saat tiba di lokasi.</p>
+            </div>
+          ) : (
+            <p className="text-xs leading-relaxed opacity-75">QR absen tersedia setelah konfirmasi Anda tercatat.</p>
+          )}
+        </div>
       </div>
     </Inner>
   ) : (
     <Inner name="form">
-      <form onSubmit={handleSubmit} className={`mx-auto mt-8 max-w-sm space-y-4 px-6 py-6 text-left ${variant === 'card' ? 'rounded-2xl border border-current/10 bg-white/5' : ''}`}>
-        <input
-          required
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Nama Anda"
-          className={inputClass}
-        />
+      <form onSubmit={handleSubmit} className={`mx-auto mt-8 max-w-sm space-y-4 px-6 py-6 text-left ${variant === 'card' ? 'rounded-2xl border border-current/10 bg-white/5' : ''}`} noValidate>
+        <div>
+          <label htmlFor="rsvp-name" className="mb-1 block text-sm opacity-80">Nama Anda</label>
+          <input
+            id="rsvp-name"
+            required
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Nama Anda"
+            aria-invalid={status === 'error' && errorMsg.startsWith('Nama')}
+            aria-describedby={status === 'error' && errorMsg.startsWith('Nama') ? 'rsvp-form-error' : undefined}
+            className={inputClass}
+          />
+        </div>
         <div>
           <p className="mb-2 text-sm opacity-80">Kehadiran</p>
           <div className="flex rounded-full border border-current/15 p-1" role="radiogroup" aria-label="Kehadiran">
@@ -160,10 +201,13 @@ export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormPr
           </div>
         </div>
         <div className="flex items-center justify-between gap-3">
-          <label className="text-sm opacity-80">Jumlah tamu</label>
+          <label htmlFor="rsvp-count" className="text-sm opacity-80">Jumlah tamu</label>
           <select
+            id="rsvp-count"
             value={guestCount}
             onChange={(e) => setGuestCount(Number(e.target.value))}
+            aria-invalid={status === 'error' && errorMsg.startsWith('Jumlah')}
+            aria-describedby={status === 'error' && errorMsg.startsWith('Jumlah') ? 'rsvp-form-error' : undefined}
             className={inputClass}
             style={{ width: 110 }}
           >
@@ -177,17 +221,33 @@ export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormPr
         {menuGroups.length > 0 && (
           <div className="space-y-3">
             {menuGroups.map((g) => (
-              <label key={g.label} className="block"><span className="mb-1 block text-sm opacity-80">{g.label}</span></label>
+              <label key={g.label} className="block">
+                <span className="mb-1 block text-sm opacity-80">{g.label}</span>
+                <select
+                  value={menuSelections[g.label] ?? ''}
+                  onChange={(e) => setMenuSelections((prev) => ({ ...prev, [g.label]: e.target.value }))}
+                  className={inputClass}
+                >
+                  <option value="">Pilih menu...</option>
+                  {g.options.map((o) => (
+                    <option key={o} value={o}>{o}</option>
+                  ))}
+                </select>
+              </label>
             ))}
           </div>
         )}
-        <textarea
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          placeholder="Tulis doa / ucapan"
-          rows={3}
-          className={inputClass}
-        />
+        <div>
+          <label htmlFor="rsvp-message" className="mb-1 block text-sm opacity-80">Doa &amp; Ucapan</label>
+          <textarea
+            id="rsvp-message"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Tulis doa / ucapan"
+            rows={3}
+            className={inputClass}
+          />
+        </div>
         <button
           type="submit"
           disabled={status === 'submitting'}
@@ -195,7 +255,11 @@ export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormPr
         >
           {status === 'submitting' ? 'Mengirim...' : String(blockProps.button_text || 'Kirim Konfirmasi')}
         </button>
-        {status === 'error' && <p className="text-center text-xs text-red-500">{errorMsg || 'Gagal mengirim. Silakan coba lagi.'}</p>}
+        {status === 'error' && (
+          <p id="rsvp-form-error" role="alert" className="text-center text-xs text-red-500">
+            {errorMsg || 'Gagal mengirim. Silakan coba lagi.'}
+          </p>
+        )}
       </form>
     </Inner>
   );

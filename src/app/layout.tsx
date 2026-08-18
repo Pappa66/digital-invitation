@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Playfair_Display, Great_Vibes, Jost } from 'next/font/google';
 import { Toaster } from 'sonner';
+import MotionProvider from '@/components/ui/motion-provider';
 import './globals.css';
 
 const playfair = Playfair_Display({
@@ -30,8 +31,8 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="id">
-      <body className={`${playfair.variable} ${greatVibes.variable} ${jost.variable} bg-dashboard-bg font-body text-gray-900 antialiased`}>
-        {children}
+      <body className={`${playfair.variable} ${greatVibes.variable} ${jost.variable} bg-background font-body text-foreground antialiased`}>
+        <MotionProvider>{children}</MotionProvider>
         <Toaster
           position="top-right"
           richColors
@@ -39,9 +40,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           toastOptions={{
             duration: 3000,
             style: {
-              background: '#1f2937',
-              color: '#f9fafb',
-              border: '1px solid #374151'
+              background: 'hsl(var(--foreground))',
+              color: 'hsl(var(--background))',
+              border: '1px solid hsl(var(--border))'
             }
           }}
         />

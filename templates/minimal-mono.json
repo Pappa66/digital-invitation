@@ -25,9 +25,9 @@
       "props": {
         "groom": "Raka Prasetya",
         "bride": "Nadia Amara",
-        "date": "09.08.2026",
+        "date": "Minggu, 9 Agustus 2026",
         "place": "The Westin, Surabaya",
-        "caption": "Save The Date",
+        "caption": "Undangan Pernikahan",
         "bg_image": "",
         "show_ornament": false,
         "variant": "left"
@@ -40,13 +40,13 @@
         "introduction": "Assalamu'alaikum Warahmatullahi Wabarakatuh",
         "bismillah": "Bismillahirrahmanirrahim",
         "groom": "Raka Prasetya, S.Kom.",
-        "groom_parents": "Son of Mr. Budi Hartanto & Mrs. Ratna",
+        "groom_parents": "Putra pertama dari Bpk. Budi Hartanto & Ibu Ratna",
         "bride": "Nadia Amara, S.T.",
-        "bride_parents": "Daughter of Mr. Hendra Wijaya & Mrs. Elisa",
+        "bride_parents": "Putri kedua dari Bpk. Hendra Wijaya & Ibu Elisa",
         "variant": "side",
         "photo_shape": "circle",
         "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
-        "bride_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80"
+        "bride_photo": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&q=80"
       }
     },
     {
@@ -73,12 +73,12 @@
       "id": "b-eventdetail-1ldwx",
       "type": "EventDetail",
       "props": {
-        "title": "The Wedding",
+        "title": "Akad Nikah",
         "icon": "rings",
-        "date": "Sunday, 09 August 2026",
-        "time": "10.00 - 14.00 WIB",
+        "date": "Minggu, 9 Agustus 2026",
+        "time": "10.00 - 12.00 WIB",
         "location": "The Westin Grand Ballroom",
-        "address": "Jl. Embong Malang, Surabaya",
+        "address": "Jl. Embong Malang No. 85, Genteng, Surabaya",
         "maps_url": "https://maps.google.com/?q=The%20Westin%20Grand%20Ballroom",
         "variant": "band"
       }
@@ -89,10 +89,10 @@
       "props": {
         "title": "Resepsi",
         "icon": "glass",
-        "date": "09.08.2026",
-        "time": "11.00 - 14.00 WIB",
-        "location": "The Westin, Surabaya",
-        "address": "Alamat venue akan menyusul",
+        "date": "Minggu, 9 Agustus 2026",
+        "time": "12.30 - 15.00 WIB",
+        "location": "The Westin Grand Ballroom",
+        "address": "Jl. Embong Malang No. 85, Genteng, Surabaya",
         "maps_url": "https://maps.google.com/?q=The%20Westin%2C%20Surabaya",
         "variant": "card"
       }
@@ -131,10 +131,10 @@
       "type": "RSVP",
       "props": {
         "title": "Konfirmasi Kehadiran",
-        "note": "Kindly RSVP before 31 July 2026",
+        "note": "Mohon konfirmasi kehadiran sebelum 31 Juli 2026",
         "deadline": "2026-07-31",
-        "button_text": "With Gratitude",
-        "success_message": "Thank you! We look forward to seeing you.",
+        "button_text": "Kirim Konfirmasi",
+        "success_message": "Terima kasih, konfirmasi Anda sudah kami terima.",
         "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
         "bank_name": "BCA",
         "account_number": "883 071 2288",
@@ -145,8 +145,8 @@
       "id": "b-thanks-1rsxj",
       "type": "Thanks",
       "props": {
-        "title": "With Gratitude",
-        "message": "Your presence is a gift. Thank you for celebrating this day with us.",
+        "title": "Terima Kasih",
+        "message": "Merupakan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu pada hari istimewa kami.",
         "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Raka & Nadia"
       }

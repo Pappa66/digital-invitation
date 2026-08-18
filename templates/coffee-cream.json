@@ -49,7 +49,7 @@
         "variant": "vertical",
         "photo_shape": "circle",
         "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
-        "bride_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80"
+        "bride_photo": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80"
       }
     },
     {
@@ -91,7 +91,7 @@
         "ev_desc": [
           "Rizky dan Salsa pertama kali bertemu di kedai kopi Alun-alun Malang.",
           "Mereka mulai menjalin hubungan saat menikmati segelas kopi tubruk.",
-          "Rizky melamar Salsa di di kebun kopi Pujon."
+          "Rizky melamar Salsa di kebun kopi Pujon sambil menikmati embun pagi."
         ]
       }
     },
@@ -118,7 +118,7 @@
         "date": "Sabtu, 15 Januari 2028",
         "time": "11.00 - 14.00 WIB",
         "location": "Coffee Hill Estate, Malang",
-        "address": "Alamat venue akan menyusul",
+        "address": "Jl. Raya Pujon Kidul No. 78, Pujon, Malang",
         "maps_url": "https://maps.google.com/?q=Coffee%20Hill%20Estate%2C%20Malang",
         "variant": "band"
       }

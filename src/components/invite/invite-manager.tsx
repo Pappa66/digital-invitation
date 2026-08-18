@@ -148,19 +148,17 @@ export default function InviteManager({ projectId, slug: slugProp, title: titleP
       setCheckins(demoListCheckins(projectId));
       return;
     }
-    supabase
-      .from('rsvps')
-      .select('*')
-      .eq('project_id', projectId)
-      .order('created_at', { ascending: false })
-      .then(({ data }) => setRsvps((data ?? []) as Rsvp[]));
-    supabase
-      .from('checkins')
-      .select('*')
-      .eq('project_id', projectId)
-      .order('created_at', { ascending: false })
-      .then(({ data }) => setCheckins((data ?? []) as Checkin[]));
-  }, [projectId]);
+    // RPC aman: hanya dengan token aktif (atau owner/internal) data
+    // RSVP & check-in lengkap dapat dibaca — RLS SELECT publik sudah ditutup.
+    if (accessToken) {
+      supabase
+        .rpc('get_invite_rsvps', { p_project_id: projectId, p_token: accessToken })
+        .then(({ data }) => setRsvps((data ?? []) as Rsvp[]));
+      supabase
+        .rpc('get_invite_checkins', { p_project_id: projectId, p_token: accessToken })
+        .then(({ data }) => setCheckins((data ?? []) as Checkin[]));
+    }
+  }, [projectId, accessToken]);
 
   function applyReligion(key: ReligionKey) {
     setReligion(key);

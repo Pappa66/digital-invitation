@@ -1,5 +1,7 @@
 'use client';
 
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+
 export interface GuideStep {
   title: string;
   body: string;
@@ -13,18 +15,13 @@ interface GuideModalProps {
 }
 
 export default function GuideModal({ open, title, steps, onClose }: GuideModalProps) {
-  if (!open) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/40" onClick={onClose} />
-      <div className="relative max-h-[85vh] w-full max-w-lg overflow-y-auto rounded-xl bg-white p-6 shadow-2xl">
-        <div className="flex items-center justify-between">
-          <h3 className="text-base font-semibold text-gray-900">{title}</h3>
-          <button onClick={onClose} className="rounded-md p-1 text-gray-400 hover:bg-gray-100" aria-label="Tutup panduan">
-            ✕
-          </button>
-        </div>
+    <Dialog open={open} onOpenChange={(o) => { if (!o) onClose(); }}>
+      <DialogContent className="max-h-[85vh] w-full max-w-lg overflow-y-auto p-6 sm:rounded-xl">
+        <DialogTitle className="text-base font-semibold text-gray-900">{title}</DialogTitle>
+        <DialogDescription className="sr-only">
+          Panduan langkah demi langkah untuk menggunakan aplikasi ini.
+        </DialogDescription>
         <ol className="mt-4 space-y-4">
           {steps.map((step, i) => (
             <li key={i} className="flex gap-3">
@@ -46,7 +43,7 @@ export default function GuideModal({ open, title, steps, onClose }: GuideModalPr
             Mengerti
           </button>
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

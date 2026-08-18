@@ -15,10 +15,9 @@ import { ThemeContext } from '@/components/guest/theme-context';
 import { GuestFrame } from '@/components/guest/guest-frame';
 import { useBuilderStore, undoBuilder, redoBuilder, useBuilderHistory, COVER_BLOCK_ID } from '@/store/builder-store';
 import DeviceToggle from '@/components/ui/device-toggle';
+import { DESIGN_WIDTH, PREVIEW_CSS_WIDTHS } from '@/components/ui/device-toggle';
 import type { Device } from '@/components/ui/device-toggle';
-import { Palette } from 'lucide-react';
-
-const CANVAS_W = 420;
+import { Palette, Keyboard } from 'lucide-react';
 
 interface BuilderCanvasProps {
   projectId: string;
@@ -46,6 +45,7 @@ export default function BuilderCanvas({
   const selectBlock = useBuilderStore((s) => s.selectBlock);
   const flow = canvas.flow ?? 'stack';
   const { canUndo, canRedo } = useBuilderHistory();
+  const [showShortcuts, setShowShortcuts] = useState(false);
 
   return (
     <div className="relative flex h-full flex-1 flex-col items-center justify-center overflow-hidden bg-[#f1ece1]">
@@ -89,6 +89,23 @@ export default function BuilderCanvas({
           Grid
         </button>
         <DeviceToggle device={device} onChange={onDeviceChange} />
+        <div className="relative">
+          <button
+            onClick={() => setShowShortcuts((v) => !v)}
+            aria-expanded={showShortcuts}
+            aria-haspopup="true"
+            title="Pintasan keyboard"
+            aria-label="Pintasan keyboard"
+            className={`flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs font-medium transition-colors ${
+              showShortcuts
+                ? 'border-[#c9a45c] bg-[#c9a45c] text-white'
+                : 'border-[#e0d6c2] bg-white text-[#6b5f4d] hover:border-[#c9a45c] hover:text-[#8a6d2f]'
+            }`}
+          >
+            <Keyboard className="h-3.5 w-3.5" />
+          </button>
+          {showShortcuts && <ShortcutsPopover onClose={() => setShowShortcuts(false)} />}
+        </div>
       </div>
 
       <div
@@ -98,7 +115,7 @@ export default function BuilderCanvas({
         }}
       >        <div
           className="relative h-full overflow-hidden rounded-md bg-white shadow-xl shadow-[#b98a3e]/20 ring-1 ring-[#e7ddcc]"
-          style={{ width: device === 'desktop' ? '100%' : device === 'tablet' ? 640 : CANVAS_W, maxWidth: '100%' }}
+          style={{ width: PREVIEW_CSS_WIDTHS[device], maxWidth: '100%' }}
         >
           {showGrid && (
             <div
@@ -145,6 +162,75 @@ export default function BuilderCanvas({
           Mode Bebas — seret &ldquo;Geser&rdquo; atas blok untuk pindah, handle emas di dalam blok untuk menggeser elemen (snap ke tengah/tepi)
         </span>
       )}
+    </div>
+  );
+}
+
+/** Daftar pintasan keyboard builder — tampil saat tombol ? / panel bantuan dibuka. */
+const SHORTCUTS: { keys: string[]; action: string }[] = [
+  { keys: ['Ctrl', 'Z'], action: 'Urungkan (undo)' },
+  { keys: ['Ctrl', 'Shift', 'Z'], action: 'Ulangi (redo)' },
+  { keys: ['Ctrl', 'S'], action: 'Simpan sekarang' },
+  { keys: ['Ctrl', 'D'], action: 'Duplikat blok terpilih' },
+  { keys: ['Ctrl', 'C'], action: 'Salin blok' },
+  { keys: ['Ctrl', 'V'], action: 'Tempel blok' },
+  { keys: ['Del'], action: 'Hapus blok terpilih' },
+  { keys: ['← ↑ → ↓'], action: 'Geser blok 1px (mode bebas)' },
+  { keys: ['Esc'], action: 'Batalkan pilihan / tutup popup' }
+];
+
+function Kbd({ children }: { children: string }) {
+  return (
+    <kbd className="rounded border border-[#e0d6c2] bg-[#faf7f2] px-1.5 py-0.5 font-mono text-[10px] text-[#4a443c]">
+      {children}
+    </kbd>
+  );
+}
+
+/** Popover kecil dokumentasi pintasan keyboard di toolbar kanvas. */
+function ShortcutsPopover({ onClose }: { onClose: () => void }) {
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    function onPointerDown(e: PointerEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) onClose();
+    }
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') onClose();
+    }
+    document.addEventListener('pointerdown', onPointerDown);
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown);
+      document.removeEventListener('keydown', onKeyDown);
+    };
+  }, [onClose]);
+
+  return (
+    <div
+      ref={ref}
+      role="dialog"
+      aria-label="Pintasan keyboard builder"
+      className="absolute right-0 top-full z-50 mt-2 w-72 rounded-xl border border-[#e7ddcc] bg-white p-3 shadow-2xl"
+    >
+      <div className="flex items-baseline justify-between">
+        <p className="text-xs font-semibold uppercase tracking-wide text-[#b39a65]">Pintasan Keyboard</p>
+        <button onClick={onClose} className="text-xs text-[#8a7a66] hover:text-[#2b2620]" aria-label="Tutup pintasan">
+          Tutup
+        </button>
+      </div>
+      <ul className="mt-2 space-y-1.5">
+        {SHORTCUTS.map((s) => (
+          <li key={s.action} className="flex items-center justify-between gap-2 text-xs">
+            <span className="text-[#4a443c]">{s.action}</span>
+            <span className="flex shrink-0 gap-1">
+              {s.keys.map((k) => (
+                <Kbd key={k}>{k}</Kbd>
+              ))}
+            </span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -247,7 +333,7 @@ function SortableBlock({ block, dimmed, dropTarget }: { block: Block; dimmed: bo
       {...listeners}
     >
       <BlockView block={block} editable />
-      {selected && <InnerDragLayer block={block} blockWidth={420} />}
+      {selected && <InnerDragLayer block={block} blockWidth={DESIGN_WIDTH} />}
       {selected && (
         <div className="absolute right-2 top-2 z-30 flex gap-1 rounded-md bg-[#141414]/90 p-1 shadow-lg ring-1 ring-white/10" onClick={(e) => e.stopPropagation()}>
           <button
@@ -327,7 +413,7 @@ function FreeCanvas({ blocks, canvasRef, guides }: { blocks: Block[]; canvasRef:
         setNodeRef(el);
       }}
       className="relative"
-      style={{ minHeight: Math.max(height, 1200), width: CANVAS_W }}
+      style={{ minHeight: Math.max(height, 1200), width: DESIGN_WIDTH }}
       onPointerDown={(e) => {
         if (e.target === e.currentTarget) selectBlock(null);
       }}

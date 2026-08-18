@@ -1,12 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Plus, Search, ExternalLink, Edit2, Trash2, Save, X } from 'lucide-react';
+import { Plus, Search, ExternalLink, Edit2, Trash2, Save } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
 import { demoIsDemoMode } from '@/lib/env';
 import { TEMPLATE_LIST } from '@/lib/templates';
 import { clientCreateProject } from '@/lib/api/project-client';
-import { useRouter } from 'next/navigation';
+import ConfirmDialog from '@/components/dashboard/confirm-dialog';
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { InlineError, TableSkeleton } from '@/components/ui/skeleton';
 
 interface Client {
   id: string;
@@ -28,17 +30,21 @@ const STATUS_OPTIONS = [
   { value: 'selesai', label: 'Selesai', color: 'bg-green-100 text-green-700' }
 ];
 
+const EMPTY_CLIENT = { name: '', email: '', phone: '', project_id: '', design_name: '', template_id: '' };
+
 export default function ClientManagement() {
-  const router = useRouter();
   const [clients, setClients] = useState<Client[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [showAddModal, setShowAddModal] = useState(false);
-  const [newClient, setNewClient] = useState({ name: '', email: '', phone: '', project_id: '', design_name: '', template_id: '' });
+  const [newClient, setNewClient] = useState(EMPTY_CLIENT);
   const [creating, setCreating] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<Client | null>(null);
 
   async function loadClients() {
     setLoading(true);
+    setLoadError(false);
     try {
       if (demoIsDemoMode()) {
         // Demo mode: load from localStorage
@@ -70,6 +76,7 @@ export default function ClientManagement() {
       }
     } catch (error) {
       console.error('Error loading clients:', error);
+      setLoadError(true);
     } finally {
       setLoading(false);
     }
@@ -122,16 +129,16 @@ export default function ClientManagement() {
 
       saveClients([client, ...clients]);
       setShowAddModal(false);
-      setNewClient({ name: '', email: '', phone: '', project_id: '', design_name: '', template_id: '' });
+      setNewClient(EMPTY_CLIENT);
     } finally {
       setCreating(false);
     }
   }
 
-  function handleDeleteClient(id: string) {
-    if (confirm('Hapus client ini?')) {
-      saveClients(clients.filter((c) => c.id !== id));
-    }
+  function confirmDelete() {
+    if (!deleteTarget) return;
+    saveClients(clients.filter((c) => c.id !== deleteTarget.id));
+    setDeleteTarget(null);
   }
 
   function handleUpdateStatus(id: string, status: Client['status']) {
@@ -180,7 +187,13 @@ export default function ClientManagement() {
 
       {/* Clients Table */}
       {loading ? (
-        <div className="py-12 text-center text-gray-500">Memuat data client...</div>
+        <TableSkeleton rows={5} cols={5} />
+      ) : loadError ? (
+        <InlineError
+          title="Gagal memuat data client"
+          description="Terjadi kendala saat mengambil data client. Periksa koneksi lalu coba lagi."
+          onRetry={loadClients}
+        />
       ) : filteredClients.length === 0 ? (
         <div className="rounded-xl border border-dashed border-gray-300 bg-white py-12 text-center">
           <p className="text-gray-500">Belum ada data client</p>
@@ -224,7 +237,7 @@ export default function ClientManagement() {
                             href={`/builder/${client.project_id}`}
                             className="inline-flex items-center gap-1 text-xs text-gray-500 hover:text-[#c9a45c]"
                           >
-                            Edit Design
+                            Edit Desain
                           </a>
                         )}
                       </div>
@@ -249,13 +262,17 @@ export default function ClientManagement() {
                         <a
                           href={`/builder/${client.project_id}`}
                           className="rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+                          aria-label={`Buka builder untuk ${client.name}`}
+                          title="Buka editor"
                         >
                           <Edit2 className="h-4 w-4" />
                         </a>
                       )}
                       <button
-                        onClick={() => handleDeleteClient(client.id)}
+                        onClick={() => setDeleteTarget(client)}
                         className="rounded p-1 text-gray-400 hover:bg-red-50 hover:text-red-600"
+                        aria-label={`Hapus client ${client.name}`}
+                        title="Hapus client"
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>
@@ -269,89 +286,103 @@ export default function ClientManagement() {
       )}
 
       {/* Add Client Modal */}
-      {showAddModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
-            <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-lg font-semibold">Tambah Client Baru</h3>
-              <button onClick={() => setShowAddModal(false)} className="text-gray-400 hover:text-gray-600">
-                <X className="h-5 w-5" />
+      <Dialog open={showAddModal} onOpenChange={(o) => { if (!o) setShowAddModal(false); }}>
+        <DialogContent className="max-h-[90vh] w-full max-w-md overflow-y-auto p-6 sm:rounded-xl">
+          <DialogTitle className="text-lg font-semibold">Tambah Client Baru</DialogTitle>
+          <DialogDescription className="sr-only">
+            Isi data client baru, opsional membuat project undangan otomatis dari template.
+          </DialogDescription>
+          <div className="mt-3 space-y-4">
+            <div>
+              <label htmlFor="cl-name" className="mb-1 block text-sm font-medium text-gray-700">Nama Client *</label>
+              <input
+                id="cl-name"
+                type="text"
+                value={newClient.name}
+                onChange={(e) => setNewClient({ ...newClient, name: e.target.value })}
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#c9a45c] focus:outline-none"
+                placeholder="Nama client"
+              />
+            </div>
+            <div>
+              <label htmlFor="cl-email" className="mb-1 block text-sm font-medium text-gray-700">Email</label>
+              <input
+                id="cl-email"
+                type="email"
+                value={newClient.email}
+                onChange={(e) => setNewClient({ ...newClient, email: e.target.value })}
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#c9a45c] focus:outline-none"
+                placeholder="email@client.com"
+              />
+            </div>
+            <div>
+              <label htmlFor="cl-phone" className="mb-1 block text-sm font-medium text-gray-700">No. WhatsApp</label>
+              <input
+                id="cl-phone"
+                type="tel"
+                value={newClient.phone}
+                onChange={(e) => setNewClient({ ...newClient, phone: e.target.value })}
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#c9a45c] focus:outline-none"
+                placeholder="08xxxxxxxxxx"
+              />
+            </div>
+            <div>
+              <label htmlFor="cl-design" className="mb-1 block text-sm font-medium text-gray-700">Nama Desain</label>
+              <input
+                id="cl-design"
+                type="text"
+                value={newClient.design_name}
+                onChange={(e) => setNewClient({ ...newClient, design_name: e.target.value })}
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#c9a45c] focus:outline-none"
+                placeholder="Contoh: Wedding Theme Gold"
+              />
+            </div>
+            <div>
+              <label htmlFor="cl-template" className="mb-1 block text-sm font-medium text-gray-700">Pilih Template</label>
+              <select
+                id="cl-template"
+                value={newClient.template_id}
+                onChange={(e) => setNewClient({ ...newClient, template_id: e.target.value })}
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#c9a45c] focus:outline-none"
+              >
+                <option value="">-- Pilih Template (otomatis buat project) --</option>
+                {TEMPLATE_LIST.map((t) => (
+                  <option key={t.id} value={t.id}>{t.name} ({t.category})</option>
+                ))}
+              </select>
+              <p className="mt-1 text-[11px] text-gray-500">Jika dipilih, project undangan akan otomatis dibuat.</p>
+            </div>
+            <div className="flex justify-end gap-3 pt-2">
+              <button
+                onClick={() => setShowAddModal(false)}
+                className="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+              >
+                Batal
+              </button>
+              <button
+                onClick={handleAddClient}
+                disabled={!newClient.name.trim() || creating}
+                className="rounded-lg bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-4 py-2 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-50"
+              >
+                {creating ? 'Membuat...' : <><Save className="mr-1 inline h-4 w-4" /> Simpan</>}
               </button>
             </div>
-            <div className="space-y-4">
-              <div>
-                <label className="mb-1 block text-sm font-medium text-gray-700">Nama Client *</label>
-                <input
-                  type="text"
-                  value={newClient.name}
-                  onChange={(e) => setNewClient({ ...newClient, name: e.target.value })}
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#c9a45c] focus:outline-none"
-                  placeholder="Nama client"
-                />
-              </div>
-              <div>
-                <label className="mb-1 block text-sm font-medium text-gray-700">Email</label>
-                <input
-                  type="email"
-                  value={newClient.email}
-                  onChange={(e) => setNewClient({ ...newClient, email: e.target.value })}
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#c9a45c] focus:outline-none"
-                  placeholder="email@client.com"
-                />
-              </div>
-              <div>
-                <label className="mb-1 block text-sm font-medium text-gray-700">No. WhatsApp</label>
-                <input
-                  type="tel"
-                  value={newClient.phone}
-                  onChange={(e) => setNewClient({ ...newClient, phone: e.target.value })}
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#c9a45c] focus:outline-none"
-                  placeholder="08xxxxxxxxxx"
-                />
-              </div>
-              <div>
-                <label className="mb-1 block text-sm font-medium text-gray-700">Nama Desain</label>
-                <input
-                  type="text"
-                  value={newClient.design_name}
-                  onChange={(e) => setNewClient({ ...newClient, design_name: e.target.value })}
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#c9a45c] focus:outline-none"
-                  placeholder="Contoh: Wedding Theme Gold"
-                />
-              </div>
-              <div>
-                <label className="mb-1 block text-sm font-medium text-gray-700">Pilih Template</label>
-                <select
-                  value={newClient.template_id}
-                  onChange={(e) => setNewClient({ ...newClient, template_id: e.target.value })}
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#c9a45c] focus:outline-none"
-                >
-                  <option value="">-- Pilih Template (otomatis buat project) --</option>
-                  {TEMPLATE_LIST.map((t) => (
-                    <option key={t.id} value={t.id}>{t.name} ({t.category})</option>
-                  ))}
-                </select>
-                <p className="mt-1 text-[11px] text-gray-500">Jika dipilih, project undangan akan otomatis dibuat.</p>
-              </div>
-              <div className="flex justify-end gap-3 pt-4">
-                <button
-                  onClick={() => setShowAddModal(false)}
-                  className="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                >
-                  Batal
-                </button>
-                <button
-                  onClick={handleAddClient}
-                  disabled={!newClient.name.trim() || creating}
-                  className="rounded-lg bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-4 py-2 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-50"
-                >
-                  {creating ? 'Membuat...' : <><Save className="mr-1 inline h-4 w-4" /> Simpan</>}
-                </button>
-              </div>
-            </div>
           </div>
-        </div>
-      )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation */}
+      <ConfirmDialog
+        open={!!deleteTarget}
+        title="Hapus client ini?"
+        message={
+          deleteTarget ? `Data client "${deleteTarget.name}" akan dihapus. Tindakan ini tidak bisa dibatalkan.` : ''
+        }
+        confirmLabel="Hapus"
+        danger
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteTarget(null)}
+      />
     </div>
   );
 }

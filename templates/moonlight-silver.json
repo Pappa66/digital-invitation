@@ -30,7 +30,7 @@
         "bride": "Giselle Tanuwijaya",
         "date": "04.03.2028",
         "place": "Fairmont, Jakarta",
-        "caption": "Save The Date",
+        "caption": "Undangan Pernikahan",
         "bg_image": "",
         "show_ornament": false,
         "variant": "right"
@@ -43,13 +43,13 @@
         "introduction": "Assalamu'alaikum Warahmatullahi Wabarakatuh",
         "bismillah": "Bismillahirrahmanirrahim",
         "groom": "Evan Sanjaya, S.T.",
-        "groom_parents": "Son of Mr. Richard Tanu & Mrs. Maria",
+        "groom_parents": "Putra pertama dari Bpk. Richard Tanuwijaya & Ibu Maria",
         "bride": "Giselle Tanuwijaya, S.E.",
-        "bride_parents": "Daughter of Mr. Hendra Wijaya & Mrs. Susan",
+        "bride_parents": "Putri pertama dari Bpk. Hendra Gunawan & Ibu Susan",
         "variant": "side",
         "photo_shape": "circle",
-        "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
-        "bride_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80"
+        "groom_photo": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&q=80",
+        "bride_photo": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600&q=80"
       }
     },
     {
@@ -68,7 +68,7 @@
       "type": "Countdown",
       "props": {
         "target_date": "2028-03-04T19:00:00+07:00",
-        "title": "Until the Full Moon",
+        "title": "Menuju Hari Bahagia",
         "variant": "cards"
       }
     },
@@ -76,12 +76,12 @@
       "id": "b-eventdetail-bihdp",
       "type": "EventDetail",
       "props": {
-        "title": "The Night of Nuptials",
-        "icon": "rings",
-        "date": "Saturday, 4 March 2028",
+        "title": "Resepsi",
+        "icon": "glass",
+        "date": "Sabtu, 4 Maret 2028",
         "time": "19.00 - 23.00 WIB",
         "location": "Fairmont Ballroom",
-        "address": "Jl. Asia Afrika, Jakarta Pusat",
+        "address": "Jl. Asia Afrika, Senayan, Jakarta Pusat",
         "maps_url": "https://maps.google.com/?q=Fairmont%20Ballroom",
         "variant": "band"
       }
@@ -90,12 +90,12 @@
       "id": "b-eventdetail-bjdq0",
       "type": "EventDetail",
       "props": {
-        "title": "Resepsi",
-        "icon": "glass",
-        "date": "04.03.2028",
+        "title": "Akad Nikah",
+        "icon": "rings",
+        "date": "Sabtu, 4 Maret 2028",
         "time": "11.00 - 14.00 WIB",
-        "location": "Fairmont, Jakarta",
-        "address": "Alamat venue akan menyusul",
+        "location": "Fairmont Chapel",
+        "address": "Jl. Asia Afrika, Senayan, Jakarta Pusat",
         "maps_url": "https://maps.google.com/?q=Fairmont%2C%20Jakarta",
         "variant": "card"
       }
@@ -135,10 +135,10 @@
       "type": "RSVP",
       "props": {
         "title": "Konfirmasi Kehadiran",
-        "note": "Kindly RSVP before 20 February 2028",
+        "note": "Mohon konfirmasi kehadiran sebelum 20 Februari 2028",
         "deadline": "2028-02-20",
-        "button_text": "Kindly RSVP",
-        "success_message": "Thank you! We look forward to seeing you.",
+        "button_text": "Kirim Konfirmasi",
+        "success_message": "Terima kasih, konfirmasi Anda sudah kami terima.",
         "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
         "bank_name": "BSI",
         "account_number": "880018040107",
@@ -149,8 +149,8 @@
       "id": "b-thanks-boeh0",
       "type": "Thanks",
       "props": {
-        "title": "Moonlit Thanks",
-        "message": "Thank you for illuminating our celebration with your presence.",
+        "title": "Terima Kasih",
+        "message": "Terima kasih telah menerangi perayaan kami dengan kehadiran Bapak/Ibu/Saudara/i.",
         "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Evan & Giselle"
       }

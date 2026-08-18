@@ -21,11 +21,8 @@ import PropertiesPanel from '@/components/builder/properties-panel';
 import { useBuilderStore } from '@/store/builder-store';
 import { undoBuilder, redoBuilder } from '@/store/builder-store';
 import { saveCanvasNow } from '@/hooks/use-autosave';
+import { DESIGN_WIDTH } from '@/components/ui/device-toggle';
 import type { Device } from '@/components/ui/device-toggle';
-
-const CANVAS_W = 420;
-const CANVAS_W_TABLET = 640;
-const CANVAS_W_DESKTOP = 900;
 
 /**
  * Pembungkus workspace builder. DndContext diletakkan DI SINI agar
@@ -67,7 +64,9 @@ export default function BuilderWorkspace({ projectId }: { projectId: string }) {
   }, [canvas.theme.font_heading, canvas.theme.font_body]);
 
   const flow = canvas.flow ?? 'stack';
-  const canvasW = device === 'desktop' ? CANVAS_W_DESKTOP : device === 'tablet' ? CANVAS_W_TABLET : CANVAS_W;
+  // Mode bebas memakai ruang koordinat desain (420px = lebar konten publik),
+  // terlepas dari mode preview. Lebar preview dipakai builder-canvas.
+  const canvasW = DESIGN_WIDTH;
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })

@@ -79,10 +79,10 @@ export default function EnvelopeBlock({ props }: { props: BlockProps }) {
 
         {showTabs && (
           <Inner name="tabs">
-            <div className="mt-4 flex items-center justify-center gap-1 rounded-full border border-current/15 bg-white/5 p-0.5">
+            <div className="mt-4 flex items-center justify-center gap-1 rounded-full border border-current/15 bg-white/5 p-1">
               <button
                 onClick={() => setTab('cash')}
-                className={`rounded-full px-4 py-1.5 text-xs font-medium transition-colors ${
+                className={`rounded-full px-4 py-2 text-xs font-medium transition-colors ${
                   tab === 'cash' ? 'bg-[var(--color-primary)] text-white' : 'opacity-60 hover:opacity-100'
                 }`}
               >
@@ -90,7 +90,7 @@ export default function EnvelopeBlock({ props }: { props: BlockProps }) {
               </button>
               <button
                 onClick={() => setTab('gift')}
-                className={`rounded-full px-4 py-1.5 text-xs font-medium transition-colors ${
+                className={`rounded-full px-4 py-2 text-xs font-medium transition-colors ${
                   tab === 'gift' ? 'bg-[var(--color-primary)] text-white' : 'opacity-60 hover:opacity-100'
                 }`}
               >
@@ -104,9 +104,9 @@ export default function EnvelopeBlock({ props }: { props: BlockProps }) {
           <Inner name="button">
             <button
               onClick={() => setOpen(true)}
-              className="mt-5 inline-flex items-center gap-2 rounded-full bg-[var(--color-primary)] px-6 py-3 text-xs font-semibold uppercase tracking-[0.15em] text-white transition-transform hover:scale-[1.03] active:scale-95"
+              className="mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[var(--color-primary)] px-7 py-3 text-xs font-semibold uppercase tracking-[0.15em] text-white transition-transform hover:scale-[1.03] active:scale-95"
             >
-              <Gift className="h-4 w-4" /> Beri Kado
+              <Gift className="h-4 w-4" aria-hidden /> Beri Kado
             </button>
           </Inner>
         ) : (
@@ -157,9 +157,10 @@ export default function EnvelopeBlock({ props }: { props: BlockProps }) {
                             <button
                               onClick={() => copyAccount(i, acc.account_number)}
                               title="Salin nomor rekening"
-                              className="ml-auto flex h-7 w-7 items-center justify-center rounded-full border border-current/25 transition-colors hover:bg-current/10"
+                              aria-label="Salin nomor rekening"
+                              className="ml-auto flex h-10 w-10 items-center justify-center rounded-full border border-current/25 transition-colors hover:bg-current/10"
                             >
-                              {copied[i] ? <Check className="h-3.5 w-3.5 text-green-500" /> : <Copy className="h-3.5 w-3.5 opacity-80" />}
+                              {copied[i] ? <Check className="h-4 w-4 text-green-500" aria-hidden /> : <Copy className="h-4 w-4 opacity-80" aria-hidden />}
                             </button>
                           </div>
                         ) : (

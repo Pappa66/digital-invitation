@@ -25,9 +25,9 @@
       "props": {
         "groom": "Vino Geraldo",
         "bride": "Sasha Ayumi",
-        "date": "13.03.2027",
+        "date": "Sabtu, 13 Maret 2027",
         "place": "The St. Regis, Jakarta",
-        "caption": "Save The Date",
+        "caption": "Undangan Pernikahan",
         "bg_image": "",
         "show_ornament": true,
         "variant": "left"
@@ -40,13 +40,13 @@
         "introduction": "Assalamu'alaikum Warahmatullahi Wabarakatuh",
         "bismillah": "Bismillahirrahmanirrahim",
         "groom": "Vino Geraldo, S.T.",
-        "groom_parents": "Son of Mr. Ricardo Halim & Mrs. Melia",
+        "groom_parents": "Putra pertama dari Bpk. Ricardo Halim & Ibu Melia",
         "bride": "Sasha Ayumi, S.E.",
-        "bride_parents": "Daughter of Mr. Steven Tanudjaja & Mrs. Winona",
+        "bride_parents": "Putri kedua dari Bpk. Steven Tanudjaja & Ibu Winona",
         "variant": "vertical",
         "photo_shape": "circle",
-        "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
-        "bride_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80"
+        "groom_photo": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&q=80",
+        "bride_photo": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80"
       }
     },
     {
@@ -64,8 +64,8 @@
       "id": "b-countdown-4au45",
       "type": "Countdown",
       "props": {
-        "target_date": "2027-03-13T16:00:00+07:00",
-        "title": "The Clock Ticks Toward Forever",
+        "target_date": "2027-03-13T09:00:00+07:00",
+        "title": "Menuju Hari Bahagia",
         "variant": "cards"
       }
     },
@@ -73,12 +73,12 @@
       "id": "b-eventdetail-4bo61",
       "type": "EventDetail",
       "props": {
-        "title": "The Celebration",
+        "title": "Akad Nikah",
         "icon": "rings",
-        "date": "Saturday, 13 March 2027",
-        "time": "16.00 - 21.00 WIB",
+        "date": "Sabtu, 13 Maret 2027",
+        "time": "09.00 - 11.00 WIB",
         "location": "The St. Regis Ballroom",
-        "address": "Jl. H.R. Rasuna Said Kav. B6, Jakarta",
+        "address": "Jl. H.R. Rasuna Said Kav. B6, Kuningan, Jakarta",
         "maps_url": "https://maps.google.com/?q=The%20St.%20Regis%20Ballroom",
         "variant": "card"
       }
@@ -89,10 +89,10 @@
       "props": {
         "title": "Resepsi",
         "icon": "glass",
-        "date": "13.03.2027",
-        "time": "11.00 - 14.00 WIB",
-        "location": "The St. Regis, Jakarta",
-        "address": "Alamat venue akan menyusul",
+        "date": "Sabtu, 13 Maret 2027",
+        "time": "18.00 - 21.00 WIB",
+        "location": "The St. Regis Grand Ballroom",
+        "address": "Jl. H.R. Rasuna Said Kav. B6, Kuningan, Jakarta",
         "maps_url": "https://maps.google.com/?q=The%20St.%20Regis%2C%20Jakarta",
         "variant": "band"
       }
@@ -132,10 +132,10 @@
       "type": "RSVP",
       "props": {
         "title": "Konfirmasi Kehadiran",
-        "note": "Kindly respond before 28 February 2027",
+        "note": "Mohon konfirmasi kehadiran sebelum 28 Februari 2027",
         "deadline": "2027-02-28",
-        "button_text": "With Gratitude",
-        "success_message": "Thank you! We look forward to seeing you.",
+        "button_text": "Kirim Konfirmasi",
+        "success_message": "Terima kasih, konfirmasi Anda sudah kami terima.",
         "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
         "bank_name": "BCA",
         "account_number": "884 019 8877",
@@ -146,8 +146,8 @@
       "id": "b-thanks-4hp7n",
       "type": "Thanks",
       "props": {
-        "title": "A Thousand Thanks",
-        "message": "Your presence lights up our celebration. Thank you for being part of our story.",
+        "title": "Doa Restu Anda",
+        "message": "Dengan bangga kami memohon doa dan restu Bapak/Ibu/Saudara/i untuk mengiringi langkah kami memulai hidup baru.",
         "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Vino & Sasha"
       }

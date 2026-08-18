@@ -30,7 +30,7 @@
         "bride": "Nadia Larasati",
         "date": "Minggu, 17 Oktober 2027",
         "place": "The Ballroom At The Hill, Yogyakarta",
-        "caption": "Save The Date",
+        "caption": "Undangan Pernikahan",
         "bg_image": "https://images.unsplash.com/photo-1550009158-9ebf69173e03",
         "show_ornament": true,
         "variant": "left"
@@ -48,8 +48,8 @@
         "bride_parents": "Putri dari Bpk. Agus Salim & Ibu Maya",
         "variant": "side",
         "photo_shape": "arch",
-        "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
-        "bride_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80"
+        "groom_photo": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&q=80",
+        "bride_photo": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80"
       }
     },
     {
@@ -68,7 +68,7 @@
       "type": "Countdown",
       "props": {
         "target_date": "2027-10-17T19:00:00+07:00",
-        "title": "Countdown To Forever",
+        "title": "Menuju Hari Bahagia",
         "variant": "line"
       }
     },
@@ -89,9 +89,9 @@
           "2027"
         ],
         "ev_desc": [
-          "Dimas dan Nadia pertama kali bertemu di sebuah acara galau seni di Jogja.",
+          "Dimas dan Nadia pertama kali bertemu di sebuah acara gelar seni di Jogja.",
           "Mereka mulai menjalin hubungan saat hujan turun di Malioboro.",
-          "Dimas melamar Nadia di di teras candi Prambanan."
+          "Dimas melamar Nadia di teras candi Prambanan di bawah langit berawan."
         ]
       }
     },
@@ -99,7 +99,7 @@
       "id": "b-eventdetail-e847t",
       "type": "EventDetail",
       "props": {
-        "title": "The Gala Night",
+        "title": "Resepsi",
         "icon": "glass",
         "date": "Minggu, 17 Oktober 2027",
         "time": "19.00 - 23.00 WIB",
@@ -113,12 +113,12 @@
       "id": "b-eventdetail-e9264",
       "type": "EventDetail",
       "props": {
-        "title": "Resepsi",
-        "icon": "glass",
+        "title": "Akad Nikah",
+        "icon": "rings",
         "date": "Minggu, 17 Oktober 2027",
         "time": "11.00 - 14.00 WIB",
         "location": "The Ballroom At The Hill, Yogyakarta",
-        "address": "Alamat venue akan menyusul",
+        "address": "Jl. Kaliurang KM 15, Pakem, Sleman, Yogyakarta",
         "maps_url": "https://maps.google.com/?q=The%20Ballroom%20At%20The%20Hill%2C%20Yogyakarta",
         "variant": "card"
       }

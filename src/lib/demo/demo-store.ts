@@ -37,6 +37,14 @@ function uid() {
   return `demo-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
+/** Token acak untuk checkin_token demo (uuid asli bila tersedia). */
+function randomToken(): string {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID();
+  }
+  return uid();
+}
+
 function listProjects(): Project[] {
   return read<Project[]>(PROJECTS_KEY, []);
 }
@@ -245,6 +253,7 @@ export function demoAddRsvp(
     message: input.message.trim() || null,
     meal_choice: input.meal_choice ?? null,
     menu_options: input.menu_options ?? null,
+    checkin_token: randomToken(),
     created_at: new Date().toISOString()
   });
   all[projectId] = list;
@@ -253,15 +262,49 @@ export function demoAddRsvp(
   return {};
 }
 
-/** Check-in demo: daftar absensi per proyek (terbaru dulu). */
+/**
+ * Check-in demo: daftar absensi per proyek (terbaru dulu).
+ */
 export function demoListCheckins(projectId: string): Checkin[] {
   const all = read<Record<string, Checkin[]>>(CHECKINS_KEY, {});
   return (all[projectId] ?? []).slice().sort((a, b) => b.created_at.localeCompare(a.created_at));
 }
 
-export function demoAddCheckin(projectId: string, input: { name: string; guest_count: number }): { error?: string } {
+/**
+ * Tambah check-in demo. Dua jalur:
+ *  - `token`: identitas diambil dari RSVP (QR absen). Bila token tidak
+ *    cocok → error 'token tidak valid'. Bila RSVP sudah check-in →
+ *    idempoten, kembalikan sukses tanpa menggandakan.
+ *  - `name` + `guest_count`: jalur manual form tamu (kompatibel dengan
+ *    pemakaian lama di check-in.tsx).
+ */
+export function demoAddCheckin(
+  projectId: string,
+  input: { token: string } | { name: string; guest_count: number }
+): { error?: string } {
   const all = read<Record<string, Checkin[]>>(CHECKINS_KEY, {});
   const list = all[projectId] ?? [];
+
+  if ('token' in input) {
+    const rsvps = read<Record<string, Rsvp[]>>(RSVPS_KEY, {})[projectId] ?? [];
+    const rsvp = rsvps.find((r) => r.checkin_token === input.token);
+    if (!rsvp) return { error: 'token tidak valid' };
+
+    const existing = list.find((c) => c.name === rsvp.name && c.guest_count === rsvp.guest_count);
+    if (existing) return {};
+
+    list.unshift({
+      id: uid(),
+      project_id: projectId,
+      name: rsvp.name.trim(),
+      guest_count: rsvp.guest_count,
+      created_at: new Date().toISOString()
+    });
+    all[projectId] = list;
+    write(CHECKINS_KEY, all);
+    return {};
+  }
+
   list.unshift({
     id: uid(),
     project_id: projectId,

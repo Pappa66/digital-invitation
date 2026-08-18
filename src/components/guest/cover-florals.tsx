@@ -21,17 +21,18 @@ function FloralCorner({ position, color }: { position: 'top-left' | 'top-right' 
     'bottom-right': { bottom: 0, right: 0 }
   };
 
-  return (
+return (
     <div
+      aria-hidden
       className="pointer-events-none absolute z-20"
       style={{ ...positions[position], transform: transforms[position] }}
     >
-      <svg width="120" height="100" viewBox="0 0 120 100" fill="none" style={{ opacity: 0.5 }}>
+      <svg width="112" height="96" viewBox="0 0 120 100" fill="none" style={{ opacity: 0.45 }}>
         {/* Main curve */}
         <path
           d="M0 90C0 40 25 10 60 10h60"
           stroke={color}
-          strokeWidth="1.5"
+          strokeWidth="1.4"
           strokeLinecap="round"
           opacity={0.6}
         />
@@ -44,7 +45,7 @@ function FloralCorner({ position, color }: { position: 'top-left' | 'top-right' 
         />
 
         {/* Rose flower 1 - large */}
-        <circle cx="16" cy="68" r="8" stroke={color} strokeWidth="1.2" opacity={0.6} />
+        <circle cx="16" cy="68" r="7.5" stroke={color} strokeWidth="1.1" opacity={0.6} />
         <path d="M12 64c2-4 6-6 8-2-4 0-6 2-8 2Z" stroke={color} strokeWidth="0.8" opacity={0.7} />
         <path d="M22 64c-2-4-6-6-8-2 4 0 6 2 8 2Z" stroke={color} strokeWidth="0.8" opacity={0.7} />
         <path d="M12 72c2 4 6 6 8 2-4 0-6-2-8-2Z" stroke={color} strokeWidth="0.8" opacity={0.7} />

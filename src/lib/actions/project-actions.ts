@@ -213,3 +213,21 @@ export async function verifyProjectAccess(projectId: string) {
 
   return { allowed: Boolean(data), reason: data ? undefined : 'forbidden' };
 }
+
+/**
+ * Cabut semua token akses "Kelola Tamu" proyek. Link lama langsung tidak
+ * bisa dipakai (get_invite_by_token menolak token ber-revoked_at).
+ * Hanya pemilik proyek yang boleh (RPC revoke_invite_token memvalidasi).
+ */
+export async function revokeInviteAccessToken(projectId: string): Promise<{ ok?: boolean; error?: string }> {
+  const user = await requireUser();
+  if (!user) return { error: 'Unauthorized' };
+
+  const supabase = await createServerSupabase();
+  const { error } = await supabase.rpc('revoke_invite_token', {
+    p_project_id: projectId
+  });
+
+  if (error) return { error: error.message };
+  return { ok: true };
+}

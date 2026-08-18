@@ -244,14 +244,15 @@ export default function MusicPlayer({ settings }: MusicPlayerProps) {
         <button
           onClick={toggle}
           aria-label={playing ? 'Jeda musik' : 'Putar musik'}
+          aria-pressed={playing}
           title={playing ? 'Jeda musik' : 'Putar musik'}
-          className="flex h-11 w-11 items-center justify-center rounded-full bg-gray-900/80 text-white shadow-lg backdrop-blur transition hover:bg-gray-900"
+          className="flex h-14 w-14 items-center justify-center rounded-full bg-foreground/90 text-background shadow-card backdrop-blur ring-1 ring-gold/40 transition-transform hover:scale-105 hover:bg-foreground active:scale-95"
         >
-          {playing ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+          {playing ? <Pause className="h-5 w-5" aria-hidden /> : <Play className="h-5 w-5" aria-hidden />}
         </button>
         {!armed && onSection && (
-          <span className="mt-1 flex items-center gap-1 text-[10px] text-gray-400">
-            <Music className="h-3 w-3" /> musik mulai saat section muncul
+          <span className="mt-1.5 flex items-center gap-1 rounded-full bg-foreground/25 px-2.5 py-1 text-[10px] text-muted-foreground dark:bg-foreground/40">
+            <Music className="h-3 w-3" aria-hidden /> musik mulai saat section muncul
           </span>
         )}
       </div>

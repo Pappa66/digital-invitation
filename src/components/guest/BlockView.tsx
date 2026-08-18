@@ -133,10 +133,10 @@ export default function BlockView({ block, projectId, editable = false, greeting
   const cardWrapCls = `${cardCls} mx-0 mb-1 mt-1 w-full`;
   
   const entranceVariants = {
-    fade: { opacity: 0, y: 44, filter: 'blur(6px)' },
+    fade: { opacity: 0, y: 44 },
     slide: { opacity: 0, x: -30 },
     zoom: { opacity: 0, scale: 0.92 },
-    blur: { opacity: 0, filter: 'blur(12px)' },
+    blur: { opacity: 0, scale: 0.94 },
     rise: { opacity: 0, y: 60 },
     none: { opacity: 1 },
   } as const;
@@ -164,7 +164,7 @@ export default function BlockView({ block, projectId, editable = false, greeting
           {animateEntrance && blockEntrance !== 'none' && entranceAnim !== entranceVariants.none ? (
             <motion.div
               initial={entranceAnim}
-              whileInView={{ opacity: 1, y: 0, x: 0, scale: 1, filter: 'blur(0px)' }}
+              whileInView={{ opacity: 1, y: 0, x: 0, scale: 1 }}
               viewport={{ once: true, amount: 0.12 }}
               transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: entranceDelay }}
             >

@@ -45,7 +45,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
           <Image src="/logo/prasha.png" width={32} height={32} alt="Prasha Digital" className="h-8 w-8 rounded-md bg-black object-cover" />
           <span className="truncate text-sm font-semibold">Prasha Digital</span>
         </div>
-        <nav className="flex-1 space-y-1 p-3">
+        <nav className="flex-1 space-y-1 p-3" aria-label="Navigasi utama">
           {NAV.map((item) => {
             const active = pathname === item.href || pathname.startsWith(item.href + '/');
             const Icon = item.icon;
@@ -53,20 +53,25 @@ export default function AppLayout({ children }: AppLayoutProps) {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm ${
-                  active ? 'bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] text-white shadow-sm' : 'text-[#4a443c] hover:bg-white'
+                aria-current={active ? 'page' : undefined}
+                className={`relative flex min-h-11 items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors ${
+                  active ? 'bg-accent font-medium text-gold-ink shadow-soft' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                 }`}
               >
-                <Icon className="h-4 w-4" />
+                <span
+                  aria-hidden
+                  className={`absolute left-0 top-1/2 h-4 w-[3px] -translate-y-1/2 rounded-r-full transition-opacity ${active ? 'bg-gold-strong opacity-100' : 'opacity-0'}`}
+                />
+                <Icon className="h-4 w-4 shrink-0" aria-hidden />
                 {item.label}
               </Link>
             );
           })}
         </nav>
         <div className="border-t border-dashboard-border p-3">
-          <div className="mb-2 truncate px-3 text-xs text-[#8a7a66]">{email}</div>
-          <Button variant="ghost" onClick={handleLogout} className="w-full justify-start text-[#4a443c]">
-            <LogOut className="h-4 w-4" />
+          <div className="mb-2 truncate px-3 text-xs text-muted-foreground">{email}</div>
+          <Button variant="ghost" onClick={handleLogout} className="w-full justify-start text-muted-foreground hover:text-destructive">
+            <LogOut className="h-4 w-4" aria-hidden />
             Keluar
           </Button>
         </div>
@@ -77,8 +82,8 @@ export default function AppLayout({ children }: AppLayoutProps) {
         </header>
         <main className="flex-1 overflow-auto p-6 pb-20 md:pb-6">{children}</main>
       </div>
-      {/* Mobile bottom nav */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around border-t border-dashboard-border bg-dashboard-surface px-2 py-1.5 md:hidden">
+      {/* Mobile bottom nav — target sentuh ≥ 56px tinggi, ikon 24px, label 11px */}
+      <nav aria-label="Navigasi utama" className="fixed bottom-0 left-0 right-0 z-50 flex items-stretch justify-around border-t border-dashboard-border bg-dashboard-surface shadow-[0_-4px_16px_-8px_rgba(43,38,32,0.16)] md:hidden">
         {NAV.map((item) => {
           const active = pathname === item.href || pathname.startsWith(item.href + '/');
           const Icon = item.icon;
@@ -86,9 +91,18 @@ export default function AppLayout({ children }: AppLayoutProps) {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex flex-col items-center gap-0.5 text-[10px] ${active ? 'text-[#c9a45c]' : 'text-[#8a7a66]'}`}
+              aria-current={active ? 'page' : undefined}
+              className={`relative flex min-h-14 min-w-0 flex-1 flex-col items-center justify-center gap-1 px-3 text-[11px] font-medium transition-colors ${
+                active ? 'text-gold-deep' : 'text-muted-foreground'
+              }`}
             >
-              <Icon className="h-5 w-5" />
+              <span className="relative flex items-center justify-center">
+                <Icon className="h-6 w-6" strokeWidth={active ? 2.2 : 1.8} aria-hidden />
+                <span
+                  aria-hidden
+                  className={`absolute -bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full transition-opacity ${active ? 'bg-gold-strong opacity-100' : 'opacity-0'}`}
+                />
+              </span>
               {item.label}
             </Link>
           );

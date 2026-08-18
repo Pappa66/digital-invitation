@@ -46,7 +46,7 @@
         "variant": "side",
         "photo_shape": "frame",
         "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
-        "bride_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80"
+        "bride_photo": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80"
       }
     },
     {
@@ -88,7 +88,7 @@
         "ev_desc": [
           "Galih dan Cinta pertama kali bertemu di sebuah festival musik di Bandung.",
           "Mereka mulai menjalin hubungan saat kami berbagi sebungkus gorengan.",
-          "Galih melamar Cinta di di taman bunga Ciwidey."
+          "Galih melamar Cinta di taman bunga Ciwidey yang sedang bermekaran."
         ]
       }
     },
@@ -115,7 +115,7 @@
         "date": "Sabtu, 18 April 2026",
         "time": "11.00 - 14.00 WIB",
         "location": "Taman Sari Garden, Bandung",
-        "address": "Alamat venue akan menyusul",
+        "address": "Jl. Taman Sari No. 45, Lembang, Bandung Barat",
         "maps_url": "https://maps.google.com/?q=Taman%20Sari%20Garden%2C%20Bandung",
         "variant": "card"
       }

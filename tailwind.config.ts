@@ -11,11 +11,19 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        /* Dashboard/template workspace — dipetakan dari token agar satu sumber. */
         dashboard: {
-          bg: '#faf7f2',
-          surface: '#FFFFFF',
-          primary: '#111827',
-          border: '#e7ddcc'
+          bg: 'hsl(var(--background))',
+          surface: 'hsl(var(--card))',
+          primary: 'hsl(var(--foreground))',
+          border: 'hsl(var(--border))'
+        },
+        /* Brand emas pernikahan (akar: globals.css :root). */
+        gold: {
+          DEFAULT: 'hsl(var(--gold))',
+          strong: 'hsl(var(--gold-strong))',
+          deep: 'hsl(var(--gold-deep))',
+          ink: 'hsl(var(--gold-ink))'
         },
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
@@ -51,10 +59,36 @@ const config: Config = {
           foreground: 'hsl(var(--card-foreground))'
         }
       },
+      fontFamily: {
+        heading: ['var(--font-heading)', 'Georgia', 'serif'],
+        script: ['var(--font-script)', 'Great Vibes', 'cursive'],
+        body: ['var(--font-body)', 'Jost', 'ui-sans-serif', 'system-ui', 'sans-serif']
+      },
+      fontSize: {
+        /* Skala tipografi premium (spasi 8pt konservatif) */
+        'display-2xl': ['clamp(3rem, 7vw, 4.5rem)', { lineHeight: '1.05', letterSpacing: '-0.02em' }],
+        'display-xl': ['clamp(2.5rem, 5vw, 3.25rem)', { lineHeight: '1.1', letterSpacing: '-0.015em' }],
+        'display-lg': ['clamp(2rem, 4vw, 2.75rem)', { lineHeight: '1.15', letterSpacing: '-0.01em' }],
+        'display-md': ['1.5rem', { lineHeight: '1.3' }],
+        'heading-sm': ['1.125rem', { lineHeight: '1.45' }],
+        'body-sm': ['0.875rem', { lineHeight: '1.55' }],
+        'body-xs': ['0.75rem', { lineHeight: '1.5' }],
+        label: ['0.6875rem', { lineHeight: '1.4', letterSpacing: '0.06em' }]
+      },
+      boxShadow: {
+        soft: 'var(--shadow-soft)',
+        card: 'var(--shadow-card)',
+        gold: 'var(--shadow-gold)',
+        dialog: 'var(--shadow-dialog)',
+        phone: '0 30px 60px -20px rgba(43,38,32,0.45)'
+      },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)'
+        sm: 'calc(var(--radius) - 4px)',
+        '2md': 'var(--radius-md)',
+        '3lg': 'var(--radius-lg)',
+        '4xl': 'var(--radius-xl)'
       },
       keyframes: {
         'accordion-down': {

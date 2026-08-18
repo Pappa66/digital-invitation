@@ -11,11 +11,16 @@ export default defineConfig(({ mode }) => {
       environment: 'jsdom',
       globals: true,
       setupFiles: ['./vitest.setup.ts'],
-      include: ['src/**/*.test.{ts,tsx}']
+      include: ['src/**/*.test.{ts,tsx}'],
+      coverage: {
+        // Tetap cetak laporan coverage meski ada test gagal (mis. bukti bug
+        // progresif pada rsvp.test.tsx), agar gate coverage tidak buta saat suite merah.
+        reportOnFailure: true
+      }
     },
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, './src')
+        '@': path.resolve(import.meta.dirname, './src')
       }
     },
     define: {

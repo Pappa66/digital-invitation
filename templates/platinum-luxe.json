@@ -28,9 +28,9 @@
       "props": {
         "groom": "Gerald Marchel",
         "bride": "Vanessa Putri",
-        "date": "12.06.2027",
+        "date": "Sabtu, 12 Juni 2027",
         "place": "The Westin, Surabaya",
-        "caption": "Save The Date",
+        "caption": "Undangan Pernikahan",
         "bg_image": "",
         "show_ornament": false,
         "variant": "center"
@@ -43,13 +43,13 @@
         "introduction": "Assalamu'alaikum Warahmatullahi Wabarakatuh",
         "bismillah": "Bismillahirrahmanirrahim",
         "groom": "Gerald Marchel, S.T.",
-        "groom_parents": "Son of Mr. Johanes Widodo & Mrs. Sisca",
+        "groom_parents": "Putra pertama dari Bpk. Johanes Widodo & Ibu Sisca",
         "bride": "Vanessa Putri, S.E.",
-        "bride_parents": "Daughter of Mr. Tommy Limanto & Mrs. Helen",
+        "bride_parents": "Putri pertama dari Bpk. Tommy Limanto & Ibu Helen",
         "variant": "side",
         "photo_shape": "circle",
-        "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
-        "bride_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80"
+        "groom_photo": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&q=80",
+        "bride_photo": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600&q=80"
       }
     },
     {
@@ -68,7 +68,7 @@
       "type": "Countdown",
       "props": {
         "target_date": "2027-06-12T17:00:00+07:00",
-        "title": "12.06.2027",
+        "title": "Sabtu, 12 Juni 2027",
         "variant": "cards"
       }
     },
@@ -76,12 +76,12 @@
       "id": "b-eventdetail-6zvnd",
       "type": "EventDetail",
       "props": {
-        "title": "The Wedding",
-        "icon": "rings",
-        "date": "Saturday, 12 June 2027",
+        "title": "Resepsi",
+        "icon": "glass",
+        "date": "Sabtu, 12 Juni 2027",
         "time": "17.00 - 21.00 WIB",
         "location": "Westin Grand Ballroom",
-        "address": "Jl. Embong Malang, Surabaya",
+        "address": "Jl. Embong Malang No. 85, Genteng, Surabaya",
         "maps_url": "https://maps.google.com/?q=Westin%20Grand%20Ballroom",
         "variant": "band"
       }
@@ -90,12 +90,12 @@
       "id": "b-eventdetail-70fcp",
       "type": "EventDetail",
       "props": {
-        "title": "Resepsi",
-        "icon": "glass",
-        "date": "12.06.2027",
+        "title": "Akad Nikah",
+        "icon": "rings",
+        "date": "Sabtu, 12 Juni 2027",
         "time": "11.00 - 14.00 WIB",
-        "location": "The Westin, Surabaya",
-        "address": "Alamat venue akan menyusul",
+        "location": "The Westin Chapel",
+        "address": "Jl. Embong Malang No. 85, Genteng, Surabaya",
         "maps_url": "https://maps.google.com/?q=The%20Westin%2C%20Surabaya",
         "variant": "card"
       }
@@ -135,10 +135,10 @@
       "type": "RSVP",
       "props": {
         "title": "Konfirmasi Kehadiran",
-        "note": "Kindly RSVP before 28 May 2027",
+        "note": "Mohon konfirmasi kehadiran sebelum 28 Mei 2027",
         "deadline": "2027-05-28",
-        "button_text": "Kindly RSVP",
-        "success_message": "Thank you! We look forward to seeing you.",
+        "button_text": "Kirim Konfirmasi",
+        "success_message": "Terima kasih, konfirmasi Anda sudah kami terima.",
         "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
         "bank_name": "BNI",
         "account_number": "880002839493",
@@ -149,8 +149,8 @@
       "id": "b-thanks-75w4v",
       "type": "Thanks",
       "props": {
-        "title": "A Thank You",
-        "message": "Your presence adds a shining touch to our celebration. Thank you.",
+        "title": "Terima Kasih",
+        "message": "Kehadiran Bapak/Ibu/Saudara/i menjadi sentuhan paling berkilau dalam perayaan kami. Terima kasih atas doa restunya.",
         "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Gerald & Vanessa"
       }

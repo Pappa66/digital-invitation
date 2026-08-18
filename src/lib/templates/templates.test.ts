@@ -1,6 +1,7 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { TemplateMeta, CanvasData } from '@/lib/types';
 import { TEMPLATE_LIST, getTemplate, emptyCanvas } from '@/lib/templates';
+import { validateCanvasData } from '@/lib/validations';
 
 const TEMPLATE_IDS = TEMPLATE_LIST.map((t) => t.id);
 const VALID_TYPES = ['Hero', 'Couple', 'Countdown', 'EventDetail', 'Story', 'Gallery', 'RSVP', 'Envelope', 'Maps', 'Thanks', 'Divider', 'GiftList', 'Quote'];
@@ -100,5 +101,44 @@ describe('emptyCanvas', () => {
     expect(c.blocks).toEqual([]);
     expect(c.theme.primary).toBeTruthy();
     expect(c.settings.guest_book_enabled).toBe(false);
+  });
+});
+
+describe('template validity — AC F: seluruh template lulus validateCanvasData', () => {
+  let errorSpy: ReturnType<typeof vi.spyOn>;
+  beforeEach(() => {
+    // validateCanvasData mencetak ringkasan error ke console.error saat GAGAL
+    // (hanya jalur gagal; spy menghindari noise dan menegaskan kontrol).
+    errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+  });
+  afterEach(() => {
+    errorSpy.mockRestore();
+  });
+
+  it('setiap template di templates/index.json LULUS validateCanvasData (bukan null)', () => {
+    const failing: string[] = [];
+    for (const id of TEMPLATE_IDS) {
+      const raw = loadTemplateRaw(id);
+      if (validateCanvasData(raw) === null) failing.push(id);
+    }
+    expect(failing, `template gagal validasi struktur: ${failing.join(', ')}`).toEqual([]);
+    // Bukti tes sungguh menguji SEMUA template terdaftar.
+    expect(failing.length).toBe(0);
+  });
+
+  it('getTemplate(id) (menuangkan theme.frame) juga lulus validateCanvasData untuk semua template', () => {
+    const failing: string[] = [];
+    for (const id of TEMPLATE_IDS) {
+      const tpl = getTemplate(id);
+      expect(tpl, `getTemplate(${id}) tidak boleh null`).not.toBeNull();
+      if (tpl && validateCanvasData(tpl) === null) failing.push(id);
+    }
+    expect(failing, `template (dengan frame) gagal validasi: ${failing.join(', ')}`).toEqual([]);
+  });
+
+  it('keystone: data korup tetap ditolak oleh gate (tidak dilonggarkan)', () => {
+    const broken = loadTemplateRaw('elegant-gold') as unknown as Record<string, unknown>;
+    (broken as { blocks: unknown }).blocks = 'bukan-array';
+    expect(validateCanvasData(broken)).toBeNull();
   });
 });

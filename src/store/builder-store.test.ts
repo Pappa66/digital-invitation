@@ -1,8 +1,10 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { useBuilderStore } from '@/store/builder-store';
+import { useBuilderStore, undoBuilder, redoBuilder, canUndoBuilder, canRedoBuilder } from '@/store/builder-store';
 
 beforeEach(() => {
   useBuilderStore.getState().reset();
+  // Riset history temporal zundo agar state undo/redo tidak bocor antar test.
+  useBuilderStore.temporal.getState().clear();
 });
 
 describe('builder-store', () => {
@@ -116,5 +118,86 @@ describe('builder-store', () => {
     const blocks = useBuilderStore.getState().canvas.blocks;
     expect(blocks).toHaveLength(1);
     expect(blocks[0].id).toBe('b');
+  });
+});
+
+describe('builder-store — undo/redo (zundo temporal)', () => {
+  it('undo membatalkan addBlock dan redo mengulanginya', () => {
+    expect(canUndoBuilder()).toBe(false);
+    const store = useBuilderStore.getState();
+    store.addBlock('Hero');
+
+    expect(canUndoBuilder()).toBe(true);
+    const id = useBuilderStore.getState().canvas.blocks[0].id;
+
+    undoBuilder();
+    expect(useBuilderStore.getState().canvas.blocks).toHaveLength(0);
+    expect(canRedoBuilder()).toBe(true);
+
+    redoBuilder();
+    expect(useBuilderStore.getState().canvas.blocks).toHaveLength(1);
+    expect(useBuilderStore.getState().canvas.blocks[0].id).toBe(id);
+    expect(canUndoBuilder()).toBe(true);
+  });
+
+  it('undo mengembalikan props blok sebelum edit (state primitif)', () => {
+    const store = useBuilderStore.getState();
+    store.addBlock('Hero');
+    const id = useBuilderStore.getState().canvas.blocks[0].id;
+
+    store.setBlockProps(id, { bride: 'Kalya', groom: 'Raka' });
+    expect(useBuilderStore.getState().canvas.blocks[0].props.bride).toBe('Kalya');
+
+    undoBuilder();
+    expect(useBuilderStore.getState().canvas.blocks[0].props.bride).not.toBe('Kalya');
+
+    redoBuilder();
+    expect(useBuilderStore.getState().canvas.blocks[0].props.bride).toBe('Kalya');
+  });
+
+  it('setelah undo lalu aksi baru, cabang redo dibuang (linear history)', () => {
+    const store = useBuilderStore.getState();
+    store.addBlock('Hero');
+    store.addBlock('Couple');
+    const heroId = useBuilderStore.getState().canvas.blocks[0].id;
+
+    undoBuilder(); // buang Couple
+    expect(canRedoBuilder()).toBe(true);
+
+    store.addBlock('Maps'); // aksi baru memotong cabang redo
+    expect(canRedoBuilder()).toBe(false);
+    expect(useBuilderStore.getState().canvas.blocks.map((b) => b.type)).toEqual(['Hero', 'Maps']);
+    expect(useBuilderStore.getState().canvas.blocks.some((b) => b.id === heroId)).toBe(true);
+  });
+
+  it('init() membersihkan history (undo dimulai dari state yang dimuat)', () => {
+    const store = useBuilderStore.getState();
+    store.addBlock('Hero');
+    undoBuilder(); // history terisi
+
+    store.init(
+      {
+        theme: { ...store.canvas.theme },
+        settings: { music_url: '', guest_book_enabled: false },
+        blocks: [{ id: 'loaded', type: 'Hero', props: { bride: 'X' } }]
+      },
+      'proj-new'
+    );
+
+    expect(canUndoBuilder()).toBe(false);
+    expect(canRedoBuilder()).toBe(false);
+    expect(useBuilderStore.getState().canvas.blocks[0].id).toBe('loaded');
+  });
+
+  it('selectBlock tidak mencemari history undo (hanya perubahan canvas)', () => {
+    const store = useBuilderStore.getState();
+    store.addBlock('Hero');
+    const id = useBuilderStore.getState().canvas.blocks[0].id;
+    store.selectBlock(id);
+    store.selectBlock(null);
+
+    expect(canUndoBuilder()).toBe(true);
+    undoBuilder();
+    expect(useBuilderStore.getState().canvas.blocks).toHaveLength(0);
   });
 });

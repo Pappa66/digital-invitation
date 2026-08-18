@@ -125,39 +125,40 @@ export default function ShareBar({ coupleNames, date, theme }: ShareBarProps) {
     <>
       <button
         onClick={openPanel}
-        aria-label="Bagikan undangan"
-        className="fixed bottom-5 right-5 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-primary)] text-white shadow-lg transition-transform hover:scale-105"
+        aria-label={open ? 'Tutup panel bagikan' : 'Bagikan undangan'}
+        aria-expanded={open}
+        className="fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-foreground text-background shadow-card ring-2 ring-gold/60 transition-transform hover:scale-105 active:scale-95"
       >
-        {open ? <X className="h-5 w-5" /> : <Share2 className="h-5 w-5" />}
+        {open ? <X className="h-6 w-6" aria-hidden /> : <Share2 className="h-6 w-6" aria-hidden />}
       </button>
 
       {open && (
-        <div className="print-hidden fixed bottom-20 right-5 z-50 w-64 rounded-2xl border border-current/10 bg-white p-4 text-gray-900 shadow-xl">
+        <div className="print-hidden fixed bottom-20 right-4 z-50 w-72 rounded-3xl border border-border bg-card p-5 text-foreground shadow-dialog">
           <div className="flex items-center justify-between">
             <p className="text-sm font-semibold">Bagikan Undangan</p>
-            <button onClick={() => setOpen(false)} aria-label="Tutup" className="text-gray-400 hover:text-gray-600">
-              <X className="h-4 w-4" />
+            <button onClick={() => setOpen(false)} aria-label="Tutup panel" className="flex h-11 w-11 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
+              <X className="h-4 w-4" aria-hidden />
             </button>
           </div>
           <button
             onClick={share}
-            className="mt-3 flex w-full items-center justify-center gap-2 rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white hover:opacity-90"
+            className="mt-2 flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-foreground px-3 py-2.5 text-sm font-semibold text-background transition-opacity hover:opacity-90"
           >
-            {copied ? <Check className="h-4 w-4" /> : <Share2 className="h-4 w-4" />}
+            {copied ? <Check className="h-4 w-4" aria-hidden /> : <Share2 className="h-4 w-4" aria-hidden />}
             {copied ? 'Tersalin!' : 'Salin / Bagikan'}
           </button>
           <a
             href={`https://wa.me/?text=${encodeURIComponent(`${document.title || 'Undangan Pernikahan'}\n${url}`)}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-green-500 px-3 py-2 text-sm font-medium text-white hover:bg-green-600"
+            className="mt-2 flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-green-100 px-3 py-2.5 text-sm font-semibold text-green-900 transition-colors hover:bg-green-200"
           >
-            <MessageCircle className="h-4 w-4" /> Bagikan via WhatsApp
+            <MessageCircle className="h-4 w-4" aria-hidden /> Bagikan via WhatsApp
           </a>
-          <div className="mt-3 flex items-center gap-3">
-            <QRCode value={url || ' '} size={84} fgColor="#111827" />
-            <div className="text-[11px] leading-relaxed text-gray-500">
-              <QrCode className="mb-1 h-4 w-4 text-gray-400" />
+          <div className="mt-4 flex items-center gap-3 rounded-xl border border-border bg-muted/50 p-3">
+            <QRCode value={url || ' '} size={88} fgColor="#2b2620" bgColor="#ffffff" />
+            <div className="text-[11px] leading-relaxed text-muted-foreground">
+              <QrCode className="mb-1 h-4 w-4" aria-hidden />
               Pindai QR untuk membuka undangan dari perangkat lain.
             </div>
           </div>
@@ -165,19 +166,19 @@ export default function ShareBar({ coupleNames, date, theme }: ShareBarProps) {
             <button
               onClick={downloadStory}
               disabled={storyLoading}
-              className="mt-3 flex w-full items-center justify-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-60"
+              className="mt-3 flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-border bg-card px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted disabled:opacity-60"
             >
-              {storyLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Instagram className="h-4 w-4" />}
+              {storyLoading ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : <Instagram className="h-4 w-4" aria-hidden />}
               {storyLoading ? 'Membuat...' : 'Download Template IG Story'}
             </button>
           )}
           <button
             onClick={() => window.print()}
-            className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+            className="mt-2 flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-border bg-card px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
           >
-            <Printer className="h-4 w-4" /> Cetak / Simpan PDF
+            <Printer className="h-4 w-4" aria-hidden /> Cetak / Simpan PDF
           </button>
-          <p className="mt-2 truncate rounded-md bg-gray-50 px-2 py-1 font-mono text-[10px] text-gray-400">{url}</p>
+          <p className="mt-3 truncate rounded-lg bg-muted px-3 py-2 font-mono text-[11px] text-muted-foreground">{url}</p>
         </div>
       )}
     </>

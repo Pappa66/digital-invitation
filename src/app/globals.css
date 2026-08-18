@@ -2,39 +2,91 @@
 @tailwind components;
 @tailwind utilities;
 
+/* =====================================================================
+ * DESIGN TOKENS — SINGLE SOURCE OF TRUTH
+ * Format: HSL triplet (hue, saturation%, lightness%) → dipakai lewat
+ * `hsl(var(--token))` di tailwind.config.ts. Perubahan warna CUKUP di sini.
+ * Skema: ivory hangat + emas pernikahan + tinta espresso (kontras ≥ 4.5:1
+ * untuk teks; emas diposisikan sebagai aksen/dekorasi — lihat docs/design/tokens.md).
+ * ===================================================================== */
 :root {
-  --gc-primary: #d4af37;
-  --gc-secondary: #8a6d2f;
-  --gc-background: #faf6ef;
-  --gc-text: #4a443c;
+  /* --- Font --- */
   --font-heading: 'Playfair Display', serif;
   --font-body: 'Montserrat', sans-serif;
+  --font-script: 'Great Vibes', cursive;
 
-  --background: 40 33% 98%;
-  --foreground: 33 8% 25%;
+  /* --- Brand ramp: emas (dekoratif/aksi) --- */
+  --gold: 40 50% 57%;          /* #C9A45C emas champagne — border, fill halus */
+  --gold-strong: 37 50% 48%;   /* #B98A3E emas kuat — stop gradien, ikon aksen */
+  --gold-deep: 37 46% 33%;     /* #7C5D2E emas tua — TEKS emas di atas terang (AA 5.7:1) */
+  --gold-ink: 38 43% 26%;      /* #5D4A2A emas tinta — hover/link kuat */
+
+  /* --- Semantik shadcn --- */
+  --background: 38 44% 97%;            /* #FAF7F2 ivory */
+  --foreground: 33 15% 15%;            /* #2B2620 tinta espresso (14:1 di ivory) */
   --card: 0 0% 100%;
-  --card-foreground: 33 8% 25%;
+  --card-foreground: 33 15% 15%;
   --popover: 0 0% 100%;
-  --popover-foreground: 33 8% 25%;
-  --primary: 42 65% 52%;
-  --primary-foreground: 40 33% 98%;
-  --secondary: 40 20% 94%;
-  --secondary-foreground: 33 8% 25%;
-  --muted: 40 20% 94%;
-  --muted-foreground: 35 8% 45%;
-  --accent: 42 65% 94%;
-  --accent-foreground: 42 65% 30%;
-  --destructive: 0 72% 51%;
-  --destructive-foreground: 40 33% 98%;
-  --border: 38 16% 87%;
-  --input: 38 16% 87%;
-  --ring: 42 65% 52%;
-  --radius: 0.5rem;
+  --popover-foreground: 33 15% 15%;
+  --primary: 40 50% 57%;               /* emas brand sbg aksen tombol; teksnya tinta */
+  --primary-foreground: 33 15% 15%;    /* teks tinta di atas emas (6.4:1) */
+  --secondary: 40 41% 91%;             /* #F2ECE0 krem lembut */
+  --secondary-foreground: 36 10% 21%;  /* #3D372E (10:1) */
+  --muted: 39 44% 92%;                 /* #F4EEE3 krem pilin */
+  --muted-foreground: 35 45% 35%;      /* #6B5D4A (6.1:1 di ivory) — WAJIB ≥ 4.5:1 */
+  --accent: 40 60% 92%;                /* #F7EFDF sampanye */
+  --accent-foreground: 38 43% 26%;     /* #5D4A2A (7.3:1) */
+  --destructive: 356 76% 40%;          /* #B42318 (6.2:1 di ivory) */
+  --destructive-foreground: 0 0% 100%;
+  --border: 38 36% 85%;                /* #E7DDCC */
+  --input: 40 33% 82%;                 /* #E0D6C2 — batas field; fokus pakai ring */
+  --ring: 37 46% 33%;                  /* emas tua agar fokus terlihat ≥ 3:1 di krem */
+
+  /* --- Radius (skala 8pt) --- */
+  --radius: 0.5rem;        /* komponen shadcn (sm/md/lg mengikuti) */
+  --radius-md: 0.75rem;    /* kartu */
+  --radius-lg: 1rem;       /* panel */
+  --radius-xl: 1.25rem;    /* hero/dialog */
+
+  /* --- Bayangan --- */
+  --shadow-soft: 0 1px 2px rgba(43, 38, 32, 0.04), 0 4px 16px -4px rgba(43, 38, 32, 0.08);
+  --shadow-card: 0 1px 2px rgba(43, 38, 32, 0.05), 0 10px 28px -8px rgba(43, 38, 32, 0.12);
+  --shadow-gold: 0 10px 28px -8px rgba(185, 138, 62, 0.35);
+  --shadow-dialog: 0 24px 64px -12px rgba(43, 38, 32, 0.28);
+
+  /* --- Tema default guest (fallback bila JSON template kosong) --- */
+  --gc-primary: var(--gold);
+  --gc-secondary: var(--gold-deep);
+  --gc-background: #faf6ef;
+  --gc-text: #4a443c;
 }
 
 html,
 body {
   height: 100%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+  ::selection {
+    background-color: hsl(var(--gold) / 0.35);
+    color: hsl(var(--foreground));
+  }
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 @layer utilities {

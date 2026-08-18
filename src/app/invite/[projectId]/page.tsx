@@ -29,7 +29,7 @@ export default async function InvitePage({ params, searchParams }: PageProps) {
     });
     const row = Array.isArray(invite) ? invite[0] : null;
     if (row) {
-      return <InviteManager projectId={projectId} slug={row.slug} title={row.title} />;
+      return <InviteManager projectId={projectId} slug={row.slug} title={row.title} accessToken={token} />;
     }
   }
 

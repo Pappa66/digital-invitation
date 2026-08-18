@@ -36,7 +36,7 @@ function makeDemoProject(id: string, title: string): Project {
 
 type TabType = 'invitations' | 'clients' | 'finance';
 
-export default function DashboardClient({ projects, isDemo = false, userName = null }: DashboardClientProps) {
+export default function DashboardClient({ projects, isDemo = false }: DashboardClientProps) {
   const [items, setItems] = useState<Project[]>(projects);
   const [modalOpen, setModalOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
@@ -107,7 +107,7 @@ export default function DashboardClient({ projects, isDemo = false, userName = n
 
   function handleDuplicated(id: string, title: string) {
     setItems((prev) => [makeDemoProject(id, title), ...prev]);
-    showToast(`Duplicating project... "${title}"`);
+    showToast(`Undangan "${title}" disalin.`);
   }
 
   function handleDeleted(id: string) {
@@ -161,7 +161,7 @@ export default function DashboardClient({ projects, isDemo = false, userName = n
                 <HelpCircle className="h-4 w-4" /> Panduan
               </Button>
               <Button onClick={() => setModalOpen(true)}>
-                <Plus className="h-4 w-4" /> Create New
+                <Plus className="h-4 w-4" /> Buat Undangan
               </Button>
             </div>
           </div>
@@ -195,8 +195,8 @@ export default function DashboardClient({ projects, isDemo = false, userName = n
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="">Semua Status</SelectItem>
-                    <SelectItem value="published">Published</SelectItem>
-                    <SelectItem value="draft">Draft</SelectItem>
+                    <SelectItem value="published">Terbit</SelectItem>
+                    <SelectItem value="draft">Draf</SelectItem>
                   </SelectContent>
                 </Select>
 
@@ -315,7 +315,7 @@ export default function DashboardClient({ projects, isDemo = false, userName = n
         steps={[
           {
             title: '1. Buat undangan baru',
-            body: 'Klik "+ Create New", pilih template, atau mulai dari kosong. Undangan langsung terbuka di Builder.'
+            body: 'Klik "Buat Undangan", pilih template, atau mulai dari kosong. Undangan langsung terbuka di Builder.'
           },
           {
             title: '2. Edit desain',
@@ -341,7 +341,7 @@ export default function DashboardClient({ projects, isDemo = false, userName = n
       />
 
       {toast && (
-        <div className="fixed right-4 top-4 z-50 rounded-md bg-gray-900 px-4 py-2 text-sm text-white shadow-lg">
+        <div role="status" aria-live="polite" className="fixed right-4 top-4 z-50 rounded-md bg-gray-900 px-4 py-2 text-sm text-white shadow-lg">
           {toast}
         </div>
       )}

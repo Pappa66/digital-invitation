@@ -250,6 +250,8 @@ export interface Rsvp {
   meal_choice?: string | null;
   /** Detail pilihan menu per kursi/kolom jika memakai menu multi-bagian. */
   menu_options?: { label: string; value: string }[] | null;
+  /** Token personal untuk QR absen (check-in hari-H tanpa login). */
+  checkin_token?: string | null;
 }
 
 /** Check-in kehadiran hari-H dari QR absensi. */
@@ -270,4 +272,28 @@ export interface TemplateMeta {
   secondary: string;
   show_as_demo?: boolean;
   demo_order?: number;
+}
+
+/** Status pengerjaan client (management dashboard). */
+export type ClientStatus = 'aktual' | 'proses' | 'selesai';
+
+/** Data client persisten (tabel `clients`, milik satu owner). */
+export interface Client {
+  id: string;
+  user_id: string;
+  name: string;
+  email: string | null;
+  phone: string | null;
+  project_id: string | null;
+  design_name: string | null;
+  status: ClientStatus;
+  created_at: string;
+  updated_at: string;
+}
+
+/** Client lengkap dengan info project terkait (untuk tampilan dashboard). */
+export interface ClientWithProject extends Client {
+  project_title: string;
+  project_slug: string;
+  invitation_link: string;
 }

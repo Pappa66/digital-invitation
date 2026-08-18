@@ -30,7 +30,7 @@
         "bride": "Ariana Basuki",
         "date": "16.10.2027",
         "place": "The Mulia, Jakarta",
-        "caption": "Save The Date",
+        "caption": "Undangan Pernikahan",
         "bg_image": "",
         "show_ornament": false,
         "variant": "center"
@@ -43,13 +43,13 @@
         "introduction": "Assalamu'alaikum Warahmatullahi Wabarakatuh",
         "bismillah": "Bismillahirrahmanirrahim",
         "groom": "Nathan Kristanto, S.T.",
-        "groom_parents": "Son of Mr. Hendra Basuki & Mrs. Ratna",
+        "groom_parents": "Putra pertama dari Bpk. Hendra Basuki & Ibu Ratna",
         "bride": "Ariana Basuki, S.E.",
-        "bride_parents": "Daughter of Mr. Felix Pratama & Mrs. Sanny",
+        "bride_parents": "Putri pertama dari Bpk. Felix Pratama & Ibu Sanny",
         "variant": "side",
         "photo_shape": "circle",
-        "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
-        "bride_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80"
+        "groom_photo": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&q=80",
+        "bride_photo": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80"
       }
     },
     {
@@ -76,9 +76,9 @@
       "id": "b-eventdetail-9888b",
       "type": "EventDetail",
       "props": {
-        "title": "The Wedding",
-        "icon": "rings",
-        "date": "Saturday, 16 October 2027",
+        "title": "Resepsi",
+        "icon": "glass",
+        "date": "Sabtu, 16 Oktober 2027",
         "time": "17.00 - 21.00 WIB",
         "location": "The Mulia Ballroom",
         "address": "Jl. Asia Afrika, Senayan, Jakarta",
@@ -90,12 +90,12 @@
       "id": "b-eventdetail-9985x",
       "type": "EventDetail",
       "props": {
-        "title": "Resepsi",
-        "icon": "glass",
-        "date": "16.10.2027",
+        "title": "Akad Nikah",
+        "icon": "rings",
+        "date": "Sabtu, 16 Oktober 2027",
         "time": "11.00 - 14.00 WIB",
-        "location": "The Mulia, Jakarta",
-        "address": "Alamat venue akan menyusul",
+        "location": "The Mulia Chapel",
+        "address": "Jl. Asia Afrika, Senayan, Jakarta",
         "maps_url": "https://maps.google.com/?q=The%20Mulia%2C%20Jakarta",
         "variant": "card"
       }
@@ -135,10 +135,10 @@
       "type": "RSVP",
       "props": {
         "title": "Konfirmasi Kehadiran",
-        "note": "Kindly RSVP before 2 October 2027",
+        "note": "Mohon konfirmasi kehadiran sebelum 2 Oktober 2027",
         "deadline": "2027-10-02",
-        "button_text": "Kindly RSVP",
-        "success_message": "Thank you! We look forward to seeing you.",
+        "button_text": "Kirim Konfirmasi",
+        "success_message": "Terima kasih, konfirmasi Anda sudah kami terima.",
         "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
         "bank_name": "Mandiri",
         "account_number": "880025819053",
@@ -149,8 +149,8 @@
       "id": "b-thanks-9ehtg",
       "type": "Thanks",
       "props": {
-        "title": "In Gratitude",
-        "message": "Thank you for treasuring this day with us. Your presence is our pearl.",
+        "title": "Terima Kasih",
+        "message": "Terima kasih telah menyimpan hari ini bersama kami. Kehadiran Anda adalah mutiara paling berharga.",
         "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Nathan & Ariana"
       }

@@ -89,27 +89,27 @@ export default function OrderDialog({ templateName, basePrice = 0, discountPerce
   }
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-[#2b2620]/60 p-4 backdrop-blur-sm" role="dialog" aria-modal="true">
-      <div className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-2xl border border-[#e7ddcc] bg-[#faf7f2] p-6 shadow-2xl shadow-[#2b2620]/20">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-foreground/60 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-label="Form pemesanan undangan">
+      <div className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-3xl border border-border bg-background p-6 shadow-dialog">
         <div className="flex items-center justify-between">
-          <h2 className="font-heading text-lg font-semibold text-[#2b2620]">Pesan Undangan Digital</h2>
-          <button onClick={close} className="text-[#8a7a66] transition-colors hover:text-[#2b2620]" aria-label="Tutup">
-            <X className="h-5 w-5" />
+          <h2 className="font-heading text-lg font-semibold text-foreground">Pesan Undangan Digital</h2>
+          <button onClick={close} className="flex h-11 w-11 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground" aria-label="Tutup dialog">
+            <X className="h-5 w-5" aria-hidden />
           </button>
         </div>
 
-        {templateName && <p className="mt-1 text-xs font-medium text-[#b98a3e]">Template: {templateName}</p>}
-        <div className="my-3 h-px w-full bg-gradient-to-r from-transparent via-[#d9c795] to-transparent" />
-        <p className="text-xs leading-relaxed text-[#8a7a66]">
+        {templateName && <p className="mt-1 text-xs font-semibold text-gold-deep">Template: {templateName}</p>}
+        <div className="my-3 h-px w-full bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
+        <p className="text-xs leading-relaxed text-muted-foreground">
           Isi sederhana saja — tim kami akan menghubungi lewat WhatsApp untuk konfirmasi detail &amp; pemesanan.
         </p>
 
         {sent && !waNumber ? (
-          <div className="mt-5 rounded-xl border border-[#d9c795] bg-[#f3ecd9] p-4">
-            <p className="flex items-center gap-2 text-sm font-medium text-[#8a6d2f]">
-              <Check className="h-4 w-4" /> Pesan siap dikirim
+          <div className="mt-5 rounded-2xl border border-gold/60 bg-gold/15 p-4">
+            <p className="flex items-center gap-2 text-sm font-semibold text-gold-deep">
+              <Check className="h-4 w-4" aria-hidden /> Pesan siap dikirim
             </p>
-            <p className="mt-1 text-xs leading-relaxed text-[#8a7a66]">
+            <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
               Nomor WhatsApp bisnis belum dikonfigurasi di dashboard, jadi pesanan disalin ke papan klip — silakan kirim ke WhatsApp kami secara manual.
             </p>
             <button
@@ -120,16 +120,16 @@ export default function OrderDialog({ templateName, basePrice = 0, discountPerce
                 );
                 setCopied(true);
               }}
-              className="mt-3 flex items-center gap-2 rounded-md bg-[#b98a3e] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#a87c34]"
+              className="mt-3 flex min-h-11 items-center gap-2 rounded-lg bg-gold-strong px-4 py-2 text-xs font-semibold text-foreground transition-colors hover:bg-gold-deep hover:text-background"
             >
-              {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+              {copied ? <Check className="h-3.5 w-3.5" aria-hidden /> : <Copy className="h-3.5 w-3.5" aria-hidden />}
               {copied ? 'Tersalin' : 'Salin pesan'}
             </button>
           </div>
         ) : (
-          <form onSubmit={submit} className="mt-5 space-y-3">
+          <form onSubmit={submit} className="mt-5 space-y-4">
             <div>
-              <label htmlFor="order-name" className="text-xs font-medium text-[#4a443c]">Nama Anda</label>
+              <label htmlFor="order-name" className="text-xs font-semibold text-foreground">Nama Anda</label>
               <input
                 id="order-name"
                 value={name}
@@ -137,11 +137,11 @@ export default function OrderDialog({ templateName, basePrice = 0, discountPerce
                 required
                 minLength={2}
                 placeholder="cth: Sena Putri"
-                className="mt-1 w-full rounded-md border border-[#e0d6c2] bg-white px-3 py-2 text-sm text-[#2b2620] outline-none placeholder:text-[#b3a69a] focus:border-[#b98a3e] focus:ring-2 focus:ring-[#b98a3e]/30"
+                className="mt-1.5 w-full rounded-lg border border-input bg-card px-3 py-2.5 text-sm text-foreground outline-none transition-shadow placeholder:text-muted-foreground focus:border-gold-strong focus:ring-2 focus:ring-ring/30"
               />
             </div>
             <div>
-              <label htmlFor="order-phone" className="text-xs font-medium text-[#4a443c]">No. WhatsApp</label>
+              <label htmlFor="order-phone" className="text-xs font-semibold text-foreground">No. WhatsApp</label>
               <input
                 id="order-phone"
                 value={phone}
@@ -149,81 +149,82 @@ export default function OrderDialog({ templateName, basePrice = 0, discountPerce
                 required
                 inputMode="tel"
                 placeholder="cth: 081234567890"
-                className="mt-1 w-full rounded-md border border-[#e0d6c2] bg-white px-3 py-2 text-sm text-[#2b2620] outline-none placeholder:text-[#b3a69a] focus:border-[#b98a3e] focus:ring-2 focus:ring-[#b98a3e]/30"
+                className="mt-1.5 w-full rounded-lg border border-input bg-card px-3 py-2.5 text-sm text-foreground outline-none transition-shadow placeholder:text-muted-foreground focus:border-gold-strong focus:ring-2 focus:ring-ring/30"
               />
-              {phone && !phoneValid && <p className="mt-1 text-xs text-red-500">Nomor WhatsApp tidak valid.</p>}
+              {phone && !phoneValid && <p className="mt-1.5 text-xs text-destructive">Nomor WhatsApp tidak valid.</p>}
             </div>
             <div>
-              <label htmlFor="order-email" className="text-xs font-medium text-[#4a443c]">Email (opsional)</label>
+              <label htmlFor="order-email" className="text-xs font-semibold text-foreground">Email (opsional)</label>
               <input
                 id="order-email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="cth: email@contoh.com"
-                className="mt-1 w-full rounded-md border border-[#e0d6c2] bg-white px-3 py-2 text-sm text-[#2b2620] outline-none placeholder:text-[#b3a69a] focus:border-[#b98a3e] focus:ring-2 focus:ring-[#b98a3e]/30"
+                className="mt-1.5 w-full rounded-lg border border-input bg-card px-3 py-2.5 text-sm text-foreground outline-none transition-shadow placeholder:text-muted-foreground focus:border-gold-strong focus:ring-2 focus:ring-ring/30"
               />
             </div>
 
             {basePrice > 0 && (
-              <div className="rounded-lg border border-[#e0d6c2] bg-white p-3">
+              <div className="rounded-xl border border-border bg-card p-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-[#8a7a66]">Harga</span>
+                  <span className="text-sm text-muted-foreground">Harga</span>
                   {hasDiscount ? (
                     <div className="flex items-baseline gap-2">
-                      <span className="text-sm text-[#8a7a66] line-through">{formatRupiah(basePrice)}</span>
-                      <span className="text-lg font-semibold text-[#2b2620]">{formatRupiah(finalPrice)}</span>
+                      <span className="text-sm text-muted-foreground line-through">{formatRupiah(basePrice)}</span>
+                      <span className="text-lg font-semibold text-foreground">{formatRupiah(finalPrice)}</span>
                     </div>
                   ) : (
-                    <span className="text-lg font-semibold text-[#2b2620]">{formatRupiah(basePrice)}</span>
+                    <span className="text-lg font-semibold text-foreground">{formatRupiah(basePrice)}</span>
                   )}
                 </div>
                 {hasDiscount && (
-                  <p className="mt-1 text-xs text-[#c9a45c]">Diskon {discountPercent}% dengan kode {promoCode}</p>
+                  <p className="mt-1 text-xs font-medium text-gold-deep">Diskon {discountPercent}% dengan kode {promoCode}</p>
                 )}
               </div>
             )}
 
             {basePrice > 0 && promoCode && (
               <div>
-                <label htmlFor="order-promo" className="text-xs font-medium text-[#4a443c]">Kode Promo</label>
-                <div className="mt-1 flex gap-2">
+                <label htmlFor="order-promo" className="text-xs font-semibold text-foreground">Kode Promo</label>
+                <div className="mt-1.5 flex gap-2">
                   <input
                     id="order-promo"
                     value={promoInput}
                     onChange={(e) => { setPromoInput(e.target.value); setPromoError(''); setPromoApplied(false); }}
                     placeholder="Masukkan kode promo"
-                    className="flex-1 rounded-md border border-[#e0d6c2] bg-white px-3 py-2 text-sm text-[#2b2620] outline-none placeholder:text-[#b3a69a] focus:border-[#b98a3e] focus:ring-2 focus:ring-[#b98a3e]/30"
+                    className="flex-1 rounded-lg border border-input bg-card px-3 py-2.5 text-sm text-foreground outline-none transition-shadow placeholder:text-muted-foreground focus:border-gold-strong focus:ring-2 focus:ring-ring/30"
                   />
                   <button
                     type="button"
                     onClick={applyPromo}
-                    className="rounded-md border border-[#c9a45c] bg-[#c9a45c]/10 px-3 py-2 text-xs font-medium text-[#c9a45c] hover:bg-[#c9a45c]/20"
+                    aria-label="Terapkan kode promo"
+                    className="flex min-h-11 w-12 items-center justify-center rounded-lg border border-gold/60 bg-gold/10 text-gold-deep transition-colors hover:bg-gold/20"
                   >
-                    <Tag className="h-4 w-4" />
+                    <Tag className="h-4 w-4" aria-hidden />
                   </button>
                 </div>
-                {promoError && <p className="mt-1 text-xs text-red-500">{promoError}</p>}
-                {promoApplied && <p className="mt-1 text-xs text-green-600">Kode promo berhasil diterapkan!</p>}
+                {promoError && <p className="mt-1.5 text-xs text-destructive">{promoError}</p>}
+                {promoApplied && <p className="mt-1.5 text-xs font-medium text-green-700">Kode promo berhasil diterapkan!</p>}
               </div>
             )}
 
             <div>
-              <label htmlFor="order-note" className="text-xs font-medium text-[#4a443c]">Catatan (opsional)</label>
+              <label htmlFor="order-note" className="text-xs font-semibold text-foreground">Catatan (opsional)</label>
               <textarea
                 id="order-note"
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
                 rows={2}
                 placeholder="cth: butuh untuk akad & resepsi tanggal 20 Desember"
-                className="mt-1 w-full resize-none rounded-md border border-[#e0d6c2] bg-white px-3 py-2 text-sm text-[#2b2620] outline-none placeholder:text-[#b3a69a] focus:border-[#b98a3e] focus:ring-2 focus:ring-[#b98a3e]/30"
+                className="mt-1.5 w-full resize-none rounded-lg border border-input bg-card px-3 py-2.5 text-sm text-foreground outline-none transition-shadow placeholder:text-muted-foreground focus:border-gold-strong focus:ring-2 focus:ring-ring/30"
               />
             </div>
             <button
               type="submit"
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-5 py-3 text-sm font-semibold text-white shadow-sm transition-transform hover:scale-[1.01]"
+              className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-gold to-gold-strong px-5 py-3 text-sm font-semibold text-foreground shadow-gold transition-transform hover:scale-[1.01] active:scale-[0.99]"
             >
-              <MessageCircle className="h-4 w-4" /> {basePrice > 0 ? `Pesan - ${formatRupiah(finalPrice)}` : 'Kirim Pesanan'}
+              <MessageCircle className="h-4 w-4" aria-hidden /> {basePrice > 0 ? `Pesan - ${formatRupiah(finalPrice)}` : 'Kirim Pesanan'}
             </button>
           </form>
         )}

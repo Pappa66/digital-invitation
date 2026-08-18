@@ -32,7 +32,7 @@ export default function ProjectCard({ project, onDuplicated, onDeleted }: Projec
     const res = await clientDuplicateProject(project.id);
     setBusy(false);
     setConfirm(null);
-    if (res.id) onDuplicated(res.id, `Copy of ${project.title}`);
+    if (res.id) onDuplicated(res.id, `Salinan dari ${project.title}`);
   }
 
   async function handleDelete() {
@@ -64,7 +64,7 @@ export default function ProjectCard({ project, onDuplicated, onDeleted }: Projec
         )}
         <span className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
           <span className="rounded-md bg-white px-4 py-2 text-sm font-medium text-gray-900">
-            <Pencil className="mr-1 inline h-4 w-4" /> Edit Design
+            <Pencil className="mr-1 inline h-4 w-4" /> Edit Desain
           </span>
         </span>
       </a>

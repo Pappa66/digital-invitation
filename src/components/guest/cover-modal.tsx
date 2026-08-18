@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
-import { MailOpen } from 'lucide-react';
+import { MailOpen, X } from 'lucide-react';
 import { OrnamentArt, type OrnamentKey } from '@/components/builder/ornaments';
 import { FloralCorner, FloatingPetals, DecorativeFrame } from './cover-florals';
 
@@ -81,7 +81,22 @@ export default function CoverModal({
           exit={{ opacity: 0, transition: { duration: 0.6 } }}
           className="fixed inset-0 z-50 overflow-hidden"
           style={{ background, color: text }}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Sampul undangan"
         >
+          {/* Tombol lewati — cara cepat menutup sampul (aksi sama dengan tombol utama). */}
+          <motion.button
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.9 }}
+            onClick={openInvitation}
+            aria-label="Lewati sampul dan buka undangan"
+            className="absolute right-4 top-4 z-50 flex h-11 w-11 items-center justify-center rounded-full bg-black/25 text-white shadow-soft backdrop-blur transition-colors hover:bg-black/40"
+          >
+            <X className="h-5 w-5" aria-hidden />
+          </motion.button>
+
           {(coverBgImage || bgImage) && (
             <div className="absolute inset-0">
               <Image src={coverBgImage || bgImage || ''} alt="" fill priority sizes="100vw" className="object-cover" />
@@ -145,10 +160,10 @@ export default function CoverModal({
               <div className="mb-8 text-xs sm:text-sm uppercase tracking-[0.25em] opacity-90">{date}</div>
               <button
                 onClick={openInvitation}
-                className="inline-flex items-center gap-2 rounded-full px-8 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-primary)] transition-transform hover:scale-[1.04] active:scale-95"
+                className="inline-flex min-h-12 items-center gap-2 rounded-full border border-current/20 px-8 py-3 text-xs font-semibold uppercase tracking-[0.2em] shadow-soft transition-transform hover:scale-[1.04] active:scale-95"
                 style={{ background, color: primary }}
               >
-                <MailOpen className="h-4 w-4" /> {coverButtonText || 'Buka Undangan'}
+                <MailOpen className="h-4 w-4" aria-hidden /> {coverButtonText || 'Buka Undangan'}
               </button>
             </motion.div>
           </div>

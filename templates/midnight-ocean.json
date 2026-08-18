@@ -28,9 +28,9 @@
       "props": {
         "groom": "Bryan Hadinata",
         "bride": "Stella Wijaya",
-        "date": "25.04.2027",
+        "date": "Minggu, 25 April 2027",
         "place": "The Ritz-Carlton, Jakarta",
-        "caption": "Save The Date",
+        "caption": "The Wedding Of",
         "bg_image": "",
         "show_ornament": false,
         "variant": "left"
@@ -43,13 +43,13 @@
         "introduction": "Namo Buddhaya,",
         "bismillah": "",
         "groom": "Bryan Hadinata, S.T.",
-        "groom_parents": "Son of Mr. Anton Wijaya & Mrs. Lina",
+        "groom_parents": "Putra pertama dari Bpk. Anton Wijaya & Ibu Lina",
         "bride": "Stella Wijaya, S.E.",
-        "bride_parents": "Daughter of Mr. Kevin Kusuma & Mrs. Yuli",
+        "bride_parents": "Putri kedua dari Bpk. Kevin Kusuma & Ibu Yuli",
         "variant": "vertical",
         "photo_shape": "circle",
         "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
-        "bride_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80"
+        "bride_photo": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80"
       }
     },
     {
@@ -68,7 +68,7 @@
       "type": "Countdown",
       "props": {
         "target_date": "2027-04-25T18:00:00+07:00",
-        "title": "Counting Down To Forever",
+        "title": "Menuju Hari Bahagia",
         "variant": "circles"
       }
     },
@@ -76,12 +76,12 @@
       "id": "b-eventdetail-63ned",
       "type": "EventDetail",
       "props": {
-        "title": "The Celebration",
+        "title": "Pemberkatan",
         "icon": "rings",
-        "date": "Sunday, 25 April 2027",
-        "time": "18.00 - 22.00 WIB",
+        "date": "Minggu, 25 April 2027",
+        "time": "18.00 - 20.00 WIB",
         "location": "Ritz-Carlton Grand Ballroom",
-        "address": "Jl. DR. Ide Anak Agung Gde Agung, Jakarta",
+        "address": "Jl. DR. Ide Anak Agung Gde Agung, Mega Kuningan, Jakarta",
         "maps_url": "https://maps.google.com/?q=Ritz-Carlton%20Grand%20Ballroom",
         "variant": "card"
       }
@@ -92,10 +92,10 @@
       "props": {
         "title": "Resepsi",
         "icon": "glass",
-        "date": "25.04.2027",
-        "time": "11.00 - 14.00 WIB",
-        "location": "The Ritz-Carlton, Jakarta",
-        "address": "Alamat venue akan menyusul",
+        "date": "Minggu, 25 April 2027",
+        "time": "20.00 - 22.00 WIB",
+        "location": "The Ritz-Carlton Grand Ballroom",
+        "address": "Jl. DR. Ide Anak Agung Gde Agung, Mega Kuningan, Jakarta",
         "maps_url": "https://maps.google.com/?q=The%20Ritz-Carlton%2C%20Jakarta",
         "variant": "band"
       }
@@ -136,10 +136,10 @@
       "type": "RSVP",
       "props": {
         "title": "Konfirmasi Kehadiran",
-        "note": "Kindly RSVP before 10 April 2027",
+        "note": "Mohon konfirmasi kehadiran sebelum 10 April 2027",
         "deadline": "2027-04-10",
-        "button_text": "Kindly RSVP",
-        "success_message": "Thank you! We look forward to seeing you.",
+        "button_text": "Kirim Konfirmasi",
+        "success_message": "Terima kasih, konfirmasi Anda sudah kami terima.",
         "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
         "bank_name": "BCA",
         "account_number": "880013987911",
@@ -150,8 +150,8 @@
       "id": "b-thanks-694ir",
       "type": "Thanks",
       "props": {
-        "title": "With Gratitude",
-        "message": "Thank you for sailing into our lives and celebrating this voyage with us.",
+        "title": "Terima Kasih",
+        "message": "Terima kasih telah melayarkan doa restu kepada kami. Kehadiran Bapak/Ibu/Saudara/i melengkapi perjalanan cinta kami.",
         "closing": "Semoga semua makhluk berbahagia.",
         "names": "Bryan & Stella"
       }

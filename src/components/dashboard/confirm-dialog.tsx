@@ -1,5 +1,7 @@
 'use client';
 
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+
 interface ConfirmDialogProps {
   open: boolean;
   title: string;
@@ -21,14 +23,11 @@ export default function ConfirmDialog({
   onConfirm,
   onCancel
 }: ConfirmDialogProps) {
-  if (!open) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/40" onClick={busy ? undefined : onCancel} />
-      <div className="relative w-full max-w-sm rounded-xl bg-white p-5 shadow-2xl">
-        <h3 className="text-base font-semibold text-gray-900">{title}</h3>
-        <p className="mt-2 text-sm leading-relaxed text-gray-600">{message}</p>
+    <Dialog open={open} onOpenChange={(o) => { if (!o && !busy) onCancel(); }}>
+      <DialogContent className="w-full max-w-sm gap-2 p-5 sm:rounded-xl">
+        <DialogTitle className="text-base font-semibold text-gray-900">{title}</DialogTitle>
+        <DialogDescription className="mt-2 text-sm leading-relaxed text-gray-600">{message}</DialogDescription>
         <div className="mt-5 flex justify-end gap-2">
           <button
             onClick={onCancel}
@@ -47,7 +46,7 @@ export default function ConfirmDialog({
             {busy ? 'Memproses...' : confirmLabel}
           </button>
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

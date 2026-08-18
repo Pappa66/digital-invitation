@@ -1,6 +1,7 @@
 import { createServerClient, type CookieMethodsServer } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import type { Database } from '@/lib/types/supabase';
+import { isAllowedEmail } from '@/lib/auth-allowed';
 
 export async function createServerSupabase() {
   const cookieStore = await cookies();
@@ -32,4 +33,16 @@ export async function requireUser() {
   const { data, error } = await supabase.auth.getUser();
   if (error || !data.user) return null;
   return data.user;
+}
+
+/**
+ * Wajib login + email operator (dikonfirmasi dua lapis: app-level di sini,
+ * dan is_internal() di RLS database). Dipakai action yang mengubah data
+ * internal (orders/settings/finance/clients).
+ */
+export async function requireInternalUser() {
+  const user = await requireUser();
+  if (!user) return null;
+  if (!isAllowedEmail(user.email)) return null;
+  return user;
 }

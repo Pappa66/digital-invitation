@@ -49,7 +49,7 @@
         "variant": "side",
         "photo_shape": "frame",
         "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
-        "bride_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80"
+        "bride_photo": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&q=80"
       }
     },
     {
@@ -68,7 +68,7 @@
       "type": "Countdown",
       "props": {
         "target_date": "2027-03-14T16:00:00+08:00",
-        "title": "Hari Berterakota",
+        "title": "Menuju Hari Bahagia",
         "variant": "circles"
       }
     },
@@ -91,7 +91,7 @@
         "ev_desc": [
           "Satria dan Amara pertama kali bertemu di pasar malam Gianyar.",
           "Mereka mulai menjalin hubungan saat menikmati senja Tanah Lot.",
-          "Satria melamar Amara di di bawah langit Campuhan Ridge."
+          "Satria melamar Amara di bawah langit Campuhan Ridge saat senja menyemburat oranye."
         ]
       }
     },
@@ -113,13 +113,13 @@
       "id": "b-eventdetail-5oxpr",
       "type": "EventDetail",
       "props": {
-        "title": "Resepsi",
-        "icon": "glass",
+        "title": "Akad Nikah",
+        "icon": "rings",
         "date": "Minggu, 14 Maret 2027",
-        "time": "11.00 - 14.00 WIB",
-        "location": "The Sun Terrace, Ubud",
-        "address": "Alamat venue akan menyusul",
-        "maps_url": "https://maps.google.com/?q=The%20Sun%20Terrace%2C%20Ubud",
+        "time": "11.00 - 14.00 WITA",
+        "location": "Masjid Agung Ubud",
+        "address": "Jl. Raya Ubud No. 88, Ubud, Gianyar",
+        "maps_url": "https://maps.google.com/?q=Masjid%20Agung%20Ubud",
         "variant": "card"
       }
     },

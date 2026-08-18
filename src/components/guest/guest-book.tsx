@@ -22,13 +22,10 @@ export default function GuestBookWall({ projectId, title }: GuestBookWallProps) 
         setItems(demoListRsvps(projectId));
         return;
       }
+      // RPC aman: hanya name+message+created_at dari project published —
+      // tidak lagi SELECT langsung ke tabel rsvps (melindungi data intim).
       supabase
-        .from('rsvps')
-        .select('name, message, created_at')
-        .eq('project_id', projectId)
-        .not('message', 'is', null)
-        .order('created_at', { ascending: false })
-        .limit(24)
+        .rpc('get_guest_book_messages', { p_project_id: projectId })
         .then(({ data }) => setItems((data ?? []) as Rsvp[]));
     };
 

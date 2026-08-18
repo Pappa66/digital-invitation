@@ -44,49 +44,48 @@ export default function PricingSection({ basePrice, discountPercent, promoCode, 
 
   return (
     <section className="px-6 py-10 text-center">
-      <div className="mx-auto max-w-md overflow-hidden rounded-2xl border border-current/10 bg-current/[0.03]">
-        <div className="bg-gradient-to-r from-[#c9a45c]/10 to-[#b98a3e]/10 px-6 py-5">
-          <p className="text-xs uppercase tracking-widest opacity-60">Mulai dari</p>
+      <div className="mx-auto max-w-md overflow-hidden rounded-3xl border border-border bg-card shadow-card">
+        <div className="bg-gradient-to-br from-gold/15 via-card to-gold/10 px-6 py-6">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Mulai dari</p>
           {hasDiscount ? (
             <div className="mt-2 flex items-baseline justify-center gap-3">
-              <span className="text-lg text-current/40 line-through">{formatRupiah(basePrice)}</span>
-              <span className="text-3xl font-heading font-medium">{formatRupiah(discountedPrice)}</span>
+              <span className="text-lg text-muted-foreground line-through">{formatRupiah(basePrice)}</span>
+              <span className="text-4xl font-heading font-medium text-foreground">{formatRupiah(discountedPrice)}</span>
             </div>
           ) : (
-            <p className="mt-2 text-3xl font-heading font-medium">{formatRupiah(basePrice)}</p>
+            <p className="mt-2 text-4xl font-heading font-medium text-foreground">{formatRupiah(basePrice)}</p>
           )}
         </div>
 
         {hasDiscount && (
-          <div className="border-t border-current/10 px-6 py-4">
-            <div className="flex items-center justify-center gap-2 text-[#c9a45c]">
-              <Tag className="h-4 w-4" />
+          <div className="border-t border-border bg-gold/5 px-6 py-5">
+            <div className="flex items-center justify-center gap-2 text-gold-deep">
+              <Tag className="h-4 w-4" aria-hidden />
               <span className="text-sm font-semibold">Diskon {discountPercent}%</span>
             </div>
             {promoCode && (
               <button
                 onClick={copyCode}
-                className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-dashed border-[#c9a45c]/50 bg-[#c9a45c]/5 px-3 py-1.5 text-xs font-medium text-[#c9a45c] transition-colors hover:bg-[#c9a45c]/10"
+                aria-live="polite"
+                className="mt-3 inline-flex min-h-11 items-center gap-1.5 rounded-full border border-dashed border-gold/70 bg-card px-4 py-2 text-xs font-semibold text-gold-deep transition-colors hover:bg-gold/15"
               >
-                {copied ? <CheckCircle className="h-3 w-3" /> : <Tag className="h-3 w-3" />}
+                {copied ? <CheckCircle className="h-3 w-3" aria-hidden /> : <Tag className="h-3 w-3" aria-hidden />}
                 {copied ? 'Tersalin!' : `Gunakan kode: ${promoCode}`}
               </button>
             )}
             {timeLeft && (
-              <div className="mt-3 flex items-center justify-center gap-1.5 text-xs text-gray-500">
-                <Clock className="h-3 w-3" />
-                <span>
-                  Berakhir dalam {timeLeft.days}h {timeLeft.hours}j {timeLeft.minutes}m
-                </span>
+              <div className="mt-3 flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
+                <Clock className="h-3 w-3" aria-hidden />
+                <span>Berakhir dalam {timeLeft.days}h {timeLeft.hours}j {timeLeft.minutes}m</span>
               </div>
             )}
           </div>
         )}
         {onOrder && (
-          <div className="border-t border-current/10 px-6 py-4">
+          <div className="border-t border-border px-6 py-5">
             <button
               onClick={onOrder}
-              className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-6 py-2.5 text-sm font-semibold text-white hover:opacity-90"
+              className="inline-flex min-h-12 items-center gap-2 rounded-xl bg-gradient-to-r from-gold to-gold-strong px-8 py-3 text-sm font-semibold text-foreground shadow-gold transition-transform hover:scale-[1.02] active:scale-[0.98]"
             >
               Pesan Sekarang
             </button>

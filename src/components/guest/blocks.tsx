@@ -1298,7 +1298,7 @@ const PHOTO_ANIMS: Record<string, { initial: Target; animate: Target }> = {
   'slide-down': { initial: { opacity: 0, y: -56 }, animate: { opacity: 1, y: 0 } },
   flip: { initial: { opacity: 0, rotateY: 90 }, animate: { opacity: 1, rotateY: 0 } },
   'flip-x': { initial: { opacity: 0, rotateX: 90 }, animate: { opacity: 1, rotateX: 0 } },
-  blur: { initial: { opacity: 0, filter: 'blur(14px)' }, animate: { opacity: 1, filter: 'blur(0px)' } },
+  blur: { initial: { opacity: 0, scale: 0.92 }, animate: { opacity: 1, scale: 1 } },
   rise: { initial: { opacity: 0, y: 90, scale: 0.92 }, animate: { opacity: 1, y: 0, scale: 1 } },
   swing: { initial: { opacity: 0, x: -28, rotate: -7 }, animate: { opacity: 1, x: 0, rotate: 0 } },
   pop: { initial: { opacity: 0, scale: 0.55 }, animate: { opacity: 1, scale: 1 } },
@@ -1308,7 +1308,7 @@ const PHOTO_ANIMS: Record<string, { initial: Target; animate: Target }> = {
   'reveal-up': { initial: { opacity: 0, clipPath: 'inset(100% 0 0 0)' }, animate: { opacity: 1, clipPath: 'inset(0% 0 0 0)' } },
   rotate: { initial: { opacity: 0, rotate: -180, scale: 0.5 }, animate: { opacity: 1, rotate: 0, scale: 1 } },
   shrink: { initial: { opacity: 0, scale: 2 }, animate: { opacity: 1, scale: 1 } },
-  'blur-up': { initial: { opacity: 0, y: 30, filter: 'blur(10px)' }, animate: { opacity: 1, y: 0, filter: 'blur(0px)' } },
+  'blur-up': { initial: { opacity: 0, y: 30, scale: 0.94 }, animate: { opacity: 1, y: 0, scale: 1 } },
 };
 
 export function GalleryBlock({ props }: { props: BlockProps }) {
