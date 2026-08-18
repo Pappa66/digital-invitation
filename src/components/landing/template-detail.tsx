@@ -2,13 +2,15 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, ArrowRight, Loader2, MessageCircle, Sparkles, Wand2 } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ExternalLink, Loader2, MessageCircle, PlayCircle, Sparkles, Wand2 } from 'lucide-react';
 import type { CanvasData, TemplateMeta } from '@/lib/types';
 import GuestRenderer from '@/components/guest/GuestRenderer';
 import OrderDialog from '@/components/landing/order-dialog';
 import PhoneFrame from '@/components/ui/phone-frame';
 import { clientCreateProject } from '@/lib/api/project-client';
+import { listTemplateDemos, demoByTemplateId } from '@/lib/api/template-demo-client';
 
 interface TemplateDetailProps {
   meta: TemplateMeta;
@@ -38,6 +40,24 @@ export default function TemplateDetail({ meta, index, canvas, categoryLabel, tot
   const [editBusy, setEditBusy] = useState(false);
   const [editError, setEditError] = useState('');
   const [pricing, setPricing] = useState({ base_price: 0, discount_percent: 0, promo_code: '' });
+
+  const [demo, setDemo] = useState<{ demo_image: string | null; demo_link: string | null } | null>(null);
+
+  useEffect(() => {
+    let alive = true;
+    listTemplateDemos()
+      .then((rows) => {
+        const hit = demoByTemplateId(rows, meta.id);
+        if (alive && hit) setDemo(hit);
+      })
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, [meta.id]);
+
+  const demoImage = demo?.demo_image || null;
+  const demoLink = demo?.demo_link || null;
 
   async function editInBuilder() {
     setEditBusy(true);
@@ -97,9 +117,37 @@ export default function TemplateDetail({ meta, index, canvas, categoryLabel, tot
           {/* Kolom ponsel: PhoneFrame lebar maks 360 & di-center; min-w-0 agar
               tidak mendorong kolom info keluar pada breakpoint lg. */}
           <div className="flex min-w-0 justify-center pt-2">
-            <PhoneFrame accent={meta.secondary}>
-              <GuestRenderer canvas={canvas} preview width="mobile" />
-            </PhoneFrame>
+            {demoImage ? (
+              <div className="relative w-full max-w-[360px] overflow-hidden rounded-[2.4rem] border border-border bg-muted shadow-phone">
+                <div className="relative aspect-[3/4]">
+                  <Image
+                    src={demoImage}
+                    alt={`Pratinjau template ${meta.name}`}
+                    fill
+                    sizes="(max-width: 900px) 80vw, 360px"
+                    className="object-cover object-[center_30%]"
+                  />
+                  <div className="absolute inset-x-0 bottom-0 flex justify-center bg-gradient-to-t from-black/75 via-black/15 to-transparent p-5 pt-24">
+                    {demoLink && (
+                      <a
+                        href={demoLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-gold to-gold-strong px-6 py-3 text-sm font-semibold text-foreground shadow-gold transition-transform hover:scale-[1.04] active:scale-[0.98]"
+                      >
+                        <PlayCircle className="h-4 w-4" aria-hidden /> Lihat Demo
+                        <ExternalLink className="h-3.5 w-3.5 opacity-70" aria-hidden />
+                      </a>
+                    )}
+                  </div>
+                  <div className="pointer-events-none absolute left-1/2 top-3 z-10 h-5 w-24 -translate-x-1/2 rounded-full bg-black/80 ring-1 ring-white/15" aria-hidden />
+                </div>
+              </div>
+            ) : (
+              <PhoneFrame accent={meta.secondary}>
+                <GuestRenderer canvas={canvas} preview width="mobile" />
+              </PhoneFrame>
+            )}
           </div>
 
           <div className="min-w-0 lg:sticky lg:top-24 lg:self-start">

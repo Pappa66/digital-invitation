@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import QRCode from 'react-qr-code';
 import CheckIn from '@/components/guest/check-in';
 
 const { insertMock } = vi.hoisted(() => ({
@@ -41,6 +42,31 @@ describe('CheckIn — jalur QR absen (?absen=1)', () => {
     expect(screen.getByRole('button', { name: /Tampilkan QR Absen/i })).toBeInTheDocument();
     expect(screen.queryByPlaceholderText('Nama Anda')).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /Check-in/i })).not.toBeInTheDocument();
+  });
+
+  it('QR venue kini mengarah ke rute publik /absen/{projectId} (bukan ?absen=1 lagi)', async () => {
+    const expectedUrl = `${window.location.origin}/absen/${PROJECT_ID}`;
+    // react-qr-code deterministik: nilai sama => pola <path d> identik.
+    const ref = render(<QRCode value={expectedUrl} size={140} />);
+    const refD = ref.container
+      .querySelector<SVGSVGElement>('svg[width="140"]')
+      ?.querySelector('path')
+      ?.getAttribute('d');
+    expect(refD).toBeTruthy();
+    ref.unmount();
+
+    const user = userEvent.setup();
+    render(<CheckIn projectId={PROJECT_ID} />);
+
+    await user.click(screen.getByRole('button', { name: /Tampilkan QR Absen/i }));
+
+    // Panitia memindai QR ini → halaman /absen/{projectId} publik (tanpa login).
+    await waitFor(() => {
+      const qrSvg = document.querySelector<SVGSVGElement>('svg[width="140"]');
+      expect(qrSvg).toBeTruthy();
+      const d = qrSvg?.querySelector('path')?.getAttribute('d');
+      expect(d).toBe(refD);
+    });
   });
 
   it('mode ?absen=1: menampilkan form dan check-in berhasil tersimpan', async () => {

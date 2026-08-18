@@ -349,6 +349,9 @@ export default function ElementsSidebar() {
           <h3 className="text-sm font-semibold text-[#2b2620]">Tambah Blok</h3>
         </div>
         <p className="mt-0.5 text-xs text-[#8a7a66]">Pilih kategori lalu klik atau seret ke kanvas</p>
+        <p className="mt-1.5 rounded-md bg-[#c9a45c]/10 px-2 py-1.5 text-[10px] leading-relaxed text-[#8a6d2f]">
+          Pilih blok di kanvas → tab <b>Style</b> punya galeri <b>Gaya</b> (Lembut, Bold, Mewah, Ruang, dll.)
+        </p>
       </div>
 
       <div className="flex-1 space-y-1 overflow-auto p-3">

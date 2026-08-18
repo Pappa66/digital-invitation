@@ -45,6 +45,30 @@ describe('payload security guardrails', () => {
     expect(src).not.toMatch(/SERVICE_ROLE/);
   });
 
+  it('supabase server client (createServerSupabase) juga anon key, bukan service role', () => {
+    const src = require('fs').readFileSync('src/lib/supabase/server.ts', 'utf8');
+    expect(src).toContain('NEXT_PUBLIC_SUPABASE_ANON_KEY');
+    expect(src).not.toMatch(/SERVICE_ROLE/);
+  });
+
+  it('tidak ada referensi service role di seluruh src (client, server, actions, api)', () => {
+    const fs = require('fs');
+    const path = require('path');
+    const hits: string[] = [];
+    const walk = (dir: string) => {
+      for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+        const full = path.join(dir, entry.name);
+        if (entry.isDirectory()) walk(full);
+        else if (/\.(ts|tsx|js|mjs)$/.test(entry.name) && !/\.test\./.test(entry.name)) {
+          const src = fs.readFileSync(full, 'utf8');
+          if (/service_role|SERVICE_ROLE_KEY|supabase_service_key/i.test(src)) hits.push(full);
+        }
+      }
+    };
+    walk('src');
+    expect(hits, `referensi service role ditemukan di: ${hits.join(', ')}`).toEqual([]);
+  });
+
   it('no secrets committed to the repo (env is gitignored)', () => {
     const gitignore = require('fs').readFileSync('.gitignore', 'utf8');
     expect(gitignore).toMatch(/\n\.env/);

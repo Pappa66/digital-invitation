@@ -396,6 +396,27 @@ export interface Database {
           }
         ];
       };
+      template_demos: {
+        Row: {
+          template_id: string;
+          demo_image: string | null;
+          demo_link: string | null;
+          updated_at: string;
+        };
+        Insert: {
+          template_id: string;
+          demo_image?: string | null;
+          demo_link?: string | null;
+          updated_at?: string;
+        };
+        Update: {
+          template_id?: string;
+          demo_image?: string | null;
+          demo_link?: string | null;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: {

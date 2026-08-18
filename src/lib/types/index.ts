@@ -274,6 +274,13 @@ export interface TemplateMeta {
   demo_order?: number;
 }
 
+/** Metadata demo template yang diatur admin (gambar + link per template). */
+export interface TemplateDemo {
+  template_id: string;
+  demo_image: string | null;
+  demo_link: string | null;
+}
+
 /** Status pengerjaan client (management dashboard). */
 export type ClientStatus = 'aktual' | 'proses' | 'selesai';
 

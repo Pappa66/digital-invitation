@@ -3,11 +3,12 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { Copy, Pencil, Share2, Trash2, ExternalLink, Globe, GlobeLock } from 'lucide-react';
+import { Copy, Pencil, Share2, Trash2, ExternalLink, Globe, GlobeLock, QrCode } from 'lucide-react';
 import type { Project } from '@/lib/types';
 import { clientDuplicateProject, clientDeleteProject, clientSetProjectStatus } from '@/lib/api/project-client';
 import ConfirmDialog from '@/components/dashboard/confirm-dialog';
 import ShareDialog from '@/components/dashboard/share-dialog';
+import AbsenShareDialog from '@/components/ui/absen-share-dialog';
 
 interface ProjectCardProps {
   project: Project;
@@ -22,6 +23,7 @@ export default function ProjectCard({ project, onDuplicated, onDeleted }: Projec
   const [confirm, setConfirm] = useState<ConfirmTarget>(null);
   const [busy, setBusy] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
+  const [absenOpen, setAbsenOpen] = useState(false);
   const [status, setStatus] = useState<Project['status']>(project.status);
   const [statusBusy, setStatusBusy] = useState(false);
 
@@ -97,6 +99,9 @@ export default function ProjectCard({ project, onDuplicated, onDeleted }: Projec
           <IconBtn label="Bagikan undangan dengan nama tamu" onClick={() => setShareOpen(true)}>
             <Share2 className="h-4 w-4" />
           </IconBtn>
+          <IconBtn label="QR Absen — link publik untuk panitia" onClick={() => setAbsenOpen(true)}>
+            <QrCode className="h-4 w-4" />
+          </IconBtn>
           <IconBtn
             label={status === 'published' ? 'Jadikan draft (tidak bisa diakses tamu)' : 'Publish (tamu dengan link bisa membuka)'}
             onClick={handleToggleStatus}
@@ -133,6 +138,7 @@ export default function ProjectCard({ project, onDuplicated, onDeleted }: Projec
         onCancel={() => setConfirm(null)}
       />
       <ShareDialog open={shareOpen} projectId={project.id} slug={project.slug} title={project.title} onClose={() => setShareOpen(false)} />
+      <AbsenShareDialog open={absenOpen} projectId={project.id} onClose={() => setAbsenOpen(false)} />
     </div>
   );
 }

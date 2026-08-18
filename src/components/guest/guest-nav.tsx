@@ -2,72 +2,29 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, type Transition } from 'framer-motion';
-import {
-  LayoutPanelTop,
-  HeartHandshake,
-  CalendarHeart,
-  Images,
-  Mail,
-  Timer,
-  BookOpen,
-  MapPin,
-  Gift,
-  Heart,
-  Quote,
-  Music,
-  Camera,
-  MailOpen,
-  MoreHorizontal
-} from 'lucide-react';
+import { HeartHandshake, CalendarHeart, Images, BookOpen, MapPin, Mail } from 'lucide-react';
 import type { Block } from '@/lib/types';
 
 type NavDef = { icon: React.ElementType; label: string };
 type NavItem = { type: string; icon: React.ElementType; label: string };
 
-/** Jenis blok yang layak masuk bottom nav (section bermakna, bukan dekorasi). */
-const NAV_DEFS: Record<string, NavDef> = {
-  Hero: { icon: LayoutPanelTop, label: 'Awal' },
-  Couple: { icon: HeartHandshake, label: 'Mempelai' },
-  Countdown: { icon: Timer, label: 'Hitung Mundur' },
-  EventDetail: { icon: CalendarHeart, label: 'Acara' },
-  Story: { icon: BookOpen, label: 'Kisah' },
-  Gallery: { icon: Images, label: 'Galeri' },
-  RSVP: { icon: Mail, label: 'RSVP' },
-  Envelope: { icon: MailOpen, label: 'Amplop' },
-  Maps: { icon: MapPin, label: 'Lokasi' },
-  GiftList: { icon: Gift, label: 'Kado' },
-  Thanks: { icon: Heart, label: 'Ucapan' },
-  Quote: { icon: Quote, label: 'Kutipan' },
-  Photo: { icon: Camera, label: 'Foto' },
-  Music: { icon: Music, label: 'Musik' }
-};
-
 /**
- * Prioritas pemilihan item saat bilah harus dipangkas (semakin kecil semakin
- * penting). Mempelai/Acara/Galeri/RSVP/Amplop/Lokasi diprioritaskan tetap
- * tampil; dekorasi/alur (Music, Quote, Photo, Countdown, Story, Hero) dibuang
- * ke menu "Lebih" lebih dulu bila jumlah blok section > kapasitas.
+ * Hanya blok PENTING yang layak masuk bottom nav. Jenis lain (Musik, Quote,
+ * Photo, Countdown, Hero, Amplop, Kado, Ucapan, dll.) tidak ditampilkan —
+ * pengguna tidak menyukai menu "Lebih" tersembunyi.
  */
-const NAV_IMPORTANCE: Record<string, number> = {
-  Couple: 1,
-  EventDetail: 2,
-  Gallery: 3,
-  RSVP: 4,
-  Envelope: 5,
-  Maps: 6,
-  GiftList: 7,
-  Thanks: 8,
-  Story: 9,
-  Countdown: 10,
-  Photo: 11,
-  Music: 12,
-  Quote: 13,
-  Hero: 14
+const NAV_DEFS: Record<string, NavDef> = {
+  Couple: { icon: HeartHandshake, label: 'Mempelai' },
+  Gallery: { icon: Images, label: 'Galeri' },
+  Story: { icon: BookOpen, label: 'Kisah' },
+  EventDetail: { icon: CalendarHeart, label: 'Acara' },
+  RSVP: { icon: Mail, label: 'RSVP' },
+  Maps: { icon: MapPin, label: 'Lokasi' }
 };
 
-/** Maksimal tombol section di bilah (5) + 1 slot "Lebih" = 6 pill. */
+/** Maksimal pill di bilah. Tanpa menu "Lebih". */
 export const NAV_MAX_SLOTS = 6;
-export const NAV_VISIBLE_SLOTS = 5;
+export const NAV_VISIBLE_SLOTS = 6;
 
 /** Ambil nav items sesuai urutan blok di kanvas, tanpa duplikat jenis. */
 export function buildNavItems(blocks: Block[]): NavItem[] {
@@ -84,29 +41,19 @@ export function buildNavItems(blocks: Block[]): NavItem[] {
 }
 
 export interface NavSlots {
-  /** Item yang tampil langsung di bilah (≤ 5). */
+  /** Item yang tampil langsung di bilah (≤ 6), urutan kanvas. */
   visible: NavItem[];
-  /** Item yang tersembunyi di menu "Lebih" (> kapasitas), urutan kanvas. */
+  /** Selalu kosong — tidak ada menu "Lebih". */
   more: NavItem[];
 }
 
 /**
- * Mengisi bilah nav maksimal 6 pill: 5 item terpenting (prioritas, urutan
- * kanvas dipertahankan) + sisanya dipindah ke menu "Lebih". Bila jumlah
- * item ≤ 6 semuanya tampil tanpa menu "Lebih".
+ * Membangun slot bilah nav: hanya blok penting yang ADA di kanvas, urutan
+ * mengikuti kanvas, dipangkas maksimal 6. Bila blok penting tidak ada, nav
+ * berisi lebih sedikit item (4-5 dst). Tidak pernah menghasilkan menu "Lebih".
  */
 export function buildNavSlots(blocks: Block[]): NavSlots {
-  const full = buildNavItems(blocks);
-  if (full.length <= NAV_MAX_SLOTS) return { visible: full, more: [] };
-
-  const ranked = [...full].sort(
-    (a, b) => (NAV_IMPORTANCE[a.type] ?? 99) - (NAV_IMPORTANCE[b.type] ?? 99)
-  );
-  const kept = new Set(ranked.slice(0, NAV_VISIBLE_SLOTS).map((i) => i.type));
-  return {
-    visible: full.filter((i) => kept.has(i.type)),
-    more: full.filter((i) => !kept.has(i.type))
-  };
+  return { visible: buildNavItems(blocks).slice(0, NAV_MAX_SLOTS), more: [] };
 }
 
 const spring: Transition = { type: 'spring', stiffness: 500, damping: 34, mass: 0.8 };
@@ -115,14 +62,13 @@ const spring: Transition = { type: 'spring', stiffness: 500, damping: 34, mass: 
  * Navigasi bawah (bottom nav) yang menempel di layar tamu. Item dibangun
  * dinamis dari urutan blok yang benar di kanvas — item mengikuti susunan
  * section (bukan daftar hardcoded), klik/scrool mengarah ke blok yang benar
- * walau blok disusun ulang, dihapus, atau ditambah. Saat lebih dari 6 jenis
- * section ada, bilah dipangkas ke 5 item terpenting + menu "Lebih".
+ * walau blok disusun ulang, dihapus, atau ditambah. Maksimal 6 pill tanpa
+ * menu "Lebih".
  */
 export default function GuestNav({ blocks = [] }: { blocks?: Block[] }) {
-  const { visible: items, more } = useMemo(() => buildNavSlots(blocks), [blocks]);
+  const { visible: items } = useMemo(() => buildNavSlots(blocks), [blocks]);
   const [active, setActive] = useState<string>(items[0]?.type ?? '');
   const activeRef = useRef<string>(items[0]?.type ?? '');
-  const [moreOpen, setMoreOpen] = useState(false);
 
   useEffect(() => {
     if (items.length === 0) return;
@@ -181,18 +127,7 @@ export default function GuestNav({ blocks = [] }: { blocks?: Block[] }) {
     };
   }, [items]);
 
-  useEffect(() => {
-    if (!moreOpen) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setMoreOpen(false);
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [moreOpen]);
-
-  if (items.length === 0 && more.length === 0) return null;
-
-  const moreActive = more.some((m) => m.type === active);
+  if (items.length === 0) return null;
 
   function go(type: string) {
     const el = document.querySelector(`[data-block-type="${type}"]`);
@@ -231,66 +166,6 @@ export default function GuestNav({ blocks = [] }: { blocks?: Block[] }) {
             </button>
           );
         })}
-
-        {more.length > 0 && (
-          <div className="relative">
-            <button
-              onClick={() => setMoreOpen((o) => !o)}
-              aria-label="Lainnya"
-              title="Lainnya"
-              aria-haspopup="menu"
-              aria-expanded={moreOpen}
-              className={pillClass(moreActive || moreOpen)}
-            >
-              {(moreActive || moreOpen) && (
-                <motion.span
-                  layoutId="nav-pill"
-                  className="absolute inset-0 rounded-full"
-                  style={{ backgroundColor: 'var(--color-primary)' }}
-                  transition={spring}
-                />
-              )}
-              <MoreHorizontal className="relative z-10 h-5 w-5" />
-            </button>
-
-            {moreOpen && (
-              <>
-                <div
-                  className="fixed inset-0 z-40"
-                  onClick={() => setMoreOpen(false)}
-                  aria-hidden="true"
-                />
-                <div
-                  role="menu"
-                  aria-label="Navigasi lainnya"
-                  className="absolute bottom-full left-1/2 z-50 mb-2 w-44 -translate-x-1/2 rounded-2xl border border-current/12 bg-[var(--color-background)]/95 p-2 shadow-card backdrop-blur"
-                >
-                  {more.map((item) => {
-                    const Icon = item.icon;
-                    const isActive = active === item.type;
-                    return (
-                      <button
-                        key={item.type}
-                        role="menuitem"
-                        onClick={() => {
-                          go(item.type);
-                          setMoreOpen(false);
-                        }}
-                        aria-current={isActive ? 'true' : undefined}
-                        className={`flex min-h-10 w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left text-xs transition-colors hover:bg-current/10 ${
-                          isActive ? 'opacity-100' : 'opacity-75'
-                        }`}
-                      >
-                        <Icon className="h-4 w-4 shrink-0 opacity-70" />
-                        <span>{item.label}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </>
-            )}
-          </div>
-        )}
       </div>
     </nav>
   );

@@ -25,9 +25,10 @@ interface CheckInProps {
 }
 
 /**
- * QR Absensi hari-H. Di lokasi acara panitia menampilkan QR ini;
- * tamu memindai -> halaman terbuka dengan ?absen=1 -> mengetuk "Check-in".
- * Pencatatan masuk ke tabel `checkins` (sekali per browser per proyek).
+ * QR Absensi hari-H. Di lokasi acara panitia menampilkan QR ini — QR mengarah
+ * ke link publik `${origin}/absen/{projectId}` (mode absen manual pakai
+ * `?absen=1` tetap didukung). Pencatatan masuk ke tabel `checkins`
+ * (sekali per browser per proyek).
  */
 export default function CheckIn({ projectId, greetingName, preview, showSeatInfo, tableLabel, seatLabel }: CheckInProps) {
   const [name, setName] = useState(greetingName ?? '');
@@ -44,8 +45,8 @@ export default function CheckIn({ projectId, greetingName, preview, showSeatInfo
       setIsAbsenMode(true);
       setQrOpen(true);
     }
-    setUrl(window.location.origin + window.location.pathname + '?absen=1');
-  }, []);
+    setUrl(`${window.location.origin}/absen/${projectId}`);
+  }, [projectId]);
 
   if (preview) return null;
 

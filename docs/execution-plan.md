@@ -193,3 +193,54 @@ zero security leak.
 - Nominal rate limit scan di venue ramai (default existing 3/60 detik/IP):
   perlu kalibrasi lapangan.
 - Lama QR tampil di layar sukses RSVP: permanen atau auto-hilang (mis. 30 detik)?
+
+---
+
+## Sprint 2: Konsolidasi UX & Demo (implementasi selesai)
+
+### 1. Bottom Nav — hanya 6 blok penting, tanpa "Lebih"
+- Whitelist: Mempelai (Couple), Kisah (Story), Galeri (Gallery), Acara
+  (EventDetail), RSVP, Lokasi (Maps). Urutan mengikuti kanvas. `NAV_MAX_SLOTS=6`,
+  `NAV_VISIBLE_SLOTS=6`, menu "Lebih" dihapus. AC BN-1..4 di QA (guest-nav 12 test).
+
+### 2. Demo per template (admin) — `template_demos`
+- Migrasi `0014_template_demos.sql`: `template_id`PK, `demo_image`, `demo_link`,
+  `updated_at`; RLS SELECT publik (metadata saja), tulis hanya `is_internal()`.
+- Server action `upsertTemplateDemo` (Zod, http(s)-only, `requireInternalUser`)
+  + client `upsertTemplateDemoClient` & `listTemplateDemos`.
+- Landing card: `demo_image`+`demo_link` → thumbnail + tombol "Lihat Demo"
+  (tab baru); hanya image → "Lihat Detail"; kosong → live TemplatePreview +
+  "Preview" → `/templates/{id}`; fallback gambar rusak → auto-swap preview.
+- Referensi desain: `docs/design/demo-card.md`. AC DM-1..5.
+
+### 3. QR Absen — link publik per project
+- Link `${origin}/absen/{projectId}` shareable publik.
+- Menu "QR Absen" di Builder top bar & kartu project dashboard
+  (`src/components/ui/absen-share-dialog.tsx`): QR code + tombol "Salin Link"
+  + "Buka halaman absen"; status draft diperingatkan. AC QR-1..4.
+
+### 4. Cover "Buka Undangan" — portrait mobile-first
+- Content cover dibungkus kolom portrait `max-w-[430px] centered`; di viewport
+  ≥sm dibingkai seperti ponsel; di mobile full-bleed; sisi luar latar charcoal
+  + radial emas; scroll-lock & `invite-opened` dipertahankan. AC CV-1..4.
+
+### 5. Builder Quick Styles
+- Panel preset tampilan per tipe blok (≥3 opsi, kombinasi style/props yang
+  LULUS `validateCanvasData`), apply tanpa menghapus konten user; posisi/
+  ukuran/edit/inner-drag/decor tetap bebas (regression). AC QS-1..4.
+- Test `quick-styles.test.ts` verifikasi preset tidak menggugurkan validasi.
+
+### 6. Audit AI SLOP & panduan
+- `docs/design/ai-slop-audit.md`: skor 5 area (palet 3, tipografi 3.5,
+  spacing 1.5, shadow 2.5, komponen 3) rata-rata 2.7/5; checklist anti-generik
+  + keputusan backlog (kurangi gradien emas per layar, batasi script, migrasi
+  hex lama, sinkron body font, verifikasi angka sosial proof).
+- Panduan dikonsep ulang per bagian (GD-1..GD-5) — dipetakan di laporan PM.
+
+### Status Sprint 2 (QA)
+- [x] lint 0 error · tsc bersih · test 217/217 (22 files) · build sukses
+- [x] coverage lines 62.05% (naik dari ~54%)
+- [x] template 39/39 lulus validateCanvasData; Quick Styles tidak memecahkan
+- [x] security: template_demos publik hanya metadata; absen tanpa login
+      tidak bocor data RSVP; no service_role
+- [x] Bug minor backlog: QR svg (react-qr-code) tanpa <title> aksesibel (P2)

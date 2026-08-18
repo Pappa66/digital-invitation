@@ -10,7 +10,7 @@ import ImageCropTool from '@/components/builder/image-crop-tool';
 import { useBuilderStore, COVER_BLOCK_ID } from '@/store/builder-store';
 import { RELIGIONS, type ReligionKey } from '@/lib/religions';
 import { getQuotesByReligion, RELIGION_LABELS, type WeddingQuote } from '@/lib/quotes';
-import type { Block, BlockProps, DecorAsset, BankAccount, BlockStyle } from '@/lib/types';
+import type { Block, BlockProps, DecorAsset, BankAccount, BlockStyle, BlockType, Theme } from '@/lib/types';
 import { getDesignPresets } from '@/lib/templates';
 
 const DESIGN_PRESETS = getDesignPresets();
@@ -230,6 +230,160 @@ function makeThemeGradients(primary: string, secondary: string, background: stri
     { name: 'Primer solid', value: `linear-gradient(160deg, ${primary} 0%, ${primary} 100%)` },
     { name: 'Sekunder solid', value: `linear-gradient(160deg, ${secondary} 0%, ${secondary} 100%)` },
   ];
+}
+
+/* ------------------------------------------------------------------ */
+/* BLOCK QUICK STYLES — preset look cepat per jenis blok.              */
+/* Hanya memakai keys `BlockStyle` (bgColor/bgGradient/border/radius/  */
+/* boxShadow/padding/textAlign/textColor) + props.variant bila perlu.  */
+/* ------------------------------------------------------------------ */
+interface QuickStylePreset {
+  label: string;
+  desc: string;
+  /** Warna untuk chip preview (gambaran visual preset). */
+  swatch: string[];
+  /** Override style section (keys BlockStyle yang sudah ada). */
+  style: Partial<BlockStyle>;
+  /** Override layout/variant blok bila preset ikut mengubah varian. */
+  props?: Partial<BlockProps>;
+}
+
+/** Buka opacity 12% dari warna hex (#RRGGBB → #RRGGBB1F). */
+function tint(hex: string): string {
+  return /^#[0-9a-fA-F]{6}$/.test(hex) ? `${hex}1F` : hex;
+}
+
+/** Preset "Gaya" default untuk semua section (Lembut / Bold / Mewah / Ruang). */
+function generalQuickStyles(theme: Theme): QuickStylePreset[] {
+  const { primary, secondary } = theme;
+  return [
+    {
+      label: 'Lembut',
+      desc: 'Radius & bayangan lembut',
+      swatch: ['#f7f2e9', '#c9a45c'],
+      style: {
+        bgColor: '#f7f2e9',
+        borderRadius: '24px',
+        boxShadow: '0 10px 30px rgba(0,0,0,0.07)',
+        padding: '48px 24px',
+        textAlign: 'center'
+      }
+    },
+    {
+      label: 'Bold',
+      desc: 'Tegas dengan warna utama',
+      swatch: [primary, '#ffffff'],
+      style: {
+        bgColor: primary,
+        textColor: '#ffffff',
+        borderRadius: '16px',
+        padding: '56px 24px',
+        textAlign: 'center'
+      }
+    },
+    {
+      label: 'Mewah',
+      desc: 'Gradien emas & bingkai elegan',
+      swatch: [primary, secondary, '#c9a45c'],
+      style: {
+        bgGradient: `linear-gradient(160deg, ${primary} 0%, ${secondary} 100%)`,
+        border: '2px solid #c9a45c',
+        borderRadius: '0px',
+        padding: '64px 28px',
+        textColor: '#ffffff',
+        boxShadow: '0 18px 44px rgba(0,0,0,0.18)'
+      }
+    },
+    {
+      label: 'Ruang',
+      desc: 'Legak, lapang & bersih',
+      swatch: ['#ffffff', '#8a7a66'],
+      style: {
+        bgColor: '#ffffff',
+        borderRadius: '28px',
+        padding: '96px 28px',
+        boxShadow: '0 16px 48px rgba(0,0,0,0.05)',
+        textAlign: 'center'
+      }
+    }
+  ];
+}
+
+/**
+ * Daftar preset "Gaya" untuk blok terpilih. Countdown & EventDetail ikut
+ * mengubah varian layout (lingkaran/kotak/garis & kartu/pita), sisanya memakai
+ * presets umum section.
+ */
+function blockQuickStyles(type: BlockType, theme: Theme): QuickStylePreset[] {
+  const { primary, secondary } = theme;
+  if (type === 'Countdown') {
+    return [
+      {
+        label: 'Lingkaran',
+        desc: 'Varian lingkaran, latar tinted',
+        swatch: [tint(primary), primary],
+        props: { variant: 'circles' },
+        style: { padding: '48px 24px', borderRadius: '28px', bgColor: tint(primary), textAlign: 'center' }
+      },
+      {
+        label: 'Kotak',
+        desc: 'Varian kartu/kotak tegas',
+        swatch: [secondary, primary],
+        props: { variant: 'cards' },
+        style: { padding: '40px 20px', borderRadius: '20px', bgColor: secondary, textAlign: 'center' }
+      },
+      {
+        label: 'Garis',
+        desc: 'Varian garis tipis minimalis',
+        swatch: ['#faf7f2', primary],
+        props: { variant: 'line' },
+        style: { padding: '32px 16px', borderRadius: '0px', textAlign: 'center' }
+      }
+    ];
+  }
+  if (type === 'EventDetail') {
+    return [
+      {
+        label: 'Kartu',
+        desc: 'Varian kartu dengan bingkai emas',
+        swatch: ['#ffffff', '#c9a45c'],
+        props: { variant: 'card' },
+        style: { bgColor: '#ffffff', border: '2px solid #c9a45c', borderRadius: '20px', padding: '40px 24px', textAlign: 'center' }
+      },
+      {
+        label: 'Pita',
+        desc: 'Varian pita gradien penuh',
+        swatch: [primary, secondary, '#ffffff'],
+        props: { variant: 'band' },
+        style: {
+          bgGradient: `linear-gradient(160deg, ${primary} 0%, ${secondary} 120%)`,
+          textColor: '#ffffff',
+          borderRadius: '0px',
+          padding: '56px 24px',
+          textAlign: 'center'
+        }
+      },
+      {
+        label: 'Ruang',
+        desc: 'Legak & lapang untuk detail',
+        swatch: ['#ffffff', '#8a7a66'],
+        style: { bgColor: '#ffffff', borderRadius: '28px', padding: '88px 28px', boxShadow: '0 16px 48px rgba(0,0,0,0.05)', textAlign: 'center' }
+      }
+    ];
+  }
+  return generalQuickStyles(theme);
+}
+
+/** Apakah preset sama dengan style+props blok saat ini (untuk indikasi aktif). */
+function isQuickPresetActive(preset: QuickStylePreset, style: BlockStyle | undefined, props: BlockProps | undefined): boolean {
+  const current = style ?? {};
+  for (const key of Object.keys(preset.style) as (keyof BlockStyle)[]) {
+    if (current[key] !== preset.style[key]) return false;
+  }
+  for (const key of Object.keys(preset.props ?? {}) as (keyof BlockProps)[]) {
+    if (props?.[key] !== preset.props?.[key]) return false;
+  }
+  return true;
 }
 
 const SECTION_TRIGGERS: { value: string; label: string }[] = [
@@ -1364,6 +1518,56 @@ export default function PropertiesPanel() {
             {panelTab === 'style' && (
               <>
                 <div className="space-y-5">
+                  <Section
+                    title="Gaya"
+                    desc="Preset look cepat untuk blok ini — memakai warna tema yang aktif"
+                    render={
+                      <div className="grid grid-cols-2 gap-2">
+                        {blockQuickStyles(block.type, canvas.theme).map((preset) => {
+                          const active = isQuickPresetActive(preset, block.style, block.props);
+                          return (
+                            <button
+                              key={preset.label}
+                              onClick={() => {
+                                setBlockStyle(block.id, preset.style);
+                                if (preset.props) setBlockProps(block.id, preset.props);
+                              }}
+                              className={`group rounded-lg border p-2 text-left transition-colors ${
+                                active
+                                  ? 'border-[#c9a45c] ring-2 ring-[#c9a45c]/40'
+                                  : 'border-[#e0d6c2] hover:border-[#c9a45c]'
+                              }`}
+                              title={`Terapkan gaya ${preset.label}`}
+                            >
+                              <div
+                                className="relative flex h-10 items-center justify-center overflow-hidden rounded-md border border-black/5"
+                                style={{
+                                  background: preset.style.bgGradient ?? preset.style.bgColor ?? '#faf7f2'
+                                }}
+                              >
+                                {preset.swatch.map((c) => (
+                                  <span
+                                    key={c}
+                                    className="h-full w-full min-w-[2px]"
+                                    style={{ background: c === 'transparent' ? 'transparent' : c }}
+                                  />
+                                ))}
+                                <span
+                                  className="absolute rounded border border-black/10 bg-white/85 px-1.5 py-0.5 text-[10px] font-semibold"
+                                  style={{ color: preset.style.textColor ?? '#6b5f4d' }}
+                                >
+                                  {preset.label}
+                                </span>
+                              </div>
+                              <p className="mt-1.5 text-xs font-semibold text-[#2b2620]">{preset.label}</p>
+                              <p className="leading-tight text-[10px] text-[#8a7a66]">{preset.desc}</p>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    }
+                  />
+
                   <Section
                     title="Warna & Background Section"
                     desc="Override warna teks, latar, atau gambar untuk section ini saja"

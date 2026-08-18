@@ -31,6 +31,7 @@ import { CATEGORIES, categoryLabel, type TemplateCategory } from '@/lib/template
 import TemplatePreview from '@/components/landing/template-preview';
 import OrderDialog from '@/components/landing/order-dialog';
 import { getLandingContent, LANDING_CONTENT_DEFAULTS, type LandingContent } from '@/lib/settings';
+import { listTemplateDemos, type TemplateDemo } from '@/lib/api/template-demo-client';
 import type { CanvasData, TemplateMeta } from '@/lib/types';
 
 interface CardData {
@@ -87,6 +88,17 @@ export default function LandingPage() {
     import('@/lib/demo/demo-templates').then(({ demoReadEnabledIds }) => setDemoIds(demoReadEnabledIds())).catch(() => setDemoIds(null));
   }, []);
 
+  const [demos, setDemos] = useState<TemplateDemo[]>([]);
+  useEffect(() => {
+    let alive = true;
+    listTemplateDemos().then((rows) => {
+      if (alive) setDemos(rows);
+    }).catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, []);
+
   const cards = useMemo<CardData[]>(
     () => {
       const source = demoIds === null ? DEMO_TEMPLATES : DEMO_TEMPLATES.filter((t) => demoIds.has(t.id));
@@ -103,6 +115,22 @@ export default function LandingPage() {
   const featuredCards = useMemo(
     () => DEMO_TEMPLATES.filter((t) => FEATURED.includes(t.id)).map((meta) => ({ meta, canvas: getTemplate(meta.id)! })).slice(0, 3),
     []
+  );
+
+  const demosByTemplate = useMemo(() => {
+    const map = new Map<string, TemplateDemo>();
+    for (const d of demos) map.set(d.template_id, d);
+    return map;
+  }, [demos]);
+
+  /** Gambar demo untuk 3 template unggulan (kolase hero) bila demo_image ada. */
+  const featuredDemoImages = useMemo(
+    () =>
+      featuredCards.map(({ meta }) => {
+        const demo = demosByTemplate.get(meta.id);
+        return demo?.demo_image || null;
+      }),
+    [featuredCards, demosByTemplate]
   );
 
   const content = landingContent ?? LANDING_CONTENT_DEFAULTS;
@@ -199,6 +227,8 @@ export default function LandingPage() {
                 <div className="relative col-span-7 row-span-2 min-w-0 overflow-hidden rounded-2xl border border-border bg-card shadow-card">
                   {collageImages[0] ? (
                     <Image src={collageImages[0].url} alt={collageImages[0].alt || 'Undangan'} fill className="object-cover" sizes="(max-width: 768px) 60vw, 280px" />
+                  ) : featuredDemoImages[0] ? (
+                    <Image src={featuredDemoImages[0]} alt="Demo undangan" fill className="object-cover" sizes="(max-width: 768px) 60vw, 280px" />
                   ) : collagePreviews[0] ? (
                     <TemplatePreview canvas={collagePreviews[0].canvas} bg={collagePreviews[0].canvas.theme.background} />
                   ) : null}
@@ -207,6 +237,8 @@ export default function LandingPage() {
                 <div className="relative col-span-5 min-w-0 overflow-hidden rounded-2xl border border-border bg-card shadow-soft">
                   {collageImages[1] ? (
                     <Image src={collageImages[1].url} alt={collageImages[1].alt || 'Undangan'} fill className="object-cover" sizes="(max-width: 768px) 40vw, 210px" />
+                  ) : featuredDemoImages[1] ? (
+                    <Image src={featuredDemoImages[1]} alt="Demo undangan" fill className="object-cover" sizes="(max-width: 768px) 40vw, 210px" />
                   ) : collagePreviews[1] ? (
                     <TemplatePreview canvas={collagePreviews[1].canvas} bg={collagePreviews[1].canvas.theme.background} />
                   ) : null}
@@ -215,6 +247,8 @@ export default function LandingPage() {
                 <div className="relative col-span-5 min-w-0 overflow-hidden rounded-2xl border border-border bg-card shadow-soft">
                   {collageImages[2] ? (
                     <Image src={collageImages[2].url} alt={collageImages[2].alt || 'Undangan'} fill className="object-cover" sizes="(max-width: 768px) 40vw, 210px" />
+                  ) : featuredDemoImages[2] ? (
+                    <Image src={featuredDemoImages[2]} alt="Demo undangan" fill className="object-cover" sizes="(max-width: 768px) 40vw, 210px" />
                   ) : collagePreviews[2] ? (
                     <TemplatePreview canvas={collagePreviews[2].canvas} bg={collagePreviews[2].canvas.theme.background} />
                   ) : null}
@@ -289,36 +323,8 @@ export default function LandingPage() {
               <div className="mt-14 grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
                 {paged.map(({ meta, canvas }) => {
                   const number = cards.findIndex((c) => c.meta.id === meta.id) + 1;
-                  return (
-                    <Link
-                      key={meta.id}
-                      href={`/templates/${meta.id}`}
-                      className="group flex flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-soft transition-all duration-300 hover:-translate-y-1.5 hover:border-gold/60 hover:shadow-card"
-                    >
-                      {/* Bingkai ponsel */}
-                      <div className="relative px-6 pt-6">
-                        <div className="relative overflow-hidden rounded-[2rem] bg-muted shadow-soft ring-1 ring-foreground/5">
-                          <TemplatePreview canvas={canvas} bg={canvas.theme.background} />
-                          <div className="pointer-events-none absolute inset-x-0 top-0 flex justify-center">
-                            <span className="mt-2 h-[18px] w-20 rounded-full bg-foreground/90 ring-1 ring-white/10" aria-hidden />
-                          </div>
-                          <span className="absolute right-4 top-4 rounded-full border border-gold/60 bg-card/90 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-gold-deep backdrop-blur-sm">{categoryLabel(meta.category)}</span>
-                        </div>
-                        <span className="pointer-events-none absolute -left-1 -top-3 select-none font-heading text-7xl font-semibold text-gold-deep/[0.08] transition-colors group-hover:text-gold-deep/20">{String(number).padStart(2, '0')}</span>
-                      </div>
-                      <div className="flex flex-1 flex-col p-6 pt-5">
-                        <div className="flex items-center gap-2">
-                          <span className="h-3.5 w-3.5 rounded-full border border-border" style={{ background: meta.primary }} />
-                          <span className="h-3.5 w-3.5 rounded-full border border-border" style={{ background: meta.secondary }} />
-                          <p className="ml-1 truncate font-heading text-base font-medium text-foreground">{meta.name}</p>
-                        </div>
-                        <p className="mt-2 line-clamp-2 flex-1 text-xs leading-relaxed text-muted-foreground">{meta.description}</p>
-                        <span className="mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-gold/50 bg-background px-3 py-2.5 text-sm font-semibold text-gold-deep transition-all group-hover:bg-gradient-to-r group-hover:from-gold group-hover:to-gold-strong group-hover:text-foreground group-hover:shadow-gold">
-                          <Eye className="h-4 w-4" aria-hidden /> Lihat Demo
-                        </span>
-                      </div>
-                    </Link>
-                  );
+                  const demo = demosByTemplate.get(meta.id) ?? null;
+                  return <CatalogCard key={meta.id} meta={meta} canvas={canvas} number={number} demo={demo} />;
                 })}
               </div>
             )}
@@ -513,6 +519,130 @@ function FAQItem({ q, a, defaultOpen = false }: { q: string; a: string; defaultO
         <span aria-hidden className={`text-gold-strong transition-transform duration-300 ${open ? 'rotate-45' : ''}`}>+</span>
       </button>
       {open && <p className="px-5 pb-5 text-sm leading-relaxed text-muted-foreground">{a}</p>}
+    </div>
+  );
+}
+
+/** Kartu katalog demo template — spec `docs/design/demo-card.md` (pola CTA-hanya). */
+function CatalogCard({
+  meta,
+  canvas,
+  number,
+  demo
+}: {
+  meta: TemplateMeta;
+  canvas: CanvasData;
+  number: number;
+  demo: TemplateDemo | null;
+}) {
+  const detailHref = `/templates/${meta.id}`;
+  const demoImage = demo?.demo_image || null;
+  const demoLink = demo?.demo_link || null;
+
+  const cta = (() => {
+    // demo_image + demo_link → "Lihat Demo" (tab baru). demo_image saja → "Lihat Detail".
+    // tanpa demo_image → "Preview" (outline) ke halaman detail.
+    if (demoImage && demoLink) {
+      return (
+        <a
+          href={demoLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-gold to-gold-strong px-5 py-2.5 text-sm font-semibold text-foreground shadow-gold shadow-[inset_0_1px_0_rgba(255,255,255,0.28)] transition-transform hover:scale-[1.02] active:scale-[0.98]"
+        >
+          <Eye className="h-4 w-4" aria-hidden /> Lihat Demo
+        </a>
+      );
+    }
+    const gold = !!demoImage;
+    return (
+      <Link
+        href={detailHref}
+        className={`mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold transition-transform ${
+          gold
+            ? 'bg-gradient-to-r from-gold to-gold-strong text-foreground shadow-gold shadow-[inset_0_1px_0_rgba(255,255,255,0.28)] hover:scale-[1.02] active:scale-[0.98]'
+            : 'border border-gold/50 bg-background text-gold-deep transition-colors hover:bg-gold/10 active:scale-[0.98]'
+        }`}
+      >
+        <Eye className="h-4 w-4" aria-hidden /> {gold ? 'Lihat Detail' : 'Preview'}
+      </Link>
+    );
+  })();
+
+  return (
+    <article className="group flex flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-soft transition-all duration-300 hover:-translate-y-1.5 hover:shadow-card">
+      <div className="relative px-6 pt-6">
+        <div className="relative overflow-hidden rounded-[2rem] bg-muted shadow-soft ring-1 ring-foreground/5">
+          {demoImage ? (
+            <DemoCardMedia src={demoImage} alt={`Pratinjau template ${meta.name}`} canvas={canvas} eager={number === 1} />
+          ) : (
+            <TemplatePreview canvas={canvas} bg={canvas.theme.background} />
+          )}
+          <span
+            className={`absolute left-3 top-3 z-10 rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] backdrop-blur-sm ${
+              demoImage ? 'border-white/25 bg-black/40 text-white' : 'border-gold/60 bg-card/90 text-gold-deep'
+            }`}
+          >
+            {categoryLabel(meta.category)}
+          </span>
+          <span className="absolute right-4 top-4 z-10 rounded-full border border-border bg-card/80 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground backdrop-blur-sm">
+            {String(number).padStart(2, '0')}
+          </span>
+          <span className="pointer-events-none absolute inset-x-0 top-0 z-10 flex justify-center" aria-hidden>
+            <span className="mt-2 h-[18px] w-20 rounded-full bg-foreground/90 ring-1 ring-white/10" />
+          </span>
+        </div>
+      </div>
+      <div className="flex flex-1 flex-col p-6 pt-5">
+        <div className="flex items-center gap-2">
+          <span className="h-3.5 w-3.5 rounded-full border border-border" style={{ background: meta.primary }} />
+          <span className="h-3.5 w-3.5 rounded-full border border-border" style={{ background: meta.secondary }} />
+          <Link href={detailHref} className="ml-1 truncate font-heading text-base font-medium text-foreground transition-colors hover:text-gold-deep">
+            {meta.name}
+          </Link>
+        </div>
+        <p className="mt-2 line-clamp-2 flex-1 text-xs leading-relaxed text-muted-foreground">{meta.description}</p>
+        {cta}
+      </div>
+    </article>
+  );
+}
+
+/** Thumbnail `demo_image` kartu katalog. Bila gambar gagal dimuat, swap otomatis
+ *  ke render live `TemplatePreview` (spec demo-card.md §1 row 4). */
+function DemoCardMedia({
+  src,
+  alt,
+  canvas,
+  eager
+}: {
+  src: string;
+  alt: string;
+  canvas: CanvasData;
+  eager?: boolean;
+}) {
+  const [broken, setBroken] = useState(false);
+  if (broken) return <TemplatePreview canvas={canvas} bg={canvas.theme.background} />;
+
+  return (
+    <div className="relative aspect-[3/4] bg-muted">
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        loading={eager ? undefined : 'lazy'}
+        sizes="(max-width:640px) 92vw, (max-width:1024px) 46vw, 30vw"
+        className="object-cover object-[center_30%]"
+        onError={() => setBroken(true)}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            'linear-gradient(180deg, rgba(11,8,5,0.08) 0%, rgba(11,8,5,0) 30%, rgba(11,8,5,0.45) 72%, rgba(11,8,5,0.62) 100%)'
+        }}
+      />
     </div>
   );
 }

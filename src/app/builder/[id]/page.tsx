@@ -3,9 +3,10 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { BookmarkPlus, HelpCircle, PenLine, Share2, Lock, Globe, GlobeLock } from 'lucide-react';
+import { BookmarkPlus, HelpCircle, PenLine, Share2, Lock, Globe, GlobeLock, QrCode } from 'lucide-react';
 import BuilderWorkspace from '@/components/builder/builder-workspace';
 import ShareDialog from '@/components/dashboard/share-dialog';
+import AbsenShareDialog from '@/components/ui/absen-share-dialog';
 import SaveTemplateDialog from '@/components/builder/save-template-dialog';
 import GuideModal from '@/components/ui/guide-modal';
 import { useBuilderStore } from '@/store/builder-store';
@@ -29,6 +30,7 @@ export default function BuilderPage() {
   const [statusBusy, setStatusBusy] = useState(false);
   const [renameStatus, setRenameStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
   const [shareOpen, setShareOpen] = useState(false);
+  const [absenOpen, setAbsenOpen] = useState(false);
   const [saveTplOpen, setSaveTplOpen] = useState(false);
   const [guideOpen, setGuideOpen] = useState(false);
   const [access, setAccess] = useState<'checking' | 'ok' | 'denied'>('checking');
@@ -169,6 +171,12 @@ export default function BuilderPage() {
               <Share2 className="h-3.5 w-3.5" /> Bagikan
             </button>
           )}
+          <button
+            onClick={() => setAbsenOpen(true)}
+            className="flex items-center gap-1.5 rounded-md border border-[#e0d6c2] bg-white px-3 py-1.5 text-xs font-medium text-[#4a443c] hover:border-[#c9a45c] hover:text-[#8a6d2f]"
+          >
+            <QrCode className="h-3.5 w-3.5" /> QR Absen
+          </button>
           {previewSlug ? (
             <a
               href={`/${previewSlug}?preview=1`}
@@ -199,6 +207,11 @@ export default function BuilderPage() {
               onClose={() => setShareOpen(false)}
             />
           )}
+          <AbsenShareDialog
+            open={absenOpen}
+            projectId={projectId}
+            onClose={() => setAbsenOpen(false)}
+          />
         </div>
       </header>
       <BuilderWorkspace projectId={projectId} />
