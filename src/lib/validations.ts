@@ -107,7 +107,7 @@ export const BlockStyleSchema = z.object({
   padding: z.string().max(100).optional(),
   opacity: z.number().min(0).max(1).optional(),
   textAlign: z.enum(['left', 'center', 'right']).optional(),
-  entrance: z.enum(['fade', 'slide', 'zoom', 'blur', 'rise', 'none']).optional(),
+  entrance: z.enum(['fade', 'slide', 'zoom', 'blur', 'rise', 'flip3d', 'parallax', 'stagger', 'float', 'none']).optional(),
   entranceDelay: z.number().min(0).max(10000).optional(),
   hideOn: z.array(z.enum(['mobile', 'tablet', 'desktop'])).optional()
 });
