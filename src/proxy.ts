@@ -1,6 +1,7 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 import { isAllowedEmail } from '@/lib/auth-allowed';
+import { demoIsDemoMode } from '@/lib/env';
 
 // Rute yang hanya boleh diakses user terautentikasi.
 // /invite sengaja TIDAK di sini: halamannya memvalidasi sendiri
@@ -14,7 +15,8 @@ export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Mode demo: semua rute terbuka agar aplikasi bisa dicoba tanpa login.
-  if (process.env.NEXT_PUBLIC_DEMO_MODE === 'true') {
+  // Safety: di production (NODE_ENV=production) demoIsDemoMode() selalu false.
+  if (demoIsDemoMode()) {
     return NextResponse.next({ request });
   }
 

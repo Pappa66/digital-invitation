@@ -5,6 +5,7 @@ import { Suspense } from 'react';
 import { createServerSupabase, requireUser } from '@/lib/supabase/server';
 import GuestView from '@/components/guest/GuestView';
 import GuestDemoView from '@/components/guest/GuestDemoView';
+import { demoIsDemoMode } from '@/lib/env';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -21,7 +22,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const proto = (await headers()).get('x-forwarded-proto') ?? 'http';
   const origin = `${proto}://${host}`;
 
-  if (process.env.NEXT_PUBLIC_DEMO_MODE !== 'true') {
+  if (!demoIsDemoMode()) {
     try {
       const supabase = await createServerSupabase();
       const { data } = await supabase.rpc('get_published_design', { p_slug: slug });
@@ -58,7 +59,7 @@ export default async function GuestPage({ params, searchParams }: PageProps) {
   const preview = search?.preview === '1';
 
   // Mode demo: ambil data dari localStorage via komponen client.
-  if (process.env.NEXT_PUBLIC_DEMO_MODE === 'true') {
+  if (demoIsDemoMode()) {
     return (
       <Suspense fallback={<div className="flex min-h-screen items-center justify-center text-sm text-gray-400">Memuat...</div>}>
         <GuestDemoView slug={slug} title="Undangan Digital" />

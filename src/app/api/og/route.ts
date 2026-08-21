@@ -1,6 +1,7 @@
 import React from 'react';
 import { ImageResponse } from 'next/og';
 import { createServerSupabase } from '@/lib/supabase/server';
+import { demoIsDemoMode } from '@/lib/env';
 
 export const runtime = 'nodejs';
 
@@ -17,7 +18,7 @@ export async function GET(request: Request) {
   let secondary = '#8a6d2f';
   let background = '#111827';
 
-  if (process.env.NEXT_PUBLIC_DEMO_MODE !== 'true' && slug) {
+  if (!demoIsDemoMode() && slug) {
     try {
       const supabase = await createServerSupabase();
       const { data } = await supabase.rpc('get_published_design', { p_slug: slug });

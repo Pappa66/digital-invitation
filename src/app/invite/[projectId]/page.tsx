@@ -1,6 +1,7 @@
 import { notFound, redirect } from 'next/navigation';
 import { createServerSupabase, requireUser } from '@/lib/supabase/server';
 import InviteManager from '@/components/invite/invite-manager';
+import { demoIsDemoMode } from '@/lib/env';
 
 interface PageProps {
   params: Promise<{ projectId: string }>;
@@ -15,7 +16,7 @@ export default async function InvitePage({ params, searchParams }: PageProps) {
   const token = typeof search?.t === 'string' ? search.t.slice(0, 64) : undefined;
 
   // Mode demo: data diambil dari localStorage via komponen client.
-  if (process.env.NEXT_PUBLIC_DEMO_MODE === 'true') {
+  if (demoIsDemoMode()) {
     return <InviteManager projectId={projectId} />;
   }
 

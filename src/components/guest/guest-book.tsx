@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase/client';
 import { demoListRsvps, demoSetRsvpListener } from '@/lib/demo/demo-store';
+import { demoIsDemoMode } from '@/lib/env';
 import type { Rsvp } from '@/lib/types';
 
 interface GuestBookWallProps {
@@ -18,7 +19,7 @@ export default function GuestBookWall({ projectId, title }: GuestBookWallProps) 
     if (!projectId) return setItems([]);
 
     const load = () => {
-      if (process.env.NEXT_PUBLIC_DEMO_MODE === 'true') {
+      if (demoIsDemoMode()) {
         setItems(demoListRsvps(projectId));
         return;
       }
