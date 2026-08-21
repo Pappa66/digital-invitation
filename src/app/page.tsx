@@ -126,6 +126,7 @@ export default function LandingPage() {
     };
   }, []);
 
+  const isLandingLoading = demoIds === null;
   const cards = useMemo<CardData[]>(
     () => {
       const source = demoIds === null ? DEMO_TEMPLATES : DEMO_TEMPLATES.filter((t) => demoIds.has(t.id));
@@ -335,7 +336,19 @@ export default function LandingPage() {
                 <FilterPill key={c.key} active={category === c.key} onClick={() => { setCategory(c.key); setPage(1); }} label={c.label} />
               ))}
             </div>
-            {paged.length === 0 ? (
+            {isLandingLoading ? (
+              <div className="mt-14 grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="animate-pulse overflow-hidden rounded-3xl border bg-card">
+                    <div className="h-64 bg-muted" />
+                    <div className="space-y-2 p-6">
+                      <div className="h-4 w-3/4 rounded bg-muted" />
+                      <div className="h-3 w-1/2 rounded bg-muted" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : paged.length === 0 ? (
               <div className="mt-16 flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card/60 px-6 py-16 text-center">
                 <p className="font-heading text-lg font-medium text-foreground">Belum ada template pada kategori ini</p>
                 <p className="mt-1 text-sm text-muted-foreground">Coba pilih kategori lain atau kembali ke “Semua”.</p>

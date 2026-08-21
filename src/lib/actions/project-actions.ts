@@ -137,15 +137,18 @@ export async function updateProjectTitle(projectId: string, title: string) {
   if (!user) return { error: 'Unauthorized' };
 
   const supabase = await createServerSupabase();
+  const trimmed = sanitizeTitle(title);
+  const slug = await makeUniqueSlug(supabase, slugify(trimmed), user.id);
   const { error } = await supabase
     .from('projects')
-    .update({ title: sanitizeTitle(title), updated_at: new Date().toISOString() })
+    .update({ title: trimmed, slug, updated_at: new Date().toISOString() })
     .eq('id', projectId)
     .eq('user_id', user.id);
 
   if (error) return { error: error.message };
   revalidatePath('/dashboard');
-  return {};
+  revalidatePath(`/${slug}`);
+  return { slug };
 }
 
 export async function setProjectStatus(projectId: string, status: 'draft' | 'published') {

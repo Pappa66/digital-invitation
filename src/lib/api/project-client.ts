@@ -46,9 +46,12 @@ export async function clientDeleteProject(projectId: string): Promise<{ error?: 
   return deleteProject(projectId);
 }
 
-export async function clientRenameProject(projectId: string, title: string): Promise<{ error?: string }> {
+export async function clientRenameProject(projectId: string, title: string): Promise<{ error?: string; slug?: string }> {
   if (demoIsDemoMode()) {
-    return demoRenameProject(projectId, title);
+    const res = demoRenameProject(projectId, title);
+    // demo: slug dari title (slugify) — ambil dari demo store
+    const proj = (await import('@/lib/demo/demo-store')).demoGetProject(projectId);
+    return { ...res, slug: proj?.slug };
   }
   return updateProjectTitle(projectId, title);
 }

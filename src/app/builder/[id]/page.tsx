@@ -15,6 +15,7 @@ import { supabase } from '@/lib/supabase/client';
 import { clientRenameProject, clientSetProjectStatus } from '@/lib/api/project-client';
 import { demoGetDesign, demoGetProject, demoIsDemoMode } from '@/lib/demo/demo-store';
 import { clientVerifyProjectAccess } from '@/lib/api/project-client';
+import { getSiteOrigin } from '@/lib/site';
 import { BuilderSkeleton } from '@/components/ui/skeleton';
 import type { CanvasData } from '@/lib/types';
 
@@ -74,7 +75,8 @@ export default function BuilderPage() {
     const trimmed = title.trim();
     if (!trimmed) return;
     setRenameStatus('saving');
-    const { error } = await clientRenameProject(projectId, trimmed);
+    const { error, slug } = await clientRenameProject(projectId, trimmed);
+    if (!error && slug) setPreviewSlug(slug);
     setRenameStatus(error ? 'idle' : 'saved');
     setTimeout(() => setRenameStatus('idle'), 1500);
   }
@@ -185,7 +187,7 @@ export default function BuilderPage() {
           </button>
           {previewSlug ? (
             <a
-              href={`/${previewSlug}?preview=1`}
+              href={`${getSiteOrigin()}/${previewSlug}?preview=1`}
               target="_blank"
               rel="noopener noreferrer"
               className="rounded-md bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-3 py-1.5 text-xs font-medium text-white hover:opacity-90"

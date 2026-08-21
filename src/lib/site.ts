@@ -4,14 +4,19 @@
  * - Fallback: prashadigitalindonesia.com (custom domain), bukan vercel.app.
  */
 export function getSiteOrigin(): string {
+  const custom = 'https://undangan-digital.prashadigitalindonesia.com';
+  // Di browser: pakai custom domain untuk semua link publik di production,
+  // agar preview/bagikan tidak jadi vercel.app meski builder dibuka via vercel.
+  if (typeof window !== 'undefined' && window.location.origin) {
+    const origin = window.location.origin.replace(/\/$/, '');
+    if (origin.includes('localhost') || origin.includes('127.0.0.1')) return origin;
+    // Production: selalu custom, bukan vercel.app
+    if (origin.includes('vercel.app')) return custom;
+    return origin;
+  }
   const envUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
-  // Bila env adalah custom domain produksi, pakai itu (agar link tidak jadi vercel.app)
-  if (envUrl && !envUrl.includes('localhost') && !envUrl.includes('127.0.0.1')) {
+  if (envUrl && envUrl.includes('prashadigitalindonesia.com')) {
     return envUrl.replace(/\/$/, '');
   }
-  if (typeof window !== 'undefined' && window.location.origin) {
-    // window.origin di production sudah custom domain bila user buka via custom domain
-    return window.location.origin.replace(/\/$/, '');
-  }
-  return 'https://prashadigitalindonesia.com';
+  return custom;
 }
