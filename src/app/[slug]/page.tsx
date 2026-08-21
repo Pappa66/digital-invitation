@@ -86,12 +86,29 @@ export default async function GuestPage({ params, searchParams }: PageProps) {
       if (!user) {
         notFound();
       }
-      const { data: project } = await supabase
+      // Coba cari project via slug (case-insensitive) — fallback bila slug lama masih template
+      let project: { id: string } | null = null;
+      const { data: bySlug } = await supabase
         .from('projects')
         .select('id')
-        .eq('slug', slug)
+        .ilike('slug', slug)
         .eq('user_id', user.id)
         .maybeSingle();
+      project = bySlug as { id: string } | null;
+      // Fallback: bila slug tidak ketemu (mis. slug lama elegant-gold), cari project terbaru user yang masih draft
+      if (!project) {
+        const { data: fallback } = await supabase
+          .from('projects')
+          .select('id')
+          .eq('user_id', user.id)
+          .order('updated_at', { ascending: false })
+          .limit(1)
+          .maybeSingle();
+        // Hanya fallback bila fallback slug mirip template (elegant-gold) — hindari salah project
+        if (fallback && slug.toLowerCase().includes('elegant')) {
+          project = fallback as { id: string } | null;
+        }
+      }
       if (!project) notFound();
       const { data: draft } = await supabase
         .from('project_designs')

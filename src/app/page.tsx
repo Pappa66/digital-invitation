@@ -126,7 +126,12 @@ export default function LandingPage() {
     };
   }, []);
 
-  const isLandingLoading = demoIds === null;
+  const [landingReady, setLandingReady] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setLandingReady(true), 400);
+    return () => clearTimeout(t);
+  }, [demoIds, demos]);
+  const isLandingLoading = !landingReady && demoIds === null;
   const cards = useMemo<CardData[]>(
     () => {
       const source = demoIds === null ? DEMO_TEMPLATES : DEMO_TEMPLATES.filter((t) => demoIds.has(t.id));

@@ -14,6 +14,30 @@ export async function GET(request: NextRequest) {
     forwardedHost ? `${forwardedProto ?? 'https'}://${forwardedHost}` : new URL(request.url).origin;
 
   // --- OAuth gagal di sisi penyedia/Google (tidak ada `code`) -------------
+  // Jika tidak ada code tapi sesi sudah ada (mis. user refresh ?code yang sudah terpakai), langsung ke dashboard
+  const oauthErrorEarly = searchParams.get('error');
+  if (!code && !oauthErrorEarly) {
+    try {
+      const tempSupabase = createServerClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        {
+          cookies: {
+            getAll() {
+              return request.cookies.getAll();
+            },
+            setAll() {}
+          }
+        }
+      );
+      const { data: { user } } = await tempSupabase.auth.getUser();
+      if (user && isAllowedEmail(user.email)) {
+        return NextResponse.redirect(`${originFromHeader}${next.startsWith('/') ? next : '/dashboard'}`);
+      }
+    } catch {
+      /* ignore — lanjut ke handling error di bawah */
+    }
+  }
   // Supabase mengarahkan kembali dengan error + error_description, mis. saat
   // provider belum dikonfigurasi, redirect URL tidak terdaftar, atau user
   // membatalkan. Beri pesan yang akurat, bukan "Sesi login tidak valid".
