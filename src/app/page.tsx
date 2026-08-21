@@ -65,6 +65,21 @@ const FEATURED = ['elegant-gold', 'blush-romance', 'ivory-dawn'];
 const EMPTY_CONTENT = null as LandingContent | null;
 
 export default function LandingPage() {
+  // Fallback: bila Supabase redirect ke /?code=... (whitelist belum berisi /auth/callback), lempar ke handler yang benar
+  useEffect(() => {
+    const sp = new URLSearchParams(window.location.search);
+    const code = sp.get('code');
+    if (code) {
+      const next = sp.get('next') ?? '/dashboard';
+      const q = new URLSearchParams({ code, next });
+      const err = sp.get('error');
+      const desc = sp.get('error_description');
+      if (err) q.set('error', err);
+      if (desc) q.set('error_description', desc);
+      window.location.replace(`/auth/callback?${q.toString()}`);
+    }
+  }, []);
+
   const [category, setCategory] = useState<TemplateCategory | 'semua'>('semua');
   const [page, setPage] = useState(1);
   const [orderOpen, setOrderOpen] = useState(false);
