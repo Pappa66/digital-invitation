@@ -15,6 +15,7 @@ import { supabase } from '@/lib/supabase/client';
 import { clientRenameProject, clientSetProjectStatus } from '@/lib/api/project-client';
 import { demoGetDesign, demoGetProject, demoIsDemoMode } from '@/lib/demo/demo-store';
 import { clientVerifyProjectAccess } from '@/lib/api/project-client';
+import { BuilderSkeleton } from '@/components/ui/skeleton';
 import type { CanvasData } from '@/lib/types';
 
 export default function BuilderPage() {
@@ -113,7 +114,12 @@ export default function BuilderPage() {
   }
 
   if (access === 'checking') {
-    return <div className="flex min-h-screen items-center justify-center bg-[#faf7f2] text-sm text-[#8a7a66]">Memeriksa akses...</div>;
+    return (
+      <div className="flex min-h-screen flex-col bg-[#faf7f2]">
+        <div className="h-12 border-b bg-white" />
+        <BuilderSkeleton />
+      </div>
+    );
   }
 
   return (

@@ -12,6 +12,10 @@ import { usePreview } from '@/components/guest/preview-context';
 import { useTheme } from '@/components/guest/theme-context';
 import { useInnerPositions, Inner } from '@/components/guest/inner-context';
 import { useBuilderStore } from '@/store/builder-store';
+import { Tilt3D, Float3D } from '@/components/guest/hero-3d-light';
+import dynamic from 'next/dynamic';
+const HeroMedium3D = dynamic(() => import('@/components/guest/hero-3d-medium'), { ssr: false, loading: () => null });
+const HeroHeavy3D = dynamic(() => import('@/components/guest/hero-3d-heavy'), { ssr: false, loading: () => null });
 
 /** Akses props sebagai string dengan fallback aman (''). */
 function str(props: BlockProps, key: string): string {
@@ -695,6 +699,7 @@ function GiantAmp() {
 export function HeroBlock({ props, greetingName, showButton = true }: { props: BlockProps; greetingName?: string; showButton?: boolean }) {
   const showOrnament = bool(props, 'show_ornament');
   const variant = str(props, 'variant') || 'center';
+  const effect3d = str(props, 'effect3d') || 'none'; // none | tilt | float | particles | rings | arch | hearts — dipilih di builder, bukan langsung aktif
   const align = variant === 'left' ? 'left' : variant === 'right' ? 'right' : 'center';
   const isLeft = align === 'left';
   const isRight = align === 'right';
@@ -731,6 +736,13 @@ export function HeroBlock({ props, greetingName, showButton = true }: { props: B
 
   const textColor = str(props, 'text_color') || '#ffffff';
 
+  // Wrapper 3D selectable — tidak langsung aktif, hanya bila dipilih di builder
+  const HeroWrap = ({ children }: { children: React.ReactNode }) => {
+    if (effect3d === 'tilt') return <Tilt3D intensity={7}>{children}</Tilt3D>;
+    if (effect3d === 'float') return <Float3D depth={22} delay={0.2}>{children}</Float3D>;
+    return <>{children}</>;
+  };
+
   return (
     <section
       ref={sectionRef}
@@ -740,6 +752,9 @@ export function HeroBlock({ props, greetingName, showButton = true }: { props: B
       style={{ color: textColor }}
     >
       <BackgroundImage src={str(props, 'bg_image')} fit={str(props, 'bg_fit')} position={str(props, 'bg_position')} />
+      {/* 3D selectable — lazy, hanya muat bila dipilih (hemat bundle) */}
+      {(effect3d === 'particles' || effect3d === 'rings') && <HeroMedium3D mode={effect3d as 'particles' | 'rings'} />}
+      {(effect3d === 'arch' || effect3d === 'hearts') && <HeroHeavy3D mode={effect3d as 'arch' | 'hearts'} />}
       {showGradient && (
         <div className="absolute inset-0 z-0 overflow-hidden">
           <div
@@ -765,14 +780,15 @@ export function HeroBlock({ props, greetingName, showButton = true }: { props: B
         </div>
       )}
       <HeroSparkles />
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.7 }}
-        animate={opened ? { opacity: 0, y: -40, transition: { duration: 0.6, ease: 'easeInOut' } } : {}}
-        className={`relative z-10 flex w-full flex-col ${isRight ? 'items-end' : isLeft ? 'items-start' : 'items-center'}`}
-      >
+      <HeroWrap>
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          animate={opened ? { opacity: 0, y: -40, transition: { duration: 0.6, ease: 'easeInOut' } } : {}}
+          className={`relative z-10 flex w-full flex-col ${isRight ? 'items-end' : isLeft ? 'items-start' : 'items-center'}`}
+        >
         <Inner name="caption">
           <motion.p
             initial={{ opacity: 0, y: 24 }}
@@ -881,6 +897,7 @@ export function HeroBlock({ props, greetingName, showButton = true }: { props: B
           </Inner>
         )}
       </motion.div>
+      </HeroWrap>
     </section>
   );
 }

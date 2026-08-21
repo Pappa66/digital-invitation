@@ -13,6 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import type { Project } from '@/lib/types';
 import { demoListProjects } from '@/lib/demo/demo-store';
+import { DashboardSkeleton, Spinner } from '@/components/ui/skeleton';
 
 interface DashboardClientProps {
   projects: Project[];
@@ -91,8 +92,19 @@ export default function DashboardClient({ projects, isDemo = false }: DashboardC
   const safePage = Math.min(page, totalPages);
   const pagedItems = filteredItems.slice((safePage - 1) * PER_PAGE, safePage * PER_PAGE);
 
+  const [demoLoading, setDemoLoading] = useState(isDemo);
   useEffect(() => {
-    if (isDemo) setItems(demoListProjects());
+    if (isDemo) {
+      setDemoLoading(true);
+      // Beri jeda skeleton 400ms agar transisi halus, efisien tanpa flicker
+      const t = setTimeout(() => {
+        setItems(demoListProjects());
+        setDemoLoading(false);
+      }, 400);
+      return () => clearTimeout(t);
+    } else {
+      setDemoLoading(false);
+    }
   }, [isDemo]);
 
   // Reset page when filters change
@@ -238,7 +250,9 @@ export default function DashboardClient({ projects, isDemo = false }: DashboardC
             </p>
           )}
 
-          {filteredItems.length === 0 ? (
+          {demoLoading ? (
+            <DashboardSkeleton />
+          ) : filteredItems.length === 0 ? (
             <div className="flex flex-col items-center justify-center rounded-xl border border-dashed bg-card py-24 text-center">
               <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#c9a45c]/20 to-[#b98a3e]/10">
                 <svg className="h-8 w-8 text-[#c9a45c]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>

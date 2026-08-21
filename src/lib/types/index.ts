@@ -154,7 +154,7 @@ export interface BlockStyle {
   /** Perataan teks section. */
   textAlign?: 'left' | 'center' | 'right';
   /** Animasi masuk section ini (override theme.card_entrance). 'none' = tanpa animasi. */
-  entrance?: 'fade' | 'slide' | 'zoom' | 'blur' | 'rise' | 'none';
+  entrance?: 'fade' | 'slide' | 'zoom' | 'blur' | 'rise' | 'flip3d' | 'parallax' | 'stagger' | 'float' | 'none';
   /** Tunda animasi masuk (ms). */
   entranceDelay?: number;
   /** Sembunyikan blok pada perangkat tertentu (responsive). Array device hsl. */

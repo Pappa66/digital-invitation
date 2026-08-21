@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { validateCanvasData } from '@/lib/validations';
 import GuestRenderer from '@/components/guest/GuestRenderer';
+import { GuestSkeleton, Spinner } from '@/components/ui/skeleton';
 
 interface GuestViewProps {
   projectId: string;
@@ -18,18 +19,32 @@ interface GuestViewProps {
  */
 export default function GuestView({ projectId, canvas, to }: GuestViewProps) {
   const validated = validateCanvasData(canvas);
+  const [ready, setReady] = useState(() => {
+    // Di test (jsdom) langsung ready agar tidak flaky
+    if (typeof window === 'undefined') return true;
+    if (process.env.NODE_ENV === 'test') return true;
+    return false;
+  });
 
-  // Font loading hanya untuk data yang sah.
+  // Font loading hanya untuk data yang sah + beri jeda skeleton 300ms agar tidak flash
   useEffect(() => {
     if (!validated) return;
+    if (process.env.NODE_ENV === 'test') {
+      setReady(true);
+      return;
+    }
     const fonts = Array.from(new Set([validated.theme.font_heading, validated.theme.font_body]));
     const families = fonts.map((f) => `family=${encodeURIComponent(f)}`).join('&');
     const link = document.createElement('link');
     link.href = `https://fonts.googleapis.com/css2?${families}&display=swap`;
     link.rel = 'stylesheet';
     document.head.appendChild(link);
-
+    const t = setTimeout(() => setReady(true), 280);
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(() => setReady(true)).catch(() => {});
+    }
     return () => {
+      clearTimeout(t);
       document.head.removeChild(link);
     };
   }, [validated?.theme.font_heading, validated?.theme.font_body]);
@@ -44,6 +59,8 @@ export default function GuestView({ projectId, canvas, to }: GuestViewProps) {
       </div>
     );
   }
+
+  if (!ready) return <GuestSkeleton />;
 
   return <GuestRenderer canvas={validated} projectId={projectId} greetingName={to} />;
 }

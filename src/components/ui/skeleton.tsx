@@ -1,4 +1,4 @@
-import { AlertTriangle, RefreshCw } from 'lucide-react';
+import { AlertTriangle, Loader2, RefreshCw } from 'lucide-react';
 
 /** Blok shimmer dasar — aksen warna desain, tanpa animasi berat. */
 export function Skeleton({ className = '', ...props }: { className?: string } & React.HTMLAttributes<HTMLDivElement>) {
@@ -66,6 +66,67 @@ export function InlineError({
           <RefreshCw className="h-3.5 w-3.5" aria-hidden /> Coba Lagi
         </button>
       )}
+    </div>
+  );
+}
+
+export function Spinner({ label = 'Memuat...' }: { label?: string }) {
+  return (
+    <div className="flex flex-col items-center justify-center gap-3 py-10 text-muted-foreground" role="status" aria-live="polite" aria-label={label}>
+      <Loader2 className="h-8 w-8 animate-spin text-gold-strong" aria-hidden />
+      <span className="text-xs tracking-wide">{label}</span>
+    </div>
+  );
+}
+
+/** Skeleton full undangan (dipakai GuestView saat canvas belum siap) */
+export function GuestSkeleton() {
+  return (
+    <div className="mx-auto w-full max-w-[430px] animate-pulse px-4 py-6">
+      <div className="h-[92vh] rounded-[2rem] bg-muted p-4">
+        <div className="h-8 w-3/4 rounded bg-border" />
+        <div className="mt-6 h-32 rounded-xl bg-border" />
+        <div className="mt-6 space-y-3">
+          <div className="h-4 w-full rounded bg-border" />
+          <div className="h-4 w-5/6 rounded bg-border" />
+        </div>
+        <div className="mt-10 grid grid-cols-3 gap-3">
+          <div className="h-24 rounded-xl bg-border" />
+          <div className="h-24 rounded-xl bg-border" />
+          <div className="h-24 rounded-xl bg-border" />
+        </div>
+      </div>
+      <div className="mt-4 space-y-3">
+        <div className="h-20 rounded-2xl bg-muted" />
+        <div className="h-20 rounded-2xl bg-muted" />
+      </div>
+    </div>
+  );
+}
+
+/** Skeleton dashboard grid */
+export function DashboardSkeleton() {
+  return (
+    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      {Array.from({ length: 8 }).map((_, i) => (
+        <div key={i} className="animate-pulse overflow-hidden rounded-xl border bg-card">
+          <div className="h-44 bg-muted" />
+          <div className="space-y-2 p-4">
+            <div className="h-4 w-3/4 rounded bg-muted" />
+            <div className="h-3 w-1/2 rounded bg-muted" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/** Skeleton builder canvas */
+export function BuilderSkeleton() {
+  return (
+    <div className="flex h-full w-full animate-pulse flex-col items-center justify-center gap-4 bg-[#f1ece1] p-8">
+      <div className="h-6 w-32 rounded bg-white/60" />
+      <div className="h-[520px] w-[340px] rounded-md bg-white shadow-xl" />
     </div>
   );
 }

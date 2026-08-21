@@ -1133,6 +1133,31 @@ export default function PropertiesPanel() {
                       </div>
                     </div>
                   )}
+                  {block.type === 'Hero' && (
+                    <div>
+                      <label className="mb-1 block text-xs font-medium text-[#4a443c]">Aset 3D Hero</label>
+                      <p className="mb-1 text-[10px] text-[#8a7a66]">Pilih jenis — tidak langsung aktif, hemat bundle (lazy)</p>
+                      <div className="grid grid-cols-3 gap-1.5">
+                        {[
+                          { key: 'none', label: 'Mati' },
+                          { key: 'tilt', label: 'Tilt' },
+                          { key: 'float', label: 'Float' },
+                          { key: 'particles', label: 'Partikel' },
+                          { key: 'rings', label: 'Cincin' },
+                          { key: 'arch', label: 'Arch' },
+                          { key: 'hearts', label: 'Hearts' }
+                        ].map((o) => (
+                          <button
+                            key={o.key}
+                            onClick={() => setBlockProps(block.id, { effect3d: o.key })}
+                            className={`rounded-md border px-2 py-1.5 text-xs ${((block.props.effect3d as string) || 'none') === o.key ? 'border-[#c9a45c] bg-[#c9a45c] text-white' : 'border-[#e0d6c2] text-[#6b5f4d]'}`}
+                          >
+                            {o.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                   {VARIANTS[block.type] && (
                     <div>
                       <label className="mb-1 block text-xs font-medium text-[#4a443c]">Gaya</label>
@@ -1806,6 +1831,10 @@ export default function PropertiesPanel() {
                             <option value="zoom">Zoom</option>
                             <option value="blur">Blur ke jernih</option>
                             <option value="rise">Naik perlahan</option>
+                            <option value="flip3d">Flip 3D</option>
+                            <option value="parallax">Parallax</option>
+                            <option value="stagger">Stagger</option>
+                            <option value="float">Float lembut</option>
                             <option value="none">Tanpa animasi</option>
                           </select>
                         </div>

@@ -65,11 +65,13 @@ const FEATURED = ['elegant-gold', 'blush-romance', 'ivory-dawn'];
 const EMPTY_CONTENT = null as LandingContent | null;
 
 export default function LandingPage() {
+  const [authRedirecting, setAuthRedirecting] = useState(false);
   // Fallback: bila Supabase redirect ke /?code=... (whitelist belum berisi /auth/callback), lempar ke handler yang benar
   useEffect(() => {
     const sp = new URLSearchParams(window.location.search);
     const code = sp.get('code');
     if (code) {
+      setAuthRedirecting(true);
       const next = sp.get('next') ?? '/dashboard';
       const q = new URLSearchParams({ code, next });
       const err = sp.get('error');
@@ -79,6 +81,16 @@ export default function LandingPage() {
       window.location.replace(`/auth/callback?${q.toString()}`);
     }
   }, []);
+
+  if (authRedirecting) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center gap-3 bg-background px-6 text-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-gold-strong border-t-transparent" aria-hidden />
+        <p className="text-sm font-medium">Memverifikasi login...</p>
+        <p className="text-xs text-muted-foreground">Mengalihkan ke dashboard...</p>
+      </div>
+    );
+  }
 
   const [category, setCategory] = useState<TemplateCategory | 'semua'>('semua');
   const [page, setPage] = useState(1);

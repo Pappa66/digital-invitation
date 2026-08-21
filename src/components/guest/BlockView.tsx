@@ -138,12 +138,19 @@ export default function BlockView({ block, projectId, editable = false, greeting
     zoom: { opacity: 0, scale: 0.92 },
     blur: { opacity: 0, scale: 0.94 },
     rise: { opacity: 0, y: 60 },
+    // Baru: 3D & stagger
+    flip3d: { opacity: 0, rotateY: 45, scale: 0.96 } as const,
+    parallax: { opacity: 0, y: 80, scale: 0.98 } as const,
+    stagger: { opacity: 0, y: 24 } as const,
+    float: { opacity: 0, y: 16 } as const,
     none: { opacity: 1 },
   } as const;
   type EntranceKey = keyof typeof entranceVariants;
-  const blockEntrance = block.style?.entrance;
-  const entranceAnim = entranceVariants[(blockEntrance ?? (theme?.card_entrance as EntranceKey)) ?? 'fade'] ?? entranceVariants.fade;
+  const blockEntrance = (block.style?.entrance ?? theme?.card_entrance ?? 'fade') as EntranceKey;
+  const entranceAnim = entranceVariants[blockEntrance] ?? entranceVariants.fade;
   const entranceDelay = block.style?.entranceDelay ?? 0;
+  const isFlip3d = blockEntrance === 'flip3d';
+  const isFloat = blockEntrance === 'float';
   const hideOn = block.style?.hideOn ?? [];
   const hideClasses = [
     hideOn.includes('mobile') ? ' max-sm:hidden' : '',
@@ -164,9 +171,20 @@ export default function BlockView({ block, projectId, editable = false, greeting
           {animateEntrance && blockEntrance !== 'none' && entranceAnim !== entranceVariants.none ? (
             <motion.div
               initial={entranceAnim}
-              whileInView={{ opacity: 1, y: 0, x: 0, scale: 1 }}
+              whileInView={{ opacity: 1, y: 0, x: 0, scale: 1, rotateY: 0, rotateX: 0 }}
               viewport={{ once: true, amount: 0.12 }}
-              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: entranceDelay }}
+              transition={
+                isFlip3d
+                  ? { duration: 0.9, ease: [0.22, 1, 0.36, 1] as const, delay: entranceDelay }
+                  : blockEntrance === 'parallax'
+                    ? { duration: 1.0, ease: [0.22, 1, 0.36, 1] as const, delay: entranceDelay }
+                    : blockEntrance === 'stagger'
+                      ? { duration: 0.6, ease: 'easeOut' as const, delay: entranceDelay, staggerChildren: 0.08 }
+                      : isFloat
+                        ? { type: 'spring' as const, stiffness: 90, damping: 12, delay: entranceDelay }
+                        : { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const, delay: entranceDelay }
+              }
+              style={isFlip3d ? { perspective: 1000, transformStyle: 'preserve-3d' as const } : undefined}
             >
               {renderCard ? <div className={cardWrapCls}>{body}</div> : body}
             </motion.div>
