@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { getSiteOrigin } from '@/lib/site';
 import PricingSection from '@/components/landing/pricing-section';
 import {
   ArrowRight,
@@ -78,7 +79,8 @@ export default function LandingPage() {
       const desc = sp.get('error_description');
       if (err) q.set('error', err);
       if (desc) q.set('error_description', desc);
-      window.location.replace(`/auth/callback?${q.toString()}`);
+      const origin = getSiteOrigin();
+      window.location.replace(`${origin}/auth/callback?${q.toString()}`);
     }
   }, []);
 

@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { supabase } from '@/lib/supabase/client';
 import { demoIsDemoMode } from '@/lib/demo/demo-store';
 import { ALLOWED_EMAIL } from '@/lib/auth-allowed';
+import { getSiteOrigin } from '@/lib/site';
 
 const ERROR_MSG: Record<string, string> = {
   forbidden: `Akun tidak diizinkan. Hanya ${ALLOWED_EMAIL} yang dapat masuk.`,
@@ -69,9 +70,8 @@ export default function LoginPage() {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          // Tanpa ?next — supaya lolos whitelist Supabase yang hanya berisi /auth/callback.
-          // Callback default next=/dashboard (route.ts:9)
-          redirectTo: `${window.location.origin}/auth/callback`
+          // Pakai custom domain dinamis, bukan vercel.app
+          redirectTo: `${getSiteOrigin()}/auth/callback`
         }
       });
       if (error) {

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import QRCode from 'react-qr-code';
 import { Check, Copy, QrCode, Share2, X, Instagram, Loader2, MessageCircle } from 'lucide-react';
+import { getSiteOrigin } from '@/lib/site';
 
 interface ShareBarProps {
   /** Nama mempelai (mis. "Raka & Salma") untuk template IG Story. */
@@ -23,7 +24,11 @@ export default function ShareBar({ coupleNames, date, theme, heroImage }: ShareB
   const [url, setUrl] = useState('');
 
   function ensureUrl() {
-    if (!url && typeof window !== 'undefined') setUrl(window.location.href);
+    if (!url && typeof window !== 'undefined') {
+      const origin = getSiteOrigin();
+      const path = window.location.pathname + window.location.search;
+      setUrl(`${origin}${path}`);
+    }
   }
 
   function openPanel() {
