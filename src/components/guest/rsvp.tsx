@@ -4,6 +4,7 @@ import { useState } from 'react';
 import QRCode from 'react-qr-code';
 import { supabase } from '@/lib/supabase/client';
 import { demoIsDemoMode } from '@/lib/env';
+import { getSiteOrigin } from '@/lib/site';
 import { demoAddRsvp, demoListRsvps } from '@/lib/demo/demo-store';
 import type { BlockProps } from '@/lib/types';
 import { Editable } from '@/components/builder/inline-edit';
@@ -139,10 +140,7 @@ export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormPr
   const inputClass =
     'w-full rounded-xl border border-current/15 bg-transparent px-4 py-2.5 text-sm outline-none transition-colors focus:border-current';
 
-  const qrUrl =
-    typeof window !== 'undefined' && checkinToken
-      ? `${window.location.origin}/absen/${projectId}?t=${checkinToken}`
-      : '';
+  const qrUrl = checkinToken ? `${getSiteOrigin()}/absen/${projectId}?t=${checkinToken}` : '';
 
   const formContent = status === 'success' ? (
     <Inner name="success">

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Copy, Pencil, Share2, Trash2, ExternalLink, Globe, GlobeLock, QrCode } from 'lucide-react';
@@ -9,6 +9,9 @@ import { clientDuplicateProject, clientDeleteProject, clientSetProjectStatus } f
 import ConfirmDialog from '@/components/dashboard/confirm-dialog';
 import ShareDialog from '@/components/dashboard/share-dialog';
 import AbsenShareDialog from '@/components/ui/absen-share-dialog';
+import { supabase } from '@/lib/supabase/client';
+import { demoGetDesign } from '@/lib/demo/demo-store';
+import { demoIsDemoMode } from '@/lib/env';
 
 interface ProjectCardProps {
   project: Project;
@@ -26,8 +29,35 @@ export default function ProjectCard({ project, onDuplicated, onDeleted }: Projec
   const [absenOpen, setAbsenOpen] = useState(false);
   const [status, setStatus] = useState<Project['status']>(project.status);
   const [statusBusy, setStatusBusy] = useState(false);
+  const [couple, setCouple] = useState<string | null>(null);
 
   const publicUrl = `/${project.slug}`;
+
+  useEffect(() => {
+    let alive = true;
+    async function loadCouple() {
+      try {
+        if (demoIsDemoMode()) {
+          const design = demoGetDesign(project.id);
+          const hero = design?.blocks.find((b) => b.type === 'Hero')?.props as Record<string, unknown> | undefined;
+          const names = [hero?.bride, hero?.groom].filter((v) => typeof v === 'string' && (v as string).trim()).join(' & ');
+          if (alive && names) setCouple(names as string);
+          return;
+        }
+        const { data } = await supabase.from('project_designs').select('canvas_data').eq('project_id', project.id).maybeSingle();
+        const canvas = data?.canvas_data as { blocks?: { type: string; props?: Record<string, unknown> }[] } | null;
+        const hero = canvas?.blocks?.find((b) => b.type === 'Hero')?.props as Record<string, unknown> | undefined;
+        const names = [hero?.bride, hero?.groom].filter((v) => typeof v === 'string' && (v as string).trim()).join(' & ');
+        if (alive && names) setCouple(names as string);
+      } catch {
+        /* ignore */
+      }
+    }
+    loadCouple();
+    return () => {
+      alive = false;
+    };
+  }, [project.id]);
 
   async function handleDuplicate() {
     setBusy(true);
@@ -74,7 +104,7 @@ export default function ProjectCard({ project, onDuplicated, onDeleted }: Projec
       <div className="flex items-center justify-between gap-2 border-t border-dashboard-border bg-white px-4 py-3">
         <div className="min-w-0">
           <div className="flex min-w-0 items-center gap-2">
-            <p className="truncate text-sm font-medium text-gray-900">{project.title}</p>
+            <p className="truncate text-sm font-medium text-gray-900">{couple || project.title}</p>
             <span
               className={`flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium ${
                 status === 'published' ? 'bg-emerald-50 text-emerald-700' : 'bg-gray-100 text-gray-500'
@@ -85,6 +115,9 @@ export default function ProjectCard({ project, onDuplicated, onDeleted }: Projec
               {status === 'published' ? 'Publik' : 'Draft'}
             </span>
           </div>
+          {couple && couple !== project.title && (
+            <p className="truncate text-[11px] text-gray-400">{project.title}</p>
+          )}
           <p className="mt-0.5 text-xs text-gray-500">
             Diperbarui {new Date(project.updated_at || project.created_at).toLocaleDateString('id-ID')}
           </p>

@@ -32,7 +32,8 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
   const shareMeta = {
     coupleNames,
     date: typeof heroBlock?.props.date === 'string' ? heroBlock.props.date : undefined,
-    theme: { primary: canvas.theme.primary, secondary: canvas.theme.secondary, background: canvas.theme.background }
+    theme: { primary: canvas.theme.primary, secondary: canvas.theme.secondary, background: canvas.theme.background },
+    heroImage: typeof heroBlock?.props.bg_image === 'string' ? heroBlock.props.bg_image : undefined
   };
   const styleVars = {
     '--color-primary': canvas.theme.primary,

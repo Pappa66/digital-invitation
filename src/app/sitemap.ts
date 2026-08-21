@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next';
 import { TEMPLATE_LIST, DEMO_TEMPLATES } from '@/lib/templates';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://digital-invitation-cyan.vercel.app';
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://prashadigitalindonesia.com';
   const now = new Date();
 
   const staticPages = [

@@ -10,6 +10,7 @@ import {
   DialogTitle,
   DialogDescription
 } from '@/components/ui/dialog';
+import { getSiteOrigin } from '@/lib/site';
 
 interface AbsenShareDialogProps {
   open: boolean;
@@ -46,10 +47,7 @@ async function copyText(text: string): Promise<boolean> {
 export default function AbsenShareDialog({ open, projectId, onClose }: AbsenShareDialogProps) {
   const [copied, setCopied] = useState(false);
 
-  const absenUrl =
-    typeof window !== 'undefined'
-      ? `${window.location.origin}/absen/${projectId}`
-      : `/absen/${projectId}`;
+  const absenUrl = `${getSiteOrigin()}/absen/${projectId}`;
 
   async function handleCopy() {
     const ok = await copyText(absenUrl);

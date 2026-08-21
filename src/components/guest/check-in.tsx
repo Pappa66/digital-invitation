@@ -5,6 +5,7 @@ import { UserCheck, Check, Loader2, Armchair } from 'lucide-react';
 import QRCode from 'react-qr-code';
 import { supabase } from '@/lib/supabase/client';
 import { demoIsDemoMode } from '@/lib/env';
+import { getSiteOrigin } from '@/lib/site';
 import { demoAddCheckin } from '@/lib/demo/demo-store';
 import { Inner } from '@/components/guest/inner-context';
 
@@ -45,7 +46,7 @@ export default function CheckIn({ projectId, greetingName, preview, showSeatInfo
       setIsAbsenMode(true);
       setQrOpen(true);
     }
-    setUrl(`${window.location.origin}/absen/${projectId}`);
+    setUrl(`${getSiteOrigin()}/absen/${projectId}`);
   }, [projectId]);
 
   if (preview) return null;

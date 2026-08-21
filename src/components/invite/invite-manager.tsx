@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Copy, Check, Send, Users, ListChecks, Link2, ExternalLink, ShieldCheck, Radio, Download, UserCheck, QrCode, CalendarClock, Mail } from 'lucide-react';
 import { demoIsDemoMode } from '@/lib/env';
+import { getSiteOrigin } from '@/lib/site';
 import {
   RELIGIONS,
   getReligion,
@@ -197,7 +198,7 @@ export default function InviteManager({ projectId, slug: slugProp, title: titleP
     setTimeout(() => setCopied(null), 1500);
   }
 
-  const base = typeof window !== 'undefined' ? window.location.origin : '';
+  const base = getSiteOrigin();
   const rows = parseGuestLines(bulkText);
   const cfg = getReligion(religion);
   const links = rows.map((r) => `${base}/${slug}?to=${encodeURIComponent(r.name)}`);

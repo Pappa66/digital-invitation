@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { RELIGIONS, getReligion, waLink, parseGuestLines, type ReligionKey } from '@/lib/religions';
 import { clientGetInviteAccessToken } from '@/lib/api/project-client';
+import { getSiteOrigin } from '@/lib/site';
 
 interface ShareDialogProps {
   open: boolean;
@@ -83,7 +84,7 @@ export default function ShareDialog({ open, projectId, slug, title, onClose, rel
 
   if (!open) return null;
 
-  const base = typeof window !== 'undefined' ? window.location.origin : '';
+  const base = getSiteOrigin();
   const cleanName = name.trim();
   const link = `${base}/${slug}${cleanName ? `?to=${encodeURIComponent(cleanName)}` : ''}`;
   const manageLink = manageToken ? `${base}/invite/${projectId}?t=${manageToken}` : `${base}/invite/${projectId}`;

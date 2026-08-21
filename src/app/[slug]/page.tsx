@@ -27,7 +27,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       const supabase = await createServerSupabase();
       const { data } = await supabase.rpc('get_published_design', { p_slug: slug });
       const row = Array.isArray(data) ? data[0] : null;
-      if (row) title = row.title;
+      if (row) {
+        // Tampilkan nama pasangan (Hero bride & groom) bila ada, fallback ke judul desain
+        const canvas = row.canvas_data as { blocks?: { type: string; props?: Record<string, unknown> }[] } | null;
+        const hero = canvas?.blocks?.find((b) => b.type === 'Hero')?.props as Record<string, unknown> | undefined;
+        const couple = [hero?.bride, hero?.groom].filter((v) => typeof v === 'string' && (v as string).trim()).join(' & ');
+        title = (couple as string) || row.title;
+      }
     } catch {
       /* generic */
     }
