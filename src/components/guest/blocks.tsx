@@ -614,10 +614,12 @@ function BackgroundImage({ src, fit, position }: { src: string; fit?: string; po
   );
 }
 
-function CouplePhoto({ src, shape, alt }: { src: string; shape: string; alt: string }) {
+function CouplePhoto({ src, shape, alt, compact }: { src: string; shape: string; alt: string; compact?: boolean }) {
   if (!src) return null;
-  // Responsif: 128px di HP kecil, 160px di 640px+, 192px di desktop — agar tidak jebol grid side-by-side.
-  const base = 'relative mx-auto mb-4 aspect-square h-32 w-32 shrink-0 overflow-hidden bg-black/10 sm:h-40 sm:w-40 md:h-48 md:w-48 max-w-full';
+  // compact=true untuk side/card di canvas 430 agar muat (96px), normal 128/160/192
+  const base = compact
+    ? 'relative mx-auto mb-3 aspect-square h-20 w-20 shrink-0 overflow-hidden bg-black/10 sm:h-24 sm:w-24 md:h-28 md:w-28 max-w-full'
+    : 'relative mx-auto mb-4 aspect-square h-28 w-28 shrink-0 overflow-hidden bg-black/10 sm:h-36 sm:w-36 md:h-48 md:w-48 max-w-full';
   const frame =
     shape === 'circle'
       ? 'rounded-full'
@@ -649,7 +651,7 @@ function CouplePhoto({ src, shape, alt }: { src: string; shape: string; alt: str
   );
 }
 
-function CouplePerson({ propKey, name, parents, photo, photoShape }: { propKey: string; name: string; parents: string; photo?: string; photoShape?: string }) {
+function CouplePerson({ propKey, name, parents, photo, photoShape, compact }: { propKey: string; name: string; parents: string; photo?: string; photoShape?: string; compact?: boolean }) {
   return (
     <motion.div
       className="flex w-full min-w-0 flex-col items-center break-words text-center"
@@ -658,11 +660,11 @@ function CouplePerson({ propKey, name, parents, photo, photoShape }: { propKey: 
       viewport={{ once: true, amount: 0.3 }}
       transition={{ type: 'spring', stiffness: 120, damping: 16 }}
     >
-      {photo && <CouplePhoto src={photo} shape={photoShape ?? ''} alt={name} />}
-      <h2 className="max-w-full text-xl font-medium leading-snug sm:text-2xl md:text-3xl break-words">
+      {photo && <CouplePhoto src={photo} shape={photoShape ?? ''} alt={name} compact={compact} />}
+      <h2 className={`max-w-full break-words font-medium leading-snug ${compact ? 'text-lg sm:text-xl md:text-2xl' : 'text-xl sm:text-2xl md:text-3xl'}`}>
         <Editable prop={propKey}>{name}</Editable>
       </h2>
-      <p className="mt-2 max-w-full text-xs uppercase leading-relaxed tracking-widest opacity-70 break-words">
+      <p className={`mt-1.5 max-w-full break-words text-xs uppercase leading-relaxed tracking-widest opacity-70 ${compact ? 'text-[10px] sm:text-xs' : ''}`}>
         <Editable prop={`${propKey}_parents`}>{parents}</Editable>
       </p>
     </motion.div>
@@ -885,8 +887,6 @@ export function HeroBlock({ props, greetingName, showButton = true }: { props: B
 
 export function CoupleBlock({ props }: { props: BlockProps }) {
   const variant = str(props, 'variant') || 'vertical';
-  const side = variant === 'side' || variant === 'horizontal' || variant === 'card';
-  const isCard = variant === 'card';
   const photoShape = str(props, 'photo_shape') || 'circle';
   const groomPhoto = str(props, 'groom_photo');
   const bridePhoto = str(props, 'bride_photo');
@@ -901,73 +901,98 @@ export function CoupleBlock({ props }: { props: BlockProps }) {
     </motion.div>
   );
 
+  // 5 gaya: vertical (stack), side (compact 3col), card (side + box), elegant (arch + ornament), minimal (no photo typography)
+  if (variant === 'minimal') {
+    return (
+      <section className="w-full min-w-0 max-w-full overflow-hidden px-4 py-12 sm:px-6 sm:py-14 md:py-16 box-border text-center">
+        <div className="mx-auto w-full min-w-0 max-w-full">
+          {str(props, 'introduction') && <Inner name="introduction">{title(<p className="mb-6 break-words text-sm leading-relaxed opacity-80"><Editable prop="introduction" multiline>{str(props, 'introduction')}</Editable></p>)}</Inner>}
+          {str(props, 'bismillah') && <Inner name="bismillah">{title(<p className="mb-6 break-words text-sm italic opacity-70"><Editable prop="bismillah">{str(props, 'bismillah')}</Editable></p>)}</Inner>}
+          {str(props, 'quote') && <Inner name="quote">{title(<p className="mb-8 break-words border-y border-current/10 py-6 text-sm italic leading-relaxed opacity-80">&ldquo;<Editable prop="quote">{str(props, 'quote')}</Editable>&rdquo;</p>)}</Inner>}
+          <Inner name="groom">
+            <div className="min-w-0">
+              <h2 className="break-words font-heading text-3xl font-light leading-tight tracking-wide sm:text-4xl md:text-5xl">
+                <Editable prop="groom">{str(props, 'groom')}</Editable>
+              </h2>
+              <p className="mt-2 break-words text-xs uppercase tracking-[0.2em] opacity-60"><Editable prop="groom_parents">{str(props, 'groom_parents')}</Editable></p>
+            </div>
+          </Inner>
+          <Inner name="ampersand">
+            <div className="mx-auto my-6 flex items-center justify-center gap-3">
+              <span className="h-px w-12 bg-current opacity-20" />
+              <span className="font-heading text-2xl italic opacity-30">&</span>
+              <span className="h-px w-12 bg-current opacity-20" />
+            </div>
+          </Inner>
+          <Inner name="bride">
+            <div className="min-w-0">
+              <h2 className="break-words font-heading text-3xl font-light leading-tight tracking-wide sm:text-4xl md:text-5xl">
+                <Editable prop="bride">{str(props, 'bride')}</Editable>
+              </h2>
+              <p className="mt-2 break-words text-xs uppercase tracking-[0.2em] opacity-60"><Editable prop="bride_parents">{str(props, 'bride_parents')}</Editable></p>
+            </div>
+          </Inner>
+        </div>
+      </section>
+    );
+  }
+
+  if (variant === 'elegant') {
+    const archShape = photoShape === 'none' ? 'arch' : photoShape;
+    return (
+      <section className="w-full min-w-0 max-w-full overflow-hidden px-4 py-10 sm:px-6 sm:py-12 md:py-16 box-border text-center">
+        <div className="mx-auto w-full min-w-0 max-w-full">
+          {str(props, 'introduction') && <Inner name="introduction">{title(<p className="mb-6 break-words text-sm leading-relaxed opacity-80"><Editable prop="introduction" multiline>{str(props, 'introduction')}</Editable></p>)}</Inner>}
+          {str(props, 'bismillah') && <Inner name="bismillah">{title(<p className="mb-6 break-words text-sm italic opacity-70"><Editable prop="bismillah">{str(props, 'bismillah')}</Editable></p>)}</Inner>}
+          {str(props, 'quote') && <Inner name="quote">{title(<p className="mb-8 break-words border-y border-current/10 py-6 text-sm italic leading-relaxed opacity-80">&ldquo;<Editable prop="quote">{str(props, 'quote')}</Editable>&rdquo;</p>)}</Inner>}
+          <div className="mx-auto grid w-full min-w-0 max-w-full grid-cols-2 gap-3 sm:gap-4">
+            <Inner name="groom"><div className="min-w-0"><CouplePhoto src={groomPhoto} shape={archShape} alt={str(props, 'groom')} /></div></Inner>
+            <Inner name="bride"><div className="min-w-0"><CouplePhoto src={bridePhoto} shape={archShape} alt={str(props, 'bride')} /></div></Inner>
+          </div>
+          <div className="mx-auto mt-6 flex items-center justify-center gap-3 opacity-30">
+            <span className="h-px w-8 bg-current" /><Heart className="h-3.5 w-3.5" /><span className="h-px w-8 bg-current" />
+          </div>
+          <div className="mt-6 grid w-full min-w-0 gap-6 sm:grid-cols-[1fr_auto_1fr] sm:items-start sm:gap-4">
+            <Inner name="groom"><div className="min-w-0 text-center"><h3 className="break-words font-heading text-xl font-medium leading-snug sm:text-2xl"><Editable prop="groom">{str(props, 'groom')}</Editable></h3><p className="mt-1.5 break-words text-[11px] uppercase tracking-widest opacity-60"><Editable prop="groom_parents">{str(props, 'groom_parents')}</Editable></p></div></Inner>
+            <Inner name="ampersand"><div className="hidden justify-center sm:flex"><span className="font-heading text-3xl italic opacity-20">&</span></div></Inner>
+            <Inner name="bride"><div className="min-w-0 text-center"><h3 className="break-words font-heading text-xl font-medium leading-snug sm:text-2xl"><Editable prop="bride">{str(props, 'bride')}</Editable></h3><p className="mt-1.5 break-words text-[11px] uppercase tracking-widest opacity-60"><Editable prop="bride_parents">{str(props, 'bride_parents')}</Editable></p></div></Inner>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  const isCard = variant === 'card';
+  const isSide = variant === 'side' || variant === 'horizontal' || isCard;
+
+  if (isSide) {
+    // Compact side-by-side agar muat di canvas builder 430 (foto 80px + gap-2)
+    return (
+      <section className="w-full min-w-0 max-w-full overflow-hidden px-3 py-8 sm:px-4 sm:py-10 md:py-12 box-border">
+        <div className="mx-auto w-full min-w-0 max-w-full">
+          {str(props, 'introduction') && <Inner name="introduction">{title(<p className="mb-4 break-words text-center text-sm leading-relaxed opacity-80"><Editable prop="introduction" multiline>{str(props, 'introduction')}</Editable></p>)}</Inner>}
+          {str(props, 'bismillah') && <Inner name="bismillah">{title(<p className="mb-4 break-words text-center text-sm italic opacity-70"><Editable prop="bismillah">{str(props, 'bismillah')}</Editable></p>)}</Inner>}
+          {str(props, 'quote') && <Inner name="quote">{title(<p className="mb-6 break-words border-y border-current/10 py-4 text-center text-sm italic leading-relaxed opacity-80">&ldquo;<Editable prop="quote">{str(props, 'quote')}</Editable>&rdquo;</p>)}</Inner>}
+          <div className={`mx-auto grid w-full min-w-0 max-w-full items-center gap-2 sm:gap-4 ${isCard ? 'rounded-2xl border border-current/10 bg-current/[0.03] p-3 sm:p-5 grid-cols-[1fr_auto_1fr]' : 'grid-cols-[1fr_auto_1fr] gap-2'}`}>
+            <Inner name="groom"><div className="flex min-w-0 justify-center"><CouplePerson propKey="groom" name={str(props, 'groom')} parents={str(props, 'groom_parents')} photo={groomPhoto} photoShape={photoShape} compact /></div></Inner>
+            <Inner name="ampersand"><div className="flex min-w-0 justify-center"><span className="font-heading text-2xl italic opacity-20 sm:text-3xl">&</span></div></Inner>
+            <Inner name="bride"><div className="flex min-w-0 justify-center"><CouplePerson propKey="bride" name={str(props, 'bride')} parents={str(props, 'bride_parents')} photo={bridePhoto} photoShape={photoShape} compact /></div></Inner>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // default vertical
   return (
     <section className="w-full min-w-0 max-w-full overflow-hidden px-4 py-10 sm:px-6 sm:py-12 md:py-16 box-border">
-      <div className={`mx-auto w-full min-w-0 max-w-full ${side ? '' : 'text-center'}`}>
-        {str(props, 'introduction') && (
-          <Inner name="introduction">
-            {title(
-              <p className="mb-6 break-words text-sm leading-relaxed opacity-80">
-                <Editable prop="introduction" multiline>
-                  {str(props, 'introduction')}
-                </Editable>
-              </p>
-            )}
-          </Inner>
-        )}
-        {str(props, 'bismillah') && (
-          <Inner name="bismillah">
-            {title(
-              <p className={`mb-6 break-words text-sm italic opacity-70 ${side ? 'text-center' : ''}`}>
-                <Editable prop="bismillah">{str(props, 'bismillah')}</Editable>
-              </p>
-            )}
-          </Inner>
-        )}
-        {str(props, 'quote') && (
-          <Inner name="quote">
-            {title(
-              <p className="mb-8 break-words border-y border-current/10 py-6 text-sm italic leading-relaxed opacity-80">
-                &ldquo;<Editable prop="quote">{str(props, 'quote')}</Editable>&rdquo;
-              </p>
-            )}
-          </Inner>
-        )}
-        {side ? (
-          <div className={`mx-auto grid w-full min-w-0 max-w-full gap-4 sm:gap-6 ${isCard ? 'rounded-2xl border border-current/10 bg-current/[0.03] p-4 sm:p-6 md:p-8 grid-cols-1 sm:grid-cols-[1fr_auto_1fr] sm:items-center sm:gap-8' : 'grid-cols-1 items-center sm:grid-cols-[1fr_auto_1fr] sm:gap-8'}`}>
-            <Inner name="groom">
-              <div className="flex min-w-0 justify-center">
-                <CouplePerson propKey="groom" name={str(props, 'groom')} parents={str(props, 'groom_parents')} photo={groomPhoto} photoShape={photoShape} />
-              </div>
-            </Inner>
-            <Inner name="ampersand">
-              <div className="flex min-w-0 justify-center py-1 sm:py-0">
-                <GiantAmp />
-              </div>
-            </Inner>
-            <Inner name="bride">
-              <div className="flex min-w-0 justify-center">
-                <CouplePerson propKey="bride" name={str(props, 'bride')} parents={str(props, 'bride_parents')} photo={bridePhoto} photoShape={photoShape} />
-              </div>
-            </Inner>
-          </div>
-        ) : (
-          <>
-            <Inner name="groom">
-              <div className="mb-0 min-w-0">
-                <CouplePerson propKey="groom" name={str(props, 'groom')} parents={str(props, 'groom_parents')} photo={groomPhoto} photoShape={photoShape} />
-              </div>
-            </Inner>
-            <Inner name="ampersand">
-              <GiantAmp />
-            </Inner>
-            <Inner name="bride">
-              <div className="mt-0 min-w-0">
-                <CouplePerson propKey="bride" name={str(props, 'bride')} parents={str(props, 'bride_parents')} photo={bridePhoto} photoShape={photoShape} />
-              </div>
-            </Inner>
-          </>
-        )}
+      <div className="mx-auto w-full min-w-0 max-w-full text-center">
+        {str(props, 'introduction') && <Inner name="introduction">{title(<p className="mb-6 break-words text-sm leading-relaxed opacity-80"><Editable prop="introduction" multiline>{str(props, 'introduction')}</Editable></p>)}</Inner>}
+        {str(props, 'bismillah') && <Inner name="bismillah">{title(<p className="mb-6 break-words text-sm italic opacity-70"><Editable prop="bismillah">{str(props, 'bismillah')}</Editable></p>)}</Inner>}
+        {str(props, 'quote') && <Inner name="quote">{title(<p className="mb-8 break-words border-y border-current/10 py-6 text-sm italic leading-relaxed opacity-80">&ldquo;<Editable prop="quote">{str(props, 'quote')}</Editable>&rdquo;</p>)}</Inner>}
+        <Inner name="groom"><div className="mb-0 min-w-0"><CouplePerson propKey="groom" name={str(props, 'groom')} parents={str(props, 'groom_parents')} photo={groomPhoto} photoShape={photoShape} /></div></Inner>
+        <Inner name="ampersand"><GiantAmp /></Inner>
+        <Inner name="bride"><div className="mt-0 min-w-0"><CouplePerson propKey="bride" name={str(props, 'bride')} parents={str(props, 'bride_parents')} photo={bridePhoto} photoShape={photoShape} /></div></Inner>
       </div>
     </section>
   );

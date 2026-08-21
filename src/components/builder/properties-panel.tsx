@@ -144,7 +144,7 @@ const TITLE_PROPS: Record<string, { label: string; multiline?: boolean; url?: bo
 
 const VARIANTS: Partial<Record<string, { key: string; options: string[] }>> = {
   Hero: { key: 'variant', options: ['center', 'left'] },
-  Couple: { key: 'variant', options: ['vertical', 'side'] },
+  Couple: { key: 'variant', options: ['vertical', 'side', 'card', 'elegant', 'minimal'] },
   Countdown: { key: 'variant', options: ['circles', 'cards', 'line'] },
   EventDetail: { key: 'variant', options: ['card', 'band'] },
   Divider: { key: 'variant', options: ['line', 'dots', 'diamond', 'hearts', 'leaves'] },

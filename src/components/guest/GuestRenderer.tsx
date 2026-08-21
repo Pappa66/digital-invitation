@@ -43,10 +43,12 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
     '--font-body': `'${canvas.theme.font_body}', sans-serif`
   } as React.CSSProperties;
 
+  // Tampilan publish/preview: HP lagi (430px centered) tapi tetap full di HP (w-full + max-w-430).
+  // Builder preview tetap pakai lebar dari DeviceToggle (mobile 430 / tablet 768 / desktop 100%).
   const rootClass =
-    'guest-root relative w-full min-w-0 max-w-none overflow-x-clip box-border mx-0 ' +
+    'guest-root relative w-full min-w-0 overflow-x-clip box-border ' +
     (canvas.theme.card_style ? 'guest-card-style ' : '') +
-    (width === 'desktop' ? 'max-w-none' : 'max-w-none');
+    (width === 'desktop' ? 'mx-auto max-w-[430px] sm:max-w-[430px]' : 'mx-auto w-full max-w-[430px]');
 
   const coverProps = {
     caption: typeof heroBlock?.props.caption === 'string' ? heroBlock.props.caption : 'Undangan Pernikahan',

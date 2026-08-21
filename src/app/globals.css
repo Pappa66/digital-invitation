@@ -65,7 +65,7 @@ html,
 body {
   height: 100%;
   width: 100%;
-  max-width: 100vw;
+  max-width: 100%;
   overflow-x: hidden;
   margin: 0;
   padding: 0;
@@ -106,7 +106,7 @@ body {
   }
 }
 
-/* Guest output theme vars driven by JSON — FULL BLEED di HP: w-full + max-w-none + box-border */
+/* Guest output theme vars driven by JSON — HP lagi (430px centered) tapi full di HP */
 .guest-root {
   --color-primary: var(--gc-primary);
   --color-secondary: var(--gc-secondary);
@@ -116,11 +116,6 @@ body {
   color: var(--color-text);
   font-family: var(--font-body);
   scroll-behavior: smooth;
-  width: 100%;
-  max-width: 100vw;
-  min-width: 0;
-  margin-left: 0;
-  margin-right: 0;
   box-sizing: border-box;
   overflow-x: hidden;
 }
