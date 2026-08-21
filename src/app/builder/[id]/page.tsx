@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { BookmarkPlus, HelpCircle, PenLine, Share2, Lock, Globe, GlobeLock, QrCode } from 'lucide-react';
@@ -36,6 +36,7 @@ export default function BuilderPage() {
   const [saveTplOpen, setSaveTplOpen] = useState(false);
   const [guideOpen, setGuideOpen] = useState(false);
   const [access, setAccess] = useState<'checking' | 'ok' | 'denied'>('checking');
+  const autoSlugRef = useRef<string | null>(null);
 
   useEffect(() => {
     async function load() {
@@ -44,6 +45,7 @@ export default function BuilderPage() {
         if (design) init(design, projectId);
         const proj = demoGetProject(projectId);
         setTitle(proj?.title ?? 'Tanpa Judul');
+        autoSlugRef.current = proj?.title ?? null;
         setPreviewSlug(proj?.slug ?? null);
         setStatus(proj?.status ?? 'draft');
         setAccess('ok');
@@ -65,6 +67,7 @@ export default function BuilderPage() {
       }
       const { data: proj } = await supabase.from('projects').select('slug, title, status').eq('id', projectId).maybeSingle();
       setTitle(proj?.title ?? 'Tanpa Judul');
+      autoSlugRef.current = proj?.title ?? null;
       setPreviewSlug(proj?.slug ?? null);
       setStatus(proj?.status ?? 'draft');
     }
@@ -77,9 +80,36 @@ export default function BuilderPage() {
     setRenameStatus('saving');
     const { error, slug } = await clientRenameProject(projectId, trimmed);
     if (!error && slug) setPreviewSlug(slug);
+    if (!error) autoSlugRef.current = trimmed;
     setRenameStatus(error ? 'idle' : 'saved');
     setTimeout(() => setRenameStatus('idle'), 1500);
   }
+
+  // Otomatis: slug dinamis dari nama pasangan (Hero bride & groom) — update judul & slug tanpa edit manual
+  useEffect(() => {
+    const hero = canvas.blocks.find((b) => b.type === 'Hero')?.props as Record<string, unknown> | undefined;
+    const bride = typeof hero?.bride === 'string' ? hero.bride.trim() : '';
+    const groom = typeof hero?.groom === 'string' ? hero.groom.trim() : '';
+    if (!bride && !groom) return;
+    const autoTitle = [bride, groom].filter(Boolean).join(' & ') || 'Tanpa Judul';
+    const slugify = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    const wantSlug = slugify(autoTitle);
+    const haveSlug = previewSlug ? slugify(previewSlug) : '';
+    const needSlugFix = wantSlug && haveSlug && wantSlug !== haveSlug && haveSlug.startsWith('elegant-gold');
+    // Hanya auto bila judul masih default / masih sama dengan auto sebelumnya (jangan timpa edit manual) — atau slug lama masih template
+    const isDefault = title === 'Tanpa Judul' || title === 'Elegant Gold' || title.trim() === '';
+    const isAuto = autoSlugRef.current !== null && title === autoSlugRef.current;
+    if (!isDefault && !isAuto && !needSlugFix) return;
+    if (autoTitle === title && !needSlugFix) return;
+    // Debounce 800ms agar tidak spam saat ketik
+    const t = setTimeout(async () => {
+      if (autoTitle !== title) setTitle(autoTitle);
+      autoSlugRef.current = autoTitle;
+      const { slug } = await clientRenameProject(projectId, autoTitle);
+      if (slug) setPreviewSlug(slug);
+    }, 800);
+    return () => clearTimeout(t);
+  }, [canvas.blocks, projectId, title, previewSlug]);
 
   async function handleToggleStatus() {
     if (statusBusy) return;

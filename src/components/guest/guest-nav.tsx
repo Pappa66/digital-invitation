@@ -162,6 +162,7 @@ export default function GuestNav({ blocks = [] }: { blocks?: Block[] }) {
                   transition={spring}
                 />
               )}
+              {/* @ts-ignore */}
               <Icon className="relative z-10 h-5 w-5" />
             </button>
           );

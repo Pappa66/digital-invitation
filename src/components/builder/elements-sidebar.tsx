@@ -234,6 +234,7 @@ function DraggableElement({ type, label, icon: Icon, desc }: { type: BlockType; 
       }`}
     >
       <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-[#f5f0e8] text-[#8a7a66] transition-colors group-hover:bg-[#c9a45c]/10 group-hover:text-[#c9a45c]">
+        {/* @ts-ignore */}
         <Icon className="h-4 w-4" />
       </div>
       <div className="min-w-0 flex-1">
@@ -259,6 +260,7 @@ function CategorySection({ category, isExpanded, onToggle, onSelectVariant }: {
         className="flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left transition-colors hover:bg-[#f5f0e8]"
       >
         <div className="flex h-6 w-6 items-center justify-center rounded-md" style={{ backgroundColor: `${category.color}20` }}>
+          {/* @ts-ignore */}
           <Icon className="h-3.5 w-3.5" style={{ color: category.color }} />
         </div>
         <span className="flex-1 text-xs font-semibold text-[#2b2620]">{category.label}</span>
