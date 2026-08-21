@@ -130,7 +130,7 @@ export default function BlockView({ block, projectId, editable = false, greeting
     gold: 'overflow-hidden rounded-2xl bg-gradient-to-b from-[var(--color-background)] to-[color-mix(in srgb,var(--color-primary) 8%,var(--color-background))] shadow-[0_12px_36px_rgba(0,0,0,0.16)] ring-1 ring-[var(--color-primary)]/30',
   };
   const cardCls = cardVariants[cardVariant] || cardVariants.shadow;
-  const cardWrapCls = `${cardCls} mx-0 mb-1 mt-1 w-full`;
+  const cardWrapCls = `${cardCls} mx-0 mb-1 mt-1 w-full max-w-full min-w-0 box-border`;
   
   const entranceVariants = {
     fade: { opacity: 0, y: 44 },
@@ -159,7 +159,7 @@ export default function BlockView({ block, projectId, editable = false, greeting
       <BuilderEditableContext.Provider value={editable ? { blockId: block.id } : null}>
         <div
           data-block-type={block.type}
-          className={`relative${hideClasses}`}
+          className={`relative w-full min-w-0 max-w-full overflow-hidden box-border${hideClasses}`}
         >
           {animateEntrance && blockEntrance !== 'none' && entranceAnim !== entranceVariants.none ? (
             <motion.div
@@ -209,7 +209,7 @@ function StyledSection({ style, children }: { style?: BlockStyle; children: Reac
             src={style.bgImage}
             alt=""
             fill
-            sizes="(min-width: 768px) 420px, 100vw"
+            sizes="100vw"
             quality={75}
             loading="lazy"
             className={`${style.bgFit === 'contain' ? 'object-contain' : 'object-cover'}`}

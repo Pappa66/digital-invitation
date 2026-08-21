@@ -33,9 +33,8 @@ interface CoverModalProps {
 /**
  * Layar pembuka "Buka Undangan" — ciri khas wevitation.com:
  * cover foto penuh + nama pasangan + sapaan "Kepada: [tamu]" + tombol.
- * SEGALA konten berada dalam kolom portrait (max-width 430px) yang di-center,
- * sehingga di desktop tampak seperti layar ponsel berdiri (bukan landscape).
- * Sisi kiri/kanan pada viewport lebar diberi latar gelap hangat yang elegan.
+ * FULL LAYAR: foto & ornamen memenuhi seluruh viewport (bukan kolom ponsel
+ * 430px yang mengecilkan konten di desktop/HP).
  * Dismiss (klik tombol) memunculkan event 'invite-opened' (memulai musik).
  * Scroll diblokir selama cover terbuka.
  */
@@ -50,7 +49,7 @@ export default function CoverModal({
   secondary,
   background,
   text,
-  namesScale = 'text-[clamp(1.875rem,6vw,2.5rem)]',
+  namesScale = 'text-[clamp(2rem,6vw,3.5rem)]',
   ornament,
   coverGreeting,
   coverButtonText,
@@ -104,10 +103,10 @@ export default function CoverModal({
             }}
           />
 
-          {/* Kolom ponsel — semua konten cover hidup di sini.
-              Di layar ≤ ponsel (potrait) menjadi full-bleed; di layar lebih lebar
-              menjadi bingkai ponsel portrait yang di-center. */}
-          <div className="relative mx-auto h-full w-full max-w-[430px] overflow-hidden sm:my-4 sm:h-[calc(100%-2rem)] sm:rounded-[2.5rem] sm:shadow-dialog sm:ring-1 sm:ring-white/10">
+          {/* Kolom konten cover — full layar. Di layar ponsel (potrait) menjadi
+              full-bleed; di layar lebih lebar tetap full-bleed agar foto &
+              ornamen memenuhi layar (bukan bingkai ponsel yang mengecilkan). */}
+          <div className="relative h-full w-full overflow-hidden">
             {/* Tombol lewati — cara cepat menutup sampul (aksi sama dengan tombol utama). */}
             <motion.button
               initial={{ opacity: 0 }}
@@ -122,7 +121,7 @@ export default function CoverModal({
 
             {(coverBgImage || bgImage) && (
               <div className="absolute inset-0">
-                <Image src={coverBgImage || bgImage || ''} alt="" fill priority sizes="(max-width: 640px) 100vw, 430px" className="object-cover" />
+                <Image src={coverBgImage || bgImage || ''} alt="" fill priority sizes="100vw" className="object-cover" />
                 <div
                   className="absolute inset-0"
                   style={{
@@ -150,7 +149,7 @@ export default function CoverModal({
             {/* Decorative frame overlay */}
             <DecorativeFrame color={primary} />
 
-            <div className="relative z-40 flex h-full w-full flex-col items-center justify-between px-6 py-12 text-center text-white" style={{ paddingBottom: 'max(3rem, env(safe-area-inset-bottom))' }}>
+            <div className="relative z-40 flex h-full w-full flex-col items-center justify-between px-6 py-12 text-center text-white sm:px-10" style={{ paddingBottom: 'max(3rem, env(safe-area-inset-bottom))' }}>
               <motion.div
                 className="mt-2 flex flex-col items-center"
                 initial={{ opacity: 0, y: 20 }}

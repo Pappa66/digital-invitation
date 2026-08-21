@@ -49,7 +49,11 @@ const UrlOrNullSchema = (label: string) =>
 export const TemplateDemoInputSchema = z.object({
   template_id: SlugSchema,
   demo_image: UrlOrNullSchema('Gambar demo'),
-  demo_link: UrlOrNullSchema('Link demo')
+  demo_link: UrlOrNullSchema('Link demo'),
+  demo_number: z.union([z.number().int().min(1).max(999), z.null()]).optional(),
+  demo_name: z
+    .union([z.string().trim().min(1, 'Nama demo tidak boleh kosong').max(80, 'Nama demo terlalu panjang'), z.null()])
+    .optional()
 });
 export type TemplateDemoInput = z.infer<typeof TemplateDemoInputSchema>;
 

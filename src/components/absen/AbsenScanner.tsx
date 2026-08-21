@@ -171,10 +171,10 @@ export default function AbsenScanner({ projectId }: AbsenScannerProps) {
     [scheduleRescan, verifyToken, startScan]
   );
 
-  // Nyalakan kamera otomatis begitu halaman dibuka (panitia siap memindai).
-  useEffect(() => {
-    startScan();
-  }, [startScan]);
+  // Kamera TIDAK dinyalakan otomatis saat halaman dibuka. Di perangkat
+  // seluler, getUserMedia hanya diizinkan bila dipicu user gesture (klik
+  // tombol) — auto-start lewat useEffect selalu ditolak NotAllowedError di
+  // iOS Safari & beberapa Android. Panitia menekan "Nyalakan Kamera".
 
   // Menghidupkan kamera & memproses hasil decode saat status = scanning.
   useEffect(() => {
@@ -294,8 +294,17 @@ export default function AbsenScanner({ projectId }: AbsenScannerProps) {
                 </div>
               )}
               {status === 'idle' && (
-                <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/60">
-                  <Loader2 className="h-6 w-6 animate-spin text-gold-strong" aria-hidden="true" />
+                <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-background/60 px-6 text-center">
+                  <button
+                    type="button"
+                    onClick={startScan}
+                    className="inline-flex min-h-12 items-center gap-2 rounded-full bg-gradient-to-r from-gold to-gold-strong px-7 py-3 text-sm font-semibold text-foreground shadow-gold transition-transform hover:scale-[1.02] active:scale-[0.98]"
+                  >
+                    <ScanLine className="h-5 w-5" aria-hidden="true" /> Nyalakan Kamera
+                  </button>
+                  <p className="max-w-[240px] text-xs leading-relaxed opacity-75">
+                    Diperlukan akses kamera untuk memindai QR tamu. Tekan tombol di atas bila belum muncul izin.
+                  </p>
                 </div>
               )}
             </div>

@@ -44,9 +44,9 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
   } as React.CSSProperties;
 
   const rootClass =
-    'guest-root relative mx-auto w-full overflow-x-clip ' +
+    'guest-root relative w-full min-w-0 max-w-none overflow-x-clip box-border mx-0 ' +
     (canvas.theme.card_style ? 'guest-card-style ' : '') +
-    (width === 'desktop' ? 'max-w-full' : 'max-w-[430px]');
+    (width === 'desktop' ? 'max-w-none' : 'max-w-none');
 
   const coverProps = {
     caption: typeof heroBlock?.props.caption === 'string' ? heroBlock.props.caption : 'Undangan Pernikahan',

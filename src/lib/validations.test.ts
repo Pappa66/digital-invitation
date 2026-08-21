@@ -227,14 +227,14 @@ describe('validateCanvasData — kasus GAGAL (harus null)', () => {
     expect(validateCanvasData(canvas)).toBeNull();
   });
 
-  it('menolak bank account yang tidak lengkap di props', () => {
+  it('menoleransi props objek apa pun (policy permissive; renderer React-escape)', () => {
     const canvas = baseCanvas();
     canvas.blocks = [{
       id: 'env',
       type: 'Envelope',
       props: { accounts: [{ bank_name: 'BCA' }] }
     }];
-    expect(validateCanvasData(canvas)).toBeNull();
+    expect(validateCanvasData(canvas)).not.toBeNull();
   });
 
   it('menolak nilai settings ilegal (discount_percent > 100 atau music_url > 500)', () => {
@@ -247,9 +247,31 @@ describe('validateCanvasData — kasus GAGAL (harus null)', () => {
     expect(validateCanvasData(badUrl)).toBeNull();
   });
 
-  it('menolak props bernilai null (di luar union BlockProps)', () => {
+  it('meloloskan props null dan array objek non-BankAccount (regresi: image_positions/gift_items dari builder)', () => {
     const canvas = baseCanvas();
-    canvas.blocks = [block('Text', { text: null })];
-    expect(validateCanvasData(canvas)).toBeNull();
+    canvas.blocks = [
+      {
+        id: 'g',
+        type: 'Gallery',
+        props: {
+          image_positions: [{ x: 0, y: 0 }, { x: 10, y: 5 }],
+          images: ['https://x/1.jpg', 'https://x/2.jpg']
+        }
+      },
+      {
+        id: 'e',
+        type: 'Envelope',
+        props: {
+          gift_items: [{ id: 'a', label: 'Hadiah', amount: 100000 }],
+          accounts: [{ bank_name: 'BCA', account_number: '1234567890', account_holder: 'Aya' }]
+        }
+      },
+      block('Text', { text: null })
+    ];
+    const result = validateCanvasData(canvas);
+    expect(result).not.toBeNull();
+    expect((result!.blocks[0].props.image_positions as unknown[]).length).toBe(2);
+    expect((result!.blocks[1].props.gift_items as unknown[]).length).toBe(1);
+    expect(result!.blocks[2].props.text).toBeNull();
   });
 });

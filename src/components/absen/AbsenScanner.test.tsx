@@ -98,14 +98,25 @@ describe('parseAbsenTokenFromQr (pure)', () => {
 });
 
 describe('AbsenScanner — komponen scanner /absen', () => {
-  it('memulai kamera (Html5Qrcode.start) saat halaman terbuka', async () => {
+  it('menampilkan tombol "Nyalakan Kamera" tanpa menyalakan kamera otomatis', async () => {
     render(<AbsenScanner projectId={PROJECT_ID} />);
     expect(screen.getByTestId('absen-scanner')).toBeInTheDocument();
+    // Kamera hanya menyala setelah user gesture (wajib di perangkat seluler).
+    expect(qrStartSpy).not.toHaveBeenCalled();
+    expect(screen.getByRole('button', { name: /Nyalakan Kamera/i })).toBeInTheDocument();
+  });
+
+  it('klik "Nyalakan Kamera" menyalakan Html5Qrcode.start', async () => {
+    const user = userEvent.setup();
+    render(<AbsenScanner projectId={PROJECT_ID} />);
+    await user.click(screen.getByRole('button', { name: /Nyalakan Kamera/i }));
     await waitFor(() => expect(qrStartSpy).toHaveBeenCalled());
   });
 
   it('scan QR valid => memanggil verifyCheckinToken dengan token & menampilkan nama tamu + jumlah', async () => {
+    const user = userEvent.setup();
     render(<AbsenScanner projectId={PROJECT_ID} />);
+    await user.click(screen.getByRole('button', { name: /Nyalakan Kamera/i }));
     await waitFor(() => expect(qrStartSpy).toHaveBeenCalled());
 
     simulateDecode(QR_TEXT);
@@ -119,7 +130,9 @@ describe('AbsenScanner — komponen scanner /absen', () => {
   });
 
   it('scan QR tidak dikenal => pesan error + kamera dibuka ulang', async () => {
+    const user = userEvent.setup();
     render(<AbsenScanner projectId={PROJECT_ID} />);
+    await user.click(screen.getByRole('button', { name: /Nyalakan Kamera/i }));
     await waitFor(() => expect(qrStartSpy).toHaveBeenCalled());
 
     simulateDecode('cek!rahasia'); // gagal parse token regex => dianggap QR asing
@@ -133,7 +146,9 @@ describe('AbsenScanner — komponen scanner /absen', () => {
       ok: false,
       error: undefined
     });
+    const user = userEvent.setup();
     render(<AbsenScanner projectId={PROJECT_ID} />);
+    await user.click(screen.getByRole('button', { name: /Nyalakan Kamera/i }));
     await waitFor(() => expect(qrStartSpy).toHaveBeenCalled());
 
     simulateDecode(QR_TEXT);
@@ -146,6 +161,7 @@ describe('AbsenScanner — komponen scanner /absen', () => {
   it('input token manual => memanggil verifyCheckinToken dengan token manual', async () => {
     const user = userEvent.setup();
     render(<AbsenScanner projectId={PROJECT_ID} />);
+    await user.click(screen.getByRole('button', { name: /Nyalakan Kamera/i }));
     await waitFor(() => expect(qrStartSpy).toHaveBeenCalled());
 
     await user.type(screen.getByLabelText(/Atau masukkan token manual/i), TOKEN);
@@ -157,7 +173,9 @@ describe('AbsenScanner — komponen scanner /absen', () => {
 
   it('kamera ditolak browser (start gagal) => mode error kamera dengan pesan jelas', async () => {
     startShouldRejectRef.current = true;
+    const user = userEvent.setup();
     render(<AbsenScanner projectId={PROJECT_ID} />);
+    await user.click(screen.getByRole('button', { name: /Nyalakan Kamera/i }));
 
     const alert = await screen.findByRole('alert');
     expect(alert).toHaveTextContent('Kamera tidak dapat dibuka');

@@ -101,8 +101,22 @@ export interface BankAccount {
   account_holder: string;
 }
 
+/** Nilai prop blok. PERMISSIVE: konten blok terus berkembang, nilai apa pun
+ * yang aman dirender React diterima (string/number/boolean/null/array/object).
+ * Validator (src/lib/validations.ts) menerima union yang sama. */
 export interface BlockProps {
-  [key: string]: string | number | boolean | string[] | BankAccount[] | undefined;
+  [key: string]:
+    | string
+    | number
+    | boolean
+    | string[]
+    | number[]
+    | boolean[]
+    | BankAccount[]
+    | Record<string, unknown>
+    | unknown[]
+    | null
+    | undefined;
 }
 
 /** Posisi bebas blok pada kanvas (mode free positioning). Unit px. */
@@ -279,6 +293,10 @@ export interface TemplateDemo {
   template_id: string;
   demo_image: string | null;
   demo_link: string | null;
+  /** Nomor urut tampilan kartu (01, 02, ...). NULL = fallback urutan katalog. */
+  demo_number?: number | null;
+  /** Nama tampil pada kartu. NULL = nama resmi template (index.json). */
+  demo_name?: string | null;
 }
 
 /** Status pengerjaan client (management dashboard). */

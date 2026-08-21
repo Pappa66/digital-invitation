@@ -155,6 +155,22 @@ export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormPr
                 <QRCode value={qrUrl} size={150} fgColor="#2B2620" title={qrUrl} />
               </div>
               <p className="mt-3 text-xs leading-relaxed opacity-75">Pindai QR ini oleh panitia saat tiba di lokasi.</p>
+              <div className="mx-auto mt-4 flex max-w-[260px] flex-col items-center gap-2">
+                <p className="text-[10px] uppercase tracking-wide opacity-60">Token manual (untuk panitia)</p>
+                <div className="flex w-full items-center gap-1.5 rounded-lg border border-dashed border-current/25 bg-white/70 px-2.5 py-1.5">
+                  <code className="min-w-0 flex-1 break-all font-mono text-[11px] leading-snug opacity-80">{checkinToken}</code>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      void navigator.clipboard?.writeText(checkinToken).catch(() => {});
+                    }}
+                    className="shrink-0 rounded-md border border-current/20 px-2 py-1 text-[10px] font-semibold transition-colors hover:bg-current/10"
+                  >
+                    Salin
+                  </button>
+                </div>
+                <p className="text-[10px] leading-relaxed opacity-60">Jika kamera panitia bermasalah, tunjukkan kode di atas.</p>
+              </div>
             </div>
           ) : (
             <p className="text-xs leading-relaxed opacity-75">QR absen tersedia setelah konfirmasi Anda tercatat.</p>

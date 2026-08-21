@@ -401,18 +401,24 @@ export interface Database {
           template_id: string;
           demo_image: string | null;
           demo_link: string | null;
+          demo_number: number | null;
+          demo_name: string | null;
           updated_at: string;
         };
         Insert: {
           template_id: string;
           demo_image?: string | null;
           demo_link?: string | null;
+          demo_number?: number | null;
+          demo_name?: string | null;
           updated_at?: string;
         };
         Update: {
           template_id?: string;
           demo_image?: string | null;
           demo_link?: string | null;
+          demo_number?: number | null;
+          demo_name?: string | null;
           updated_at?: string;
         };
         Relationships: [];

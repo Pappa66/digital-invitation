@@ -616,7 +616,8 @@ function BackgroundImage({ src, fit, position }: { src: string; fit?: string; po
 
 function CouplePhoto({ src, shape, alt }: { src: string; shape: string; alt: string }) {
   if (!src) return null;
-  const base = 'relative h-48 w-48 overflow-hidden bg-black/10';
+  // Responsif: 128px di HP kecil, 160px di 640px+, 192px di desktop — agar tidak jebol grid side-by-side.
+  const base = 'relative mx-auto mb-4 aspect-square h-32 w-32 shrink-0 overflow-hidden bg-black/10 sm:h-40 sm:w-40 md:h-48 md:w-48 max-w-full';
   const frame =
     shape === 'circle'
       ? 'rounded-full'
@@ -637,7 +638,7 @@ function CouplePhoto({ src, shape, alt }: { src: string; shape: string; alt: str
       : 'rounded-2xl';
   const inner = shape === 'none' ? 'absolute inset-0 overflow-hidden' : 'absolute inset-1.5 overflow-hidden ' + innerRound;
   return (
-    <div className={`${base} ${frame} mx-auto mb-4`}>
+    <div className={`${base} ${frame}`}>
       <div className={inner}>
         <img src={src} alt={alt} className="h-full w-full object-cover" style={{ objectPosition: 'center top' }} />
       </div>
@@ -651,17 +652,17 @@ function CouplePhoto({ src, shape, alt }: { src: string; shape: string; alt: str
 function CouplePerson({ propKey, name, parents, photo, photoShape }: { propKey: string; name: string; parents: string; photo?: string; photoShape?: string }) {
   return (
     <motion.div
-      className="min-w-0 flex-1 break-words"
+      className="flex w-full min-w-0 flex-col items-center break-words text-center"
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
       transition={{ type: 'spring', stiffness: 120, damping: 16 }}
     >
       {photo && <CouplePhoto src={photo} shape={photoShape ?? ''} alt={name} />}
-      <h2 className="text-2xl font-medium leading-snug md:text-3xl">
+      <h2 className="max-w-full text-xl font-medium leading-snug sm:text-2xl md:text-3xl break-words">
         <Editable prop={propKey}>{name}</Editable>
       </h2>
-      <p className="mt-2 text-xs uppercase leading-relaxed tracking-widest opacity-70">
+      <p className="mt-2 max-w-full text-xs uppercase leading-relaxed tracking-widest opacity-70 break-words">
         <Editable prop={`${propKey}_parents`}>{parents}</Editable>
       </p>
     </motion.div>
@@ -901,12 +902,12 @@ export function CoupleBlock({ props }: { props: BlockProps }) {
   );
 
   return (
-    <section className="px-6 py-10 sm:py-12 md:py-16">
-      <div className={`mx-auto w-full ${side ? '' : 'text-center'}`}>
+    <section className="w-full min-w-0 max-w-full overflow-hidden px-4 py-10 sm:px-6 sm:py-12 md:py-16 box-border">
+      <div className={`mx-auto w-full min-w-0 max-w-full ${side ? '' : 'text-center'}`}>
         {str(props, 'introduction') && (
           <Inner name="introduction">
             {title(
-              <p className="mb-6 text-sm leading-relaxed opacity-80">
+              <p className="mb-6 break-words text-sm leading-relaxed opacity-80">
                 <Editable prop="introduction" multiline>
                   {str(props, 'introduction')}
                 </Editable>
@@ -917,7 +918,7 @@ export function CoupleBlock({ props }: { props: BlockProps }) {
         {str(props, 'bismillah') && (
           <Inner name="bismillah">
             {title(
-              <p className={`mb-6 text-sm italic opacity-70 ${side ? 'text-center' : ''}`}>
+              <p className={`mb-6 break-words text-sm italic opacity-70 ${side ? 'text-center' : ''}`}>
                 <Editable prop="bismillah">{str(props, 'bismillah')}</Editable>
               </p>
             )}
@@ -926,26 +927,26 @@ export function CoupleBlock({ props }: { props: BlockProps }) {
         {str(props, 'quote') && (
           <Inner name="quote">
             {title(
-              <p className="mb-8 border-y border-current/10 py-6 text-sm italic leading-relaxed opacity-80">
+              <p className="mb-8 break-words border-y border-current/10 py-6 text-sm italic leading-relaxed opacity-80">
                 &ldquo;<Editable prop="quote">{str(props, 'quote')}</Editable>&rdquo;
               </p>
             )}
           </Inner>
         )}
         {side ? (
-          <div className={`mx-auto grid w-full gap-6 ${isCard ? 'max-w-3xl rounded-2xl border border-current/10 bg-current/[0.03] p-6 sm:p-8 md:grid-cols-[1fr_auto_1fr] md:gap-8' : 'max-w-2xl items-center md:grid-cols-[1fr_auto_1fr] md:gap-8'}`}>
+          <div className={`mx-auto grid w-full min-w-0 max-w-full gap-4 sm:gap-6 ${isCard ? 'rounded-2xl border border-current/10 bg-current/[0.03] p-4 sm:p-6 md:p-8 grid-cols-1 sm:grid-cols-[1fr_auto_1fr] sm:items-center sm:gap-8' : 'grid-cols-1 items-center sm:grid-cols-[1fr_auto_1fr] sm:gap-8'}`}>
             <Inner name="groom">
-              <div className="min-w-0 text-center">
+              <div className="flex min-w-0 justify-center">
                 <CouplePerson propKey="groom" name={str(props, 'groom')} parents={str(props, 'groom_parents')} photo={groomPhoto} photoShape={photoShape} />
               </div>
             </Inner>
             <Inner name="ampersand">
-              <div className="my-2 flex min-w-0 justify-center md:my-0">
+              <div className="flex min-w-0 justify-center py-1 sm:py-0">
                 <GiantAmp />
               </div>
             </Inner>
             <Inner name="bride">
-              <div className="min-w-0 text-center">
+              <div className="flex min-w-0 justify-center">
                 <CouplePerson propKey="bride" name={str(props, 'bride')} parents={str(props, 'bride_parents')} photo={bridePhoto} photoShape={photoShape} />
               </div>
             </Inner>
@@ -953,7 +954,7 @@ export function CoupleBlock({ props }: { props: BlockProps }) {
         ) : (
           <>
             <Inner name="groom">
-              <div className="mb-0">
+              <div className="mb-0 min-w-0">
                 <CouplePerson propKey="groom" name={str(props, 'groom')} parents={str(props, 'groom_parents')} photo={groomPhoto} photoShape={photoShape} />
               </div>
             </Inner>
@@ -961,7 +962,7 @@ export function CoupleBlock({ props }: { props: BlockProps }) {
               <GiantAmp />
             </Inner>
             <Inner name="bride">
-              <div className="mt-0">
+              <div className="mt-0 min-w-0">
                 <CouplePerson propKey="bride" name={str(props, 'bride')} parents={str(props, 'bride_parents')} photo={bridePhoto} photoShape={photoShape} />
               </div>
             </Inner>
@@ -976,8 +977,8 @@ export function CountdownBlock({ props }: { props: BlockProps }) {
   const target = new Date(str(props, 'target_date')).getTime();
   const variant = str(props, 'variant') || 'circles';
   return (
-    <section className="px-6 py-10 sm:py-12 md:py-16 text-center">
-      <h2 className="text-xl md:text-2xl">
+    <section className="w-full min-w-0 max-w-full overflow-hidden box-border px-4 py-10 sm:px-6 sm:py-12 md:py-16 text-center">
+      <h2 className="break-words text-xl md:text-2xl">
         <Editable prop="title">{str(props, 'title')}</Editable>
       </h2>
       <Inner name="timer">
@@ -1026,14 +1027,14 @@ function CountdownTimer({ target, variant }: { target: number; variant: string }
 
   if (variant === 'line' || variant === 'simple') {
     return (
-      <div className="mx-auto mt-10 flex w-full items-center justify-center gap-4 text-sm uppercase tracking-widest opacity-90">
+      <div className="mx-auto mt-6 flex w-full min-w-0 max-w-full flex-wrap items-center justify-center gap-x-2 gap-y-3 text-xs uppercase tracking-widest opacity-90 sm:mt-10 sm:gap-4 sm:text-sm">
         {cells.map((c, i) => (
-          <span key={c.label} className="flex items-baseline gap-2">
-            <span className="text-2xl font-semibold">
+          <span key={c.label} className="inline-flex shrink-0 items-baseline gap-1 sm:gap-2">
+            <span className="text-xl font-semibold sm:text-2xl">
               <Digit value={c.value} />
             </span>
-            <span>{c.label}</span>
-            {i < cells.length - 1 && <span className="mx-2 opacity-40">/</span>}
+            <span className="text-[10px] sm:text-xs">{c.label}</span>
+            {i < cells.length - 1 && <span className="mx-1 opacity-40 sm:mx-2">/</span>}
           </span>
         ))}
       </div>
@@ -1042,19 +1043,19 @@ function CountdownTimer({ target, variant }: { target: number; variant: string }
 
   const cellBase =
     variant === 'cards' || variant === 'boxes'
-      ? 'flex h-16 w-14 flex-col items-center justify-center rounded-lg border border-current/25 px-1 md:h-20 md:w-16'
-      : 'flex h-16 w-16 items-center justify-center rounded-full border border-current/20 text-2xl font-semibold md:h-20 md:w-20';
+      ? 'flex h-14 w-12 flex-col items-center justify-center rounded-lg border border-current/25 px-1 text-xl font-semibold sm:h-16 sm:w-14 md:h-20 md:w-16'
+      : 'flex h-14 w-14 items-center justify-center rounded-full border border-current/20 text-xl font-semibold sm:h-16 sm:w-16 md:h-20 md:w-20';
 
   return (
-    <div className="mx-auto mt-10 flex w-full items-start justify-center gap-4">
+    <div className="mx-auto mt-6 flex w-full min-w-0 max-w-full flex-wrap items-start justify-center gap-2 sm:mt-10 sm:gap-4">
       {cells.map((c) => (
-        <div key={c.label} className="flex flex-col items-center">
+        <div key={c.label} className="flex min-w-0 flex-col items-center">
           <div className={cellBase}>
-            <span className="text-2xl font-semibold md:text-3xl">
+            <span className="text-xl font-semibold sm:text-2xl md:text-3xl">
               <Digit value={c.value} />
             </span>
           </div>
-          <span className="mt-2 text-xs uppercase tracking-widest opacity-70">{c.label}</span>
+          <span className="mt-2 text-[10px] uppercase tracking-widest opacity-70 sm:text-xs">{c.label}</span>
         </div>
       ))}
     </div>
@@ -1353,7 +1354,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
               className="group relative aspect-[4/5] w-full overflow-hidden rounded-lg cursor-pointer"
               onClick={() => !preview && openLightbox(i)}
             >
-              <Image src={src} alt="" fill sizes="(max-width: 768px) 100vw, 420px" quality={75} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" style={{ objectPosition: getPos(i) }} />
+              <Image src={src} alt="" fill sizes="100vw" quality={75} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" style={{ objectPosition: getPos(i) }} />
               <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-400 group-hover:bg-black/15" />
             </motion.div>
           ))}
@@ -1502,7 +1503,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
               className="group relative mx-auto aspect-[3/4.2] w-full max-w-[300px] overflow-hidden rounded-t-[999px] shadow-[0_18px_40px_rgba(0,0,0,0.18)] cursor-pointer"
               onClick={() => !preview && openLightbox(0)}
             >
-              <Image src={hero} alt="" fill sizes="(max-width: 768px) 100vw, 420px" quality={80} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" style={{ objectPosition: getPos(0) }} />
+              <Image src={hero} alt="" fill sizes="100vw" quality={80} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" style={{ objectPosition: getPos(0) }} />
             </motion.div>
           )}
           {rest.length > 0 && (
@@ -1575,7 +1576,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
               className="group relative aspect-[16/10] w-full overflow-hidden rounded-lg cursor-pointer"
               onClick={() => !preview && openLightbox(0)}
             >
-              <Image src={images[0]} alt="" fill sizes="(max-width: 768px) 100vw, 420px" quality={80} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" style={{ objectPosition: getPos(0) }} />
+              <Image src={images[0]} alt="" fill sizes="100vw" quality={80} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" style={{ objectPosition: getPos(0) }} />
             </motion.div>
           )}
           {images.length > 1 && (
@@ -1734,12 +1735,12 @@ function GalleryCarousel({
                 animate={{ scale: [1, 1.15] }}
                 transition={{ duration: Math.max(8, intervalSec * 2), repeat: Infinity, ease: 'linear' }}
               >
-                <Image src={images[idx]} alt="" fill sizes="(max-width: 768px) 100vw, 420px" quality={80} className="object-cover" style={{ objectPosition: positions?.[idx] || 'center' }} />
+                <Image src={images[idx]} alt="" fill sizes="100vw" quality={80} className="object-cover" style={{ objectPosition: positions?.[idx] || 'center' }} />
               </motion.div>
             </motion.div>
           ) : (
             <motion.div key={idx} {...anim} transition={{ duration: 0.7 }} className="absolute inset-0 h-full w-full">
-              <Image src={images[idx]} alt="" fill sizes="(max-width: 768px) 100vw, 420px" quality={80} className="object-cover" style={{ objectPosition: positions?.[idx] || 'center' }} />
+              <Image src={images[idx]} alt="" fill sizes="100vw" quality={80} className="object-cover" style={{ objectPosition: positions?.[idx] || 'center' }} />
             </motion.div>
           )}
         </div>

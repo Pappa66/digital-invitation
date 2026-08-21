@@ -212,6 +212,22 @@ describe('RSVP — QR personal di layar sukses (US-2 / FE-1)', () => {
     expect(svgTitle?.textContent).toContain(`/absen/${PROJECT_ID}?t=${CHECKIN_TOKEN}`);
   });
 
+  it('menampilkan token manual di bawah QR + tombol salin (fallback kamera panitia)', async () => {
+    const user = userEvent.setup();
+    const writeTextSpy = vi.spyOn(navigator.clipboard, 'writeText').mockResolvedValue();
+    render(<RSVPForm projectId={PROJECT_ID} blockProps={{}} />);
+
+    await user.type(screen.getByLabelText('Nama Anda'), 'Budi Santoso');
+    await user.click(screen.getByRole('button', { name: /Kirim Konfirmasi/i }));
+
+    await screen.findByText('Terima kasih atas konfirmasinya.');
+    // Token UUID penuh tampil sebagai teks (bisa dibacakan ke panitia).
+    expect(screen.getByText(CHECKIN_TOKEN)).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: /Salin/i }));
+    expect(writeTextSpy).toHaveBeenCalledWith(CHECKIN_TOKEN);
+    writeTextSpy.mockRestore();
+  });
+
   it('layar sukses TIDAK merender QR bila RSVP tidak memiliki checkin_token', async () => {
     mockInsertOk([{ checkin_token: null }]);
     const user = userEvent.setup();

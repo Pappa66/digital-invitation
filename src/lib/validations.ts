@@ -66,16 +66,18 @@ export const BankAccountSchema = z.object({
 // ---------------------------------------------------------------
 // BLOCK PROPS — PERMISSIVE (index signature seperti BlockProps)
 // ---------------------------------------------------------------
-export const BlockPropsSchema = z.record(
+// Policy dokumen: props adalah konten yang terus berkembang, TIDAK boleh
+// memblokir render data sah. Nilai apa pun yang aman untuk dirender React
+// (React-escape penuh, tidak ada dangerouslySetInnerHTML) diterima:
+// string/number/boolean/null/array (string | number | object) / object.
+const PropString = z.string().max(5000);
+const PropNumber = z.number();
+const PropBoolean = z.boolean();
+const PropAnyArray = z.array(z.unknown()).max(200);
+const PropObject = z.record(z.string(), z.unknown());
+const BlockPropsSchema = z.record(
   z.string(),
-  z.union([
-    z.string().max(5000),
-    z.number(),
-    z.boolean(),
-    z.array(z.string()),
-    z.array(BankAccountSchema),
-    z.undefined()
-  ])
+  z.union([PropString, PropNumber, PropBoolean, z.null(), PropAnyArray, PropObject, z.undefined()])
 );
 
 // ---------------------------------------------------------------
