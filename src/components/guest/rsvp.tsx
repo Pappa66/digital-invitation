@@ -93,6 +93,19 @@ export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormPr
         : null;
     const mealChoice = menuOptions?.map((m) => m.value).join(' / ') ?? null;
 
+    // Generate token client-side agar QR selalu muncul (anon user tidak bisa
+    // SELECT balik row mereka sendiri karena RLS hanya izinkan authenticated).
+    let clientToken: string | null = null;
+    try {
+      clientToken = crypto.randomUUID();
+    } catch {
+      // Fallback: buat ID acak 36-char tanpa crypto API
+      clientToken = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+        const r = (Math.random() * 16) | 0;
+        return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
+      });
+    }
+
     let error: { message?: string } | null = null;
     let newToken: string | null = null;
     if (demoIsDemoMode()) {
@@ -114,12 +127,13 @@ export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormPr
     } else {
       const r = await supabase
         .from('rsvps')
-        .insert({ project_id: projectId, name: cleanName, attendance, guest_count: guestCount, message: message.trim() || null, meal_choice: mealChoice, menu_options: menuOptions })
+        .insert({ project_id: projectId, name: cleanName, attendance, guest_count: guestCount, message: message.trim() || null, meal_choice: mealChoice, menu_options: menuOptions, checkin_token: clientToken })
         .select('checkin_token');
       error = r.error;
       if (!r.error) {
         const row = Array.isArray(r.data) ? r.data[0] : null;
-        newToken = typeof row?.checkin_token === 'string' ? row.checkin_token : null;
+        // Prioritaskan token dari DB (jika SELECT berhasil), fallback ke clientToken
+        newToken = (typeof row?.checkin_token === 'string' ? row.checkin_token : null) ?? clientToken;
       }
     }
 
@@ -147,7 +161,7 @@ export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormPr
       <div className={`mx-auto mt-8 max-w-sm px-6 py-10 ${variant === 'card' ? 'rounded-2xl border border-current/10' : ''}`}>
         <p className="text-lg">{str(blockProps, 'success_message') || 'Terima kasih atas konfirmasinya.'}</p>
         <div className="mt-6">
-          {checkinToken ? (
+          {checkinToken && attendance !== 'tidak' ? (
             <div className="rounded-2xl border border-current/10 bg-white/60 p-4">
               <div className="mx-auto w-fit rounded-xl bg-white p-3 shadow-soft">
                 <QRCode value={qrUrl} size={150} fgColor="#2B2620" title={qrUrl} />

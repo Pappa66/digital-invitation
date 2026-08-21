@@ -79,13 +79,15 @@ export default function AbsenScanner({ projectId }: AbsenScannerProps) {
   const [result, setResult] = useState<CheckinResult | null>(null);
   const [manualToken, setManualToken] = useState('');
   const [manualError, setManualError] = useState('');
-  const [scanAttempt, setScanAttempt] = useState(0);
 
   const containerId = `absen-scanner-${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`;
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const busyRef = useRef(false);
   const isMounted = useRef(true);
   const rescanTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  /** Ref untuk onDecoded supaya startCamera tidak perlu depends on onDecoded
+   *  (menghindari circular dependency: startCamera → onDecoded → scheduleRescan → startCamera). */
+  const onDecodedRef = useRef<(decodedText: string) => void>(() => {});
 
   /** Hentikan kamera & lepas resource. Aman dipanggil kapan pun. */
   const stopScanner = useCallback(async () => {
@@ -104,15 +106,45 @@ export default function AbsenScanner({ projectId }: AbsenScannerProps) {
     }
   }, []);
 
-  /** Mulai ulang alur scan: nolkan hasil, nyalakan kamera kembali. */
-  const startScan = useCallback(() => {
+  /** Nyalakan kamera & mulai scan. Dipanggil langsung dari click handler
+   *  supaya getUserMedia berada dalam user gesture (wajib di iOS Safari & Android). */
+  const startCamera = useCallback(async () => {
     setResult(null);
     setManualError('');
     setErrorMsg('');
     setCameraIssue(null);
     setStatus('scanning');
-    setScanAttempt((n) => n + 1);
-  }, []);
+
+    // Hentikan scanner sebelumnya jika ada
+    if (scannerRef.current) {
+      try { if (scannerRef.current.isScanning) await scannerRef.current.stop(); } catch { /* ignore */ }
+      try { scannerRef.current.clear(); } catch { /* ignore */ }
+      scannerRef.current = null;
+    }
+
+    const el = document.getElementById(containerId);
+    if (!el) return;
+
+    const scanner = new Html5Qrcode(containerId, { verbose: false });
+    scannerRef.current = scanner;
+
+    try {
+      await scanner.start(
+        { facingMode: 'environment' },
+        { fps: 10, qrbox: { width: QRBOX, height: QRBOX } },
+        (decodedText) => {
+          if (!busyRef.current) onDecodedRef.current(decodedText);
+        },
+        () => { /* galat decode per-frame — biarkan kamera tetap berjalan */ }
+      );
+    } catch (err: unknown) {
+      const issue = classifyCameraError(err);
+      scannerRef.current = null;
+      setCameraIssue(issue);
+      setErrorMsg(CAMERA_ERROR_TEXT[issue ?? 'generic']);
+      setStatus('error');
+    }
+  }, [containerId]);
 
   const scheduleRescan = useCallback(() => {
     if (rescanTimer.current) clearTimeout(rescanTimer.current);
@@ -120,9 +152,9 @@ export default function AbsenScanner({ projectId }: AbsenScannerProps) {
       rescanTimer.current = null;
       if (!isMounted.current) return;
       busyRef.current = false;
-      startScan();
+      void startCamera();
     }, RESCAN_MS);
-  }, [startScan]);
+  }, [startCamera]);
 
   /** Verifikasi token (dari scan atau input manual) via server action. */
   const verifyToken = useCallback(
@@ -158,7 +190,7 @@ export default function AbsenScanner({ projectId }: AbsenScannerProps) {
         const timer = setTimeout(() => {
           if (isMounted.current) {
             busyRef.current = false;
-            startScan();
+            void startCamera();
           }
         }, RESCAN_MS);
         rescanTimer.current = timer;
@@ -168,61 +200,20 @@ export default function AbsenScanner({ projectId }: AbsenScannerProps) {
         if (!r.ok && isMounted.current) scheduleRescan();
       });
     },
-    [scheduleRescan, verifyToken, startScan]
+    [scheduleRescan, verifyToken, startCamera]
   );
+  // Sync ref agar startCamera (yang tidak depends on onDecoded) selalu
+  // memanggil versi onDecoded terbaru.
+  useEffect(() => {
+    onDecodedRef.current = onDecoded;
+  });
 
   // Kamera TIDAK dinyalakan otomatis saat halaman dibuka. Di perangkat
   // seluler, getUserMedia hanya diizinkan bila dipicu user gesture (klik
   // tombol) — auto-start lewat useEffect selalu ditolak NotAllowedError di
   // iOS Safari & beberapa Android. Panitia menekan "Nyalakan Kamera".
 
-  // Menghidupkan kamera & memproses hasil decode saat status = scanning.
-  useEffect(() => {
-    if (status !== 'scanning') return;
-    let cancelled = false;
-    const el = document.getElementById(containerId);
-    if (!el) return;
-
-    const scanner = new Html5Qrcode(containerId, { verbose: false });
-    scannerRef.current = scanner;
-
-    scanner
-      .start(
-        { facingMode: 'environment' },
-        { fps: 10, qrbox: { width: QRBOX, height: QRBOX } },
-        (decodedText) => {
-          if (!cancelled) onDecoded(decodedText);
-        },
-        () => {
-          /* galat decode per-frame — biarkan kamera tetap berjalan */
-        }
-      )
-      .catch((err: unknown) => {
-        if (cancelled) return;
-        const issue = classifyCameraError(err);
-        scannerRef.current = null;
-        setCameraIssue(issue);
-        setErrorMsg(CAMERA_ERROR_TEXT[issue ?? 'generic']);
-        setStatus('error');
-      });
-
-    return () => {
-      cancelled = true;
-      if (scannerRef.current === scanner) scannerRef.current = null;
-      try {
-        if (scanner.isScanning) void scanner.stop();
-      } catch {
-        /* ignore */
-      }
-      try {
-        scanner.clear();
-      } catch {
-        /* ignore */
-      }
-    };
-  }, [containerId, onDecoded, status, scanAttempt]);
-
-  // Pembersihan saat komponen dilepas (tidak pernah mulai ulang).
+  // Pembersihan saat komponen dilepas.
   useEffect(() => {
     isMounted.current = true;
     return () => {
@@ -257,7 +248,7 @@ export default function AbsenScanner({ projectId }: AbsenScannerProps) {
               <Users className="h-3.5 w-3.5" aria-hidden="true" /> {result.guest_count ?? 1} tamu
             </p>
             <button
-              onClick={startScan}
+              onClick={() => void startCamera()}
               className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-full bg-gradient-to-r from-gold to-gold-strong px-6 py-2.5 text-sm font-semibold text-foreground shadow-gold transition-transform hover:scale-[1.02] active:scale-[0.98]"
             >
               <ScanLine className="h-4 w-4" aria-hidden="true" /> Scan Berikutnya
@@ -275,7 +266,7 @@ export default function AbsenScanner({ projectId }: AbsenScannerProps) {
             <h2 className="mt-3 text-lg font-medium">{cameraIssue ? 'Kamera tidak dapat dibuka' : 'Check-in ditolak'}</h2>
             <p className="mx-auto mt-1 max-w-xs text-xs leading-relaxed opacity-80">{errorMsg}</p>
             <button
-              onClick={startScan}
+              onClick={() => void startCamera()}
               className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-full border border-current/25 px-5 py-2.5 text-sm font-medium transition-colors hover:bg-current/10 active:scale-95"
             >
               <RefreshCw className="h-4 w-4" aria-hidden="true" />
@@ -297,7 +288,7 @@ export default function AbsenScanner({ projectId }: AbsenScannerProps) {
                 <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-background/60 px-6 text-center">
                   <button
                     type="button"
-                    onClick={startScan}
+                    onClick={() => void startCamera()}
                     className="inline-flex min-h-12 items-center gap-2 rounded-full bg-gradient-to-r from-gold to-gold-strong px-7 py-3 text-sm font-semibold text-foreground shadow-gold transition-transform hover:scale-[1.02] active:scale-[0.98]"
                   >
                     <ScanLine className="h-5 w-5" aria-hidden="true" /> Nyalakan Kamera

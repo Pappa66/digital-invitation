@@ -2398,7 +2398,7 @@ export function WatermarkBlock({ props }: { props: BlockProps }) {
   const url = str(props, 'url');
   const theme = useTheme();
   const content = (
-    <p className="font-body text-xs tracking-wide opacity-40">
+    <p className="font-body text-xs tracking-wide opacity-70">
       {text}{' '}
       <span className="font-heading font-medium opacity-70">{brand}</span>
     </p>

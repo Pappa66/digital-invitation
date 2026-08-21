@@ -214,7 +214,7 @@ function StyledSection({ style, children }: { style?: BlockStyle; children: Reac
   if (style.border) css.border = style.border;
   if (style.boxShadow) css.boxShadow = style.boxShadow;
   if (style.padding) css.padding = style.padding;
-  if (style.opacity !== undefined) css.opacity = style.opacity;
+  if (style.opacity !== undefined) css.opacity = Math.min(1, Math.max(0, style.opacity));
   if (style.textAlign) css.textAlign = style.textAlign;
 
   const textOverride = style.textColor ? ' data-text-override' : '';

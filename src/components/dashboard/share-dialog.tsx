@@ -11,11 +11,15 @@ import {
   MessageSquare,
   Users,
   Send,
-  ListChecks
+  ListChecks,
+  KeyRound,
+  Trash2,
+  Clock
 } from 'lucide-react';
 import { RELIGIONS, getReligion, waLink, parseGuestLines, type ReligionKey } from '@/lib/religions';
 import { clientGetInviteAccessToken } from '@/lib/api/project-client';
 import { getSiteOrigin } from '@/lib/site';
+import { generateShareToken, listShareTokens, revokeShareToken, type ShareTokenInfo } from '@/lib/actions/share-token-actions';
 
 interface ShareDialogProps {
   open: boolean;
@@ -26,6 +30,8 @@ interface ShareDialogProps {
   /** Agama aktif dari builder (opsional). Bila dikosongkan, dipakai state lokal. */
   religion?: string;
   onChangeReligion?: (religion: ReligionKey) => void;
+  /** Tampilkan tab Edit Link (hanya dari builder). */
+  showEditLink?: boolean;
 }
 
 const STORAGE_RELIGION = (id: string) => `gb_religion_${id}`;
@@ -53,9 +59,9 @@ function loadState<T>(key: string, fallback: T): T {
   }
 }
 
-type Tab = 'single' | 'bulk' | 'team';
+type Tab = 'single' | 'bulk' | 'team' | 'edit';
 
-export default function ShareDialog({ open, projectId, slug, title, onClose, religion: initialReligion, onChangeReligion }: ShareDialogProps) {
+export default function ShareDialog({ open, projectId, slug, title, onClose, religion: initialReligion, onChangeReligion, showEditLink }: ShareDialogProps) {
   const [tab, setTab] = useState<Tab>('single');
   const [name, setName] = useState('');
   const [religion, setReligion] = useState<ReligionKey>(() => {
@@ -70,6 +76,13 @@ export default function ShareDialog({ open, projectId, slug, title, onClose, rel
   const [bulkText, setBulkText] = useState<string>(() => loadState(STORAGE_BULK(projectId), ''));
   const [sentIndexes, setSentIndexes] = useState<Set<number>>(new Set());
   const [manageToken, setManageToken] = useState<string | null>(null);
+  // Edit link state
+  const [editTokens, setEditTokens] = useState<(ShareTokenInfo & { is_active: boolean; note?: string })[]>([]);
+  const [editLoading, setEditLoading] = useState(false);
+  const [editExpiry, setEditExpiry] = useState(24);
+  const [editNote, setEditNote] = useState('');
+  const [editGenerated, setEditGenerated] = useState<{ token: string; url: string } | null>(null);
+  const [editCopied, setEditCopied] = useState(false);
 
   useEffect(() => {
     if (!open) return;
@@ -175,7 +188,8 @@ export default function ShareDialog({ open, projectId, slug, title, onClose, rel
             [
               { key: 'single', label: 'Satu Tamu', icon: User },
               { key: 'bulk', label: 'Bulk', icon: Users },
-              { key: 'team', label: 'Akses Tim', icon: Link2 }
+              { key: 'team', label: 'Akses Tim', icon: Link2 },
+              ...(showEditLink ? [{ key: 'edit' as const, label: 'Edit Link', icon: KeyRound }] : [])
             ] as { key: Tab; label: string; icon: typeof User }[]
           ).map((t) => (
             <button
@@ -346,6 +360,51 @@ export default function ShareDialog({ open, projectId, slug, title, onClose, rel
               />
             </Section>
           )}
+
+          {tab === 'edit' && (
+            <EditLinkTab
+              tokens={editTokens}
+              loading={editLoading}
+              expiry={editExpiry}
+              note={editNote}
+              generated={editGenerated}
+              copied={editCopied}
+              onExpiryChange={setEditExpiry}
+              onNoteChange={setEditNote}
+              onGenerate={async () => {
+                setEditLoading(true);
+                const res = await generateShareToken(projectId, editExpiry, editNote || undefined);
+                if (res.data) {
+                  const url = `${base}/edit/${res.data.token}`;
+                  setEditGenerated({ token: res.data.token, url });
+                  setEditTokens((prev) => [
+                    { ...res.data!, is_active: true, note: editNote || undefined },
+                    ...prev
+                  ]);
+                  setEditNote('');
+                }
+                setEditLoading(false);
+              }}
+              onCopy={() => {
+                if (editGenerated) {
+                  copyText(editGenerated.url).then((ok) => {
+                    setEditCopied(ok);
+                    setTimeout(() => setEditCopied(false), 1500);
+                  });
+                }
+              }}
+              onRevoke={async (tokenId) => {
+                await revokeShareToken(tokenId);
+                setEditTokens((prev) => prev.map((t) => t.id === tokenId ? { ...t, is_active: false } : t));
+              }}
+              onLoadTokens={async () => {
+                setEditLoading(true);
+                const res = await listShareTokens(projectId);
+                if (res.data) setEditTokens(res.data);
+                setEditLoading(false);
+              }}
+            />
+          )}
         </div>
 
         <div className="flex items-center justify-between border-t border-gray-100 px-5 py-3">
@@ -459,5 +518,167 @@ function AccessRow({
       <p className="mt-1 truncate text-[11px] text-gray-500">{value}</p>
       <p className="mt-0.5 text-[10px] text-gray-400">{desc}</p>
     </div>
+  );
+}
+
+interface EditLinkTabProps {
+  tokens: (ShareTokenInfo & { is_active: boolean; note?: string })[];
+  loading: boolean;
+  expiry: number;
+  note: string;
+  generated: { token: string; url: string } | null;
+  copied: boolean;
+  onExpiryChange: (hours: number) => void;
+  onNoteChange: (note: string) => void;
+  onGenerate: () => void;
+  onCopy: () => void;
+  onRevoke: (tokenId: string) => void;
+  onLoadTokens: () => void;
+}
+
+function EditLinkTab({
+  tokens,
+  loading,
+  expiry,
+  note,
+  generated,
+  copied,
+  onExpiryChange,
+  onNoteChange,
+  onGenerate,
+  onCopy,
+  onRevoke,
+  onLoadTokens
+}: EditLinkTabProps) {
+  const [loaded, setLoaded] = useState(false);
+  const [now, setNow] = useState(() => Date.now());
+
+  useEffect(() => {
+    if (!loaded) {
+      onLoadTokens();
+      setLoaded(true);
+    }
+    // Update timeLeft setiap menit
+    const interval = setInterval(() => setNow(Date.now()), 60_000);
+    return () => clearInterval(interval);
+  }, [loaded, onLoadTokens]);
+
+  const EXPIRY_OPTIONS = [
+    { hours: 1, label: '1 Jam' },
+    { hours: 24, label: '24 Jam' },
+    { hours: 168, label: '7 Hari' }
+  ];
+
+  const activeTokens = tokens.filter((t) => t.is_active && new Date(t.expires_at) > new Date());
+  const expiredTokens = tokens.filter((t) => !t.is_active || new Date(t.expires_at) <= new Date());
+
+  return (
+    <Section icon={<KeyRound className="h-4 w-4 text-gray-400" />} title="Link Edit Tanpa Login">
+      <p className="text-[11px] text-gray-500 mb-3">
+        Bagikan link ini agar orang lain bisa edit undangan tanpa login. Perubahan langsung disimpan ke project utama.
+      </p>
+
+      {/* Generate form */}
+      <div className="rounded-lg border border-gray-200 p-3 space-y-3">
+        <div>
+          <label className="mb-1 block text-xs font-medium text-gray-700">Berapa lama link berlaku?</label>
+          <div className="flex gap-1.5">
+            {EXPIRY_OPTIONS.map((opt) => (
+              <button
+                key={opt.hours}
+                onClick={() => onExpiryChange(opt.hours)}
+                className={`flex-1 rounded-md border px-2 py-1.5 text-xs font-medium ${
+                  expiry === opt.hours
+                    ? 'border-gray-900 bg-gray-900 text-white'
+                    : 'border-gray-300 text-gray-600 hover:bg-gray-50'
+                }`}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <label className="mb-1 block text-xs font-medium text-gray-700">Catatan (opsional)</label>
+          <input
+            value={note}
+            onChange={(e) => onNoteChange(e.target.value)}
+            placeholder="cth. Untuk desainer"
+            maxLength={100}
+            className="w-full rounded-md border border-gray-300 bg-gray-50 px-2.5 py-1.5 text-xs outline-none focus:ring-2 focus:ring-gray-900"
+          />
+        </div>
+
+        <button
+          onClick={onGenerate}
+          disabled={loading}
+          className="w-full rounded-md bg-gray-900 px-3 py-2 text-xs font-medium text-white hover:bg-gray-800 disabled:opacity-50"
+        >
+          {loading ? 'Generating...' : 'Generate Link Edit'}
+        </button>
+      </div>
+
+      {/* Generated link */}
+      {generated && (
+        <div className="mt-3 rounded-lg border border-green-200 bg-green-50 p-3">
+          <p className="text-[11px] font-medium text-green-700 mb-2">Link berhasil dibuat!</p>
+          <div className="flex items-center gap-1.5">
+            <input
+              readOnly
+              value={generated.url}
+              className="min-w-0 flex-1 rounded-md border border-green-300 bg-white px-2 py-1.5 text-[11px] text-gray-700"
+            />
+            <button
+              onClick={onCopy}
+              className="flex shrink-0 items-center gap-1 rounded-md border border-green-300 bg-white px-2 py-1.5 text-[11px] font-medium text-green-700 hover:bg-green-100"
+            >
+              {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+              {copied ? 'Disalin' : 'Salin'}
+            </button>
+          </div>
+          <p className="mt-1.5 text-[10px] text-green-600">
+            Berlaku {expiry < 24 ? `${expiry} jam` : `${expiry / 24} hari`} dari sekarang.
+          </p>
+        </div>
+      )}
+
+      {/* Active tokens */}
+      {activeTokens.length > 0 && (
+        <div className="mt-4">
+          <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wide mb-2">Link Aktif</p>
+          <div className="space-y-1.5">
+            {activeTokens.map((t) => {
+              const timeLeft = Math.max(0, Math.floor((new Date(t.expires_at).getTime() - now) / 3600000));
+              return (
+                <div key={t.id} className="flex items-center justify-between rounded-md border border-gray-200 p-2">
+                  <div className="min-w-0">
+                    <p className="text-[11px] text-gray-700 truncate">{t.note || 'Link edit'}</p>
+                    <p className="text-[10px] text-gray-400">
+                      <Clock className="inline h-3 w-3 mr-0.5" />
+                      Sisa {timeLeft} jam · Dibuat {new Date(t.created_at).toLocaleDateString('id-ID')}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => onRevoke(t.id)}
+                    className="shrink-0 rounded-md border border-red-200 px-2 py-1 text-[10px] font-medium text-red-600 hover:bg-red-50"
+                  >
+                    <Trash2 className="h-3 w-3" />
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Expired tokens */}
+      {expiredTokens.length > 0 && (
+        <div className="mt-3">
+          <p className="text-[11px] font-medium text-gray-400 uppercase tracking-wide mb-1">Riwayat</p>
+          <p className="text-[10px] text-gray-400">{expiredTokens.length} link kedaluwarsa/dinonaktifkan</p>
+        </div>
+      )}
+    </Section>
   );
 }

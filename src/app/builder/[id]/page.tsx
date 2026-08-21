@@ -243,6 +243,7 @@ export default function BuilderPage() {
               religion={canvas.settings.religion}
               onChangeReligion={setReligion}
               onClose={() => setShareOpen(false)}
+              showEditLink
             />
           )}
           <AbsenShareDialog

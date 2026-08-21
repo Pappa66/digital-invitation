@@ -76,6 +76,9 @@ describe('RSVPForm — submit & validasi', () => {
       attendance: 'hadir',
       guest_count: 1
     });
+    // Token di-generate client-side dan ikut di-insert.
+    expect(typeof payload.checkin_token).toBe('string');
+    expect(payload.checkin_token).toMatch(/^[0-9a-f-]{36}$/);
     expect(await screen.findByText('Terima kasih!')).toBeInTheDocument();
   });
 
@@ -228,17 +231,36 @@ describe('RSVP — QR personal di layar sukses (US-2 / FE-1)', () => {
     writeTextSpy.mockRestore();
   });
 
-  it('layar sukses TIDAK merender QR bila RSVP tidak memiliki checkin_token', async () => {
+  it('layar sukses tetap merender QR menggunakan token client-side bila DB mengembalikan null', async () => {
     mockInsertOk([{ checkin_token: null }]);
     const user = userEvent.setup();
     const { container } = render(<RSVPForm projectId={PROJECT_ID} blockProps={{}} />);
 
     await user.type(screen.getByLabelText('Nama Anda'), 'Budi Santoso');
+    // Default attendance = hadir → QR harus muncul
     await user.click(screen.getByRole('button', { name: /Kirim Konfirmasi/i }));
 
     await screen.findByText('Terima kasih atas konfirmasinya.');
+    // Token client-side dijadikan fallback — QR tetap muncul untuk hadir.
+    expect(container.querySelector('svg')).not.toBeNull();
+    expect(screen.getByText(/Pindai QR ini oleh panitia/i)).toBeInTheDocument();
+  });
+
+  it('layar sukses TIDAK menampilkan QR untuk attendance tidak hadir', async () => {
+    mockInsertOk([{ checkin_token: 'some-token' }]);
+    const user = userEvent.setup();
+    const { container } = render(<RSVPForm projectId={PROJECT_ID} blockProps={{}} />);
+
+    await user.type(screen.getByLabelText('Nama Anda'), 'Budi Santoso');
+    // Pilih "Tidak Hadir"
+    await user.click(screen.getByRole('radio', { name: /Tidak/i }));
+    await user.click(screen.getByRole('button', { name: /Kirim Konfirmasi/i }));
+
+    await screen.findByText('Terima kasih atas konfirmasinya.');
+    // QR dan token tidak ditampilkan untuk yang tidak hadir.
     expect(container.querySelector('svg')).toBeNull();
-    expect(screen.getByText(/QR absen tersedia setelah konfirmasi/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Pindai QR ini oleh panitia/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Token manual/i)).not.toBeInTheDocument();
   });
 
   it('tidak memanggil select/submit DB saat readonly (preview builder)', async () => {
