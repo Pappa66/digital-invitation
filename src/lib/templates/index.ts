@@ -39,6 +39,10 @@ import mauveReverie from '../../../templates/mauve-reverie.json';
 import simpleRustic from '../../../templates/simple-rustic.json';
 import serene from '../../../templates/serene.json';
 import photovita from '../../../templates/photovita.json';
+import darkLuxe from '../../../templates/dark-luxe.json';
+import gardenRomantic from '../../../templates/garden-romantic.json';
+import modernMinimal from '../../../templates/modern-minimal.json';
+import blushDream from '../../../templates/blush-dream.json';
 import templateIndex from '../../../templates/index.json';
 
 export const TEMPLATE_LIST: TemplateMeta[] = templateIndex as TemplateMeta[];
@@ -86,7 +90,11 @@ const RAW_TEMPLATES: Record<string, CanvasData> = {
   'mauve-reverie': mauveReverie as unknown as CanvasData,
   'simple-rustic': simpleRustic as unknown as CanvasData,
   'serene': serene as unknown as CanvasData,
-  'photovita': photovita as unknown as CanvasData
+  'photovita': photovita as unknown as CanvasData,
+  'dark-luxe': darkLuxe as unknown as CanvasData,
+  'garden-romantic': gardenRomantic as unknown as CanvasData,
+  'modern-minimal': modernMinimal as unknown as CanvasData,
+  'blush-dream': blushDream as unknown as CanvasData
 };
 
 /**
@@ -140,6 +148,10 @@ const TEMPLATE_FRAMES: Record<string, string> = {
 TEMPLATE_FRAMES['simple-rustic'] = 'double';
 TEMPLATE_FRAMES['serene'] = 'arch';
 TEMPLATE_FRAMES['photovita'] = 'none';
+TEMPLATE_FRAMES['dark-luxe'] = 'none';
+TEMPLATE_FRAMES['garden-romantic'] = 'arch';
+TEMPLATE_FRAMES['modern-minimal'] = 'none';
+TEMPLATE_FRAMES['blush-dream'] = 'classic';
 
 export function getTemplate(id: string): CanvasData | null {
   const tpl = RAW_TEMPLATES[id];

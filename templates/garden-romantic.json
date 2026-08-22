@@ -1,0 +1,182 @@
+{
+  "theme": {
+    "primary": "#5B7553",
+    "secondary": "#C4A882",
+    "background": "#FAF7F2",
+    "text": "#3D3D3D",
+    "font_heading": "Italiana",
+    "font_body": "Nunito",
+    "layout": "center",
+    "hero_style": "image",
+    "ornament": "eucalyptus",
+    "frame": "arch",
+    "card_style": false,
+    "cover_style": "floral"
+  },
+  "settings": {
+    "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3",
+    "guest_book_enabled": true,
+    "religion": "islam",
+    "checkin_enabled": true
+  },
+  "blocks": [
+    {
+      "id": "gr-hero-1",
+      "type": "Hero",
+      "props": {
+        "groom": "Panca Priyantoro",
+        "bride": "Sena Ayudia",
+        "date": "Sabtu, 12 Desember 2026",
+        "place": "The Ritz-Carlton, Jakarta",
+        "caption": "Undangan Pernikahan",
+        "bg_image": "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=1920&q=80",
+        "show_ornament": true,
+        "variant": "center"
+      }
+    },
+    {
+      "id": "gr-couple-2",
+      "type": "Couple",
+      "props": {
+        "introduction": "Assalamu'alaikum Warahmatullahi Wabarakatuh",
+        "bismillah": "Bismillahirrahmanirrahim",
+        "groom": "Panca Priyantoro, S.T.",
+        "groom_parents": "Putra pertama dari Bpk. H. Darmo & Ibu Hj. Wulan",
+        "bride": "Sena Ayudia, S.E.",
+        "bride_parents": "Putri kedua dari Bpk. Ir. Rendra & Ibu Lily Susanti",
+        "variant": "side",
+        "photo_shape": "rounded",
+        "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
+        "bride_photo": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&q=80"
+      }
+    },
+    {
+      "id": "gr-quote-3",
+      "type": "Quote",
+      "props": {
+        "religion": "islam",
+        "original": "وَمِن كُلِّ شَيْءٍ خَلَقْنَا زَوْجَيْنِ لَعَلَّكُمْ تَذَكَّرُونَ",
+        "latin": "Wa min kulli syai-in khalaqnaa zaujaini la'allakum tadzakkaruun",
+        "translation": "Dan segala sesuatu Kami ciptakan berpasang-pasangan supaya kamu mengingat (kebesaran Allah).",
+        "reference": "QS. Adz Dzariyyat: 49"
+      }
+    },
+    {
+      "id": "gr-countdown-4",
+      "type": "Countdown",
+      "props": {
+        "target_date": "2026-12-12T08:00:00+07:00",
+        "title": "Menghitung Hari Kebahagiaan Kami",
+        "variant": "flip"
+      }
+    },
+    {
+      "id": "gr-story-5",
+      "type": "Story",
+      "props": {
+        "title": "Kisah Kami",
+        "subtitle": "Perjalanan cinta yang indah",
+        "ev_title": ["Pertemuan Pertama", "Menjadi Pasangan", "Lamaran"],
+        "ev_date": ["2016", "2018", "2025"],
+        "ev_desc": [
+          "Panca dan Sena pertama kali bertemu saat kuliah di Yogyakarta.",
+          "Mereka mulai menjalin hubungan setelah saling mengenal dua tahun.",
+          "Panca melamar Sena di tepi pantai Parangtritis saat langit berubah keemasan."
+        ]
+      },
+      "style": {
+        "bgColor": "#F0EDE6",
+        "borderRadius": "28px",
+        "padding": "48px 24px"
+      }
+    },
+    {
+      "id": "gr-event-6",
+      "type": "EventDetail",
+      "props": {
+        "title": "Akad Nikah",
+        "icon": "rings",
+        "date": "Sabtu, 12 Desember 2026",
+        "time": "08.00 - 10.00 WIB",
+        "location": "The Ritz-Carlton Grand Ballroom",
+        "address": "Jl. DR. IDE Anak Agung Gde Agung Kav. C1, Kuningan",
+        "maps_url": "https://maps.google.com/?q=The%20Ritz-Carlton%20Grand%20Ballroom",
+        "variant": "band"
+      }
+    },
+    {
+      "id": "gr-event-7",
+      "type": "EventDetail",
+      "props": {
+        "title": "Resepsi",
+        "icon": "glass",
+        "date": "Sabtu, 12 Desember 2026",
+        "time": "11.00 - 14.00 WIB",
+        "location": "The Ritz-Carlton Grand Ballroom",
+        "address": "Kawasan Mega Kuningan, Jakarta Selatan",
+        "maps_url": "https://maps.google.com/?q=The%20Ritz-Carlton%20Grand%20Ballroom",
+        "variant": "card"
+      }
+    },
+    {
+      "id": "gr-gallery-8",
+      "type": "Gallery",
+      "props": {
+        "title": "Momen Indah Kami",
+        "images": [
+          "https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&q=80",
+          "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=1200&q=80",
+          "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=1200&q=80",
+          "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1200&q=80"
+        ],
+        "variant": "polaroid"
+      }
+    },
+    {
+      "id": "gr-envelope-9",
+      "type": "Envelope",
+      "props": {
+        "title": "Amplop Digital",
+        "note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening berikut.",
+        "accounts": [
+          {
+            "bank_name": "BCA",
+            "account_number": "885 012 3456",
+            "account_holder": "Sena Ayudia, S.E."
+          }
+        ]
+      }
+    },
+    {
+      "id": "gr-rsvp-10",
+      "type": "RSVP",
+      "props": {
+        "title": "Konfirmasi Kehadiran",
+        "note": "Mohon kirim konfirmasi kehadiran sebelum 30 November 2026",
+        "deadline": "2026-11-30",
+        "button_text": "Kirim Konfirmasi",
+        "success_message": "Terima kasih, konfirmasi Anda sudah kami terima."
+      }
+    },
+    {
+      "id": "gr-thanks-11",
+      "type": "Thanks",
+      "props": {
+        "title": "Doa Restu Anda",
+        "message": "Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu kepada kami.",
+        "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
+        "names": "Panca & Sena"
+      }
+    },
+    {
+      "id": "gr-maps-12",
+      "type": "Maps",
+      "props": {
+        "title": "Lokasi Acara",
+        "address": "The Ritz-Carlton, Jakarta",
+        "embed_url": "https://maps.google.com/?q=The%20Ritz-Carlton%2C%20Jakarta"
+      }
+    }
+  ],
+  "flow": "stack"
+}

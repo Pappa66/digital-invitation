@@ -361,5 +361,45 @@
     "primary": "#2B2B2B",
     "secondary": "#6B6B6B",
     "show_as_demo": false
+  },
+  {
+    "id": "dark-luxe",
+    "name": "Dark Luxe",
+    "category": "classic",
+    "description": "Mewah dan dramatis: emas di atas latar gelap, kartu-kartu elegan dengan bayangan emas.",
+    "primary": "#D4AF37",
+    "secondary": "#1A1A2E",
+    "show_as_demo": true,
+    "demo_order": 13
+  },
+  {
+    "id": "garden-romantic",
+    "name": "Garden Romantic",
+    "category": "outdoor",
+    "description": "Taman bunga yang asri: hijau sage, bingkai arch, polaroid gallery, nuansa hangat dan natural.",
+    "primary": "#5B7553",
+    "secondary": "#C4A882",
+    "show_as_demo": true,
+    "demo_order": 14
+  },
+  {
+    "id": "modern-minimal",
+    "name": "Modern Minimal",
+    "category": "modern",
+    "description": "Bersih dan modern: hitam putih, tipografi besar, kartu minimalis tanpa ornamen.",
+    "primary": "#111827",
+    "secondary": "#6B7280",
+    "show_as_demo": true,
+    "demo_order": 15
+  },
+  {
+    "id": "blush-dream",
+    "name": "Blush Dream",
+    "category": "romance",
+    "description": "Romantis dan lembut: pink dusty, tipografi kaligrafi, polaroid gallery, bingkai klasik.",
+    "primary": "#D4869C",
+    "secondary": "#F2C4CE",
+    "show_as_demo": true,
+    "demo_order": 16
   }
 ]

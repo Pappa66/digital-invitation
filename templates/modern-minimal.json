@@ -1,0 +1,164 @@
+{
+  "theme": {
+    "primary": "#111827",
+    "secondary": "#6B7280",
+    "background": "#FFFFFF",
+    "text": "#111827",
+    "font_heading": "Space Grotesk",
+    "font_body": "Inter",
+    "layout": "center",
+    "hero_style": "solid",
+    "ornament": "",
+    "frame": "none",
+    "card_style": true,
+    "card_variant": "minimal",
+    "cover_style": "filmroll"
+  },
+  "settings": {
+    "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3",
+    "guest_book_enabled": true,
+    "religion": "islam",
+    "checkin_enabled": true
+  },
+  "blocks": [
+    {
+      "id": "mm-hero-1",
+      "type": "Hero",
+      "props": {
+        "groom": "Panca",
+        "bride": "Sena",
+        "date": "12 . 12 . 2026",
+        "place": "The Ritz-Carlton, Jakarta",
+        "caption": "",
+        "bg_image": "",
+        "show_ornament": false,
+        "variant": "center"
+      },
+      "style": {
+        "bgColor": "#111827",
+        "textColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "mm-couple-2",
+      "type": "Couple",
+      "props": {
+        "introduction": "",
+        "bismillah": "",
+        "groom": "Panca Priyantoro, S.T.",
+        "groom_parents": "Putra pertama dari Bpk. H. Darmo & Ibu Hj. Wulan",
+        "bride": "Sena Ayudia, S.E.",
+        "bride_parents": "Putri kedua dari Bpk. Ir. Rendra & Ibu Lily Susanti",
+        "variant": "together",
+        "photo_shape": "circle",
+        "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
+        "bride_photo": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&q=80"
+      }
+    },
+    {
+      "id": "mm-divider-2b",
+      "type": "Divider",
+      "props": {
+        "variant": "line"
+      }
+    },
+    {
+      "id": "mm-countdown-4",
+      "type": "Countdown",
+      "props": {
+        "target_date": "2026-12-12T08:00:00+07:00",
+        "title": "",
+        "variant": "clean"
+      }
+    },
+    {
+      "id": "mm-story-5",
+      "type": "Story",
+      "props": {
+        "title": "Timeline",
+        "subtitle": "",
+        "ev_title": ["First Meet", "Together", "Proposal"],
+        "ev_date": ["2016", "2018", "2025"],
+        "ev_desc": [
+          "Kuliah di Yogyakarta.",
+          "Menjalin hubungan.",
+          "Lamaran di Parangtritis."
+        ]
+      },
+      "style": {
+        "borderRadius": "16px",
+        "padding": "32px 20px"
+      }
+    },
+    {
+      "id": "mm-event-6",
+      "type": "EventDetail",
+      "props": {
+        "title": "Akad",
+        "icon": "rings",
+        "date": "12 Desember 2026",
+        "time": "08.00 WIB",
+        "location": "The Ritz-Carlton",
+        "address": "Jakarta Selatan",
+        "maps_url": "https://maps.google.com/?q=The%20Ritz-Carlton%2C%20Jakarta",
+        "variant": "minimal"
+      }
+    },
+    {
+      "id": "mm-event-7",
+      "type": "EventDetail",
+      "props": {
+        "title": "Resepsi",
+        "icon": "glass",
+        "date": "12 Desember 2026",
+        "time": "11.00 WIB",
+        "location": "The Ritz-Carlton",
+        "address": "Jakarta Selatan",
+        "maps_url": "https://maps.google.com/?q=The%20Ritz-Carlton%2C%20Jakarta",
+        "variant": "minimal"
+      }
+    },
+    {
+      "id": "mm-gallery-8",
+      "type": "Gallery",
+      "props": {
+        "title": "",
+        "images": [
+          "https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&q=80",
+          "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=1200&q=80",
+          "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=1200&q=80",
+          "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1200&q=80"
+        ],
+        "variant": "grid"
+      },
+      "style": {
+        "borderRadius": "12px"
+      }
+    },
+    {
+      "id": "mm-rsvp-10",
+      "type": "RSVP",
+      "props": {
+        "title": "RSVP",
+        "note": "Konfirmasi sebelum 30 November 2026",
+        "deadline": "2026-11-30",
+        "button_text": "Kirim",
+        "success_message": "Terima kasih."
+      },
+      "style": {
+        "accentColor": "#111827"
+      }
+    },
+    {
+      "id": "mm-thanks-11",
+      "type": "Thanks",
+      "props": {
+        "title": "Terima Kasih",
+        "message": "Kehormatan dan kebahagiaan bagi kami apabila berkenan hadir.",
+        "closing": "",
+        "names": "P & S"
+      }
+    }
+  ],
+  "flow": "stack"
+}
