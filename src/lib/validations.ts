@@ -27,7 +27,10 @@ export const ThemeSchema = z.object({
   card_variant: z.string().max(30).optional(),
   card_entrance: z.string().max(20).optional(),
   ornament: z.string().max(50).optional(),
-  cover_style: z.enum(['floral', 'book', 'filmroll', 'oldtv', 'newspaper']).optional()
+  cover_style: z.enum(['floral', 'book', 'filmroll', 'oldtv', 'newspaper']).optional(),
+  // Legacy (tidak dirender lagi) — ditoleransi agar data lama tetap valid.
+  cover_3d: z.boolean().optional(),
+  model3d: z.string().max(200).optional()
 }).strict();
 
 // ---------------------------------------------------------------

@@ -206,7 +206,6 @@ export function romanticClassicTheme() {
     hero_style: 'image' as const,
     ornament: 'gardenia-wreath',
     cover_style: 'floral' as const,
-    cover_3d: true
   };
 }
 
@@ -223,7 +222,6 @@ export function vintage80sTheme() {
     hero_style: 'image' as const,
     ornament: 'newspaper-rule',
     cover_style: 'oldtv' as const,
-    cover_3d: false
   };
 }
 
@@ -240,7 +238,6 @@ export function vintageNewsprintTheme() {
     hero_style: 'solid' as const,
     ornament: 'newspaper-rule',
     cover_style: 'newspaper' as const,
-    cover_3d: false
   };
 }
 

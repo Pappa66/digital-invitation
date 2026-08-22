@@ -77,7 +77,7 @@ describe('builder-store', () => {
     const store = useBuilderStore.getState();
     store.setTheme({ primary: '#FF0000' });
     expect(useBuilderStore.getState().canvas.theme.primary).toBe('#FF0000');
-    expect(useBuilderStore.getState().canvas.theme.background).toBe('#FAF6EF');
+    expect(useBuilderStore.getState().canvas.theme.background).toBe('#FBF7F1');
   });
 
   it('init() only applies once to avoid clobbering autosave state', () => {
