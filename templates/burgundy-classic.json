@@ -8,11 +8,9 @@
     "font_body": "Jost",
     "layout": "center",
     "hero_style": "image",
-    "ornament": "vine-border",
     "frame": "double",
     "card_style": true,
-    "cover_style": "filmroll",
-    "cover_3d": false
+    "cover_style": "filmroll"
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3",

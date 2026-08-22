@@ -11,9 +11,7 @@
     "ornament": "sunda-kebat",
     "frame": "none",
     "card_style": true,
-    "cover_style": "floral",
-    "cover_3d": true,
-    "model3d": "3d/sunda-rumah.glb"
+    "cover_style": "floral"
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3",
@@ -39,7 +37,7 @@
         "variant": "center"
       },
       "style": {
-        "entrance": "batik",
+        "entrance": "fade",
         "entranceDelay": 0
       }
     },
@@ -59,7 +57,7 @@
         "bride_photo": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600&q=80"
       },
       "style": {
-        "entrance": "batik",
+        "entrance": "fade",
         "entranceDelay": 120
       }
     },
@@ -74,7 +72,7 @@
         "reference": "QS. Adz Dzariyyat: 49"
       },
       "style": {
-        "entrance": "batik",
+        "entrance": "fade",
         "entranceDelay": 240
       }
     },
@@ -87,7 +85,7 @@
         "variant": "cards"
       },
       "style": {
-        "entrance": "batik",
+        "entrance": "fade",
         "entranceDelay": 360
       }
     },
@@ -105,7 +103,7 @@
         "variant": "band"
       },
       "style": {
-        "entrance": "batik",
+        "entrance": "fade",
         "entranceDelay": 0
       }
     },
@@ -123,7 +121,7 @@
         "variant": "card"
       },
       "style": {
-        "entrance": "batik",
+        "entrance": "fade",
         "entranceDelay": 120
       }
     },
@@ -142,7 +140,7 @@
         "animation": "fade"
       },
       "style": {
-        "entrance": "batik",
+        "entrance": "fade",
         "entranceDelay": 240
       }
     },
@@ -161,7 +159,7 @@
         ]
       },
       "style": {
-        "entrance": "batik",
+        "entrance": "fade",
         "entranceDelay": 360
       }
     },
@@ -180,7 +178,7 @@
         "account_holder": "Gerald Marchel"
       },
       "style": {
-        "entrance": "batik",
+        "entrance": "fade",
         "entranceDelay": 0
       }
     },
@@ -194,7 +192,7 @@
         "names": "Gerald & Vanessa"
       },
       "style": {
-        "entrance": "batik",
+        "entrance": "fade",
         "entranceDelay": 120
       }
     },
@@ -207,7 +205,7 @@
         "embed_url": "https://maps.google.com/?q=The%20Westin%2C%20Surabaya"
       },
       "style": {
-        "entrance": "batik",
+        "entrance": "fade",
         "entranceDelay": 240
       }
     }

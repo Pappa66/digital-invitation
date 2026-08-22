@@ -6,7 +6,7 @@ import {
   Image as ImageIcon, LayoutPanelTop, Clock, CalendarHeart, BookOpen, Images,
   Mail, MapPin, HeartHandshake, Minus, GripVertical, Type, Gift, ListChecks,
   Quote as QuoteIcon, Radio, ChevronDown, ChevronRight, Sparkles, PenTool,
-  Layout, Users, MessageSquare, Palette, MousePointerClick, Copy as CopyIcon
+  Layout, Users, MessageSquare, Palette, MousePointerClick, Copy as CopyIcon, X
 } from 'lucide-react';
 import type { BlockType } from '@/lib/types';
 import { useBuilderStore } from '@/store/builder-store';
@@ -220,13 +220,14 @@ const QUICK_STARTS: { label: string; blocks: BlockType[] }[] = [
   { label: 'RSVP + Maps', blocks: ['RSVP', 'Maps'] }
 ];
 
-function DraggableElement({ type, label, icon: Icon, desc }: { type: BlockType; label: string; icon: React.ElementType; desc: string }) {
+function DraggableElement({ type, label, icon: Icon, desc, onTap }: { type: BlockType; label: string; icon: React.ElementType; desc: string; onTap?: (type: BlockType) => void }) {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({ id: `widget-${type}` });
   return (
     <button
       ref={setNodeRef}
       {...listeners}
       {...attributes}
+      onClick={() => onTap?.(type)}
       className={`group flex w-full items-center gap-3 rounded-lg border px-3 py-2.5 text-left transition-all ${
         isDragging
           ? 'border-[#c9a45c] bg-[#c9a45c]/10 text-[#8a6d2f] opacity-40'
@@ -246,11 +247,12 @@ function DraggableElement({ type, label, icon: Icon, desc }: { type: BlockType; 
   );
 }
 
-function CategorySection({ category, isExpanded, onToggle, onSelectVariant }: {
+function CategorySection({ category, isExpanded, onToggle, onSelectVariant, onTap }: {
   category: BlockCategory;
   isExpanded: boolean;
   onToggle: () => void;
   onSelectVariant: (type: BlockType, variant: string, variantKey?: string) => void;
+  onTap?: (type: BlockType) => void;
 }) {
   const Icon = category.icon;
   return (
@@ -273,7 +275,7 @@ function CategorySection({ category, isExpanded, onToggle, onSelectVariant }: {
       {isExpanded && (
         <div className="mt-1 space-y-1 pl-1">
           {category.blocks.map((block) => (
-            <BlockWithVariants key={block.type} block={block} onSelectVariant={onSelectVariant} />
+            <BlockWithVariants key={block.type} block={block} onSelectVariant={onSelectVariant} onTap={onTap} />
           ))}
         </div>
       )}
@@ -281,12 +283,12 @@ function CategorySection({ category, isExpanded, onToggle, onSelectVariant }: {
   );
 }
 
-function BlockWithVariants({ block, onSelectVariant }: { block: BlockItem; onSelectVariant: (type: BlockType, variant: string, variantKey?: string) => void }) {
+function BlockWithVariants({ block, onSelectVariant, onTap }: { block: BlockItem; onSelectVariant: (type: BlockType, variant: string, variantKey?: string) => void; onTap?: (type: BlockType) => void }) {
   const [showVariants, setShowVariants] = useState(false);
 
   return (
     <div>
-      <DraggableElement type={block.type} label={block.label} icon={block.icon} desc={block.desc} />
+      <DraggableElement type={block.type} label={block.label} icon={block.icon} desc={block.desc} onTap={onTap} />
       {block.variants && block.variants.length > 1 && (
         <button
           onClick={() => setShowVariants(!showVariants)}
@@ -317,7 +319,7 @@ function BlockWithVariants({ block, onSelectVariant }: { block: BlockItem; onSel
   );
 }
 
-export default function ElementsSidebar() {
+export default function ElementsSidebar({ mobileOpen = false, onClose }: { mobileOpen?: boolean; onClose?: () => void } = {}) {
   const addBlock = useBuilderStore((s) => s.addBlock);
   const setBlockProps = useBuilderStore((s) => s.setBlockProps);
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
@@ -343,12 +345,23 @@ export default function ElementsSidebar() {
     }
   }
 
+  // Tap-to-add ramah sentuh (HP): klik widget langsung tambah blok, lalu tutup drawer.
+  function handleTap(type: BlockType) {
+    addBlock(type);
+    onClose?.();
+  }
+
   return (
-    <aside className="flex h-full w-72 shrink-0 flex-col border-r border-[#e7ddcc] bg-[#faf8f5]">
+    <aside className={`flex h-full w-72 shrink-0 flex-col border-r border-[#e7ddcc] bg-[#faf8f5] max-lg:fixed max-lg:left-0 max-lg:top-0 max-lg:bottom-16 max-lg:z-50 max-lg:w-[82%] max-lg:max-w-xs max-lg:shadow-2xl max-lg:transition-transform max-lg:duration-300 ${mobileOpen ? 'max-lg:translate-x-0' : 'max-lg:-translate-x-full'}`}>
       <div className="border-b border-[#e7ddcc] px-4 py-3">
-        <div className="flex items-center gap-2">
-          <Layout className="h-4 w-4 text-[#c9a45c]" />
-          <h3 className="text-sm font-semibold text-[#2b2620]">Tambah Blok</h3>
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <Layout className="h-4 w-4 text-[#c9a45c]" />
+            <h3 className="text-sm font-semibold text-[#2b2620]">Tambah Blok</h3>
+          </div>
+          <button onClick={onClose} className="rounded-md p-1 text-[#8a7a66] hover:bg-[#e7ddcc] lg:hidden" aria-label="Tutup">
+            <X className="h-4 w-4" />
+          </button>
         </div>
         <p className="mt-0.5 text-xs text-[#8a7a66]">Pilih kategori lalu klik atau seret ke kanvas</p>
         <p className="mt-1.5 rounded-md bg-[#c9a45c]/10 px-2 py-1.5 text-[10px] leading-relaxed text-[#8a6d2f]">
@@ -358,13 +371,14 @@ export default function ElementsSidebar() {
 
       <div className="flex-1 space-y-1 overflow-auto p-3">
         {BLOCK_CATEGORIES.map((cat) => (
-          <CategorySection
-            key={cat.id}
-            category={cat}
-            isExpanded={expandedCategories.has(cat.id)}
-            onToggle={() => toggleCategory(cat.id)}
-            onSelectVariant={handleSelectVariant}
-          />
+            <CategorySection
+              key={cat.id}
+              category={cat}
+              isExpanded={expandedCategories.has(cat.id)}
+              onToggle={() => toggleCategory(cat.id)}
+              onSelectVariant={handleSelectVariant}
+              onTap={handleTap}
+            />
         ))}
 
         <div className="mt-4 border-t border-[#e7ddcc] pt-4">

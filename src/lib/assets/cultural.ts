@@ -225,17 +225,17 @@ export const NO_COPYRIGHT_ASSETS: CulturalCategory[] = CULTURAL_ASSETS.map((c) =
  * Dipakai builder (picker "Budaya & Agama") dan script naik-kelas template.
  * Semua aset 2D berasal dari ornaments.tsx (inline, CC0/bebas hak cipta).
  */
-export const CULTURAL_CONCEPT_MAP: Record<string, { cover: string; entrance: string; ornament: string; accent: string; model3d: string }> = {
-  islam:    { cover: 'book',    entrance: 'islamic',  ornament: 'islamic-geometric', accent: '#2E7D57', model3d: '3d/islam-masjid.glb' },
-  kristen:  { cover: 'book',    entrance: 'fade',     ornament: 'church-window',     accent: '#3B5BA5', model3d: '3d/kristen-church.glb' },
-  katolik:  { cover: 'book',    entrance: 'fade',     ornament: 'cross',            accent: '#8C6D1F', model3d: '3d/katolik-gereja.glb' },
-  hindu:    { cover: 'mandala', entrance: 'mandala',  ornament: 'hindu-mandala',    accent: '#C0392B', model3d: '3d/hindu-candi.glb' },
-  buddha:   { cover: 'floral',  entrance: 'mandala',  ornament: 'buddha-wheel',     accent: '#D98C1F', model3d: '3d/buddha-stupa.glb' },
-  konghucu: { cover: 'lantern', entrance: 'lantern',  ornament: 'lantern',          accent: '#B23A3A', model3d: '3d/konghucu-kelenteng.glb' },
-  jawa:     { cover: 'floral',  entrance: 'wayang',   ornament: 'jawa-gunungan',    accent: '#7B4B2A', model3d: '3d/jawa-gapura.glb' },
-  sunda:    { cover: 'floral',  entrance: 'batik',    ornament: 'sunda-kebat',      accent: '#4E7A3A', model3d: '3d/sunda-rumah.glb' },
-  batak:    { cover: 'floral',  entrance: 'ulos',     ornament: 'batak-ulos',       accent: '#5A3E2B', model3d: '3d/batak-rumah.glb' },
-  bali:     { cover: 'floral',  entrance: 'wayang',   ornament: 'wayang',           accent: '#C0392B', model3d: '3d/bali-pura.glb' },
-  minang:   { cover: 'floral',  entrance: 'batik',    ornament: 'minang-gadang',    accent: '#8A5A2B', model3d: '3d/minang-gadang.glb' },
-  papua:    { cover: 'floral',  entrance: 'batik',    ornament: 'papua-asmat',      accent: '#2E6E8E', model3d: '3d/papua-honai.glb' }
+export const CULTURAL_CONCEPT_MAP: Record<string, { cover: string; entrance: string; ornament: string; accent: string }> = {
+  islam:    { cover: 'book',    entrance: 'fade',  ornament: 'islamic-geometric', accent: '#2E7D57' },
+  kristen:  { cover: 'book',    entrance: 'fade',     ornament: 'church-window',     accent: '#3B5BA5' },
+  katolik:  { cover: 'book',    entrance: 'fade',     ornament: 'cross',            accent: '#8C6D1F' },
+  hindu:    { cover: 'floral', entrance: 'fade',  ornament: 'hindu-mandala',    accent: '#C0392B' },
+  buddha:   { cover: 'floral',  entrance: 'fade',  ornament: 'buddha-wheel',     accent: '#D98C1F' },
+  konghucu: { cover: 'book', entrance: 'fade',  ornament: 'lantern',          accent: '#B23A3A' },
+  jawa:     { cover: 'floral',  entrance: 'fade',   ornament: 'jawa-gunungan',    accent: '#7B4B2A' },
+  sunda:    { cover: 'floral',  entrance: 'fade',    ornament: 'sunda-kebat',      accent: '#4E7A3A' },
+  batak:    { cover: 'floral',  entrance: 'fade',     ornament: 'batak-ulos',       accent: '#5A3E2B' },
+  bali:     { cover: 'floral',  entrance: 'fade',   ornament: 'wayang',           accent: '#C0392B' },
+  minang:   { cover: 'floral',  entrance: 'fade',    ornament: 'minang-gadang',    accent: '#8A5A2B' },
+  papua:    { cover: 'floral',  entrance: 'fade',    ornament: 'papua-asmat',      accent: '#2E6E8E' }
 };

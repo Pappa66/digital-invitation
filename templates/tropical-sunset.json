@@ -11,9 +11,7 @@
     "ornament": "islamic-geometric",
     "frame": "classic",
     "card_style": true,
-    "cover_style": "book",
-    "cover_3d": true,
-    "model3d": "3d/islam-masjid.glb"
+    "cover_style": "book"
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-12.mp3",
@@ -39,7 +37,7 @@
         "variant": "left"
       },
       "style": {
-        "entrance": "islamic",
+        "entrance": "fade",
         "entranceDelay": 0
       }
     },
@@ -59,7 +57,7 @@
         "bride_photo": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600&q=80"
       },
       "style": {
-        "entrance": "islamic",
+        "entrance": "fade",
         "entranceDelay": 120
       }
     },
@@ -74,7 +72,7 @@
         "reference": "QS. Adz Dzariyyat: 49"
       },
       "style": {
-        "entrance": "islamic",
+        "entrance": "fade",
         "entranceDelay": 240
       }
     },
@@ -87,7 +85,7 @@
         "variant": "circles"
       },
       "style": {
-        "entrance": "islamic",
+        "entrance": "fade",
         "entranceDelay": 360
       }
     },
@@ -114,7 +112,7 @@
         ]
       },
       "style": {
-        "entrance": "islamic",
+        "entrance": "fade",
         "entranceDelay": 0
       }
     },
@@ -132,7 +130,7 @@
         "variant": "band"
       },
       "style": {
-        "entrance": "islamic",
+        "entrance": "fade",
         "entranceDelay": 120
       }
     },
@@ -150,7 +148,7 @@
         "variant": "card"
       },
       "style": {
-        "entrance": "islamic",
+        "entrance": "fade",
         "entranceDelay": 240
       }
     },
@@ -171,7 +169,7 @@
         "interval_sec": 5
       },
       "style": {
-        "entrance": "islamic",
+        "entrance": "fade",
         "entranceDelay": 360
       }
     },
@@ -190,7 +188,7 @@
         ]
       },
       "style": {
-        "entrance": "islamic",
+        "entrance": "fade",
         "entranceDelay": 0
       }
     },
@@ -209,7 +207,7 @@
         "account_holder": "Ardan Pradana"
       },
       "style": {
-        "entrance": "islamic",
+        "entrance": "fade",
         "entranceDelay": 120
       }
     },
@@ -223,7 +221,7 @@
         "names": "Ardan & Maharani"
       },
       "style": {
-        "entrance": "islamic",
+        "entrance": "fade",
         "entranceDelay": 240
       }
     },
@@ -236,7 +234,7 @@
         "embed_url": "https://maps.google.com/?q=Sunset%20Bay%2C%20Manado"
       },
       "style": {
-        "entrance": "islamic",
+        "entrance": "fade",
         "entranceDelay": 360
       }
     }

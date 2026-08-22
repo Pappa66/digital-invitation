@@ -138,8 +138,7 @@ export default function BlockView({ block, projectId, editable = false, greeting
     zoom: { opacity: 0, scale: 0.92 },
     blur: { opacity: 0, scale: 0.94 },
     rise: { opacity: 0, y: 60 },
-    // Baru: 3D & stagger
-    flip3d: { opacity: 0, rotateY: 45, scale: 0.96 } as const,
+    // 3D & editorial
     parallax: { opacity: 0, y: 80, scale: 0.98 } as const,
     stagger: { opacity: 0, y: 24 } as const,
     float: { opacity: 0, y: 16 } as const,
@@ -150,20 +149,12 @@ export default function BlockView({ block, projectId, editable = false, greeting
     oldtv: { opacity: 0, scale: 0.55 } as const,
     newspaper: { opacity: 0, y: 36 } as const,
     vintage: { opacity: 0, scale: 1.05 } as const,
-    // Budaya & agama
-    mandala: { opacity: 0, scale: 0.7, rotate: -25 } as const,
-    islamic: { opacity: 0, scaleX: 0.2, scaleY: 1 } as const,
-    ulos: { opacity: 0, y: 40, scaleY: 0.6 } as const,
-    lantern: { opacity: 0, y: -30, scale: 0.8 } as const,
-    wayang: { opacity: 0, x: -40, skewX: 6 } as const,
-    batik: { opacity: 0, scale: 1.08, rotate: 3 } as const,
     none: { opacity: 1 },
   } as const;
   type EntranceKey = keyof typeof entranceVariants;
   const blockEntrance = (block.style?.entrance ?? theme?.card_entrance ?? 'fade') as EntranceKey;
   const entranceAnim = entranceVariants[blockEntrance] ?? entranceVariants.fade;
   const entranceDelay = block.style?.entranceDelay ?? 0;
-  const isFlip3d = blockEntrance === 'flip3d';
   const isBook = blockEntrance === 'book' || blockEntrance === 'magazine';
   const isFloat = blockEntrance === 'float';
   const hideOn = block.style?.hideOn ?? [];
@@ -189,21 +180,19 @@ export default function BlockView({ block, projectId, editable = false, greeting
               whileInView={{ opacity: 1, y: 0, x: 0, scale: 1, scaleX: 1, scaleY: 1, rotate: 0, rotateY: 0, rotateX: 0, skewX: 0 }}
               viewport={{ once: true, amount: 0.12 }}
               transition={
-                isFlip3d || isBook
+                isBook
                   ? { duration: 0.9, ease: [0.22, 1, 0.36, 1] as const, delay: entranceDelay }
                   : blockEntrance === 'parallax'
                     ? { duration: 1.0, ease: [0.22, 1, 0.36, 1] as const, delay: entranceDelay }
-                    : blockEntrance === 'filmroll' || blockEntrance === 'oldtv'
-                      ? { duration: 0.7, ease: 'easeOut' as const, delay: entranceDelay }
-                      : blockEntrance === 'mandala' || blockEntrance === 'batik'
-                        ? { duration: 1.1, ease: [0.34, 1.2, 0.64, 1] as const, delay: entranceDelay }
+                      : blockEntrance === 'filmroll' || blockEntrance === 'oldtv'
+                        ? { duration: 0.7, ease: 'easeOut' as const, delay: entranceDelay }
                         : blockEntrance === 'stagger'
                           ? { duration: 0.6, ease: 'easeOut' as const, delay: entranceDelay, staggerChildren: 0.08 }
                           : isFloat
                             ? { type: 'spring' as const, stiffness: 90, damping: 12, delay: entranceDelay }
                             : { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const, delay: entranceDelay }
               }
-              style={(isFlip3d || isBook) ? { perspective: 1200, transformStyle: 'preserve-3d' as const } : undefined}
+              style={isBook ? { perspective: 1200, transformStyle: 'preserve-3d' as const } : undefined}
             >
               {renderCard ? <div className={cardWrapCls}>{body}</div> : body}
             </motion.div>

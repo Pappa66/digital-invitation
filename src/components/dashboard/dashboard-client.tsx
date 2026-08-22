@@ -9,6 +9,7 @@ import FinanceTracker from '@/components/dashboard/finance-tracker';
 import GuideModal from '@/components/ui/guide-modal';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
+
 import { Input } from '@/components/ui/input';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import type { Project } from '@/lib/types';
@@ -37,7 +38,7 @@ function makeDemoProject(id: string, title: string): Project {
 
 type TabType = 'invitations' | 'clients' | 'finance';
 
-export default function DashboardClient({ projects, isDemo = false }: DashboardClientProps) {
+export default function DashboardClient({ projects, isDemo = false, userName }: DashboardClientProps) {
   const [items, setItems] = useState<Project[]>(projects);
   const [modalOpen, setModalOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
@@ -136,7 +137,25 @@ export default function DashboardClient({ projects, isDemo = false }: DashboardC
   const hasActiveFilters = searchQuery || filterMonth || filterYear || filterStatus;
 
   return (
-    <div>
+    <div className="min-h-screen bg-background">
+      {/* HEADER Romantis Klasik */}
+      <header className="relative overflow-hidden border-b border-gold/20 bg-gradient-to-r from-[#FBF7F1] via-[#F6EFE4] to-[#FBF7F1]">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-5 sm:px-6">
+          <div className="flex items-center gap-3">
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-gold to-gold-strong text-base font-semibold text-foreground shadow-gold">P</span>
+            <div>
+              <p className="font-script text-xl leading-none text-gold-deep">Prasha</p>
+              <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">Digital Indonesia</p>
+            </div>
+          </div>
+          <div className="text-right">
+            <p className="text-sm font-medium text-foreground">{userName || 'Selamat datang'}</p>
+            <p className="text-xs text-muted-foreground">Kelola undangan pernikahan Anda</p>
+          </div>
+        </div>
+      </header>
+
+      <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
       {/* Tab Navigation */}
       <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as TabType)} className="mb-6">
         <TabsList>
@@ -156,7 +175,7 @@ export default function DashboardClient({ projects, isDemo = false }: DashboardC
           <div className="mb-6 flex items-center justify-between">
             <div>
               <h2 className="text-lg font-semibold">Daftar Undangan</h2>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-muted-foreground">
                 {filteredItems.length === 0
                   ? '0 undangan ditemukan'
                   : `${(safePage - 1) * PER_PAGE + 1}–${Math.min(safePage * PER_PAGE, filteredItems.length)} dari ${filteredItems.length} undangan`}
@@ -244,9 +263,9 @@ export default function DashboardClient({ projects, isDemo = false }: DashboardC
           </div>
 
           {isDemo && (
-            <p className="mb-4 rounded-md bg-sky-50 px-3 py-2 text-xs text-sky-700">
+            <p className="mb-4 rounded-md bg-gold/10 px-3 py-2 text-xs text-gold-deep">
               Mode Demo aktif — data disimpan di browser (localStorage), tanpa Supabase. Untuk produksi,
-              matikan <code className="rounded bg-sky-100 px-1">NEXT_PUBLIC_DEMO_MODE</code> di .env.local.
+              matikan <code className="rounded bg-gold/15 px-1">NEXT_PUBLIC_DEMO_MODE</code> di .env.local.
             </p>
           )}
 
@@ -259,10 +278,10 @@ export default function DashboardClient({ projects, isDemo = false }: DashboardC
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                 </svg>
               </div>
-              <p className="text-base font-medium text-gray-700">
+              <p className="text-base font-medium text-foreground">
                 {hasActiveFilters ? 'Tidak ada undangan yang cocok' : 'Belum ada undangan'}
               </p>
-              <p className="mt-1 max-w-xs text-sm text-gray-400">
+              <p className="mt-1 max-w-xs text-sm text-muted-foreground">
                 {hasActiveFilters
                   ? 'Coba ubah filter atau kata kunci pencarian Anda.'
                   : 'Buat undangan digital pertama Anda dan bagikan ke tamu dalam hitungan menit.'}
@@ -355,10 +374,11 @@ export default function DashboardClient({ projects, isDemo = false }: DashboardC
       />
 
       {toast && (
-        <div role="status" aria-live="polite" className="fixed right-4 top-4 z-50 rounded-md bg-gray-900 px-4 py-2 text-sm text-white shadow-lg">
+        <div role="status" aria-live="polite" className="fixed right-4 top-4 z-50 rounded-md bg-foreground px-4 py-2 text-sm text-background shadow-lg">
           {toast}
         </div>
       )}
+      </div>
     </div>
   );
 }

@@ -31,10 +31,19 @@ import type { Device } from '@/components/ui/device-toggle';
  */
 export default function BuilderWorkspace({ projectId }: { projectId: string }) {
   const canvas = useBuilderStore((s) => s.canvas);
+  const selectedBlockId = useBuilderStore((s) => s.selectedBlockId);
   const [activeType, setActiveType] = useState<BlockType | null>(null);
   const [showGrid, setShowGrid] = useState(true);
   const [device, setDevice] = useState<Device>('mobile');
+  const [mobilePanel, setMobilePanel] = useState<'none' | 'elements' | 'properties'>('none');
   const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved'>('idle');
+
+  // Di layar kecil, pilih blok → buka panel Edit otomatis (ramah sentuh).
+  useEffect(() => {
+    if (selectedBlockId && typeof window !== 'undefined' && window.matchMedia('(max-width: 1023px)').matches) {
+      setMobilePanel('properties');
+    }
+  }, [selectedBlockId]);
   const dragStartLayoutRef = useRef<Record<string, { x: number; y: number }>>({});
   const dragTranslatedRef = useRef<Record<string, { left: number; top: number }>>({});
   const freeCanvasRef = useRef<HTMLDivElement | null>(null);
@@ -292,7 +301,10 @@ export default function BuilderWorkspace({ projectId }: { projectId: string }) {
         onDragMove={handleDragMove}
         onDragEnd={handleDragEnd}
       >
-        <ElementsSidebar />
+        <ElementsSidebar
+          mobileOpen={mobilePanel === 'elements'}
+          onClose={() => setMobilePanel('none')}
+        />
         <BuilderCanvas
           projectId={projectId}
           activeType={activeType}
@@ -304,7 +316,10 @@ export default function BuilderWorkspace({ projectId }: { projectId: string }) {
           saveState={saveState}
           guides={guides}
         />
-        <PropertiesPanel />
+        <PropertiesPanel
+          mobileOpen={mobilePanel === 'properties'}
+          onClose={() => setMobilePanel('none')}
+        />
 
         <DragOverlay dropAnimation={null}>
           {activeType && (
@@ -317,6 +332,32 @@ export default function BuilderWorkspace({ projectId }: { projectId: string }) {
           )}
         </DragOverlay>
       </DndContext>
+
+      {/* Backdrop mobile saat drawer terbuka */}
+      {mobilePanel !== 'none' && (
+        <div
+          className="fixed inset-0 z-40 bg-black/40 lg:hidden"
+          onClick={() => setMobilePanel('none')}
+          aria-hidden
+        />
+      )}
+
+      {/* Toolbar bawah (hanya mobile) */}
+      <div className="fixed inset-x-0 bottom-0 z-50 flex border-t border-[#e7ddcc] bg-white/95 backdrop-blur lg:hidden">
+        <button
+          onClick={() => setMobilePanel(mobilePanel === 'elements' ? 'none' : 'elements')}
+          className={`flex-1 py-3 text-sm font-semibold transition-colors ${mobilePanel === 'elements' ? 'text-[#c9a45c]' : 'text-[#4a443c]'}`}
+        >
+          + Elemen
+        </button>
+        <span className="my-2 w-px bg-[#e7ddcc]" />
+        <button
+          onClick={() => setMobilePanel(mobilePanel === 'properties' ? 'none' : 'properties')}
+          className={`flex-1 py-3 text-sm font-semibold transition-colors ${mobilePanel === 'properties' ? 'text-[#c9a45c]' : 'text-[#4a443c]'}`}
+        >
+          Edit
+        </button>
+      </div>
     </div>
   );
 }

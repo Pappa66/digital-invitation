@@ -11,9 +11,7 @@
     "ornament": "wayang",
     "frame": "arch",
     "card_style": false,
-    "cover_style": "floral",
-    "cover_3d": true,
-    "model3d": "3d/bali-pura.glb"
+    "cover_style": "floral"
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",

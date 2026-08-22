@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Type, Clapperboard } from 'lucide-react';
+import { Type, Clapperboard, X } from 'lucide-react';
 import ColorPicker from '@/components/builder/color-picker';
 import { OrnamentArt, ORNAMENT_CATEGORIES, ORNAMENT_LABELS, type OrnamentKey } from '@/components/builder/ornaments';
 import MediaLibrary from '@/components/dashboard/media-library';
@@ -15,6 +15,48 @@ import { getDesignPresets } from '@/lib/templates';
 import { CULTURAL_CONCEPT_MAP } from '@/lib/assets/cultural';
 
 const DESIGN_PRESETS = getDesignPresets();
+
+/** Grid 9-titik untuk atur posisi foto (object-position) — efisien & konsisten di semua blok foto. */
+const POSITION_POINTS = [
+  'top left', 'top center', 'top right',
+  'center left', 'center', 'center right',
+  'bottom left', 'bottom center', 'bottom right'
+] as const;
+
+function normalizePosition(v: string): string {
+  const s = (v || '').toLowerCase();
+  if (s.includes('top') && s.includes('left')) return 'top left';
+  if (s.includes('top') && s.includes('right')) return 'top right';
+  if (s.includes('bottom') && s.includes('left')) return 'bottom left';
+  if (s.includes('bottom') && s.includes('right')) return 'bottom right';
+  if (s.includes('top')) return 'top center';
+  if (s.includes('bottom')) return 'bottom center';
+  if (s.includes('left')) return 'center left';
+  if (s.includes('right')) return 'center right';
+  return 'center';
+}
+
+function PositionGrid({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const cur = normalizePosition(value || 'center');
+  return (
+    <div className="grid grid-cols-3 grid-rows-3 gap-1" style={{ width: 108 }}>
+      {POSITION_POINTS.map((p) => (
+        <button
+          key={p}
+          type="button"
+          onClick={() => onChange(p)}
+          aria-label={`Posisi ${p}`}
+          title={p}
+          className={`flex h-7 items-center justify-center rounded border ${
+            cur === p ? 'border-[#c9a45c] bg-[#c9a45c] text-white' : 'border-[#e0d6c2] bg-[#faf7f2] text-[#6b5f4d] hover:border-[#c9a45c]'
+          }`}
+        >
+          <span className="block h-1.5 w-1.5 rounded-full bg-current" />
+        </button>
+      ))}
+    </div>
+  );
+}
 
 const FONTS = [
   'Playfair Display',
@@ -173,18 +215,6 @@ const GALLERY_LAYOUTS: { key: string; label: string; desc: string }[] = [
   { key: 'carousel', label: 'Carousel Otomatis', desc: 'Slide otomatis satu per satu dengan efek animasi' },
   { key: 'filmstrip', label: 'Filmstrip', desc: 'Foto tersusun horizontal seperti gulungan film' },
   { key: 'stack', label: 'Tumpuk', desc: 'Foto bertumpuk dengan efek kedalaman' }
-];
-
-const IMAGE_POSITIONS = [
-  { value: 'center', label: 'Tengah' },
-  { value: 'top', label: 'Atas' },
-  { value: 'bottom', label: 'Bawah' },
-  { value: 'left', label: 'Kiri' },
-  { value: 'right', label: 'Kanan' },
-  { value: 'top left', label: 'Kiri Atas' },
-  { value: 'top right', label: 'Kanan Atas' },
-  { value: 'bottom left', label: 'Kiri Bawah' },
-  { value: 'bottom right', label: 'Kanan Bawah' }
 ];
 
 const GALLERY_ANIMATIONS = [
@@ -398,7 +428,7 @@ const SECTION_TRIGGERS: { value: string; label: string }[] = [
   { value: 'Thanks', label: 'Saat masuk Penutup' }
 ];
 
-export default function PropertiesPanel() {
+export default function PropertiesPanel({ mobileOpen = false, onClose }: { mobileOpen?: boolean; onClose?: () => void } = {}) {
   const canvas = useBuilderStore((s) => s.canvas);
   const selectedBlockId = useBuilderStore((s) => s.selectedBlockId);
   const block = canvas.blocks.find((b) => b.id === selectedBlockId) ?? null;
@@ -452,9 +482,14 @@ export default function PropertiesPanel() {
   })();
 
   return (
-    <aside className="flex h-full w-80 shrink-0 flex-col border-l border-[#e7ddcc] bg-white">
+    <aside className={`flex h-full w-80 shrink-0 flex-col border-l border-[#e7ddcc] bg-white max-lg:fixed max-lg:right-0 max-lg:top-0 max-lg:bottom-16 max-lg:z-50 max-lg:w-[88%] max-lg:max-w-sm max-lg:shadow-2xl max-lg:transition-transform max-lg:duration-300 ${mobileOpen ? 'max-lg:translate-x-0' : 'max-lg:translate-x-full'}`}>
       <div className="border-b border-[#e7ddcc] px-4 py-3">
-        <h3 className="text-sm font-semibold text-[#2b2620]">{block ? `Edit ${block.type}` : isCoverSelected ? 'Edit Cover Undangan' : 'Pengaturan Halaman'}</h3>
+        <div className="flex items-center justify-between gap-2">
+          <h3 className="text-sm font-semibold text-[#2b2620]">{block ? `Edit ${block.type}` : isCoverSelected ? 'Edit Cover Undangan' : 'Pengaturan Halaman'}</h3>
+          <button onClick={onClose} className="rounded-md p-1 text-[#8a7a66] hover:bg-[#f4efe6] lg:hidden" aria-label="Tutup">
+            <X className="h-4 w-4" />
+          </button>
+        </div>
         {block && (
           <div className="mt-2 flex gap-1 rounded-lg bg-[#f4efe6] p-0.5" role="tablist" aria-label="Mode pengeditan">
             {(
@@ -627,13 +662,11 @@ export default function PropertiesPanel() {
                     <p className="mb-2 text-[11px] text-[#8a7a66]">Efek saat tamu menekan &quot;Buka Undangan&quot;.</p>
                     <div className="flex flex-wrap gap-1.5">
                       {([
-                        { value: 'floral', label: 'Tirai Bunga 3D' },
+                        { value: 'floral', label: 'Tirai Bunga' },
                         { value: 'book', label: 'Buka Buku' },
                         { value: 'filmroll', label: 'Roll Film' },
                         { value: 'oldtv', label: 'TV Jadul' },
                         { value: 'newspaper', label: 'Koran Lama' },
-                        { value: 'mandala', label: 'Mandala' },
-                        { value: 'lantern', label: 'Lentera' },
                       ] as const).map((v) => (
                         <button
                           key={v.value}
@@ -648,15 +681,6 @@ export default function PropertiesPanel() {
                         </button>
                       ))}
                     </div>
-                    <label className="mt-2 flex items-center gap-2 text-xs font-medium text-[#4a443c]">
-                      <input
-                        type="checkbox"
-                        checked={canvas.theme.cover_3d !== false}
-                        onChange={(e) => setTheme({ cover_3d: e.target.checked })}
-                        className="h-4 w-4 rounded border-[#e0d6c2] accent-[#c9a45c]"
-                      />
-                      Layer 3D (tirai bunga) — matikan agar lebih ringan di HP
-                    </label>
                   </div>
                   <div className="mt-3 rounded-lg border border-[#ece3d2] bg-[#fbf7f1] p-3">
                     <label className="block text-xs font-semibold text-[#4a443c]">Konsep Budaya &amp; Agama</label>
@@ -666,7 +690,7 @@ export default function PropertiesPanel() {
                         <button
                           key={key}
                           onClick={() => {
-                            setTheme({ cover_style: c.cover as never, ornament: c.ornament, model3d: c.model3d });
+                            setTheme({ cover_style: c.cover as never, ornament: c.ornament });
                             canvas.blocks.forEach((b) => setBlockStyle(b.id, { entrance: c.entrance as never }));
                           }}
                           className={`rounded-md border px-2 py-1 text-[10px] capitalize ${
@@ -1123,28 +1147,8 @@ export default function PropertiesPanel() {
                             </select>
                           </div>
                            <div>
-                            <label className="mb-1 block text-xs font-medium text-[#4a443c]">Posisi</label>
-                            {['center', 'top', 'bottom', 'left', 'right'].includes((block.props.bg_position as string) || 'center') ? (
-                              <select
-                                value={(block.props.bg_position as string) || 'center'}
-                                onChange={(e) => setBlockProps(block.id, { bg_position: e.target.value })}
-                                className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-2 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
-                              >
-                                <option value="center">Tengah</option>
-                                <option value="top">Atas</option>
-                                <option value="bottom">Bawah</option>
-                                <option value="left">Kiri</option>
-                                <option value="right">Kanan</option>
-                              </select>
-                            ) : (
-                              <input
-                                type="text"
-                                value={(block.props.bg_position as string) || 'center'}
-                                onChange={(e) => setBlockProps(block.id, { bg_position: e.target.value })}
-                                className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-2 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
-                                placeholder="center"
-                              />
-                            )}
+                            <label className="mb-1 block text-xs font-medium text-[#4a443c]">Posisi Foto</label>
+                            <PositionGrid value={(block.props.bg_position as string) || 'center'} onChange={(v) => setBlockProps(block.id, { bg_position: v })} />
                           </div>
                         </div>
                       )}
@@ -1195,27 +1199,7 @@ export default function PropertiesPanel() {
                   )}
                   {block.type === 'Hero' && (
                     <div>
-                      <label className="mb-1 block text-xs font-medium text-[#4a443c]">Aset 3D Hero</label>
-                      <p className="mb-1 text-[10px] text-[#8a7a66]">Pilih jenis — tidak langsung aktif, hemat bundle (lazy)</p>
-                      <div className="grid grid-cols-3 gap-1.5">
-                        {[
-                          { key: 'none', label: 'Mati' },
-                          { key: 'tilt', label: 'Tilt' },
-                          { key: 'float', label: 'Float' },
-                          { key: 'particles', label: 'Partikel' },
-                          { key: 'rings', label: 'Cincin' },
-                          { key: 'arch', label: 'Arch' },
-                          { key: 'hearts', label: 'Hearts' }
-                        ].map((o) => (
-                          <button
-                            key={o.key}
-                            onClick={() => setBlockProps(block.id, { effect3d: o.key })}
-                            className={`rounded-md border px-2 py-1.5 text-xs ${((block.props.effect3d as string) || 'none') === o.key ? 'border-[#c9a45c] bg-[#c9a45c] text-white' : 'border-[#e0d6c2] text-[#6b5f4d]'}`}
-                          >
-                            {o.label}
-                          </button>
-                        ))}
-                      </div>
+                      <p className="text-[10px] text-[#8a7a66]">Foto hero memenuhi layar penuh. Atur posisi foto di bawah untuk fokus yang pas.</p>
                     </div>
                   )}
                   {VARIANTS[block.type] && (
@@ -1389,20 +1373,15 @@ export default function PropertiesPanel() {
                                 <div key={i} className="group relative overflow-hidden rounded-md border border-[#e0d6c2]">
                                   {/* eslint-disable-next-line @next/next/no-img-element */}
                                   <img src={src} alt="" className="aspect-square w-full object-cover" style={{ objectPosition: positions[i] || 'center' }} />
-                                  <div className="flex items-center gap-0.5 p-0.5">
-                                    <select
+                                  <div className="flex items-center justify-between gap-0.5 p-0.5">
+                                    <PositionGrid
                                       value={positions[i] || 'center'}
-                                      onChange={(e) => {
+                                      onChange={(v) => {
                                         const next = [...positions];
-                                        next[i] = e.target.value;
+                                        next[i] = v;
                                         setBlockProps(block.id, { image_positions: next });
                                       }}
-                                      className="w-full rounded border border-[#e0d6c2] bg-[#faf7f2] px-0.5 py-0.5 text-[9px] text-[#6b5f4d] outline-none"
-                                    >
-                                      {IMAGE_POSITIONS.map((p) => (
-                                        <option key={p.value} value={p.value}>{p.label}</option>
-                                      ))}
-                                    </select>
+                                    />
                                     <button
                                       onClick={() => {
                                         const imgs = (block.props.images as string[]).filter((_, j) => j !== i);
@@ -1727,17 +1706,7 @@ export default function PropertiesPanel() {
                               </div>
                               <div>
                                 <label className="mb-1 block text-xs font-medium text-[#4a443c]">Posisi</label>
-                                <select
-                                  value={block.style?.bgPosition ?? 'center'}
-                                  onChange={(e) => setBlockStyle(block.id, { bgPosition: e.target.value })}
-                                  className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-2 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
-                                >
-                                  <option value="center">Tengah</option>
-                                  <option value="top">Atas</option>
-                                  <option value="bottom">Bawah</option>
-                                  <option value="left">Kiri</option>
-                                  <option value="right">Kanan</option>
-                                </select>
+                                <PositionGrid value={block.style?.bgPosition ?? 'center'} onChange={(v) => setBlockStyle(block.id, { bgPosition: v })} />
                               </div>
                             </div>
                           </div>
@@ -1891,7 +1860,6 @@ export default function PropertiesPanel() {
                             <option value="zoom">Zoom</option>
                             <option value="blur">Blur ke jernih</option>
                             <option value="rise">Naik perlahan</option>
-                            <option value="flip3d">Flip 3D</option>
                             <option value="parallax">Parallax</option>
                             <option value="stagger">Stagger</option>
                             <option value="float">Float lembut</option>
@@ -1901,12 +1869,6 @@ export default function PropertiesPanel() {
                             <option value="oldtv">TV jadul</option>
                             <option value="newspaper">Koran lama</option>
                             <option value="vintage">Vintage 80s–90s</option>
-                            <option value="mandala">Mandala (Hindu/Buddha)</option>
-                            <option value="islamic">Geometrik (Islam)</option>
-                            <option value="ulos">Kain Ulos (Batak)</option>
-                            <option value="lantern">Lentera (Konghucu)</option>
-                            <option value="wayang">Wayang (Jawa/Bali)</option>
-                            <option value="batik">Batik (Nusantara)</option>
                             <option value="none">Tanpa animasi</option>
                           </select>
                         </div>

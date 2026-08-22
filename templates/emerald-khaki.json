@@ -11,9 +11,7 @@
     "ornament": "hindu-mandala",
     "frame": "double",
     "card_style": false,
-    "cover_style": "mandala",
-    "cover_3d": false,
-    "model3d": "3d/hindu-candi.glb"
+    "cover_style": "floral"
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
@@ -36,7 +34,7 @@
         "variant": "center"
       },
       "style": {
-        "entrance": "mandala",
+        "entrance": "fade",
         "entranceDelay": 0
       }
     },
@@ -56,7 +54,7 @@
         "bride_photo": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80"
       },
       "style": {
-        "entrance": "mandala",
+        "entrance": "fade",
         "entranceDelay": 120
       }
     },
@@ -71,7 +69,7 @@
         "reference": "QS. Adz Dzariyyat: 49"
       },
       "style": {
-        "entrance": "mandala",
+        "entrance": "fade",
         "entranceDelay": 240
       }
     },
@@ -84,7 +82,7 @@
         "variant": "circles"
       },
       "style": {
-        "entrance": "mandala",
+        "entrance": "fade",
         "entranceDelay": 360
       }
     },
@@ -111,7 +109,7 @@
         ]
       },
       "style": {
-        "entrance": "mandala",
+        "entrance": "fade",
         "entranceDelay": 0
       }
     },
@@ -129,7 +127,7 @@
         "variant": "card"
       },
       "style": {
-        "entrance": "mandala",
+        "entrance": "fade",
         "entranceDelay": 120
       }
     },
@@ -147,7 +145,7 @@
         "variant": "band"
       },
       "style": {
-        "entrance": "mandala",
+        "entrance": "fade",
         "entranceDelay": 240
       }
     },
@@ -166,7 +164,7 @@
         "variant": "masonry"
       },
       "style": {
-        "entrance": "mandala",
+        "entrance": "fade",
         "entranceDelay": 360
       }
     },
@@ -185,7 +183,7 @@
         ]
       },
       "style": {
-        "entrance": "mandala",
+        "entrance": "fade",
         "entranceDelay": 0
       }
     },
@@ -204,7 +202,7 @@
         "account_holder": "Rafi Pradana"
       },
       "style": {
-        "entrance": "mandala",
+        "entrance": "fade",
         "entranceDelay": 120
       }
     },
@@ -218,7 +216,7 @@
         "names": "Rafi & Naila"
       },
       "style": {
-        "entrance": "mandala",
+        "entrance": "fade",
         "entranceDelay": 240
       }
     },
@@ -231,7 +229,7 @@
         "embed_url": "https://maps.google.com/?q=Emerald%20Garden%2C%20Kota%20Batu"
       },
       "style": {
-        "entrance": "mandala",
+        "entrance": "fade",
         "entranceDelay": 360
       }
     }

@@ -225,7 +225,7 @@ export function LanternOpener({ primary, secondary, background, text, onDone }: 
     return () => clearTimeout(t);
   }, [onDone]);
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center overflow-hidden" style={{ background: '#1a0e0e' }}>
+    <div className="fixed inset-0 z-[60] flex items-center justify-center overflow-hidden" style={{ background: `radial-gradient(circle at 50% 38%, ${background}, #efe6d8)` }}>
       <motion.div
         className="relative"
         style={{ width: 'min(60vw, 260px)' }}
@@ -233,14 +233,14 @@ export function LanternOpener({ primary, secondary, background, text, onDone }: 
         animate={{ scale: [0.5, 1, 1, 0.4], opacity: [0, 1, 1, 0], y: [30, 0, 0, -20] }}
         transition={{ duration: 1.7, times: [0, 0.3, 0.7, 1], ease: 'easeInOut' }}
       >
-        <div className="mx-auto h-3 w-1 -translate-y-1 rounded bg-yellow-200" />
+        <div className="mx-auto h-3 w-px -translate-y-1 rounded bg-[#c9a45c]" />
         <motion.div
           className="rounded-[42%] border-2 px-6 py-10 text-center"
-          style={{ borderColor: primary, background: `radial-gradient(circle at 50% 40%, ${primary}, #7a1f1f)`, boxShadow: `0 0 60px ${primary}` }}
+          style={{ borderColor: primary, background: `radial-gradient(circle at 50% 40%, #fff8ec, ${primary})`, boxShadow: `0 0 60px ${primary}55` }}
         >
-          <span className="font-serif text-3xl" style={{ color: '#fff3d6', fontFamily: 'Cormorant Garamond, serif' }}>囍</span>
+          <span className="font-serif text-3xl" style={{ color: '#4A4036', fontFamily: 'Cormorant Garamond, serif' }}>囍</span>
         </motion.div>
-        <div className="mx-auto h-8 w-px bg-yellow-200" />
+        <div className="mx-auto h-8 w-px bg-[#c9a45c]" />
       </motion.div>
     </div>
   );

@@ -11,8 +11,7 @@
     "ornament": "newspaper-rule",
     "frame": "arch",
     "card_style": false,
-    "cover_style": "newspaper",
-    "cover_3d": false
+    "cover_style": "newspaper"
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3",

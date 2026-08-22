@@ -55,21 +55,10 @@ export interface Theme {
   ornament?: string;
   /**
    * Gaya layar pembuka "Buka Undangan":
-   * 'floral' (tirai bunga 3D, default), 'book' (buka buku),
+   * 'floral' (tirai bunga, default), 'book' (buka buku),
    * 'filmroll' (roll film analog), 'oldtv' (TV jadul), 'newspaper' (koran lama).
    */
-  cover_style?: 'floral' | 'book' | 'filmroll' | 'oldtv' | 'newspaper' | 'mandala' | 'lantern';
-  /**
-   * Gunakan layer 3D (tirai bunga berwarna GLB) pada cover 'floral'.
-   * false = fallback 2D cepat (lebih ringan di HP). Default: true.
-   */
-  cover_3d?: boolean;
-  /**
-   * Path GLB budaya/agama di Supabase Storage (mis. '3d/kristen-church.glb').
-   * Bila diisi & cover_3d aktif, model 3D ditampilkan sebagai entrance budaya.
-   * Kosong = tidak ada model 3D (pakai opener SVG/CSS).
-   */
-  model3d?: string;
+  cover_style?: 'floral' | 'book' | 'filmroll' | 'oldtv' | 'newspaper';
 }
 
 export interface Settings {

@@ -11,8 +11,7 @@
     "ornament": "batik-parang",
     "frame": "classic",
     "card_style": false,
-    "cover_style": "floral",
-    "cover_3d": true
+    "cover_style": "floral"
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3",

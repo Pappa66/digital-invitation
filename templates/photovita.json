@@ -11,9 +11,7 @@
     "frame": "none",
     "card_style": true,
     "ornament": "batak-ulos",
-    "cover_style": "floral",
-    "cover_3d": true,
-    "model3d": "3d/batak-rumah.glb"
+    "cover_style": "floral"
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
@@ -36,7 +34,7 @@
         "variant": "center"
       },
       "style": {
-        "entrance": "ulos",
+        "entrance": "fade",
         "entranceDelay": 0
       }
     },
@@ -57,7 +55,7 @@
         "bride_photo": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80"
       },
       "style": {
-        "entrance": "ulos",
+        "entrance": "fade",
         "entranceDelay": 120
       }
     },
@@ -72,7 +70,7 @@
         "reference": "QS. Adz Dzariyyat: 49"
       },
       "style": {
-        "entrance": "ulos",
+        "entrance": "fade",
         "entranceDelay": 240
       }
     },
@@ -85,7 +83,7 @@
         "variant": "cards"
       },
       "style": {
-        "entrance": "ulos",
+        "entrance": "fade",
         "entranceDelay": 360
       }
     },
@@ -112,7 +110,7 @@
         ]
       },
       "style": {
-        "entrance": "ulos",
+        "entrance": "fade",
         "entranceDelay": 0
       }
     },
@@ -130,7 +128,7 @@
         "variant": "card"
       },
       "style": {
-        "entrance": "ulos",
+        "entrance": "fade",
         "entranceDelay": 120
       }
     },
@@ -148,7 +146,7 @@
         "variant": "card"
       },
       "style": {
-        "entrance": "ulos",
+        "entrance": "fade",
         "entranceDelay": 240
       }
     },
@@ -167,7 +165,7 @@
         "variant": "arch"
       },
       "style": {
-        "entrance": "ulos",
+        "entrance": "fade",
         "entranceDelay": 360
       }
     },
@@ -191,7 +189,7 @@
         ]
       },
       "style": {
-        "entrance": "ulos",
+        "entrance": "fade",
         "entranceDelay": 0
       }
     },
@@ -207,7 +205,7 @@
         "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening pada bagian Amplop Online."
       },
       "style": {
-        "entrance": "ulos",
+        "entrance": "fade",
         "entranceDelay": 120
       }
     },
@@ -221,7 +219,7 @@
         "names": "Vinna & Tio"
       },
       "style": {
-        "entrance": "ulos",
+        "entrance": "fade",
         "entranceDelay": 240
       }
     },
@@ -234,7 +232,7 @@
         "embed_url": "https://maps.google.com/?q=Maximo%20Resto%20%26%20Garden%2C%20Jl.%20Dr.%20Setiabudi%20No.%20378"
       },
       "style": {
-        "entrance": "ulos",
+        "entrance": "fade",
         "entranceDelay": 360
       }
     }

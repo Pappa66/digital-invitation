@@ -66,10 +66,7 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
     coverGreeting: canvas.settings.cover_greeting,
     coverButtonText: canvas.settings.cover_button_text,
     coverBgImage: canvas.settings.cover_bg_image,
-    coverStyle: canvas.theme.cover_style,
-    cover3d: canvas.theme.cover_3d,
-    model3d: canvas.theme.model3d,
-    supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL
+    coverStyle: canvas.theme.cover_style
   };
 
   if (flow === 'free') {

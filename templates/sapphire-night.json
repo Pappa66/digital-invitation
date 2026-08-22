@@ -11,8 +11,7 @@
     "ornament": "newspaper-rule",
     "frame": "none",
     "card_style": true,
-    "cover_style": "oldtv",
-    "cover_3d": false
+    "cover_style": "oldtv"
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-11.mp3",

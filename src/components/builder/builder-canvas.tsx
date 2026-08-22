@@ -48,8 +48,8 @@ export default function BuilderCanvas({
   const [showShortcuts, setShowShortcuts] = useState(false);
 
   return (
-    <div className="relative flex h-full flex-1 flex-col items-center justify-center overflow-hidden bg-[#f1ece1]">
-      <div className="flex w-full items-center justify-end gap-3 px-4 pt-3">
+    <div className="relative flex h-full flex-1 flex-col items-center justify-center overflow-hidden bg-[#f1ece1] max-lg:pb-14">
+      <div className="flex w-full flex-wrap items-center justify-end gap-3 px-4 pt-3 max-lg:gap-1.5 max-lg:px-2">
         <button
           onClick={redoBuilder}
           disabled={!canRedo}

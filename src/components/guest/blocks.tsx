@@ -732,7 +732,6 @@ function GiantAmp() {
 export function HeroBlock({ props, greetingName, showButton = true }: { props: BlockProps; greetingName?: string; showButton?: boolean }) {
   const showOrnament = bool(props, 'show_ornament');
   const variant = str(props, 'variant') || 'center';
-  const effect3d = str(props, 'effect3d') || 'none'; // none | tilt | float | particles | rings | arch | hearts — dipilih di builder, bukan langsung aktif
   const align = variant === 'left' ? 'left' : variant === 'right' ? 'right' : 'center';
   const isLeft = align === 'left';
   const isRight = align === 'right';
@@ -769,12 +768,8 @@ export function HeroBlock({ props, greetingName, showButton = true }: { props: B
 
   const textColor = str(props, 'text_color') || '#ffffff';
 
-  // Wrapper 3D selectable — tidak langsung aktif, hanya bila dipilih di builder
-  const HeroWrap = ({ children }: { children: React.ReactNode }) => {
-    if (effect3d === 'tilt') return <Tilt3D intensity={7}>{children}</Tilt3D>;
-    if (effect3d === 'float') return <Float3D depth={22} delay={0.2}>{children}</Float3D>;
-    return <>{children}</>;
-  };
+  // Wrapper hero (efek 3D dihapus)
+  const HeroWrap = ({ children }: { children: React.ReactNode }) => <>{children}</>;
 
   return (
     <section
@@ -785,9 +780,6 @@ export function HeroBlock({ props, greetingName, showButton = true }: { props: B
       style={{ color: textColor }}
     >
       <BackgroundImage src={str(props, 'bg_image')} fit={str(props, 'bg_fit')} position={str(props, 'bg_position')} />
-      {/* 3D selectable — lazy, hanya muat bila dipilih (hemat bundle) */}
-      {(effect3d === 'particles' || effect3d === 'rings') && <HeroMedium3D mode={effect3d as 'particles' | 'rings'} />}
-      {(effect3d === 'arch' || effect3d === 'hearts') && <HeroHeavy3D mode={effect3d as 'arch' | 'hearts'} />}
       {showGradient && (
         <div className="absolute inset-0 z-0 overflow-hidden">
           <div
@@ -1425,7 +1417,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
               className="group relative aspect-[4/5] w-full overflow-hidden rounded-lg cursor-pointer"
               onClick={() => !preview && openLightbox(i)}
             >
-              <Image src={src} alt="" fill sizes="100vw" quality={75} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" style={{ objectPosition: getPos(i) }} />
+              <GalleryMedia src={src} position={getPos(i)} />
               <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-400 group-hover:bg-black/15" />
             </motion.div>
           ))}
@@ -1452,7 +1444,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
               className="group relative aspect-square overflow-hidden rounded-md cursor-pointer"
               onClick={() => !preview && openLightbox(i)}
             >
-              <Image src={src} alt="" fill sizes="(max-width: 768px) 100vw, 33vw" quality={70} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-110" style={{ objectPosition: getPos(i) }} />
+              <GalleryMedia src={src} position={getPos(i)} />
               <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-400 group-hover:bg-black/15" />
             </motion.div>
           ))}
@@ -1517,7 +1509,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
               className={`group relative overflow-hidden rounded-md cursor-pointer ${i % 5 === 0 ? 'col-span-2 row-span-2 aspect-square' : 'aspect-[3/4]'}`}
               onClick={() => !preview && openLightbox(i)}
             >
-              <Image src={src} alt="" fill sizes="(max-width: 768px) 100vw, 33vw" quality={75} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-110" style={{ objectPosition: getPos(i) }} />
+              <GalleryMedia src={src} position={getPos(i)} />
               <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-400 group-hover:bg-black/15" />
             </motion.div>
           ))}
@@ -1546,7 +1538,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
               onClick={() => !preview && openLightbox(i)}
             >
               <div className="relative aspect-square w-full overflow-hidden bg-[#e8e2d5]">
-                <Image src={src} alt="" fill sizes="(max-width: 768px) 50vw, 33vw" quality={70} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-110" style={{ objectPosition: getPos(i) }} />
+                <GalleryMedia src={src} position={getPos(i)} />
               </div>
             </motion.div>
           ))}
@@ -1574,7 +1566,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
               className="group relative mx-auto aspect-[3/4.2] w-full max-w-[300px] overflow-hidden rounded-t-[999px] shadow-[0_18px_40px_rgba(0,0,0,0.18)] cursor-pointer"
               onClick={() => !preview && openLightbox(0)}
             >
-              <Image src={hero} alt="" fill sizes="100vw" quality={80} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" style={{ objectPosition: getPos(0) }} />
+              <GalleryMedia src={hero} position={getPos(0)} />
             </motion.div>
           )}
           {rest.length > 0 && (
@@ -1589,7 +1581,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
                   className="group relative aspect-square overflow-hidden rounded-lg cursor-pointer"
                   onClick={() => !preview && openLightbox(i + 1)}
                 >
-                  <Image src={src} alt="" fill sizes="(max-width: 768px) 50vw, 33vw" quality={70} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-110" style={{ objectPosition: getPos(i + 1) }} />
+                  <GalleryMedia src={src} position={getPos(i + 1)} />
                   <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-400 group-hover:bg-black/15" />
                 </motion.div>
               ))}
@@ -1620,7 +1612,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
                 className={`group relative overflow-hidden rounded-lg cursor-pointer ${span}`}
                 onClick={() => !preview && openLightbox(i)}
               >
-                <Image src={src} alt="" fill sizes="(max-width: 768px) 100vw, 33vw" quality={75} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" style={{ objectPosition: getPos(i) }} />
+                <GalleryMedia src={src} position={getPos(i)} />
                 <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-400 group-hover:bg-black/10" />
               </motion.div>
             );
@@ -1647,7 +1639,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
               className="group relative aspect-[16/10] w-full overflow-hidden rounded-lg cursor-pointer"
               onClick={() => !preview && openLightbox(0)}
             >
-              <Image src={images[0]} alt="" fill sizes="100vw" quality={80} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" style={{ objectPosition: getPos(0) }} />
+              <GalleryMedia src={images[0]} position={getPos(0)} />
             </motion.div>
           )}
           {images.length > 1 && (
@@ -1662,7 +1654,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
                   className="group relative aspect-square overflow-hidden rounded-lg cursor-pointer"
                   onClick={() => !preview && openLightbox(i + 1)}
                 >
-                  <Image src={src} alt="" fill sizes="(max-width: 768px) 33vw, 140px" quality={75} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" style={{ objectPosition: getPos(i + 1) }} />
+                  <GalleryMedia src={src} position={getPos(i + 1)} />
                 </motion.div>
               ))}
             </div>
@@ -1691,7 +1683,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
                 className="group relative h-48 w-72 shrink-0 overflow-hidden rounded-lg cursor-pointer sm:h-56 sm:w-80"
                 onClick={() => !preview && openLightbox(i)}
               >
-                <Image src={src} alt="" fill sizes="320px" quality={75} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" style={{ objectPosition: getPos(i) }} />
+                <GalleryMedia src={src} position={getPos(i)} />
                 <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-400 group-hover:bg-black/15" />
               </motion.div>
             ))}
@@ -1728,7 +1720,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
                   }}
                   onClick={() => !preview && openLightbox(i)}
                 >
-                  <Image src={src} alt="" fill sizes="380px" quality={80} loading="lazy" className="object-cover" style={{ objectPosition: getPos(i) }} />
+                  <GalleryMedia src={src} position={getPos(i)} />
                 </motion.div>
               );
             })}
@@ -1757,12 +1749,56 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
             }`}
             onClick={() => !preview && openLightbox(i)}
           >
-            <Image src={src} alt="" fill sizes="(max-width: 768px) 100vw, 50vw" quality={75} loading="lazy" className="object-cover transition-transform duration-700 ease-out group-hover:scale-110" style={{ objectPosition: getPos(i) }} />
+            <GalleryMedia src={src} position={getPos(i)} />
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
           </motion.div>
         ))}
       </div>
     </section>
+  );
+}
+
+function isVideo(src?: string) {
+  return /\.(mp4|webm|ogg|mov|m4v)(\?|$)/i.test(src || '');
+}
+
+/** Render media galeri: gambar biasa, atau <video controls> (play manual) bila video. */
+function GalleryMedia({
+  src,
+  position,
+  sizes = '100vw',
+  quality = 80,
+  className
+}: {
+  src: string;
+  position?: string;
+  sizes?: string;
+  quality?: number;
+  className?: string;
+}) {
+  if (isVideo(src)) {
+    return (
+      <video
+        src={src}
+        controls
+        preload="metadata"
+        playsInline
+        className={`object-cover w-full h-full ${className ?? ''}`}
+        style={{ objectPosition: position || 'center' }}
+      />
+    );
+  }
+  return (
+    <Image
+      src={src}
+      alt=""
+      fill
+      sizes={sizes}
+      quality={quality}
+      loading="lazy"
+      className={`object-cover ${className ?? ''}`}
+      style={{ objectPosition: position || 'center' }}
+    />
   );
 }
 
@@ -1786,7 +1822,9 @@ function GalleryCarousel({
 
   useEffect(() => {
     if (preview || images.length <= 1) return;
-    const id = setInterval(() => setIdx((i) => (i + 1) % images.length), intervalSec * 1000);
+    const id = setInterval(() => {
+      setIdx((i) => (isVideo(images[i]) ? i : (i + 1) % images.length));
+    }, intervalSec * 1000);
     return () => clearInterval(id);
   }, [preview, images.length, intervalSec]);
 
@@ -1799,19 +1837,23 @@ function GalleryCarousel({
       </Inner>
       <div className="mx-auto w-full">
         <div className="relative aspect-[4/5] w-full overflow-hidden rounded-lg">
-          {animKey === 'ken-burns' ? (
+          {isVideo(images[idx]) ? (
+            <div key={idx} className="absolute inset-0 h-full w-full">
+              <GalleryMedia src={images[idx]} position={positions?.[idx] || 'center'} sizes="100vw" quality={80} />
+            </div>
+          ) : animKey === 'ken-burns' ? (
             <motion.div key={idx} {...anim} transition={{ duration: 0.9 }} className="absolute inset-0 h-full w-full">
               <motion.div
                 className="h-full w-full"
                 animate={{ scale: [1, 1.15] }}
                 transition={{ duration: Math.max(8, intervalSec * 2), repeat: Infinity, ease: 'linear' }}
               >
-                <Image src={images[idx]} alt="" fill sizes="100vw" quality={80} className="object-cover" style={{ objectPosition: positions?.[idx] || 'center' }} />
+                <GalleryMedia src={images[idx]} position={positions?.[idx] || 'center'} sizes="100vw" quality={80} />
               </motion.div>
             </motion.div>
           ) : (
             <motion.div key={idx} {...anim} transition={{ duration: 0.7 }} className="absolute inset-0 h-full w-full">
-              <Image src={images[idx]} alt="" fill sizes="100vw" quality={80} className="object-cover" style={{ objectPosition: positions?.[idx] || 'center' }} />
+              <GalleryMedia src={images[idx]} position={positions?.[idx] || 'center'} sizes="100vw" quality={80} />
             </motion.div>
           )}
         </div>
@@ -2359,11 +2401,21 @@ function GalleryLightbox({
         className="relative max-h-[85vh] max-w-[90vw]"
         onClick={(e) => e.stopPropagation()}
       >
-        <img
-          src={images[index]}
-          alt=""
-          className="max-h-[85vh] max-w-[90vw] rounded-lg object-contain"
-        />
+        {isVideo(images[index]) ? (
+          <video
+            src={images[index]}
+            controls
+            preload="metadata"
+            playsInline
+            className="max-h-[85vh] max-w-[90vw] rounded-lg object-contain"
+          />
+        ) : (
+          <img
+            src={images[index]}
+            alt=""
+            className="max-h-[85vh] max-w-[90vw] rounded-lg object-contain"
+          />
+        )}
       </motion.div>
 
       {images.length > 1 && (

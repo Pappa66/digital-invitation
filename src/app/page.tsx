@@ -31,6 +31,7 @@ import { DEMO_TEMPLATES, getTemplate } from '@/lib/templates';
 import { CATEGORIES, categoryLabel, type TemplateCategory } from '@/lib/template-categories';
 import TemplatePreview from '@/components/landing/template-preview';
 import OrderDialog from '@/components/landing/order-dialog';
+
 import { getLandingContent, LANDING_CONTENT_DEFAULTS, type LandingContent } from '@/lib/settings';
 import { listTemplateDemos, type TemplateDemo } from '@/lib/api/template-demo-client';
 import type { CanvasData, TemplateMeta } from '@/lib/types';
@@ -289,7 +290,7 @@ export default function LandingPage() {
                   ) : null}
                 </div>
               </div>
-              {/* ornament dekoratif */}
+              {/* aksen sudut halus */}
               <div className="absolute -right-3 -top-3 -z-10 h-24 w-24 rounded-full bg-gradient-to-br from-gold/20 to-transparent" />
               <div className="absolute -bottom-5 -left-5 -z-10 h-32 w-32 rounded-full border border-gold/20" />
             </div>

@@ -5,10 +5,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MailOpen, X } from 'lucide-react';
 import { OrnamentArt, type OrnamentKey } from '@/components/builder/ornaments';
 import { FloatingPetals } from './cover-florals';
-import { BookOpener, FilmRollOpener, OldTvOpener, NewspaperOpener, MandalaOpener, LanternOpener } from './cover-openers';
+import { BookOpener, FilmRollOpener, OldTvOpener, NewspaperOpener } from './cover-openers';
 
 const FloralCurtain = lazy(() => import('./floral-curtain'));
-const Cultural3DLayer = lazy(() => import('./cultural-3d'));
 
 interface CoverModalProps {
   caption: string;
@@ -33,12 +32,6 @@ interface CoverModalProps {
   coverBgImage?: string;
   /** Gaya pembuka: 'floral' | 'book' | 'filmroll' | 'oldtv' | 'newspaper'. */
   coverStyle?: string;
-  /** Gunakan layer 3D (tirai bunga GLB) — false = fallback 2D ringan. */
-  cover3d?: boolean;
-  /** Path GLB budaya di Storage (mis. '3d/kristen-church.glb'); tampil bila cover3d aktif. */
-  model3d?: string;
-  /** Base URL Supabase (untuk bangun URL publik GLB). */
-  supabaseUrl?: string;
 }
 
 /**
@@ -65,10 +58,7 @@ export default function CoverModal({
   coverGreeting,
   coverButtonText,
   coverBgImage,
-  coverStyle = 'floral',
-  cover3d = true,
-  model3d,
-  supabaseUrl
+  coverStyle = 'floral'
 }: CoverModalProps) {
   const [open, setOpen] = useState(true);
   const [phase, setPhase] = useState<'cover' | 'opening'>('cover');
@@ -81,7 +71,7 @@ export default function CoverModal({
     }
   }, [open]);
 
-  const use3d = coverStyle === 'floral' && cover3d !== false;
+  const use3d = coverStyle === 'floral';
 
   function finish() {
     setOpen(false);
@@ -145,13 +135,8 @@ export default function CoverModal({
               <X className="h-5 w-5" aria-hidden />
             </motion.button>
 
-            {/* Layer 3D: model budaya dari Storage (bila ada) atau tirai bunga procedural.
-                Lazy-load; aman (Boundary mengembalikan null bila GLB belum ada). */}
-            {model3d && cover3d !== false ? (
-              <Suspense fallback={null}>
-                <Cultural3DLayer path={model3d} primary={primary} supabaseUrl={supabaseUrl} />
-              </Suspense>
-            ) : use3d && (
+            {/* Layer tirai bunga procedural (floral). */}
+            {use3d && (
               <Suspense fallback={<div className="absolute inset-0" style={{ background: `radial-gradient(ellipse 80% 60% at 50% 50%, color-mix(in srgb, ${primary} 18%, transparent), transparent 70%)` }} />}>
                 <FloralCurtain open={open} primary={primary} secondary={secondary} image={coverBgImage || bgImage} />
               </Suspense>
@@ -215,12 +200,6 @@ export default function CoverModal({
             )}
             {phase === 'opening' && coverStyle === 'newspaper' && (
               <NewspaperOpener primary={primary} secondary={secondary} background={background} text={text} onDone={finish} />
-            )}
-            {phase === 'opening' && coverStyle === 'mandala' && (
-              <MandalaOpener primary={primary} secondary={secondary} background={background} text={text} onDone={finish} />
-            )}
-            {phase === 'opening' && coverStyle === 'lantern' && (
-              <LanternOpener primary={primary} secondary={secondary} background={background} text={text} onDone={finish} />
             )}
           </div>
         </motion.div>

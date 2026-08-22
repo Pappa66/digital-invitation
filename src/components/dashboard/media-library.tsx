@@ -3,10 +3,14 @@
 import { useCallback, useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
 import imageCompression from 'browser-image-compression';
-import { Upload, X, Loader2, AlertTriangle, CheckCircle, Info } from 'lucide-react';
+import { Upload, X, Loader2, AlertTriangle, CheckCircle, Info, Video } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
 
 const BUCKET = 'invitation-assets';
+
+function isVideoName(name: string) {
+  return /\.(mp4|webm|ogg|mov|m4v)(\?|$)/i.test(name || '');
+}
 
 const IMAGE_SPECS = {
   hero: { label: 'Hero/Cover', minW: 1080, minH: 1350, recW: 1920, recH: 2400, tip: 'Minimal 1080×1350px, rekomendasi 1920×2400px untuk kualitas terbaik' },
@@ -113,10 +117,12 @@ export default function MediaLibrary({ open, onClose, onSelect, imageType = 'gen
     if (!fileList || fileList.length === 0) return;
     const picked = Array.from(fileList);
 
-    // Check quality of first image
+    // Check quality of first image (video dilewati)
     if (picked.length > 0 && picked[0].type.startsWith('image/')) {
       const quality = await checkImageQuality(picked[0], imageType);
       setQualityReport(quality);
+    } else {
+      setQualityReport(null);
     }
 
     setUploading(true);
@@ -125,14 +131,18 @@ export default function MediaLibrary({ open, onClose, onSelect, imageType = 'gen
       const { data: { user } } = await supabase.auth.getUser();
       const prefix = user ? `${user.id}/` : '';
       for (const file of picked) {
-        const compressed = await imageCompression(file, {
-          maxSizeMB: 1,
-          maxWidthOrHeight: 1920,
-          useWebWorker: true
-        });
+        const isVideoFile = file.type.startsWith('video/');
+        const toUpload = isVideoFile
+          ? file
+          : await imageCompression(file, {
+              maxSizeMB: 1,
+              maxWidthOrHeight: 1920,
+              useWebWorker: true
+            });
         const name = `${prefix}${Date.now()}-${file.name.replace(/\s+/g, '-')}`;
-        const { error } = await supabase.storage.from(BUCKET).upload(name, compressed, {
+        const { error } = await supabase.storage.from(BUCKET).upload(name, toUpload, {
           cacheControl: '3600',
+          contentType: file.type || undefined,
           upsert: false
         });
         if (!error) {
@@ -196,7 +206,7 @@ export default function MediaLibrary({ open, onClose, onSelect, imageType = 'gen
             <input
               ref={fileInputRef}
               type="file"
-              accept="image/*"
+              accept="image/*,video/*"
               multiple
               className="hidden"
               onChange={handleUpload}
@@ -204,7 +214,7 @@ export default function MediaLibrary({ open, onClose, onSelect, imageType = 'gen
             />
           </label>
           <span className="text-xs text-gray-500">
-            {uploading ? `Mengunggah ${uploadingCount} gambar...` : 'Pilih banyak gambar sekaligus; akan dikompresi sebelum diunggah.'}
+            {uploading ? `Mengunggah ${uploadingCount} file...` : 'Pilih gambar atau video; gambar dikompresi otomatis, video diunggah apa adanya.'}
           </span>
         </div>
 
@@ -238,22 +248,31 @@ export default function MediaLibrary({ open, onClose, onSelect, imageType = 'gen
           ) : files.length === 0 ? (
             <div className="flex h-full flex-col items-center justify-center text-sm text-gray-500">
               <Upload className="h-8 w-8 mb-2 opacity-30" />
-              <p>Belum ada gambar. Upload gambar pertama Anda.</p>
-              <p className="mt-1 text-xs text-gray-400">Format: JPG, PNG, WebP. Maks 1MB (akan dikompresi otomatis).</p>
+              <p>Belum ada media. Upload gambar atau video pertama Anda.</p>
+              <p className="mt-1 text-xs text-gray-400">Format gambar: JPG, PNG, WebP. Format video: MP4, WebM, MOV (video diputar manual di undangan).</p>
             </div>
           ) : (
-            <div className="grid grid-cols-3 gap-3">
-              {files.map((f) => (
-                <button
-                  key={f.name}
-                  onClick={() => onSelect(f.url)}
-                  className="relative aspect-square overflow-hidden rounded-lg border border-gray-200 hover:border-gray-400"
-                  title={f.name}
-                >
-                  <Image src={f.url} alt={f.name} fill sizes="(max-width:768px) 33vw, 33vw" className="object-cover" />
-                </button>
-              ))}
-            </div>
+             <div className="grid grid-cols-3 gap-3">
+               {files.map((f) => (
+                 <button
+                   key={f.name}
+                   onClick={() => onSelect(f.url)}
+                   className="relative aspect-square overflow-hidden rounded-lg border border-gray-200 hover:border-gray-400"
+                   title={f.name}
+                 >
+                   {isVideoName(f.name) ? (
+                     <>
+                       <video src={f.url} muted preload="metadata" className="h-full w-full object-cover" />
+                       <span className="absolute right-1.5 top-1.5 rounded-full bg-black/50 p-1 text-white">
+                         <Video className="h-3.5 w-3.5" />
+                       </span>
+                     </>
+                   ) : (
+                     <Image src={f.url} alt={f.name} fill sizes="(max-width:768px) 33vw, 33vw" className="object-cover" />
+                   )}
+                 </button>
+               ))}
+             </div>
           )}
         </div>
       </div>

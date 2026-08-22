@@ -11,9 +11,7 @@
     "ornament": "islamic-geometric",
     "frame": "classic",
     "card_style": true,
-    "cover_style": "book",
-    "cover_3d": true,
-    "model3d": "3d/islam-masjid.glb"
+    "cover_style": "book"
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
@@ -36,7 +34,7 @@
         "variant": "left"
       },
       "style": {
-        "entrance": "islamic",
+        "entrance": "fade",
         "entranceDelay": 0
       }
     },
@@ -56,7 +54,7 @@
         "bride_photo": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80"
       },
       "style": {
-        "entrance": "islamic",
+        "entrance": "fade",
         "entranceDelay": 120
       }
     },
@@ -71,7 +69,7 @@
         "reference": "QS. Adz Dzariyyat: 49"
       },
       "style": {
-        "entrance": "islamic",
+        "entrance": "fade",
         "entranceDelay": 240
       }
     },
@@ -84,7 +82,7 @@
         "variant": "circles"
       },
       "style": {
-        "entrance": "islamic",
+        "entrance": "fade",
         "entranceDelay": 360
       }
     },
@@ -111,7 +109,7 @@
         ]
       },
       "style": {
-        "entrance": "islamic",
+        "entrance": "fade",
         "entranceDelay": 0
       }
     },
@@ -129,7 +127,7 @@
         "variant": "band"
       },
       "style": {
-        "entrance": "islamic",
+        "entrance": "fade",
         "entranceDelay": 120
       }
     },
@@ -147,7 +145,7 @@
         "variant": "card"
       },
       "style": {
-        "entrance": "islamic",
+        "entrance": "fade",
         "entranceDelay": 240
       }
     },
@@ -158,7 +156,7 @@
         "variant": "leaves"
       },
       "style": {
-        "entrance": "islamic",
+        "entrance": "fade",
         "entranceDelay": 360
       }
     },
@@ -177,7 +175,7 @@
         "animation": "pop"
       },
       "style": {
-        "entrance": "islamic",
+        "entrance": "fade",
         "entranceDelay": 0
       }
     },
@@ -196,7 +194,7 @@
         ]
       },
       "style": {
-        "entrance": "islamic",
+        "entrance": "fade",
         "entranceDelay": 120
       }
     },
@@ -215,7 +213,7 @@
         "account_holder": "Desta Anugrah"
       },
       "style": {
-        "entrance": "islamic",
+        "entrance": "fade",
         "entranceDelay": 240
       }
     },
@@ -229,7 +227,7 @@
         "names": "Desta & Citra"
       },
       "style": {
-        "entrance": "islamic",
+        "entrance": "fade",
         "entranceDelay": 360
       }
     },
@@ -242,7 +240,7 @@
         "embed_url": "https://maps.google.com/?q=Amanti%20Resort%2C%20Ubud"
       },
       "style": {
-        "entrance": "islamic",
+        "entrance": "fade",
         "entranceDelay": 0
       }
     }
