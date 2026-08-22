@@ -90,7 +90,8 @@ const BlockPropsSchema = z.record(
 export const BlockLayoutSchema = z.object({
   x: z.number(),
   y: z.number(),
-  width: z.number().min(100).max(2000)
+  width: z.number().min(100).max(2000),
+  height: z.number().min(0).max(5000).optional()
 }).strict();
 
 // ---------------------------------------------------------------

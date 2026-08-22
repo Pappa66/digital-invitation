@@ -130,6 +130,7 @@ export interface BlockLayout {
   x: number;
   y: number;
   width: number;
+  height?: number;
 }
 
 /** Override tampilan per-section (teks, background warna/gambar). */

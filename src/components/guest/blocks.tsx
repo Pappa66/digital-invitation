@@ -476,8 +476,56 @@ function BuilderDecorLayer({ blockId, decor }: { blockId: string; decor?: DecorA
               >
                 ✕
               </button>
+              {/* Resize handles: 4 sudut + 4 edge */}
+              {(['nw', 'n', 'ne', 'e', 'se', 's', 'sw', 'w'] as const).map((dir) => {
+                const isCorner = dir.length === 2;
+                const cursor = dir === 'nw' || dir === 'se' ? 'nwse-resize' : dir === 'ne' || dir === 'sw' ? 'nesw-resize' : dir === 'n' || dir === 's' ? 'ns-resize' : 'ew-resize';
+                const posClass = dir.includes('n') ? '-top-1.5' : dir.includes('s') ? '-bottom-1.5' : 'top-1/2 -translate-y-1/2';
+                const posH = dir.includes('w') ? '-left-1.5' : dir.includes('e') ? '-right-1.5' : 'left-1/2 -translate-x-1/2';
+                return (
+                  <div
+                    key={dir}
+                    className={`absolute z-50 ${posClass} ${posH} ${isCorner ? 'h-3 w-3' : dir === 'n' || dir === 's' ? 'h-1.5 w-5' : 'h-5 w-1.5'} rounded-sm bg-[#c9a45c] border border-white/80 shadow-sm`}
+                    style={{ cursor }}
+                    onPointerDown={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      const startX = e.clientX;
+                      const startY = e.clientY;
+                      const startSize = asset.size ?? (asset.kind === 'image' ? asset.width ?? 100 : asset.kind === 'text' ? 14 : 48);
+                      const startW = asset.width ?? startSize;
+                      const onMove = (ev: PointerEvent) => {
+                        const dx = ev.clientX - startX;
+                        const dy = ev.clientY - startY;
+                        let delta: number;
+                        if (dir === 'n' || dir === 's') delta = dy;
+                        else if (dir === 'e' || dir === 'w') delta = dx;
+                        else delta = (dx + dy) / 2;
+                        const factor = (dir === 'w' || dir === 'nw' || dir === 'sw') ? -1 : 1;
+                        const vertFactor = (dir === 'n' || dir === 'nw' || dir === 'ne') ? -1 : 1;
+                        if (asset.kind === 'ornament' || asset.kind === 'shape') {
+                          const newSize = Math.max(12, Math.min(400, startSize + delta * factor * 0.8));
+                          updateDecor(blockId, asset.id, { size: Math.round(newSize) });
+                        } else if (asset.kind === 'image') {
+                          const newW = Math.max(24, Math.min(420, startW + delta * factor * 0.8));
+                          updateDecor(blockId, asset.id, { width: Math.round(newW) });
+                        } else if (asset.kind === 'text') {
+                          const newSize = Math.max(8, Math.min(96, startSize + delta * vertFactor * 0.5));
+                          updateDecor(blockId, asset.id, { fontSize: Math.round(newSize) });
+                        }
+                      };
+                      const onUp = () => {
+                        window.removeEventListener('pointermove', onMove);
+                        window.removeEventListener('pointerup', onUp);
+                      };
+                      window.addEventListener('pointermove', onMove);
+                      window.addEventListener('pointerup', onUp);
+                    }}
+                  />
+                );
+              })}
               <span className="absolute -bottom-5 left-0 whitespace-nowrap text-[9px] text-[#8a6d2f]">
-                {asset.kind === 'shape' ? asset.shape : asset.kind} · drag utk pindah
+                {asset.kind === 'shape' ? asset.shape : asset.kind} · drag utk pindah, tarik sudut utk resize
               </span>
             </>
           )}

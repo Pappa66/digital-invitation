@@ -719,6 +719,7 @@ function FreeBlock({ block }: { block: Block }) {
         left: layout.x,
         top: layout.y,
         width: layout.width,
+        height: layout.height || undefined,
         transform: CSS.Translate.toString(transform),
         zIndex: isDragging ? 20 : selected ? 5 : 1
       }}
@@ -828,6 +829,125 @@ function FreeBlock({ block }: { block: Block }) {
               const startW = layout.width;
               const onMove = (ev: PointerEvent) =>
                 setBlockLayout(block.id, { width: Math.min(420, Math.max(40, startW + (ev.clientX - startX))) });
+              const onUp = () => {
+                window.removeEventListener('pointermove', onMove);
+                window.removeEventListener('pointerup', onUp);
+              };
+              window.addEventListener('pointermove', onMove);
+              window.addEventListener('pointerup', onUp);
+            }}
+          />
+          {/* Bottom edge: height/resize */}
+          <div
+            className="absolute inset-x-0 bottom-0 z-40 h-2 cursor-ns-resize bg-[#c9a45c]/60"
+            title="Geser bawah"
+            onPointerDown={(e) => {
+              e.stopPropagation();
+              const startY = e.clientY;
+              const startH = layout.height ?? 0;
+              const onMove = (ev: PointerEvent) =>
+                setBlockLayout(block.id, { height: Math.max(100, startH + (ev.clientY - startY)) });
+              const onUp = () => {
+                window.removeEventListener('pointermove', onMove);
+                window.removeEventListener('pointerup', onUp);
+              };
+              window.addEventListener('pointermove', onMove);
+              window.addEventListener('pointerup', onUp);
+            }}
+          />
+          {/* Bottom-right corner */}
+          <div
+            className="absolute bottom-0 right-0 z-50 h-4 w-4 cursor-nwse-resize rounded-tl-sm bg-[#c9a45c] border border-white/60 shadow"
+            title="Resize sudut kanan bawah"
+            onPointerDown={(e) => {
+              e.stopPropagation();
+              const startX = e.clientX;
+              const startY = e.clientY;
+              const startW = layout.width;
+              const startH = layout.height ?? 0;
+              const onMove = (ev: PointerEvent) => {
+                const newW = Math.min(420, Math.max(40, startW + (ev.clientX - startX)));
+                const newH = Math.max(100, startH + (ev.clientY - startY));
+                setBlockLayout(block.id, { width: newW, height: newH });
+              };
+              const onUp = () => {
+                window.removeEventListener('pointermove', onMove);
+                window.removeEventListener('pointerup', onUp);
+              };
+              window.addEventListener('pointermove', onMove);
+              window.addEventListener('pointerup', onUp);
+            }}
+          />
+          {/* Bottom-left corner */}
+          <div
+            className="absolute bottom-0 left-0 z-50 h-4 w-4 cursor-nesw-resize rounded-tr-sm bg-[#c9a45c] border border-white/60 shadow"
+            title="Resize sudut kiri bawah"
+            onPointerDown={(e) => {
+              e.stopPropagation();
+              const startX = e.clientX;
+              const startY = e.clientY;
+              const startW = layout.width;
+              const startH = layout.height ?? 0;
+              const startXPos = layout.x;
+              const onMove = (ev: PointerEvent) => {
+                const dx = ev.clientX - startX;
+                const newW = Math.min(420, Math.max(40, startW - dx));
+                const newX = Math.max(0, startXPos + (startW - newW));
+                const newH = Math.max(100, startH + (ev.clientY - startY));
+                setBlockLayout(block.id, { width: newW, x: newX, height: newH });
+              };
+              const onUp = () => {
+                window.removeEventListener('pointermove', onMove);
+                window.removeEventListener('pointerup', onUp);
+              };
+              window.addEventListener('pointermove', onMove);
+              window.addEventListener('pointerup', onUp);
+            }}
+          />
+          {/* Top-left corner */}
+          <div
+            className="absolute left-0 top-0 z-50 h-4 w-4 cursor-nwse-resize rounded-br-sm bg-[#c9a45c] border border-white/60 shadow"
+            title="Resize sudut kiri atas"
+            onPointerDown={(e) => {
+              e.stopPropagation();
+              const startX = e.clientX;
+              const startY = e.clientY;
+              const startW = layout.width;
+              const startH = layout.height ?? 0;
+              const startXPos = layout.x;
+              const startYPos = layout.y;
+              const onMove = (ev: PointerEvent) => {
+                const dx = ev.clientX - startX;
+                const dy = ev.clientY - startY;
+                const newW = Math.min(420, Math.max(40, startW - dx));
+                const newH = Math.max(100, startH - dy);
+                setBlockLayout(block.id, { width: newW, x: startXPos + (startW - newW), y: Math.max(0, startYPos + (startH - newH)) });
+              };
+              const onUp = () => {
+                window.removeEventListener('pointermove', onMove);
+                window.removeEventListener('pointerup', onUp);
+              };
+              window.addEventListener('pointermove', onMove);
+              window.addEventListener('pointerup', onUp);
+            }}
+          />
+          {/* Top-right corner */}
+          <div
+            className="absolute right-0 top-0 z-50 h-4 w-4 cursor-nesw-resize rounded-bl-sm bg-[#c9a45c] border border-white/60 shadow"
+            title="Resize sudut kanan atas"
+            onPointerDown={(e) => {
+              e.stopPropagation();
+              const startX = e.clientX;
+              const startY = e.clientY;
+              const startW = layout.width;
+              const startH = layout.height ?? 0;
+              const startYPos = layout.y;
+              const onMove = (ev: PointerEvent) => {
+                const newW = Math.min(420, Math.max(40, startW + (ev.clientX - startX)));
+                const dy = ev.clientY - startY;
+                const newH = Math.max(100, startH - dy);
+                setBlockLayout(block.id, { width: newW, y: Math.max(0, startYPos + (startH - newH)) });
+              };
               const onUp = () => {
                 window.removeEventListener('pointermove', onMove);
                 window.removeEventListener('pointerup', onUp);
