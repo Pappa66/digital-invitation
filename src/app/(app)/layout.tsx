@@ -35,7 +35,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
     router.refresh();
   }
 
-  const activeItem = NAV.find((item) => pathname === item.href || pathname.startsWith(item.href + '/'));
+  const activeItem = NAV.find((item) => pathname === item.href);
   const title = activeItem?.label ?? 'Dashboard';
 
   return (
@@ -47,7 +47,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
         </div>
         <nav className="flex-1 space-y-1 p-3" aria-label="Navigasi utama">
           {NAV.map((item) => {
-            const active = pathname === item.href || pathname.startsWith(item.href + '/');
+            const active = pathname === item.href;
             const Icon = item.icon;
             return (
               <Link
@@ -85,7 +85,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
       {/* Mobile bottom nav — target sentuh ≥ 56px tinggi, ikon 24px, label 11px */}
       <nav aria-label="Navigasi utama" className="fixed bottom-0 left-0 right-0 z-50 flex items-stretch justify-around border-t border-dashboard-border bg-dashboard-surface shadow-[0_-4px_16px_-8px_rgba(43,38,32,0.16)] md:hidden">
         {NAV.map((item) => {
-          const active = pathname === item.href || pathname.startsWith(item.href + '/');
+          const active = pathname === item.href;
           const Icon = item.icon;
           return (
             <Link

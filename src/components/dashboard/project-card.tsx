@@ -86,7 +86,7 @@ export default function ProjectCard({ project, onDuplicated, onDeleted }: Projec
 
   return (
     <div className="flex flex-col overflow-hidden rounded-xl border border-dashboard-border bg-dashboard-surface shadow-sm transition-shadow hover:shadow-md">
-      <a href={`/builder/${project.id}`} className="group relative block h-36 overflow-hidden bg-gray-100">
+      <a href={`/builder/${project.id}`} className="group relative block h-40 overflow-hidden bg-gray-100 sm:h-44">
         {project.thumbnail ? (
           <Image src={project.thumbnail} alt="" fill sizes="(min-width:768px) 33vw, 100vw" className="object-cover transition-transform duration-300 group-hover:scale-105" />
         ) : (
@@ -101,10 +101,10 @@ export default function ProjectCard({ project, onDuplicated, onDeleted }: Projec
         </span>
       </a>
 
-      <div className="border-t border-dashboard-border bg-white px-3 py-2.5">
+      <div className="border-t border-dashboard-border bg-white px-4 py-3">
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0 flex-1">
-            <div className="flex min-w-0 items-center gap-1.5">
+            <div className="flex min-w-0 items-center gap-2">
               <p className="truncate text-sm font-medium text-gray-900">{couple || project.title}</p>
               <span
                 className={`flex shrink-0 items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[10px] font-medium ${
@@ -124,38 +124,38 @@ export default function ProjectCard({ project, onDuplicated, onDeleted }: Projec
             </p>
           </div>
         </div>
-        <div className="mt-2 flex items-center gap-1.5">
+        <div className="mt-3 flex items-center gap-2">
           <button
             onClick={() => router.push(`/builder/${project.id}`)}
-            className="flex items-center gap-1 rounded-lg bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-2.5 py-1 text-[11px] font-semibold text-white hover:opacity-90"
+            className="flex items-center gap-1 rounded-lg bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-3 py-1.5 text-xs font-semibold text-white hover:opacity-90"
           >
-            <Pencil className="h-3 w-3" /> Edit
+            <Pencil className="h-3.5 w-3.5" /> Edit
           </button>
           <button
             onClick={() => setShareOpen(true)}
-            className="flex items-center gap-1 rounded-lg border border-[#e0d6c2] px-2.5 py-1 text-[11px] font-medium text-gray-700 hover:bg-gray-50"
+            className="flex items-center gap-1 rounded-lg border border-[#e0d6c2] px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
           >
-            <Share2 className="h-3 w-3" /> Share
+            <Share2 className="h-3.5 w-3.5" /> Share
           </button>
           <div className="flex-1" />
           <IconBtn label="Salin" onClick={() => setConfirm('duplicate')}>
-            <Copy className="h-3.5 w-3.5" />
+            <Copy className="h-4 w-4" />
           </IconBtn>
           <IconBtn label="QR Absen" onClick={() => setAbsenOpen(true)}>
-            <QrCode className="h-3.5 w-3.5" />
+            <QrCode className="h-4 w-4" />
           </IconBtn>
           <IconBtn
             label={status === 'published' ? 'Jadikan draft' : 'Publish'}
             onClick={handleToggleStatus}
             disabled={statusBusy}
           >
-            {status === 'published' ? <Globe className="h-3.5 w-3.5 text-emerald-600" /> : <GlobeLock className="h-3.5 w-3.5" />}
+            {status === 'published' ? <Globe className="h-4 w-4 text-emerald-600" /> : <GlobeLock className="h-4 w-4" />}
           </IconBtn>
           <IconBtn label="Buka publik" onClick={() => router.push(publicUrl)}>
-            <ExternalLink className="h-3.5 w-3.5" />
+            <ExternalLink className="h-4 w-4" />
           </IconBtn>
           <IconBtn label="Hapus" danger onClick={() => setConfirm('delete')}>
-            <Trash2 className="h-3.5 w-3.5" />
+            <Trash2 className="h-4 w-4" />
           </IconBtn>
         </div>
       </div>
