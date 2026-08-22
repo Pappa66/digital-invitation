@@ -24,14 +24,71 @@ const jost = Jost({
   display: 'swap'
 });
 
+const SITE_URL = 'https://undangan-digital.prashadigitalindonesia.com';
+const SITE_NAME = 'Prasha Digital';
+const DEFAULT_OG = `${SITE_URL}/og-default.png`;
+
 export const metadata: Metadata = {
-  title: 'Prasha Digital — Undangan Digital Pernikahan',
-  description: 'Undangan digital mewah dan personal untuk hari bahagia Anda, dirancang oleh Prasha Digital Indonesia.'
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: 'Prasha Digital — Undangan Digital Pernikahan',
+    template: '%s | Prasha Digital'
+  },
+  description: 'Undangan digital mewah dan personal untuk hari bahagia Anda. Desain elegan, mudah dibagikan, fitur lengkap — RSVP, musik, galeri, peta, dan absensi QR. Dirancang oleh Prasha Digital Indonesia.',
+  keywords: ['undangan digital', 'undangan pernikahan online', 'wedding invitation', 'digital invitation', 'undangan elegan', 'Prasha Digital'],
+  authors: [{ name: 'Prasha Digital Indonesia' }],
+  creator: 'Prasha Digital Indonesia',
+  publisher: 'Prasha Digital Indonesia',
+  openGraph: {
+    type: 'website',
+    locale: 'id_ID',
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    title: 'Prasha Digital — Undangan Digital Pernikahan',
+    description: 'Undangan digital mewah dan personal untuk hari bahagia Anda. Desain elegan, mudah dibagikan, fitur lengkap.',
+    images: [
+      {
+        url: DEFAULT_OG,
+        width: 1200,
+        height: 630,
+        alt: 'Prasha Digital — Undangan Digital Pernikahan'
+      }
+    ]
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Prasha Digital — Undangan Digital Pernikahan',
+    description: 'Undangan digital mewah dan personal untuk hari bahagia Anda.',
+    images: [DEFAULT_OG]
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1
+    }
+  },
+  alternates: {
+    canonical: SITE_URL
+  },
+  icons: {
+    icon: '/logo/prasha.png',
+    apple: '/logo/prasha.png'
+  }
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="id">
+      <head>
+        <link rel="icon" href="/logo/prasha.png" sizes="any" />
+        <link rel="apple-touch-icon" href="/logo/prasha.png" />
+        <meta name="theme-color" content="#c9a45c" />
+      </head>
       <body className={`${cormorant.variable} ${pinyon.variable} ${jost.variable} bg-background font-body text-foreground antialiased`}>
         <MotionProvider>{children}</MotionProvider>
         <Toaster

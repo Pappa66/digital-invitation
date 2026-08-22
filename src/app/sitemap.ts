@@ -1,20 +1,25 @@
 import type { MetadataRoute } from 'next';
-import { TEMPLATE_LIST, DEMO_TEMPLATES } from '@/lib/templates';
+import { DEMO_TEMPLATES } from '@/lib/templates';
+
+const SITE_URL = 'https://undangan-digital.prashadigitalindonesia.com';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://undangan-digital.prashadigitalindonesia.com';
   const now = new Date();
 
-  const staticPages = [
-    { url: siteUrl, lastModified: now, changeFrequency: 'weekly' as const, priority: 1 },
-    { url: `${siteUrl}/login`, lastModified: now, changeFrequency: 'monthly' as const, priority: 0.3 }
+  const staticPages: MetadataRoute.Sitemap = [
+    {
+      url: SITE_URL,
+      lastModified: now,
+      changeFrequency: 'weekly',
+      priority: 1
+    }
   ];
 
-  const templatePages = DEMO_TEMPLATES.map((t) => ({
-    url: `${siteUrl}/templates/${t.id}`,
+  const templatePages: MetadataRoute.Sitemap = DEMO_TEMPLATES.map((t) => ({
+    url: `${SITE_URL}/templates/${t.id}`,
     lastModified: now,
     changeFrequency: 'weekly' as const,
-    priority: 0.8
+    priority: 0.7
   }));
 
   return [...staticPages, ...templatePages];

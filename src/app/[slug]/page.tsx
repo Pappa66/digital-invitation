@@ -42,17 +42,27 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     metadataBase: new URL(origin),
     title,
-    description: `Buka undangan digital ${title}.`,
+    description: `Undangan digital ${title} — dibuat dengan Prasha Digital.`,
     openGraph: {
       title,
-      description: `Buka undangan digital ${title}.`,
+      description: `Undangan digital ${title} — dibuat dengan Prasha Digital.`,
       type: 'website',
       url: `${origin}/${slug}`,
-      images: [`/api/og?slug=${encodeURIComponent(slug)}`]
+      siteName: 'Prasha Digital',
+      locale: 'id_ID',
+      images: [
+        {
+          url: `/api/og?slug=${encodeURIComponent(slug)}`,
+          width: 1200,
+          height: 630,
+          alt: `Undangan ${title}`
+        }
+      ]
     },
     twitter: {
       card: 'summary_large_image',
       title,
+      description: `Undangan digital ${title}.`,
       images: [`/api/og?slug=${encodeURIComponent(slug)}`]
     }
   };
