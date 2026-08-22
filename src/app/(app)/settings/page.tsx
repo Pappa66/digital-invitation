@@ -75,8 +75,6 @@ export default function SettingsPage() {
       saveSetting(SETTING_BUSINESS_NAME, settings.business_name)
     ]);
 
-    // Mirror business name ke localStorage — dibaca sinkron oleh builder-store
-    // saat menambah blok Watermark (auto-fill brand).
     try {
       localStorage.setItem('di_business_name', settings.business_name);
     } catch { /* ignore */ }
@@ -95,54 +93,67 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="max-w-2xl">
+    <div className="mx-auto max-w-4xl">
       <div className="mb-6">
         <h2 className="text-lg font-semibold">Pengaturan</h2>
         <p className="mt-1 text-sm text-gray-500">Konfigurasi WhatsApp, harga, promo, dan branding.</p>
       </div>
 
-      <form onSubmit={handleSave} className="space-y-6">
-        {/* WhatsApp */}
-        <section className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-          <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-900">
-            <MessageCircle className="h-4 w-4" /> WhatsApp Bisnis
-          </h3>
-          <p className="mb-3 text-xs leading-relaxed text-gray-500">
-            Nomor yang akan membuka chat WhatsApp saat pengunjung mengirim pesanan. Format internasional tanpa &quot;+&quot;, tanpa spasi.
-          </p>
-          <div className="relative">
-            <MessageCircle className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-            <Input
-              value={settings.whatsapp}
-              onChange={(e) => update('whatsapp', e.target.value)}
-              inputMode="tel"
-              placeholder="cth: 6281234567890"
-              className="pl-10"
-            />
-          </div>
-          <p className="mt-1.5 text-xs text-gray-400">
-            Tersimpan sebagai: {settings.whatsapp ? `https://wa.me/${toWaNumber(settings.whatsapp)}` : '(belum diset)'}
-          </p>
-        </section>
+      <form onSubmit={handleSave} className="space-y-5">
+        <div className="grid gap-5 md:grid-cols-2">
+          {/* WhatsApp */}
+          <section className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+            <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-900">
+              <MessageCircle className="h-4 w-4" /> WhatsApp Bisnis
+            </h3>
+            <p className="mb-3 text-xs leading-relaxed text-gray-500">
+              Nomor untuk chat WhatsApp pesanan. Format internasional tanpa &quot;+&quot;.
+            </p>
+            <div className="relative">
+              <MessageCircle className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+              <Input
+                value={settings.whatsapp}
+                onChange={(e) => update('whatsapp', e.target.value)}
+                inputMode="tel"
+                placeholder="cth: 6281234567890"
+                className="pl-10"
+              />
+            </div>
+            <p className="mt-1.5 text-xs text-gray-400">
+              {settings.whatsapp ? `wa.me/${toWaNumber(settings.whatsapp)}` : '(belum diset)'}
+            </p>
+          </section>
 
-        {/* Harga & Promo */}
-        <section className="rounded-xl border border-[#c9a45c]/30 bg-[#faf7f2] p-6">
-          <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-[#4a443c]">
-            <Tag className="h-4 w-4 text-[#c9a45c]" /> Harga & Promo Landing Page
-          </h3>
-          <p className="mb-4 text-xs text-[#8a7a66]">
-            Harga dan promo ini ditampilkan di halaman depan publik (jika diaktifkan).
-          </p>
+          {/* Branding */}
+          <section className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+            <h3 className="mb-3 text-sm font-semibold text-gray-900">Branding</h3>
+            <div>
+              <label className="mb-1 block text-xs font-medium text-gray-700">Nama Bisnis (Watermark)</label>
+              <Input
+                type="text"
+                value={settings.business_name}
+                onChange={(e) => update('business_name', e.target.value)}
+                placeholder="PT. Prasha Digital Indonesia"
+              />
+              <p className="mt-1 text-xs text-gray-400">Muncul di watermark &quot;Made with Love by ...&quot;</p>
+            </div>
+          </section>
+        </div>
 
-          <div className="mb-4 flex items-center gap-3">
+        {/* Harga & Promo — full width */}
+        <section className="rounded-xl border border-[#c9a45c]/30 bg-[#faf7f2] p-5">
+          <div className="mb-4 flex items-center justify-between">
+            <h3 className="flex items-center gap-2 text-sm font-semibold text-[#4a443c]">
+              <Tag className="h-4 w-4 text-[#c9a45c]" /> Harga & Promo
+            </h3>
             <label className="flex items-center gap-2 text-xs font-medium text-[#4a443c]">
               <Switch checked={settings.show_pricing} onCheckedChange={(v) => update('show_pricing', v)} />
-              Tampilkan harga di landing page
+              Tampilkan
             </label>
           </div>
 
           {settings.show_pricing && (
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               <div>
                 <Label className="mb-1 block text-xs font-medium text-[#4a443c]">Harga Dasar (Rp)</Label>
                 <Input
@@ -186,41 +197,27 @@ export default function SettingsPage() {
           {settings.base_price > 0 && settings.discount_percent > 0 && (
             <p className="mt-3 text-xs text-[#c9a45c]">
               Harga final: {formatRupiah(Math.round(settings.base_price * (1 - settings.discount_percent / 100)))}
-              {settings.promo_code && ` (kode: ${settings.promo_code})`}
+              {settings.promo_code && ` (${settings.promo_code})`}
             </p>
           )}
-        </section>
-
-        {/* Business Name */}
-        <section className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-          <h3 className="mb-3 text-sm font-semibold text-gray-900">Branding</h3>
-          <div>
-            <label className="mb-1 block text-xs font-medium text-gray-700">Nama Bisnis (untuk Watermark)</label>
-            <Input
-              type="text"
-              value={settings.business_name}
-              onChange={(e) => update('business_name', e.target.value)}
-              placeholder="PT. Prasha Digital Indonesia"
-            />
-            <p className="mt-1 text-xs text-gray-400">Muncul di watermark &quot;Made with Love by ...&quot; di bagian akhir undangan.</p>
-          </div>
         </section>
 
         {message && (
           <p className={`rounded-md px-3 py-2 text-xs ${message.ok ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>{message.text}</p>
         )}
 
-        <Button type="submit" disabled={saving || loading}>
-          {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-          {saving ? 'Menyimpan...' : 'Simpan Pengaturan'}
-        </Button>
+        <div className="flex items-center gap-3">
+          <Button type="submit" disabled={saving || loading}>
+            {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+            {saving ? 'Menyimpan...' : 'Simpan'}
+          </Button>
+          {loading && (
+            <span className="flex items-center gap-1.5 text-xs text-gray-400">
+              <Loader2 className="h-3.5 w-3.5 animate-spin" /> Memuat...
+            </span>
+          )}
+        </div>
       </form>
-
-      {loading && (
-        <p className="mt-4 flex items-center gap-2 text-sm text-gray-400">
-          <Loader2 className="h-4 w-4 animate-spin" /> Memuat pengaturan...
-        </p>
-      )}
     </div>
   );
 }

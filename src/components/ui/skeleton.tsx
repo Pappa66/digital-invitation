@@ -72,9 +72,9 @@ export function InlineError({
 
 export function Spinner({ label = 'Memuat...' }: { label?: string }) {
   return (
-    <div className="flex flex-col items-center justify-center gap-3 py-10 text-muted-foreground" role="status" aria-live="polite" aria-label={label}>
-      <Loader2 className="h-8 w-8 animate-spin text-gold-strong" aria-hidden />
-      <span className="text-xs tracking-wide">{label}</span>
+    <div className="flex flex-col items-center justify-center gap-2 py-8 text-muted-foreground" role="status" aria-live="polite" aria-label={label}>
+      <Loader2 className="h-6 w-6 animate-spin text-gold-strong" aria-hidden />
+      <span className="text-[11px] tracking-wide">{label}</span>
     </div>
   );
 }
@@ -104,16 +104,16 @@ export function GuestSkeleton() {
   );
 }
 
-/** Skeleton dashboard grid */
+/** Skeleton dashboard grid — lighter, staggered feel */
 export function DashboardSkeleton() {
   return (
-    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {Array.from({ length: 8 }).map((_, i) => (
-        <div key={i} className="animate-pulse overflow-hidden rounded-xl border bg-card">
-          <div className="h-44 bg-muted" />
-          <div className="space-y-2 p-4">
-            <div className="h-4 w-3/4 rounded bg-muted" />
-            <div className="h-3 w-1/2 rounded bg-muted" />
+        <div key={i} className="animate-pulse overflow-hidden rounded-xl border bg-card" style={{ animationDelay: `${i * 60}ms` }}>
+          <div className="h-36 bg-muted" />
+          <div className="space-y-1.5 p-3">
+            <div className="h-3.5 w-3/4 rounded bg-muted" />
+            <div className="h-2.5 w-1/2 rounded bg-muted" />
           </div>
         </div>
       ))}

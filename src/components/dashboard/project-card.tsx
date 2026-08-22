@@ -85,77 +85,77 @@ export default function ProjectCard({ project, onDuplicated, onDeleted }: Projec
   }
 
   return (
-    <div className="flex flex-col overflow-hidden rounded-xl border border-dashboard-border bg-dashboard-surface shadow-sm">
-      <a href={`/builder/${project.id}`} className="group relative block h-44 overflow-hidden bg-gray-100">
+    <div className="flex flex-col overflow-hidden rounded-xl border border-dashboard-border bg-dashboard-surface shadow-sm transition-shadow hover:shadow-md">
+      <a href={`/builder/${project.id}`} className="group relative block h-36 overflow-hidden bg-gray-100">
         {project.thumbnail ? (
-          <Image src={project.thumbnail} alt="" fill sizes="(min-width:768px) 33vw, 100vw" className="object-cover" />
+          <Image src={project.thumbnail} alt="" fill sizes="(min-width:768px) 33vw, 100vw" className="object-cover transition-transform duration-300 group-hover:scale-105" />
         ) : (
           <div className="flex h-full w-full items-center justify-center">
-            <span className="text-sm text-gray-400">Belum ada preview</span>
+            <span className="text-xs text-gray-400">Belum ada preview</span>
           </div>
         )}
         <span className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
-          <span className="rounded-md bg-white px-4 py-2 text-sm font-medium text-gray-900">
-            <Pencil className="mr-1 inline h-4 w-4" /> Edit Desain
+          <span className="rounded-md bg-white px-3 py-1.5 text-xs font-medium text-gray-900">
+            <Pencil className="mr-1 inline h-3.5 w-3.5" /> Edit
           </span>
         </span>
       </a>
 
-      <div className="border-t border-dashboard-border bg-white px-4 py-3">
+      <div className="border-t border-dashboard-border bg-white px-3 py-2.5">
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0 flex-1">
-            <div className="flex min-w-0 items-center gap-2">
+            <div className="flex min-w-0 items-center gap-1.5">
               <p className="truncate text-sm font-medium text-gray-900">{couple || project.title}</p>
               <span
-                className={`flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium ${
+                className={`flex shrink-0 items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[10px] font-medium ${
                   status === 'published' ? 'bg-emerald-50 text-emerald-700' : 'bg-gray-100 text-gray-500'
                 }`}
-                title={status === 'published' ? 'Publik — tamu dengan link bisa membuka' : 'Draft — belum bisa diakses tamu'}
+                title={status === 'published' ? 'Publik' : 'Draft'}
               >
-                {status === 'published' ? <Globe className="h-3 w-3" /> : <GlobeLock className="h-3 w-3" />}
+                {status === 'published' ? <Globe className="h-2.5 w-2.5" /> : <GlobeLock className="h-2.5 w-2.5" />}
                 {status === 'published' ? 'Publik' : 'Draft'}
               </span>
             </div>
             {couple && couple !== project.title && (
               <p className="truncate text-[11px] text-gray-400">{project.title}</p>
             )}
-            <p className="mt-0.5 text-xs text-gray-500">
-              Diperbarui {new Date(project.updated_at || project.created_at).toLocaleDateString('id-ID')}
+            <p className="mt-0.5 text-[11px] text-gray-400">
+              {new Date(project.updated_at || project.created_at).toLocaleDateString('id-ID')}
             </p>
           </div>
         </div>
-        <div className="mt-3 flex items-center gap-2">
+        <div className="mt-2 flex items-center gap-1.5">
           <button
             onClick={() => router.push(`/builder/${project.id}`)}
-            className="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-3 py-1.5 text-xs font-semibold text-white hover:opacity-90"
+            className="flex items-center gap-1 rounded-lg bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-2.5 py-1 text-[11px] font-semibold text-white hover:opacity-90"
           >
-            <Pencil className="h-3.5 w-3.5" /> Edit
+            <Pencil className="h-3 w-3" /> Edit
           </button>
           <button
             onClick={() => setShareOpen(true)}
-            className="flex items-center gap-1.5 rounded-lg border border-[#e0d6c2] px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
+            className="flex items-center gap-1 rounded-lg border border-[#e0d6c2] px-2.5 py-1 text-[11px] font-medium text-gray-700 hover:bg-gray-50"
           >
-            <Share2 className="h-3.5 w-3.5" /> Share
+            <Share2 className="h-3 w-3" /> Share
           </button>
           <div className="flex-1" />
-          <IconBtn label="Salin (duplicate) undangan" onClick={() => setConfirm('duplicate')}>
-            <Copy className="h-4 w-4" />
+          <IconBtn label="Salin" onClick={() => setConfirm('duplicate')}>
+            <Copy className="h-3.5 w-3.5" />
           </IconBtn>
-          <IconBtn label="QR Absen — link publik untuk panitia" onClick={() => setAbsenOpen(true)}>
-            <QrCode className="h-4 w-4" />
+          <IconBtn label="QR Absen" onClick={() => setAbsenOpen(true)}>
+            <QrCode className="h-3.5 w-3.5" />
           </IconBtn>
           <IconBtn
-            label={status === 'published' ? 'Jadikan draft (tidak bisa diakses tamu)' : 'Publish (tamu dengan link bisa membuka)'}
+            label={status === 'published' ? 'Jadikan draft' : 'Publish'}
             onClick={handleToggleStatus}
             disabled={statusBusy}
           >
-            {status === 'published' ? <Globe className="h-4 w-4 text-emerald-600" /> : <GlobeLock className="h-4 w-4" />}
+            {status === 'published' ? <Globe className="h-3.5 w-3.5 text-emerald-600" /> : <GlobeLock className="h-3.5 w-3.5" />}
           </IconBtn>
-          <IconBtn label="Buka halaman publik" onClick={() => router.push(publicUrl)}>
-            <ExternalLink className="h-4 w-4" />
+          <IconBtn label="Buka publik" onClick={() => router.push(publicUrl)}>
+            <ExternalLink className="h-3.5 w-3.5" />
           </IconBtn>
-          <IconBtn label="Hapus undangan" danger onClick={() => setConfirm('delete')}>
-            <Trash2 className="h-4 w-4" />
+          <IconBtn label="Hapus" danger onClick={() => setConfirm('delete')}>
+            <Trash2 className="h-3.5 w-3.5" />
           </IconBtn>
         </div>
       </div>

@@ -138,26 +138,26 @@ export default function DashboardClient({ projects, isDemo = false, userName }: 
 
   return (
     <div className="min-h-screen bg-background">
-      {/* HEADER Romantis Klasik */}
-      <header className="relative overflow-hidden border-b border-gold/20 bg-gradient-to-r from-[#FBF7F1] via-[#F6EFE4] to-[#FBF7F1]">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-5 sm:px-6">
-          <div className="flex items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-gold to-gold-strong text-base font-semibold text-foreground shadow-gold">P</span>
+      {/* HEADER — compact */}
+      <header className="border-b border-gold/20 bg-gradient-to-r from-[#FBF7F1] via-[#F6EFE4] to-[#FBF7F1]">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+          <div className="flex items-center gap-2.5">
+            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-gold to-gold-strong text-sm font-semibold text-foreground shadow-gold">P</span>
             <div>
-              <p className="font-script text-xl leading-none text-gold-deep">Prasha</p>
-              <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">Digital Indonesia</p>
+              <p className="font-script text-lg leading-none text-gold-deep">Prasha</p>
+              <p className="text-[9px] uppercase tracking-[0.25em] text-muted-foreground">Digital Indonesia</p>
             </div>
           </div>
           <div className="text-right">
             <p className="text-sm font-medium text-foreground">{userName || 'Selamat datang'}</p>
-            <p className="text-xs text-muted-foreground">Kelola undangan pernikahan Anda</p>
+            <p className="text-[11px] text-muted-foreground">Kelola undangan pernikahan</p>
           </div>
         </div>
       </header>
 
-      <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
+      <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6">
       {/* Tab Navigation */}
-      <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as TabType)} className="mb-6">
+      <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as TabType)} className="mb-4">
         <TabsList>
           <TabsTrigger value="invitations">
             <Calendar className="h-4 w-4" /> Undangan
@@ -172,98 +172,85 @@ export default function DashboardClient({ projects, isDemo = false, userName }: 
 
         {/* Invitations Tab */}
         <TabsContent value="invitations">
-          <div className="mb-6 flex items-center justify-between">
+          <div className="mb-4 flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-semibold">Daftar Undangan</h2>
-              <p className="text-sm text-muted-foreground">
+              <h2 className="text-base font-semibold">Daftar Undangan</h2>
+              <p className="text-xs text-muted-foreground">
                 {filteredItems.length === 0
                   ? '0 undangan ditemukan'
-                  : `${(safePage - 1) * PER_PAGE + 1}–${Math.min(safePage * PER_PAGE, filteredItems.length)} dari ${filteredItems.length} undangan`}
+                  : `${(safePage - 1) * PER_PAGE + 1}–${Math.min(safePage * PER_PAGE, filteredItems.length)} dari ${filteredItems.length}`}
                 {hasActiveFilters && (
                   <button onClick={clearFilters} className="ml-2 text-[#c9a45c] hover:underline">
-                    (Reset filter)
+                    Reset filter
                   </button>
                 )}
-                {isDemo && <span className="ml-2 rounded bg-amber-100 px-1.5 py-0.5 text-xs text-amber-700">Mode Demo</span>}
+                {isDemo && <span className="ml-2 rounded bg-amber-100 px-1.5 py-0.5 text-xs text-amber-700">Demo</span>}
               </p>
             </div>
             <div className="flex items-center gap-2">
-              <Button variant="outline" onClick={() => setGuideOpen(true)}>
-                <HelpCircle className="h-4 w-4" /> Panduan
+              <Button variant="outline" size="sm" onClick={() => setGuideOpen(true)}>
+                <HelpCircle className="h-3.5 w-3.5" /> Panduan
               </Button>
-              <Button onClick={() => setModalOpen(true)}>
-                <Plus className="h-4 w-4" /> Buat Undangan
+              <Button size="sm" onClick={() => setModalOpen(true)}>
+                <Plus className="h-3.5 w-3.5" /> Buat
               </Button>
             </div>
           </div>
 
-          {/* Search and Filters */}
-          <div className="mb-6 rounded-lg border bg-card p-4">
-            <div className="flex flex-col gap-4 lg:flex-row">
-              {/* Search */}
-              <div className="flex-1">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                  <Input
-                    type="text"
-                    placeholder="Cari undangan..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10"
-                  />
-                </div>
-              </div>
-
-              {/* Filters */}
-              <div className="flex flex-wrap items-center gap-3">
-                <div className="flex items-center gap-2 text-muted-foreground">
-                  <span className="text-xs">Filter:</span>
-                </div>
-
-                <Select value={filterStatus} onValueChange={setFilterStatus}>
-                  <SelectTrigger className="w-auto gap-2 text-sm">
-                    <SelectValue placeholder="Semua Status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="">Semua Status</SelectItem>
-                    <SelectItem value="published">Terbit</SelectItem>
-                    <SelectItem value="draft">Draf</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <Select value={filterMonth} onValueChange={setFilterMonth}>
-                  <SelectTrigger className="w-auto gap-2 text-sm">
-                    <SelectValue placeholder="Semua Bulan" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="">Semua Bulan</SelectItem>
-                    {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
-                      <SelectItem key={m} value={String(m)}>
-                        {new Date(0, m - 1).toLocaleDateString('id-ID', { month: 'long' })}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                <Select value={filterYear} onValueChange={setFilterYear}>
-                  <SelectTrigger className="w-auto gap-2 text-sm">
-                    <SelectValue placeholder="Semua Tahun" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="">Semua Tahun</SelectItem>
-                    {availableYears.map((year) => (
-                      <SelectItem key={year} value={String(year)}>
-                        {year}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+          {/* Search and Filters — compact single row */}
+          <div className="mb-4 flex flex-col gap-2 rounded-lg border bg-card p-3 sm:flex-row sm:items-center">
+            <div className="relative flex-1">
+              <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                type="text"
+                placeholder="Cari..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="h-8 pl-8 text-sm"
+              />
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Select value={filterStatus} onValueChange={setFilterStatus}>
+                <SelectTrigger className="h-8 w-auto gap-1.5 text-xs">
+                  <SelectValue placeholder="Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="">Semua</SelectItem>
+                  <SelectItem value="published">Terbit</SelectItem>
+                  <SelectItem value="draft">Draf</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select value={filterMonth} onValueChange={setFilterMonth}>
+                <SelectTrigger className="h-8 w-auto gap-1.5 text-xs">
+                  <SelectValue placeholder="Bulan" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="">Semua</SelectItem>
+                  {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
+                    <SelectItem key={m} value={String(m)}>
+                      {new Date(0, m - 1).toLocaleDateString('id-ID', { month: 'short' })}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Select value={filterYear} onValueChange={setFilterYear}>
+                <SelectTrigger className="h-8 w-auto gap-1.5 text-xs">
+                  <SelectValue placeholder="Tahun" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="">Semua</SelectItem>
+                  {availableYears.map((year) => (
+                    <SelectItem key={year} value={String(year)}>
+                      {year}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
           {isDemo && (
-            <p className="mb-4 rounded-md bg-gold/10 px-3 py-2 text-xs text-gold-deep">
+            <p className="mb-3 rounded-md bg-gold/10 px-3 py-1.5 text-xs text-gold-deep">
               Mode Demo aktif — data disimpan di browser (localStorage), tanpa Supabase. Untuk produksi,
               matikan <code className="rounded bg-gold/15 px-1">NEXT_PUBLIC_DEMO_MODE</code> di .env.local.
             </p>
@@ -272,7 +259,7 @@ export default function DashboardClient({ projects, isDemo = false, userName }: 
           {demoLoading ? (
             <DashboardSkeleton />
           ) : filteredItems.length === 0 ? (
-            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed bg-card py-24 text-center">
+            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed bg-card py-16 text-center">
               <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#c9a45c]/20 to-[#b98a3e]/10">
                 <svg className="h-8 w-8 text-[#c9a45c]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -293,7 +280,7 @@ export default function DashboardClient({ projects, isDemo = false, userName }: 
               )}
             </div>
           ) : (
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {pagedItems.map((p) => (
                 <ProjectCard key={p.id} project={p} onDuplicated={handleDuplicated} onDeleted={handleDeleted} />
               ))}
@@ -301,16 +288,16 @@ export default function DashboardClient({ projects, isDemo = false, userName }: 
           )}
 
           {filteredItems.length > PER_PAGE && (
-            <div className="mt-6 flex items-center justify-center gap-2">
-              <Button variant="outline" size="sm" onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={safePage === 1}>
-                ← Sebelumnya
+            <div className="mt-5 flex items-center justify-center gap-1.5">
+              <Button variant="outline" size="sm" onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={safePage === 1} className="h-8 px-2.5 text-xs">
+                Prev
               </Button>
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
                 <Button
                   key={n}
                   variant={n === safePage ? 'default' : 'outline'}
                   size="icon"
-                  className="h-8 w-8 text-sm"
+                  className="h-7 w-7 text-xs"
                   onClick={() => setPage(n)}
                 >
                   {n}
@@ -321,8 +308,9 @@ export default function DashboardClient({ projects, isDemo = false, userName }: 
                 size="sm"
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                 disabled={safePage === totalPages}
+                className="h-8 px-2.5 text-xs"
               >
-                Berikutnya →
+                Next
               </Button>
             </div>
           )}

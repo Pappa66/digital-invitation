@@ -926,54 +926,49 @@ export default function PropertiesPanel({ mobileOpen = false, onClose }: { mobil
             />
 
             <Section
-              title="Absensi Hari-H (QR Check-in)"
-              desc="Tampilkan bagian absen dengan QR di undangan. Tamu memindai saat tiba di venue."
+              title="Fitur Interaktif"
+              desc="Absensi QR & Buku Tamu"
               render={
-                <label className="flex items-center justify-between gap-3 rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2.5">
-                  <div>
-                    <p className="text-sm font-medium text-[#4a443c]">Aktifkan Absensi QR</p>
-                    <p className="text-[11px] text-[#8a7a66]">Data masuk ke daftar tamu hari-H Anda.</p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setSettings({ checkin_enabled: canvas.settings.checkin_enabled === false })}
-                    className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${
-                      canvas.settings.checkin_enabled !== false ? 'bg-[#c9a45c]' : 'bg-[#e0d6c2]'
-                    }`}
-                  >
-                    <span
-                      className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-all ${
-                        canvas.settings.checkin_enabled !== false ? 'left-[22px]' : 'left-0.5'
+                <div className="grid grid-cols-2 gap-2">
+                  <label className="flex items-center justify-between gap-2 rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2">
+                    <div className="min-w-0">
+                      <p className="truncate text-xs font-medium text-[#4a443c]">Absensi QR</p>
+                      <p className="truncate text-[10px] text-[#8a7a66]">Check-in hari-H</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setSettings({ checkin_enabled: canvas.settings.checkin_enabled === false })}
+                      className={`relative h-5 w-9 shrink-0 rounded-full transition-colors ${
+                        canvas.settings.checkin_enabled !== false ? 'bg-[#c9a45c]' : 'bg-[#e0d6c2]'
                       }`}
-                    />
-                  </button>
-                </label>
-              }
-            />
-
-            <Section
-              title="Buku Tamu"
-              desc="Izinkan tamu menulis ucapan di undangan"
-              render={
-                <label className="flex items-center justify-between gap-3 rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2.5">
-                  <div>
-                    <p className="text-sm font-medium text-[#4a443c]">Aktifkan Buku Tamu</p>
-                    <p className="text-[11px] text-[#8a7a66]">Tamu dapat mengirim ucapan & doa.</p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setSettings({ guest_book_enabled: canvas.settings.guest_book_enabled === false })}
-                    className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${
-                      canvas.settings.guest_book_enabled !== false ? 'bg-[#c9a45c]' : 'bg-[#e0d6c2]'
-                    }`}
-                  >
-                    <span
-                      className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-all ${
-                        canvas.settings.guest_book_enabled !== false ? 'left-[22px]' : 'left-0.5'
+                    >
+                      <span
+                        className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-all ${
+                          canvas.settings.checkin_enabled !== false ? 'left-[18px]' : 'left-0.5'
+                        }`}
+                      />
+                    </button>
+                  </label>
+                  <label className="flex items-center justify-between gap-2 rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2">
+                    <div className="min-w-0">
+                      <p className="truncate text-xs font-medium text-[#4a443c]">Buku Tamu</p>
+                      <p className="truncate text-[10px] text-[#8a7a66]">Ucapan & doa</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setSettings({ guest_book_enabled: canvas.settings.guest_book_enabled === false })}
+                      className={`relative h-5 w-9 shrink-0 rounded-full transition-colors ${
+                        canvas.settings.guest_book_enabled !== false ? 'bg-[#c9a45c]' : 'bg-[#e0d6c2]'
                       }`}
-                    />
-                  </button>
-                </label>
+                    >
+                      <span
+                        className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-all ${
+                          canvas.settings.guest_book_enabled !== false ? 'left-[18px]' : 'left-0.5'
+                        }`}
+                      />
+                    </button>
+                  </label>
+                </div>
               }
             />
 

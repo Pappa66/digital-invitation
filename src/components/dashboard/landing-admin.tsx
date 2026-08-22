@@ -38,15 +38,15 @@ export default function LandingAdmin() {
   }
 
   return (
-    <div className="max-w-3xl">
-      <div className="mb-6 flex items-center justify-between">
+    <div className="mx-auto max-w-5xl">
+      <div className="mb-5 flex items-center justify-between">
         <div>
           <h2 className="text-lg font-semibold">Landing Page</h2>
-          <p className="mt-1 text-sm text-gray-500">Konten halaman depan publik — hero, statistik, fitur, FAQ, CTA, footer.</p>
+          <p className="mt-1 text-sm text-gray-500">Konten halaman depan publik.</p>
         </div>
         <Button onClick={handleSave} disabled={saving || loading}>
           {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-          {saving ? 'Menyimpan...' : 'Simpan Konten'}
+          {saving ? 'Menyimpan...' : 'Simpan'}
         </Button>
       </div>
 
@@ -56,74 +56,69 @@ export default function LandingAdmin() {
         </p>
       )}
 
-      <div className="space-y-6">
+      <div className="space-y-5">
         {/* HERO */}
         <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-base">
               <ImageIcon className="h-4 w-4 text-[#c9a45c]" /> Hero
             </CardTitle>
-            <CardDescription>Titik pembuka, judul, dan kolase 3 gambar di samping teks.</CardDescription>
+            <CardDescription>Titik pembuka, judul, dan kolase gambar.</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-3">
             <div>
-              <Label>Titik pembuka (script)</Label>
-              <Input value={content.hero.kicker} onChange={(e) => setHero(content.hero.kicker, { kicker: e.target.value })} />
+              <Label className="text-xs">Kicker (script)</Label>
+              <Input value={content.hero.kicker} onChange={(e) => setHero(content.hero.kicker, { kicker: e.target.value })} className="mt-1" />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid gap-3 sm:grid-cols-2">
               <div>
-                <Label>Judul — bagian 1</Label>
-                <Input value={content.hero.title_a} onChange={(e) => setHero(content.hero.title_a, { title_a: e.target.value })} />
+                <Label className="text-xs">Judul bagian 1</Label>
+                <Input value={content.hero.title_a} onChange={(e) => setHero(content.hero.title_a, { title_a: e.target.value })} className="mt-1" />
               </div>
               <div>
-                <Label>Judul — bagian 2 (italic)</Label>
-                <Input value={content.hero.title_b} onChange={(e) => setHero(content.hero.title_b, { title_b: e.target.value })} />
+                <Label className="text-xs">Judul bagian 2 (italic)</Label>
+                <Input value={content.hero.title_b} onChange={(e) => setHero(content.hero.title_b, { title_b: e.target.value })} className="mt-1" />
               </div>
             </div>
             <div>
-              <Label>Subjudul</Label>
+              <Label className="text-xs">Subjudul</Label>
               <textarea
                 value={content.hero.subtitle}
                 onChange={(e) => setHero(content.hero.subtitle, { subtitle: e.target.value })}
-                rows={3}
-                className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                rows={2}
+                className="mt-1 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
               />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid gap-3 sm:grid-cols-2">
               <div>
-                <Label>Teks tombol utama</Label>
-                <Input value={content.hero.cta_primary} onChange={(e) => setHero(content.hero.cta_primary, { cta_primary: e.target.value })} />
+                <Label className="text-xs">Teks tombol utama</Label>
+                <Input value={content.hero.cta_primary} onChange={(e) => setHero(content.hero.cta_primary, { cta_primary: e.target.value })} className="mt-1" />
               </div>
               <div>
-                <Label>Teks tombol kedua</Label>
-                <Input value={content.hero.cta_secondary} onChange={(e) => setHero(content.hero.cta_secondary, { cta_secondary: e.target.value })} />
+                <Label className="text-xs">Teks tombol kedua</Label>
+                <Input value={content.hero.cta_secondary} onChange={(e) => setHero(content.hero.cta_secondary, { cta_secondary: e.target.value })} className="mt-1" />
               </div>
             </div>
 
             <div>
-              <Label>Kolase Gambar (maks 3)</Label>
-              <div className="space-y-2">
+              <Label className="text-xs">Kolase Gambar (maks 3)</Label>
+              <div className="mt-1 space-y-1.5">
                 {(content.hero.images.length > 0 ? content.hero.images : [{ url: '', alt: '' }]).map((img, i) => (
                   <div key={i} className="flex items-center gap-2">
                     <Input
                       value={img.url}
                       onChange={(e) => updateHeroImage(i, 'url', e.target.value)}
-                      placeholder="https://.../foto.jpg (biarkan kosong untuk tema default)"
+                      placeholder="https://.../foto.jpg"
+                      className="flex-1"
                     />
                     <Input
                       value={img.alt}
                       onChange={(e) => updateHeroImage(i, 'alt', e.target.value)}
-                      placeholder="Alt teks"
-                      className="w-40"
+                      placeholder="Alt"
+                      className="w-28"
                     />
                     {content.hero.images.length > 1 && (
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => removeHeroImage(i)}
-                        aria-label="Hapus gambar"
-                      >
+                      <Button type="button" variant="ghost" size="icon" onClick={() => removeHeroImage(i)} aria-label="Hapus" className="shrink-0">
                         <Trash2 className="h-4 w-4 text-red-600" />
                       </Button>
                     )}
@@ -131,89 +126,89 @@ export default function LandingAdmin() {
                 ))}
               </div>
               {content.hero.images.length < 3 && (
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  className="mt-2"
-                  onClick={() => setHero(content.hero.images, { images: [...content.hero.images, { url: '', alt: '' }] })}
-                >
-                  <Plus className="h-4 w-4" /> Tambah Gambar
+                <Button type="button" variant="outline" size="sm" className="mt-1.5" onClick={() => setHero(content.hero.images, { images: [...content.hero.images, { url: '', alt: '' }] })}>
+                  <Plus className="h-4 w-4" /> Tambah
                 </Button>
               )}
-              <p className="mt-1 text-xs text-muted-foreground">
-                Jika kosong, landing menampilkan kolase 3 foto template unggulan secara otomatis.
-              </p>
+              <p className="mt-1 text-[11px] text-muted-foreground">Kosongkan = template default.</p>
             </div>
           </CardContent>
         </Card>
 
-        {/* STATS */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Statistik</CardTitle>
-            <CardDescription>Angka yang tampil di bilah sosial proof.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {content.stats.map((stat, i) => (
-              <div key={i} className="flex items-end gap-2">
-                <div className="flex-1">
-                  <Label>Label statistik {i + 1}</Label>
-                  <div className="flex gap-2">
-                    <Input
-                      type="number"
-                      value={stat.value}
-                      onChange={(e) => updateStatValue(i, parseInt(e.target.value) || 0)}
-                      className="w-32"
-                    />
-                    <Input value={stat.suffix} onChange={(e) => updateStat(i, 'suffix', e.target.value)} className="w-16" placeholder="+" />
-                  </div>
+        <div className="grid gap-5 lg:grid-cols-2">
+          {/* STATS */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base">Statistik</CardTitle>
+              <CardDescription>Angka sosial proof.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              {content.stats.map((stat, i) => (
+                <div key={i} className="flex items-end gap-1.5">
+                  <Input type="number" value={stat.value} onChange={(e) => updateStatValue(i, parseInt(e.target.value) || 0)} className="w-16" />
+                  <Input value={stat.suffix} onChange={(e) => updateStat(i, 'suffix', e.target.value)} className="w-10" placeholder="+" />
+                  <Input value={stat.label} onChange={(e) => updateStat(i, 'label', e.target.value)} placeholder="Label" className="flex-1" />
+                  <Button type="button" variant="ghost" size="icon" onClick={() => removeStat(i)} className="shrink-0">
+                    <Trash2 className="h-3.5 w-3.5 text-red-600" />
+                  </Button>
                 </div>
-                <Input
-                  value={stat.label}
-                  onChange={(e) => updateStat(i, 'label', e.target.value)}
-                  placeholder="Undangan Dikirim"
-                  className="flex-1"
-                />
-                <Button type="button" variant="ghost" size="icon" onClick={() => removeStat(i)} aria-label="Hapus statistik">
-                  <Trash2 className="h-4 w-4 text-red-600" />
-                </Button>
+              ))}
+              <Button type="button" variant="outline" size="sm" onClick={() => addStat()}>
+                <Plus className="h-4 w-4" /> Tambah
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* CTA */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base">CTA Akhir</CardTitle>
+              <CardDescription>Ajakan sebelum footer.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div>
+                  <Label className="text-xs">Kicker</Label>
+                  <Input value={content.cta.kicker} onChange={(e) => setCta(content.cta.kicker, { kicker: e.target.value })} className="mt-1" />
+                </div>
+                <div>
+                  <Label className="text-xs">Judul</Label>
+                  <Input value={content.cta.title} onChange={(e) => setCta(content.cta.title, { title: e.target.value })} className="mt-1" />
+                </div>
               </div>
-            ))}
-            <Button type="button" variant="outline" size="sm" onClick={() => addStat()}>
-              <Plus className="h-4 w-4" /> Tambah Statistik
-            </Button>
-          </CardContent>
-        </Card>
+              <div>
+                <Label className="text-xs">Body</Label>
+                <Input value={content.cta.body} onChange={(e) => setCta(content.cta.body, { body: e.target.value })} className="mt-1" />
+              </div>
+              <div>
+                <Label className="text-xs">Teks tombol</Label>
+                <Input value={content.cta.button_text} onChange={(e) => setCta(content.cta.button_text, { button_text: e.target.value })} className="mt-1" />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
         {/* STEPS */}
-        <AccordionCard title="Cara Kerja (4 langkah)" items={content.steps} patch={setContent} targetKey="steps" />
+        <AccordionCard title="Cara Kerja" items={content.steps} patch={setContent} targetKey="steps" />
 
         {/* FEATURES */}
-        <AccordionCard title="Fitur (kisi keunggulan)" items={content.features} patch={setContent} targetKey="features" />
+        <AccordionCard title="Fitur" items={content.features} patch={setContent} targetKey="features" />
 
         {/* FAQ */}
         <Card>
-          <CardHeader>
-            <CardTitle>FAQ</CardTitle>
-            <CardDescription>Pertanyaan yang sering diajukan tamu.</CardDescription>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base">FAQ</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3">
+          <CardContent className="space-y-2">
             {content.faq.map((f, i) => (
-              <div key={i} className="rounded-md border border-border p-3">
-                <div className="flex items-start justify-between gap-2">
-                  <Input value={f.q} onChange={(e) => updateFaq(i, 'q', e.target.value)} placeholder="Pertanyaan" className="font-medium" />
-                  <Button type="button" variant="ghost" size="icon" onClick={() => removeFaq(i)} aria-label="Hapus FAQ">
-                    <Trash2 className="h-4 w-4 text-red-600" />
-                  </Button>
+              <div key={i} className="flex items-start gap-2 rounded-md border border-border p-2.5">
+                <div className="flex-1 space-y-1.5">
+                  <Input value={f.q} onChange={(e) => updateFaq(i, 'q', e.target.value)} placeholder="Pertanyaan" className="text-sm font-medium" />
+                  <textarea value={f.a} onChange={(e) => updateFaq(i, 'a', e.target.value)} rows={2} placeholder="Jawaban" className="w-full rounded-md border border-input bg-transparent px-3 py-1.5 text-sm shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-ring" />
                 </div>
-                <textarea
-                  value={f.a}
-                  onChange={(e) => updateFaq(i, 'a', e.target.value)}
-                  rows={2}
-                  placeholder="Jawaban"
-                  className="mt-2 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                />
+                <Button type="button" variant="ghost" size="icon" onClick={() => removeFaq(i)} className="shrink-0">
+                  <Trash2 className="h-4 w-4 text-red-600" />
+                </Button>
               </div>
             ))}
             <Button type="button" variant="outline" size="sm" onClick={() => addFaq()}>
@@ -222,77 +217,50 @@ export default function LandingAdmin() {
           </CardContent>
         </Card>
 
-        {/* CTA */}
-        <Card>
-          <CardHeader>
-            <CardTitle>CTA Akhir</CardTitle>
-            <CardDescription>Bagian ajakan sebelum footer.</CardDescription>
-          </CardHeader>
-          <CardContent className="grid grid-cols-2 gap-4">
-            <div>
-              <Label>Titik pembuka</Label>
-              <Input value={content.cta.kicker} onChange={(e) => setCta(content.cta.kicker, { kicker: e.target.value })} />
-            </div>
-            <div>
-              <Label>Judul</Label>
-              <Input value={content.cta.title} onChange={(e) => setCta(content.cta.title, { title: e.target.value })} />
-            </div>
-            <div className="col-span-2">
-              <Label>Body</Label>
-              <Input value={content.cta.body} onChange={(e) => setCta(content.cta.body, { body: e.target.value })} />
-            </div>
-            <div>
-              <Label>Teks tombol</Label>
-              <Input value={content.cta.button_text} onChange={(e) => setCta(content.cta.button_text, { button_text: e.target.value })} />
-            </div>
-          </CardContent>
-        </Card>
-
         {/* FOOTER */}
         <Card>
-          <CardHeader>
-            <CardTitle>Footer</CardTitle>
-            <CardDescription>Deskripsi brand, kontak, dan tagline.</CardDescription>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base">Footer</CardTitle>
+            <CardDescription>Brand, kontak, tagline.</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-3">
             <div>
-              <Label>Deskripsi brand</Label>
-              <Input value={content.footer.description} onChange={(e) => setFooter(content.footer.description, { description: e.target.value })} />
+              <Label className="text-xs">Deskripsi brand</Label>
+              <Input value={content.footer.description} onChange={(e) => setFooter(content.footer.description, { description: e.target.value })} className="mt-1" />
             </div>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid gap-3 sm:grid-cols-3">
               <div>
-                <Label>WhatsApp (angka)</Label>
-                <Input value={content.footer.whatsapp} onChange={(e) => setFooter(content.footer.whatsapp, { whatsapp: e.target.value })} placeholder="628..." />
+                <Label className="text-xs">WhatsApp</Label>
+                <Input value={content.footer.whatsapp} onChange={(e) => setFooter(content.footer.whatsapp, { whatsapp: e.target.value })} placeholder="628..." className="mt-1" />
               </div>
               <div>
-                <Label>Instagram</Label>
-                <Input value={content.footer.instagram} onChange={(e) => setFooter(content.footer.instagram, { instagram: e.target.value })} />
+                <Label className="text-xs">Instagram</Label>
+                <Input value={content.footer.instagram} onChange={(e) => setFooter(content.footer.instagram, { instagram: e.target.value })} className="mt-1" />
               </div>
               <div>
-                <Label>Website</Label>
-                <Input value={content.footer.website} onChange={(e) => setFooter(content.footer.website, { website: e.target.value })} />
+                <Label className="text-xs">Website</Label>
+                <Input value={content.footer.website} onChange={(e) => setFooter(content.footer.website, { website: e.target.value })} className="mt-1" />
               </div>
             </div>
             <div>
-              <Label>Tagline</Label>
-              <Input value={content.footer.tagline} onChange={(e) => setFooter(content.footer.tagline, { tagline: e.target.value })} />
+              <Label className="text-xs">Tagline</Label>
+              <Input value={content.footer.tagline} onChange={(e) => setFooter(content.footer.tagline, { tagline: e.target.value })} className="mt-1" />
             </div>
           </CardContent>
         </Card>
       </div>
 
-      <div className="mt-6">
-        <Button onClick={handleSave} disabled={saving || loading} className="w-full sm:w-auto">
+      <div className="mt-5 flex items-center gap-3">
+        <Button onClick={handleSave} disabled={saving || loading}>
           {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-          {saving ? 'Menyimpan...' : 'Simpan Konten'}
+          {saving ? 'Menyimpan...' : 'Simpan'}
         </Button>
+        {loading && (
+          <span className="flex items-center gap-1.5 text-xs text-gray-400">
+            <Loader2 className="h-3.5 w-3.5 animate-spin" /> Memuat...
+          </span>
+        )}
       </div>
-
-      {loading && (
-        <p className="mt-4 flex items-center gap-2 text-sm text-gray-400">
-          <Loader2 className="h-4 w-4 animate-spin" /> Memuat konten...
-        </p>
-      )}
     </div>
   );
 
@@ -370,29 +338,21 @@ function AccordionCard({ title, items, patch, targetKey }: AccordionCardProps) {
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
+      <CardHeader className="pb-3">
+        <CardTitle className="text-base">{title}</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-3">
+      <CardContent className="space-y-2">
         {items.map((item, i) => (
-          <div key={i} className="rounded-md border border-border p-3">
-            <div className="flex items-center gap-2">
-              <Label className="h-8 w-8 shrink-0 rounded-md bg-muted text-center leading-8">{i + 1}</Label>
+          <div key={i} className="flex items-center gap-2 rounded-md border border-border p-2.5">
+            <Label className="h-7 w-7 shrink-0 rounded-md bg-muted text-center text-xs leading-7">{i + 1}</Label>
+            <div className="flex-1 space-y-1.5">
               <Input value={item.title} onChange={(e) => update(i, 'title', e.target.value)} placeholder="Judul" />
-              <Button type="button" variant="ghost" size="icon" onClick={() => setItems(items.filter((_, j) => j !== i))} aria-label="Hapus">
-                <Trash2 className="h-4 w-4 text-red-600" />
-              </Button>
-            </div>
-            <div className="mt-2 flex items-center gap-2">
               <Select value={item.icon} onChange={(v) => updateIcon(i, v)} />
+              <textarea value={item.desc} onChange={(e) => update(i, 'desc', e.target.value)} rows={2} placeholder="Deskripsi" className="w-full rounded-md border border-input bg-transparent px-3 py-1.5 text-sm shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-ring" />
             </div>
-            <textarea
-              value={item.desc}
-              onChange={(e) => update(i, 'desc', e.target.value)}
-              rows={2}
-              placeholder="Deskripsi"
-              className="mt-2 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            />
+            <Button type="button" variant="ghost" size="icon" onClick={() => setItems(items.filter((_, j) => j !== i))} className="shrink-0">
+              <Trash2 className="h-4 w-4 text-red-600" />
+            </Button>
           </div>
         ))}
         <Button type="button" variant="outline" size="sm" onClick={() => setItems([...items, { icon: 'Sparkles', title: '', desc: '' }])}>
@@ -410,7 +370,7 @@ function Select({ value, onChange }: { value: string; onChange: (v: string) => v
     <select
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="h-9 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      className="h-8 w-full rounded-md border border-input bg-transparent px-2 py-1 text-sm shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
     >
       {ICON_CHOICES.map((icon) => (
         <option key={icon} value={icon}>
