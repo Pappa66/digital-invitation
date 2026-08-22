@@ -83,6 +83,7 @@ export default function ShareDialog({ open, projectId, slug, title, onClose, rel
   const [editNote, setEditNote] = useState('');
   const [editGenerated, setEditGenerated] = useState<{ token: string; url: string } | null>(null);
   const [editCopied, setEditCopied] = useState(false);
+  const [editError, setEditError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!open) return;
@@ -368,12 +369,19 @@ export default function ShareDialog({ open, projectId, slug, title, onClose, rel
               expiry={editExpiry}
               note={editNote}
               generated={editGenerated}
+              error={editError}
               copied={editCopied}
               onExpiryChange={setEditExpiry}
               onNoteChange={setEditNote}
               onGenerate={async () => {
                 setEditLoading(true);
+                setEditError(null);
                 const res = await generateShareToken(projectId, editExpiry, editNote || undefined);
+                if (res.error) {
+                  setEditError(res.error);
+                  setEditLoading(false);
+                  return;
+                }
                 if (res.data) {
                   const url = `${base}/edit/${res.data.token}`;
                   setEditGenerated({ token: res.data.token, url });
@@ -527,6 +535,7 @@ interface EditLinkTabProps {
   expiry: number;
   note: string;
   generated: { token: string; url: string } | null;
+  error?: string | null;
   copied: boolean;
   onExpiryChange: (hours: number) => void;
   onNoteChange: (note: string) => void;
@@ -542,6 +551,7 @@ function EditLinkTab({
   expiry,
   note,
   generated,
+  error,
   copied,
   onExpiryChange,
   onNoteChange,
@@ -618,6 +628,14 @@ function EditLinkTab({
           {loading ? 'Generating...' : 'Generate Link Edit'}
         </button>
       </div>
+
+      {/* Error */}
+      {error && (
+        <div className="mt-3 rounded-lg border border-red-200 bg-red-50 p-3">
+          <p className="text-[11px] font-medium text-red-700 mb-1">Gagal membuat link</p>
+          <p className="text-[10px] text-red-600 break-words">{error}</p>
+        </div>
+      )}
 
       {/* Generated link */}
       {generated && (
