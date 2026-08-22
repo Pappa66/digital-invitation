@@ -132,26 +132,6 @@ export default function BlockView({ block, projectId, editable = false, greeting
   const cardCls = cardVariants[cardVariant] || cardVariants.shadow;
   const cardWrapCls = `${cardCls} mx-0 mb-1 mt-1 w-full max-w-full min-w-0 box-border`;
   
-  const entranceVariants = {
-    fade: { opacity: 0, y: 44 },
-    slide: { opacity: 0, x: -30 },
-    zoom: { opacity: 0, scale: 0.92 },
-    blur: { opacity: 0, scale: 0.94 },
-    rise: { opacity: 0, y: 60 },
-    // Vintage / editorial
-    book: { opacity: 0, rotateY: -115, scale: 0.92 } as const,
-    magazine: { opacity: 0, rotateX: 75, scale: 0.94 } as const,
-    filmroll: { opacity: 0, scaleX: 0.15 } as const,
-    oldtv: { opacity: 0, scale: 0.55 } as const,
-    newspaper: { opacity: 0, y: 36 } as const,
-    vintage: { opacity: 0, scale: 1.05 } as const,
-    none: { opacity: 1 },
-  } as const;
-  type EntranceKey = keyof typeof entranceVariants;
-  const blockEntrance = (block.style?.entrance ?? theme?.card_entrance ?? 'fade') as EntranceKey;
-  const entranceAnim = entranceVariants[blockEntrance] ?? entranceVariants.fade;
-  const entranceDelay = block.style?.entranceDelay ?? 0;
-  const isBook = blockEntrance === 'book' || blockEntrance === 'magazine';
   const hideOn = block.style?.hideOn ?? [];
   const hideClasses = [
     hideOn.includes('mobile') ? ' max-sm:hidden' : '',
@@ -169,19 +149,12 @@ export default function BlockView({ block, projectId, editable = false, greeting
           data-block-type={block.type}
           className={`relative w-full min-w-0 max-w-full overflow-hidden box-border transition-[background-color,background-image,opacity] duration-500 ease-out${hideClasses}`}
         >
-          {animateEntrance && blockEntrance !== 'none' && entranceAnim !== entranceVariants.none ? (
+          {animateEntrance ? (
             <motion.div
-              initial={entranceAnim}
-              whileInView={{ opacity: 1, y: 0, x: 0, scale: 1, scaleX: 1, scaleY: 1, rotate: 0, rotateY: 0, rotateX: 0, skewX: 0 }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.12 }}
-              transition={
-                isBook
-                  ? { duration: 0.9, ease: [0.22, 1, 0.36, 1] as const, delay: entranceDelay }
-                  : blockEntrance === 'filmroll' || blockEntrance === 'oldtv'
-                    ? { duration: 0.7, ease: 'easeOut' as const, delay: entranceDelay }
-                    : { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const, delay: entranceDelay }
-              }
-              style={isBook ? { perspective: 1200, transformStyle: 'preserve-3d' as const } : undefined}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             >
               {renderCard ? <div className={cardWrapCls}>{body}</div> : body}
             </motion.div>

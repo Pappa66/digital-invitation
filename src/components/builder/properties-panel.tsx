@@ -808,7 +808,6 @@ export default function PropertiesPanel({ mobileOpen = false, onClose }: { mobil
                           key={key}
                           onClick={() => {
                             setTheme({ cover_style: c.cover as never, ornament: c.ornament });
-                            canvas.blocks.forEach((b) => setBlockStyle(b.id, { entrance: c.entrance as never }));
                           }}
                           className={`rounded-md border px-2 py-1 text-[10px] capitalize ${
                             (canvas.theme.cover_style === c.cover && canvas.theme.ornament === c.ornament)
@@ -844,30 +843,6 @@ export default function PropertiesPanel({ mobileOpen = false, onClose }: { mobil
                               onClick={() => setTheme({ card_variant: v.value })}
                               className={`rounded-md border px-2 py-1 text-[10px] ${
                                 (canvas.theme.card_variant ?? 'shadow') === v.value
-                                  ? 'border-[#c9a45c] bg-[#c9a45c] text-white'
-                                  : 'border-[#e0d6c2] text-[#6b5f4d]'
-                              }`}
-                            >
-                              {v.label}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="mt-2">
-                        <label className="mb-1 block text-xs font-medium text-[#4a443c]">Animasi Masuk</label>
-                        <div className="flex flex-wrap gap-1.5">
-                          {[
-                            { value: 'fade', label: 'Fade' },
-                            { value: 'slide', label: 'Slide' },
-                            { value: 'zoom', label: 'Zoom' },
-                            { value: 'blur', label: 'Blur' },
-                            { value: 'rise', label: 'Naik' },
-                          ].map((v) => (
-                            <button
-                              key={v.value}
-                              onClick={() => setTheme({ card_entrance: v.value })}
-                              className={`rounded-md border px-2 py-1 text-[10px] ${
-                                (canvas.theme.card_entrance ?? 'fade') === v.value
                                   ? 'border-[#c9a45c] bg-[#c9a45c] text-white'
                                   : 'border-[#e0d6c2] text-[#6b5f4d]'
                               }`}
@@ -2033,46 +2008,6 @@ export default function PropertiesPanel({ mobileOpen = false, onClose }: { mobil
                       }
                     />
                   )}
-                  <Section
-                    title="Animasi Masuk"
-                    desc="Efek saat section muncul di layar (saat dibuka tamu)."
-                    render={
-                      <div className="space-y-3">
-                        <div>
-                          <label className="mb-1 block text-xs font-medium text-[#4a443c]">Efek</label>
-                          <select
-                            value={block.style?.entrance ?? ''}
-                            onChange={(e) => setBlockStyle(block.id, { entrance: (e.target.value || undefined) as BlockStyle['entrance'] })}
-                            className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-2 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
-                          >
-                            <option value="">Default tema</option>
-                            <option value="fade">Fade naik</option>
-                            <option value="slide">Geser masuk</option>
-                            <option value="zoom">Zoom</option>
-                            <option value="blur">Blur ke jernih</option>
-                            <option value="rise">Naik perlahan</option>
-                            <option value="book">Buka buku</option>
-                            <option value="magazine">Buka majalah</option>
-                            <option value="filmroll">Roll film analog</option>
-                            <option value="oldtv">TV jadul</option>
-                            <option value="newspaper">Koran lama</option>
-                            <option value="vintage">Vintage 80s–90s</option>
-                            <option value="none">Tanpa animasi</option>
-                          </select>
-                        </div>
-                        <div>
-                          <label className="mb-1 block text-xs font-medium text-[#4a443c]">Tunda (ms)</label>
-                          <NumberField
-                            label=""
-                            value={block.style?.entranceDelay ?? 0}
-                            onChange={(v) => setBlockStyle(block.id, { entranceDelay: v })}
-                            min={0}
-                            max={3000}
-                          />
-                        </div>
-                      </div>
-                    }
-                  />
                   <Section
                     title="Responsif"
                     desc="Sembunyikan blok pada perangkat tertentu (gaya Elementor)."
