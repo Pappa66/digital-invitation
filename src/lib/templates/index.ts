@@ -156,8 +156,9 @@ TEMPLATE_FRAMES['blush-dream'] = 'classic';
 export function getTemplate(id: string): CanvasData | null {
   const tpl = RAW_TEMPLATES[id];
   if (!tpl) return null;
-  const clone = structuredClone(tpl);
-  clone.theme.frame = TEMPLATE_FRAMES[id] ?? 'double';
+  // Return a shallow clone with frame override — avoid structuredClone for performance.
+  // Callers that mutate the result should clone deeply themselves.
+  const clone = { ...tpl, theme: { ...tpl.theme, frame: TEMPLATE_FRAMES[id] ?? 'double' } };
   return clone;
 }
 

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { HelpCircle, Loader2, Plus, Sparkles, Trash2, ChevronLeft, ChevronRight, Eye, EyeOff } from 'lucide-react';
+import { HelpCircle, Loader2, Plus, Sparkles, Trash2, ChevronLeft, ChevronRight, Eye, EyeOff, Search } from 'lucide-react';
 import { TEMPLATE_LIST } from '@/lib/templates';
 import { CATEGORIES, categoryLabel, type TemplateCategory } from '@/lib/template-categories';
 import { clientCreateProject, clientCreateProjectFromData } from '@/lib/api/project-client';
@@ -25,6 +25,7 @@ export default function TemplatesPage() {
   const [category, setCategory] = useState<TemplateCategory | 'semua'>('semua');
   const [page, setPage] = useState(1);
   const [demoIds, setDemoIds] = useState<Set<string> | null>(null);
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     setDemoIds(demoReadEnabledIds());
@@ -83,8 +84,13 @@ export default function TemplatesPage() {
     setPage(1);
   }
 
-  const filtered =
-    category === 'semua' ? TEMPLATE_LIST : TEMPLATE_LIST.filter((t) => (t.category ?? '').toLowerCase() === category);
+  const query = search.trim().toLowerCase();
+  const filtered = TEMPLATE_LIST.filter((t) => {
+    const matchCategory = category === 'semua' || (t.category ?? '').toLowerCase() === category;
+    if (!query) return matchCategory;
+    const haystack = `${t.name} ${t.description ?? ''} ${t.category ?? ''}`.toLowerCase();
+    return matchCategory && haystack.includes(query);
+  });
   const totalPages = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
   const safePage = Math.min(page, totalPages);
   const paged = filtered.slice((safePage - 1) * PER_PAGE, safePage * PER_PAGE);
@@ -174,6 +180,16 @@ export default function TemplatesPage() {
             </p>
           </div>
           <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600">{filtered.length} template</span>
+        </div>
+
+        <div className="mb-3 relative">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <Input
+            value={search}
+            onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+            placeholder="Cari template..."
+            className="pl-9 text-sm"
+          />
         </div>
 
         <div className="mb-2 flex flex-wrap gap-2">

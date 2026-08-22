@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { Type, Clapperboard, X } from 'lucide-react';
 import ColorPicker from '@/components/builder/color-picker';
 import { OrnamentArt, ORNAMENT_CATEGORIES, ORNAMENT_LABELS, type OrnamentKey } from '@/components/builder/ornaments';
@@ -13,7 +13,6 @@ import { getQuotesByReligion, RELIGION_LABELS, type WeddingQuote } from '@/lib/q
 import type { Block, BlockProps, DecorAsset, BankAccount, BlockStyle, BlockType, Theme } from '@/lib/types';
 import { getDesignPresets } from '@/lib/templates';
 
-const DESIGN_PRESETS = getDesignPresets();
 
 /** Grid 9-titik untuk atur posisi foto (object-position) — efisien & konsisten di semua blok foto. */
 const POSITION_POINTS = [
@@ -559,6 +558,7 @@ export default function PropertiesPanel({ mobileOpen = false, onClose }: { mobil
   const setBlockTextFont = useBuilderStore((s) => s.setBlockTextFont);
   const setSelectedText = useBuilderStore((s) => s.setSelectedText);
   const selectedText = useBuilderStore((s) => s.selectedText);
+  const DESIGN_PRESETS = useMemo(() => getDesignPresets(), []);
   const setFlow = useBuilderStore((s) => s.setFlow);
   const setReligion = useBuilderStore((s) => s.setReligion);
 

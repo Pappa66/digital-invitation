@@ -30,7 +30,7 @@ export async function createProject(title: string, templateId?: string) {
   const trimmed = sanitizeTitle(title);
   const slug = await makeUniqueSlug(supabase, slugify(trimmed), user.id);
 
-  const canvas: CanvasData = templateId ? getTemplate(templateId) ?? emptyCanvas() : emptyCanvas();
+  const canvas: CanvasData = templateId ? structuredClone(getTemplate(templateId) ?? emptyCanvas()) : emptyCanvas();
 
   const { data, error } = await supabase
     .from('projects')

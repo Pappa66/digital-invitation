@@ -71,7 +71,7 @@ function seedTemplates() {
       created_at: now,
       updated_at: now
     });
-    designs[id] = getTemplate(s.template) ?? emptyCanvas();
+    designs[id] = structuredClone(getTemplate(s.template) ?? emptyCanvas());
   }
   write(PROJECTS_KEY, created);
   write(DESIGNS_KEY, designs);
@@ -109,7 +109,7 @@ export function demoCreateProject(title: string, templateId?: string): { id: str
   projects.unshift(project);
   write(PROJECTS_KEY, projects);
   const designs = read<Record<string, CanvasData>>(DESIGNS_KEY, {});
-  designs[id] = templateId ? getTemplate(templateId) ?? emptyCanvas() : emptyCanvas();
+  designs[id] = templateId ? structuredClone(getTemplate(templateId) ?? emptyCanvas()) : emptyCanvas();
   write(DESIGNS_KEY, designs);
   return { id };
 }
