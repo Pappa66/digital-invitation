@@ -124,7 +124,7 @@ export default function ProjectCard({ project, onDuplicated, onDeleted }: Projec
             </p>
           </div>
         </div>
-        <div className="mt-3 flex items-center gap-2">
+        <div className="mt-3 flex flex-wrap items-center gap-2">
           <button
             onClick={() => router.push(`/builder/${project.id}`)}
             className="flex items-center gap-1 rounded-lg bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-3 py-1.5 text-xs font-semibold text-white hover:opacity-90"
@@ -137,26 +137,27 @@ export default function ProjectCard({ project, onDuplicated, onDeleted }: Projec
           >
             <Share2 className="h-3.5 w-3.5" /> Share
           </button>
-          <div className="flex-1" />
-          <IconBtn label="Salin" onClick={() => setConfirm('duplicate')}>
-            <Copy className="h-4 w-4" />
-          </IconBtn>
-          <IconBtn label="QR Absen" onClick={() => setAbsenOpen(true)}>
-            <QrCode className="h-4 w-4" />
-          </IconBtn>
-          <IconBtn
-            label={status === 'published' ? 'Jadikan draft' : 'Publish'}
-            onClick={handleToggleStatus}
-            disabled={statusBusy}
-          >
-            {status === 'published' ? <Globe className="h-4 w-4 text-emerald-600" /> : <GlobeLock className="h-4 w-4" />}
-          </IconBtn>
-          <IconBtn label="Buka publik" onClick={() => router.push(publicUrl)}>
-            <ExternalLink className="h-4 w-4" />
-          </IconBtn>
-          <IconBtn label="Hapus" danger onClick={() => setConfirm('delete')}>
-            <Trash2 className="h-4 w-4" />
-          </IconBtn>
+          <div className="flex items-center gap-0.5">
+            <IconBtn label="Salin" onClick={() => setConfirm('duplicate')}>
+              <Copy className="h-4 w-4" />
+            </IconBtn>
+            <IconBtn label="QR Absen" onClick={() => setAbsenOpen(true)}>
+              <QrCode className="h-4 w-4" />
+            </IconBtn>
+            <IconBtn
+              label={status === 'published' ? 'Jadikan draft' : 'Publish'}
+              onClick={handleToggleStatus}
+              disabled={statusBusy}
+            >
+              {status === 'published' ? <Globe className="h-4 w-4 text-emerald-600" /> : <GlobeLock className="h-4 w-4" />}
+            </IconBtn>
+            <IconBtn label="Buka publik" onClick={() => router.push(publicUrl)}>
+              <ExternalLink className="h-4 w-4" />
+            </IconBtn>
+            <IconBtn label="Hapus" danger onClick={() => setConfirm('delete')}>
+              <Trash2 className="h-4 w-4" />
+            </IconBtn>
+          </div>
         </div>
       </div>
 
@@ -204,7 +205,7 @@ function IconBtn({
       aria-label={label}
       title={label}
       disabled={disabled}
-      className={`rounded-md p-1.5 disabled:opacity-40 ${
+      className={`rounded p-1 disabled:opacity-40 ${
         danger
           ? 'text-gray-500 hover:bg-red-50 hover:text-red-600'
           : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'
