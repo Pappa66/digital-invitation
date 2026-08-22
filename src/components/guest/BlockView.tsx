@@ -138,10 +138,6 @@ export default function BlockView({ block, projectId, editable = false, greeting
     zoom: { opacity: 0, scale: 0.92 },
     blur: { opacity: 0, scale: 0.94 },
     rise: { opacity: 0, y: 60 },
-    // 3D & editorial
-    parallax: { opacity: 0, y: 80, scale: 0.98 } as const,
-    stagger: { opacity: 0, y: 24 } as const,
-    float: { opacity: 0, y: 16 } as const,
     // Vintage / editorial
     book: { opacity: 0, rotateY: -115, scale: 0.92 } as const,
     magazine: { opacity: 0, rotateX: 75, scale: 0.94 } as const,
@@ -156,7 +152,6 @@ export default function BlockView({ block, projectId, editable = false, greeting
   const entranceAnim = entranceVariants[blockEntrance] ?? entranceVariants.fade;
   const entranceDelay = block.style?.entranceDelay ?? 0;
   const isBook = blockEntrance === 'book' || blockEntrance === 'magazine';
-  const isFloat = blockEntrance === 'float';
   const hideOn = block.style?.hideOn ?? [];
   const hideClasses = [
     hideOn.includes('mobile') ? ' max-sm:hidden' : '',
@@ -182,15 +177,9 @@ export default function BlockView({ block, projectId, editable = false, greeting
               transition={
                 isBook
                   ? { duration: 0.9, ease: [0.22, 1, 0.36, 1] as const, delay: entranceDelay }
-                  : blockEntrance === 'parallax'
-                    ? { duration: 1.0, ease: [0.22, 1, 0.36, 1] as const, delay: entranceDelay }
-                      : blockEntrance === 'filmroll' || blockEntrance === 'oldtv'
-                        ? { duration: 0.7, ease: 'easeOut' as const, delay: entranceDelay }
-                        : blockEntrance === 'stagger'
-                          ? { duration: 0.6, ease: 'easeOut' as const, delay: entranceDelay, staggerChildren: 0.08 }
-                          : isFloat
-                            ? { type: 'spring' as const, stiffness: 90, damping: 12, delay: entranceDelay }
-                            : { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const, delay: entranceDelay }
+                  : blockEntrance === 'filmroll' || blockEntrance === 'oldtv'
+                    ? { duration: 0.7, ease: 'easeOut' as const, delay: entranceDelay }
+                    : { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const, delay: entranceDelay }
               }
               style={isBook ? { perspective: 1200, transformStyle: 'preserve-3d' as const } : undefined}
             >
