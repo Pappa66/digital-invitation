@@ -136,6 +136,12 @@ export interface BlockLayout {
 /** Override tampilan per-section (teks, background warna/gambar). */
 export interface BlockStyle {
   textColor?: string;
+  /** Warna heading/judul dalam blok (override per elemen). */
+  headingColor?: string;
+  /** Warna subtitle/deskripsi dalam blok (override per elemen). */
+  subtitleColor?: string;
+  /** Warna aksen (tombol, link, highlight) dalam blok. */
+  accentColor?: string;
   /** Ukuran font override per elemen teks. Kunci = `${prop}` atau `${prop}.${index}`. Value = CSS fontSize (mis. "2rem"). */
   textSizes?: Record<string, string>;
   /** Font override per elemen teks. Kunci = `${prop}` atau `${prop}.${index}`. Value = nama font (Google Fonts). */

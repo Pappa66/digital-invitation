@@ -1063,25 +1063,7 @@ export default function PropertiesPanel({ mobileOpen = false, onClose }: { mobil
                       />
                     </label>
                   )}
-                  {block.type === 'RSVP' && (
-                    <div>
-                      <p className="mb-1 text-xs font-medium text-[#4a443c]">Pilihan Menu</p>
-                      <p className="mb-2 text-[11px] leading-relaxed text-[#8a7a66]">
-                        Satu baris per kategori lalu opsi dipisah koma — misal:
-                        <span className="mt-1 block rounded bg-[#f4efe6] px-2 py-1 font-mono text-[10px]">
-                          {`Pembuka: Sup Krim, Salad\nMenu Utama: Ayam Bakar, Rendang\nPenutup: Es Krim, Puding`}
-                        </span>
-                        Kosongkan untuk menonaktifkan.
-                      </p>
-                      <textarea
-                        value={(block.props.menu_config as string) || ''}
-                        onChange={(e) => setBlockProps(block.id, { menu_config: e.target.value })}
-                        rows={5}
-                        placeholder={'Pembuka: Sup Krim, Salad\nMenu Utama: Ayam Bakar, Rendang'}
-                        className="w-full resize-y rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
-                      />
-                    </div>
-                  )}
+
                   {block.type === 'LiveStreaming' && (
                     <div>
                       <p className="mb-1 text-xs font-medium text-[#4a443c]">Platform Streaming</p>
@@ -1731,6 +1713,23 @@ export default function PropertiesPanel({ mobileOpen = false, onClose }: { mobil
                             label="Warna Latar"
                             value={block.style?.bgColor ?? ''}
                             onChange={(c) => setBlockStyle(block.id, { bgColor: c })}
+                          />
+                          <div className="grid grid-cols-2 gap-2">
+                            <ColorPicker
+                              label="Warna Heading"
+                              value={block.style?.headingColor ?? ''}
+                              onChange={(c) => setBlockStyle(block.id, { headingColor: c })}
+                            />
+                            <ColorPicker
+                              label="Warna Subtitle"
+                              value={block.style?.subtitleColor ?? ''}
+                              onChange={(c) => setBlockStyle(block.id, { subtitleColor: c })}
+                            />
+                          </div>
+                          <ColorPicker
+                            label="Warna Aksen (Tombol)"
+                            value={block.style?.accentColor ?? ''}
+                            onChange={(c) => setBlockStyle(block.id, { accentColor: c })}
                           />
                            <div>
                             <p className="mb-1 text-xs font-medium text-[#4a443c]">Gradien Latar</p>
