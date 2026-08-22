@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Type, Clapperboard, X } from 'lucide-react';
 import ColorPicker from '@/components/builder/color-picker';
 import { OrnamentArt, ORNAMENT_CATEGORIES, ORNAMENT_LABELS, type OrnamentKey } from '@/components/builder/ornaments';
@@ -36,6 +36,36 @@ function normalizePosition(v: string): string {
   return 'center';
 }
 
+function positionToPerc(pos: string): { x: number; y: number } {
+  const s = (pos || '').toLowerCase();
+  if (s.includes('top') && s.includes('left')) return { x: 0, y: 0 };
+  if (s.includes('top') && s.includes('right')) return { x: 100, y: 0 };
+  if (s.includes('bottom') && s.includes('left')) return { x: 0, y: 100 };
+  if (s.includes('bottom') && s.includes('right')) return { x: 100, y: 100 };
+  if (s.includes('top')) return { x: 50, y: 0 };
+  if (s.includes('bottom')) return { x: 50, y: 100 };
+  if (s.includes('left')) return { x: 0, y: 50 };
+  if (s.includes('right')) return { x: 100, y: 50 };
+  // Try percentage parsing
+  const nums = s.match(/[\d.]+/g);
+  if (nums && nums.length >= 2) return { x: parseFloat(nums[0]), y: parseFloat(nums[1]) };
+  return { x: 50, y: 50 };
+}
+
+function percToPosition(px: number, py: number): string {
+  const snap = 15;
+  if (Math.abs(px - 50) <= snap && Math.abs(py - 50) <= snap) return 'center';
+  if (Math.abs(px - 50) <= snap && py <= snap) return 'top center';
+  if (Math.abs(px - 50) <= snap && py >= 100 - snap) return 'bottom center';
+  if (px <= snap && Math.abs(py - 50) <= snap) return 'center left';
+  if (px >= 100 - snap && Math.abs(py - 50) <= snap) return 'center right';
+  if (px <= snap && py <= snap) return 'top left';
+  if (px >= 100 - snap && py <= snap) return 'top right';
+  if (px <= snap && py >= 100 - snap) return 'bottom left';
+  if (px >= 100 - snap && py >= 100 - snap) return 'bottom right';
+  return `${Math.round(px)}% ${Math.round(py)}%`;
+}
+
 function PositionGrid({ value, onChange }: { value: string; onChange: (v: string) => void }) {
   const cur = normalizePosition(value || 'center');
   return (
@@ -54,6 +84,92 @@ function PositionGrid({ value, onChange }: { value: string; onChange: (v: string
           <span className="block h-1.5 w-1.5 rounded-full bg-current" />
         </button>
       ))}
+    </div>
+  );
+}
+
+/** Inline drag-to-position: geser gambar dengan pointer/finger, bukan grid. */
+function DragPosition({
+  src,
+  value,
+  fit,
+  onChange
+}: {
+  src: string;
+  value: string;
+  fit?: string;
+  onChange: (v: string) => void;
+}) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const initPct = positionToPerc(value);
+  const [panPct, setPanPct] = useState({ x: initPct.x - 50, y: initPct.y - 50 });
+  const [dragging, setDragging] = useState(false);
+  const startRef = useRef({ x: 0, y: 0, px: 0, py: 0 });
+
+  useEffect(() => {
+    if (dragging) return;
+    const p = positionToPerc(value);
+    setPanPct({ x: p.x - 50, y: p.y - 50 });
+  }, [value, dragging]);
+
+  function onPointerDown(e: React.PointerEvent) {
+    e.preventDefault();
+    setDragging(true);
+    startRef.current = { x: e.clientX, y: e.clientY, px: panPct.x, py: panPct.y };
+  }
+  function onPointerMove(e: React.PointerEvent) {
+    if (!dragging || !containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const dx = ((e.clientX - startRef.current.x) / rect.width) * 100;
+    const dy = ((e.clientY - startRef.current.y) / rect.height) * 100;
+    const nx = Math.max(-50, Math.min(50, startRef.current.px + dx));
+    const ny = Math.max(-50, Math.min(50, startRef.current.py + dy));
+    setPanPct({ x: nx, y: ny });
+  }
+  function onPointerUp() {
+    if (!dragging) return;
+    setDragging(false);
+    const posX = 50 + panPct.x;
+    const posY = 50 + panPct.y;
+    onChange(percToPosition(posX, posY));
+  }
+
+  const posX = 50 + panPct.x;
+  const posY = 50 + panPct.y;
+
+  return (
+    <div className="mt-1">
+      <div
+        ref={containerRef}
+        className="relative aspect-[4/3] overflow-hidden rounded-lg border border-[#e0d6c2] bg-gray-100 select-none"
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerLeave={onPointerUp}
+        style={{ touchAction: 'none', cursor: dragging ? 'grabbing' : 'grab' }}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={src}
+          alt=""
+          draggable={false}
+          className={`pointer-events-none absolute inset-0 h-full w-full ${fit === 'contain' ? 'object-contain' : 'object-cover'}`}
+          style={{
+            objectPosition: `${posX}% ${posY}%`,
+            transform: `scale(1.3)`,
+            transition: dragging ? 'none' : 'object-position 0.2s ease'
+          }}
+        />
+        {/* Guide crosshair */}
+        <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+          <div className="h-px w-4 bg-white/60" />
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-4 w-px bg-white/60" />
+        </div>
+        <div className="pointer-events-none absolute bottom-1 right-1 rounded bg-black/50 px-1.5 py-0.5 text-[9px] text-white/80">
+          {percToPosition(posX, posY)}
+        </div>
+      </div>
+      <p className="mt-1 text-[10px] text-[#8a7a66]">Geser gambar untuk memposisikan</p>
     </div>
   );
 }
@@ -263,27 +379,6 @@ function makeThemeGradients(primary: string, secondary: string, background: stri
   ];
 }
 
-/**
- * Jadikan warna monochrome (tambah alpha 12%) supaya latar tidak
- * menghalangi konten blok. Mendukung hex (#rrggbb), hex+alpha (#rrggbbaa),
- * rgb(), dan rgba().
- */
-function withAlpha(color: string, alpha = 0.12): string {
-  if (color.startsWith('#')) {
-    const hex = color.slice(1);
-    // Sudah punya alpha?
-    if (hex.length === 8) return color; // sudah ada alpha, biarkan
-    if (hex.length === 6) {
-      const a = Math.round(alpha * 255).toString(16).padStart(2, '0');
-      return `#${hex}${a}`;
-    }
-  }
-  if (color.startsWith('rgb(')) {
-    return color.replace('rgb(', 'rgba(').replace(')', `, ${alpha})`);
-  }
-  // rgba atau format lain — biarkan
-  return color;
-}
 
 /* ------------------------------------------------------------------ */
 /* BLOCK QUICK STYLES — preset look cepat per jenis blok.              */
@@ -1156,7 +1251,7 @@ export default function PropertiesPanel({ mobileOpen = false, onClose }: { mobil
                         {block.props.bg_image ? 'Ganti Foto Hero' : 'Pilih Foto Hero'}
                       </button>
                       {block.props.bg_image && (
-                        <div className="mt-2 grid grid-cols-2 gap-2">
+                        <div className="mt-2 space-y-2">
                           <div>
                             <label className="mb-1 block text-xs font-medium text-[#4a443c]">Ukuran</label>
                             <select
@@ -1168,10 +1263,12 @@ export default function PropertiesPanel({ mobileOpen = false, onClose }: { mobil
                               <option value="contain">Utuh (contain)</option>
                             </select>
                           </div>
-                           <div>
-                            <label className="mb-1 block text-xs font-medium text-[#4a443c]">Posisi Foto</label>
-                            <PositionGrid value={(block.props.bg_position as string) || 'center'} onChange={(v) => setBlockProps(block.id, { bg_position: v })} />
-                          </div>
+                          <DragPosition
+                            src={block.props.bg_image as string}
+                            value={(block.props.bg_position as string) || 'center'}
+                            fit={(block.props.bg_fit as string) || 'cover'}
+                            onChange={(v) => setBlockProps(block.id, { bg_position: v })}
+                          />
                         </div>
                       )}
                       {block.props.bg_image && (
@@ -1179,7 +1276,7 @@ export default function PropertiesPanel({ mobileOpen = false, onClose }: { mobil
                           onClick={() => setCropOpen(true)}
                           className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-md border border-[#c9a45c]/40 bg-[#c9a45c]/5 px-3 py-2 text-xs font-medium text-[#c9a45c] hover:bg-[#c9a45c]/10"
                         >
-                          ✂️ Crop & Posisi Gambar
+                          Crop & Posisi Gambar
                         </button>
                       )}
                     </div>
@@ -1723,23 +1820,43 @@ export default function PropertiesPanel({ mobileOpen = false, onClose }: { mobil
                               </button>
                             )}
                             </div>
-                            <div className="mt-2 grid grid-cols-2 gap-2">
-                              <div>
-                                <label className="mb-1 block text-xs font-medium text-[#4a443c]">Ukuran</label>
-                                <select
-                                  value={block.style?.bgFit ?? 'cover'}
-                                  onChange={(e) => setBlockStyle(block.id, { bgFit: e.target.value as 'cover' | 'contain' })}
-                                  className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-2 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
-                                >
-                                  <option value="cover">Penuhi (cover)</option>
-                                  <option value="contain">Utuh (contain)</option>
-                                </select>
-                              </div>
-                              <div>
-                                <label className="mb-1 block text-xs font-medium text-[#4a443c]">Posisi</label>
-                                <PositionGrid value={block.style?.bgPosition ?? 'center'} onChange={(v) => setBlockStyle(block.id, { bgPosition: v })} />
-                              </div>
-                            </div>
+                            {block.style?.bgImage && (
+                              <>
+                                <div className="mt-2">
+                                  <label className="mb-1 block text-xs font-medium text-[#4a443c]">Ukuran</label>
+                                  <select
+                                    value={block.style?.bgFit ?? 'cover'}
+                                    onChange={(e) => setBlockStyle(block.id, { bgFit: e.target.value as 'cover' | 'contain' })}
+                                    className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-2 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
+                                  >
+                                    <option value="cover">Penuhi (cover)</option>
+                                    <option value="contain">Utuh (contain)</option>
+                                  </select>
+                                </div>
+                                <DragPosition
+                                  src={block.style.bgImage}
+                                  value={block.style?.bgPosition ?? 'center'}
+                                  fit={block.style?.bgFit}
+                                  onChange={(v) => setBlockStyle(block.id, { bgPosition: v })}
+                                />
+                                <label className="mt-2 flex items-center justify-between gap-3 rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2">
+                                  <span className="text-xs font-medium text-[#4a443c]">Monochrome (grayscale + redup)</span>
+                                  <button
+                                    type="button"
+                                    onClick={() => setBlockStyle(block.id, { bgMonochrome: block.style?.bgMonochrome === false ? undefined : false })}
+                                    className={`relative h-5 w-9 shrink-0 rounded-full transition-colors ${
+                                      block.style?.bgMonochrome !== false ? 'bg-[#c9a45c]' : 'bg-[#e0d6c2]'
+                                    }`}
+                                  >
+                                    <span
+                                      className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-all ${
+                                        block.style?.bgMonochrome !== false ? 'left-[18px]' : 'left-0.5'
+                                      }`}
+                                    />
+                                  </button>
+                                </label>
+                              </>
+                            )}
                           </div>
                            <div className="grid grid-cols-2 gap-2">
                             <div>

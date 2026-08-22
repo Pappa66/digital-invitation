@@ -147,6 +147,8 @@ export interface BlockStyle {
   bgFit?: 'cover' | 'contain';
   /** Posisi gambar latar (sumbu utama). Default: 'center'. */
   bgPosition?: string;
+  /** Gambar latar grayscale + redup. Default: true. */
+  bgMonochrome?: boolean;
   /** Radius sudut section (CSS, mis. "24px"). */
   borderRadius?: string;
   /** Border sekeliling section (CSS, mis. "2px solid #c9a45c"). */

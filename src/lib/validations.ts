@@ -105,6 +105,7 @@ export const BlockStyleSchema = z.object({
   bgImage: z.string().max(1000).optional(),
   bgFit: z.enum(['cover', 'contain']).optional(),
   bgPosition: z.string().max(50).optional(),
+  bgMonochrome: z.boolean().optional(),
   borderRadius: z.string().max(50).optional(),
   border: z.string().max(100).optional(),
   boxShadow: z.string().max(200).optional(),

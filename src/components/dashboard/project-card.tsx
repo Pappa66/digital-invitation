@@ -101,36 +101,45 @@ export default function ProjectCard({ project, onDuplicated, onDeleted }: Projec
         </span>
       </a>
 
-      <div className="flex items-center justify-between gap-2 border-t border-dashboard-border bg-white px-4 py-3">
-        <div className="min-w-0">
-          <div className="flex min-w-0 items-center gap-2">
-            <p className="truncate text-sm font-medium text-gray-900">{couple || project.title}</p>
-            <span
-              className={`flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium ${
-                status === 'published' ? 'bg-emerald-50 text-emerald-700' : 'bg-gray-100 text-gray-500'
-              }`}
-              title={status === 'published' ? 'Publik — tamu dengan link bisa membuka' : 'Draft — belum bisa diakses tamu'}
-            >
-              {status === 'published' ? <Globe className="h-3 w-3" /> : <GlobeLock className="h-3 w-3" />}
-              {status === 'published' ? 'Publik' : 'Draft'}
-            </span>
+      <div className="border-t border-dashboard-border bg-white px-4 py-3">
+        <div className="flex items-start justify-between gap-2">
+          <div className="min-w-0 flex-1">
+            <div className="flex min-w-0 items-center gap-2">
+              <p className="truncate text-sm font-medium text-gray-900">{couple || project.title}</p>
+              <span
+                className={`flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium ${
+                  status === 'published' ? 'bg-emerald-50 text-emerald-700' : 'bg-gray-100 text-gray-500'
+                }`}
+                title={status === 'published' ? 'Publik — tamu dengan link bisa membuka' : 'Draft — belum bisa diakses tamu'}
+              >
+                {status === 'published' ? <Globe className="h-3 w-3" /> : <GlobeLock className="h-3 w-3" />}
+                {status === 'published' ? 'Publik' : 'Draft'}
+              </span>
+            </div>
+            {couple && couple !== project.title && (
+              <p className="truncate text-[11px] text-gray-400">{project.title}</p>
+            )}
+            <p className="mt-0.5 text-xs text-gray-500">
+              Diperbarui {new Date(project.updated_at || project.created_at).toLocaleDateString('id-ID')}
+            </p>
           </div>
-          {couple && couple !== project.title && (
-            <p className="truncate text-[11px] text-gray-400">{project.title}</p>
-          )}
-          <p className="mt-0.5 text-xs text-gray-500">
-            Diperbarui {new Date(project.updated_at || project.created_at).toLocaleDateString('id-ID')}
-          </p>
         </div>
-        <div className="flex shrink-0 items-center gap-0.5">
-          <IconBtn label="Edit desain (buka builder)" onClick={() => router.push(`/builder/${project.id}`)}>
-            <Pencil className="h-4 w-4" />
-          </IconBtn>
+        <div className="mt-3 flex items-center gap-2">
+          <button
+            onClick={() => router.push(`/builder/${project.id}`)}
+            className="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-3 py-1.5 text-xs font-semibold text-white hover:opacity-90"
+          >
+            <Pencil className="h-3.5 w-3.5" /> Edit
+          </button>
+          <button
+            onClick={() => setShareOpen(true)}
+            className="flex items-center gap-1.5 rounded-lg border border-[#e0d6c2] px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
+          >
+            <Share2 className="h-3.5 w-3.5" /> Share
+          </button>
+          <div className="flex-1" />
           <IconBtn label="Salin (duplicate) undangan" onClick={() => setConfirm('duplicate')}>
             <Copy className="h-4 w-4" />
-          </IconBtn>
-          <IconBtn label="Bagikan undangan dengan nama tamu" onClick={() => setShareOpen(true)}>
-            <Share2 className="h-4 w-4" />
           </IconBtn>
           <IconBtn label="QR Absen — link publik untuk panitia" onClick={() => setAbsenOpen(true)}>
             <QrCode className="h-4 w-4" />

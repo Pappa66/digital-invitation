@@ -1,16 +1,14 @@
 'use client';
 
-import html2canvas from 'html2canvas';
 import { supabase } from '@/lib/supabase/client';
+import { useBuilderStore } from '@/store/builder-store';
 
 const BUCKET = 'invitation-assets';
 
 /**
  * Capture a thumbnail from a DOM element and save the PUBLIC URL into
- * projects.thumbnail. Gambar diupload ke Storage (bukan base64 di kolom
- * text) di bawah folder pemilik: {userId}/thumbs/{projectId}.jpg —
- * konsisten dengan policy upload owner-folder di 0012.
- * Dipanggil saat save manual (bukan autosave) agar tidak membebani.
+ * projects.thumbnail. Jika Hero punya bg_image, gunakan langsung sebagai
+ * thumbnail (lebih ringan dari html2canvas). Fallback ke html2canvas.
  */
 export async function captureAndSaveThumbnail(
   projectId: string,
@@ -20,7 +18,21 @@ export async function captureAndSaveThumbnail(
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 
-    const canvas = await html2canvas(element, {
+    // Coba pakai hero bg_image sebagai thumbnail
+    const canvas = useBuilderStore.getState().canvas;
+    const heroBlock = canvas.blocks.find((b) => b.type === 'Hero');
+    const heroBg = heroBlock?.props?.bg_image;
+    if (typeof heroBg === 'string' && heroBg.trim()) {
+      await supabase
+        .from('projects')
+        .update({ thumbnail: heroBg })
+        .eq('id', projectId);
+      return;
+    }
+
+    // Fallback: html2canvas
+    const { default: html2canvas } = await import('html2canvas');
+    const cvs = await html2canvas(element, {
       width: 420,
       height: 560,
       scale: 0.5,
@@ -28,9 +40,8 @@ export async function captureAndSaveThumbnail(
       allowTaint: true,
       backgroundColor: '#ffffff'
     });
-    const dataUrl = canvas.toDataURL('image/jpeg', 0.6);
+    const dataUrl = cvs.toDataURL('image/jpeg', 0.6);
 
-    // Ubah data URL jadi Blob lalu unggah ke folder milik user.
     const blob = await (await fetch(dataUrl)).blob();
     const filePath = `${user.id}/thumbs/${projectId}.jpg`;
 
