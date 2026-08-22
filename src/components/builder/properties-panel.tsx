@@ -263,6 +263,28 @@ function makeThemeGradients(primary: string, secondary: string, background: stri
   ];
 }
 
+/**
+ * Jadikan warna monochrome (tambah alpha 12%) supaya latar tidak
+ * menghalangi konten blok. Mendukung hex (#rrggbb), hex+alpha (#rrggbbaa),
+ * rgb(), dan rgba().
+ */
+function withAlpha(color: string, alpha = 0.12): string {
+  if (color.startsWith('#')) {
+    const hex = color.slice(1);
+    // Sudah punya alpha?
+    if (hex.length === 8) return color; // sudah ada alpha, biarkan
+    if (hex.length === 6) {
+      const a = Math.round(alpha * 255).toString(16).padStart(2, '0');
+      return `#${hex}${a}`;
+    }
+  }
+  if (color.startsWith('rgb(')) {
+    return color.replace('rgb(', 'rgba(').replace(')', `, ${alpha})`);
+  }
+  // rgba atau format lain — biarkan
+  return color;
+}
+
 /* ------------------------------------------------------------------ */
 /* BLOCK QUICK STYLES — preset look cepat per jenis blok.              */
 /* Hanya memakai keys `BlockStyle` (bgColor/bgGradient/border/radius/  */
@@ -1645,7 +1667,7 @@ export default function PropertiesPanel({ mobileOpen = false, onClose }: { mobil
                           <ColorPicker
                             label="Warna Latar"
                             value={block.style?.bgColor ?? ''}
-                            onChange={(c) => setBlockStyle(block.id, { bgColor: c })}
+                            onChange={(c) => setBlockStyle(block.id, { bgColor: c ? withAlpha(c) : c })}
                           />
                            <div>
                             <p className="mb-1 text-xs font-medium text-[#4a443c]">Gradien Latar</p>
@@ -1679,19 +1701,28 @@ export default function PropertiesPanel({ mobileOpen = false, onClose }: { mobil
                               ))}
                             </div>
                           </div>
-                           {block.type !== 'Hero' && (
                            <div>
                             <p className="mb-1 text-xs font-medium text-[#4a443c]">Gambar Latar Section</p>
                             <p className="mb-2 text-[10px] text-[#8a7a66]">Gambar overlay di belakang konten section ini</p>
+                            <div className="flex gap-2">
                             <button
                               onClick={() => {
                                 setMediaMode('bg');
                                 setMediaOpen(true);
                               }}
-                              className="flex w-full items-center gap-2 rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2 text-sm text-[#6b5f4d] hover:border-[#c9a45c]"
+                              className="flex flex-1 items-center gap-2 rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2 text-sm text-[#6b5f4d] hover:border-[#c9a45c]"
                             >
                               {block.style?.bgImage ? 'Ganti Gambar Latar' : 'Pilih Gambar Latar'}
                             </button>
+                            {block.style?.bgImage && (
+                              <button
+                                onClick={() => setBlockStyle(block.id, { bgImage: undefined })}
+                                className="rounded-md border border-red-200 bg-white px-3 py-2 text-sm text-red-500 hover:bg-red-50"
+                              >
+                                Hapus
+                              </button>
+                            )}
+                            </div>
                             <div className="mt-2 grid grid-cols-2 gap-2">
                               <div>
                                 <label className="mb-1 block text-xs font-medium text-[#4a443c]">Ukuran</label>
@@ -1710,8 +1741,7 @@ export default function PropertiesPanel({ mobileOpen = false, onClose }: { mobil
                               </div>
                             </div>
                           </div>
-                           )}
-                          <div className="grid grid-cols-2 gap-2">
+                           <div className="grid grid-cols-2 gap-2">
                             <div>
                               <label className="mb-1 block text-xs font-medium text-[#4a443c]">Radius Sudut</label>
                               <select

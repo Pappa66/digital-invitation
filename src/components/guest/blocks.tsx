@@ -1010,7 +1010,7 @@ export function CoupleBlock({ props }: { props: BlockProps }) {
   if (isSide) {
     // Compact side-by-side agar muat di canvas builder 430 (foto 80px + gap-2)
     return (
-      <section className="w-full min-w-0 max-w-full overflow-hidden px-3 py-8 sm:px-4 sm:py-10 md:py-12 box-border">
+      <section className="w-full min-w-0 max-w-full overflow-hidden px-4 py-8 sm:px-6 sm:py-10 md:py-12 box-border">
         <div className="mx-auto w-full min-w-0 max-w-full">
           {str(props, 'introduction') && <Inner name="introduction">{title(<p className="mb-4 break-words text-center text-sm leading-relaxed opacity-80"><Editable prop="introduction" multiline>{str(props, 'introduction')}</Editable></p>)}</Inner>}
           {str(props, 'bismillah') && <Inner name="bismillah">{title(<p className="mb-4 break-words text-center text-sm italic opacity-70"><Editable prop="bismillah">{str(props, 'bismillah')}</Editable></p>)}</Inner>}

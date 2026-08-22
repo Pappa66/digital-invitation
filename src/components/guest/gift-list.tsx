@@ -28,7 +28,7 @@ export default function GiftListBlock({ props }: { props: BlockProps }) {
   if (items.length === 0 && !inBuilder) return null;
 
   return (
-    <section className="mx-auto max-w-sm px-6 py-8 sm:py-10 md:py-12 text-center">
+    <section className="mx-auto w-full px-6 py-8 sm:py-10 md:py-12 text-center">
       <div className="rounded-2xl border border-dashed border-current/25 bg-white/5 px-6 py-7 text-center">
         <Inner name="title">
           <div className="flex flex-col items-center gap-1">

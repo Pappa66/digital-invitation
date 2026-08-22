@@ -93,7 +93,7 @@ export default function CheckIn({ projectId, greetingName, preview, showSeatInfo
   }
 
   return (
-    <section className="mx-auto max-w-sm px-6 py-8 sm:py-10 md:py-12 text-center">
+    <section className="mx-auto w-full px-6 py-8 sm:py-10 md:py-12 text-center">
       <div className="rounded-3xl border border-current/15 bg-white/5 px-6 py-8">
         <Inner name="title">
           <UserCheck className="mx-auto h-8 w-8 opacity-80" />

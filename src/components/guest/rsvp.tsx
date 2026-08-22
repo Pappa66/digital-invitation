@@ -158,7 +158,7 @@ export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormPr
 
   const formContent = status === 'success' ? (
     <Inner name="success">
-      <div className={`mx-auto mt-8 max-w-sm px-6 py-10 ${variant === 'card' ? 'rounded-2xl border border-current/10' : ''}`}>
+      <div className={`mx-auto mt-8 w-full px-6 py-10 ${variant === 'card' ? 'rounded-2xl border border-current/10' : ''}`}>
         <p className="text-lg">{str(blockProps, 'success_message') || 'Terima kasih atas konfirmasinya.'}</p>
         <div className="mt-6">
           {checkinToken && attendance !== 'tidak' ? (
@@ -192,7 +192,7 @@ export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormPr
     </Inner>
   ) : (
     <Inner name="form">
-      <form onSubmit={handleSubmit} className={`mx-auto mt-8 max-w-sm space-y-4 px-6 py-6 text-left ${variant === 'card' ? 'rounded-2xl border border-current/10 bg-white/5' : ''}`} noValidate>
+      <form onSubmit={handleSubmit} className={`mx-auto mt-8 w-full space-y-4 px-6 py-6 text-left ${variant === 'card' ? 'rounded-2xl border border-current/10 bg-white/5' : ''}`} noValidate>
         <div>
           <label htmlFor="rsvp-name" className="mb-1 block text-sm opacity-80">Nama Anda</label>
           <input

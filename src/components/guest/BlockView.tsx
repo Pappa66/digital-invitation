@@ -167,7 +167,7 @@ export default function BlockView({ block, projectId, editable = false, greeting
       <BuilderEditableContext.Provider value={editable ? { blockId: block.id } : null}>
         <div
           data-block-type={block.type}
-          className={`relative w-full min-w-0 max-w-full overflow-hidden box-border${hideClasses}`}
+          className={`relative w-full min-w-0 max-w-full overflow-hidden box-border transition-[background-color,background-image,opacity] duration-500 ease-out${hideClasses}`}
         >
           {animateEntrance && blockEntrance !== 'none' && entranceAnim !== entranceVariants.none ? (
             <motion.div
@@ -218,7 +218,7 @@ function StyledSection({ style, children }: { style?: BlockStyle; children: Reac
 
   if (style.bgImage) {
     return (
-      <div className={`relative${textOverride}`} style={css}>
+      <div className={`relative transition-[background-color,background-image] duration-500 ease-out${textOverride}`} style={css}>
         <div className="absolute inset-0 z-0">
           <Image
             src={style.bgImage}
@@ -237,5 +237,5 @@ function StyledSection({ style, children }: { style?: BlockStyle; children: Reac
     );
   }
 
-  return <div className={textOverride || undefined} style={css}>{children}</div>;
+  return <div className={`transition-[background-color,background-image] duration-500 ease-out${textOverride || ''}`} style={css}>{children}</div>;
 }
