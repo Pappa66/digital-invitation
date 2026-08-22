@@ -1,11 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Image from 'next/image';
 import { MailOpen, X } from 'lucide-react';
 import { OrnamentArt, type OrnamentKey } from '@/components/builder/ornaments';
-import { FloralCorner, FloatingPetals, DecorativeFrame } from './cover-florals';
+import { FloatingPetals } from './cover-florals';
+import { BookOpener, FilmRollOpener, OldTvOpener, NewspaperOpener, MandalaOpener, LanternOpener } from './cover-openers';
+
+const FloralCurtain = lazy(() => import('./floral-curtain'));
+const Cultural3DLayer = lazy(() => import('./cultural-3d'));
 
 interface CoverModalProps {
   caption: string;
@@ -28,6 +31,14 @@ interface CoverModalProps {
   coverButtonText?: string;
   /** Background image cover (terpisah dari Hero bg_image). */
   coverBgImage?: string;
+  /** Gaya pembuka: 'floral' | 'book' | 'filmroll' | 'oldtv' | 'newspaper'. */
+  coverStyle?: string;
+  /** Gunakan layer 3D (tirai bunga GLB) — false = fallback 2D ringan. */
+  cover3d?: boolean;
+  /** Path GLB budaya di Storage (mis. '3d/kristen-church.glb'); tampil bila cover3d aktif. */
+  model3d?: string;
+  /** Base URL Supabase (untuk bangun URL publik GLB). */
+  supabaseUrl?: string;
 }
 
 /**
@@ -53,9 +64,14 @@ export default function CoverModal({
   ornament,
   coverGreeting,
   coverButtonText,
-  coverBgImage
+  coverBgImage,
+  coverStyle = 'floral',
+  cover3d = true,
+  model3d,
+  supabaseUrl
 }: CoverModalProps) {
   const [open, setOpen] = useState(true);
+  const [phase, setPhase] = useState<'cover' | 'opening'>('cover');
 
   // Block scroll when cover is open
   useEffect(() => {
@@ -65,13 +81,23 @@ export default function CoverModal({
     }
   }, [open]);
 
-  function openInvitation() {
+  const use3d = coverStyle === 'floral' && cover3d !== false;
+
+  function finish() {
     setOpen(false);
     document.body.style.overflow = '';
-    window.dispatchEvent(new CustomEvent('invite-opened'));
     window.setTimeout(() => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }, 300);
+  }
+
+  function openInvitation() {
+    window.dispatchEvent(new CustomEvent('invite-opened'));
+    if (coverStyle && coverStyle !== 'floral') {
+      setPhase('opening');
+    } else {
+      finish();
+    }
   }
 
   return (
@@ -119,35 +145,20 @@ export default function CoverModal({
               <X className="h-5 w-5" aria-hidden />
             </motion.button>
 
-            {(coverBgImage || bgImage) && (
-              <div className="absolute inset-0">
-                <Image src={coverBgImage || bgImage || ''} alt="" fill priority sizes="100vw" className="object-cover" />
-                <div
-                  className="absolute inset-0"
-                  style={{
-                    background: `linear-gradient(to top, ${background} 4%, color-mix(in srgb, ${primary} 55%, transparent) 45%, color-mix(in srgb, ${primary} 88%, #000 12%) 100%)`
-                  }}
-                />
-              </div>
+            {/* Layer 3D: model budaya dari Storage (bila ada) atau tirai bunga procedural.
+                Lazy-load; aman (Boundary mengembalikan null bila GLB belum ada). */}
+            {model3d && cover3d !== false ? (
+              <Suspense fallback={null}>
+                <Cultural3DLayer path={model3d} primary={primary} supabaseUrl={supabaseUrl} />
+              </Suspense>
+            ) : use3d && (
+              <Suspense fallback={<div className="absolute inset-0" style={{ background: `radial-gradient(ellipse 80% 60% at 50% 50%, color-mix(in srgb, ${primary} 18%, transparent), transparent 70%)` }} />}>
+                <FloralCurtain open={open} primary={primary} secondary={secondary} image={coverBgImage || bgImage} />
+              </Suspense>
             )}
-            {!coverBgImage && !bgImage && (
-              <div
-                className="absolute inset-0"
-                style={{ background: `linear-gradient(165deg, ${primary} 0%, color-mix(in srgb, ${primary} 60%, ${secondary}) 55%, ${background} 130%)` }}
-              />
-            )}
-
-            {/* Floral corners — 4 sudut */}
-            <FloralCorner position="top-left" color={primary} />
-            <FloralCorner position="top-right" color={primary} />
-            <FloralCorner position="bottom-left" color={primary} />
-            <FloralCorner position="bottom-right" color={primary} />
 
             {/* Floating petals animation */}
             <FloatingPetals color={primary} />
-
-            {/* Decorative frame overlay */}
-            <DecorativeFrame color={primary} />
 
             <div className="relative z-40 flex h-full w-full flex-col items-center justify-between px-6 py-12 text-center text-white sm:px-10" style={{ paddingBottom: 'max(3rem, env(safe-area-inset-bottom))' }}>
               <motion.div
@@ -157,7 +168,7 @@ export default function CoverModal({
                 transition={{ duration: 0.8, delay: 0.3 }}
               >
                 {ornament && (
-                  <OrnamentArt ornament={ornament as OrnamentKey} width={180} className="mb-3 text-white opacity-60" />
+                  <OrnamentArt ornament={ornament as OrnamentKey} width={180} className="mb-3 text-white opacity-60" accent={primary} />
                 )}
                 <p className="text-xs uppercase tracking-[0.35em] opacity-90">{caption}</p>
                 <h1
@@ -191,6 +202,26 @@ export default function CoverModal({
                 </button>
               </motion.div>
             </div>
+
+            {/* Overlay pembuka vintage — main setelah tombol ditekan. */}
+            {phase === 'opening' && coverStyle === 'book' && (
+              <BookOpener primary={primary} secondary={secondary} background={background} text={text} onDone={finish} />
+            )}
+            {phase === 'opening' && coverStyle === 'filmroll' && (
+              <FilmRollOpener primary={primary} secondary={secondary} background={background} text={text} onDone={finish} />
+            )}
+            {phase === 'opening' && coverStyle === 'oldtv' && (
+              <OldTvOpener primary={primary} secondary={secondary} background={background} text={text} onDone={finish} />
+            )}
+            {phase === 'opening' && coverStyle === 'newspaper' && (
+              <NewspaperOpener primary={primary} secondary={secondary} background={background} text={text} onDone={finish} />
+            )}
+            {phase === 'opening' && coverStyle === 'mandala' && (
+              <MandalaOpener primary={primary} secondary={secondary} background={background} text={text} onDone={finish} />
+            )}
+            {phase === 'opening' && coverStyle === 'lantern' && (
+              <LanternOpener primary={primary} secondary={secondary} background={background} text={text} onDone={finish} />
+            )}
           </div>
         </motion.div>
       )}

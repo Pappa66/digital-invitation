@@ -1,16 +1,18 @@
 {
   "theme": {
-    "primary": "#1B2A4A",
-    "secondary": "#C9A227",
-    "background": "#0F1524",
-    "text": "#EAEEF5",
-    "font_heading": "Playfair Display",
-    "font_body": "Inter",
-    "layout": "left",
+    "primary": "#C98A3E",
+    "secondary": "#5E8B7E",
+    "background": "#F3E9D2",
+    "text": "#3A2E22",
+    "font_heading": "Cormorant Garamond",
+    "font_body": "Jost",
+    "layout": "center",
     "hero_style": "image",
-    "ornament": "arch-geometric",
+    "ornament": "newspaper-rule",
     "frame": "none",
-    "card_style": true
+    "card_style": true,
+    "cover_style": "oldtv",
+    "cover_3d": false
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-11.mp3",
@@ -34,6 +36,10 @@
         "bg_image": "https://images.unsplash.com/photo-1550009158-9ebf69173e03",
         "show_ornament": true,
         "variant": "left"
+      },
+      "style": {
+        "entrance": "oldtv",
+        "entranceDelay": 0
       }
     },
     {
@@ -50,6 +56,10 @@
         "photo_shape": "arch",
         "groom_photo": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&q=80",
         "bride_photo": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80"
+      },
+      "style": {
+        "entrance": "oldtv",
+        "entranceDelay": 120
       }
     },
     {
@@ -61,6 +71,10 @@
         "latin": "Wa min kulli syai-in khalaqnaa zaujaini la'allakum tadzakkaruun",
         "translation": "Dan segala sesuatu Kami ciptakan berpasang-pasangan supaya kamu mengingat (kebesaran Allah).",
         "reference": "QS. Adz Dzariyyat: 49"
+      },
+      "style": {
+        "entrance": "oldtv",
+        "entranceDelay": 240
       }
     },
     {
@@ -70,6 +84,10 @@
         "target_date": "2027-10-17T19:00:00+07:00",
         "title": "Menuju Hari Bahagia",
         "variant": "line"
+      },
+      "style": {
+        "entrance": "oldtv",
+        "entranceDelay": 360
       }
     },
     {
@@ -93,6 +111,10 @@
           "Mereka mulai menjalin hubungan saat hujan turun di Malioboro.",
           "Dimas melamar Nadia di teras candi Prambanan di bawah langit berawan."
         ]
+      },
+      "style": {
+        "entrance": "oldtv",
+        "entranceDelay": 0
       }
     },
     {
@@ -107,6 +129,10 @@
         "address": "Jl. Kaliurang KM 15, Yogyakarta",
         "maps_url": "https://maps.google.com/?q=The%20Hill%20Grand%20Ballroom",
         "variant": "band"
+      },
+      "style": {
+        "entrance": "oldtv",
+        "entranceDelay": 120
       }
     },
     {
@@ -121,6 +147,10 @@
         "address": "Jl. Kaliurang KM 15, Pakem, Sleman, Yogyakarta",
         "maps_url": "https://maps.google.com/?q=The%20Ballroom%20At%20The%20Hill%2C%20Yogyakarta",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "oldtv",
+        "entranceDelay": 240
       }
     },
     {
@@ -137,6 +167,10 @@
         "variant": "grid3",
         "animation": "ken-burns",
         "interval_sec": 5
+      },
+      "style": {
+        "entrance": "oldtv",
+        "entranceDelay": 360
       }
     },
     {
@@ -152,6 +186,10 @@
             "account_holder": "Nadia Larasati, S.E."
           }
         ]
+      },
+      "style": {
+        "entrance": "oldtv",
+        "entranceDelay": 0
       }
     },
     {
@@ -167,6 +205,10 @@
         "bank_name": "BRI",
         "account_number": "880036591307",
         "account_holder": "Dimas Prakoso"
+      },
+      "style": {
+        "entrance": "oldtv",
+        "entranceDelay": 120
       }
     },
     {
@@ -177,6 +219,10 @@
         "message": "Terima kasih telah hadir merayakan malam safir kami, ditemani bintang-bintang di langit Jogja.",
         "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Dimas & Nadia"
+      },
+      "style": {
+        "entrance": "oldtv",
+        "entranceDelay": 240
       }
     },
     {
@@ -186,6 +232,10 @@
         "title": "Lokasi Acara",
         "address": "The Ballroom At The Hill, Yogyakarta",
         "embed_url": "https://maps.google.com/?q=The%20Ballroom%20At%20The%20Hill%2C%20Yogyakarta"
+      },
+      "style": {
+        "entrance": "oldtv",
+        "entranceDelay": 360
       }
     }
   ],

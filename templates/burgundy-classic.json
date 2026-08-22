@@ -1,16 +1,18 @@
 {
   "theme": {
-    "primary": "#6E1423",
-    "secondary": "#C08552",
-    "background": "#FAF1EC",
-    "text": "#3F232B",
-    "font_heading": "Cinzel",
-    "font_body": "Lora",
+    "primary": "#B23A3A",
+    "secondary": "#3A3A3A",
+    "background": "#EDE7DD",
+    "text": "#2A2A2A",
+    "font_heading": "Cormorant Garamond",
+    "font_body": "Jost",
     "layout": "center",
     "hero_style": "image",
-    "ornament": "baby-breath",
+    "ornament": "vine-border",
     "frame": "double",
-    "card_style": true
+    "card_style": true,
+    "cover_style": "filmroll",
+    "cover_3d": false
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3",
@@ -34,6 +36,10 @@
         "bg_image": "https://images.unsplash.com/photo-1510076857177-7470076d4098",
         "show_ornament": true,
         "variant": "center"
+      },
+      "style": {
+        "entrance": "filmroll",
+        "entranceDelay": 0
       }
     },
     {
@@ -50,6 +56,10 @@
         "photo_shape": "circle",
         "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
         "bride_photo": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80"
+      },
+      "style": {
+        "entrance": "filmroll",
+        "entranceDelay": 120
       }
     },
     {
@@ -61,6 +71,10 @@
         "latin": "",
         "translation": "Rumah tangga yang rukun berawal dari budi pekerti yang luhur dan saling menghormati.",
         "reference": "Lun Yu (Analekta)"
+      },
+      "style": {
+        "entrance": "filmroll",
+        "entranceDelay": 240
       }
     },
     {
@@ -70,6 +84,10 @@
         "target_date": "2027-09-25T08:00:00+07:00",
         "title": "Menuju Mahligai",
         "variant": "circles"
+      },
+      "style": {
+        "entrance": "filmroll",
+        "entranceDelay": 360
       }
     },
     {
@@ -93,6 +111,10 @@
           "Mereka mulai menjalin hubungan saat berbagi sebatas teh hangat.",
           "Wisnu melamar Ayu di Candi Prambanan saat langit senja memerah."
         ]
+      },
+      "style": {
+        "entrance": "filmroll",
+        "entranceDelay": 0
       }
     },
     {
@@ -107,6 +129,10 @@
         "address": "Jl. Adi Sucipto, Surakarta",
         "maps_url": "https://maps.google.com/?q=Marriott%20Grand%20Ballroom",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "filmroll",
+        "entranceDelay": 120
       }
     },
     {
@@ -121,6 +147,10 @@
         "address": "Kartosuro, Sukoharjo",
         "maps_url": "https://maps.google.com/?q=Marriott%20Grand%20Ballroom",
         "variant": "band"
+      },
+      "style": {
+        "entrance": "filmroll",
+        "entranceDelay": 240
       }
     },
     {
@@ -138,6 +168,10 @@
         "variant": "grid",
         "animation": "flip",
         "interval_sec": 4
+      },
+      "style": {
+        "entrance": "filmroll",
+        "entranceDelay": 360
       }
     },
     {
@@ -153,6 +187,10 @@
             "account_holder": "Ayu Sekar, S.E."
           }
         ]
+      },
+      "style": {
+        "entrance": "filmroll",
+        "entranceDelay": 0
       }
     },
     {
@@ -168,6 +206,10 @@
         "bank_name": "BSI",
         "account_number": "880018044714",
         "account_holder": "Wisnu Bramantyo"
+      },
+      "style": {
+        "entrance": "filmroll",
+        "entranceDelay": 120
       }
     },
     {
@@ -178,6 +220,10 @@
         "message": "Semoga kehadiran dan doa Bapak/Ibu menjadi mahar terindah bagi kami.",
         "closing": "Salam Sejahtera",
         "names": "Wisnu & Ayu"
+      },
+      "style": {
+        "entrance": "filmroll",
+        "entranceDelay": 240
       }
     },
     {
@@ -187,6 +233,10 @@
         "title": "Lokasi Acara",
         "address": "Marriott Ballroom, Surakarta",
         "embed_url": "https://maps.google.com/?q=Marriott%20Ballroom%2C%20Surakarta"
+      },
+      "style": {
+        "entrance": "filmroll",
+        "entranceDelay": 360
       }
     }
   ],

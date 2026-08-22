@@ -1,16 +1,18 @@
 {
   "theme": {
-    "primary": "#B4552D",
-    "secondary": "#8C4A1E",
-    "background": "#F9F1E6",
-    "text": "#4C3A27",
-    "font_heading": "Marcellus",
-    "font_body": "Lora",
-    "layout": "left",
+    "primary": "#BFA06A",
+    "secondary": "#D9A7A4",
+    "background": "#FBF7F1",
+    "text": "#4A4036",
+    "font_heading": "Cormorant Garamond",
+    "font_body": "Jost",
+    "layout": "center",
     "hero_style": "image",
-    "ornament": "monstera-garland",
+    "ornament": "gardenia-wreath",
     "frame": "double",
-    "card_style": false
+    "card_style": false,
+    "cover_style": "floral",
+    "cover_3d": true
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3",
@@ -34,6 +36,10 @@
         "bg_image": "https://images.unsplash.com/photo-1591604466107-ec97de577aff",
         "show_ornament": true,
         "variant": "left"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 0
       }
     },
     {
@@ -50,6 +56,10 @@
         "photo_shape": "circle",
         "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
         "bride_photo": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&q=80"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 120
       }
     },
     {
@@ -61,6 +71,10 @@
         "latin": "Wa min kulli syai-in khalaqnaa zaujaini la'allakum tadzakkaruun",
         "translation": "Dan segala sesuatu Kami ciptakan berpasang-pasangan supaya kamu mengingat (kebesaran Allah).",
         "reference": "QS. Adz Dzariyyat: 49"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 240
       }
     },
     {
@@ -70,6 +84,10 @@
         "target_date": "2027-07-18T15:00:00+07:00",
         "title": "Musim Gugur Cinta",
         "variant": "circles"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 360
       }
     },
     {
@@ -93,6 +111,10 @@
           "Mereka mulai menjalin hubungan saat menikmati musim gugur.",
           "Reyhan melamar Chintya di bawah pohon maple tertua di taman kota."
         ]
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 0
       }
     },
     {
@@ -107,6 +129,10 @@
         "address": "Lembang, Bandung Barat",
         "maps_url": "https://maps.google.com/?q=Maple%20Hill%20Hall",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 120
       }
     },
     {
@@ -121,6 +147,10 @@
         "address": "Jl. Dago Giri No. 22, Lembang, Bandung Barat",
         "maps_url": "https://maps.google.com/?q=Maple%20Hill%2C%20Bandung",
         "variant": "band"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 240
       }
     },
     {
@@ -137,6 +167,10 @@
         ],
         "variant": "masonry",
         "animation": "slide-right"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 360
       }
     },
     {
@@ -152,6 +186,10 @@
             "account_holder": "Chintya Ayu, S.E."
           }
         ]
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 0
       }
     },
     {
@@ -167,6 +205,10 @@
         "bank_name": "BCA",
         "account_number": "880030225718",
         "account_holder": "Reyhan Maulana"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 120
       }
     },
     {
@@ -177,6 +219,10 @@
         "message": "Terima kasih telah hadir merayakan musim paling hangat dalam hidup kami.",
         "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Reyhan & Chintya"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 240
       }
     },
     {
@@ -186,6 +232,10 @@
         "title": "Lokasi Acara",
         "address": "Maple Hill, Bandung",
         "embed_url": "https://maps.google.com/?q=Maple%20Hill%2C%20Bandung"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 360
       }
     }
   ],

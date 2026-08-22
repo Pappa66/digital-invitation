@@ -1,16 +1,18 @@
 {
   "theme": {
-    "primary": "#7C9885",
-    "secondary": "#A9B7A6",
-    "background": "#F6F4EC",
-    "text": "#56544A",
-    "font_heading": "Marcellus",
-    "font_body": "Lora",
-    "layout": "left",
+    "primary": "#BFA06A",
+    "secondary": "#D9A7A4",
+    "background": "#FBF7F1",
+    "text": "#4A4036",
+    "font_heading": "Cormorant Garamond",
+    "font_body": "Jost",
+    "layout": "center",
     "hero_style": "image",
-    "ornament": "botanical-garland",
+    "ornament": "gardenia-wreath",
     "frame": "double",
-    "card_style": false
+    "card_style": false,
+    "cover_style": "floral",
+    "cover_3d": true
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
@@ -31,6 +33,10 @@
         "bg_image": "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91",
         "show_ornament": true,
         "variant": "left"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 0
       }
     },
     {
@@ -47,6 +53,10 @@
         "photo_shape": "circle",
         "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
         "bride_photo": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&q=80"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 120
       }
     },
     {
@@ -58,6 +68,10 @@
         "latin": "Wa min kulli syai-in khalaqnaa zaujaini la'allakum tadzakkaruun",
         "translation": "Dan segala sesuatu Kami ciptakan berpasang-pasangan supaya kamu mengingat (kebesaran Allah).",
         "reference": "QS. Adz Dzariyyat: 49"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 240
       }
     },
     {
@@ -67,6 +81,10 @@
         "target_date": "2026-06-07T09:00:00+07:00",
         "title": "Hitungan Menuju Hari Bahagia",
         "variant": "cards"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 360
       }
     },
     {
@@ -90,6 +108,10 @@
           "Mereka mulai menjalin hubungan saat sama-sama belajar merawat kebun melati di halaman.",
           "Bayu melamar Kintan di bawah pohon sakura Cibodas dengan secarik surat dan setangkai melati."
         ]
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 0
       }
     },
     {
@@ -104,6 +126,10 @@
         "address": "Jalan Kebun Raya Cibodas, Cianjur",
         "maps_url": "https://maps.google.com/?q=Gedung%20Serbaguna%20Kebun%20Raya",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 120
       }
     },
     {
@@ -118,6 +144,10 @@
         "address": "Cibodas, Cianjur, Jawa Barat",
         "maps_url": "https://maps.google.com/?q=Taman%20Sakura%20Venue",
         "variant": "band"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 240
       }
     },
     {
@@ -132,6 +162,10 @@
           "https://images.unsplash.com/photo-1519741497674-611481863552"
         ],
         "variant": "grid"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 360
       }
     },
     {
@@ -147,6 +181,10 @@
             "account_holder": "Kintan Maharani, M.Ds."
           }
         ]
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 0
       }
     },
     {
@@ -162,6 +200,10 @@
         "bank_name": "Mandiri",
         "account_number": "137 000 456 789",
         "account_holder": "Bayu Wicaksono"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 120
       }
     },
     {
@@ -172,6 +214,10 @@
         "message": "Sungguh sebuah kebahagiaan bila Bapak/Ibu/Saudara berkenan hadir untuk merayakan hari bahagia kami di sini.",
         "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Bayu & Kintan"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 240
       }
     },
     {
@@ -181,6 +227,10 @@
         "title": "Lokasi Acara",
         "address": "Kebun Raya Cibodas, Cianjur",
         "embed_url": "https://maps.google.com/?q=Kebun%20Raya%20Cibodas%2C%20Cianjur"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 360
       }
     }
   ],

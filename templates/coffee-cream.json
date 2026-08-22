@@ -1,16 +1,18 @@
 {
   "theme": {
-    "primary": "#6F4E37",
-    "secondary": "#A67C52",
-    "background": "#F6EFE3",
-    "text": "#43352A",
-    "font_heading": "Lora",
-    "font_body": "Poppins",
-    "layout": "left",
+    "primary": "#7B4B2A",
+    "secondary": "#C9A227",
+    "background": "#F6EFE2",
+    "text": "#3D2A1A",
+    "font_heading": "Cormorant Garamond",
+    "font_body": "Jost",
+    "layout": "center",
     "hero_style": "image",
-    "ornament": "gardenia-wreath",
+    "ornament": "batik-parang",
     "frame": "classic",
-    "card_style": false
+    "card_style": false,
+    "cover_style": "floral",
+    "cover_3d": true
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-14.mp3",
@@ -34,6 +36,10 @@
         "bg_image": "https://images.unsplash.com/photo-1507504031003-b417219a0fde",
         "show_ornament": true,
         "variant": "left"
+      },
+      "style": {
+        "entrance": "vintage",
+        "entranceDelay": 0
       }
     },
     {
@@ -50,6 +56,10 @@
         "photo_shape": "circle",
         "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
         "bride_photo": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80"
+      },
+      "style": {
+        "entrance": "vintage",
+        "entranceDelay": 120
       }
     },
     {
@@ -61,6 +71,10 @@
         "latin": "Wa min kulli syai-in khalaqnaa zaujaini la'allakum tadzakkaruun",
         "translation": "Dan segala sesuatu Kami ciptakan berpasang-pasangan supaya kamu mengingat (kebesaran Allah).",
         "reference": "QS. Adz Dzariyyat: 49"
+      },
+      "style": {
+        "entrance": "vintage",
+        "entranceDelay": 240
       }
     },
     {
@@ -70,6 +84,10 @@
         "target_date": "2028-01-15T10:00:00+07:00",
         "title": "Ramuan Cinta",
         "variant": "circles"
+      },
+      "style": {
+        "entrance": "vintage",
+        "entranceDelay": 360
       }
     },
     {
@@ -93,6 +111,10 @@
           "Mereka mulai menjalin hubungan saat menikmati segelas kopi tubruk.",
           "Rizky melamar Salsa di kebun kopi Pujon sambil menikmati embun pagi."
         ]
+      },
+      "style": {
+        "entrance": "vintage",
+        "entranceDelay": 0
       }
     },
     {
@@ -107,6 +129,10 @@
         "address": "Karangploso, Malang",
         "maps_url": "https://maps.google.com/?q=Coffee%20Hill%20Estate",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "vintage",
+        "entranceDelay": 120
       }
     },
     {
@@ -121,6 +147,10 @@
         "address": "Jl. Raya Pujon Kidul No. 78, Pujon, Malang",
         "maps_url": "https://maps.google.com/?q=Coffee%20Hill%20Estate%2C%20Malang",
         "variant": "band"
+      },
+      "style": {
+        "entrance": "vintage",
+        "entranceDelay": 240
       }
     },
     {
@@ -137,6 +167,10 @@
         ],
         "variant": "grid",
         "animation": "fade"
+      },
+      "style": {
+        "entrance": "vintage",
+        "entranceDelay": 360
       }
     },
     {
@@ -152,6 +186,10 @@
             "account_holder": "Salsa Nabila, S.E."
           }
         ]
+      },
+      "style": {
+        "entrance": "vintage",
+        "entranceDelay": 0
       }
     },
     {
@@ -167,6 +205,10 @@
         "bank_name": "BRI",
         "account_number": "880005118595",
         "account_holder": "Rizky Pratama"
+      },
+      "style": {
+        "entrance": "vintage",
+        "entranceDelay": 120
       }
     },
     {
@@ -177,6 +219,10 @@
         "message": "Kehadiran Anda adalah rasa terhangat dalam secangkir cerita kami.",
         "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Rizky & Salsa"
+      },
+      "style": {
+        "entrance": "vintage",
+        "entranceDelay": 240
       }
     },
     {
@@ -186,6 +232,10 @@
         "title": "Lokasi Acara",
         "address": "Coffee Hill Estate, Malang",
         "embed_url": "https://maps.google.com/?q=Coffee%20Hill%20Estate%2C%20Malang"
+      },
+      "style": {
+        "entrance": "vintage",
+        "entranceDelay": 360
       }
     }
   ],

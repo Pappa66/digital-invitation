@@ -1,16 +1,18 @@
 {
   "theme": {
-    "primary": "#D4A03C",
-    "secondary": "#E8C5CD",
-    "background": "#FBF6EF",
-    "text": "#574B3A",
+    "primary": "#8A7A66",
+    "secondary": "#BFA06A",
+    "background": "#F7F4EF",
+    "text": "#3A352E",
     "font_heading": "Cormorant Garamond",
     "font_body": "Jost",
-    "layout": "center",
+    "layout": "left",
     "hero_style": "image",
-    "ornament": "corner-peony",
+    "ornament": "arch-geometric",
     "frame": "double",
-    "card_style": false
+    "card_style": false,
+    "cover_style": "floral",
+    "cover_3d": true
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3",
@@ -34,6 +36,10 @@
         "bg_image": "https://images.unsplash.com/photo-1556910103-1c02745aae4d",
         "show_ornament": true,
         "variant": "center"
+      },
+      "style": {
+        "entrance": "slide",
+        "entranceDelay": 0
       }
     },
     {
@@ -50,6 +56,10 @@
         "photo_shape": "circle",
         "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
         "bride_photo": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&q=80"
+      },
+      "style": {
+        "entrance": "slide",
+        "entranceDelay": 120
       }
     },
     {
@@ -61,6 +71,10 @@
         "latin": "",
         "translation": "Semoga semua makhluk berbahagia dan tenteram, hidup saling menyayangi sebagaimana seorang ibu menyayangi anak tunggalnya.",
         "reference": "Metta Sutta"
+      },
+      "style": {
+        "entrance": "slide",
+        "entranceDelay": 240
       }
     },
     {
@@ -70,6 +84,10 @@
         "target_date": "2027-05-08T09:00:00+07:00",
         "title": "Menuju Sakura Mekar",
         "variant": "cards"
+      },
+      "style": {
+        "entrance": "slide",
+        "entranceDelay": 360
       }
     },
     {
@@ -93,6 +111,10 @@
           "Mereka mulai menjalin hubungan saat musim sakura mekar.",
           "Fajar melamar Sakura di lereng Gunung Arjuno dikelilingi bunga sakura liar."
         ]
+      },
+      "style": {
+        "entrance": "slide",
+        "entranceDelay": 0
       }
     },
     {
@@ -107,6 +129,10 @@
         "address": "Jalan Raya Oro-oro Ombo, Batu",
         "maps_url": "https://maps.google.com/?q=Sakura%20Garden%20Hall",
         "variant": "band"
+      },
+      "style": {
+        "entrance": "slide",
+        "entranceDelay": 120
       }
     },
     {
@@ -121,6 +147,10 @@
         "address": "Pemandian Cangar, Batu",
         "maps_url": "https://maps.google.com/?q=Sakura%20Garden%20Lawn",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "slide",
+        "entranceDelay": 240
       }
     },
     {
@@ -138,6 +168,10 @@
         ],
         "variant": "arch",
         "animation": "swing"
+      },
+      "style": {
+        "entrance": "slide",
+        "entranceDelay": 360
       }
     },
     {
@@ -153,6 +187,10 @@
             "account_holder": "Sakura Ayudia, S.E."
           }
         ]
+      },
+      "style": {
+        "entrance": "slide",
+        "entranceDelay": 0
       }
     },
     {
@@ -168,6 +206,10 @@
         "bank_name": "BNI",
         "account_number": "880032533405",
         "account_holder": "Fajar Ramadhan"
+      },
+      "style": {
+        "entrance": "slide",
+        "entranceDelay": 120
       }
     },
     {
@@ -178,6 +220,10 @@
         "message": "Semoga doa restu Bapak/Ibu/Saudara/i menjadi kelopak yang mengiringi cinta kami.",
         "closing": "Semoga semua makhluk berbahagia.",
         "names": "Fajar & Sakura"
+      },
+      "style": {
+        "entrance": "slide",
+        "entranceDelay": 240
       }
     },
     {
@@ -187,6 +233,10 @@
         "title": "Lokasi Acara",
         "address": "Sakura Garden, Batu",
         "embed_url": "https://maps.google.com/?q=Sakura%20Garden%2C%20Batu"
+      },
+      "style": {
+        "entrance": "slide",
+        "entranceDelay": 360
       }
     }
   ],

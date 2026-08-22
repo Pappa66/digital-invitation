@@ -1,16 +1,19 @@
 {
   "theme": {
-    "primary": "#7FB5A8",
-    "secondary": "#F6C6A8",
-    "background": "#FFFCF6",
-    "text": "#5A6360",
-    "font_heading": "Quicksand",
-    "font_body": "Nunito Sans",
+    "primary": "#D98C1F",
+    "secondary": "#7B4B2A",
+    "background": "#FCF3E2",
+    "text": "#3B2A1A",
+    "font_heading": "Cormorant Garamond",
+    "font_body": "Jost",
     "layout": "center",
     "hero_style": "image",
-    "ornament": "peony-bouquet",
+    "ornament": "buddha-wheel",
     "frame": "classic",
-    "card_style": true
+    "card_style": true,
+    "cover_style": "floral",
+    "cover_3d": true,
+    "model3d": "3d/buddha-stupa.glb"
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
@@ -31,6 +34,10 @@
         "bg_image": "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2",
         "show_ornament": true,
         "variant": "center"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 0
       }
     },
     {
@@ -47,6 +54,10 @@
         "photo_shape": "frame",
         "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
         "bride_photo": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 120
       }
     },
     {
@@ -58,6 +69,10 @@
         "latin": "Wa min kulli syai-in khalaqnaa zaujaini la'allakum tadzakkaruun",
         "translation": "Dan segala sesuatu Kami ciptakan berpasang-pasangan supaya kamu mengingat (kebesaran Allah).",
         "reference": "QS. Adz Dzariyyat: 49"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 240
       }
     },
     {
@@ -67,6 +82,10 @@
         "target_date": "2026-04-18T10:00:00+07:00",
         "title": "Countdown Cinta",
         "variant": "circles"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 360
       }
     },
     {
@@ -90,6 +109,10 @@
           "Mereka mulai menjalin hubungan saat kami berbagi sebungkus gorengan.",
           "Galih melamar Cinta di taman bunga Ciwidey yang sedang bermekaran."
         ]
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 0
       }
     },
     {
@@ -104,6 +127,10 @@
         "address": "Dago Pakar, Bandung",
         "maps_url": "https://maps.google.com/?q=Taman%20Sari%20Garden",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 120
       }
     },
     {
@@ -118,6 +145,10 @@
         "address": "Jl. Taman Sari No. 45, Lembang, Bandung Barat",
         "maps_url": "https://maps.google.com/?q=Taman%20Sari%20Garden%2C%20Bandung",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 240
       }
     },
     {
@@ -134,6 +165,10 @@
           "https://images.unsplash.com/photo-1532712938310-34cb3982ef74"
         ],
         "variant": "polaroid"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 360
       }
     },
     {
@@ -149,6 +184,10 @@
             "account_holder": "Cinta Larassati, S.S."
           }
         ]
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 0
       }
     },
     {
@@ -164,6 +203,10 @@
         "bank_name": "BNI",
         "account_number": "072 909 1122",
         "account_holder": "Galih Rehan"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 120
       }
     },
     {
@@ -174,6 +217,10 @@
         "message": "Terima kasih sudah menjadi bagian dari kebahagiaan kecil kami di hari yang cerah ini.",
         "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Galih & Cinta"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 240
       }
     },
     {
@@ -183,6 +230,10 @@
         "title": "Lokasi Acara",
         "address": "Taman Sari Garden, Bandung",
         "embed_url": "https://maps.google.com/?q=Taman%20Sari%20Garden%2C%20Bandung"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 360
       }
     }
   ],

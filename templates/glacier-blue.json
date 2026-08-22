@@ -1,16 +1,19 @@
 {
   "theme": {
-    "primary": "#4E7FA3",
-    "secondary": "#8FB6CE",
-    "background": "#F2F7FA",
-    "text": "#2F4A5C",
-    "font_heading": "Playfair Display",
-    "font_body": "Lato",
+    "primary": "#4E7A3A",
+    "secondary": "#C9A227",
+    "background": "#F4F1E2",
+    "text": "#2E3320",
+    "font_heading": "Cormorant Garamond",
+    "font_body": "Jost",
     "layout": "center",
     "hero_style": "image",
-    "ornament": "corner-peony",
+    "ornament": "sunda-kebat",
     "frame": "double",
-    "card_style": false
+    "card_style": false,
+    "cover_style": "floral",
+    "cover_3d": true,
+    "model3d": "3d/sunda-rumah.glb"
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
@@ -34,6 +37,10 @@
         "bg_image": "https://images.unsplash.com/photo-1548142813-c348350df52b",
         "show_ornament": true,
         "variant": "center"
+      },
+      "style": {
+        "entrance": "batik",
+        "entranceDelay": 0
       }
     },
     {
@@ -50,6 +57,10 @@
         "photo_shape": "circle",
         "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
         "bride_photo": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&q=80"
+      },
+      "style": {
+        "entrance": "batik",
+        "entranceDelay": 120
       }
     },
     {
@@ -61,6 +72,10 @@
         "latin": "Wa min kulli syai-in khalaqnaa zaujaini la'allakum tadzakkaruun",
         "translation": "Dan segala sesuatu Kami ciptakan berpasang-pasangan supaya kamu mengingat (kebesaran Allah).",
         "reference": "QS. Adz Dzariyyat: 49"
+      },
+      "style": {
+        "entrance": "batik",
+        "entranceDelay": 240
       }
     },
     {
@@ -70,6 +85,10 @@
         "target_date": "2028-06-10T15:00:00+08:00",
         "title": "Mencairkan Kerinduan",
         "variant": "cards"
+      },
+      "style": {
+        "entrance": "batik",
+        "entranceDelay": 360
       }
     },
     {
@@ -93,6 +112,10 @@
           "Mereka mulai menjalin hubungan saat menyelam di Menjangan.",
           "Radit melamar Alysia di tepi Pantai Pandawa saat langit senja membiru tua."
         ]
+      },
+      "style": {
+        "entrance": "batik",
+        "entranceDelay": 0
       }
     },
     {
@@ -107,6 +130,10 @@
         "address": "Nusa Dua, Badung, Bali",
         "maps_url": "https://maps.google.com/?q=Glacier%20Chapel",
         "variant": "band"
+      },
+      "style": {
+        "entrance": "batik",
+        "entranceDelay": 120
       }
     },
     {
@@ -121,6 +148,10 @@
         "address": "Nusa Dua, Bali",
         "maps_url": "https://maps.google.com/?q=Glacier%20Lawn",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "batik",
+        "entranceDelay": 240
       }
     },
     {
@@ -138,6 +169,10 @@
         "variant": "arch",
         "animation": "fade",
         "interval_sec": 4
+      },
+      "style": {
+        "entrance": "batik",
+        "entranceDelay": 360
       }
     },
     {
@@ -153,6 +188,10 @@
             "account_holder": "Alysia Deandra, S.E."
           }
         ]
+      },
+      "style": {
+        "entrance": "batik",
+        "entranceDelay": 0
       }
     },
     {
@@ -168,6 +207,10 @@
         "bank_name": "BRI",
         "account_number": "880002454522",
         "account_holder": "Radit Nagagara"
+      },
+      "style": {
+        "entrance": "batik",
+        "entranceDelay": 120
       }
     },
     {
@@ -178,6 +221,10 @@
         "message": "Kehadiran Anda sejuk seperti gletser menyejukkan perjalanan kami.",
         "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Radit & Alysia"
+      },
+      "style": {
+        "entrance": "batik",
+        "entranceDelay": 240
       }
     },
     {
@@ -187,6 +234,10 @@
         "title": "Lokasi Acara",
         "address": "Glacier Hall, Bali",
         "embed_url": "https://maps.google.com/?q=Glacier%20Hall%2C%20Bali"
+      },
+      "style": {
+        "entrance": "batik",
+        "entranceDelay": 360
       }
     }
   ],

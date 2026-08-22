@@ -55,6 +55,39 @@ function Ornament({ className = '', ornament }: { className?: string; ornament?:
   );
 }
 
+/**
+ * Judul section seragam "Romantis Klasik": kicker kaligrafi emas + judul
+ * serif + ornamen. Selalu dibungkus <Inner name="title"> agar bisa digerakkan
+ * bebas di builder. Kicker adalah aksen dekoratif (tidak editable).
+ */
+function SectionHeading({ title, subtitle, ornament, kicker, titleProp = 'title' }: {
+  title: string;
+  subtitle?: string;
+  ornament?: string;
+  kicker?: string;
+  titleProp?: string;
+}) {
+  const theme = useTheme();
+  return (
+    <Inner name="title">
+      <div className="mx-auto w-full text-center">
+        {kicker && (
+          <p className="font-script text-3xl leading-none text-[color:var(--color-primary)] opacity-90">{kicker}</p>
+        )}
+        <h2 className={`font-heading text-2xl font-medium md:text-3xl ${kicker ? 'mt-1' : ''}`}>
+          <Editable prop={titleProp}>{title}</Editable>
+        </h2>
+        {subtitle && (
+          <p className="mt-2 text-sm italic opacity-70">
+            <Editable prop="subtitle">{subtitle}</Editable>
+          </p>
+        )}
+        <Ornament className="mt-6 opacity-60" ornament={ornament || theme?.ornament} />
+      </div>
+    </Inner>
+  );
+}
+
 /* ============================ Layer dekor ============================ */
 
 function ShapeSvg({ kind, color, size, opacity }: { kind: string; color: string; size: number; opacity: number }) {
@@ -1018,11 +1051,10 @@ export function CoupleBlock({ props }: { props: BlockProps }) {
 export function CountdownBlock({ props }: { props: BlockProps }) {
   const target = new Date(str(props, 'target_date')).getTime();
   const variant = str(props, 'variant') || 'circles';
+  const theme = useTheme();
   return (
     <section className="w-full min-w-0 max-w-full overflow-hidden box-border px-4 py-10 sm:px-6 sm:py-12 md:py-16 text-center">
-      <h2 className="break-words text-xl md:text-2xl">
-        <Editable prop="title">{str(props, 'title')}</Editable>
-      </h2>
+      <SectionHeading title={str(props, 'title')} kicker="Menuju Hari Bahagia" ornament={theme?.ornament} />
       <Inner name="timer">
         <CountdownTimer target={target} variant={variant} />
       </Inner>
@@ -1109,6 +1141,7 @@ export function EventDetailBlock({ props }: { props: BlockProps }) {
   const Icon = icon;
   const band = str(props, 'variant') === 'band';
   const preview = usePreview();
+  const theme = useTheme();
 
   const title = str(props, 'title');
   const dateStr = str(props, 'date');
@@ -1141,11 +1174,7 @@ export function EventDetailBlock({ props }: { props: BlockProps }) {
           <Inner name="icon">
             <Icon className="mx-auto h-7 w-7" />
           </Inner>
-          <Inner name="title">
-            <h2 className="mt-4 text-2xl font-medium">
-              <Editable prop="title">{str(props, 'title')}</Editable>
-            </h2>
-          </Inner>
+          <SectionHeading title={str(props, 'title')} kicker="Waktu & Tempat" ornament={theme?.ornament} />
           <Inner name="datetime">
             <div className="mt-6 space-y-3 text-sm">
               <div className="flex items-start justify-center gap-2">
@@ -1896,15 +1925,12 @@ function maybeEmbedSrc(embedUrl: string): string | null {
 
 export function ThanksBlock({ props }: { props: BlockProps }) {
   const variant = str(props, 'variant') || 'center';
-  const ornament = <Inner name="ornament"><Ornament className="mb-6 opacity-60" /></Inner>;
+  const theme = useTheme();
   if (variant === 'elegant') {
     return (
       <section className="px-6 py-10 sm:py-14 md:py-20 text-center">
-        {ornament}
+        <SectionHeading title={str(props, 'title')} kicker="Doa & Restu" ornament={theme?.ornament} />
         <div className="mx-auto max-w-md rounded-2xl border border-current/10 bg-current/[0.03] px-8 py-10">
-          <Inner name="title">
-            <h2 className="text-2xl font-medium md:text-3xl"><Editable prop="title">{str(props, 'title')}</Editable></h2>
-          </Inner>
           <Inner name="message">
             <p className="mx-auto mt-6 w-full text-sm leading-relaxed opacity-80">
               {str(props, 'message')}
@@ -1924,10 +1950,7 @@ export function ThanksBlock({ props }: { props: BlockProps }) {
 
   return (
     <section className="px-6 py-10 sm:py-14 md:py-20 text-center">
-      {ornament}
-      <Inner name="title">
-        <h2 className="text-2xl font-medium md:text-3xl"><Editable prop="title">{str(props, 'title')}</Editable></h2>
-      </Inner>
+      <SectionHeading title={str(props, 'title')} kicker="Doa & Restu" ornament={theme?.ornament} />
       <Inner name="message">
         <p className="mx-auto mt-6 w-full text-sm leading-relaxed opacity-80">
           {str(props, 'message')}

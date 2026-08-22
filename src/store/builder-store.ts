@@ -432,9 +432,13 @@ selectedDecor: null,
     set((state) => ({
       canvas: {
         ...state.canvas,
-        blocks: state.canvas.blocks.map((b) =>
-          b.id === blockId ? { ...b, inner: { ...(b.inner ?? {}), [key]: pos } } : b
-        )
+        blocks: state.canvas.blocks.map((b) => {
+          if (b.id !== blockId) return b;
+          const prev = b.inner ?? {};
+          const existing = prev[key] ?? { x: 0, y: 0 };
+          // Merge pos (x,y) dengan entry lama agar warna (color) tidak hilang saat digeser.
+          return { ...b, inner: { ...prev, [key]: { ...existing, ...pos } } };
+        })
       }
     })),
 

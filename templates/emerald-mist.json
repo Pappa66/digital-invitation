@@ -1,16 +1,19 @@
 {
   "theme": {
-    "primary": "#0F5132",
-    "secondary": "#82A396",
-    "background": "#F0F5EF",
-    "text": "#28463A",
+    "primary": "#D98C1F",
+    "secondary": "#7B4B2A",
+    "background": "#FCF3E2",
+    "text": "#3B2A1A",
     "font_heading": "Cormorant Garamond",
-    "font_body": "Montserrat",
+    "font_body": "Jost",
     "layout": "center",
     "hero_style": "image",
-    "ornament": "baby-breath",
+    "ornament": "buddha-wheel",
     "frame": "double",
-    "card_style": true
+    "card_style": true,
+    "cover_style": "floral",
+    "cover_3d": true,
+    "model3d": "3d/buddha-stupa.glb"
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3",
@@ -34,6 +37,10 @@
         "bg_image": "https://images.unsplash.com/photo-1583939003579-730e3918a45a",
         "show_ornament": true,
         "variant": "center"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 0
       }
     },
     {
@@ -50,6 +57,10 @@
         "photo_shape": "circle",
         "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
         "bride_photo": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&q=80"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 120
       }
     },
     {
@@ -61,6 +72,10 @@
         "latin": "Wa min kulli syai-in khalaqnaa zaujaini la'allakum tadzakkaruun",
         "translation": "Dan segala sesuatu Kami ciptakan berpasang-pasangan supaya kamu mengingat (kebesaran Allah).",
         "reference": "QS. Adz Dzariyyat: 49"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 240
       }
     },
     {
@@ -70,6 +85,10 @@
         "target_date": "2028-02-19T09:00:00+07:00",
         "title": "Kabut Cinta",
         "variant": "circles"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 360
       }
     },
     {
@@ -93,6 +112,10 @@
           "Mereka mulai menjalin hubungan saat menikmati hujan di Kaliurang.",
           "Devan melamar Kiara di tebing Parangtritis saat air laut mulai pasang."
         ]
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 0
       }
     },
     {
@@ -107,6 +130,10 @@
         "address": "Kaliurang, Yogyakarta",
         "maps_url": "https://maps.google.com/?q=Emerald%20Shelter",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 120
       }
     },
     {
@@ -121,6 +148,10 @@
         "address": "Kaliurang, Sleman",
         "maps_url": "https://maps.google.com/?q=Emerald%20Shelter",
         "variant": "band"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 240
       }
     },
     {
@@ -138,6 +169,10 @@
         "variant": "grid",
         "animation": "slide-left",
         "interval_sec": 3
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 360
       }
     },
     {
@@ -153,6 +188,10 @@
             "account_holder": "Kiara Anindya, S.E."
           }
         ]
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 0
       }
     },
     {
@@ -168,6 +207,10 @@
         "bank_name": "BNI",
         "account_number": "880008167298",
         "account_holder": "Devan Mahendra"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 120
       }
     },
     {
@@ -178,6 +221,10 @@
         "message": "Semoga doa dan restu Anda menjadi kabut yang mendinginkan perjalanan kami.",
         "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Devan & Kiara"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 240
       }
     },
     {
@@ -187,6 +234,10 @@
         "title": "Lokasi Acara",
         "address": "Emerald Shelter, Yogyakarta",
         "embed_url": "https://maps.google.com/?q=Emerald%20Shelter%2C%20Yogyakarta"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 360
       }
     }
   ],

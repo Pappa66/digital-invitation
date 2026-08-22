@@ -1,16 +1,18 @@
 {
   "theme": {
-    "primary": "#F0A202",
-    "secondary": "#F2560D",
-    "background": "#FFFBF0",
-    "text": "#4A3B26",
-    "font_heading": "Quicksand",
-    "font_body": "Nunito Sans",
+    "primary": "#7B4B2A",
+    "secondary": "#C9A227",
+    "background": "#F6EFE2",
+    "text": "#3D2A1A",
+    "font_heading": "Cormorant Garamond",
+    "font_body": "Jost",
     "layout": "center",
     "hero_style": "solid",
-    "ornament": "corner-rose",
+    "ornament": "batik-parang",
     "frame": "arch",
-    "card_style": true
+    "card_style": true,
+    "cover_style": "floral",
+    "cover_3d": true
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
@@ -34,6 +36,10 @@
         "bg_image": "",
         "show_ornament": false,
         "variant": "center"
+      },
+      "style": {
+        "entrance": "vintage",
+        "entranceDelay": 0
       }
     },
     {
@@ -50,6 +56,10 @@
         "photo_shape": "arch",
         "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
         "bride_photo": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&q=80"
+      },
+      "style": {
+        "entrance": "vintage",
+        "entranceDelay": 120
       }
     },
     {
@@ -61,6 +71,10 @@
         "latin": "Wa min kulli syai-in khalaqnaa zaujaini la'allakum tadzakkaruun",
         "translation": "Dan segala sesuatu Kami ciptakan berpasang-pasangan supaya kamu mengingat (kebesaran Allah).",
         "reference": "QS. Adz Dzariyyat: 49"
+      },
+      "style": {
+        "entrance": "vintage",
+        "entranceDelay": 240
       }
     },
     {
@@ -70,6 +84,10 @@
         "target_date": "2028-05-13T10:00:00+07:00",
         "title": "Lewat Hari Cerah",
         "variant": "cards"
+      },
+      "style": {
+        "entrance": "vintage",
+        "entranceDelay": 360
       }
     },
     {
@@ -93,6 +111,10 @@
           "Mereka mulai menjalin hubungan saat piknik di Kebun Raya Cibodas.",
           "Farhan melamar Alea di puncak Gunung Gede saat langit pagi masih berkabut."
         ]
+      },
+      "style": {
+        "entrance": "vintage",
+        "entranceDelay": 0
       }
     },
     {
@@ -107,6 +129,10 @@
         "address": "Cipanas, Puncak",
         "maps_url": "https://maps.google.com/?q=Citrus%20Hills",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "vintage",
+        "entranceDelay": 120
       }
     },
     {
@@ -121,6 +147,10 @@
         "address": "Cipanas, Bogor",
         "maps_url": "https://maps.google.com/?q=Citrus%20Hills",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "vintage",
+        "entranceDelay": 240
       }
     },
     {
@@ -138,6 +168,10 @@
         ],
         "variant": "polaroid",
         "animation": "swing"
+      },
+      "style": {
+        "entrance": "vintage",
+        "entranceDelay": 360
       }
     },
     {
@@ -153,6 +187,10 @@
             "account_holder": "Alea Putri, S.E."
           }
         ]
+      },
+      "style": {
+        "entrance": "vintage",
+        "entranceDelay": 0
       }
     },
     {
@@ -168,6 +206,10 @@
         "bank_name": "BNI",
         "account_number": "880038370452",
         "account_holder": "Farhan Mahesa"
+      },
+      "style": {
+        "entrance": "vintage",
+        "entranceDelay": 120
       }
     },
     {
@@ -178,6 +220,10 @@
         "message": "Semoga kehadiran Anda menjadi sinar yang menerangi pernikahan kami.",
         "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Farhan & Alea"
+      },
+      "style": {
+        "entrance": "vintage",
+        "entranceDelay": 240
       }
     },
     {
@@ -187,6 +233,10 @@
         "title": "Lokasi Acara",
         "address": "Citrus Hills, Puncak",
         "embed_url": "https://maps.google.com/?q=Citrus%20Hills%2C%20Puncak"
+      },
+      "style": {
+        "entrance": "vintage",
+        "entranceDelay": 360
       }
     }
   ],

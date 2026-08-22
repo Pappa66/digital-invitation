@@ -65,7 +65,11 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
     ornament: typeof canvas.theme.ornament === 'string' ? canvas.theme.ornament : undefined,
     coverGreeting: canvas.settings.cover_greeting,
     coverButtonText: canvas.settings.cover_button_text,
-    coverBgImage: canvas.settings.cover_bg_image
+    coverBgImage: canvas.settings.cover_bg_image,
+    coverStyle: canvas.theme.cover_style,
+    cover3d: canvas.theme.cover_3d,
+    model3d: canvas.theme.model3d,
+    supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL
   };
 
   if (flow === 'free') {

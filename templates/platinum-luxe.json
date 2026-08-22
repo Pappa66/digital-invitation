@@ -1,16 +1,19 @@
 {
   "theme": {
-    "primary": "#3D3D3D",
-    "secondary": "#A8A8A8",
-    "background": "#FFFFFF",
-    "text": "#2B2B2B",
-    "font_heading": "Cinzel",
-    "font_body": "Lato",
+    "primary": "#4E7A3A",
+    "secondary": "#C9A227",
+    "background": "#F4F1E2",
+    "text": "#2E3320",
+    "font_heading": "Cormorant Garamond",
+    "font_body": "Jost",
     "layout": "center",
     "hero_style": "solid",
-    "ornament": "mandala",
+    "ornament": "sunda-kebat",
     "frame": "none",
-    "card_style": true
+    "card_style": true,
+    "cover_style": "floral",
+    "cover_3d": true,
+    "model3d": "3d/sunda-rumah.glb"
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3",
@@ -34,6 +37,10 @@
         "bg_image": "",
         "show_ornament": false,
         "variant": "center"
+      },
+      "style": {
+        "entrance": "batik",
+        "entranceDelay": 0
       }
     },
     {
@@ -50,6 +57,10 @@
         "photo_shape": "circle",
         "groom_photo": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&q=80",
         "bride_photo": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600&q=80"
+      },
+      "style": {
+        "entrance": "batik",
+        "entranceDelay": 120
       }
     },
     {
@@ -61,6 +72,10 @@
         "latin": "Wa min kulli syai-in khalaqnaa zaujaini la'allakum tadzakkaruun",
         "translation": "Dan segala sesuatu Kami ciptakan berpasang-pasangan supaya kamu mengingat (kebesaran Allah).",
         "reference": "QS. Adz Dzariyyat: 49"
+      },
+      "style": {
+        "entrance": "batik",
+        "entranceDelay": 240
       }
     },
     {
@@ -70,6 +85,10 @@
         "target_date": "2027-06-12T17:00:00+07:00",
         "title": "Sabtu, 12 Juni 2027",
         "variant": "cards"
+      },
+      "style": {
+        "entrance": "batik",
+        "entranceDelay": 360
       }
     },
     {
@@ -84,6 +103,10 @@
         "address": "Jl. Embong Malang No. 85, Genteng, Surabaya",
         "maps_url": "https://maps.google.com/?q=Westin%20Grand%20Ballroom",
         "variant": "band"
+      },
+      "style": {
+        "entrance": "batik",
+        "entranceDelay": 0
       }
     },
     {
@@ -98,6 +121,10 @@
         "address": "Jl. Embong Malang No. 85, Genteng, Surabaya",
         "maps_url": "https://maps.google.com/?q=The%20Westin%2C%20Surabaya",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "batik",
+        "entranceDelay": 120
       }
     },
     {
@@ -113,6 +140,10 @@
         ],
         "variant": "mosaic",
         "animation": "fade"
+      },
+      "style": {
+        "entrance": "batik",
+        "entranceDelay": 240
       }
     },
     {
@@ -128,6 +159,10 @@
             "account_holder": "Vanessa Putri, S.E."
           }
         ]
+      },
+      "style": {
+        "entrance": "batik",
+        "entranceDelay": 360
       }
     },
     {
@@ -143,6 +178,10 @@
         "bank_name": "BNI",
         "account_number": "880002839493",
         "account_holder": "Gerald Marchel"
+      },
+      "style": {
+        "entrance": "batik",
+        "entranceDelay": 0
       }
     },
     {
@@ -153,6 +192,10 @@
         "message": "Kehadiran Bapak/Ibu/Saudara/i menjadi sentuhan paling berkilau dalam perayaan kami. Terima kasih atas doa restunya.",
         "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Gerald & Vanessa"
+      },
+      "style": {
+        "entrance": "batik",
+        "entranceDelay": 120
       }
     },
     {
@@ -162,6 +205,10 @@
         "title": "Lokasi Acara",
         "address": "The Westin, Surabaya",
         "embed_url": "https://maps.google.com/?q=The%20Westin%2C%20Surabaya"
+      },
+      "style": {
+        "entrance": "batik",
+        "entranceDelay": 240
       }
     }
   ],

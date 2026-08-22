@@ -1,16 +1,18 @@
 {
   "theme": {
-    "primary": "#7C6FA8",
-    "secondary": "#C6B8E8",
-    "background": "#FBFAFD",
-    "text": "#463F5C",
-    "font_heading": "Great Vibes",
-    "font_body": "Nunito Sans",
+    "primary": "#C98A3E",
+    "secondary": "#5E8B7E",
+    "background": "#F3E9D2",
+    "text": "#3A2E22",
+    "font_heading": "Cormorant Garamond",
+    "font_body": "Jost",
     "layout": "center",
     "hero_style": "image",
-    "ornament": "peony-bouquet",
+    "ornament": "newspaper-rule",
     "frame": "classic",
-    "card_style": true
+    "card_style": true,
+    "cover_style": "oldtv",
+    "cover_3d": false
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3",
@@ -34,6 +36,10 @@
         "bg_image": "https://images.unsplash.com/photo-1533929736458-ca588d08c8be",
         "show_ornament": true,
         "variant": "center"
+      },
+      "style": {
+        "entrance": "oldtv",
+        "entranceDelay": 0
       }
     },
     {
@@ -50,6 +56,10 @@
         "photo_shape": "frame",
         "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
         "bride_photo": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&q=80"
+      },
+      "style": {
+        "entrance": "oldtv",
+        "entranceDelay": 120
       }
     },
     {
@@ -61,6 +71,10 @@
         "latin": "",
         "translation": "Kasih itu sabar; kasih itu murah hati; ia tidak cemburu. Ia tidak memegahkan diri dan tidak sombong.",
         "reference": "1 Korintus 13:4"
+      },
+      "style": {
+        "entrance": "oldtv",
+        "entranceDelay": 240
       }
     },
     {
@@ -70,6 +84,10 @@
         "target_date": "2027-12-11T09:00:00+07:00",
         "title": "Mimpi Lavender",
         "variant": "circles"
+      },
+      "style": {
+        "entrance": "oldtv",
+        "entranceDelay": 360
       }
     },
     {
@@ -93,6 +111,10 @@
           "Mereka mulai menjalin hubungan di antara ladang lavender.",
           "Bagas melamar Lavina di puncak Gunung Patuha dengan latar hamparan edelweiss."
         ]
+      },
+      "style": {
+        "entrance": "oldtv",
+        "entranceDelay": 0
       }
     },
     {
@@ -107,6 +129,10 @@
         "address": "Kampung Cai, Rancabali, Ciwidey",
         "maps_url": "https://maps.google.com/?q=Lavender%20Hall",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "oldtv",
+        "entranceDelay": 120
       }
     },
     {
@@ -121,6 +147,10 @@
         "address": "Rancabali, Bandung Selatan",
         "maps_url": "https://maps.google.com/?q=Lavender%20Garden",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "oldtv",
+        "entranceDelay": 240
       }
     },
     {
@@ -137,6 +167,10 @@
         ],
         "variant": "polaroid",
         "animation": "pop"
+      },
+      "style": {
+        "entrance": "oldtv",
+        "entranceDelay": 360
       }
     },
     {
@@ -152,6 +186,10 @@
             "account_holder": "Lavina Ayu, S.E."
           }
         ]
+      },
+      "style": {
+        "entrance": "oldtv",
+        "entranceDelay": 0
       }
     },
     {
@@ -167,6 +205,10 @@
         "bank_name": "BCA",
         "account_number": "880029944014",
         "account_holder": "Bagas Widyatama"
+      },
+      "style": {
+        "entrance": "oldtv",
+        "entranceDelay": 120
       }
     },
     {
@@ -177,6 +219,10 @@
         "message": "Kehadiran Anda adalah harum lavender yang menyemarakkan hari kami.",
         "closing": "Tuhan Yesus memberkati.",
         "names": "Bagas & Lavina"
+      },
+      "style": {
+        "entrance": "oldtv",
+        "entranceDelay": 240
       }
     },
     {
@@ -186,6 +232,10 @@
         "title": "Lokasi Acara",
         "address": "Lavender Farm, Ciwidey",
         "embed_url": "https://maps.google.com/?q=Lavender%20Farm%2C%20Ciwidey"
+      },
+      "style": {
+        "entrance": "oldtv",
+        "entranceDelay": 360
       }
     }
   ],

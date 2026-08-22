@@ -1,16 +1,18 @@
 {
   "theme": {
-    "primary": "#111827",
-    "secondary": "#6B7280",
-    "background": "#FFFFFF",
-    "text": "#111827",
-    "font_heading": "Jost",
-    "font_body": "Inter",
-    "layout": "left",
+    "primary": "#B23A3A",
+    "secondary": "#3A3A3A",
+    "background": "#EDE7DD",
+    "text": "#2A2A2A",
+    "font_heading": "Cormorant Garamond",
+    "font_body": "Jost",
+    "layout": "center",
     "hero_style": "solid",
-    "ornament": "mandala",
+    "ornament": "vine-border",
     "frame": "none",
-    "card_style": false
+    "card_style": false,
+    "cover_style": "filmroll",
+    "cover_3d": false
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-11.mp3",
@@ -31,6 +33,10 @@
         "bg_image": "",
         "show_ornament": false,
         "variant": "left"
+      },
+      "style": {
+        "entrance": "filmroll",
+        "entranceDelay": 0
       }
     },
     {
@@ -47,6 +53,10 @@
         "photo_shape": "circle",
         "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
         "bride_photo": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&q=80"
+      },
+      "style": {
+        "entrance": "filmroll",
+        "entranceDelay": 120
       }
     },
     {
@@ -58,6 +68,10 @@
         "latin": "Wa min kulli syai-in khalaqnaa zaujaini la'allakum tadzakkaruun",
         "translation": "Dan segala sesuatu Kami ciptakan berpasang-pasangan supaya kamu mengingat (kebesaran Allah).",
         "reference": "QS. Adz Dzariyyat: 49"
+      },
+      "style": {
+        "entrance": "filmroll",
+        "entranceDelay": 240
       }
     },
     {
@@ -67,6 +81,10 @@
         "target_date": "2026-08-09T10:00:00+07:00",
         "title": "09.08.2026",
         "variant": "cards"
+      },
+      "style": {
+        "entrance": "filmroll",
+        "entranceDelay": 360
       }
     },
     {
@@ -81,6 +99,10 @@
         "address": "Jl. Embong Malang No. 85, Genteng, Surabaya",
         "maps_url": "https://maps.google.com/?q=The%20Westin%20Grand%20Ballroom",
         "variant": "band"
+      },
+      "style": {
+        "entrance": "filmroll",
+        "entranceDelay": 0
       }
     },
     {
@@ -95,6 +117,10 @@
         "address": "Jl. Embong Malang No. 85, Genteng, Surabaya",
         "maps_url": "https://maps.google.com/?q=The%20Westin%2C%20Surabaya",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "filmroll",
+        "entranceDelay": 120
       }
     },
     {
@@ -109,6 +135,10 @@
           "https://images.unsplash.com/photo-1532712938310-34cb3982ef74"
         ],
         "variant": "mosaic"
+      },
+      "style": {
+        "entrance": "filmroll",
+        "entranceDelay": 240
       }
     },
     {
@@ -124,6 +154,10 @@
             "account_holder": "Nadia Amara, S.T."
           }
         ]
+      },
+      "style": {
+        "entrance": "filmroll",
+        "entranceDelay": 360
       }
     },
     {
@@ -139,6 +173,10 @@
         "bank_name": "BCA",
         "account_number": "883 071 2288",
         "account_holder": "Raka Prasetya"
+      },
+      "style": {
+        "entrance": "filmroll",
+        "entranceDelay": 0
       }
     },
     {
@@ -149,6 +187,10 @@
         "message": "Merupakan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu pada hari istimewa kami.",
         "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Raka & Nadia"
+      },
+      "style": {
+        "entrance": "filmroll",
+        "entranceDelay": 120
       }
     },
     {
@@ -158,6 +200,10 @@
         "title": "Lokasi Acara",
         "address": "The Westin, Surabaya",
         "embed_url": "https://maps.google.com/?q=The%20Westin%2C%20Surabaya"
+      },
+      "style": {
+        "entrance": "filmroll",
+        "entranceDelay": 240
       }
     }
   ],

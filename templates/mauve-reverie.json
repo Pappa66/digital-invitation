@@ -1,16 +1,18 @@
 {
   "theme": {
-    "primary": "#9B6A8C",
-    "secondary": "#C9A3BE",
-    "background": "#FBF5F8",
-    "text": "#5A4153",
-    "font_heading": "Great Vibes",
-    "font_body": "Nunito Sans",
-    "layout": "center",
+    "primary": "#8A7A66",
+    "secondary": "#B7A98F",
+    "background": "#EFE7D6",
+    "text": "#2C2419",
+    "font_heading": "Cormorant Garamond",
+    "font_body": "Jost",
+    "layout": "left",
     "hero_style": "image",
-    "ornament": "lily-divider",
+    "ornament": "newspaper-rule",
     "frame": "arch",
-    "card_style": false
+    "card_style": false,
+    "cover_style": "newspaper",
+    "cover_3d": false
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
@@ -31,6 +33,10 @@
         "bg_image": "https://images.unsplash.com/photo-1505236858219-8359eb29e329",
         "show_ornament": true,
         "variant": "center"
+      },
+      "style": {
+        "entrance": "newspaper",
+        "entranceDelay": 0
       }
     },
     {
@@ -47,6 +53,10 @@
         "photo_shape": "arch",
         "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
         "bride_photo": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80"
+      },
+      "style": {
+        "entrance": "newspaper",
+        "entranceDelay": 120
       }
     },
     {
@@ -58,6 +68,10 @@
         "latin": "Wa min kulli syai-in khalaqnaa zaujaini la'allakum tadzakkaruun",
         "translation": "Dan segala sesuatu Kami ciptakan berpasang-pasangan supaya kamu mengingat (kebesaran Allah).",
         "reference": "QS. Adz Dzariyyat: 49"
+      },
+      "style": {
+        "entrance": "newspaper",
+        "entranceDelay": 240
       }
     },
     {
@@ -67,6 +81,10 @@
         "target_date": "2026-12-19T08:00:00+07:00",
         "title": "Menghitung Hari Bahagia",
         "variant": "cards"
+      },
+      "style": {
+        "entrance": "newspaper",
+        "entranceDelay": 360
       }
     },
     {
@@ -90,6 +108,10 @@
           "Mereka saling mengenal lewat diskusi panjang tentang mimpi-mimpi kecil.",
           "Rama melamar Alya di pagi buta, tepat saat matahari terbit di puncak Gunung Bromo."
         ]
+      },
+      "style": {
+        "entrance": "newspaper",
+        "entranceDelay": 0
       }
     },
     {
@@ -104,6 +126,10 @@
         "address": "Jl. Tugu No. 12, Malang, Jawa Timur",
         "maps_url": "https://maps.google.com/?q=Hotel%20Tugu%20Malang",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "newspaper",
+        "entranceDelay": 120
       }
     },
     {
@@ -118,6 +144,10 @@
         "address": "Taman belakang bergaya kolonial, Malang",
         "maps_url": "https://maps.google.com/?q=Hotel%20Tugu%20Malang",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "newspaper",
+        "entranceDelay": 240
       }
     },
     {
@@ -125,6 +155,10 @@
       "type": "Divider",
       "props": {
         "variant": "hearts"
+      },
+      "style": {
+        "entrance": "newspaper",
+        "entranceDelay": 360
       }
     },
     {
@@ -141,6 +175,10 @@
         "variant": "grid",
         "animation": "zoom-out",
         "interval_sec": 3
+      },
+      "style": {
+        "entrance": "newspaper",
+        "entranceDelay": 0
       }
     },
     {
@@ -156,6 +194,10 @@
             "account_holder": "Alya Salsabila, S.Ked."
           }
         ]
+      },
+      "style": {
+        "entrance": "newspaper",
+        "entranceDelay": 120
       }
     },
     {
@@ -171,6 +213,10 @@
         "bank_name": "BRI",
         "account_number": "009 012 3456",
         "account_holder": "Rama Aditya"
+      },
+      "style": {
+        "entrance": "newspaper",
+        "entranceDelay": 240
       }
     },
     {
@@ -181,6 +227,10 @@
         "message": "Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu kepada kami.",
         "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Rama & Alya"
+      },
+      "style": {
+        "entrance": "newspaper",
+        "entranceDelay": 360
       }
     },
     {
@@ -190,6 +240,10 @@
         "title": "Lokasi Acara",
         "address": "Hotel Tugu, Malang",
         "embed_url": "https://maps.google.com/?q=Hotel%20Tugu%2C%20Malang"
+      },
+      "style": {
+        "entrance": "newspaper",
+        "entranceDelay": 0
       }
     }
   ],

@@ -1,16 +1,19 @@
 {
   "theme": {
-    "primary": "#F08080",
-    "secondary": "#F5B7B1",
-    "background": "#FFF7F5",
-    "text": "#5F4442",
-    "font_heading": "Great Vibes",
-    "font_body": "Nunito Sans",
+    "primary": "#C0392B",
+    "secondary": "#2E7D57",
+    "background": "#FBF1E6",
+    "text": "#3B2A22",
+    "font_heading": "Cormorant Garamond",
+    "font_body": "Jost",
     "layout": "center",
     "hero_style": "image",
-    "ornament": "orchid-spray",
+    "ornament": "wayang",
     "frame": "arch",
-    "card_style": false
+    "card_style": false,
+    "cover_style": "floral",
+    "cover_3d": true,
+    "model3d": "3d/bali-pura.glb"
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
@@ -34,6 +37,10 @@
         "bg_image": "https://images.unsplash.com/photo-1543508282-6319a3e2621f",
         "show_ornament": true,
         "variant": "center"
+      },
+      "style": {
+        "entrance": "rise",
+        "entranceDelay": 0
       }
     },
     {
@@ -50,6 +57,10 @@
         "photo_shape": "arch",
         "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
         "bride_photo": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&q=80"
+      },
+      "style": {
+        "entrance": "rise",
+        "entranceDelay": 120
       }
     },
     {
@@ -61,6 +72,10 @@
         "latin": "Wa min kulli syai-in khalaqnaa zaujaini la'allakum tadzakkaruun",
         "translation": "Dan segala sesuatu Kami ciptakan berpasang-pasangan supaya kamu mengingat (kebesaran Allah).",
         "reference": "QS. Adz Dzariyyat: 49"
+      },
+      "style": {
+        "entrance": "rise",
+        "entranceDelay": 240
       }
     },
     {
@@ -70,6 +85,10 @@
         "target_date": "2028-03-11T09:00:00+07:00",
         "title": "Hari Berbisik",
         "variant": "cards"
+      },
+      "style": {
+        "entrance": "rise",
+        "entranceDelay": 360
       }
     },
     {
@@ -93,6 +112,10 @@
           "Mereka mulai menjalin hubungan saat berbagi payung di tengah hujan.",
           "Adnan melamar Bella di tepi danau Situ Gintung saat matahari tenggelam."
         ]
+      },
+      "style": {
+        "entrance": "rise",
+        "entranceDelay": 0
       }
     },
     {
@@ -107,6 +130,10 @@
         "address": "Cinere, Depok",
         "maps_url": "https://maps.google.com/?q=Blush%20Garden%20Hall",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "rise",
+        "entranceDelay": 120
       }
     },
     {
@@ -121,6 +148,10 @@
         "address": "Sawangan, Depok",
         "maps_url": "https://maps.google.com/?q=Blush%20Garden%20Lawn",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "rise",
+        "entranceDelay": 240
       }
     },
     {
@@ -138,6 +169,10 @@
         "variant": "grid",
         "animation": "rise",
         "interval_sec": 4
+      },
+      "style": {
+        "entrance": "rise",
+        "entranceDelay": 360
       }
     },
     {
@@ -153,6 +188,10 @@
             "account_holder": "Bella Salsabila, S.E."
           }
         ]
+      },
+      "style": {
+        "entrance": "rise",
+        "entranceDelay": 0
       }
     },
     {
@@ -168,6 +207,10 @@
         "bank_name": "BCA",
         "account_number": "880022580788",
         "account_holder": "Adnan Hakim"
+      },
+      "style": {
+        "entrance": "rise",
+        "entranceDelay": 120
       }
     },
     {
@@ -178,6 +221,10 @@
         "message": "Kehadiran Anda adalah bisikan hangat dalam pernikahan kami.",
         "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Adnan & Bella"
+      },
+      "style": {
+        "entrance": "rise",
+        "entranceDelay": 240
       }
     },
     {
@@ -187,6 +234,10 @@
         "title": "Lokasi Acara",
         "address": "Blush Garden, Depok",
         "embed_url": "https://maps.google.com/?q=Blush%20Garden%2C%20Depok"
+      },
+      "style": {
+        "entrance": "rise",
+        "entranceDelay": 360
       }
     }
   ],

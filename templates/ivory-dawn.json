@@ -1,16 +1,18 @@
 {
   "theme": {
-    "primary": "#B98A5E",
-    "secondary": "#E6D3B8",
-    "background": "#FDFBF7",
-    "text": "#5A4C3C",
+    "primary": "#BFA06A",
+    "secondary": "#D9A7A4",
+    "background": "#FBF7F1",
+    "text": "#4A4036",
     "font_heading": "Cormorant Garamond",
-    "font_body": "Karla",
+    "font_body": "Jost",
     "layout": "center",
     "hero_style": "image",
-    "ornament": "orchid-spray",
+    "ornament": "gardenia-wreath",
     "frame": "arch",
-    "card_style": false
+    "card_style": false,
+    "cover_style": "floral",
+    "cover_3d": true
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3",
@@ -34,6 +36,10 @@
         "bg_image": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b",
         "show_ornament": true,
         "variant": "center"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 0
       }
     },
     {
@@ -50,6 +56,10 @@
         "photo_shape": "arch",
         "groom_photo": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&q=80",
         "bride_photo": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 120
       }
     },
     {
@@ -61,6 +71,10 @@
         "latin": "Wa min kulli syai-in khalaqnaa zaujaini la'allakum tadzakkaruun",
         "translation": "Dan segala sesuatu Kami ciptakan berpasang-pasangan supaya kamu mengingat (kebesaran Allah).",
         "reference": "QS. Adz Dzariyyat: 49"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 240
       }
     },
     {
@@ -70,6 +84,10 @@
         "target_date": "2027-08-21T08:00:00+07:00",
         "title": "Menanti Sang Fajar",
         "variant": "cards"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 360
       }
     },
     {
@@ -93,6 +111,10 @@
           "Mereka mulai menjalin hubungan saat menyusuri jembatan Mberok.",
           "Rafael melamar Alyssa di puncak Gunung Ungaran saat kabut pagi mulai menyingkap kota Semarang."
         ]
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 0
       }
     },
     {
@@ -107,6 +129,10 @@
         "address": "Jl. Pandanaran, Semarang",
         "maps_url": "https://maps.google.com/?q=The%20Ivory%20House%20Hall",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 120
       }
     },
     {
@@ -121,6 +147,10 @@
         "address": "Jl. Pahlawan, Semarang",
         "maps_url": "https://maps.google.com/?q=The%20Ivory%20Garden",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 240
       }
     },
     {
@@ -138,6 +168,10 @@
         ],
         "variant": "grid",
         "animation": "zoom"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 360
       }
     },
     {
@@ -153,6 +187,10 @@
             "account_holder": "Alyssa Prameswari, S.E."
           }
         ]
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 0
       }
     },
     {
@@ -168,6 +206,10 @@
         "bank_name": "Mandiri",
         "account_number": "880040930418",
         "account_holder": "Rafael Ardiansyah"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 120
       }
     },
     {
@@ -178,6 +220,10 @@
         "message": "Kehadiran Anda adalah sinar fajar yang menyempurnakan hari paling membahagiakan kami.",
         "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Rafael & Alyssa"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 240
       }
     },
     {
@@ -187,6 +233,10 @@
         "title": "Lokasi Acara",
         "address": "The Ivory House, Semarang",
         "embed_url": "https://maps.google.com/?q=The%20Ivory%20House%2C%20Semarang"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 360
       }
     }
   ],

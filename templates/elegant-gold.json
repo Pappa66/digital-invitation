@@ -1,16 +1,19 @@
 {
   "theme": {
-    "primary": "#D4AF37",
-    "secondary": "#8A6D2F",
-    "background": "#FAF6EF",
-    "text": "#4A443C",
-    "font_heading": "Playfair Display",
-    "font_body": "Montserrat",
+    "primary": "#3B5BA5",
+    "secondary": "#C9A227",
+    "background": "#F5F3EE",
+    "text": "#2A2E3A",
+    "font_heading": "Cormorant Garamond",
+    "font_body": "Jost",
     "layout": "center",
     "hero_style": "image",
-    "ornament": "gardenia-wreath",
+    "ornament": "church-window",
     "frame": "classic",
-    "card_style": false
+    "card_style": false,
+    "cover_style": "book",
+    "cover_3d": true,
+    "model3d": "3d/kristen-church.glb"
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3",
@@ -31,6 +34,10 @@
         "bg_image": "https://images.unsplash.com/photo-1519741497674-611481863552?w=1920&q=80",
         "show_ornament": true,
         "variant": "center"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 0
       }
     },
     {
@@ -47,6 +54,10 @@
         "photo_shape": "circle",
         "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
         "bride_photo": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&q=80"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 120
       }
     },
     {
@@ -58,6 +69,10 @@
         "latin": "Wa min kulli syai-in khalaqnaa zaujaini la'allakum tadzakkaruun",
         "translation": "Dan segala sesuatu Kami ciptakan berpasang-pasangan supaya kamu mengingat (kebesaran Allah).",
         "reference": "QS. Adz Dzariyyat: 49"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 240
       }
     },
     {
@@ -67,6 +82,10 @@
         "target_date": "2026-12-12T08:00:00+07:00",
         "title": "Menghitung Hari Kebahagiaan Kami",
         "variant": "line"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 360
       }
     },
     {
@@ -90,6 +109,10 @@
           "Mereka mulai menjalin hubungan setelah saling mengenal dua tahun.",
           "Panca melamar Sena di tepi pantai Parangtritis saat langit berubah keemasan."
         ]
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 0
       }
     },
     {
@@ -104,6 +127,10 @@
         "address": "Jl. DR. IDE Anak Agung Gde Agung Kav. C1, Kuningan",
         "maps_url": "https://maps.google.com/?q=The%20Ritz-Carlton%20Grand%20Ballroom",
         "variant": "band"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 120
       }
     },
     {
@@ -118,6 +145,10 @@
         "address": "Kawasan Mega Kuningan, Jakarta Selatan",
         "maps_url": "https://maps.google.com/?q=The%20Ritz-Carlton%20Grand%20Ballroom",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 240
       }
     },
     {
@@ -132,6 +163,10 @@
           "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1200&q=80"
         ],
         "variant": "polaroid"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 360
       }
     },
     {
@@ -147,6 +182,10 @@
             "account_holder": "Sena Ayudia, S.E."
           }
         ]
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 0
       }
     },
     {
@@ -162,6 +201,10 @@
         "bank_name": "BCA",
         "account_number": "885 012 3456",
         "account_holder": "Panca Priyantoro"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 120
       }
     },
     {
@@ -172,6 +215,10 @@
         "message": "Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu kepada kami.",
         "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Panca & Sena"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 240
       }
     },
     {
@@ -181,6 +228,10 @@
         "title": "Lokasi Acara",
         "address": "The Ritz-Carlton, Jakarta",
         "embed_url": "https://maps.google.com/?q=The%20Ritz-Carlton%2C%20Jakarta"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 360
       }
     }
   ],

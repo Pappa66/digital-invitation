@@ -1,16 +1,19 @@
 {
   "theme": {
-    "primary": "#1F3A5F",
+    "primary": "#3B5BA5",
     "secondary": "#C9A227",
-    "background": "#F2F0E9",
-    "text": "#2C323D",
-    "font_heading": "Cinzel",
-    "font_body": "Lato",
+    "background": "#F5F3EE",
+    "text": "#2A2E3A",
+    "font_heading": "Cormorant Garamond",
+    "font_body": "Jost",
     "layout": "center",
     "hero_style": "solid",
-    "ornament": "gardenia-wreath",
+    "ornament": "church-window",
     "frame": "classic",
-    "card_style": false
+    "card_style": false,
+    "cover_style": "book",
+    "cover_3d": true,
+    "model3d": "3d/kristen-church.glb"
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-11.mp3",
@@ -31,6 +34,10 @@
         "bg_image": "",
         "show_ornament": true,
         "variant": "center"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 0
       }
     },
     {
@@ -47,6 +54,10 @@
         "photo_shape": "circle",
         "groom_photo": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&q=80",
         "bride_photo": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600&q=80"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 120
       }
     },
     {
@@ -58,6 +69,10 @@
         "latin": "Wa min kulli syai-in khalaqnaa zaujaini la'allakum tadzakkaruun",
         "translation": "Dan segala sesuatu Kami ciptakan berpasang-pasangan supaya kamu mengingat (kebesaran Allah).",
         "reference": "QS. Adz Dzariyyat: 49"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 240
       }
     },
     {
@@ -67,6 +82,10 @@
         "target_date": "2026-07-25T08:00:00+07:00",
         "title": "Menuju Akad",
         "variant": "circles"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 360
       }
     },
     {
@@ -81,6 +100,10 @@
         "address": "Jl. MH Thamrin No.1, Jakarta Pusat",
         "maps_url": "https://maps.google.com/?q=Grand%20Ballroom%20Kempinski",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 0
       }
     },
     {
@@ -95,6 +118,10 @@
         "address": "Kawasan Bundaran HI, Jl. MH Thamrin No. 1, Jakarta Pusat",
         "maps_url": "https://maps.google.com/?q=Hotel%20Indonesia%20Kempinski%2C%20Jakarta",
         "variant": "band"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 120
       }
     },
     {
@@ -109,6 +136,10 @@
           "https://images.unsplash.com/photo-1532712938310-34cb3982ef74"
         ],
         "variant": "grid"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 240
       }
     },
     {
@@ -124,6 +155,10 @@
             "account_holder": "Kirana Maharani, S.E., M.M."
           }
         ]
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 360
       }
     },
     {
@@ -139,6 +174,10 @@
         "bank_name": "Mandiri",
         "account_number": "132 000 778 899",
         "account_holder": "Arka Sadewa"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 0
       }
     },
     {
@@ -149,6 +188,10 @@
         "message": "Segala kehormatan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir memberikan doa restu.",
         "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Arka & Kirana"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 120
       }
     },
     {
@@ -158,6 +201,10 @@
         "title": "Lokasi Acara",
         "address": "Hotel Indonesia Kempinski, Jakarta",
         "embed_url": "https://maps.google.com/?q=Hotel%20Indonesia%20Kempinski%2C%20Jakarta"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 240
       }
     }
   ],

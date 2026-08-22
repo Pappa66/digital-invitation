@@ -1,16 +1,19 @@
 {
   "theme": {
-    "primary": "#2B2B2B",
-    "secondary": "#6B6B6B",
-    "background": "#111111",
-    "text": "#EDEDED",
-    "font_heading": "Dancing Script",
-    "font_body": "Open Sans",
+    "primary": "#5A3E2B",
+    "secondary": "#B23A3A",
+    "background": "#F2E9DC",
+    "text": "#33241A",
+    "font_heading": "Cormorant Garamond",
+    "font_body": "Jost",
     "layout": "center",
     "hero_style": "image",
     "frame": "none",
     "card_style": true,
-    "ornament": "arch-geometric"
+    "ornament": "batak-ulos",
+    "cover_style": "floral",
+    "cover_3d": true,
+    "model3d": "3d/batak-rumah.glb"
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
@@ -31,6 +34,10 @@
         "bg_image": "https://images.unsplash.com/photo-1519741497674-611481863552",
         "show_ornament": true,
         "variant": "center"
+      },
+      "style": {
+        "entrance": "ulos",
+        "entranceDelay": 0
       }
     },
     {
@@ -48,6 +55,10 @@
         "photo_shape": "arch",
         "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
         "bride_photo": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80"
+      },
+      "style": {
+        "entrance": "ulos",
+        "entranceDelay": 120
       }
     },
     {
@@ -59,6 +70,10 @@
         "latin": "Wa min kulli syai-in khalaqnaa zaujaini la'allakum tadzakkaruun",
         "translation": "Dan segala sesuatu Kami ciptakan berpasang-pasangan agar kamu mengingat (kebesaran Allah).",
         "reference": "QS. Adz Dzariyyat: 49"
+      },
+      "style": {
+        "entrance": "ulos",
+        "entranceDelay": 240
       }
     },
     {
@@ -68,6 +83,10 @@
         "target_date": "2026-03-28T16:30:00+07:00",
         "title": "Menuju Hari Bahagia",
         "variant": "cards"
+      },
+      "style": {
+        "entrance": "ulos",
+        "entranceDelay": 360
       }
     },
     {
@@ -91,6 +110,10 @@
           "Ketertarikan yang sama pada seni membuat mereka semakin dekat.",
           "Tio melamar Vinna dengan memutar video sinematik berisi memori mereka."
         ]
+      },
+      "style": {
+        "entrance": "ulos",
+        "entranceDelay": 0
       }
     },
     {
@@ -105,6 +128,10 @@
         "address": "Jl. Dr. Setiabudi No. 378, Bandung",
         "maps_url": "https://maps.google.com/?q=Maximo%20Resto%20%26%20Garden%20Jl.%20Dr.%20Setiabudi%20No.%20378",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "ulos",
+        "entranceDelay": 120
       }
     },
     {
@@ -119,6 +146,10 @@
         "address": "Jl. Dr. Setiabudi No. 378, Bandung",
         "maps_url": "https://maps.google.com/?q=Maximo%20Resto%20%26%20Garden%20Jl.%20Dr.%20Setiabudi%20No.%20378",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "ulos",
+        "entranceDelay": 240
       }
     },
     {
@@ -134,6 +165,10 @@
           "https://images.unsplash.com/photo-1519741497674-611481863552"
         ],
         "variant": "arch"
+      },
+      "style": {
+        "entrance": "ulos",
+        "entranceDelay": 360
       }
     },
     {
@@ -154,6 +189,10 @@
             "account_holder": "Tio Bachir"
           }
         ]
+      },
+      "style": {
+        "entrance": "ulos",
+        "entranceDelay": 0
       }
     },
     {
@@ -166,6 +205,10 @@
         "button_text": "Kirim Konfirmasi",
         "success_message": "Terima kasih, konfirmasi Anda sudah kami terima.",
         "envelope_note": "Apabila ingin mengirimkan tanda kasih, doa restu dapat disalurkan melalui rekening pada bagian Amplop Online."
+      },
+      "style": {
+        "entrance": "ulos",
+        "entranceDelay": 120
       }
     },
     {
@@ -176,6 +219,10 @@
         "message": "Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.",
         "closing": "Wassalamu’alaikum Warahmatullahi Wabarakatuh",
         "names": "Vinna & Tio"
+      },
+      "style": {
+        "entrance": "ulos",
+        "entranceDelay": 240
       }
     },
     {
@@ -185,6 +232,10 @@
         "title": "Lokasi Acara",
         "address": "Maximo Resto & Garden, Jl. Dr. Setiabudi No. 378, Bandung",
         "embed_url": "https://maps.google.com/?q=Maximo%20Resto%20%26%20Garden%2C%20Jl.%20Dr.%20Setiabudi%20No.%20378"
+      },
+      "style": {
+        "entrance": "ulos",
+        "entranceDelay": 360
       }
     }
   ],

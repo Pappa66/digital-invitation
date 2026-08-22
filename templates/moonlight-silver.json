@@ -1,16 +1,19 @@
 {
   "theme": {
-    "primary": "#2B3A42",
-    "secondary": "#9DB4C0",
-    "background": "#172431",
-    "text": "#DEE6EA",
-    "font_heading": "Cinzel",
-    "font_body": "Inter",
-    "layout": "left",
+    "primary": "#2E7D57",
+    "secondary": "#BFA06A",
+    "background": "#F4F1E8",
+    "text": "#2C3A30",
+    "font_heading": "Cormorant Garamond",
+    "font_body": "Jost",
+    "layout": "center",
     "hero_style": "solid",
-    "ornament": "mandala",
+    "ornament": "islamic-geometric",
     "frame": "none",
-    "card_style": true
+    "card_style": true,
+    "cover_style": "book",
+    "cover_3d": true,
+    "model3d": "3d/islam-masjid.glb"
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3",
@@ -34,6 +37,10 @@
         "bg_image": "",
         "show_ornament": false,
         "variant": "right"
+      },
+      "style": {
+        "entrance": "islamic",
+        "entranceDelay": 0
       }
     },
     {
@@ -50,6 +57,10 @@
         "photo_shape": "circle",
         "groom_photo": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&q=80",
         "bride_photo": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600&q=80"
+      },
+      "style": {
+        "entrance": "islamic",
+        "entranceDelay": 120
       }
     },
     {
@@ -61,6 +72,10 @@
         "latin": "Wa min kulli syai-in khalaqnaa zaujaini la'allakum tadzakkaruun",
         "translation": "Dan segala sesuatu Kami ciptakan berpasang-pasangan supaya kamu mengingat (kebesaran Allah).",
         "reference": "QS. Adz Dzariyyat: 49"
+      },
+      "style": {
+        "entrance": "islamic",
+        "entranceDelay": 240
       }
     },
     {
@@ -70,6 +85,10 @@
         "target_date": "2028-03-04T19:00:00+07:00",
         "title": "Menuju Hari Bahagia",
         "variant": "cards"
+      },
+      "style": {
+        "entrance": "islamic",
+        "entranceDelay": 360
       }
     },
     {
@@ -84,6 +103,10 @@
         "address": "Jl. Asia Afrika, Senayan, Jakarta Pusat",
         "maps_url": "https://maps.google.com/?q=Fairmont%20Ballroom",
         "variant": "band"
+      },
+      "style": {
+        "entrance": "islamic",
+        "entranceDelay": 0
       }
     },
     {
@@ -98,6 +121,10 @@
         "address": "Jl. Asia Afrika, Senayan, Jakarta Pusat",
         "maps_url": "https://maps.google.com/?q=Fairmont%2C%20Jakarta",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "islamic",
+        "entranceDelay": 120
       }
     },
     {
@@ -113,6 +140,10 @@
         ],
         "variant": "mosaic",
         "animation": "blur"
+      },
+      "style": {
+        "entrance": "islamic",
+        "entranceDelay": 240
       }
     },
     {
@@ -128,6 +159,10 @@
             "account_holder": "Giselle Tanuwijaya, S.E."
           }
         ]
+      },
+      "style": {
+        "entrance": "islamic",
+        "entranceDelay": 360
       }
     },
     {
@@ -143,6 +178,10 @@
         "bank_name": "BSI",
         "account_number": "880018040107",
         "account_holder": "Evan Sanjaya"
+      },
+      "style": {
+        "entrance": "islamic",
+        "entranceDelay": 0
       }
     },
     {
@@ -153,6 +192,10 @@
         "message": "Terima kasih telah menerangi perayaan kami dengan kehadiran Bapak/Ibu/Saudara/i.",
         "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Evan & Giselle"
+      },
+      "style": {
+        "entrance": "islamic",
+        "entranceDelay": 120
       }
     },
     {
@@ -162,6 +205,10 @@
         "title": "Lokasi Acara",
         "address": "Fairmont, Jakarta",
         "embed_url": "https://maps.google.com/?q=Fairmont%2C%20Jakarta"
+      },
+      "style": {
+        "entrance": "islamic",
+        "entranceDelay": 240
       }
     }
   ],

@@ -1,16 +1,18 @@
 {
   "theme": {
-    "primary": "#123C4E",
-    "secondary": "#2E7D8C",
-    "background": "#0E2230",
-    "text": "#E7EEF2",
-    "font_heading": "Playfair Display",
-    "font_body": "Inter",
-    "layout": "left",
+    "primary": "#7C5C3B",
+    "secondary": "#C9A36A",
+    "background": "#FAF3E6",
+    "text": "#3B2F23",
+    "font_heading": "Cormorant Garamond",
+    "font_body": "Jost",
+    "layout": "center",
     "hero_style": "solid",
-    "ornament": "baby-breath",
+    "ornament": "flourish",
     "frame": "double",
-    "card_style": true
+    "card_style": true,
+    "cover_style": "book",
+    "cover_3d": true
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
@@ -34,6 +36,10 @@
         "bg_image": "",
         "show_ornament": false,
         "variant": "left"
+      },
+      "style": {
+        "entrance": "book",
+        "entranceDelay": 0
       }
     },
     {
@@ -50,6 +56,10 @@
         "photo_shape": "circle",
         "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
         "bride_photo": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80"
+      },
+      "style": {
+        "entrance": "book",
+        "entranceDelay": 120
       }
     },
     {
@@ -61,6 +71,10 @@
         "latin": "",
         "translation": "Semoga semua makhluk berbahagia dan tenteram, hidup saling menyayangi sebagaimana seorang ibu menyayangi anak tunggalnya.",
         "reference": "Metta Sutta"
+      },
+      "style": {
+        "entrance": "book",
+        "entranceDelay": 240
       }
     },
     {
@@ -70,6 +84,10 @@
         "target_date": "2027-04-25T18:00:00+07:00",
         "title": "Menuju Hari Bahagia",
         "variant": "circles"
+      },
+      "style": {
+        "entrance": "book",
+        "entranceDelay": 360
       }
     },
     {
@@ -84,6 +102,10 @@
         "address": "Jl. DR. Ide Anak Agung Gde Agung, Mega Kuningan, Jakarta",
         "maps_url": "https://maps.google.com/?q=Ritz-Carlton%20Grand%20Ballroom",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "book",
+        "entranceDelay": 0
       }
     },
     {
@@ -98,6 +120,10 @@
         "address": "Jl. DR. Ide Anak Agung Gde Agung, Mega Kuningan, Jakarta",
         "maps_url": "https://maps.google.com/?q=The%20Ritz-Carlton%2C%20Jakarta",
         "variant": "band"
+      },
+      "style": {
+        "entrance": "book",
+        "entranceDelay": 120
       }
     },
     {
@@ -114,6 +140,10 @@
         "variant": "grid",
         "animation": "slide-up",
         "interval_sec": 3
+      },
+      "style": {
+        "entrance": "book",
+        "entranceDelay": 240
       }
     },
     {
@@ -129,6 +159,10 @@
             "account_holder": "Stella Wijaya, S.E."
           }
         ]
+      },
+      "style": {
+        "entrance": "book",
+        "entranceDelay": 360
       }
     },
     {
@@ -144,6 +178,10 @@
         "bank_name": "BCA",
         "account_number": "880013987911",
         "account_holder": "Bryan Hadinata"
+      },
+      "style": {
+        "entrance": "book",
+        "entranceDelay": 0
       }
     },
     {
@@ -154,6 +192,10 @@
         "message": "Terima kasih telah melayarkan doa restu kepada kami. Kehadiran Bapak/Ibu/Saudara/i melengkapi perjalanan cinta kami.",
         "closing": "Semoga semua makhluk berbahagia.",
         "names": "Bryan & Stella"
+      },
+      "style": {
+        "entrance": "book",
+        "entranceDelay": 120
       }
     },
     {
@@ -163,6 +205,10 @@
         "title": "Lokasi Acara",
         "address": "The Ritz-Carlton, Jakarta",
         "embed_url": "https://maps.google.com/?q=The%20Ritz-Carlton%2C%20Jakarta"
+      },
+      "style": {
+        "entrance": "book",
+        "entranceDelay": 240
       }
     }
   ],

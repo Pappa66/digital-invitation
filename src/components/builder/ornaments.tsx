@@ -55,7 +55,25 @@ export type OrnamentKey =
   | 'lily-head'
   | 'tulip-head'
   | 'daisy-head'
-  | 'hydrangea-head';
+  | 'hydrangea-head'
+  | 'newspaper-rule'
+  | 'batik-parang'
+  | 'wayang'
+  | 'om-symbol'
+  | 'cross'
+  | 'lantern'
+  | 'naga'
+  | 'stupa'
+  | 'islamic-geometric'
+  | 'masjid-dome'
+  | 'church-window'
+  | 'hindu-mandala'
+  | 'buddha-wheel'
+  | 'jawa-gunungan'
+  | 'batak-ulos'
+  | 'sunda-kebat'
+  | 'minang-gadang'
+  | 'papua-asmat';
 
 export const ORNAMENT_CATEGORIES: Record<string, { label: string; keys: OrnamentKey[] }> = {
   classic: { label: 'Klasik & Mewah', keys: ['flourish', 'corner-flourish', 'laurel', 'flourish-double', 'paisley', 'scroll-divider', 'vine-border', 'gardenia-wreath', 'baby-breath'] },
@@ -63,7 +81,8 @@ export const ORNAMENT_CATEGORIES: Record<string, { label: string; keys: Ornament
   romance: { label: 'Romantis', keys: ['rose-branch', 'heart-swirl', 'celestial', 'paisley', 'infinity-love', 'corner-rose', 'corner-peony', 'orchid-spray', 'lily-divider', 'peony-bouquet'] },
   modern: { label: 'Modern & Minimal', keys: ['arch-geometric', 'diamond-lines', 'celestial', 'flourish', 'art-deco', 'geometric-hex', 'mandala'] },
   floral: { label: 'Sudut & Bunga', keys: ['corner-jasmine', 'corner-rose', 'corner-peony', 'jasmine-garland', 'orchid-spray', 'peony-bouquet', 'gardenia-wreath'] },
-  flowers: { label: 'Kepala Bunga', keys: ['rose-head', 'jasmine-head', 'orchid-head', 'peony-head', 'lily-head', 'tulip-head', 'daisy-head', 'hydrangea-head'] }
+  flowers: { label: 'Kepala Bunga', keys: ['rose-head', 'jasmine-head', 'orchid-head', 'peony-head', 'lily-head', 'tulip-head', 'daisy-head', 'hydrangea-head'] },
+  cultural: { label: 'Budaya & Agama', keys: ['newspaper-rule', 'batik-parang', 'wayang', 'om-symbol', 'cross', 'lantern', 'naga', 'stupa', 'islamic-geometric', 'masjid-dome', 'church-window', 'hindu-mandala', 'buddha-wheel', 'jawa-gunungan', 'batak-ulos', 'sunda-kebat', 'minang-gadang', 'papua-asmat'] }
 };
 
 export const ORNAMENTS: { key: OrnamentKey; label: string; category: string }[] = [
@@ -110,7 +129,25 @@ export const ORNAMENTS: { key: OrnamentKey; label: string; category: string }[] 
   { key: 'lily-head', label: 'Kepala Lily', category: 'flowers' },
   { key: 'tulip-head', label: 'Kepala Tulip', category: 'flowers' },
   { key: 'daisy-head', label: 'Kepala Daisy', category: 'flowers' },
-  { key: 'hydrangea-head', label: 'Kepala Hydrangea', category: 'flowers' }
+  { key: 'hydrangea-head', label: 'Kepala Hydrangea', category: 'flowers' },
+  { key: 'newspaper-rule', label: 'Garis Koran', category: 'cultural' },
+  { key: 'batik-parang', label: 'Batik Parang', category: 'cultural' },
+  { key: 'wayang', label: 'Wayang Kulit', category: 'cultural' },
+  { key: 'om-symbol', label: 'Om (Hindu)', category: 'cultural' },
+  { key: 'cross', label: 'Salib (Kristen)', category: 'cultural' },
+  { key: 'lantern', label: 'Lentera (Konghucu)', category: 'cultural' },
+  { key: 'naga', label: 'Naga (Cina)', category: 'cultural' },
+  { key: 'stupa', label: 'Stupa (Buddha)', category: 'cultural' },
+  { key: 'islamic-geometric', label: 'Geometrik Islam', category: 'cultural' },
+  { key: 'masjid-dome', label: 'Kubah Masjid', category: 'cultural' },
+  { key: 'church-window', label: 'Jendela Gereja', category: 'cultural' },
+  { key: 'hindu-mandala', label: 'Mandala Hindu', category: 'cultural' },
+  { key: 'buddha-wheel', label: 'Roda Dharma', category: 'cultural' },
+  { key: 'jawa-gunungan', label: 'Gunungan Wayang', category: 'cultural' },
+  { key: 'batak-ulos', label: 'Kain Ulos', category: 'cultural' },
+  { key: 'sunda-kebat', label: 'Kebat Sunda', category: 'cultural' },
+  { key: 'minang-gadang', label: 'Rumah Gadang', category: 'cultural' },
+  { key: 'papua-asmat', label: 'Motif Asmat', category: 'cultural' }
 ];
 
 export const ORNAMENT_LABELS: Record<OrnamentKey, string> = Object.fromEntries(
@@ -130,19 +167,21 @@ interface OrnamentSvgProps {
   className?: string;
   style?: CSSProperties;
   title?: string;
+  /** Warna aksen kedua (dua-nada) agar ornamen terlihat berwarna namun elegan. */
+  accent?: string;
 }
 
 /** Ornamen dipakai sebagai pembagi / pengisi antar section. */
 type Comp = (p: OrnamentSvgProps) => React.ReactNode;
 
-function Svg({ viewBox, width = 24, height, className, style, title, children }: OrnamentSvgProps & { viewBox: string; children: React.ReactNode }) {
+function Svg({ viewBox, width = 24, height, className, style, title, accent, children }: OrnamentSvgProps & { viewBox: string; children: React.ReactNode }) {
   return (
     <svg
       width={width}
       height={height ?? width}
       viewBox={viewBox}
       className={className}
-      style={style}
+      style={{ ...style, ['--oa-accent' as string]: accent ?? 'currentColor' } as CSSProperties}
       fill="none"
       stroke="currentColor"
       strokeWidth={1.4}
@@ -972,10 +1011,148 @@ const ORNAMENT_COMPONENTS: Record<OrnamentKey, Comp> = {
       <circle cx="28" cy="46" r="2.5" opacity={0.45} />
       <circle cx="38" cy="44" r="2" opacity={0.4} />
     </Svg>
+  ),
+  /* ===== Vintage & Budaya Indonesia ===== */
+  'newspaper-rule': ({ width, height, className, style, title, accent }) => (
+    <Svg viewBox="0 0 140 24" width={width ?? 240} height={height} className={className} style={style} title={title} accent={accent}>
+      <path d="M4 8h132M4 16h132" />
+      <path d="M62 4l8 8-8 8-8-8z" opacity={0.7} />
+      <circle cx="70" cy="12" r="2.5" fill="var(--oa-accent)" stroke="none" />
+      <path d="M70 2v4M70 18v4" />
+    </Svg>
+  ),
+  'batik-parang': ({ width, height, className, style, title, accent }) => (
+    <Svg viewBox="0 0 120 48" width={width ?? 200} height={height} className={className} style={style} title={title} accent={accent}>
+      <path d="M10 40C26 24 18 12 34 8c-8 8 0 18-6 26M40 40C56 24 48 12 64 8c-8 8 0 18-6 26M70 40C86 24 78 12 94 8c-8 8 0 18-6 26M100 40C116 24 108 12 124 8c-8 8 0 18-6 26" opacity={0.7} />
+      <path d="M18 44c6-10 2-18 12-22M48 44c6-10 2-18 12-22M78 44c6-10 2-18 12-22M108 44c6-10 2-18 12-22" opacity={0.4} />
+      <circle cx="34" cy="20" r="2" fill="var(--oa-accent)" stroke="none" opacity={0.8} />
+      <circle cx="94" cy="20" r="2" fill="var(--oa-accent)" stroke="none" opacity={0.8} />
+    </Svg>
+  ),
+  'wayang': ({ width, height, className, style, title, accent }) => (
+    <Svg viewBox="0 0 60 80" width={width ?? 70} height={height} className={className} style={style} title={title} accent={accent}>
+      <path d="M30 6c10 0 16 8 16 18 0 8-4 12-4 18 0 6 6 8 6 16H16c0-8 6-10 6-16 0-6-4-10-4-18 0-10 6-18 16-18z" opacity={0.65} />
+      <path d="M30 22v34M22 40h16" opacity={0.4} />
+      <path d="M14 70h32" />
+      <circle cx="30" cy="40" r="3.5" fill="var(--oa-accent)" stroke="none" opacity={0.85} />
+    </Svg>
+  ),
+  'om-symbol': ({ width, height, className, style, title, accent }) => (
+    <Svg viewBox="0 0 60 60" width={width ?? 70} height={height} className={className} style={style} title={title} accent={accent}>
+      <path d="M30 44c-8 0-14-5-14-13 0-8 7-13 15-13 6 0 11 3 13 9" />
+      <path d="M30 18c-7 0-12 5-12 11" opacity={0.7} />
+      <path d="M44 26c2 6-1 12-7 14" opacity={0.7} />
+      <path d="M22 48c4 4 10 5 16 3" />
+      <circle cx="30" cy="44" r="2.4" fill="var(--oa-accent)" stroke="none" />
+    </Svg>
+  ),
+  'cross': ({ width, height, className, style, title, accent }) => (
+    <Svg viewBox="0 0 40 60" width={width ?? 50} height={height} className={className} style={style} title={title} accent={accent}>
+      <path d="M20 6v48M8 22h24" />
+      <path d="M14 6h12v10H14z" opacity={0.5} />
+      <circle cx="20" cy="14" r="2.4" fill="var(--oa-accent)" stroke="none" />
+    </Svg>
+  ),
+  'lantern': ({ width, height, className, style, title, accent }) => (
+    <Svg viewBox="0 0 50 70" width={width ?? 56} height={height} className={className} style={style} title={title} accent={accent}>
+      <path d="M25 4v6M18 10h14v6M14 16c0 14 0 22 0 30M36 16c0 14 0 22 0 30M14 46h22v6M18 52h14v8" />
+      <path d="M25 60v6" />
+      <path d="M16 22h18M16 30h18M16 38h18" opacity={0.4} />
+      <circle cx="25" cy="33" r="3" fill="var(--oa-accent)" stroke="none" opacity={0.9} />
+    </Svg>
+  ),
+  'naga': ({ width, height, className, style, title, accent }) => (
+    <Svg viewBox="0 0 120 40" width={width ?? 200} height={height} className={className} style={style} title={title} accent={accent}>
+      <path d="M6 28c10-16 22 8 32-4s20 14 30 2 18 12 26 2" />
+      <path d="M6 28c4-4 8-2 10 2M112 26l8-6-2 10" opacity={0.7} />
+      <circle cx="10" cy="26" r="2.2" fill="var(--oa-accent)" stroke="none" />
+    </Svg>
+  ),
+  'stupa': ({ width, height, className, style, title, accent }) => (
+    <Svg viewBox="0 0 60 70" width={width ?? 64} height={height} className={className} style={style} title={title} accent={accent}>
+      <path d="M30 4c4 4 4 8 0 12M22 18h16l-4 8h-8zM18 30h24l-4 8h-16zM14 42h32l-5 10H19zM10 56h40" />
+      <path d="M22 64h16" />
+      <circle cx="30" cy="8" r="2.4" fill="var(--oa-accent)" stroke="none" opacity={0.9} />
+    </Svg>
+  ),
+  'islamic-geometric': ({ width, height, className, style, title, accent }) => (
+    <Svg viewBox="0 0 80 80" width={width ?? 90} height={height} className={className} style={style} title={title} accent={accent}>
+      <path d="M40 6l34 20v28L40 74 6 54V26z" opacity={0.7} />
+      <path d="M40 18l22 13v18L40 62 18 49V31z" opacity={0.45} />
+      <path d="M40 30l10 6v8l-10 6-10-6v-8z" fill="var(--oa-accent)" stroke="var(--oa-accent)" opacity={0.85} />
+    </Svg>
+  ),
+  'masjid-dome': ({ width, height, className, style, title, accent }) => (
+    <Svg viewBox="0 0 80 70" width={width ?? 90} height={height} className={className} style={style} title={title} accent={accent}>
+      <path d="M40 8c14 0 22 10 22 22 0 6-2 10-2 14H20c0-4-2-8-2-14 0-12 8-22 22-22z" opacity={0.7} />
+      <path d="M40 4v6M30 30h20" />
+      <path d="M16 44h48v8H16zM24 52v10M40 52v10M56 52v10" />
+      <circle cx="40" cy="6" r="2.4" fill="var(--oa-accent)" stroke="none" />
+    </Svg>
+  ),
+  'church-window': ({ width, height, className, style, title, accent }) => (
+    <Svg viewBox="0 0 60 80" width={width ?? 60} height={height} className={className} style={style} title={title} accent={accent}>
+      <path d="M30 6c12 0 18 10 18 22v46H12V28C12 16 18 6 30 6z" opacity={0.7} />
+      <path d="M30 16v46M18 40h24M22 30l8 8 8-8" opacity={0.5} />
+      <circle cx="30" cy="14" r="2.6" fill="var(--oa-accent)" stroke="none" />
+    </Svg>
+  ),
+  'hindu-mandala': ({ width, height, className, style, title, accent }) => (
+    <Svg viewBox="0 0 80 80" width={width ?? 90} height={height} className={className} style={style} title={title} accent={accent}>
+      <circle cx="40" cy="40" r="30" opacity={0.6} />
+      <circle cx="40" cy="40" r="20" opacity={0.45} />
+      <path d="M40 10v60M10 40h60M18 18l44 44M62 18L18 62" opacity={0.35} />
+      <circle cx="40" cy="40" r="8" fill="var(--oa-accent)" stroke="var(--oa-accent)" opacity={0.85} />
+    </Svg>
+  ),
+  'buddha-wheel': ({ width, height, className, style, title, accent }) => (
+    <Svg viewBox="0 0 80 60" width={width ?? 90} height={height} className={className} style={style} title={title} accent={accent}>
+      <circle cx="40" cy="30" r="22" opacity={0.7} />
+      <path d="M40 8v44M22 30h36M27 14l26 32M53 14L27 46" opacity={0.5} />
+      <path d="M16 52h48" />
+      <circle cx="40" cy="30" r="3" fill="var(--oa-accent)" stroke="none" />
+    </Svg>
+  ),
+  'jawa-gunungan': ({ width, height, className, style, title, accent }) => (
+    <Svg viewBox="0 0 70 80" width={width ?? 70} height={height} className={className} style={style} title={title} accent={accent}>
+      <path d="M35 6c14 6 22 22 22 40 0 14-10 22-22 28-12-6-22-14-22-28 0-18 8-34 22-40z" opacity={0.7} />
+      <path d="M35 24v44M24 44h22" opacity={0.4} />
+      <circle cx="35" cy="40" r="3" fill="var(--oa-accent)" stroke="none" opacity={0.9} />
+    </Svg>
+  ),
+  'batak-ulos': ({ width, height, className, style, title, accent }) => (
+    <Svg viewBox="0 0 80 50" width={width ?? 100} height={height} className={className} style={style} title={title} accent={accent}>
+      <path d="M10 8h60v34H10z" opacity={0.6} />
+      <path d="M10 16h60M10 34h60M22 8v34M58 8v34" opacity={0.4} />
+      <path d="M30 16l10 9 10-9M30 34l10-9 10 9" opacity={0.5} />
+      <path d="M40 8v34" stroke="var(--oa-accent)" opacity={0.7} />
+    </Svg>
+  ),
+  'sunda-kebat': ({ width, height, className, style, title, accent }) => (
+    <Svg viewBox="0 0 90 40" width={width ?? 110} height={height} className={className} style={style} title={title} accent={accent}>
+      <path d="M8 20c10-12 24-12 37 0s32 12 37 0" opacity={0.7} />
+      <path d="M8 28c10-12 24-12 37 0s32 12 37 0" opacity={0.4} />
+      <circle cx="45" cy="20" r="3.4" fill="var(--oa-accent)" stroke="none" />
+    </Svg>
+  ),
+  'minang-gadang': ({ width, height, className, style, title, accent }) => (
+    <Svg viewBox="0 0 80 70" width={width ?? 90} height={height} className={className} style={style} title={title} accent={accent}>
+      <path d="M40 6l8 14h-4l6 12h-5l5 12h-5l5 12H20l5-12h-5l5-12h-5l6-12h-4z" opacity={0.65} />
+      <path d="M40 6l8 14h-4l6 12h-5l5 12h-5l5 12H20l5-12h-5l5-12h-5l6-12h-4z" opacity={0.3} transform="translate(0 2)" />
+      <path d="M16 66h48" />
+      <circle cx="40" cy="6" r="2.4" fill="var(--oa-accent)" stroke="none" />
+    </Svg>
+  ),
+  'papua-asmat': ({ width, height, className, style, title, accent }) => (
+    <Svg viewBox="0 0 80 60" width={width ?? 100} height={height} className={className} style={style} title={title} accent={accent}>
+      <path d="M40 8c10 6 14 18 14 28 0 10-6 16-14 16s-14-6-14-16c0-10 4-22 14-28z" opacity={0.7} />
+      <path d="M28 28h24M40 16v32M32 22l16 16M48 22L32 38" opacity={0.45} />
+      <circle cx="40" cy="22" r="2.6" fill="var(--oa-accent)" stroke="none" opacity={0.9} />
+    </Svg>
   )
 };
 
-export function OrnamentArt({ ornament, width, height, className, style, title }: OrnamentSvgProps & { ornament: OrnamentKey }) {
+export function OrnamentArt({ ornament, width, height, className, style, title, accent }: OrnamentSvgProps & { ornament: OrnamentKey }) {
   const Comp = ORNAMENT_COMPONENTS[ornament] ?? ORNAMENT_COMPONENTS.flourish;
-  return Comp({ width, height, className, style, title });
+  return Comp({ width, height, className, style, title, accent });
 }

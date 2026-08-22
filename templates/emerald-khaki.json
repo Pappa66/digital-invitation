@@ -1,16 +1,19 @@
 {
   "theme": {
-    "primary": "#046A38",
-    "secondary": "#B5A27C",
-    "background": "#F6F3EA",
-    "text": "#33382F",
+    "primary": "#C0392B",
+    "secondary": "#D98C1F",
+    "background": "#FBF0E4",
+    "text": "#3A241A",
     "font_heading": "Cormorant Garamond",
-    "font_body": "Lora",
+    "font_body": "Jost",
     "layout": "center",
     "hero_style": "image",
-    "ornament": "monstera-garland",
+    "ornament": "hindu-mandala",
     "frame": "double",
-    "card_style": false
+    "card_style": false,
+    "cover_style": "mandala",
+    "cover_3d": false,
+    "model3d": "3d/hindu-candi.glb"
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
@@ -31,6 +34,10 @@
         "bg_image": "https://images.unsplash.com/photo-1511376777868-611b54f68947",
         "show_ornament": true,
         "variant": "center"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 0
       }
     },
     {
@@ -47,6 +54,10 @@
         "photo_shape": "circle",
         "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
         "bride_photo": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 120
       }
     },
     {
@@ -58,6 +69,10 @@
         "latin": "Wa min kulli syai-in khalaqnaa zaujaini la'allakum tadzakkaruun",
         "translation": "Dan segala sesuatu Kami ciptakan berpasang-pasangan supaya kamu mengingat (kebesaran Allah).",
         "reference": "QS. Adz Dzariyyat: 49"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 240
       }
     },
     {
@@ -67,6 +82,10 @@
         "target_date": "2026-11-21T08:00:00+07:00",
         "title": "Menuju Hari Bahagia",
         "variant": "circles"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 360
       }
     },
     {
@@ -90,6 +109,10 @@
           "Mereka mulai menjalin hubungan di antara tumpukan buku dan teh hangat.",
           "Rafi melamar Naila di taman apel Kota Batu di tengah musim panen."
         ]
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 0
       }
     },
     {
@@ -104,6 +127,10 @@
         "address": "Jalan Raya Batu, Kota Batu",
         "maps_url": "https://maps.google.com/?q=Emerald%20Garden%20Hall",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 120
       }
     },
     {
@@ -118,6 +145,10 @@
         "address": "Wisata Selecta, Batu",
         "maps_url": "https://maps.google.com/?q=Emerald%20Garden%20Lawn",
         "variant": "band"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 240
       }
     },
     {
@@ -133,6 +164,10 @@
           "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6"
         ],
         "variant": "masonry"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 360
       }
     },
     {
@@ -148,6 +183,10 @@
             "account_holder": "Naila Zahra, S.Pd."
           }
         ]
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 0
       }
     },
     {
@@ -163,6 +202,10 @@
         "bank_name": "BSI",
         "account_number": "721 101 3344",
         "account_holder": "Rafi Pradana"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 120
       }
     },
     {
@@ -173,6 +216,10 @@
         "message": "Kehadiran Bapak/Ibu/Saudara/i adalah doa dan semangat bagi perjalanan kami.",
         "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Rafi & Naila"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 240
       }
     },
     {
@@ -182,6 +229,10 @@
         "title": "Lokasi Acara",
         "address": "Emerald Garden, Kota Batu",
         "embed_url": "https://maps.google.com/?q=Emerald%20Garden%2C%20Kota%20Batu"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 360
       }
     }
   ],

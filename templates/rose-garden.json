@@ -1,16 +1,18 @@
 {
   "theme": {
-    "primary": "#A63D5F",
-    "secondary": "#5E7C6B",
-    "background": "#FBF2F5",
-    "text": "#542C3B",
-    "font_heading": "Playfair Display",
-    "font_body": "Montserrat",
-    "layout": "center",
+    "primary": "#8A7A66",
+    "secondary": "#BFA06A",
+    "background": "#F7F4EF",
+    "text": "#3A352E",
+    "font_heading": "Cormorant Garamond",
+    "font_body": "Jost",
+    "layout": "left",
     "hero_style": "image",
-    "ornament": "corner-rose",
+    "ornament": "arch-geometric",
     "frame": "classic",
-    "card_style": true
+    "card_style": true,
+    "cover_style": "floral",
+    "cover_3d": true
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3",
@@ -34,6 +36,10 @@
         "bg_image": "https://images.unsplash.com/photo-1523438885200-e635ba2c371e",
         "show_ornament": true,
         "variant": "center"
+      },
+      "style": {
+        "entrance": "slide",
+        "entranceDelay": 0
       }
     },
     {
@@ -50,6 +56,10 @@
         "photo_shape": "frame",
         "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
         "bride_photo": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&q=80"
+      },
+      "style": {
+        "entrance": "slide",
+        "entranceDelay": 120
       }
     },
     {
@@ -61,6 +71,10 @@
         "latin": "",
         "translation": "Demikianlah tinggal ketiga hal ini, yaitu iman, pengharapan dan kasih, dan yang paling besar di antaranya ialah kasih.",
         "reference": "1 Korintus 13:13"
+      },
+      "style": {
+        "entrance": "slide",
+        "entranceDelay": 240
       }
     },
     {
@@ -70,6 +84,10 @@
         "target_date": "2027-06-26T10:00:00+07:00",
         "title": "Menuju Hari Mawar",
         "variant": "circles"
+      },
+      "style": {
+        "entrance": "slide",
+        "entranceDelay": 360
       }
     },
     {
@@ -93,6 +111,10 @@
           "Mereka mulai menjalin hubungan ketika hujan turun tiba-tiba.",
           "Dimas melamar Rania di antara hamparan mawar taman favoritnya saat hujan baru reda."
         ]
+      },
+      "style": {
+        "entrance": "slide",
+        "entranceDelay": 0
       }
     },
     {
@@ -107,6 +129,10 @@
         "address": "Kebun Raya Bogor, Jalan Ir. H. Juanda, Bogor",
         "maps_url": "https://maps.google.com/?q=Rose%20Garden%20Ballroom",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "slide",
+        "entranceDelay": 120
       }
     },
     {
@@ -121,6 +147,10 @@
         "address": "Sindangbarang, Bogor",
         "maps_url": "https://maps.google.com/?q=Rose%20Garden%20Lawn",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "slide",
+        "entranceDelay": 240
       }
     },
     {
@@ -138,6 +168,10 @@
         "variant": "polaroid",
         "animation": "fade",
         "interval_sec": 3
+      },
+      "style": {
+        "entrance": "slide",
+        "entranceDelay": 360
       }
     },
     {
@@ -153,6 +187,10 @@
             "account_holder": "Rania Anggraini, S.E."
           }
         ]
+      },
+      "style": {
+        "entrance": "slide",
+        "entranceDelay": 0
       }
     },
     {
@@ -168,6 +206,10 @@
         "bank_name": "BCA",
         "account_number": "880035240039",
         "account_holder": "Dimas Prasetya"
+      },
+      "style": {
+        "entrance": "slide",
+        "entranceDelay": 120
       }
     },
     {
@@ -178,6 +220,10 @@
         "message": "Kehadiran Bapak/Ibu/Saudara/i adalah mawar terindah dalam taman cinta kami.",
         "closing": "Tuhan memberkati.",
         "names": "Dimas & Rania"
+      },
+      "style": {
+        "entrance": "slide",
+        "entranceDelay": 240
       }
     },
     {
@@ -187,6 +233,10 @@
         "title": "Lokasi Acara",
         "address": "Rose Garden Hotel, Bogor",
         "embed_url": "https://maps.google.com/?q=Rose%20Garden%20Hotel%2C%20Bogor"
+      },
+      "style": {
+        "entrance": "slide",
+        "entranceDelay": 360
       }
     }
   ],

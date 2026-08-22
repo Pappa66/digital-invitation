@@ -1,16 +1,19 @@
 {
   "theme": {
-    "primary": "#C9A24B",
-    "secondary": "#6B5B3E",
-    "background": "#141414",
-    "text": "#F3EAD9",
-    "font_heading": "Cinzel",
-    "font_body": "Karla",
+    "primary": "#C0392B",
+    "secondary": "#D98C1F",
+    "background": "#FBF0E4",
+    "text": "#3A241A",
+    "font_heading": "Cormorant Garamond",
+    "font_body": "Jost",
     "layout": "center",
     "hero_style": "solid",
-    "ornament": "gardenia-wreath",
+    "ornament": "hindu-mandala",
     "frame": "classic",
-    "card_style": false
+    "card_style": false,
+    "cover_style": "mandala",
+    "cover_3d": false,
+    "model3d": "3d/hindu-candi.glb"
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
@@ -31,6 +34,10 @@
         "bg_image": "",
         "show_ornament": true,
         "variant": "center"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 0
       }
     },
     {
@@ -47,6 +54,10 @@
         "photo_shape": "circle",
         "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
         "bride_photo": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 120
       }
     },
     {
@@ -58,6 +69,10 @@
         "latin": "Wa min kulli syai-in khalaqnaa zaujaini la'allakum tadzakkaruun",
         "translation": "Dan segala sesuatu Kami ciptakan berpasang-pasangan supaya kamu mengingat (kebesaran Allah).",
         "reference": "QS. Adz Dzariyyat: 49"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 240
       }
     },
     {
@@ -67,6 +82,10 @@
         "target_date": "2026-11-21T08:00:00+07:00",
         "title": "Menuju Hari Bahagia",
         "variant": "circles"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 360
       }
     },
     {
@@ -90,6 +109,10 @@
           "Setelah tiga tahun berkenalan, kami menguatkan komitmen di tepi senja Pantai Sanur.",
           "Arka melamar Maya di atas menara kota dengan deretan lentera yang menyala."
         ]
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 0
       }
     },
     {
@@ -104,6 +127,10 @@
         "address": "Jl. MH. Thamrin No. 10, Jakarta Pusat",
         "maps_url": "https://maps.google.com/?q=The%20Grand%20Majestic%20Ballroom",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 120
       }
     },
     {
@@ -118,6 +145,10 @@
         "address": "Kawasan Thamrin, Jakarta Pusat",
         "maps_url": "https://maps.google.com/?q=The%20Grand%20Majestic%20Ballroom",
         "variant": "band"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 240
       }
     },
     {
@@ -125,6 +156,10 @@
       "type": "Divider",
       "props": {
         "variant": "diamond"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 360
       }
     },
     {
@@ -140,6 +175,10 @@
         ],
         "variant": "grid",
         "animation": "slide-up"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 0
       }
     },
     {
@@ -155,6 +194,10 @@
             "account_holder": "Maya Kirana, S.H."
           }
         ]
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 120
       }
     },
     {
@@ -170,6 +213,10 @@
         "bank_name": "BCA",
         "account_number": "528 012 3456",
         "account_holder": "Arka Wicaksono"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 240
       }
     },
     {
@@ -180,6 +227,10 @@
         "message": "Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu kepada kami.",
         "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Arka & Maya"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 360
       }
     },
     {
@@ -189,6 +240,10 @@
         "title": "Lokasi Acara",
         "address": "The Grand Majestic, Jakarta",
         "embed_url": "https://maps.google.com/?q=The%20Grand%20Majestic%2C%20Jakarta"
+      },
+      "style": {
+        "entrance": "mandala",
+        "entranceDelay": 0
       }
     }
   ],

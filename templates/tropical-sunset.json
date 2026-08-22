@@ -1,16 +1,19 @@
 {
   "theme": {
-    "primary": "#F26D5D",
-    "secondary": "#1B7A72",
-    "background": "#FFF7F0",
-    "text": "#4A3F38",
-    "font_heading": "Jost",
-    "font_body": "Quicksand",
-    "layout": "left",
+    "primary": "#2E7D57",
+    "secondary": "#BFA06A",
+    "background": "#F4F1E8",
+    "text": "#2C3A30",
+    "font_heading": "Cormorant Garamond",
+    "font_body": "Jost",
+    "layout": "center",
     "hero_style": "image",
-    "ornament": "frangipani",
+    "ornament": "islamic-geometric",
     "frame": "classic",
-    "card_style": true
+    "card_style": true,
+    "cover_style": "book",
+    "cover_3d": true,
+    "model3d": "3d/islam-masjid.glb"
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-12.mp3",
@@ -34,6 +37,10 @@
         "bg_image": "https://images.unsplash.com/photo-1552674605-db6ffd4facb5",
         "show_ornament": true,
         "variant": "left"
+      },
+      "style": {
+        "entrance": "islamic",
+        "entranceDelay": 0
       }
     },
     {
@@ -50,6 +57,10 @@
         "photo_shape": "frame",
         "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
         "bride_photo": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600&q=80"
+      },
+      "style": {
+        "entrance": "islamic",
+        "entranceDelay": 120
       }
     },
     {
@@ -61,6 +72,10 @@
         "latin": "Wa min kulli syai-in khalaqnaa zaujaini la'allakum tadzakkaruun",
         "translation": "Dan segala sesuatu Kami ciptakan berpasang-pasangan supaya kamu mengingat (kebesaran Allah).",
         "reference": "QS. Adz Dzariyyat: 49"
+      },
+      "style": {
+        "entrance": "islamic",
+        "entranceDelay": 240
       }
     },
     {
@@ -70,6 +85,10 @@
         "target_date": "2027-11-07T17:00:00+08:00",
         "title": "Ayunan Senja",
         "variant": "circles"
+      },
+      "style": {
+        "entrance": "islamic",
+        "entranceDelay": 360
       }
     },
     {
@@ -93,6 +112,10 @@
           "Mereka mulai menjalin hubungan saat snorkeling di Bunaken.",
           "Ardan melamar Maharani di bawah senja Pulau Siladen dengan latar bunyi ombak."
         ]
+      },
+      "style": {
+        "entrance": "islamic",
+        "entranceDelay": 0
       }
     },
     {
@@ -107,6 +130,10 @@
         "address": "Bunaken, Manado",
         "maps_url": "https://maps.google.com/?q=Sunset%20Bay%20Deck",
         "variant": "band"
+      },
+      "style": {
+        "entrance": "islamic",
+        "entranceDelay": 120
       }
     },
     {
@@ -121,6 +148,10 @@
         "address": "Jl. Bougenville No. 1, Bunaken, Manado",
         "maps_url": "https://maps.google.com/?q=Sunset%20Bay%2C%20Manado",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "islamic",
+        "entranceDelay": 240
       }
     },
     {
@@ -138,6 +169,10 @@
         "variant": "arch",
         "animation": "ken-burns",
         "interval_sec": 5
+      },
+      "style": {
+        "entrance": "islamic",
+        "entranceDelay": 360
       }
     },
     {
@@ -153,6 +188,10 @@
             "account_holder": "Maharani Putri, S.E."
           }
         ]
+      },
+      "style": {
+        "entrance": "islamic",
+        "entranceDelay": 0
       }
     },
     {
@@ -168,6 +207,10 @@
         "bank_name": "BRI",
         "account_number": "880030735965",
         "account_holder": "Ardan Pradana"
+      },
+      "style": {
+        "entrance": "islamic",
+        "entranceDelay": 120
       }
     },
     {
@@ -178,6 +221,10 @@
         "message": "Terima kasih telah menjadi bagian dari senja terindah kami di tepi lautan.",
         "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Ardan & Maharani"
+      },
+      "style": {
+        "entrance": "islamic",
+        "entranceDelay": 240
       }
     },
     {
@@ -187,6 +234,10 @@
         "title": "Lokasi Acara",
         "address": "Sunset Bay, Manado",
         "embed_url": "https://maps.google.com/?q=Sunset%20Bay%2C%20Manado"
+      },
+      "style": {
+        "entrance": "islamic",
+        "entranceDelay": 360
       }
     }
   ],

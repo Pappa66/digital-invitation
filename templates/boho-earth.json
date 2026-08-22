@@ -1,16 +1,18 @@
 {
   "theme": {
-    "primary": "#B5651D",
-    "secondary": "#C9A28A",
-    "background": "#F7F2E9",
-    "text": "#4C4439",
-    "font_heading": "Lora",
-    "font_body": "Quicksand",
-    "layout": "left",
+    "primary": "#7C5C3B",
+    "secondary": "#C9A36A",
+    "background": "#FAF3E6",
+    "text": "#3B2F23",
+    "font_heading": "Cormorant Garamond",
+    "font_body": "Jost",
+    "layout": "center",
     "hero_style": "image",
-    "ornament": "monstera-garland",
+    "ornament": "flourish",
     "frame": "double",
-    "card_style": false
+    "card_style": false,
+    "cover_style": "book",
+    "cover_3d": true
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
@@ -31,6 +33,10 @@
         "bg_image": "https://images.unsplash.com/photo-1519225421980-715cb0215aed",
         "show_ornament": true,
         "variant": "left"
+      },
+      "style": {
+        "entrance": "book",
+        "entranceDelay": 0
       }
     },
     {
@@ -47,6 +53,10 @@
         "photo_shape": "circle",
         "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
         "bride_photo": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&q=80"
+      },
+      "style": {
+        "entrance": "book",
+        "entranceDelay": 120
       }
     },
     {
@@ -58,6 +68,10 @@
         "latin": "Wa min kulli syai-in khalaqnaa zaujaini la'allakum tadzakkaruun",
         "translation": "Dan segala sesuatu Kami ciptakan berpasang-pasangan supaya kamu mengingat (kebesaran Allah).",
         "reference": "QS. Adz Dzariyyat: 49"
+      },
+      "style": {
+        "entrance": "book",
+        "entranceDelay": 240
       }
     },
     {
@@ -67,6 +81,10 @@
         "target_date": "2026-09-20T10:00:00+07:00",
         "title": "Hari Raya Cinta Kami",
         "variant": "circles"
+      },
+      "style": {
+        "entrance": "book",
+        "entranceDelay": 360
       }
     },
     {
@@ -90,6 +108,10 @@
           "Mereka mulai menjalin hubungan saat menjelajahi bukit bersama.",
           "Rangga melamar Intan di lereng Gunung Pangrango saat langit masih senja."
         ]
+      },
+      "style": {
+        "entrance": "book",
+        "entranceDelay": 0
       }
     },
     {
@@ -104,6 +126,10 @@
         "address": "Kawasan Puncak, Cisarua, Bogor",
         "maps_url": "https://maps.google.com/?q=Villa%20Bukit%20Cinta",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "book",
+        "entranceDelay": 120
       }
     },
     {
@@ -118,6 +144,10 @@
         "address": "Jl. Karanggan Jaya No. 12, Cibinong, Bogor",
         "maps_url": "https://maps.google.com/?q=Villa%20Bukit%20Cinta%2C%20Bogor",
         "variant": "band"
+      },
+      "style": {
+        "entrance": "book",
+        "entranceDelay": 240
       }
     },
     {
@@ -133,6 +163,10 @@
           "https://images.unsplash.com/photo-1532712938310-34cb3982ef74"
         ],
         "variant": "masonry"
+      },
+      "style": {
+        "entrance": "book",
+        "entranceDelay": 360
       }
     },
     {
@@ -148,6 +182,10 @@
             "account_holder": "Intan Ayuningtyas, S.Farm."
           }
         ]
+      },
+      "style": {
+        "entrance": "book",
+        "entranceDelay": 0
       }
     },
     {
@@ -163,6 +201,10 @@
         "bank_name": "BSI",
         "account_number": "720 011 2233",
         "account_holder": "Rangga Bumi"
+      },
+      "style": {
+        "entrance": "book",
+        "entranceDelay": 120
       }
     },
     {
@@ -173,6 +215,10 @@
         "message": "Sungguh berbahagia bila kehadiranmu menjadi bagian dari pesta kecil kami.",
         "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Rangga & Intan"
+      },
+      "style": {
+        "entrance": "book",
+        "entranceDelay": 240
       }
     },
     {
@@ -182,6 +228,10 @@
         "title": "Lokasi Acara",
         "address": "Villa Bukit Cinta, Bogor",
         "embed_url": "https://maps.google.com/?q=Villa%20Bukit%20Cinta%2C%20Bogor"
+      },
+      "style": {
+        "entrance": "book",
+        "entranceDelay": 360
       }
     }
   ],

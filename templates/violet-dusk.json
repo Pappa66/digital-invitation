@@ -1,16 +1,19 @@
 {
   "theme": {
-    "primary": "#6C4A9B",
-    "secondary": "#C9A9E8",
-    "background": "#F7F4FA",
-    "text": "#3E3450",
+    "primary": "#3B5BA5",
+    "secondary": "#C9A227",
+    "background": "#F5F3EE",
+    "text": "#2A2E3A",
     "font_heading": "Cormorant Garamond",
-    "font_body": "Quicksand",
+    "font_body": "Jost",
     "layout": "center",
     "hero_style": "image",
-    "ornament": "lily-divider",
+    "ornament": "church-window",
     "frame": "arch",
-    "card_style": false
+    "card_style": false,
+    "cover_style": "book",
+    "cover_3d": true,
+    "model3d": "3d/kristen-church.glb"
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
@@ -34,6 +37,10 @@
         "bg_image": "https://images.unsplash.com/photo-1532712938310-34cb3982ef74",
         "show_ornament": true,
         "variant": "center"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 0
       }
     },
     {
@@ -50,6 +57,10 @@
         "photo_shape": "arch",
         "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
         "bride_photo": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&q=80"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 120
       }
     },
     {
@@ -61,6 +72,10 @@
         "latin": "Wa min kulli syai-in khalaqnaa zaujaini la'allakum tadzakkaruun",
         "translation": "Dan segala sesuatu Kami ciptakan berpasang-pasangan supaya kamu mengingat (kebesaran Allah).",
         "reference": "QS. Adz Dzariyyat: 49"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 240
       }
     },
     {
@@ -70,6 +85,10 @@
         "target_date": "2027-02-06T09:00:00+07:00",
         "title": "Menghitung Hari",
         "variant": "cards"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 360
       }
     },
     {
@@ -93,6 +112,10 @@
           "Mereka mulai menjalin hubungan di tengah konser musik senja.",
           "Arjuna melamar Kirana di taman bunga Lembang, di tengah wangi bunga lavender."
         ]
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 0
       }
     },
     {
@@ -107,6 +130,10 @@
         "address": "Jl. Dago Pakar, Bandung",
         "maps_url": "https://maps.google.com/?q=The%20Violet%20Ballroom",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 120
       }
     },
     {
@@ -121,6 +148,10 @@
         "address": "Dago Atas, Bandung",
         "maps_url": "https://maps.google.com/?q=The%20Violet%20Garden",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 240
       }
     },
     {
@@ -137,6 +168,10 @@
         ],
         "variant": "grid",
         "animation": "blur"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 360
       }
     },
     {
@@ -152,6 +187,10 @@
             "account_holder": "Kirana Maharani, S.E."
           }
         ]
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 0
       }
     },
     {
@@ -167,6 +206,10 @@
         "bank_name": "BNI",
         "account_number": "880025442220",
         "account_holder": "Arjuna Pradipta"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 120
       }
     },
     {
@@ -177,6 +220,10 @@
         "message": "Kehadiran dan doa Bapak/Ibu/Saudara/i adalah warna terindah dalam pernikahan kami.",
         "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Arjuna & Kirana"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 240
       }
     },
     {
@@ -186,6 +233,10 @@
         "title": "Lokasi Acara",
         "address": "The Violet Ballroom, Bandung",
         "embed_url": "https://maps.google.com/?q=The%20Violet%20Ballroom%2C%20Bandung"
+      },
+      "style": {
+        "entrance": "fade",
+        "entranceDelay": 360
       }
     }
   ],

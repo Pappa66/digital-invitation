@@ -1,16 +1,19 @@
 {
   "theme": {
-    "primary": "#1C3D2F",
-    "secondary": "#7AA874",
-    "background": "#F3F6F1",
-    "text": "#2E423A",
-    "font_heading": "Marcellus",
+    "primary": "#5A3E2B",
+    "secondary": "#B23A3A",
+    "background": "#F2E9DC",
+    "text": "#33241A",
+    "font_heading": "Cormorant Garamond",
     "font_body": "Jost",
-    "layout": "left",
+    "layout": "center",
     "hero_style": "image",
-    "ornament": "frangipani",
+    "ornament": "batak-ulos",
     "frame": "classic",
-    "card_style": true
+    "card_style": true,
+    "cover_style": "floral",
+    "cover_3d": true,
+    "model3d": "3d/batak-rumah.glb"
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
@@ -34,6 +37,10 @@
         "bg_image": "https://images.unsplash.com/photo-1519345182560-3f2917c472ef",
         "show_ornament": true,
         "variant": "left"
+      },
+      "style": {
+        "entrance": "ulos",
+        "entranceDelay": 0
       }
     },
     {
@@ -50,6 +57,10 @@
         "photo_shape": "frame",
         "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
         "bride_photo": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&q=80"
+      },
+      "style": {
+        "entrance": "ulos",
+        "entranceDelay": 120
       }
     },
     {
@@ -61,6 +72,10 @@
         "latin": "Wa min kulli syai-in khalaqnaa zaujaini la'allakum tadzakkaruun",
         "translation": "Dan segala sesuatu Kami ciptakan berpasang-pasangan supaya kamu mengingat (kebesaran Allah).",
         "reference": "QS. Adz Dzariyyat: 49"
+      },
+      "style": {
+        "entrance": "ulos",
+        "entranceDelay": 240
       }
     },
     {
@@ -70,6 +85,10 @@
         "target_date": "2028-04-16T10:00:00+07:00",
         "title": "Musim Tumbuh",
         "variant": "circles"
+      },
+      "style": {
+        "entrance": "ulos",
+        "entranceDelay": 360
       }
     },
     {
@@ -93,6 +112,10 @@
           "Mereka mulai menjalin hubungan saat mendaki Gunung Papandayan.",
           "Naufal melamar Syifa di hutan pinus Cikole di bawah cahaya redup pagi hari."
         ]
+      },
+      "style": {
+        "entrance": "ulos",
+        "entranceDelay": 0
       }
     },
     {
@@ -107,6 +130,10 @@
         "address": "Cikole, Lembang",
         "maps_url": "https://maps.google.com/?q=Evergreen%20Forest",
         "variant": "band"
+      },
+      "style": {
+        "entrance": "ulos",
+        "entranceDelay": 120
       }
     },
     {
@@ -121,6 +148,10 @@
         "address": "Jl. Raya Tangkuban Parahu No. 88, Cikole, Bandung Barat",
         "maps_url": "https://maps.google.com/?q=Evergreen%20Forest%2C%20Bandung",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "ulos",
+        "entranceDelay": 240
       }
     },
     {
@@ -137,6 +168,10 @@
         ],
         "variant": "arch",
         "animation": "zoom-out"
+      },
+      "style": {
+        "entrance": "ulos",
+        "entranceDelay": 360
       }
     },
     {
@@ -152,6 +187,10 @@
             "account_holder": "Syifa Rahma, S.E."
           }
         ]
+      },
+      "style": {
+        "entrance": "ulos",
+        "entranceDelay": 0
       }
     },
     {
@@ -167,6 +206,10 @@
         "bank_name": "BSI",
         "account_number": "880017799001",
         "account_holder": "Naufal Akbar"
+      },
+      "style": {
+        "entrance": "ulos",
+        "entranceDelay": 120
       }
     },
     {
@@ -177,6 +220,10 @@
         "message": "Terima kasih telah menumbuhkan cinta kami dengan doa dan kehadiranmu.",
         "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Naufal & Syifa"
+      },
+      "style": {
+        "entrance": "ulos",
+        "entranceDelay": 240
       }
     },
     {
@@ -186,6 +233,10 @@
         "title": "Lokasi Acara",
         "address": "Evergreen Forest, Bandung",
         "embed_url": "https://maps.google.com/?q=Evergreen%20Forest%2C%20Bandung"
+      },
+      "style": {
+        "entrance": "ulos",
+        "entranceDelay": 360
       }
     }
   ],

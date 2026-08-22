@@ -1,16 +1,17 @@
 import type { Metadata } from 'next';
-import { Playfair_Display, Great_Vibes, Jost } from 'next/font/google';
+import { Cormorant_Garamond, Pinyon_Script, Jost } from 'next/font/google';
 import { Toaster } from 'sonner';
 import MotionProvider from '@/components/ui/motion-provider';
 import './globals.css';
 
-const playfair = Playfair_Display({
+const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
   variable: '--font-heading',
   display: 'swap'
 });
 
-const greatVibes = Great_Vibes({
+const pinyon = Pinyon_Script({
   subsets: ['latin'],
   weight: '400',
   variable: '--font-script',
@@ -31,7 +32,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="id">
-      <body className={`${playfair.variable} ${greatVibes.variable} ${jost.variable} bg-background font-body text-foreground antialiased`}>
+      <body className={`${cormorant.variable} ${pinyon.variable} ${jost.variable} bg-background font-body text-foreground antialiased`}>
         <MotionProvider>{children}</MotionProvider>
         <Toaster
           position="top-right"

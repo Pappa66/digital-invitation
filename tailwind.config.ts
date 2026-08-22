@@ -25,6 +25,7 @@ const config: Config = {
           deep: 'hsl(var(--gold-deep))',
           ink: 'hsl(var(--gold-ink))'
         },
+        rose: 'hsl(var(--rose))',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
@@ -60,9 +61,9 @@ const config: Config = {
         }
       },
       fontFamily: {
-        heading: ['var(--font-heading)', 'Georgia', 'serif'],
-        script: ['var(--font-script)', 'Great Vibes', 'cursive'],
-        body: ['var(--font-body)', 'Jost', 'ui-sans-serif', 'system-ui', 'sans-serif']
+        heading: ['var(--font-heading)', 'Cormorant Garamond', 'Playfair Display', 'serif'],
+        script: ['var(--font-script)', 'Pinyon Script', 'Great Vibes', 'cursive'],
+        body: ['var(--font-body)', 'Jost', 'Montserrat', 'ui-sans-serif', 'system-ui', 'sans-serif']
       },
       fontSize: {
         /* Skala tipografi premium (spasi 8pt konservatif) */

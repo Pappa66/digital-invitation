@@ -1,16 +1,18 @@
 {
   "theme": {
-    "primary": "#2F5D50",
-    "secondary": "#C77B4E",
-    "background": "#F7F3EA",
-    "text": "#3E463F",
+    "primary": "#C98A3E",
+    "secondary": "#5E8B7E",
+    "background": "#F3E9D2",
+    "text": "#3A2E22",
     "font_heading": "Cormorant Garamond",
     "font_body": "Jost",
-    "layout": "left",
+    "layout": "center",
     "hero_style": "image",
-    "ornament": "frangipani",
+    "ornament": "newspaper-rule",
     "frame": "double",
-    "card_style": false
+    "card_style": false,
+    "cover_style": "oldtv",
+    "cover_3d": false
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
@@ -31,6 +33,10 @@
         "bg_image": "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=1920&q=80",
         "show_ornament": true,
         "variant": "left"
+      },
+      "style": {
+        "entrance": "oldtv",
+        "entranceDelay": 0
       }
     },
     {
@@ -47,6 +53,10 @@
         "photo_shape": "circle",
         "groom_photo": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&q=80",
         "bride_photo": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&q=80"
+      },
+      "style": {
+        "entrance": "oldtv",
+        "entranceDelay": 120
       }
     },
     {
@@ -58,6 +68,10 @@
         "latin": "",
         "translation": "Semoga kita bersama-sama dilindungi, diberkahi, dan memperoleh kekuatan, serta pengetahuan yang bercahaya.",
         "reference": "Mantra Pernikahan Hindu"
+      },
+      "style": {
+        "entrance": "oldtv",
+        "entranceDelay": 240
       }
     },
     {
@@ -67,6 +81,10 @@
         "target_date": "2026-10-24T15:00:00+08:00",
         "title": "Hari Bahagia",
         "variant": "circles"
+      },
+      "style": {
+        "entrance": "oldtv",
+        "entranceDelay": 360
       }
     },
     {
@@ -90,6 +108,10 @@
           "Mereka mulai menjalin hubungan di tengah senja Pantai Kuta.",
           "Made melamar Putu di tepi sawah Ubud, dikelilingi terasering dan suara jangkrik senja."
         ]
+      },
+      "style": {
+        "entrance": "oldtv",
+        "entranceDelay": 0
       }
     },
     {
@@ -104,6 +126,10 @@
         "address": "Jalan Karang Mas, Jimbaran, Uluwatu",
         "maps_url": "https://maps.google.com/?q=Chapel%20Ayana",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "oldtv",
+        "entranceDelay": 120
       }
     },
     {
@@ -118,6 +144,10 @@
         "address": "Uluwatu, Badung, Bali",
         "maps_url": "https://maps.google.com/?q=Tresna%20Chapel%20%26%20Garden",
         "variant": "band"
+      },
+      "style": {
+        "entrance": "oldtv",
+        "entranceDelay": 240
       }
     },
     {
@@ -133,6 +163,10 @@
           "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=1200&q=80"
         ],
         "variant": "masonry"
+      },
+      "style": {
+        "entrance": "oldtv",
+        "entranceDelay": 360
       }
     },
     {
@@ -148,6 +182,10 @@
             "account_holder": "Putu Ayu Lestari, A.Md.Keb."
           }
         ]
+      },
+      "style": {
+        "entrance": "oldtv",
+        "entranceDelay": 0
       }
     },
     {
@@ -163,6 +201,10 @@
         "bank_name": "BRI",
         "account_number": "0099 0101 202 508",
         "account_holder": "Made Wiradana"
+      },
+      "style": {
+        "entrance": "oldtv",
+        "entranceDelay": 120
       }
     },
     {
@@ -173,6 +215,10 @@
         "message": "Kehadiran dan doa restu Bapak/Ibu/Saudara/i adalah hadiah terindah bagi kami berdua.",
         "closing": "Om Shanti Shanti Shanti Om",
         "names": "Made & Ayu"
+      },
+      "style": {
+        "entrance": "oldtv",
+        "entranceDelay": 240
       }
     },
     {
@@ -182,6 +228,10 @@
         "title": "Lokasi Acara",
         "address": "Ayana Resort, Uluwatu, Bali",
         "embed_url": "https://maps.google.com/?q=Ayana%20Resort%2C%20Uluwatu%2C%20Bali"
+      },
+      "style": {
+        "entrance": "oldtv",
+        "entranceDelay": 360
       }
     }
   ],

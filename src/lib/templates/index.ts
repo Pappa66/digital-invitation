@@ -166,16 +166,16 @@ export function getDesignPresets(): { id: string; name: string; theme: CanvasDat
   }).filter((p): p is { id: string; name: string; theme: CanvasData['theme'] } => p !== null);
 }
 
-/** Mengembalikan canvas_data kosong dengan theme default. */
+/** Mengembalikan canvas_data kosong dengan theme default (Romantis Klasik). */
 export function emptyCanvas(): CanvasData {
   return {
     theme: {
-      primary: '#D4AF37',
-      secondary: '#8A6D2F',
-      background: '#FAF6EF',
-      text: '#4A443C',
-      font_heading: 'Playfair Display',
-      font_body: 'Montserrat',
+      primary: '#BFA06A',
+      secondary: '#D9A7A4',
+      background: '#FBF7F1',
+      text: '#4A4036',
+      font_heading: 'Cormorant Garamond',
+      font_body: 'Jost',
       layout: 'center',
       hero_style: 'image',
       ornament: 'gardenia-wreath'
@@ -192,3 +192,61 @@ export function emptyCanvas(): CanvasData {
     flow: 'stack'
   };
 }
+
+/** Tema romantis klasik (default) — emas antique + dusty rose + ivory. */
+export function romanticClassicTheme() {
+  return {
+    primary: '#BFA06A',
+    secondary: '#D9A7A4',
+    background: '#FBF7F1',
+    text: '#4A4036',
+    font_heading: 'Cormorant Garamond',
+    font_body: 'Jost',
+    layout: 'center' as const,
+    hero_style: 'image' as const,
+    ornament: 'gardenia-wreath',
+    cover_style: 'floral' as const,
+    cover_3d: true
+  };
+}
+
+/** Tema vintage 80s–90s — krem sepuh + aksen teal/cokelat, buka ala TV jadul. */
+export function vintage80sTheme() {
+  return {
+    primary: '#C98A3E',
+    secondary: '#5E8B7E',
+    background: '#F3E9D2',
+    text: '#3A2E22',
+    font_heading: 'Cormorant Garamond',
+    font_body: 'Jost',
+    layout: 'center' as const,
+    hero_style: 'image' as const,
+    ornament: 'newspaper-rule',
+    cover_style: 'oldtv' as const,
+    cover_3d: false
+  };
+}
+
+/** Tema koran lama — monokrom krem, buka ala koran. */
+export function vintageNewsprintTheme() {
+  return {
+    primary: '#8A7A66',
+    secondary: '#B7A98F',
+    background: '#EFE7D6',
+    text: '#2C2419',
+    font_heading: 'Cormorant Garamond',
+    font_body: 'Jost',
+    layout: 'center' as const,
+    hero_style: 'solid' as const,
+    ornament: 'newspaper-rule',
+    cover_style: 'newspaper' as const,
+    cover_3d: false
+  };
+}
+
+/** Daftar preset tema siap pakai (tombol di builder). */
+export const PRESET_THEMES = [
+  { key: 'romantic', label: 'Romantis Klasik', theme: romanticClassicTheme() },
+  { key: 'vintage80s', label: 'Vintage 80s–90s', theme: vintage80sTheme() },
+  { key: 'newsprint', label: 'Koran Lama', theme: vintageNewsprintTheme() }
+];

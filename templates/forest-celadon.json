@@ -1,16 +1,19 @@
 {
   "theme": {
-    "primary": "#324F43",
-    "secondary": "#A9C5B4",
-    "background": "#F1F5EF",
-    "text": "#33423B",
-    "font_heading": "Marcellus",
+    "primary": "#B23A3A",
+    "secondary": "#C9A227",
+    "background": "#FAEFE4",
+    "text": "#3A241A",
+    "font_heading": "Cormorant Garamond",
     "font_body": "Jost",
     "layout": "center",
     "hero_style": "image",
-    "ornament": "gardenia-wreath",
+    "ornament": "lantern",
     "frame": "corner",
-    "card_style": true
+    "card_style": true,
+    "cover_style": "lantern",
+    "cover_3d": false,
+    "model3d": "3d/konghucu-kelenteng.glb"
   },
   "settings": {
     "music_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
@@ -31,6 +34,10 @@
         "bg_image": "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6",
         "show_ornament": true,
         "variant": "center"
+      },
+      "style": {
+        "entrance": "lantern",
+        "entranceDelay": 0
       }
     },
     {
@@ -47,6 +54,10 @@
         "photo_shape": "frame",
         "groom_photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
         "bride_photo": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80"
+      },
+      "style": {
+        "entrance": "lantern",
+        "entranceDelay": 120
       }
     },
     {
@@ -58,6 +69,10 @@
         "latin": "Wa min kulli syai-in khalaqnaa zaujaini la'allakum tadzakkaruun",
         "translation": "Dan segala sesuatu Kami ciptakan berpasang-pasangan supaya kamu mengingat (kebesaran Allah).",
         "reference": "QS. Adz Dzariyyat: 49"
+      },
+      "style": {
+        "entrance": "lantern",
+        "entranceDelay": 240
       }
     },
     {
@@ -67,6 +82,10 @@
         "target_date": "2026-10-03T09:00:00+07:00",
         "title": "Menuju Hari Kita",
         "variant": "line"
+      },
+      "style": {
+        "entrance": "lantern",
+        "entranceDelay": 360
       }
     },
     {
@@ -81,6 +100,10 @@
         "address": "Jalan Raya Sarangan, Magetan",
         "maps_url": "https://maps.google.com/?q=Gd.%20Sarangan%20Lake",
         "variant": "card"
+      },
+      "style": {
+        "entrance": "lantern",
+        "entranceDelay": 0
       }
     },
     {
@@ -95,6 +118,10 @@
         "address": "Kawasan Telaga Sarangan, Magetan, Jawa Timur",
         "maps_url": "https://maps.google.com/?q=Sarangan%20Lake%20Hotel%2C%20Magetan",
         "variant": "band"
+      },
+      "style": {
+        "entrance": "lantern",
+        "entranceDelay": 120
       }
     },
     {
@@ -110,6 +137,10 @@
           "https://images.unsplash.com/photo-1520854221256-17451cc331bf"
         ],
         "variant": "column"
+      },
+      "style": {
+        "entrance": "lantern",
+        "entranceDelay": 240
       }
     },
     {
@@ -125,6 +156,10 @@
             "account_holder": "Rania Puspita, S.Ked."
           }
         ]
+      },
+      "style": {
+        "entrance": "lantern",
+        "entranceDelay": 360
       }
     },
     {
@@ -140,6 +175,10 @@
         "bank_name": "BCA",
         "account_number": "882 044 5566",
         "account_holder": "Bima Permana"
+      },
+      "style": {
+        "entrance": "lantern",
+        "entranceDelay": 0
       }
     },
     {
@@ -150,6 +189,10 @@
         "message": "Terima kasih atas kehadiran dan doa restu Bapak/Ibu/Saudara/i sekalian.",
         "closing": "Wassalamu'alaikum Warahmatullahi Wabarakatuh",
         "names": "Bima & Rania"
+      },
+      "style": {
+        "entrance": "lantern",
+        "entranceDelay": 120
       }
     },
     {
@@ -159,6 +202,10 @@
         "title": "Lokasi Acara",
         "address": "Sarangan Lake Hotel, Magetan",
         "embed_url": "https://maps.google.com/?q=Sarangan%20Lake%20Hotel%2C%20Magetan"
+      },
+      "style": {
+        "entrance": "lantern",
+        "entranceDelay": 240
       }
     }
   ],
