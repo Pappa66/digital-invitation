@@ -12,7 +12,6 @@ import { RELIGIONS, type ReligionKey } from '@/lib/religions';
 import { getQuotesByReligion, RELIGION_LABELS, type WeddingQuote } from '@/lib/quotes';
 import type { Block, BlockProps, DecorAsset, BankAccount, BlockStyle, BlockType, Theme } from '@/lib/types';
 import { getDesignPresets } from '@/lib/templates';
-import { CULTURAL_CONCEPT_MAP } from '@/lib/assets/cultural';
 
 const DESIGN_PRESETS = getDesignPresets();
 
@@ -774,53 +773,6 @@ export default function PropertiesPanel({ mobileOpen = false, onClose }: { mobil
                     />
                     Gaya Kartu (tiap section berbentuk card)
                   </label>
-                  <div className="mt-3 rounded-lg border border-[#ece3d2] bg-[#fbf7f1] p-3">
-                    <label className="block text-xs font-semibold text-[#4a443c]">Gaya Layar Pembuka</label>
-                    <p className="mb-2 text-[11px] text-[#8a7a66]">Efek saat tamu menekan &quot;Buka Undangan&quot;.</p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {([
-                        { value: 'floral', label: 'Tirai Bunga' },
-                        { value: 'book', label: 'Buka Buku' },
-                        { value: 'filmroll', label: 'Roll Film' },
-                        { value: 'oldtv', label: 'TV Jadul' },
-                        { value: 'newspaper', label: 'Koran Lama' },
-                      ] as const).map((v) => (
-                        <button
-                          key={v.value}
-                          onClick={() => setTheme({ cover_style: v.value })}
-                          className={`rounded-md border px-2 py-1 text-[10px] ${
-                            (canvas.theme.cover_style ?? 'floral') === v.value
-                              ? 'border-[#c9a45c] bg-[#c9a45c] text-white'
-                              : 'border-[#e0d6c2] text-[#6b5f4d]'
-                          }`}
-                        >
-                          {v.label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="mt-3 rounded-lg border border-[#ece3d2] bg-[#fbf7f1] p-3">
-                    <label className="block text-xs font-semibold text-[#4a443c]">Konsep Budaya &amp; Agama</label>
-                    <p className="mb-2 text-[11px] text-[#8a7a66]">Satu klik: cover, ornamen &amp; animasi masuk serasi dengan konsep.</p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {Object.entries(CULTURAL_CONCEPT_MAP).map(([key, c]) => (
-                        <button
-                          key={key}
-                          onClick={() => {
-                            setTheme({ cover_style: c.cover as never, ornament: c.ornament });
-                          }}
-                          className={`rounded-md border px-2 py-1 text-[10px] capitalize ${
-                            (canvas.theme.cover_style === c.cover && canvas.theme.ornament === c.ornament)
-                              ? 'border-[#c9a45c] bg-[#c9a45c] text-white'
-                              : 'border-[#e0d6c2] text-[#6b5f4d]'
-                          }`}
-                          style={{ borderLeftColor: c.accent, borderLeftWidth: 3 }}
-                        >
-                          {key}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
                   {canvas.theme.card_style && (
                     <>
                       <div className="mt-2">
