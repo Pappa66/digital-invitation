@@ -1363,6 +1363,29 @@ export default function PropertiesPanel({ mobileOpen = false, onClose }: { mobil
                         </div>
                       </div>
                       <div>
+                        <p className="mb-1 text-xs font-medium text-[#4a443c]">Posisi Foto</p>
+                        <p className="mb-2 text-[10px] text-[#8a7a66]">Pisahkan foto dari nama & orangtua</p>
+                        <div className="flex gap-2">
+                          {([
+                            { key: 'together', label: 'Bersamaan', desc: 'Foto + nama per orang' },
+                            { key: 'above', label: 'Foto di Atas', desc: 'Semua foto di atas, nama di bawah' }
+                          ] as const).map((opt) => (
+                            <button
+                              key={opt.key}
+                              onClick={() => setBlockProps(block.id, { photo_layout: opt.key })}
+                              className={`flex-1 rounded-md border px-2 py-2 text-left ${
+                                ((block.props.photo_layout as string) || 'together') === opt.key
+                                  ? 'border-[#c9a45c] bg-[#c9a45c] text-white'
+                                  : 'border-[#e0d6c2] text-[#6b5f4d]'
+                              }`}
+                            >
+                              <span className="block text-xs font-semibold">{opt.label}</span>
+                              <span className={`block text-[10px] ${((block.props.photo_layout as string) || 'together') === opt.key ? 'text-white/80' : 'text-[#8a7a66]'}`}>{opt.desc}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
                         <p className="mb-1 text-xs font-medium text-[#4a443c]">Foto Pria</p>
                         <button
                           onClick={() => {
@@ -1696,6 +1719,27 @@ export default function PropertiesPanel({ mobileOpen = false, onClose }: { mobil
                       );
                     })()}
                   </div>
+                  {['Countdown', 'EventDetail', 'Story', 'Quote', 'Thanks'].includes(block.type) && (
+                    <label className="flex items-center justify-between gap-3 rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-3 py-2.5">
+                      <div>
+                        <p className="text-sm font-medium text-[#4a443c]">Tampilkan Ornamen</p>
+                        <p className="text-[11px] text-[#8a7a66]">Sembunyikan ornamen dekoratif section ini</p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setBlockProps(block.id, { show_ornament: block.props.show_ornament === false })}
+                        className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${
+                          block.props.show_ornament !== false ? 'bg-[#c9a45c]' : 'bg-[#e0d6c2]'
+                        }`}
+                      >
+                        <span
+                          className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-all ${
+                            block.props.show_ornament !== false ? 'left-[22px]' : 'left-0.5'
+                          }`}
+                        />
+                      </button>
+                    </label>
+                  )}
               </>
             )}
             {panelTab === 'style' && (

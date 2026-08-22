@@ -60,12 +60,13 @@ function Ornament({ className = '', ornament }: { className?: string; ornament?:
  * serif + ornamen. Selalu dibungkus <Inner name="title"> agar bisa digerakkan
  * bebas di builder. Kicker adalah aksen dekoratif (tidak editable).
  */
-function SectionHeading({ title, subtitle, ornament, kicker, titleProp = 'title' }: {
+function SectionHeading({ title, subtitle, ornament, kicker, titleProp = 'title', showOrnament = true }: {
   title: string;
   subtitle?: string;
   ornament?: string;
   kicker?: string;
   titleProp?: string;
+  showOrnament?: boolean;
 }) {
   const theme = useTheme();
   return (
@@ -82,7 +83,7 @@ function SectionHeading({ title, subtitle, ornament, kicker, titleProp = 'title'
             <Editable prop="subtitle">{subtitle}</Editable>
           </p>
         )}
-        <Ornament className="mt-6 opacity-60" ornament={ornament || theme?.ornament} />
+        {showOrnament !== false && <Ornament className="mt-6 opacity-60" ornament={ornament || theme?.ornament} />}
       </div>
     </Inner>
   );
@@ -1026,6 +1027,31 @@ export function CoupleBlock({ props }: { props: BlockProps }) {
   }
 
   // default vertical
+  const photoLayout = str(props, 'photo_layout') || 'together';
+
+  if (photoLayout === 'above') {
+    // Foto di atas (grid 2 kolom), nama+orangtua di bawah
+    return (
+      <section className="w-full min-w-0 max-w-full overflow-hidden px-4 py-10 sm:px-6 sm:py-12 md:py-16 box-border">
+        <div className="mx-auto w-full min-w-0 max-w-full text-center">
+          {str(props, 'introduction') && <Inner name="introduction">{title(<p className="mb-6 break-words text-sm leading-relaxed opacity-80"><Editable prop="introduction" multiline>{str(props, 'introduction')}</Editable></p>)}</Inner>}
+          {str(props, 'bismillah') && <Inner name="bismillah">{title(<p className="mb-6 break-words text-sm italic opacity-70"><Editable prop="bismillah">{str(props, 'bismillah')}</Editable></p>)}</Inner>}
+          {str(props, 'quote') && <Inner name="quote">{title(<p className="mb-8 break-words border-y border-current/10 py-6 text-sm italic leading-relaxed opacity-80">&ldquo;<Editable prop="quote">{str(props, 'quote')}</Editable>&rdquo;</p>)}</Inner>}
+          <div className="mx-auto grid w-full min-w-0 max-w-full grid-cols-[auto_auto] justify-center gap-6 sm:gap-10">
+            <Inner name="groom"><div className="min-w-0"><CouplePhoto src={groomPhoto} shape={photoShape} alt={str(props, 'groom')} /></div></Inner>
+            <Inner name="bride"><div className="min-w-0"><CouplePhoto src={bridePhoto} shape={photoShape} alt={str(props, 'bride')} /></div></Inner>
+          </div>
+          <Inner name="ampersand"><GiantAmp /></Inner>
+          <div className="grid w-full min-w-0 gap-6 sm:grid-cols-[1fr_auto_1fr] sm:items-start">
+            <Inner name="groom"><div className="min-w-0 text-center"><h3 className="break-words font-heading text-xl font-medium leading-snug sm:text-2xl"><Editable prop="groom">{str(props, 'groom')}</Editable></h3><p className="mt-1.5 break-words text-[11px] uppercase tracking-widest opacity-60"><Editable prop="groom_parents">{str(props, 'groom_parents')}</Editable></p></div></Inner>
+            <Inner name="ampersand2"><div className="hidden justify-center sm:flex"><span className="font-heading text-3xl italic opacity-20">&</span></div></Inner>
+            <Inner name="bride"><div className="min-w-0 text-center"><h3 className="break-words font-heading text-xl font-medium leading-snug sm:text-2xl"><Editable prop="bride">{str(props, 'bride')}</Editable></h3><p className="mt-1.5 break-words text-[11px] uppercase tracking-widest opacity-60"><Editable prop="bride_parents">{str(props, 'bride_parents')}</Editable></p></div></Inner>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="w-full min-w-0 max-w-full overflow-hidden px-4 py-10 sm:px-6 sm:py-12 md:py-16 box-border">
       <div className="mx-auto w-full min-w-0 max-w-full text-center">
@@ -1046,7 +1072,7 @@ export function CountdownBlock({ props }: { props: BlockProps }) {
   const theme = useTheme();
   return (
     <section className="w-full min-w-0 max-w-full overflow-hidden box-border px-4 py-10 sm:px-6 sm:py-12 md:py-16 text-center">
-      <SectionHeading title={str(props, 'title')} kicker="Menuju Hari Bahagia" ornament={theme?.ornament} />
+      <SectionHeading title={str(props, 'title')} kicker="Menuju Hari Bahagia" ornament={theme?.ornament} showOrnament={bool(props, 'show_ornament') !== false} />
       <Inner name="timer">
         <CountdownTimer target={target} variant={variant} />
       </Inner>
@@ -1166,7 +1192,7 @@ export function EventDetailBlock({ props }: { props: BlockProps }) {
           <Inner name="icon">
             <Icon className="mx-auto h-7 w-7" />
           </Inner>
-          <SectionHeading title={str(props, 'title')} kicker="Waktu & Tempat" ornament={theme?.ornament} />
+          <SectionHeading title={str(props, 'title')} kicker="Waktu & Tempat" ornament={theme?.ornament} showOrnament={bool(props, 'show_ornament') !== false} />
           <Inner name="datetime">
             <div className="mt-6 space-y-3 text-sm">
               <div className="flex items-start justify-center gap-2">
@@ -1267,7 +1293,7 @@ export function StoryBlock({ props }: { props: BlockProps }) {
             <Editable prop="subtitle">{str(props, 'subtitle')}</Editable>
           </p>
         )}
-        <Ornament className="mt-6 opacity-60" ornament={str(props, 'ornament') || theme?.ornament} />
+        {bool(props, 'show_ornament') !== false && <Ornament className="mt-6 opacity-60" ornament={str(props, 'ornament') || theme?.ornament} />}
       </div>
     </Inner>
   );
@@ -1971,7 +1997,7 @@ export function ThanksBlock({ props }: { props: BlockProps }) {
   if (variant === 'elegant') {
     return (
       <section className="px-6 py-10 sm:py-14 md:py-20 text-center">
-        <SectionHeading title={str(props, 'title')} kicker="Doa & Restu" ornament={theme?.ornament} />
+        <SectionHeading title={str(props, 'title')} kicker="Doa & Restu" ornament={theme?.ornament} showOrnament={bool(props, 'show_ornament') !== false} />
         <div className="mx-auto max-w-md rounded-2xl border border-current/10 bg-current/[0.03] px-8 py-10">
           <Inner name="message">
             <p className="mx-auto mt-6 w-full text-sm leading-relaxed opacity-80">
@@ -2130,9 +2156,11 @@ export function QuoteBlock({ props }: { props: BlockProps }) {
   if (variant === 'card') {
     return (
       <section className="px-6 py-10 sm:py-12 md:py-14 text-center">
-        <Inner name="ornament">
-          <Ornament className="mb-6 opacity-50" ornament={str(props, 'ornament') || theme?.ornament} />
-        </Inner>
+        {bool(props, 'show_ornament') !== false && (
+          <Inner name="ornament">
+            <Ornament className="mb-6 opacity-50" ornament={str(props, 'ornament') || theme?.ornament} />
+          </Inner>
+        )}
         <div className="mx-auto max-w-md rounded-2xl border border-current/10 bg-current/[0.03] px-6 py-8">
           <p className="mb-4 text-4xl leading-none opacity-30">&ldquo;</p>
           {quoteContent}
@@ -2143,9 +2171,11 @@ export function QuoteBlock({ props }: { props: BlockProps }) {
 
   return (
     <section className="px-6 py-10 sm:py-12 md:py-14 text-center">
-      <Inner name="ornament">
-        <Ornament className="mb-6 opacity-50" ornament={str(props, 'ornament') || theme?.ornament} />
-      </Inner>
+      {bool(props, 'show_ornament') !== false && (
+        <Inner name="ornament">
+          <Ornament className="mb-6 opacity-50" ornament={str(props, 'ornament') || theme?.ornament} />
+        </Inner>
+      )}
       {quoteContent}
     </section>
   );

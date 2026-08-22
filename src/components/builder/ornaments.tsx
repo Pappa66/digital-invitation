@@ -73,13 +73,18 @@ export type OrnamentKey =
   | 'batak-ulos'
   | 'sunda-kebat'
   | 'minang-gadang'
-  | 'papua-asmat';
+  | 'papua-asmat'
+  | 'ring-circles'
+  | 'ribbon-bow'
+  | 'wave-divider'
+  | 'arrow-divider'
+  | 'heart-simple';
 
 export const ORNAMENT_CATEGORIES: Record<string, { label: string; keys: OrnamentKey[] }> = {
-  classic: { label: 'Klasik & Mewah', keys: ['flourish', 'corner-flourish', 'laurel', 'flourish-double', 'paisley', 'scroll-divider', 'vine-border', 'gardenia-wreath', 'baby-breath'] },
+  classic: { label: 'Klasik & Mewah', keys: ['flourish', 'corner-flourish', 'laurel', 'flourish-double', 'paisley', 'scroll-divider', 'vine-border', 'gardenia-wreath', 'baby-breath', 'ribbon-bow'] },
   outdoor: { label: 'Outdoor & Natural', keys: ['eucalyptus', 'wildflower', 'lotus', 'birds', 'cherry-blossom', 'olive-branch', 'tropical-leaf', 'botanical-garland', 'frangipani', 'monstera-garland', 'sunflower'] },
-  romance: { label: 'Romantis', keys: ['rose-branch', 'heart-swirl', 'celestial', 'paisley', 'infinity-love', 'corner-rose', 'corner-peony', 'orchid-spray', 'lily-divider', 'peony-bouquet'] },
-  modern: { label: 'Modern & Minimal', keys: ['arch-geometric', 'diamond-lines', 'celestial', 'flourish', 'art-deco', 'geometric-hex', 'mandala'] },
+  romance: { label: 'Romantis', keys: ['rose-branch', 'heart-swirl', 'celestial', 'paisley', 'infinity-love', 'corner-rose', 'corner-peony', 'orchid-spray', 'lily-divider', 'peony-bouquet', 'ring-circles', 'heart-simple'] },
+  modern: { label: 'Modern & Minimal', keys: ['arch-geometric', 'diamond-lines', 'celestial', 'flourish', 'art-deco', 'geometric-hex', 'mandala', 'wave-divider', 'arrow-divider'] },
   floral: { label: 'Sudut & Bunga', keys: ['corner-jasmine', 'corner-rose', 'corner-peony', 'jasmine-garland', 'orchid-spray', 'peony-bouquet', 'gardenia-wreath'] },
   flowers: { label: 'Kepala Bunga', keys: ['rose-head', 'jasmine-head', 'orchid-head', 'peony-head', 'lily-head', 'tulip-head', 'daisy-head', 'hydrangea-head'] },
   cultural: { label: 'Budaya & Agama', keys: ['newspaper-rule', 'batik-parang', 'wayang', 'om-symbol', 'cross', 'lantern', 'naga', 'stupa', 'islamic-geometric', 'masjid-dome', 'church-window', 'hindu-mandala', 'buddha-wheel', 'jawa-gunungan', 'batak-ulos', 'sunda-kebat', 'minang-gadang', 'papua-asmat'] }
@@ -147,7 +152,12 @@ export const ORNAMENTS: { key: OrnamentKey; label: string; category: string }[] 
   { key: 'batak-ulos', label: 'Kain Ulos', category: 'cultural' },
   { key: 'sunda-kebat', label: 'Kebat Sunda', category: 'cultural' },
   { key: 'minang-gadang', label: 'Rumah Gadang', category: 'cultural' },
-  { key: 'papua-asmat', label: 'Motif Asmat', category: 'cultural' }
+  { key: 'papua-asmat', label: 'Motif Asmat', category: 'cultural' },
+  { key: 'ring-circles', label: 'Cincin Lingkaran', category: 'romance' },
+  { key: 'ribbon-bow', label: 'Pita & Busur', category: 'classic' },
+  { key: 'wave-divider', label: 'Gelombang', category: 'modern' },
+  { key: 'arrow-divider', label: 'Panah / Chevron', category: 'modern' },
+  { key: 'heart-simple', label: 'Hati Sederhana', category: 'romance' }
 ];
 
 export const ORNAMENT_LABELS: Record<OrnamentKey, string> = Object.fromEntries(
@@ -1148,6 +1158,48 @@ const ORNAMENT_COMPONENTS: Record<OrnamentKey, Comp> = {
       <path d="M40 8c10 6 14 18 14 28 0 10-6 16-14 16s-14-6-14-16c0-10 4-22 14-28z" opacity={0.7} />
       <path d="M28 28h24M40 16v32M32 22l16 16M48 22L32 38" opacity={0.45} />
       <circle cx="40" cy="22" r="2.6" fill="var(--oa-accent)" stroke="none" opacity={0.9} />
+    </Svg>
+  ),
+  'ring-circles': ({ width, height, className, style, title, accent }) => (
+    <Svg viewBox="0 0 120 50" width={width ?? 140} height={height} className={className} style={style} title={title} accent={accent}>
+      <circle cx="42" cy="25" r="16" opacity={0.7} />
+      <circle cx="78" cy="25" r="16" opacity={0.7} />
+      <path d="M58 25a16 16 0 0 1 4 0" opacity={0.5} />
+      <circle cx="42" cy="25" r="3" fill="var(--oa-accent)" stroke="none" opacity={0.9} />
+      <circle cx="78" cy="25" r="3" fill="var(--oa-accent)" stroke="none" opacity={0.9} />
+      <path d="M10 25h18M92 25h18" opacity={0.3} />
+    </Svg>
+  ),
+  'ribbon-bow': ({ width, height, className, style, title, accent }) => (
+    <Svg viewBox="0 0 120 50" width={width ?? 140} height={height} className={className} style={style} title={title} accent={accent}>
+      <path d="M60 18c-12-10-30-8-32 6s16 14 32 6" opacity={0.7} />
+      <path d="M60 18c12-10 30-8 32 6s-16 14-32 6" opacity={0.7} />
+      <circle cx="60" cy="25" r="4" fill="var(--oa-accent)" stroke="none" opacity={0.9} />
+      <path d="M50 34c-4 8-6 12-10 14M70 34c4 8 6 12 10 14" opacity={0.5} />
+      <path d="M10 25h22M88 25h22" opacity={0.3} />
+    </Svg>
+  ),
+  'wave-divider': ({ width, height, className, style, title, accent }) => (
+    <Svg viewBox="0 0 140 30" width={width ?? 160} height={height} className={className} style={style} title={title} accent={accent}>
+      <path d="M4 15c10-10 20-10 30 0s20 10 30 0 20-10 30 0 20 10 30 0 20-10 30 0 20 10 30 0" opacity={0.7} />
+      <path d="M4 20c10-10 20-10 30 0s20 10 30 0 20-10 30 0 20 10 30 0 20-10 30 0 20 10 30 0" opacity={0.35} />
+      <circle cx="70" cy="15" r="2.5" fill="var(--oa-accent)" stroke="none" opacity={0.9} />
+    </Svg>
+  ),
+  'arrow-divider': ({ width, height, className, style, title, accent }) => (
+    <Svg viewBox="0 0 140 30" width={width ?? 160} height={height} className={className} style={style} title={title} accent={accent}>
+      <path d="M8 15h48" opacity={0.6} />
+      <path d="M56 15l10-10v20z" opacity={0.7} />
+      <path d="M74 15l10-10v20z" opacity={0.7} />
+      <path d="M84 15h48" opacity={0.6} />
+      <circle cx="70" cy="15" r="2.5" fill="var(--oa-accent)" stroke="none" opacity={0.9} />
+    </Svg>
+  ),
+  'heart-simple': ({ width, height, className, style, title, accent }) => (
+    <Svg viewBox="0 0 120 50" width={width ?? 140} height={height} className={className} style={style} title={title} accent={accent}>
+      <path d="M60 40c-20-16-36-28-36-14s16 14 36 28c20-14 36-20 36-28s-16-2-36 14z" opacity={0.7} />
+      <path d="M60 36c-14-12-24-20-24-10s10 10 24 20c14-10 24-14 24-20s-10-2-24 10z" fill="var(--oa-accent)" opacity={0.3} />
+      <path d="M10 25h26M84 25h26" opacity={0.3} />
     </Svg>
   )
 };
