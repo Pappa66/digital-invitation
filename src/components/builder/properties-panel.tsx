@@ -1667,7 +1667,7 @@ export default function PropertiesPanel({ mobileOpen = false, onClose }: { mobil
                           <ColorPicker
                             label="Warna Latar"
                             value={block.style?.bgColor ?? ''}
-                            onChange={(c) => setBlockStyle(block.id, { bgColor: c ? withAlpha(c) : c })}
+                            onChange={(c) => setBlockStyle(block.id, { bgColor: c })}
                           />
                            <div>
                             <p className="mb-1 text-xs font-medium text-[#4a443c]">Gradien Latar</p>

@@ -218,7 +218,8 @@ function StyledSection({ style, children }: { style?: BlockStyle; children: Reac
 
   if (style.bgImage) {
     return (
-      <div className={`relative transition-[background-color,background-image] duration-500 ease-out${textOverride}`} style={css}>
+      <div className={`relative overflow-hidden transition-[background-color,background-image] duration-500 ease-out${textOverride}`} style={css}>
+        {/* Background: monochrome + redup agar konten tidak tertutup */}
         <div className="absolute inset-0 z-0">
           <Image
             src={style.bgImage}
@@ -227,12 +228,13 @@ function StyledSection({ style, children }: { style?: BlockStyle; children: Reac
             sizes="100vw"
             quality={75}
             loading="lazy"
-            className={`${style.bgFit === 'contain' ? 'object-contain' : 'object-cover'}`}
+            className={`${style.bgFit === 'contain' ? 'object-contain' : 'object-cover'} opacity-30 saturate-0`}
             style={{ objectPosition: style.bgPosition || 'center' }}
           />
-          <div className="absolute inset-0 bg-black/40" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/20 to-black/30" />
         </div>
-        <div className="relative z-10">{children}</div>
+        {/* Konten: efek melayang (floating) */}
+        <div className="relative z-10 rounded-2xl mx-3 my-4 bg-[var(--color-background)]/80 backdrop-blur-sm shadow-[0_8px_32px_rgba(0,0,0,0.12)] ring-1 ring-black/5 px-4 py-2">{children}</div>
       </div>
     );
   }
