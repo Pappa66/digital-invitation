@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, lazy, Suspense } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MailOpen, X } from 'lucide-react';
 import { OrnamentArt, type OrnamentKey } from '@/components/builder/ornaments';
@@ -135,10 +136,23 @@ export default function CoverModal({
               <X className="h-5 w-5" aria-hidden />
             </motion.button>
 
-            {/* Layer tirai bunga procedural (floral). */}
+            {/* Layer foto cover — satu sumber untuk semua gaya pembuka.
+              Prioritas: gambar cover (cover_bg_image) kalau diisi, kalau kosong
+              mengikuti gambar Hero undangan. */}
+            {(coverBgImage || bgImage) && (
+              <div className="absolute inset-0 z-0" aria-hidden>
+                <Image
+                  src={(coverBgImage || bgImage)!} alt="" fill priority sizes="100vw"
+                  className="object-cover opacity-70"
+                />
+                <div className="absolute inset-0" style={{ background: 'rgba(18,13,9,0.34)' }} />
+              </div>
+            )}
+
+            {/* Layer tirai bunga procedural (floral) — hiasan di atas foto. */}
             {use3d && (
               <Suspense fallback={<div className="absolute inset-0" style={{ background: `radial-gradient(ellipse 80% 60% at 50% 50%, color-mix(in srgb, ${primary} 18%, transparent), transparent 70%)` }} />}>
-                <FloralCurtain open={open} primary={primary} secondary={secondary} image={bgImage || coverBgImage} />
+                <FloralCurtain open={open} primary={primary} secondary={secondary} />
               </Suspense>
             )}
 

@@ -1,58 +1,11 @@
 -- ============================================================
--- 0017_fix_share_edit_tokens.sql
--- Idempoten: jalankan berulang kali aman.
--- Kasus: 0016 gagal di tengah jalan karena policy
--- "share_tokens_manage_owner" sudah ada (remote sudah
--- punya tabel+policy pertama), sehingga policy kedua &
--- keempat RPC functions belum terbuat. Migrasi ini
--- melengkapinya tanpa bentrok (drop policy if exists).
+-- 0018_fix_share_token_rpc_ambiguity.sql
+-- Perbaiki bug "column reference id is ambiguous" di
+-- generate_share_edit_token (OUT param 'id' bentrok dengan
+-- public.projects.id di subquery EXISTS). Juga ganti alias
+-- reserved-word 'set' -> 'st' di revoke/list.
+-- Idempoten: create or replace, aman dijalankan berulang.
 -- ============================================================
-
--- Pastikan tabel ada (no-op jika sudah ada)
-create table if not exists public.share_edit_tokens (
-  id          uuid primary key default gen_random_uuid(),
-  project_id  uuid not null references public.projects(id) on delete cascade,
-  token       text not null unique,
-  created_by  uuid not null references auth.users(id) on delete cascade,
-  expires_at  timestamptz not null,
-  is_active   boolean not null default true,
-  note        text,
-  created_at  timestamptz not null default now()
-);
-
-create unique index if not exists share_edit_tokens_token_uidx
-  on public.share_edit_tokens (token);
-create index if not exists share_edit_tokens_project_idx
-  on public.share_edit_tokens (project_id);
-
-alter table public.share_edit_tokens enable row level security;
-
--- Buat ulang policy (drop dulu agar idempoten)
-drop policy if exists "share_tokens_manage_owner" on public.share_edit_tokens;
-create policy "share_tokens_manage_owner"
-  on public.share_edit_tokens for all
-  to authenticated
-  using (
-    exists (
-      select 1 from public.projects p
-      where p.id = share_edit_tokens.project_id
-        and p.user_id = auth.uid()
-    )
-  )
-  with check (
-    exists (
-      select 1 from public.projects p
-      where p.id = share_edit_tokens.project_id
-        and p.user_id = auth.uid()
-    )
-  );
-
-drop policy if exists "share_tokens_service_role" on public.share_edit_tokens;
-create policy "share_tokens_service_role"
-  on public.share_edit_tokens for all
-  to service_role
-  using (true)
-  with check (true);
 
 -- 3) RPC: generate share token (hanya owner)
 create or replace function public.generate_share_edit_token(
@@ -215,7 +168,7 @@ begin
 
   if not exists (
     select 1 from public.projects
-    where id = p_project_id and user_id = v_user_id
+    where public.projects.id = p_project_id and public.projects.user_id = v_user_id
   ) then
     raise exception 'Project not found or access denied';
   end if;
