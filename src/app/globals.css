@@ -138,8 +138,7 @@ body {
 
 /*
  * Override warna teks per-section (dari panel "Warna & Background Section").
- * Pakai !important agar mengalahkan kelas warna eksplisit (mis. text-white)
- * dan ikon/elemen yang memakai currentColor di dalam section.
+ * Blanket: semua elemen teks ikut --section-text-color.
  */
 .guest-root [data-text-override],
 .guest-root [data-text-override] h1,
@@ -153,6 +152,27 @@ body {
 .guest-root [data-text-override] div,
 .guest-root [data-text-override] small {
   color: var(--section-text-color) !important;
+}
+
+/* Per-element overrides — higher specificity via nested selectors */
+.guest-root [data-text-override] h1,
+.guest-root [data-text-override] h2,
+.guest-root [data-text-override] h3,
+.guest-root [data-text-override] h4 {
+  color: var(--section-heading-color) !important;
+}
+.guest-root [data-text-override] p.opacity-70,
+.guest-root [data-text-override] p[class*="italic"] {
+  color: var(--section-subtitle-color) !important;
+}
+.guest-root [data-text-override] button,
+.guest-root [data-text-override] a.inline-flex {
+  color: var(--section-accent-color) !important;
+  border-color: var(--section-accent-color) !important;
+}
+.guest-root [data-text-override] button[class*="bg-"][class*="primary"],
+.guest-root [data-text-override] [role="radio"][aria-checked="true"] {
+  background-color: var(--section-accent-color) !important;
 }
 
 /* Utility: hide scrollbar on 100vh builder canvas */

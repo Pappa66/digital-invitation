@@ -17,11 +17,12 @@ interface ProjectCardProps {
   project: Project;
   onDuplicated: (id: string, title: string) => void;
   onDeleted: (id: string) => void;
+  heroFallback?: string;
 }
 
 type ConfirmTarget = 'duplicate' | 'delete' | null;
 
-export default function ProjectCard({ project, onDuplicated, onDeleted }: ProjectCardProps) {
+export default function ProjectCard({ project, onDuplicated, onDeleted, heroFallback }: ProjectCardProps) {
   const router = useRouter();
   const [confirm, setConfirm] = useState<ConfirmTarget>(null);
   const [busy, setBusy] = useState(false);
@@ -87,8 +88,8 @@ export default function ProjectCard({ project, onDuplicated, onDeleted }: Projec
   return (
     <div className="flex flex-col overflow-hidden rounded-xl border border-dashboard-border bg-dashboard-surface shadow-sm transition-shadow hover:shadow-md">
       <a href={`/builder/${project.id}`} className="group relative block h-40 overflow-hidden bg-gray-100 sm:h-44">
-        {project.thumbnail ? (
-          <Image src={project.thumbnail} alt="" fill sizes="(min-width:768px) 33vw, 100vw" className="object-cover transition-transform duration-300 group-hover:scale-105" />
+        {project.thumbnail || heroFallback ? (
+          <Image src={project.thumbnail || heroFallback!} alt="" fill sizes="(min-width:768px) 33vw, 100vw" className="object-cover transition-transform duration-300 group-hover:scale-105" />
         ) : (
           <div className="flex h-full w-full items-center justify-center">
             <span className="text-xs text-gray-400">Belum ada preview</span>

@@ -20,6 +20,7 @@ interface DashboardClientProps {
   projects: Project[];
   isDemo?: boolean;
   userName?: string | null;
+  thumbnails?: Record<string, string>;
 }
 
 function makeDemoProject(id: string, title: string): Project {
@@ -38,7 +39,7 @@ function makeDemoProject(id: string, title: string): Project {
 
 type TabType = 'invitations' | 'clients' | 'finance';
 
-export default function DashboardClient({ projects, isDemo = false, userName }: DashboardClientProps) {
+export default function DashboardClient({ projects, isDemo = false, userName, thumbnails = {} }: DashboardClientProps) {
   const [items, setItems] = useState<Project[]>(projects);
   const [modalOpen, setModalOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
@@ -282,7 +283,7 @@ export default function DashboardClient({ projects, isDemo = false, userName }: 
           ) : (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {pagedItems.map((p) => (
-                <ProjectCard key={p.id} project={p} onDuplicated={handleDuplicated} onDeleted={handleDeleted} />
+                <ProjectCard key={p.id} project={p} onDuplicated={handleDuplicated} onDeleted={handleDeleted} heroFallback={thumbnails[p.id]} />
               ))}
             </div>
           )}

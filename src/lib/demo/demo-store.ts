@@ -198,8 +198,11 @@ export function demoSaveDesign(id: string, canvas: CanvasData) {
   const designs = read<Record<string, CanvasData>>(DESIGNS_KEY, {});
   designs[id] = structuredClone(canvas);
   write(DESIGNS_KEY, designs);
+  // Auto-update thumbnail from hero bg_image
+  const heroBlock = canvas.blocks.find((b) => b.type === 'Hero');
+  const heroBg = typeof heroBlock?.props?.bg_image === 'string' ? heroBlock.props.bg_image.trim() : '';
   const projects = listProjects().map((p) =>
-    p.id === id ? { ...p, updated_at: new Date().toISOString() } : p
+    p.id === id ? { ...p, thumbnail: heroBg || p.thumbnail, updated_at: new Date().toISOString() } : p
   );
   write(PROJECTS_KEY, projects);
 }

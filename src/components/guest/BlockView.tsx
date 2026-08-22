@@ -169,15 +169,18 @@ export default function BlockView({ block, projectId, editable = false, greeting
 }
 
 function StyledSection({ style, children }: { style?: BlockStyle; children: React.ReactNode }) {
-  if (!style || (!style.textColor && !style.bgColor && !style.bgGradient && !style.bgImage && !style.borderRadius && !style.border && !style.boxShadow && !style.padding && style.opacity === undefined && !style.textAlign)) {
+  if (!style || (!style.textColor && !style.headingColor && !style.subtitleColor && !style.accentColor && !style.bgColor && !style.bgGradient && !style.bgImage && !style.borderRadius && !style.border && !style.boxShadow && !style.padding && style.opacity === undefined && !style.textAlign)) {
     return <>{children}</>;
   }
 
-  const css: React.CSSProperties = {};
+  const css: Record<string, string | number> = {};
   if (style.textColor) {
     css.color = style.textColor;
-    (css as Record<string, string>)['--section-text-color'] = style.textColor;
+    css['--section-text-color'] = style.textColor;
   }
+  if (style.headingColor) css['--section-heading-color'] = style.headingColor;
+  if (style.subtitleColor) css['--section-subtitle-color'] = style.subtitleColor;
+  if (style.accentColor) css['--section-accent-color'] = style.accentColor;
   if (style.bgGradient) css.backgroundImage = style.bgGradient;
   else if (style.bgColor) css.backgroundColor = style.bgColor;
   if (style.borderRadius) css.borderRadius = style.borderRadius;
@@ -187,7 +190,8 @@ function StyledSection({ style, children }: { style?: BlockStyle; children: Reac
   if (style.opacity !== undefined) css.opacity = Math.min(1, Math.max(0, style.opacity));
   if (style.textAlign) css.textAlign = style.textAlign;
 
-  const textOverride = style.textColor ? ' data-text-override' : '';
+  const hasColorOverride = style.textColor || style.headingColor || style.subtitleColor || style.accentColor;
+  const textOverride = hasColorOverride ? ' data-text-override' : '';
 
   if (style.bgImage) {
     const mono = style.bgMonochrome !== false;
