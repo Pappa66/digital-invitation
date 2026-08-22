@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { useRef, useEffect, useState } from 'react';
 import type { Block, BlockStyle } from '@/lib/types';
 import {
   HeroBlock,
@@ -30,7 +30,6 @@ import { usePreview } from '@/components/guest/preview-context';
 import { InnerProvider } from '@/components/guest/inner-context';
 import { DecorLayer } from '@/components/guest/blocks';
 import { useTheme } from '@/components/guest/theme-context';
-import type { Theme } from '@/lib/types';
 
 interface BlockViewProps {
   block: Block;
@@ -39,14 +38,30 @@ interface BlockViewProps {
   greetingName?: string;
   cardStyle?: boolean;
   demo?: boolean;
-  /** Show "Buka Undangan" button in Hero (false when cover is enabled). */
   showCoverButton?: boolean;
+}
+
+function useScrollReveal(threshold = 0.12) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.unobserve(el); } },
+      { threshold, rootMargin: '0px 0px -30px 0px' }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [threshold]);
+  return { ref, visible };
 }
 
 export default function BlockView({ block, projectId, editable = false, greetingName, cardStyle, demo, showCoverButton = true }: BlockViewProps) {
   const preview = usePreview();
   const theme = useTheme();
-  const animateEntrance = (!preview || demo) && !editable;
+  const animate = (!preview || demo) && !editable;
+  const { ref: revealRef, visible } = useScrollReveal();
   let view: React.ReactNode;
   switch (block.type) {
     case 'Hero':
@@ -118,19 +133,19 @@ export default function BlockView({ block, projectId, editable = false, greeting
   const cardVariant = theme?.card_variant ?? 'shadow';
   
   const cardVariants: Record<string, string> = {
-    shadow: 'overflow-hidden rounded-2xl bg-[var(--color-background)] shadow-[0_10px_30px_rgba(0,0,0,0.14)] ring-1 ring-black/5',
-    outline: 'overflow-hidden rounded-2xl bg-[var(--color-background)] ring-2 ring-[var(--color-primary)]/30',
-    glass: 'overflow-hidden rounded-2xl bg-white/10 backdrop-blur-md ring-1 ring-white/20 shadow-[0_8px_30px_rgba(0,0,0,0.12)]',
+    shadow: 'overflow-hidden rounded-2xl bg-[var(--color-background)] shadow-[0_12px_40px_rgba(0,0,0,0.12)] ring-1 ring-black/5',
+    outline: 'overflow-hidden rounded-2xl bg-[var(--color-background)] ring-2 ring-[var(--color-primary)]/25',
+    glass: 'overflow-hidden rounded-2xl bg-white/15 backdrop-blur-xl ring-1 ring-white/25 shadow-[0_8px_32px_rgba(0,0,0,0.15)]',
     minimal: 'overflow-hidden rounded-xl bg-[var(--color-background)]',
-    elevated: 'overflow-hidden rounded-3xl bg-[var(--color-background)] shadow-[0_16px_45px_rgba(0,0,0,0.18)]',
+    elevated: 'overflow-hidden rounded-3xl bg-[var(--color-background)] shadow-[0_20px_50px_rgba(0,0,0,0.16)]',
     flat: 'overflow-hidden rounded-none bg-current/[0.03] border border-current/10',
-    arch: 'overflow-hidden rounded-t-[999px] bg-[var(--color-background)] shadow-[0_10px_30px_rgba(0,0,0,0.14)] ring-1 ring-black/5',
-    tilt: 'overflow-hidden rounded-2xl rotate-1 bg-[var(--color-background)] shadow-[0_12px_34px_rgba(0,0,0,0.15)] ring-1 ring-black/5',
-    double: 'overflow-hidden rounded-2xl bg-[var(--color-background)] shadow-[0_8px_26px_rgba(0,0,0,0.12)] outline outline-1 outline-offset-[-7px] outline-[var(--color-secondary)]/50',
-    gold: 'overflow-hidden rounded-2xl bg-gradient-to-b from-[var(--color-background)] to-[color-mix(in srgb,var(--color-primary) 8%,var(--color-background))] shadow-[0_12px_36px_rgba(0,0,0,0.16)] ring-1 ring-[var(--color-primary)]/30',
+    arch: 'overflow-hidden rounded-t-[999px] bg-[var(--color-background)] shadow-[0_12px_40px_rgba(0,0,0,0.12)] ring-1 ring-black/5',
+    tilt: 'overflow-hidden rounded-2xl rotate-1 bg-[var(--color-background)] shadow-[0_14px_38px_rgba(0,0,0,0.13)] ring-1 ring-black/5',
+    double: 'overflow-hidden rounded-2xl bg-[var(--color-background)] shadow-[0_10px_30px_rgba(0,0,0,0.10)] outline outline-1 outline-offset-[-8px] outline-[var(--color-secondary)]/40',
+    gold: 'overflow-hidden rounded-2xl bg-gradient-to-b from-[var(--color-background)] to-[color-mix(in srgb,var(--color-primary) 6%,var(--color-background))] shadow-[0_14px_40px_rgba(0,0,0,0.14)] ring-1 ring-[var(--color-primary)]/25',
   };
   const cardCls = cardVariants[cardVariant] || cardVariants.shadow;
-  const cardWrapCls = `${cardCls} mx-0 mb-1 mt-1 w-full max-w-full min-w-0 box-border`;
+  const cardWrapCls = `${cardCls} mx-0 mb-1.5 mt-1.5 w-full max-w-full min-w-0 box-border`;
   
   const hideOn = block.style?.hideOn ?? [];
   const hideClasses = [
@@ -142,25 +157,17 @@ export default function BlockView({ block, projectId, editable = false, greeting
     <StyledSection style={block.style}>{view}</StyledSection>
   );
 
+  const revealClass = animate && !isHero ? `scroll-reveal ${visible ? 'scroll-reveal-visible' : ''}` : '';
+
   return (
     <InnerProvider value={block.inner ?? undefined}>
       <BuilderEditableContext.Provider value={editable ? { blockId: block.id } : null}>
         <div
+          ref={animate && !isHero ? revealRef : undefined}
           data-block-type={block.type}
-          className={`relative w-full min-w-0 max-w-full overflow-hidden box-border transition-[background-color,background-image,opacity] duration-500 ease-out${hideClasses}`}
+          className={`relative w-full min-w-0 max-w-full overflow-hidden box-border transition-[background-color,background-image,opacity] duration-500 ease-out${hideClasses ? ' ' + hideClasses : ''}${revealClass ? ' ' + revealClass : ''}`}
         >
-          {animateEntrance ? (
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.12 }}
-              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            >
-              {renderCard ? <div className={cardWrapCls}>{body}</div> : body}
-            </motion.div>
-          ) : (
-            renderCard ? <div className={cardWrapCls}>{body}</div> : body
-          )}
+          {renderCard ? <div className={cardWrapCls}>{body}</div> : body}
           <DecorLayer blockId={block.id} decor={block.decor} />
         </div>
       </BuilderEditableContext.Provider>

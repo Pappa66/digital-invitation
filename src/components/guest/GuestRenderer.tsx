@@ -23,6 +23,10 @@ interface GuestRendererProps {
 
 const CANVAS_W = 420;
 
+function SectionGap() {
+  return <div className="h-4" aria-hidden />;
+}
+
 export default function GuestRenderer({ canvas, projectId, greetingName, preview, demo, width = 'mobile' }: GuestRendererProps) {
   const immersive = !preview || !!demo;
   const flow = canvas.flow ?? 'stack';
@@ -44,8 +48,6 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
     '--font-body': `'${canvas.theme.font_body}', sans-serif`
   } as React.CSSProperties;
 
-  // Tampilan publish/preview: HP lagi (430px centered) tapi tetap full di HP (w-full + max-w-430).
-  // Builder preview tetap pakai lebar dari DeviceToggle (mobile 430 / tablet 768 / desktop 100%).
   const rootClass =
     'guest-root relative w-full min-w-0 overflow-x-clip box-border ' +
     (canvas.theme.card_style ? 'guest-card-style ' : '') +
@@ -90,7 +92,7 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
           {immersive && <MusicPlayer settings={canvas.settings} />}
           {immersive && <ShareBar {...shareMeta} />}
           <GuestNav blocks={canvas.blocks} />
-          {!canvas.theme.card_style && <GuestFrame mode={canvas.theme.frame} color={canvas.theme.secondary} fixed={!preview} />}
+          <GuestFrame mode={canvas.theme.frame} color={canvas.theme.secondary} fixed={!preview} />
           {immersive && showCover && <CoverModal {...coverProps} />}
         </div>
         </ThemeContext.Provider>
@@ -102,8 +104,11 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
     <PreviewContext.Provider value={!!preview}>
       <ThemeContext.Provider value={canvas.theme}>
       <div className={rootClass} style={styleVars}>
-        {canvas.blocks.map((block) => (
-          <BlockView key={block.id} block={block} projectId={projectId} greetingName={greetingName} cardStyle={canvas.theme.card_style} demo={immersive && !!demo} showCoverButton={!showCover} />
+        {canvas.blocks.map((block, i) => (
+          <div key={block.id}>
+            <BlockView block={block} projectId={projectId} greetingName={greetingName} cardStyle={canvas.theme.card_style} demo={immersive && !!demo} showCoverButton={!showCover} />
+            {i < canvas.blocks.length - 1 && <SectionGap />}
+          </div>
         ))}
         {!preview && canvas.settings.guest_book_enabled && <GuestBookWall projectId={projectId} />}
         {!preview && projectId && canvas.settings.checkin_enabled !== false && (
@@ -119,7 +124,7 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
         {immersive && <MusicPlayer settings={canvas.settings} />}
         {immersive && <ShareBar {...shareMeta} />}
         <GuestNav blocks={canvas.blocks} />
-        {!canvas.theme.card_style && <GuestFrame mode={canvas.theme.frame} color={canvas.theme.secondary} fixed={!preview} />}
+        <GuestFrame mode={canvas.theme.frame} color={canvas.theme.secondary} fixed={!preview} />
         {immersive && showCover && <CoverModal {...coverProps} />}
       </div>
       </ThemeContext.Provider>
