@@ -20,7 +20,8 @@ function Model({ url, primary }: ModelProps) {
         mesh.material = new THREE.MeshStandardMaterial({
           color: new THREE.Color(primary),
           roughness: 0.55,
-          metalness: 0.15
+          metalness: 0.15,
+          side: THREE.DoubleSide
         });
       }
     });
