@@ -26,7 +26,10 @@ export const ThemeSchema = z.object({
   card_style: z.boolean().optional(),
   card_variant: z.string().max(30).optional(),
   card_entrance: z.string().max(20).optional(),
-  ornament: z.string().max(50).optional()
+  ornament: z.string().max(50).optional(),
+  cover_style: z.enum(['floral', 'book', 'filmroll', 'oldtv', 'newspaper', 'mandala', 'lantern']).optional(),
+  cover_3d: z.boolean().optional(),
+  model3d: z.string().max(200).optional()
 }).strict();
 
 // ---------------------------------------------------------------
@@ -107,7 +110,7 @@ export const BlockStyleSchema = z.object({
   padding: z.string().max(100).optional(),
   opacity: z.number().min(0).max(1).optional(),
   textAlign: z.enum(['left', 'center', 'right']).optional(),
-  entrance: z.enum(['fade', 'slide', 'zoom', 'blur', 'rise', 'flip3d', 'parallax', 'stagger', 'float', 'none']).optional(),
+  entrance: z.enum(['fade', 'slide', 'zoom', 'blur', 'rise', 'flip3d', 'parallax', 'stagger', 'float', 'none', 'book', 'magazine', 'filmroll', 'oldtv', 'newspaper', 'vintage', 'mandala', 'islamic', 'ulos', 'lantern', 'wayang', 'batik']).optional(),
   entranceDelay: z.number().min(0).max(10000).optional(),
   hideOn: z.array(z.enum(['mobile', 'tablet', 'desktop'])).optional()
 });
