@@ -94,10 +94,7 @@ export default function CoverModal({
   return (
     <AnimatePresence>
       {open && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0, transition: { duration: 0.6 } }}
+        <div
           className="fixed inset-0 z-50 overflow-hidden"
           style={{
             background: `color-mix(in srgb, ${background} 45%, #000 55%)`,
@@ -125,16 +122,13 @@ export default function CoverModal({
               ornamen memenuhi layar (bukan bingkai ponsel yang mengecilkan). */}
           <div className="relative h-full w-full overflow-hidden">
             {/* Tombol lewati — cara cepat menutup sampul (aksi sama dengan tombol utama). */}
-            <motion.button
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.9 }}
+            <button
               onClick={openInvitation}
               aria-label="Lewati sampul dan buka undangan"
               className="absolute right-4 top-4 z-50 flex h-11 w-11 items-center justify-center rounded-full bg-black/25 text-white shadow-soft backdrop-blur transition-colors hover:bg-black/40"
             >
               <X className="h-5 w-5" aria-hidden />
-            </motion.button>
+            </button>
 
             {/* Layer foto cover — satu sumber untuk semua gaya pembuka.
               Prioritas: gambar cover (cover_bg_image) kalau diisi, kalau kosong
@@ -171,11 +165,8 @@ export default function CoverModal({
             <FloatingPetals color={primary} />
 
             <div className="relative z-40 flex h-full w-full flex-col items-center justify-between px-6 py-12 text-center text-white sm:px-10" style={{ paddingBottom: 'max(3rem, env(safe-area-inset-bottom))' }}>
-              <motion.div
+              <div
                 className="mt-2 flex flex-col items-center"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.3 }}
               >
                 {ornament && (
                   <OrnamentArt ornament={ornament as OrnamentKey} width={180} className="mb-3 text-white opacity-60" accent={primary} />
@@ -189,13 +180,10 @@ export default function CoverModal({
                   <span className="my-1 font-sans text-[0.45em] font-light uppercase tracking-[0.2em] opacity-60">&</span>
                   <span>{groom}</span>
                 </h1>
-              </motion.div>
+              </div>
 
-              <motion.div
+              <div
                 className="flex w-full flex-col items-center"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
               >
                 <div className="mb-5 flex w-full flex-col items-center gap-1">
                   <span className="text-[10px] uppercase tracking-[0.3em] opacity-80">{coverGreeting || 'Kepada:'}</span>
@@ -210,7 +198,7 @@ export default function CoverModal({
                 >
                   <MailOpen className="h-4 w-4" aria-hidden /> {coverButtonText || 'Buka Undangan'}
                 </button>
-              </motion.div>
+              </div>
             </div>
 
             {/* Overlay pembuka vintage — main setelah tombol ditekan. */}
@@ -227,7 +215,7 @@ export default function CoverModal({
               <NewspaperOpener primary={primary} secondary={secondary} background={background} text={text} onDone={finish} />
             )}
           </div>
-        </motion.div>
+        </div>
       )}
     </AnimatePresence>
   );
