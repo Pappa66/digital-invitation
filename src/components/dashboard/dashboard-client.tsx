@@ -139,23 +139,6 @@ export default function DashboardClient({ projects, isDemo = false, userName, th
 
   return (
     <div className="min-h-screen bg-background">
-      {/* HEADER — compact */}
-      <header className="border-b border-gold/20 bg-gradient-to-r from-[#FBF7F1] via-[#F6EFE4] to-[#FBF7F1]">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-          <div className="flex items-center gap-2.5">
-            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-gold to-gold-strong text-sm font-semibold text-foreground shadow-gold">P</span>
-            <div>
-              <p className="font-script text-lg leading-none text-gold-deep">Prasha</p>
-              <p className="text-[9px] uppercase tracking-[0.25em] text-muted-foreground">Digital Indonesia</p>
-            </div>
-          </div>
-          <div className="text-right">
-            <p className="text-sm font-medium text-foreground">{userName || 'Selamat datang'}</p>
-            <p className="text-[11px] text-muted-foreground">Kelola undangan pernikahan</p>
-          </div>
-        </div>
-      </header>
-
       <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6">
       {/* Tab Navigation */}
       <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as TabType)} className="mb-4">

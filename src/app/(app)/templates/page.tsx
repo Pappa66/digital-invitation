@@ -2,16 +2,16 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { HelpCircle, Loader2, Plus, Sparkles, Trash2, ChevronLeft, ChevronRight, Eye, EyeOff, Search } from 'lucide-react';
+import { HelpCircle, Loader2, Plus, Sparkles, Trash2, ChevronLeft, ChevronRight, Eye, Search } from 'lucide-react';
 import { TEMPLATE_LIST } from '@/lib/templates';
 import { CATEGORIES, categoryLabel, type TemplateCategory } from '@/lib/template-categories';
 import { clientCreateProject, clientCreateProjectFromData } from '@/lib/api/project-client';
 import { userTemplatesList, userTemplateDelete } from '@/lib/demo/user-templates';
 import type { UserTemplate } from '@/lib/demo/user-templates';
-import { demoReadEnabledIds, demoWriteEnabledIds } from '@/lib/demo/demo-templates';
 import GuideModal from '@/components/ui/guide-modal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 
 const PER_PAGE = 8;
 
@@ -24,25 +24,9 @@ export default function TemplatesPage() {
   const [guideOpen, setGuideOpen] = useState(false);
   const [category, setCategory] = useState<TemplateCategory | 'semua'>('semua');
   const [page, setPage] = useState(1);
-  const [demoIds, setDemoIds] = useState<Set<string> | null>(null);
   const [search, setSearch] = useState('');
-
-  useEffect(() => {
-    setDemoIds(demoReadEnabledIds());
-  }, []);
-
-  function toggleDemo(id: string) {
-    setDemoIds((prev) => {
-      // Belum pernah diatur -> semua template tampil. Saat toggle pertama,
-      // set berisi SEMUA id, lalu satu dihapus/ditambah sesuai aksi.
-      const base = prev ?? new Set(TEMPLATE_LIST.map((t) => t.id));
-      const next = new Set(base);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      demoWriteEnabledIds(Array.from(next));
-      return next;
-    });
-  }
+  const [nameDialogOpen, setNameDialogOpen] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<{ id: string; name: string } | null>(null);
 
   const refreshUserTemplates = useCallback(() => setUserTemplates(userTemplatesList()), []);
 
@@ -65,7 +49,8 @@ export default function TemplatesPage() {
   async function startBuiltIn(templateId: string) {
     setBusyId(templateId);
     setError(null);
-    await go(await clientCreateProject(title.trim() || 'Undangan Baru', templateId));
+    const name = title.trim() || 'Undangan Baru';
+    await go(await clientCreateProject(name, templateId));
   }
 
   async function startUser(t: UserTemplate) {
@@ -103,14 +88,6 @@ export default function TemplatesPage() {
           <p className="text-sm text-gray-500">
             Mulai dari template jadi, buat dari kosong, atau pakai lagi desain yang kamu simpan sebagai template.
           </p>
-          <label className="mt-4 block text-xs font-medium text-gray-700">Nama undangan</label>
-          <Input
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="cth: Perkawinan Panca & Sena"
-            className="mt-1 w-full max-w-md"
-          />
-          {error && <p className="mt-2 text-xs text-red-600">{error}</p>}
         </div>
         <Button variant="outline" onClick={() => setGuideOpen(true)}>
           <HelpCircle className="h-4 w-4" /> Panduan
@@ -193,7 +170,7 @@ export default function TemplatesPage() {
         </div>
 
         <div className="mb-2 flex flex-wrap gap-2">
-          <Button key="semua" variant={category === 'semua' ? 'default' : 'outline'} size="sm" className="rounded-full px-3 text-xs" onClick={() => selectCategory('semua')}>
+          <Button key="semua" variant={category === 'semua' ? 'default' : 'outline'} size="sm" className="rounded-full px-3 text-xs" onClick={() => selectCategory('semua')} aria-pressed={category === 'semua'}>
             Semua
           </Button>
           {CATEGORIES.map((c) => (
@@ -203,6 +180,7 @@ export default function TemplatesPage() {
               size="sm"
               className="rounded-full px-3 text-xs"
               onClick={() => selectCategory(c.key)}
+              aria-pressed={category === c.key}
             >
               {c.label}
             </Button>
@@ -249,21 +227,10 @@ export default function TemplatesPage() {
                     <p className="ml-1 text-sm font-semibold text-gray-900">{t.name}</p>
                   </div>
                   <p className="mt-1.5 line-clamp-3 flex-1 text-xs leading-relaxed text-gray-500">{t.description}</p>
-                  <Button onClick={() => startBuiltIn(t.id)} disabled={busyId !== null} className="mt-4 w-full">
+                  <Button onClick={() => { setSelectedTemplate({ id: t.id, name: t.name }); setNameDialogOpen(true); }} disabled={busyId !== null} className="mt-4 w-full">
                     {busyId === t.id ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
                     Pakai Template
                   </Button>
-                  <button
-                    onClick={() => toggleDemo(t.id)}
-                    className={`mt-2 flex items-center justify-center gap-1.5 rounded-md border px-3 py-1.5 text-xs font-medium transition-colors ${
-                      (demoIds === null || demoIds.has(t.id))
-                        ? 'border-green-300 bg-green-50 text-green-700 hover:bg-green-100'
-                        : 'border-gray-200 bg-gray-50 text-gray-500 hover:bg-gray-100'
-                    }`}
-                  >
-                    {demoIds === null || demoIds.has(t.id) ? <Eye className="h-3 w-3" /> : <EyeOff className="h-3 w-3" />}
-                    {demoIds === null || demoIds.has(t.id) ? 'Demo Aktif' : 'Tampilkan di Landing'}
-                  </button>
                 </div>
               </div>
             );
@@ -331,6 +298,40 @@ export default function TemplatesPage() {
           }
         ]}
       />
+
+      <Dialog open={nameDialogOpen} onOpenChange={(o) => { if (!o) { setNameDialogOpen(false); setSelectedTemplate(null); } }}>
+        <DialogContent className="w-full max-w-sm gap-2 p-5 sm:rounded-xl">
+          <DialogTitle className="text-base font-semibold text-gray-900">Buat Undangan Baru</DialogTitle>
+          <DialogDescription className="mt-2 text-sm leading-relaxed text-gray-600">
+            Beri nama undangan Anda dari template <span className="font-medium">{selectedTemplate?.name}</span>.
+          </DialogDescription>
+          <Input
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="cth: Perkawinan Panca & Sena"
+            className="mt-3"
+            autoFocus
+          />
+          {error && <p className="mt-2 text-xs text-red-600">{error}</p>}
+          <div className="mt-5 flex justify-end gap-2">
+            <button
+              onClick={() => { setNameDialogOpen(false); setSelectedTemplate(null); }}
+              disabled={busyId !== null}
+              className="rounded-md border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+            >
+              Batal
+            </button>
+            <button
+              onClick={() => { if (selectedTemplate) startBuiltIn(selectedTemplate.id); }}
+              disabled={busyId !== null}
+              className="rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700 disabled:opacity-50"
+            >
+              {busyId ? <Loader2 className="mr-1 inline h-3 w-3 animate-spin" /> : null}
+              Buat
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

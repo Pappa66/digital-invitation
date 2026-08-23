@@ -14,11 +14,12 @@ import {
   type DragEndEvent
 } from '@dnd-kit/core';
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
+import { Undo2, Redo2 } from 'lucide-react';
 import type { BlockType } from '@/lib/types';
 import ElementsSidebar from '@/components/builder/elements-sidebar';
 import BuilderCanvas from '@/components/builder/builder-canvas';
 import PropertiesPanel from '@/components/builder/properties-panel';
-import { useBuilderStore } from '@/store/builder-store';
+import { useBuilderStore, useBuilderHistory } from '@/store/builder-store';
 import { undoBuilder, redoBuilder } from '@/store/builder-store';
 import { saveCanvasNow } from '@/hooks/use-autosave';
 import { DESIGN_WIDTH } from '@/components/ui/device-toggle';
@@ -37,6 +38,7 @@ export default function BuilderWorkspace({ projectId }: { projectId: string }) {
   const [device, setDevice] = useState<Device>('mobile');
   const [mobilePanel, setMobilePanel] = useState<'none' | 'elements' | 'properties'>('none');
   const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved'>('idle');
+  const { canUndo, canRedo } = useBuilderHistory();
 
   // Di layar kecil, pilih blok → buka panel Edit otomatis (ramah sentuh).
   useEffect(() => {
@@ -153,6 +155,20 @@ export default function BuilderWorkspace({ projectId }: { projectId: string }) {
       if (e.key === 'Escape') {
         store.selectBlock(null);
         store.selectDecor(null);
+      }
+
+      // Zoom shortcuts (Ctrl+Plus, Ctrl+Minus, Ctrl+0)
+      if ((e.ctrlKey || e.metaKey) && (e.key === '=' || e.key === '+')) {
+        e.preventDefault();
+        window.dispatchEvent(new CustomEvent('builder-zoom', { detail: 'in' }));
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key === '-') {
+        e.preventDefault();
+        window.dispatchEvent(new CustomEvent('builder-zoom', { detail: 'out' }));
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key === '0') {
+        e.preventDefault();
+        window.dispatchEvent(new CustomEvent('builder-zoom', { detail: 'reset' }));
       }
     }
 
@@ -323,10 +339,15 @@ export default function BuilderWorkspace({ projectId }: { projectId: string }) {
 
         <DragOverlay dropAnimation={null}>
           {activeType && (
-            <div className="w-[300px] rounded-lg border-2 border-dashed border-[#c9a45c] bg-white/95 p-4 opacity-95 shadow-2xl">
-              <div className="flex items-center gap-2 text-sm font-medium text-[#141414]">
-                <span className="h-7 w-7 rounded-md bg-[#c9a45c]/15 text-center leading-7">{activeType.slice(0, 1)}</span>
-                Tambah {activeType}
+            <div className="w-[280px] rounded-lg border-2 border-dashed border-[#c9a45c] bg-white/95 p-3 opacity-95 shadow-2xl">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#c9a45c]/15 text-[#c9a45c]">
+                  <span className="text-lg font-bold">{activeType.charAt(0)}</span>
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-[#141414]">{activeType}</p>
+                  <p className="text-[11px] text-[#8a7a66]">Lepas untuk menambahkan</p>
+                </div>
               </div>
             </div>
           )}
@@ -343,7 +364,24 @@ export default function BuilderWorkspace({ projectId }: { projectId: string }) {
       )}
 
       {/* Toolbar bawah (hanya mobile) */}
-      <div className="fixed inset-x-0 bottom-0 z-50 flex border-t border-[#e7ddcc] bg-white/95 backdrop-blur lg:hidden">
+      <div className="fixed inset-x-0 bottom-0 z-50 flex items-center border-t border-[#e7ddcc] bg-white/95 backdrop-blur lg:hidden">
+        <button
+          onClick={undoBuilder}
+          disabled={!canUndo}
+          className="flex items-center justify-center px-3 py-3 text-[#4a443c] disabled:opacity-40"
+          aria-label="Undo"
+        >
+          <Undo2 className="h-4 w-4" />
+        </button>
+        <button
+          onClick={redoBuilder}
+          disabled={!canRedo}
+          className="flex items-center justify-center px-3 py-3 text-[#4a443c] disabled:opacity-40"
+          aria-label="Redo"
+        >
+          <Redo2 className="h-4 w-4" />
+        </button>
+        <span className="my-2 w-px bg-[#e7ddcc]" />
         <button
           onClick={() => setMobilePanel(mobilePanel === 'elements' ? 'none' : 'elements')}
           className={`flex-1 py-3 text-sm font-semibold transition-colors ${mobilePanel === 'elements' ? 'text-[#c9a45c]' : 'text-[#4a443c]'}`}

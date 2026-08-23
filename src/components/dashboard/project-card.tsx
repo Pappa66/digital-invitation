@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { Copy, Pencil, Share2, Trash2, ExternalLink, Globe, GlobeLock, QrCode } from 'lucide-react';
+import { Copy, Pencil, Share2, Trash2, ExternalLink, Globe, GlobeLock, QrCode, MoreHorizontal } from 'lucide-react';
 import type { Project } from '@/lib/types';
 import { clientDuplicateProject, clientDeleteProject, clientSetProjectStatus } from '@/lib/api/project-client';
 import ConfirmDialog from '@/components/dashboard/confirm-dialog';
@@ -31,6 +31,8 @@ export default function ProjectCard({ project, onDuplicated, onDeleted, heroFall
   const [status, setStatus] = useState<Project['status']>(project.status);
   const [statusBusy, setStatusBusy] = useState(false);
   const [couple, setCouple] = useState<string | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const publicUrl = `/${project.slug}`;
 
@@ -59,6 +61,18 @@ export default function ProjectCard({ project, onDuplicated, onDeleted, heroFall
       alive = false;
     };
   }, [project.id]);
+
+  useEffect(() => {
+    function handleClickOutside(e: PointerEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    }
+    if (menuOpen) {
+      document.addEventListener('pointerdown', handleClickOutside);
+      return () => document.removeEventListener('pointerdown', handleClickOutside);
+    }
+  }, [menuOpen]);
 
   async function handleDuplicate() {
     setBusy(true);
@@ -138,7 +152,8 @@ export default function ProjectCard({ project, onDuplicated, onDeleted, heroFall
           >
             <Share2 className="h-3.5 w-3.5" /> Share
           </button>
-          <div className="flex items-center gap-0.5">
+          {/* Desktop: all icon buttons */}
+          <div className="hidden items-center gap-0.5 sm:flex">
             <IconBtn label="Salin" onClick={() => setConfirm('duplicate')}>
               <Copy className="h-4 w-4" />
             </IconBtn>
@@ -158,6 +173,38 @@ export default function ProjectCard({ project, onDuplicated, onDeleted, heroFall
             <IconBtn label="Hapus" danger onClick={() => setConfirm('delete')}>
               <Trash2 className="h-4 w-4" />
             </IconBtn>
+          </div>
+          {/* Mobile: overflow menu */}
+          <div className="relative sm:hidden" ref={menuRef}>
+            <button
+              onClick={() => setMenuOpen((v) => !v)}
+              aria-label="Lainnya"
+              aria-expanded={menuOpen}
+              className="rounded-lg border border-[#e0d6c2] p-1.5 text-gray-500 hover:bg-gray-50"
+            >
+              <MoreHorizontal className="h-4 w-4" />
+            </button>
+            {menuOpen && (
+              <div className="absolute right-0 top-full z-50 mt-1 w-44 rounded-lg border border-gray-200 bg-white py-1 shadow-lg">
+                <button onClick={() => { setMenuOpen(false); setConfirm('duplicate'); }} className="flex w-full items-center gap-2 px-3 py-2 text-xs text-gray-700 hover:bg-gray-50">
+                  <Copy className="h-3.5 w-3.5" /> Salin
+                </button>
+                <button onClick={() => { setMenuOpen(false); setAbsenOpen(true); }} className="flex w-full items-center gap-2 px-3 py-2 text-xs text-gray-700 hover:bg-gray-50">
+                  <QrCode className="h-3.5 w-3.5" /> QR Absen
+                </button>
+                <button onClick={() => { setMenuOpen(false); handleToggleStatus(); }} className="flex w-full items-center gap-2 px-3 py-2 text-xs text-gray-700 hover:bg-gray-50">
+                  {status === 'published' ? <GlobeLock className="h-3.5 w-3.5" /> : <Globe className="h-3.5 w-3.5" />}
+                  {status === 'published' ? 'Jadikan Draft' : 'Publish'}
+                </button>
+                <button onClick={() => { setMenuOpen(false); router.push(publicUrl); }} className="flex w-full items-center gap-2 px-3 py-2 text-xs text-gray-700 hover:bg-gray-50">
+                  <ExternalLink className="h-3.5 w-3.5" /> Buka Publik
+                </button>
+                <div className="my-1 border-t border-gray-100" />
+                <button onClick={() => { setMenuOpen(false); setConfirm('delete'); }} className="flex w-full items-center gap-2 px-3 py-2 text-xs text-red-600 hover:bg-red-50">
+                  <Trash2 className="h-3.5 w-3.5" /> Hapus
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

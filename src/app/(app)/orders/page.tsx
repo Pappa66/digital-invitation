@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { Inbox, Loader2, Trash2, Search, CheckCircle, Clock, XCircle, Send, ExternalLink } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
 import { formatDate } from '@/lib/api/order-client';
@@ -8,6 +9,7 @@ import { clientCreateProject } from '@/lib/api/project-client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import ConfirmDialog from '@/components/dashboard/confirm-dialog';
 
 interface OrderRow {
   id: string;
@@ -58,11 +60,40 @@ Prasha Digital`;
 }
 
 export default function OrdersPage() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const [orders, setOrders] = useState<OrderRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [filter, setFilter] = useState<FilterStatus>('all');
-  const [search, setSearch] = useState('');
+  const [filter, setFilter] = useState<FilterStatus>((searchParams.get('status') as FilterStatus) || 'all');
+  const [search, setSearch] = useState(searchParams.get('q') || '');
+  const [toast, setToast] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<OrderRow | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const [actionBusy, setActionBusy] = useState<string | null>(null);
+
+  const updateURL = useCallback((status: FilterStatus, q: string) => {
+    const params = new URLSearchParams();
+    if (status !== 'all') params.set('status', status);
+    if (q) params.set('q', q);
+    const qs = params.toString();
+    router.replace(`/orders${qs ? `?${qs}` : ''}`, { scroll: false });
+  }, [router]);
+
+  const setFilterWithURL = useCallback((status: FilterStatus) => {
+    setFilter(status);
+    updateURL(status, search);
+  }, [search, updateURL]);
+
+  const setSearchWithURL = useCallback((q: string) => {
+    setSearch(q);
+    updateURL(filter, q);
+  }, [filter, updateURL]);
+
+  const showToast = useCallback((msg: string) => {
+    setToast(msg);
+    setTimeout(() => setToast(null), 2500);
+  }, []);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -83,16 +114,45 @@ export default function OrdersPage() {
     load();
   }, [load]);
 
+  // Poll for new orders every 30 seconds
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      const { data } = await supabase
+        .from('orders')
+        .select('id, template_name, template_id, name, whatsapp, email, note, status, project_id, created_at')
+        .order('created_at', { ascending: false })
+        .limit(200) as { data: OrderRow[] | null };
+      if (data) {
+        setOrders((prev) => {
+          const prevIds = new Set(prev.map((o) => o.id));
+          const newOrders = data.filter((o) => !prevIds.has(o.id));
+          if (newOrders.length > 0) {
+            showToast(`${newOrders.length} pesanan baru masuk`);
+          }
+          return data as OrderRow[];
+        });
+      }
+    }, 30000);
+    return () => clearInterval(interval);
+  }, [showToast]);
+
   async function updateStatus(id: string, status: string) {
+    setActionBusy(id);
     const { error } = await supabase.from('orders').update({ status } as never).eq('id', id);
-    if (error) { alert('Gagal update status: ' + error.message); return; }
+    if (error) {
+      showToast('Gagal update status: ' + error.message);
+      setActionBusy(null);
+      return;
+    }
     setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, status } : o)));
+    showToast(status === 'approved' ? 'Pesanan disetujui' : 'Pesanan ditolak');
     if (status === 'approved') {
       const order = orders.find((o) => o.id === id);
       if (order?.template_id && !order.project_id) {
-        createProjectFromOrder({ ...order, status });
+        await createProjectFromOrder({ ...order, status });
       }
     }
+    setActionBusy(null);
   }
 
   async function createProjectFromOrder(order: OrderRow) {
@@ -102,14 +162,24 @@ export default function OrdersPage() {
       const pid = res.id;
       await supabase.from('orders').update({ project_id: pid, status: 'approved' } as never).eq('id', order.id);
       setOrders((prev) => prev.map((o) => (o.id === order.id ? { ...o, project_id: pid, status: 'approved' } : o)));
+      showToast('Proyek berhasil dibuat');
       window.open(`/builder/${pid}`, '_blank');
     }
+    setActionBusy(null);
   }
 
-  async function remove(id: string) {
-    const { error } = await supabase.from('orders').delete().eq('id', id);
-    if (error) { alert('Gagal menghapus: ' + error.message); return; }
-    setOrders((prev) => prev.filter((o) => o.id !== id));
+  async function confirmDelete() {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    const { error } = await supabase.from('orders').delete().eq('id', deleteTarget.id);
+    if (error) {
+      showToast('Gagal menghapus: ' + error.message);
+    } else {
+      setOrders((prev) => prev.filter((o) => o.id !== deleteTarget.id));
+      showToast('Pesanan dihapus');
+    }
+    setDeleting(false);
+    setDeleteTarget(null);
   }
 
   const filtered = orders.filter((o) => {
@@ -135,7 +205,8 @@ export default function OrdersPage() {
           <h2 className="text-lg font-semibold">Kontak Masuk</h2>
           <p className="mt-1 text-sm text-gray-500">{orders.length} pesanan dari form pemesanan.</p>
         </div>
-        <Button variant="outline" onClick={load}>
+        <Button variant="outline" onClick={load} disabled={loading}>
+          {loading ? <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> : null}
           Muat Ulang
         </Button>
       </div>
@@ -154,7 +225,8 @@ export default function OrdersPage() {
             variant={filter === f ? 'default' : 'outline'}
             size="sm"
             className="rounded-full px-3 text-xs"
-            onClick={() => setFilter(f)}
+            onClick={() => setFilterWithURL(f)}
+            aria-pressed={filter === f}
           >
             {f === 'all' ? 'Semua' : STATUS_CONFIG[f].label} ({counts[f]})
           </Button>
@@ -163,7 +235,7 @@ export default function OrdersPage() {
           <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-400" />
           <Input
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => setSearchWithURL(e.target.value)}
             placeholder="Cari nama, template, WA..."
             className="h-8 w-56 pl-8 text-xs"
           />
@@ -219,26 +291,32 @@ export default function OrdersPage() {
                       <>
                         <button
                           onClick={() => updateStatus(o.id, 'approved')}
-                          className="rounded-md border border-green-200 p-1.5 text-green-600 hover:bg-green-50"
+                          disabled={actionBusy === o.id}
+                          aria-label="Setujui pesanan"
+                          className="rounded-md border border-green-200 p-1.5 text-green-600 hover:bg-green-50 disabled:opacity-40"
                           title="Setujui pesanan"
                         >
-                          <CheckCircle className="h-3.5 w-3.5" />
+                          {actionBusy === o.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <CheckCircle className="h-3.5 w-3.5" />}
                         </button>
                         <button
                           onClick={() => updateStatus(o.id, 'rejected')}
-                          className="rounded-md border border-red-200 p-1.5 text-red-400 hover:bg-red-50"
+                          disabled={actionBusy === o.id}
+                          aria-label="Tolak pesanan"
+                          className="rounded-md border border-red-200 p-1.5 text-red-400 hover:bg-red-50 disabled:opacity-40"
                           title="Tolak pesanan"
                         >
-                          <XCircle className="h-3.5 w-3.5" />
+                          {actionBusy === o.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <XCircle className="h-3.5 w-3.5" />}
                         </button>
                       </>
                     )}
                     {(o.status || 'pending') === 'approved' && !o.project_id && o.template_id && (
                       <Button
                         onClick={() => createProjectFromOrder(o)}
+                        disabled={actionBusy === o.id}
                         className="h-7 px-3 text-xs"
                         title="Buat proyek undangan dari pesanan ini"
                       >
+                        {actionBusy === o.id ? <Loader2 className="mr-1 h-3 w-3 animate-spin" /> : null}
                         Buat Proyek
                       </Button>
                     )}
@@ -253,7 +331,7 @@ export default function OrdersPage() {
                       </a>
                     )}
                     <button
-                      onClick={() => remove(o.id)}
+                      onClick={() => setDeleteTarget(o)}
                       aria-label={`Hapus pesanan ${o.name}`}
                       className="rounded-md border border-gray-200 p-1.5 text-gray-400 hover:bg-gray-50 hover:text-red-600"
                     >
@@ -265,6 +343,23 @@ export default function OrdersPage() {
               </div>
             );
           })}
+        </div>
+      )}
+
+      <ConfirmDialog
+        open={!!deleteTarget}
+        title="Hapus Pesanan"
+        message={`Yakin ingin menghapus pesanan dari "${deleteTarget?.name}"? Tindakan ini tidak dapat dibatalkan.`}
+        confirmLabel="Hapus"
+        danger
+        busy={deleting}
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteTarget(null)}
+      />
+
+      {toast && (
+        <div role="status" aria-live="polite" className="fixed right-4 top-4 z-50 rounded-md bg-foreground px-4 py-2 text-sm text-background shadow-lg">
+          {toast}
         </div>
       )}
     </div>

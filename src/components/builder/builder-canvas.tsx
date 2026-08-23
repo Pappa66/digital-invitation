@@ -8,7 +8,7 @@ import {
 } from '@dnd-kit/sortable';
 import { useDraggable, useDroppable, useDndContext } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
-import { GripVertical, Grid3x3, Undo2, Redo2, Copy, ClipboardPaste, ArrowUp, ArrowDown } from 'lucide-react';
+import { GripVertical, Grid3x3, Undo2, Redo2, Copy, ClipboardPaste, ArrowUp, ArrowDown, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
 import type { Block, BlockType } from '@/lib/types';
 import BlockView from '@/components/guest/BlockView';
 import { ThemeContext } from '@/components/guest/theme-context';
@@ -46,6 +46,22 @@ export default function BuilderCanvas({
   const flow = canvas.flow ?? 'stack';
   const { canUndo, canRedo } = useBuilderHistory();
   const [showShortcuts, setShowShortcuts] = useState(false);
+  const [zoom, setZoom] = useState(100);
+
+  const zoomIn = () => setZoom((z) => Math.min(200, z + 10));
+  const zoomOut = () => setZoom((z) => Math.max(50, z - 10));
+  const zoomReset = () => setZoom(100);
+
+  useEffect(() => {
+    function handleZoom(e: Event) {
+      const detail = (e as CustomEvent).detail;
+      if (detail === 'in') setZoom((z) => Math.min(200, z + 10));
+      else if (detail === 'out') setZoom((z) => Math.max(50, z - 10));
+      else if (detail === 'reset') setZoom(100);
+    }
+    window.addEventListener('builder-zoom', handleZoom);
+    return () => window.removeEventListener('builder-zoom', handleZoom);
+  }, []);
 
   return (
     <div className="relative flex h-full flex-1 flex-col items-center justify-center overflow-hidden bg-[#f1ece1] max-lg:pb-14">
@@ -88,6 +104,34 @@ export default function BuilderCanvas({
           <Grid3x3 className="h-3.5 w-3.5" />
           Grid
         </button>
+        <div className="flex items-center gap-1 rounded-lg border border-[#e0d6c2] bg-white">
+          <button
+            onClick={zoomOut}
+            disabled={zoom <= 50}
+            title="Perkecil (Ctrl+-)"
+            aria-label="Perkecil"
+            className="flex items-center rounded-l-lg px-2 py-1.5 text-xs font-medium text-[#6b5f4d] transition-colors hover:bg-[#f4eee3] disabled:opacity-40"
+          >
+            <ZoomOut className="h-3.5 w-3.5" />
+          </button>
+          <button
+            onClick={zoomReset}
+            title="Reset zoom (Ctrl+0)"
+            aria-label="Reset zoom"
+            className="flex items-center border-x border-[#e0d6c2] px-2 py-1.5 text-xs font-medium text-[#6b5f4d] transition-colors hover:bg-[#f4eee3]"
+          >
+            {zoom}%
+          </button>
+          <button
+            onClick={zoomIn}
+            disabled={zoom >= 200}
+            title="Perbesar (Ctrl++)"
+            aria-label="Perbesar"
+            className="flex items-center rounded-r-lg px-2 py-1.5 text-xs font-medium text-[#6b5f4d] transition-colors hover:bg-[#f4eee3] disabled:opacity-40"
+          >
+            <ZoomIn className="h-3.5 w-3.5" />
+          </button>
+        </div>
         <DeviceToggle device={device} onChange={onDeviceChange} />
         <div className="relative">
           <button
@@ -114,8 +158,8 @@ export default function BuilderCanvas({
           if (e.target === e.currentTarget) selectBlock(null);
         }}
       >        <div
-          className="relative h-full overflow-hidden rounded-md bg-white shadow-xl shadow-[#b98a3e]/20 ring-1 ring-[#e7ddcc]"
-          style={{ width: PREVIEW_CSS_WIDTHS[device], maxWidth: '100%' }}
+          className="relative h-full overflow-hidden rounded-md bg-white shadow-xl shadow-[#b98a3e]/20 ring-1 ring-[#e7ddcc] transition-transform duration-150"
+          style={{ width: PREVIEW_CSS_WIDTHS[device], maxWidth: '100%', transform: `scale(${zoom / 100})`, transformOrigin: 'center center' }}
         >
           {showGrid && (
             <div
@@ -211,6 +255,7 @@ function ShortcutsPopover({ onClose }: { onClose: () => void }) {
       ref={ref}
       role="dialog"
       aria-label="Pintasan keyboard builder"
+      aria-modal="false"
       className="absolute right-0 top-full z-50 mt-2 w-72 rounded-xl border border-[#e7ddcc] bg-white p-3 shadow-2xl"
     >
       <div className="flex items-baseline justify-between">
@@ -233,6 +278,32 @@ function ShortcutsPopover({ onClose }: { onClose: () => void }) {
       </ul>
     </div>
   );
+}
+
+type LayoutPatch = { x?: number; y?: number; width?: number; height?: number };
+
+function resizeHandler(
+  blockId: string,
+  layout: { x: number; y: number; width: number; height?: number },
+  setBlockLayout: (id: string, patch: LayoutPatch) => void,
+  compute: (dx: number, dy: number) => LayoutPatch
+) {
+  return (e: React.PointerEvent) => {
+    e.stopPropagation();
+    const startX = e.clientX;
+    const startY = e.clientY;
+    const onMove = (ev: PointerEvent) => {
+      const dx = ev.clientX - startX;
+      const dy = ev.clientY - startY;
+      setBlockLayout(blockId, compute(dx, dy));
+    };
+    const onUp = () => {
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+    };
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  };
 }
 
 function guestStyle(canvas: ReturnType<typeof useBuilderStore.getState>['canvas']) {
@@ -671,7 +742,7 @@ function InnerDragLayer({ block, blockWidth }: { block: Block; blockWidth: numbe
           </button>
           {colorPickerName === h.name && (
             <div className="pointer-events-auto absolute -bottom-8 left-1/2 z-50 flex -translate-x-1/2 items-center gap-1 rounded-lg border border-gray-200 bg-white p-1 shadow-xl">
-              {['', '#000000', '#ffffff', '#c9a45c', '#4a443c', '#8B4513', '#1a5276', '#6c3483'].map((c) => (
+              {['', '#000000', '#ffffff', '#c9a45c', '#4a443c', '#8B4513', '#1a5276', '#6c3483', '#B98A3E', '#7C5D2E', '#5D4A2A', '#FAF7F2', '#F2ECE0', '#E7DDCC', '#B42318', '#046A38'].map((c) => (
                 <button
                   key={c || 'reset'}
                   className="h-5 w-5 rounded-full border-2 hover:scale-110"
@@ -820,141 +891,71 @@ function FreeBlock({ block }: { block: Block }) {
               </svg>
             </button>
           </div>
+          {/* Right edge: width/resize */}
           <div
             className="absolute inset-y-0 right-0 z-40 w-2 cursor-ew-resize bg-[#c9a45c]/60"
             title="Ubah lebar"
-            onPointerDown={(e) => {
-              e.stopPropagation();
-              const startX = e.clientX;
-              const startW = layout.width;
-              const onMove = (ev: PointerEvent) =>
-                setBlockLayout(block.id, { width: Math.min(420, Math.max(40, startW + (ev.clientX - startX))) });
-              const onUp = () => {
-                window.removeEventListener('pointermove', onMove);
-                window.removeEventListener('pointerup', onUp);
-              };
-              window.addEventListener('pointermove', onMove);
-              window.addEventListener('pointerup', onUp);
-            }}
+            onPointerDown={resizeHandler(block.id, layout, setBlockLayout, (dx) => ({
+              width: Math.min(420, Math.max(40, layout.width + dx)),
+            }))}
           />
           {/* Bottom edge: height/resize */}
           <div
             className="absolute inset-x-0 bottom-0 z-40 h-2 cursor-ns-resize bg-[#c9a45c]/60"
             title="Geser bawah"
-            onPointerDown={(e) => {
-              e.stopPropagation();
-              const startY = e.clientY;
-              const startH = layout.height ?? 0;
-              const onMove = (ev: PointerEvent) =>
-                setBlockLayout(block.id, { height: Math.max(100, startH + (ev.clientY - startY)) });
-              const onUp = () => {
-                window.removeEventListener('pointermove', onMove);
-                window.removeEventListener('pointerup', onUp);
-              };
-              window.addEventListener('pointermove', onMove);
-              window.addEventListener('pointerup', onUp);
-            }}
+            onPointerDown={resizeHandler(block.id, layout, setBlockLayout, (_dx, dy) => ({
+              height: Math.max(100, (layout.height ?? 0) + dy),
+            }))}
           />
           {/* Bottom-right corner */}
           <div
             className="absolute bottom-0 right-0 z-50 h-4 w-4 cursor-nwse-resize rounded-tl-sm bg-[#c9a45c] border border-white/60 shadow"
             title="Resize sudut kanan bawah"
-            onPointerDown={(e) => {
-              e.stopPropagation();
-              const startX = e.clientX;
-              const startY = e.clientY;
-              const startW = layout.width;
-              const startH = layout.height ?? 0;
-              const onMove = (ev: PointerEvent) => {
-                const newW = Math.min(420, Math.max(40, startW + (ev.clientX - startX)));
-                const newH = Math.max(100, startH + (ev.clientY - startY));
-                setBlockLayout(block.id, { width: newW, height: newH });
-              };
-              const onUp = () => {
-                window.removeEventListener('pointermove', onMove);
-                window.removeEventListener('pointerup', onUp);
-              };
-              window.addEventListener('pointermove', onMove);
-              window.addEventListener('pointerup', onUp);
-            }}
+            onPointerDown={resizeHandler(block.id, layout, setBlockLayout, (dx, dy) => ({
+              width: Math.min(420, Math.max(40, layout.width + dx)),
+              height: Math.max(100, (layout.height ?? 0) + dy),
+            }))}
           />
           {/* Bottom-left corner */}
           <div
             className="absolute bottom-0 left-0 z-50 h-4 w-4 cursor-nesw-resize rounded-tr-sm bg-[#c9a45c] border border-white/60 shadow"
             title="Resize sudut kiri bawah"
-            onPointerDown={(e) => {
-              e.stopPropagation();
-              const startX = e.clientX;
-              const startY = e.clientY;
-              const startW = layout.width;
-              const startH = layout.height ?? 0;
-              const startXPos = layout.x;
-              const onMove = (ev: PointerEvent) => {
-                const dx = ev.clientX - startX;
-                const newW = Math.min(420, Math.max(40, startW - dx));
-                const newX = Math.max(0, startXPos + (startW - newW));
-                const newH = Math.max(100, startH + (ev.clientY - startY));
-                setBlockLayout(block.id, { width: newW, x: newX, height: newH });
+            onPointerDown={resizeHandler(block.id, layout, setBlockLayout, (dx, dy) => {
+              const newW = Math.min(420, Math.max(40, layout.width - dx));
+              return {
+                width: newW,
+                x: Math.max(0, layout.x + (layout.width - newW)),
+                height: Math.max(100, (layout.height ?? 0) + dy),
               };
-              const onUp = () => {
-                window.removeEventListener('pointermove', onMove);
-                window.removeEventListener('pointerup', onUp);
-              };
-              window.addEventListener('pointermove', onMove);
-              window.addEventListener('pointerup', onUp);
-            }}
+            })}
           />
           {/* Top-left corner */}
           <div
             className="absolute left-0 top-0 z-50 h-4 w-4 cursor-nwse-resize rounded-br-sm bg-[#c9a45c] border border-white/60 shadow"
             title="Resize sudut kiri atas"
-            onPointerDown={(e) => {
-              e.stopPropagation();
-              const startX = e.clientX;
-              const startY = e.clientY;
-              const startW = layout.width;
-              const startH = layout.height ?? 0;
-              const startXPos = layout.x;
-              const startYPos = layout.y;
-              const onMove = (ev: PointerEvent) => {
-                const dx = ev.clientX - startX;
-                const dy = ev.clientY - startY;
-                const newW = Math.min(420, Math.max(40, startW - dx));
-                const newH = Math.max(100, startH - dy);
-                setBlockLayout(block.id, { width: newW, x: startXPos + (startW - newW), y: Math.max(0, startYPos + (startH - newH)) });
+            onPointerDown={resizeHandler(block.id, layout, setBlockLayout, (dx, dy) => {
+              const newW = Math.min(420, Math.max(40, layout.width - dx));
+              const newH = Math.max(100, (layout.height ?? 0) - dy);
+              return {
+                width: newW,
+                x: layout.x + (layout.width - newW),
+                y: Math.max(0, layout.y + ((layout.height ?? 0) - newH)),
+                height: newH,
               };
-              const onUp = () => {
-                window.removeEventListener('pointermove', onMove);
-                window.removeEventListener('pointerup', onUp);
-              };
-              window.addEventListener('pointermove', onMove);
-              window.addEventListener('pointerup', onUp);
-            }}
+            })}
           />
           {/* Top-right corner */}
           <div
             className="absolute right-0 top-0 z-50 h-4 w-4 cursor-nesw-resize rounded-bl-sm bg-[#c9a45c] border border-white/60 shadow"
             title="Resize sudut kanan atas"
-            onPointerDown={(e) => {
-              e.stopPropagation();
-              const startX = e.clientX;
-              const startY = e.clientY;
-              const startW = layout.width;
-              const startH = layout.height ?? 0;
-              const startYPos = layout.y;
-              const onMove = (ev: PointerEvent) => {
-                const newW = Math.min(420, Math.max(40, startW + (ev.clientX - startX)));
-                const dy = ev.clientY - startY;
-                const newH = Math.max(100, startH - dy);
-                setBlockLayout(block.id, { width: newW, y: Math.max(0, startYPos + (startH - newH)) });
+            onPointerDown={resizeHandler(block.id, layout, setBlockLayout, (dx, dy) => {
+              const newH = Math.max(100, (layout.height ?? 0) - dy);
+              return {
+                width: Math.min(420, Math.max(40, layout.width + dx)),
+                y: Math.max(0, layout.y + ((layout.height ?? 0) - newH)),
+                height: newH,
               };
-              const onUp = () => {
-                window.removeEventListener('pointermove', onMove);
-                window.removeEventListener('pointerup', onUp);
-              };
-              window.addEventListener('pointermove', onMove);
-              window.addEventListener('pointerup', onUp);
-            }}
+            })}
           />
         </>
       )}

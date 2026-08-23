@@ -40,3 +40,6 @@ next-env.d.ts
 
 # playwright mcp
 .playwright-mcp/
+
+# opencode config (contains API keys)
+opencode.json

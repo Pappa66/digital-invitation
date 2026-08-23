@@ -2503,22 +2503,54 @@ function FontSelect({
   value: string;
   onChange: (v: string) => void;
 }) {
+  const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState('');
+
+  const filtered = FONTS.filter((f) => f.toLowerCase().includes(search.toLowerCase()));
+
   return (
     <div>
       <label className="mb-1 block text-xs font-medium text-[#4a443c]">{label}</label>
-      <div className="flex items-center gap-2">
-        <Type className="h-4 w-4 shrink-0 text-[#8a7a66]" />
-        <select
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-2 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
+      <div className="relative">
+        <button
+          type="button"
+          onClick={() => setOpen((o) => !o)}
+          className="flex w-full items-center gap-2 rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-2 py-2 text-left text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
         >
-          {FONTS.map((f) => (
-            <option key={f} value={f}>
-              {f}
-            </option>
-          ))}
-        </select>
+          <Type className="h-4 w-4 shrink-0 text-[#8a7a66]" />
+          <span className="flex-1 truncate">{value}</span>
+        </button>
+        {open && (
+          <>
+            <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
+            <div className="absolute left-0 top-full z-50 mt-1 w-full rounded-md border border-[#e7ddcc] bg-white shadow-xl">
+              <div className="border-b border-[#e7ddcc] p-2">
+                <input
+                  type="text"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Cari font..."
+                  className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-[#c9a45c]"
+                  autoFocus
+                />
+              </div>
+              <div className="max-h-60 overflow-y-auto p-1">
+                {filtered.map((f) => (
+                  <button
+                    key={f}
+                    onClick={() => { onChange(f); setOpen(false); setSearch(''); }}
+                    className={`flex w-full items-center gap-2 rounded px-2 py-1.5 text-left text-sm hover:bg-[#f4eee3] ${value === f ? 'bg-[#c9a45c]/10 font-medium text-[#c9a45c]' : 'text-[#4a443c]'}`}
+                  >
+                    {f}
+                  </button>
+                ))}
+                {filtered.length === 0 && (
+                  <p className="px-2 py-3 text-center text-xs text-[#8a7a66]">Tidak ditemukan</p>
+                )}
+              </div>
+            </div>
+          </>
+        )}
       </div>
       <p className="mt-1 flex items-center gap-1 text-[11px] text-[#8a7a66]">
         <Clapperboard className="h-3 w-3" /> Otomatis dimuat via Google Fonts pada output.
@@ -2552,22 +2584,60 @@ function TextStyleControl({
   onDone: () => void;
 }) {
   const current = parsePx(fontSize);
+  const [fontOpen, setFontOpen] = useState(false);
+  const [fontSearch, setFontSearch] = useState('');
+  const filteredFonts = FONTS.filter((f) => f.toLowerCase().includes(fontSearch.toLowerCase()));
+
   return (
     <div className="space-y-3">
       <div>
         <label className="mb-1 block text-xs font-medium text-[#4a443c]">Font</label>
-        <select
-          value={fontFamily ?? ''}
-          onChange={(e) => onCommitFont(e.target.value)}
-          className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-2 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
-        >
-          <option value="">Ikuti tema (default)</option>
-          {FONTS.map((f) => (
-            <option key={f} value={f}>
-              {f}
-            </option>
-          ))}
-        </select>
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => setFontOpen((o) => !o)}
+            className="flex w-full items-center gap-2 rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-2 py-2 text-left text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
+          >
+            <span className="flex-1 truncate">{fontFamily || 'Ikuti tema (default)'}</span>
+          </button>
+          {fontOpen && (
+            <>
+              <div className="fixed inset-0 z-40" onClick={() => setFontOpen(false)} />
+              <div className="absolute left-0 top-full z-50 mt-1 w-full rounded-md border border-[#e7ddcc] bg-white shadow-xl">
+                <div className="border-b border-[#e7ddcc] p-2">
+                  <input
+                    type="text"
+                    value={fontSearch}
+                    onChange={(e) => setFontSearch(e.target.value)}
+                    placeholder="Cari font..."
+                    className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-[#c9a45c]"
+                    autoFocus
+                  />
+                </div>
+                <div className="max-h-60 overflow-y-auto p-1">
+                  <button
+                    onClick={() => { onCommitFont(''); setFontOpen(false); setFontSearch(''); }}
+                    className={`flex w-full items-center gap-2 rounded px-2 py-1.5 text-left text-sm hover:bg-[#f4eee3] ${!fontFamily ? 'bg-[#c9a45c]/10 font-medium text-[#c9a45c]' : 'text-[#4a443c]'}`}
+                  >
+                    Ikuti tema (default)
+                  </button>
+                  {filteredFonts.map((f) => (
+                    <button
+                      key={f}
+                      onClick={() => { onCommitFont(f); setFontOpen(false); setFontSearch(''); }}
+                      className={`flex w-full items-center gap-2 rounded px-2 py-1.5 text-left text-sm hover:bg-[#f4eee3] ${fontFamily === f ? 'bg-[#c9a45c]/10 font-medium text-[#c9a45c]' : 'text-[#4a443c]'}`}
+                    >
+                      {f}
+                    </button>
+                  ))}
+                  {filteredFonts.length === 0 && (
+                    <p className="px-2 py-3 text-center text-xs text-[#8a7a66]">Tidak ditemukan</p>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
+        </div>
       </div>
       <div>
         <label className="mb-1 block text-xs font-medium text-[#4a443c]">
