@@ -683,18 +683,31 @@ function HeroSparkles() {
 
 function BackgroundImage({ src, fit, position }: { src: string; fit?: string; position?: string }) {
   if (!src) return null;
+  const isVideoBg = /\.(mp4|webm|ogg|mov|m4v)(\?|$)/i.test(src);
   return (
     <div className="absolute inset-0 z-0">
-      <Image
-        src={src}
-        alt=""
-        fill
-        priority
-        sizes="100vw"
-        quality={75}
-        className={fit === 'contain' ? 'object-contain' : 'object-cover'}
-        style={{ objectPosition: position || 'center' }}
-      />
+      {isVideoBg ? (
+        <video
+          src={src}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 h-full w-full object-cover"
+          style={{ objectPosition: position || 'center' }}
+        />
+      ) : (
+        <Image
+          src={src}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          quality={75}
+          className={fit === 'contain' ? 'object-contain' : 'object-cover'}
+          style={{ objectPosition: position || 'center' }}
+        />
+      )}
       <div className="absolute inset-0 bg-black/40" />
     </div>
   );

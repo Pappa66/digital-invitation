@@ -141,10 +141,21 @@ export default function CoverModal({
               mengikuti gambar Hero undangan. */}
             {(coverBgImage || bgImage) && (
               <div className="absolute inset-0 z-0" aria-hidden>
-                <Image
-                  src={(coverBgImage || bgImage)!} alt="" fill priority sizes="100vw"
-                  className="object-cover opacity-70"
-                />
+                {/\.(mp4|webm|ogg|mov|m4v)(\?|$)/i.test((coverBgImage || bgImage)!) ? (
+                  <video
+                    src={(coverBgImage || bgImage)!}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="absolute inset-0 h-full w-full object-cover opacity-70"
+                  />
+                ) : (
+                  <Image
+                    src={(coverBgImage || bgImage)!} alt="" fill priority sizes="100vw"
+                    className="object-cover opacity-70"
+                  />
+                )}
                 <div className="absolute inset-0" style={{ background: 'rgba(18,13,9,0.34)' }} />
               </div>
             )}
