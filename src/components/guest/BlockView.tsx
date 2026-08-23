@@ -1,7 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import { useRef, useEffect, useState } from 'react';
 import type { Block, BlockStyle } from '@/lib/types';
 import {
   HeroBlock,
@@ -41,27 +40,9 @@ interface BlockViewProps {
   showCoverButton?: boolean;
 }
 
-function useScrollReveal(threshold = 0.12) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.unobserve(el); } },
-      { threshold, rootMargin: '0px 0px -30px 0px' }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [threshold]);
-  return { ref, visible };
-}
-
 export default function BlockView({ block, projectId, editable = false, greetingName, cardStyle, demo, showCoverButton = true }: BlockViewProps) {
   const preview = usePreview();
   const theme = useTheme();
-  const animate = (!preview || demo) && !editable;
-  const { ref: revealRef, visible } = useScrollReveal();
   let view: React.ReactNode;
   switch (block.type) {
     case 'Hero':
@@ -157,13 +138,13 @@ export default function BlockView({ block, projectId, editable = false, greeting
     <StyledSection style={block.style}>{view}</StyledSection>
   );
 
-  const revealClass = animate && !isHero ? `scroll-reveal ${visible ? 'scroll-reveal-visible' : ''}` : '';
+  const revealClass = '';
 
   return (
     <InnerProvider value={block.inner ?? undefined}>
       <BuilderEditableContext.Provider value={editable ? { blockId: block.id } : null}>
         <div
-          ref={animate && !isHero ? revealRef : undefined}
+          ref={undefined}
           data-block-type={block.type}
           className={`relative w-full min-w-0 max-w-full overflow-hidden box-border transition-[background-color,background-image,opacity] duration-500 ease-out${hideClasses ? ' ' + hideClasses : ''}${revealClass ? ' ' + revealClass : ''}`}
         >

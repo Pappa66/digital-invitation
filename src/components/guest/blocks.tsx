@@ -752,12 +752,8 @@ function CouplePhoto({ src, shape, alt, compact }: { src: string; shape: string;
 
 function CouplePerson({ propKey, name, parents, photo, photoShape, compact }: { propKey: string; name: string; parents: string; photo?: string; photoShape?: string; compact?: boolean }) {
   return (
-    <motion.div
+    <div
       className="flex w-full min-w-0 flex-col items-center break-words text-center"
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.3 }}
-      transition={{ type: 'spring', stiffness: 120, damping: 16 }}
     >
       {photo && <CouplePhoto src={photo} shape={photoShape ?? ''} alt={name} compact={compact} />}
       <h2 className={`max-w-full break-words font-medium leading-snug ${compact ? 'text-lg sm:text-xl md:text-2xl' : 'text-xl sm:text-2xl md:text-3xl'}`}>
@@ -766,18 +762,14 @@ function CouplePerson({ propKey, name, parents, photo, photoShape, compact }: { 
       <p className={`mt-1.5 max-w-full break-words text-xs uppercase leading-relaxed tracking-widest opacity-70 ${compact ? 'text-[10px] sm:text-xs' : ''}`}>
         <Editable prop={`${propKey}_parents`}>{parents}</Editable>
       </p>
-    </motion.div>
+    </div>
   );
 }
 
 /** "&" raksasa khas undangan mewah (webvitation.com): besar, tipis, miring. */
 function GiantAmp() {
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.6 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: true, amount: 0.4 }}
-      transition={{ type: 'spring', stiffness: 200, damping: 16 }}
+    <div
       aria-hidden
       className="flex items-center justify-center py-4"
     >
@@ -787,7 +779,7 @@ function GiantAmp() {
       >
         &amp;
       </span>
-    </motion.div>
+    </div>
   );
 }
 
@@ -868,122 +860,87 @@ export function HeroBlock({ props, greetingName, showButton = true }: { props: B
       )}
       <HeroSparkles />
       <HeroWrap>
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          animate={opened ? { opacity: 0, y: -40, transition: { duration: 0.6, ease: 'easeInOut' } } : {}}
+        <div
           className={`relative z-10 flex w-full flex-col ${isRight ? 'items-end' : isLeft ? 'items-start' : 'items-center'}`}
         >
         <Inner name="caption">
-          <motion.p
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ type: 'spring', stiffness: 140, damping: 18, delay: 0.15 }}
+          <p
             className="font-body text-xs uppercase tracking-[0.3em]"
           >
             <Editable prop="caption">{str(props, 'caption')}</Editable>
-          </motion.p>
+          </p>
         </Inner>
         {showOrnament && (
           <Inner name="ornament">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.5, y: 8 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ type: 'spring', stiffness: 220, damping: 17, delay: 0.4 }}
+            <div
               className={isRight ? 'mt-4 ml-auto text-white opacity-80' : isLeft ? 'mt-4 mr-auto text-white opacity-80' : 'mt-4 text-white opacity-80'}
             >
               <Ornament ornament={str(props, 'ornament') || theme?.ornament} />
-            </motion.div>
+            </div>
           </Inner>
         )}
         <Inner name="bride_name">
-          <motion.h1
-            initial={{ opacity: 0, y: 26 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ type: 'spring', stiffness: 130, damping: 17, delay: 0.55 }}
+          <h1
             className="font-heading mt-6 text-3xl font-medium leading-tight sm:text-4xl md:text-5xl"
           >
             <Editable prop="bride">{str(props, 'bride')}</Editable>
-          </motion.h1>
+          </h1>
         </Inner>
         <Inner name="ampersand">
-          <motion.p
-            initial={{ opacity: 0, scale: 0.6 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ type: 'spring', stiffness: 240, damping: 15, delay: 0.8 }}
+          <p
             className="my-4 text-xl sm:text-2xl"
           >
             &amp;
-          </motion.p>
+          </p>
         </Inner>
         <Inner name="groom_name">
-          <motion.h1
-            initial={{ opacity: 0, y: 26 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ type: 'spring', stiffness: 130, damping: 17, delay: 0.95 }}
+          <h1
             className="font-heading text-3xl font-medium leading-tight sm:text-4xl md:text-5xl"
           >
             <Editable prop="groom">{str(props, 'groom')}</Editable>
-          </motion.h1>
+          </h1>
         </Inner>
         <Inner name="date">
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 1.05 }}
+          <p
             className="font-body mt-8 text-sm uppercase tracking-widest opacity-90"
           >
             <Editable prop="date">{str(props, 'date')}</Editable>
-          </motion.p>
+          </p>
         </Inner>
         <Inner name="location">
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 1.2 }}
+          <div
             className="mt-3 flex items-center gap-2 text-xs opacity-80"
           >
             <MapPin className="h-3.5 w-3.5" />
             <span>
               <Editable prop="place">{str(props, 'place')}</Editable>
             </span>
-          </motion.div>
+          </div>
         </Inner>
         {greetingName && (
           <Inner name="greeting">
-            <motion.div
-              initial={{ opacity: 0, y: 8 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
+            <div
               className="mt-10"
             >
               <div className="inline-flex flex-col items-center rounded-full border border-white/25 bg-white/10 px-6 py-3 backdrop-blur-sm">
                 <span className="text-[10px] uppercase tracking-[0.25em] opacity-80">Kepada Yth.</span>
                 <span className="mt-0.5 text-sm font-medium">{greetingName}</span>
               </div>
-            </motion.div>
+            </div>
           </Inner>
         )}
         {showButton && !preview && !inBuilder && (
           <Inner name="button">
-            <motion.button
-              initial={{ opacity: 0, y: 8 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              animate={opened ? { opacity: 0, y: -12, transition: { duration: 0.4 } } : {}}
+            <button
               onClick={openInvitation}
               className="mt-10 inline-flex items-center gap-2 rounded-full border border-white/40 bg-white/10 px-8 py-3 text-sm font-semibold text-white backdrop-blur-sm transition-transform hover:scale-[1.04] active:scale-95"
             >
               <MailOpen className="h-4 w-4" />
               Buka Undangan
-            </motion.button>
+            </button>
           </Inner>
         )}
-      </motion.div>
+      </div>
       </HeroWrap>
     </section>
   );
@@ -995,14 +952,9 @@ export function CoupleBlock({ props }: { props: BlockProps }) {
   const groomPhoto = str(props, 'groom_photo');
   const bridePhoto = str(props, 'bride_photo');
   const title = (children: React.ReactNode) => (
-    <motion.div
-      initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ type: 'spring', stiffness: 130, damping: 18 }}
-    >
+    <div>
       {children}
-    </motion.div>
+    </div>
   );
 
   // 5 gaya: vertical (stack), side (compact 3col), card (side + box), elegant (arch + ornament), minimal (no photo typography)
@@ -1167,15 +1119,12 @@ function CountdownTimer({ target, variant }: { target: number; variant: string }
   ];
 
   const Digit = ({ value }: { value: number }) => (
-    <motion.span
+    <span
       key={value}
-      initial={{ scale: 0.5, opacity: 0.4 }}
-      animate={{ scale: 1, opacity: 1 }}
-      transition={{ duration: 0.35 }}
       className="inline-block tabular-nums"
     >
       {String(value).padStart(2, '0')}
-    </motion.span>
+    </span>
   );
 
   if (variant === 'line' || variant === 'simple') {
@@ -1244,12 +1193,7 @@ export function EventDetailBlock({ props }: { props: BlockProps }) {
             : 'mx-auto w-full rounded-xl border border-current/10 p-6 sm:p-8'
         }`}
       >
-        <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        >
+        <div>
           <Inner name="icon">
             <Icon className="mx-auto h-7 w-7" />
           </Inner>
@@ -1329,7 +1273,7 @@ export function EventDetailBlock({ props }: { props: BlockProps }) {
                 </div>
               </Inner>
             )}
-        </motion.div>
+        </div>
       </div>
     </section>
   );
@@ -1366,12 +1310,8 @@ export function StoryBlock({ props }: { props: BlockProps }) {
         <div className="mx-auto mt-10 grid w-full gap-4 sm:grid-cols-2">
           {count === 0 && <p className="text-center text-sm opacity-50 sm:col-span-2">Belum ada cerita.</p>}
           {Array.from({ length: count }).map((_, i) => (
-            <motion.div
+            <div
               key={i}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.06 }}
               className="rounded-xl border border-current/10 bg-current/[0.03] px-5 py-4 text-left"
             >
               {dates[i] && (
@@ -1385,7 +1325,7 @@ export function StoryBlock({ props }: { props: BlockProps }) {
               <p className="mt-2 text-sm leading-relaxed opacity-80">
                 <Editable prop="ev_desc" index={i} multiline>{descs[i]}</Editable>
               </p>
-            </motion.div>
+            </div>
           ))}
         </div>
       </section>
@@ -1398,12 +1338,8 @@ export function StoryBlock({ props }: { props: BlockProps }) {
       <div className="mx-auto mt-10 w-full space-y-8">
         {count === 0 && <p className="text-center text-sm opacity-50">Belum ada cerita.</p>}
         {Array.from({ length: count }).map((_, i) => (
-          <motion.div
+          <div
             key={i}
-            initial={{ opacity: 0, x: -16 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: i * 0.05 }}
             className="relative flex gap-4"
           >
             <div className="flex flex-col items-center">
@@ -1431,7 +1367,7 @@ export function StoryBlock({ props }: { props: BlockProps }) {
                 </Editable>
               </p>
             </div>
-          </motion.div>
+          </div>
         ))}
       </div>
     </section>
@@ -1495,18 +1431,14 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
         </Inner>
         <div className="mx-auto flex w-full flex-col gap-5">
           {images.map((src, i) => (
-            <motion.div
+            <div
               key={`${src}-${i}`}
-              {...a}
-              whileInView={a.animate}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: Math.min(i, 4) * 0.08 }}
               className="group relative aspect-[4/5] w-full overflow-hidden rounded-lg cursor-pointer"
               onClick={() => !preview && openLightbox(i)}
             >
               <GalleryMedia src={src} position={getPos(i)} />
               <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-400 group-hover:bg-black/15" />
-            </motion.div>
+            </div>
           ))}
         </div>
       </section>
@@ -1522,23 +1454,20 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
         </Inner>
         <div className="mx-auto grid w-full grid-cols-3 gap-2.5">
           {images.map((src, i) => (
-            <motion.div
+            <div
               key={`${src}-${i}`}
-              {...a}
-              whileInView={a.animate}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.05 }}
               className="group relative aspect-square overflow-hidden rounded-md cursor-pointer"
               onClick={() => !preview && openLightbox(i)}
             >
               <GalleryMedia src={src} position={getPos(i)} />
               <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-400 group-hover:bg-black/15" />
-            </motion.div>
+            </div>
           ))}
         </div>
       </section>
     );
   }
+
 
    if (layout === 'masonry') {
     return (
@@ -1550,12 +1479,8 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
         <div className="mx-auto w-full">
           <div className="columns-2 gap-3 [column-fill:_balance] md:columns-3">
             {images.map((src, i) => (
-              <motion.div
+              <div
                 key={`${src}-${i}`}
-                {...a}
-                whileInView={a.animate}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: (i % 6) * 0.05 }}
                 className="group mb-3 break-inside-avoid overflow-hidden rounded-lg cursor-pointer"
                 onClick={() => !preview && openLightbox(i)}
               >
@@ -1570,7 +1495,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
                   className="h-auto w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                   style={{ objectPosition: getPos(i), aspectRatio: `${[3, 4, 5, 3][i % 4]}/4` }}
                 />
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -1587,18 +1512,14 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
         </Inner>
         <div className="mx-auto grid w-full grid-cols-3 gap-2">
           {images.map((src, i) => (
-            <motion.div
+            <div
               key={`${src}-${i}`}
-              {...a}
-              whileInView={a.animate}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: Math.min(i, 5) * 0.06 }}
               className={`group relative overflow-hidden rounded-md cursor-pointer ${i % 5 === 0 ? 'col-span-2 row-span-2 aspect-square' : 'aspect-[3/4]'}`}
               onClick={() => !preview && openLightbox(i)}
             >
               <GalleryMedia src={src} position={getPos(i)} />
               <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-400 group-hover:bg-black/15" />
-            </motion.div>
+            </div>
           ))}
         </div>
       </section>
@@ -1614,12 +1535,8 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
         </Inner>
         <div className="mx-auto grid w-full grid-cols-2 gap-6 md:grid-cols-3">
           {images.map((src, i) => (
-            <motion.div
+            <div
               key={`${src}-${i}`}
-              {...a}
-              whileInView={a.animate}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: (i % 6) * 0.07 }}
               className="group break-inside-avoid rounded-sm bg-white p-2 pb-8 shadow-[0_6px_16px_rgba(0,0,0,0.18)] cursor-pointer"
               style={{ transform: `rotate(${[-3, 2, -1, 3, -2, 2][i % 6]}deg)` }}
               onClick={() => !preview && openLightbox(i)}
@@ -1627,7 +1544,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
               <div className="relative aspect-square w-full overflow-hidden bg-[#e8e2d5]">
                 <GalleryMedia src={src} position={getPos(i)} />
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </section>
@@ -1645,32 +1562,24 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
         </Inner>
         <div className="mx-auto w-full">
           {hero && (
-            <motion.div
-              {...a}
-              whileInView={a.animate}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7 }}
+            <div
               className="group relative mx-auto aspect-[3/4.2] w-full max-w-[300px] overflow-hidden rounded-t-[999px] shadow-[0_18px_40px_rgba(0,0,0,0.18)] cursor-pointer"
               onClick={() => !preview && openLightbox(0)}
             >
               <GalleryMedia src={hero} position={getPos(0)} />
-            </motion.div>
+            </div>
           )}
           {rest.length > 0 && (
             <div className="mt-6 grid grid-cols-2 gap-3">
               {rest.map((src, i) => (
-                <motion.div
+                <div
                   key={`${src}-${i}`}
-                  {...a}
-                  whileInView={a.animate}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: i * 0.05 }}
                   className="group relative aspect-square overflow-hidden rounded-lg cursor-pointer"
                   onClick={() => !preview && openLightbox(i + 1)}
                 >
                   <GalleryMedia src={src} position={getPos(i + 1)} />
                   <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-400 group-hover:bg-black/15" />
-                </motion.div>
+                </div>
               ))}
             </div>
           )}
@@ -1690,18 +1599,14 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
           {images.map((src: string, i: number) => {
             const span = i === 0 ? 'col-span-2 row-span-2' : i % 5 === 0 ? 'col-span-1 row-span-2' : '';
             return (
-              <motion.div
+              <div
                 key={`${src}-${i}`}
-                {...a}
-                whileInView={a.animate}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.06 }}
                 className={`group relative overflow-hidden rounded-lg cursor-pointer ${span}`}
                 onClick={() => !preview && openLightbox(i)}
               >
                 <GalleryMedia src={src} position={getPos(i)} />
                 <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-400 group-hover:bg-black/10" />
-              </motion.div>
+              </div>
             );
           })}
         </div>
@@ -1718,31 +1623,23 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
         </Inner>
         <div className="mx-auto w-full space-y-3">
           {images[0] && (
-            <motion.div
-              {...a}
-              whileInView={a.animate}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
+            <div
               className="group relative aspect-[16/10] w-full overflow-hidden rounded-lg cursor-pointer"
               onClick={() => !preview && openLightbox(0)}
             >
               <GalleryMedia src={images[0]} position={getPos(0)} />
-            </motion.div>
+            </div>
           )}
           {images.length > 1 && (
             <div className="grid grid-cols-3 gap-2.5">
               {images.slice(1).map((src: string, i: number) => (
-                <motion.div
+                <div
                   key={`${src}-${i}`}
-                  {...a}
-                  whileInView={a.animate}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: (i + 1) * 0.06 }}
                   className="group relative aspect-square overflow-hidden rounded-lg cursor-pointer"
                   onClick={() => !preview && openLightbox(i + 1)}
                 >
                   <GalleryMedia src={src} position={getPos(i + 1)} />
-                </motion.div>
+                </div>
               ))}
             </div>
           )}
@@ -1761,18 +1658,14 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
         <div className="mx-auto w-full overflow-x-auto scrollbar-hide">
           <div className="flex gap-3 px-6" style={{ width: 'max-content' }}>
             {images.map((src: string, i: number) => (
-              <motion.div
+              <div
                 key={`${src}-${i}`}
-                {...a}
-                whileInView={a.animate}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.08 }}
                 className="group relative h-48 w-72 shrink-0 overflow-hidden rounded-lg cursor-pointer sm:h-56 sm:w-80"
                 onClick={() => !preview && openLightbox(i)}
               >
                 <GalleryMedia src={src} position={getPos(i)} />
                 <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-400 group-hover:bg-black/15" />
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -1794,12 +1687,8 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
               const scale = 1 - i * 0.03;
               const rotate = (i % 2 === 0 ? 1 : -1) * (i * 1.5);
               return (
-                <motion.div
+                <div
                   key={`${src}-${i}`}
-                  {...a}
-                  whileInView={a.animate}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: i * 0.1 }}
                   className="absolute inset-0 cursor-pointer overflow-hidden rounded-lg shadow-lg border border-white/20"
                   style={{
                     zIndex: images.length - i,
@@ -1808,7 +1697,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
                   onClick={() => !preview && openLightbox(i)}
                 >
                   <GalleryMedia src={src} position={getPos(i)} />
-                </motion.div>
+                </div>
               );
             })}
           </div>
@@ -1825,12 +1714,8 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
       </Inner>
       <div className="mx-auto grid w-full grid-cols-2 gap-3">
         {images.map((src, i) => (
-          <motion.div
+          <div
             key={`${src}-${i}`}
-            {...a}
-            whileInView={a.animate}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: i * 0.06 }}
             className={`group relative overflow-hidden rounded-lg cursor-pointer ${i === 0 || i === 3 ? 'col-span-2' : ''} ${
               i === 0 || i === 3 ? 'aspect-[16/10]' : 'aspect-[3/4]'
             }`}
@@ -1838,7 +1723,7 @@ export function GalleryBlock({ props }: { props: BlockProps }) {
           >
             <GalleryMedia src={src} position={getPos(i)} />
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-          </motion.div>
+          </div>
         ))}
       </div>
     </section>
@@ -2324,15 +2209,11 @@ export function DividerBlock({ props }: { props: BlockProps }) {
   const variant = str(props, 'variant') || 'line';
   return (
     <section className="flex w-full items-center justify-center px-6 py-8 text-current" aria-hidden>
-      <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5 }}
+      <div
         className="flex items-center justify-center"
       >
         {DIVIDER_VARIANTS[variant] ?? DIVIDER_VARIANTS.line}
-      </motion.div>
+      </div>
     </section>
   );
 }
@@ -2405,12 +2286,12 @@ export function LiveStreamingBlock({ props }: { props: BlockProps }) {
   return (
     <section className="px-6 py-10 sm:py-12 md:py-14 text-center">
       <Inner name="title">
-        <motion.div initial={{ opacity: 0, scale: 0.96 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
+        <div>
           <Radio className="mx-auto h-7 w-7" />
           <h2 className="mt-4 text-2xl font-medium">
             <Editable prop="title">{str(props, 'title') || 'Siaran Langsung'}</Editable>
           </h2>
-        </motion.div>
+        </div>
       </Inner>
       <Inner name="note">
         <p className="mt-3 text-sm opacity-80">
@@ -2457,11 +2338,7 @@ function GalleryLightbox({
   }, [onClose, onPrev, onNext]);
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.25 }}
+    <div
       className="fixed inset-0 z-[200] flex items-center justify-center bg-black/90"
       onClick={onClose}
     >
@@ -2483,12 +2360,8 @@ function GalleryLightbox({
         </button>
       )}
 
-      <motion.div
+      <div
         key={index}
-        initial={{ opacity: 0, scale: 0.92 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.92 }}
-        transition={{ duration: 0.25 }}
         className="relative max-h-[85vh] max-w-[90vw]"
         onClick={(e) => e.stopPropagation()}
       >
@@ -2507,7 +2380,7 @@ function GalleryLightbox({
             className="max-h-[85vh] max-w-[90vw] rounded-lg object-contain"
           />
         )}
-      </motion.div>
+      </div>
 
       {images.length > 1 && (
         <button
@@ -2531,7 +2404,7 @@ function GalleryLightbox({
           ))}
         </div>
       )}
-    </motion.div>
+    </div>
   );
 }
 
@@ -2634,18 +2507,11 @@ export function PopupBlock({ props }: { props: BlockProps }) {
       </button>
       <AnimatePresence>
         {open && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+          <div
             className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 p-6"
             onClick={() => setOpen(false)}
           >
-            <motion.div
-              initial={{ opacity: 0, y: 24, scale: 0.96 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 24, scale: 0.96 }}
-              transition={{ duration: 0.22 }}
+            <div
               onClick={(e) => e.stopPropagation()}
               className="relative w-full max-w-sm rounded-2xl bg-white p-6 text-left text-gray-800 shadow-2xl"
             >
@@ -2661,8 +2527,8 @@ export function PopupBlock({ props }: { props: BlockProps }) {
                 {title}
               </h3>
               <div className="mt-3 text-sm text-gray-600">{body}</div>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         )}
       </AnimatePresence>
     </section>

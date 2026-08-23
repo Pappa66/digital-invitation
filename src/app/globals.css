@@ -175,22 +175,10 @@ body {
   background-color: var(--section-accent-color) !important;
 }
 
-/* Scroll reveal animation — cinematic fade-up like wekita.id */
+/* Scroll reveal animation — disabled, all content renders immediately */
 .scroll-reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.scroll-reveal-visible {
   opacity: 1;
-  transform: translateY(0);
-}
-@media (prefers-reduced-motion: reduce) {
-  .scroll-reveal {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
+  transform: none;
 }
 
 /* SVG wave divider between sections */
