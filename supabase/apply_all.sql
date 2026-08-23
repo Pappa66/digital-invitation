@@ -1130,13 +1130,14 @@ grant execute on function public.get_invite_checkins(uuid, text) to anon, authen
 -- Aman untuk rerun: IF NOT EXISTS / DO $$ guard.
 -- ============================================================
 
--- 1) STORAGE: bucket hanya menerima gambar/audio, batas 10MB,
+-- 1) STORAGE: bucket menerima gambar/audio/video, batas 100MB,
 --    dan upload/update wajib ke folder milik pengguna.
 update storage.buckets
-set file_size_limit = 10485760, -- 10 MiB
+set file_size_limit = 104857600, -- 100 MiB (was 10 MiB)
     allowed_mime_types = array[
       'image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml',
-      'audio/mpeg', 'audio/ogg', 'audio/wav', 'audio/mp4', 'audio/x-m4a'
+      'audio/mpeg', 'audio/ogg', 'audio/wav', 'audio/mp4', 'audio/x-m4a',
+      'video/mp4', 'video/webm', 'video/ogg', 'video/quicktime', 'video/x-msvideo', 'video/x-matroska'
     ]
 where id = 'invitation-assets';
 
@@ -2212,3 +2213,15 @@ begin
   order by st.created_at desc;
 end;
 $$;
+
+-- ============================================================
+-- 0019: Allow video uploads in invitation-assets bucket
+-- ============================================================
+update storage.buckets
+set file_size_limit = 104857600, -- 100 MiB (was 10 MiB)
+    allowed_mime_types = array[
+      'image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml',
+      'audio/mpeg', 'audio/ogg', 'audio/wav', 'audio/mp4', 'audio/x-m4a',
+      'video/mp4', 'video/webm', 'video/ogg', 'video/quicktime', 'video/x-msvideo', 'video/x-matroska'
+    ]
+where id = 'invitation-assets';

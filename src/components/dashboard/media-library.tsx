@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
 import imageCompression from 'browser-image-compression';
-import { Upload, X, Loader2, AlertTriangle, CheckCircle, Info, Video } from 'lucide-react';
+import { Upload, X, Loader2, AlertTriangle, CheckCircle, Info, Video, Trash2 } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
 
 const BUCKET = 'invitation-assets';
@@ -86,6 +86,7 @@ export default function MediaLibrary({ open, onClose, onSelect, imageType = 'gen
   const [uploadingCount, setUploadingCount] = useState(0);
   const [qualityReport, setQualityReport] = useState<ImageQualityInfo | null>(null);
   const [showSpecs, setShowSpecs] = useState(false);
+  const [deleting, setDeleting] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const loadFiles = useCallback(async () => {
@@ -156,6 +157,25 @@ export default function MediaLibrary({ open, onClose, onSelect, imageType = 'gen
       setUploading(false);
       setUploadingCount(0);
       e.target.value = '';
+    }
+  }
+
+  async function handleDelete(fileName: string, e: React.MouseEvent) {
+    e.stopPropagation();
+    if (!confirm('Hapus file ini?')) return;
+    setDeleting(fileName);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      const prefix = user ? `${user.id}/` : '';
+      const filePath = `${prefix}${fileName}`;
+      const { error } = await supabase.storage.from(BUCKET).remove([filePath]);
+      if (error) {
+        console.error('Delete failed', error);
+      } else {
+        await loadFiles();
+      }
+    } finally {
+      setDeleting(null);
     }
   }
 
@@ -257,7 +277,7 @@ export default function MediaLibrary({ open, onClose, onSelect, imageType = 'gen
                  <button
                    key={f.name}
                    onClick={() => onSelect(f.url)}
-                   className="relative aspect-square overflow-hidden rounded-lg border border-gray-200 hover:border-gray-400"
+                   className="group relative aspect-square overflow-hidden rounded-lg border border-gray-200 hover:border-gray-400"
                    title={f.name}
                  >
                    {isVideoName(f.name) ? (
@@ -270,6 +290,13 @@ export default function MediaLibrary({ open, onClose, onSelect, imageType = 'gen
                    ) : (
                      <Image src={f.url} alt={f.name} fill sizes="(max-width:768px) 33vw, 33vw" className="object-cover" />
                    )}
+                   <span
+                     className="absolute left-1.5 top-1.5 z-10 rounded-full bg-red-500/80 p-1 text-white opacity-0 transition-opacity hover:bg-red-600 group-hover:opacity-100"
+                     onClick={(e) => handleDelete(f.name, e)}
+                     title="Hapus"
+                   >
+                     {deleting === f.name ? <Loader2 className="h-3 w-3 animate-spin" /> : <Trash2 className="h-3 w-3" />}
+                   </span>
                  </button>
                ))}
              </div>
