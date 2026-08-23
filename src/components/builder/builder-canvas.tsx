@@ -335,6 +335,7 @@ function CoverPreview() {
   const bg = canvas.settings.cover_bg_image || (typeof hero?.props.bg_image === 'string' ? hero.props.bg_image : undefined);
   const names = [hero?.props.bride, hero?.props.groom].filter(Boolean).join(' & ');
   const caption = typeof hero?.props.caption === 'string' ? hero.props.caption : 'Undangan Pernikahan';
+  const isVideo = bg ? /\.(mp4|webm|ogg|mov|m4v)(\?|$)/i.test(bg) : false;
   return (
     <button
       type="button"
@@ -342,8 +343,14 @@ function CoverPreview() {
       className={`relative flex h-64 w-full flex-col items-center justify-center overflow-hidden px-6 text-center transition-shadow ${
         selected ? 'ring-2 ring-[#c9a45c] ring-inset' : 'hover:ring-2 hover:ring-[#c9a45c]/60 hover:ring-inset'
       }`}
-      style={{ background: bg ? `url(${bg}) center / cover no-repeat` : `linear-gradient(160deg, ${canvas.theme.primary} 0%, ${canvas.theme.secondary} 100%)` }}
+      style={!bg || isVideo ? undefined : { background: `url(${bg}) center / cover no-repeat` }}
     >
+      {bg && isVideo && (
+        <video src={bg} muted loop playsInline className="absolute inset-0 h-full w-full object-cover" />
+      )}
+      {!bg && (
+        <div className="absolute inset-0" style={{ background: `linear-gradient(160deg, ${canvas.theme.primary} 0%, ${canvas.theme.secondary} 100%)` }} />
+      )}
       <span className="pointer-events-none absolute left-2 top-2 rounded bg-black/45 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-white">
         Cover — Buka Undangan
       </span>

@@ -146,18 +146,32 @@ function DragPosition({
         onPointerLeave={onPointerUp}
         style={{ touchAction: 'none', cursor: dragging ? 'grabbing' : 'grab' }}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={src}
-          alt=""
-          draggable={false}
-          className={`pointer-events-none absolute inset-0 h-full w-full ${fit === 'contain' ? 'object-contain' : 'object-cover'}`}
-          style={{
-            objectPosition: `${posX}% ${posY}%`,
-            transform: `scale(1.3)`,
-            transition: dragging ? 'none' : 'object-position 0.2s ease'
-          }}
-        />
+        {/\.(mp4|webm|ogg|mov|m4v)(\?|$)/i.test(src) ? (
+          <video
+            src={src}
+            muted
+            playsInline
+            className={`pointer-events-none absolute inset-0 h-full w-full ${fit === 'contain' ? 'object-contain' : 'object-cover'}`}
+            style={{
+              objectPosition: `${posX}% ${posY}%`,
+              transform: `scale(1.3)`,
+              transition: dragging ? 'none' : 'object-position 0.2s ease'
+            }}
+          />
+        ) : (
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img
+            src={src}
+            alt=""
+            draggable={false}
+            className={`pointer-events-none absolute inset-0 h-full w-full ${fit === 'contain' ? 'object-contain' : 'object-cover'}`}
+            style={{
+              objectPosition: `${posX}% ${posY}%`,
+              transform: `scale(1.3)`,
+              transition: dragging ? 'none' : 'object-position 0.2s ease'
+            }}
+          />
+        )}
         {/* Guide crosshair */}
         <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
           <div className="h-px w-4 bg-white/60" />
@@ -987,8 +1001,12 @@ export default function PropertiesPanel({ mobileOpen = false, onClose }: { mobil
                         </button>
                         {canvas.settings.cover_bg_image && (
                           <div className="relative mt-1 h-16 w-full overflow-hidden rounded-md border border-[#e0d6c2]">
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src={canvas.settings.cover_bg_image} alt="" className="h-full w-full object-cover" />
+                            {/\.(mp4|webm|ogg|mov|m4v)(\?|$)/i.test(canvas.settings.cover_bg_image) ? (
+                              <video src={canvas.settings.cover_bg_image} muted playsInline className="h-full w-full object-cover" />
+                            ) : (
+                              /* eslint-disable-next-line @next/next/no-img-element */
+                              <img src={canvas.settings.cover_bg_image} alt="" className="h-full w-full object-cover" />
+                            )}
                             <button
                               type="button"
                               onClick={() => setSettings({ cover_bg_image: '' })}
