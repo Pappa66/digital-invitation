@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { PUCK_TEMPLATE_LIST } from '@/lib/templates/puck';
 
 interface TemplatePickerProps {
@@ -9,8 +10,13 @@ interface TemplatePickerProps {
 
 /** Modal pilih template awal untuk kanvas kosong. */
 export default function TemplatePicker({ onSelect, onClose }: TemplatePickerProps) {
+  useEffect(() => {
+    document.body.classList.add('puck-modal-open');
+    return () => document.body.classList.remove('puck-modal-open');
+  }, []);
+
   return (
-    <div className="fixed inset-0 z-[1200] flex items-start justify-center overflow-auto bg-black/40 p-6">
+    <div className="fixed inset-0 z-[5000] flex items-start justify-center overflow-auto bg-black/60 p-6">
       <div className="mt-6 w-full max-w-3xl rounded-2xl bg-white p-6 shadow-2xl">
         <div className="flex items-center justify-between">
           <h2 className="text-base font-semibold text-[#2b2620]">Mulai dari Template</h2>

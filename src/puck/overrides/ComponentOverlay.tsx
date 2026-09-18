@@ -34,6 +34,7 @@ export default function ComponentOverlay({ children, isSelected, componentId, co
     el.style.outline = '2px dashed #c9a45c';
     el.style.outlineOffset = '2px';
     el.style.touchAction = 'none';
+    el.classList.add('puck-selected-wrapper');
 
     const doc = el.ownerDocument;
     const win = doc.defaultView ?? window;
@@ -99,6 +100,7 @@ export default function ComponentOverlay({ children, isSelected, componentId, co
       el.style.outline = '';
       el.style.outlineOffset = '';
       el.style.touchAction = '';
+      el.classList.remove('puck-selected-wrapper');
     };
   }, [isSelected, componentId, dispatch, getItemById]);
 

@@ -31,6 +31,13 @@ export default function MediaLibrary({ open, onClose, onPick }: MediaLibraryProp
     listAssets().then((r) => setAssets(r.data ?? []));
   }, [open]);
 
+  // Sembunyikan outline seleksi kanvas selama modal terbuka.
+  useEffect(() => {
+    if (!open) return;
+    document.body.classList.add('puck-modal-open');
+    return () => document.body.classList.remove('puck-modal-open');
+  }, [open]);
+
   async function handleFiles(files: FileList | null) {
     if (!files || files.length === 0) return;
     const list = Array.from(files);
@@ -63,7 +70,7 @@ export default function MediaLibrary({ open, onClose, onPick }: MediaLibraryProp
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[1300] flex items-start justify-center overflow-auto bg-black/40 p-6">
+    <div className="fixed inset-0 z-[5000] flex items-start justify-center overflow-auto bg-black/60 p-6">
       <div className="mt-6 w-full max-w-3xl rounded-2xl bg-white p-5 shadow-2xl">
         <div className="flex items-center justify-between">
           <h3 className="text-sm font-semibold text-[#2b2620]">Pustaka Media</h3>

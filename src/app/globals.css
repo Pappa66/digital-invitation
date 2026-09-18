@@ -303,3 +303,8 @@ body {
 .block-ta :is(section, h1, h2, h3, h4, p, span, div, blockquote, figure) {
   text-align: inherit;
 }
+
+/* Sembunyikan outline seleksi kanvas saat modal builder terbuka. */
+body.puck-modal-open .puck-selected-wrapper {
+  outline: none !important;
+}
