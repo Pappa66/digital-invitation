@@ -18,6 +18,23 @@ export const sampleData: Data<InvitationProps, InvitationRootProps> = {
   },
   content: [
     {
+      type: 'Cover',
+      props: {
+        id: 'cover-1',
+        caption: 'The Wedding of',
+        bride: 'Sena Ayudia',
+        groom: 'Panca Priyantoro',
+        date: 'Sabtu, 12 Desember 2026',
+        place: 'The Ritz-Carlton, Jakarta',
+        bgImage: '',
+        greeting: 'Kepada Yth.',
+        buttonText: 'Buka Undangan',
+        coverStyle: 'floral',
+        entrance: 'none',
+        position: flow
+      }
+    },
+    {
       type: 'Hero',
       props: {
         id: 'hero-1',

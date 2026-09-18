@@ -27,8 +27,8 @@ describe('PuckGuestView', () => {
     expect(screen.getByText(/Bapak Tamu/)).toBeInTheDocument();
   });
 
-  it('menyembunyikan cover saat showCover = no', () => {
-    const data = { ...sampleData, root: { props: { ...sampleData.root.props, showCover: 'no' as const } } } as typeof sampleData;
+  it('tanpa blok Cover tidak menampilkan "Buka Undangan"', () => {
+    const data = { ...sampleData, content: sampleData.content.filter((c) => c.type !== 'Cover') } as typeof sampleData;
     render(<PuckGuestView canvas={data} projectId="p1" />);
     expect(screen.queryByText(/Buka Undangan/i)).toBeNull();
   });

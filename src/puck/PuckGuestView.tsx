@@ -3,13 +3,12 @@
 import { useEffect, useState } from 'react';
 import { Render } from '@puckeditor/core';
 import { config } from '@/puck/config';
-import CoverModal from '@/components/guest/cover-modal';
 import ShareBar from '@/components/guest/share-bar';
 import MusicPlayer from '@/components/guest/music-player';
 import GuestBookWall from '@/components/guest/guest-book';
 import CheckIn from '@/components/guest/check-in';
 import { fireConfetti } from '@/lib/confetti';
-import { buildCoverProps, buildGuestSettings, readHero } from '@/puck/guest-config';
+import { buildGuestSettings, readHero } from '@/puck/guest-config';
 import type { PuckData } from '@/lib/canvas/puck-format';
 import type { InvitationRootProps } from '@/puck/types';
 
@@ -24,19 +23,18 @@ export default function PuckGuestView({ canvas, projectId, greetingName }: PuckG
   const theme = (canvas.root.props ?? {}) as InvitationRootProps;
   const hero = readHero(canvas);
   const settings = buildGuestSettings(theme);
-  const hasCoverBlock = canvas.content.some((c) => c.type === 'Cover');
-  const fallbackCover = !hasCoverBlock && theme.showCover !== 'no';
-  const [opened, setOpened] = useState(!fallbackCover);
+  const hasCover = canvas.content.some((c) => c.type === 'Cover');
+  const [opened, setOpened] = useState(!hasCover);
 
   useEffect(() => {
-    if (!fallbackCover) return;
+    if (!hasCover) return;
     const handler = () => {
       setOpened(true);
       void fireConfetti();
     };
     window.addEventListener('invite-opened', handler);
     return () => window.removeEventListener('invite-opened', handler);
-  }, [fallbackCover]);
+  }, [hasCover]);
 
   return (
     <>
@@ -52,7 +50,6 @@ export default function PuckGuestView({ canvas, projectId, greetingName }: PuckG
           heroImage={hero.bgImage}
         />
       ) : null}
-      {fallbackCover ? <CoverModal {...buildCoverProps(theme, hero, greetingName)} /> : null}
     </>
   );
 }

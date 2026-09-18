@@ -773,28 +773,6 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
       fontHeading: { type: 'select', label: 'Font Judul', options: fontOptions },
       fontBody: { type: 'select', label: 'Font Isi', options: fontOptions },
       decor: { type: 'custom', label: 'Dekor Kanvas', render: DecorField },
-      showCover: {
-        type: 'select',
-        label: 'Cover "Buka Undangan"',
-        options: [
-          { label: 'Tampilkan', value: 'yes' },
-          { label: 'Sembunyikan', value: 'no' }
-        ]
-      },
-      coverGreeting: { type: 'text', label: 'Sapaan Cover' },
-      coverButtonText: { type: 'text', label: 'Teks Tombol Cover' },
-      coverBgImage: { type: 'custom', label: 'Gambar Cover', render: AssetField },
-      coverStyle: {
-        type: 'select',
-        label: 'Gaya Cover',
-        options: [
-          { label: 'Floral', value: 'floral' },
-          { label: 'Buku', value: 'book' },
-          { label: 'Roll Film', value: 'filmroll' },
-          { label: 'TV Jadul', value: 'oldtv' },
-          { label: 'Koran', value: 'newspaper' }
-        ]
-      },
       musicUrl: { type: 'text', label: 'URL Musik (MP3/YouTube)' },
       musicAutoplay: {
         type: 'select',
@@ -846,11 +824,6 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
     defaultProps: {
       ...defaultTheme,
       decor: [],
-      showCover: 'yes',
-      coverGreeting: 'Kepada Yth.',
-      coverButtonText: 'Buka Undangan',
-      coverStyle: 'floral',
-      coverBgImage: '',
       musicUrl: '',
       musicAutoplay: 'yes',
       musicOffsetSec: 0,
