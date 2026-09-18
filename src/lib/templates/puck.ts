@@ -372,6 +372,118 @@ const BLUEPRINTS: Blueprint[] = [
       thanks('noir-gold-thanks'),
       rsvp('noir-gold-rsvp')
     ]
+  },
+  {
+    id: 'emerald-khaki',
+    name: 'Emerald Khaki',
+    category: 'outdoor',
+    description: 'Hijau emerald dengan aksen khaki — botanical, natural, dan tenang.',
+    primary: '#2F5D50',
+    secondary: '#B5A27C',
+    background: '#F4F1E8',
+    text: '#2E3A34',
+    fontHeading: 'Cormorant Garamond',
+    fontBody: 'Jost',
+    decor: decor('emerald-khaki', [
+      { imageUrl: '/stickers/leaf-garland.svg', x: -40, y: 0, width: 510, rotation: 0, opacity: 0.45, zIndex: 2, loop: 'none' },
+      { imageUrl: '/stickers/leaf-garland.svg', x: -40, y: 1500, width: 510, rotation: 180, opacity: 0.35, zIndex: 2, loop: 'none' },
+      { imageUrl: '/stickers/butterfly.svg', x: 320, y: 620, width: 84, rotation: -8, opacity: 0.9, zIndex: 3, loop: 'float' }
+    ]),
+    blocks: [
+      hero('emerald-khaki-hero', 'The Wedding of', 'Ayu Paramita', 'Damar Wicaksono', 'Sabtu, 3 Oktober 2026', 'Bogor Botanical Garden'),
+      quote('emerald-khaki-quote', 'Dan segala sesuatu Kami ciptakan berpasang-pasangan supaya kamu mengingat kebesaran Allah.', 'QS. Adz-Dzariyat: 49'),
+      couple('emerald-khaki-couple', 'Damar Wicaksono', 'Putra dari Bpk. & Ibu Wicaksono', 'Ayu Paramita', 'Putri dari Bpk. & Ibu Paramita'),
+      countdown('emerald-khaki-countdown', '2026-10-03T09:00:00+07:00'),
+      events('emerald-khaki-event', 'Sabtu, 3 Oktober 2026', 'Bogor Botanical Garden'),
+      story('emerald-khaki-story'),
+      gallery('emerald-khaki-gallery'),
+      maps('emerald-khaki-maps', 'Kebun Raya Bogor, Jawa Barat'),
+      gift('emerald-khaki-gift', 'Bank BNI', '0987654321', 'Ayu Paramita'),
+      thanks('emerald-khaki-thanks'),
+      rsvp('emerald-khaki-rsvp')
+    ]
+  },
+  {
+    id: 'lavender-mist',
+    name: 'Lavender Mist',
+    category: 'romance',
+    description: 'Ungu lavender lembut dan dreamy.',
+    primary: '#8E7CC3',
+    secondary: '#C9A227',
+    background: '#F8F6FC',
+    text: '#3E3A4A',
+    fontHeading: 'Playfair Display',
+    fontBody: 'Poppins',
+    decor: decor('lavender-mist', [
+      { imageUrl: '/stickers/sparkle.svg', x: 60, y: 220, width: 60, rotation: 0, opacity: 0.7, zIndex: 2, loop: 'pulse' },
+      { imageUrl: '/stickers/rose-right.svg', x: 300, y: 1000, width: 140, rotation: 8, opacity: 0.8, zIndex: 2, loop: 'float' }
+    ]),
+    blocks: [
+      hero('lavender-mist-hero', 'The Wedding of', 'Nadira Ayu', 'Fajar Ramadhan', 'Minggu, 12 Juli 2026', 'The Trans Luxury, Bandung'),
+      couple('lavender-mist-couple', 'Fajar Ramadhan', 'Putra dari Bpk. & Ibu Ramadhan', 'Nadira Ayu', 'Putri dari Bpk. & Ibu Ayu'),
+      countdown('lavender-mist-countdown', '2026-07-12T10:00:00+07:00'),
+      events('lavender-mist-event', 'Minggu, 12 Juli 2026', 'The Trans Luxury Hotel'),
+      story('lavender-mist-story'),
+      gallery('lavender-mist-gallery'),
+      maps('lavender-mist-maps', 'The Trans Luxury, Bandung'),
+      thanks('lavender-mist-thanks'),
+      rsvp('lavender-mist-rsvp')
+    ]
+  },
+  {
+    id: 'pearl-ivory',
+    name: 'Pearl Ivory',
+    category: 'classic',
+    description: 'Ivory mutiara, minimal, dan abadi.',
+    primary: '#9C8E76',
+    secondary: '#D9CBB0',
+    background: '#FBF9F4',
+    text: '#3B372F',
+    fontHeading: 'Cormorant Garamond',
+    fontBody: 'Karla',
+    decor: decor('pearl-ivory', [
+      { imageUrl: '/stickers/gold-frame.svg', x: 30, y: 40, width: 370, rotation: 0, opacity: 0.18, zIndex: 2, loop: 'none' }
+    ]),
+    blocks: [
+      hero('pearl-ivory-hero', 'The Wedding of', 'Laras Widuri', 'Krisna Bayu', 'Sabtu, 8 Agustus 2026', 'Amanjiwo, Magelang'),
+      quote('pearl-ivory-quote', 'Siapa mendapat isteri, mendapat sesuatu yang baik, dan ia dikenan TUHAN.', 'Amsal 18:22'),
+      couple('pearl-ivory-couple', 'Krisna Bayu', 'Putra dari Bpk. & Ibu Bayu', 'Laras Widuri', 'Putri dari Bpk. & Ibu Widuri'),
+      countdown('pearl-ivory-countdown', '2026-08-08T09:00:00+07:00'),
+      events('pearl-ivory-event', 'Sabtu, 8 Agustus 2026', 'Amanjiwo Resort'),
+      story('pearl-ivory-story'),
+      gallery('pearl-ivory-gallery'),
+      maps('pearl-ivory-maps', 'Amanjiwo, Magelang'),
+      thanks('pearl-ivory-thanks'),
+      rsvp('pearl-ivory-rsvp')
+    ]
+  },
+  {
+    id: 'golden-marigold',
+    name: 'Golden Marigold',
+    category: 'outdoor',
+    description: 'Kuning marigold hangat dan ceria, khas garden party.',
+    primary: '#C98A1E',
+    secondary: '#6B7F4B',
+    background: '#FFF9EC',
+    text: '#4A3B22',
+    fontHeading: 'Lora',
+    fontBody: 'Montserrat',
+    decor: decor('golden-marigold', [
+      { imageUrl: '/stickers/leaf-garland.svg', x: -30, y: 0, width: 490, rotation: 0, opacity: 0.4, zIndex: 2, loop: 'none' },
+      { imageUrl: '/stickers/butterfly.svg', x: 80, y: 700, width: 80, rotation: 6, opacity: 0.9, zIndex: 3, loop: 'float' }
+    ]),
+    blocks: [
+      hero('golden-marigold-hero', 'The Wedding of', 'Sekar Ayu', 'Bagas Prakoso', 'Sabtu, 19 September 2026', 'Plataran Puncak, Bogor'),
+      couple('golden-marigold-couple', 'Bagas Prakoso', 'Putra dari Bpk. & Ibu Prakoso', 'Sekar Ayu', 'Putri dari Bpk. & Ibu Ayu'),
+      countdown('golden-marigold-countdown', '2026-09-19T09:00:00+07:00'),
+      events('golden-marigold-event', 'Sabtu, 19 September 2026', 'Plataran Puncak'),
+      story('golden-marigold-story'),
+      gallery('golden-marigold-gallery'),
+      maps('golden-marigold-maps', 'Plataran Puncak, Bogor'),
+      envelope('golden-marigold-envelope', 'Bank Mandiri', '1029384756', 'Sekar Ayu'),
+      thanks('golden-marigold-thanks'),
+      rsvp('golden-marigold-rsvp')
+    ]
   }
 ];
 

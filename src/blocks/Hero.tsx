@@ -25,7 +25,7 @@ export default function Hero({ caption, groom, bride, date, place, bgImage, vari
             <img src={bgImage} alt="" className="absolute inset-0 h-full w-full object-cover opacity-55" />
           )
         ) : null}
-        <div className={`relative z-10 flex flex-col ${v.inner}`}>
+        <div className={`relative z-10 flex flex-col ${v.inner}`} style={{ textShadow: '0 2px 14px rgba(0,0,0,0.45)' }}>
           <p className="text-[11px] uppercase tracking-[0.35em] opacity-85">{caption}</p>
           <h1 className="mt-5 font-heading text-4xl leading-tight sm:text-5xl" style={nameStyle}>
             {bride}
