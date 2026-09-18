@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { getSiteOrigin } from '@/lib/site';
 import { generateShareToken } from '@/lib/actions/share-token-actions';
+import { clientGetInviteAccessToken } from '@/lib/api/project-client';
 import { guestLink } from '@/lib/guest-links';
 import type { ProjectMeta } from '@/puck/hooks/use-puck-project';
 
@@ -48,6 +49,17 @@ export default function BuilderHeader({ meta, saveStatus, busy, isEditLink, lega
     }
   }
 
+  async function shareGuestManageLink() {
+    setBusyLink(true);
+    try {
+      const res = await clientGetInviteAccessToken(projectId);
+      if (res.token) await copy(`${getSiteOrigin()}/invite/${projectId}?t=${res.token}`, 'Link kelola tamu');
+      else setToast(res.error ?? 'Gagal membuat link tamu');
+    } finally {
+      setBusyLink(false);
+    }
+  }
+
   return (
     <header className="flex h-12 shrink-0 items-center justify-between border-b border-[#e7ddcc] bg-white px-4">
       <div className="flex min-w-0 items-center gap-3">
@@ -74,6 +86,9 @@ export default function BuilderHeader({ meta, saveStatus, busy, isEditLink, lega
             <Link href={`/invite/${projectId}`} className={BTN}>
               Kelola Tamu
             </Link>
+            <button type="button" onClick={shareGuestManageLink} disabled={busyLink} className={BTN}>
+              Link Tamu
+            </button>
             {meta.slug ? (
               <button type="button" onClick={() => copy(guestLink(getSiteOrigin(), meta.slug ?? undefined, ''), 'Link undangan')} className={BTN}>
                 Bagikan

@@ -16,6 +16,11 @@ const CORE_COMPONENTS = [
   'Thanks',
   'Envelope',
   'RunningText',
+  'Text',
+  'Photo',
+  'LiveStreaming',
+  'CopyText',
+  'Watermark',
   'Rsvp'
 ];
 

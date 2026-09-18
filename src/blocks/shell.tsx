@@ -7,7 +7,10 @@ import type { BlockStyleLite, EntranceKind, Position } from '@/puck/types';
 const VARIANTS: Record<Exclude<EntranceKind, 'none'>, Variants> = {
   fade: { hidden: { opacity: 0 }, show: { opacity: 1 } },
   slide: { hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0 } },
-  zoom: { hidden: { opacity: 0, scale: 0.97 }, show: { opacity: 1, scale: 1 } }
+  slideUp: { hidden: { opacity: 0, y: -24 }, show: { opacity: 1, y: 0 } },
+  slideDown: { hidden: { opacity: 0, y: 40 }, show: { opacity: 1, y: 0 } },
+  zoom: { hidden: { opacity: 0, scale: 0.97 }, show: { opacity: 1, scale: 1 } },
+  flip: { hidden: { opacity: 0, rotateX: 45 }, show: { opacity: 1, rotateX: 0 } }
 };
 
 interface BlockShellProps {

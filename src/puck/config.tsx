@@ -13,6 +13,11 @@ import GiftList from '@/blocks/GiftList';
 import Divider from '@/blocks/Divider';
 import Envelope from '@/blocks/Envelope';
 import RunningText from '@/blocks/RunningText';
+import Text from '@/blocks/Text';
+import Photo from '@/blocks/Photo';
+import LiveStreaming from '@/blocks/LiveStreaming';
+import CopyText from '@/blocks/CopyText';
+import Watermark from '@/blocks/Watermark';
 import PositionField from '@/puck/fields/PositionField';
 import ColorField from '@/puck/fields/ColorField';
 import AssetField from '@/puck/fields/AssetField';
@@ -48,8 +53,10 @@ const entranceField = {
   label: 'Animasi Masuk',
   options: [
     { label: 'Fade', value: 'fade' },
-    { label: 'Slide', value: 'slide' },
+    { label: 'Slide naik', value: 'slide' },
+    { label: 'Slide turun', value: 'slideDown' },
     { label: 'Zoom', value: 'zoom' },
+    { label: 'Flip', value: 'flip' },
     { label: 'Tanpa animasi', value: 'none' }
   ]
 };
@@ -361,6 +368,121 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
       },
       render: (props) => <RunningText {...props} />
     },
+    Text: {
+      label: 'Teks',
+      fields: {
+        title: { type: 'text' },
+        body: { type: 'textarea' },
+        align: {
+          type: 'select',
+          label: 'Perataan',
+          options: [
+            { label: 'Kiri', value: 'left' },
+            { label: 'Tengah', value: 'center' },
+            { label: 'Kanan', value: 'right' }
+          ]
+        },
+        blockStyle: styleField,
+        entrance: entranceField,
+        position: positionField('Posisi Teks')
+      },
+      defaultProps: {
+        title: 'Judul Bagian',
+        body: 'Tulis kalimat Anda di sini.\nBisa beberapa baris.',
+        align: 'center',
+        entrance: 'fade',
+        blockStyle: {},
+        position: defaultPosition
+      },
+      render: (props) => <Text {...props} />
+    },
+    Photo: {
+      label: 'Foto',
+      fields: {
+        image: { type: 'custom', label: 'Gambar', render: AssetField },
+        caption: { type: 'text' },
+        shape: {
+          type: 'select',
+          label: 'Bentuk',
+          options: [
+            { label: 'Persegi', value: 'square' },
+            { label: 'Melengkung', value: 'rounded' },
+            { label: 'Bulat', value: 'circle' },
+            { label: 'Miring', value: 'tilt' }
+          ]
+        },
+        blockStyle: styleField,
+        entrance: entranceField,
+        position: positionField('Posisi Foto')
+      },
+      defaultProps: {
+        image: '',
+        caption: '',
+        shape: 'rounded',
+        entrance: 'fade',
+        blockStyle: {},
+        position: defaultPosition
+      },
+      render: (props) => <Photo {...props} />
+    },
+    LiveStreaming: {
+      label: 'Live Streaming',
+      fields: {
+        title: { type: 'text' },
+        embedUrl: { type: 'text', label: 'URL Streaming' },
+        note: { type: 'textarea' },
+        blockStyle: styleField,
+        entrance: entranceField,
+        position: positionField('Posisi Streaming')
+      },
+      defaultProps: {
+        title: 'Live Streaming',
+        embedUrl: '',
+        note: 'Saksikan acara kami secara langsung.',
+        entrance: 'fade',
+        blockStyle: {},
+        position: defaultPosition
+      },
+      render: (props) => <LiveStreaming {...props} />
+    },
+    CopyText: {
+      label: 'Teks Salin',
+      fields: {
+        title: { type: 'text' },
+        label: { type: 'text' },
+        value: { type: 'text' },
+        blockStyle: styleField,
+        entrance: entranceField,
+        position: positionField('Posisi Teks Salin')
+      },
+      defaultProps: {
+        title: 'Rekening Hadiah',
+        label: 'Nomor Rekening',
+        value: '1234567890',
+        entrance: 'fade',
+        blockStyle: {},
+        position: defaultPosition
+      },
+      render: (props) => <CopyText {...props} />
+    },
+    Watermark: {
+      label: 'Watermark',
+      fields: {
+        text: { type: 'text' },
+        opacity: { type: 'number', label: 'Opacity (0-1)' },
+        blockStyle: styleField,
+        entrance: entranceField,
+        position: positionField('Posisi Watermark')
+      },
+      defaultProps: {
+        text: 'Prasha Digital',
+        opacity: 0.08,
+        entrance: 'none',
+        blockStyle: {},
+        position: defaultPosition
+      },
+      render: (props) => <Watermark {...props} />
+    },
     Thanks: {
       label: 'Ucapan Terima Kasih',
       fields: {
@@ -536,9 +658,9 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
   },
   categories: {
     intro: { title: 'Header & Intro', components: ['Hero', 'Couple', 'Quote'] },
-    konten: { title: 'Konten', components: ['Countdown', 'EventDetail', 'Story', 'Thanks'] },
-    media: { title: 'Media & Lokasi', components: ['Gallery', 'Maps'] },
-    interaktif: { title: 'Interaktif', components: ['Rsvp', 'GiftList', 'Envelope'] },
-    dekorasi: { title: 'Dekorasi', components: ['Divider', 'RunningText'] }
+    konten: { title: 'Konten', components: ['Countdown', 'EventDetail', 'Story', 'Text', 'Thanks'] },
+    media: { title: 'Media & Lokasi', components: ['Gallery', 'Photo', 'Maps', 'LiveStreaming'] },
+    interaktif: { title: 'Interaktif', components: ['Rsvp', 'GiftList', 'Envelope', 'CopyText'] },
+    dekorasi: { title: 'Dekorasi', components: ['Divider', 'RunningText', 'Watermark'] }
   }
 };

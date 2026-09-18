@@ -6,7 +6,7 @@
 export type PositionMode = 'flow' | 'absolute';
 
 /** Animasi masuk saat section terlihat (guest). 'none' = tanpa animasi. */
-export type EntranceKind = 'none' | 'fade' | 'slide' | 'zoom';
+export type EntranceKind = 'none' | 'fade' | 'slide' | 'zoom' | 'slideUp' | 'slideDown' | 'flip';
 
 export interface Position {
   mode: PositionMode;
@@ -145,6 +145,35 @@ export interface RunningTextProps extends BaseBlockProps {
   separator?: string;
 }
 
+export interface TextProps extends BaseBlockProps {
+  title?: string;
+  body: string;
+  align?: 'left' | 'center' | 'right';
+}
+
+export interface PhotoProps extends BaseBlockProps {
+  image: string;
+  caption?: string;
+  shape?: 'square' | 'rounded' | 'circle' | 'tilt';
+}
+
+export interface LiveStreamingProps extends BaseBlockProps {
+  title: string;
+  embedUrl: string;
+  note?: string;
+}
+
+export interface CopyTextProps extends BaseBlockProps {
+  title: string;
+  label: string;
+  value: string;
+}
+
+export interface WatermarkProps extends BaseBlockProps {
+  text: string;
+  opacity?: number;
+}
+
 /** Props root (tema) — disimpan di `Data.root.props`. */
 export interface InvitationTheme {
   primary: string;
@@ -216,4 +245,9 @@ export interface InvitationProps {
   Divider: DividerProps;
   Envelope: EnvelopeProps;
   RunningText: RunningTextProps;
+  Text: TextProps;
+  Photo: PhotoProps;
+  LiveStreaming: LiveStreamingProps;
+  CopyText: CopyTextProps;
+  Watermark: WatermarkProps;
 }
