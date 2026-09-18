@@ -64,12 +64,25 @@
 
 html,
 body {
-  height: 100%;
+  /* Jangan pakai height:100% — memaku body setinggi viewport lalu membuat
+     nested scroll container (konten undangan jadi terpotong & tidak bisa
+     di-scroll di mobile). min-height menjaga layout full-height tetap bekerja
+     sambil membiarkan window yang menangani scroll dokumen. */
+  min-height: 100%;
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
   margin: 0;
   padding: 0;
+}
+
+/* `clip` mencegah scroll horizontal TANPA mengubah sumbu Y menjadi scroll
+   container (perilaku `hidden`). Browser lama otomatis pakai `hidden` di atas. */
+@supports (overflow-x: clip) {
+  html,
+  body {
+    overflow-x: clip;
+  }
 }
 
 @layer base {

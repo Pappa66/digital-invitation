@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { TEMPLATE_LIST, getTemplate } from '@/lib/templates';
-import type { CanvasData } from '@/lib/types';
+import type { PuckData } from '@/lib/canvas/puck-format';
 
 /**
  * Test "zero security leak" tingkat integrasi ringan (tanpa DB):
@@ -31,7 +31,7 @@ describe('payload security guardrails', () => {
   });
 
   it('canvas blocks never contain HTML injection keys', () => {
-    const t = getTemplate('elegant-gold') as CanvasData | null;
+    const t = getTemplate('ivory-gold') as PuckData | null;
     expect(t).not.toBeNull();
     const raw = JSON.stringify(t).toLowerCase();
     expect(raw).not.toContain('dangerouslysetinnerhtml');

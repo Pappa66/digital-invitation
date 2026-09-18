@@ -2,27 +2,32 @@ import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import GuestNav, { buildNavItems, buildNavSlots } from './guest-nav';
 
-function block(type: string) {
-  return { id: type, type: type as never, props: {} } as never;
+function block(type: string, id?: string, props: Record<string, string> = {}) {
+  return { id: id ?? type, type: type as never, props } as never;
 }
 
 /** Enam jenis blok PENTING yang boleh tampil di bottom nav. */
 const IMPORTANT = ['Couple', 'Gallery', 'Story', 'EventDetail', 'RSVP', 'Maps'];
 
-describe('buildNavItems — hanya blok penting (dedup + filter + urutan kanvas)', () => {
+describe('buildNavItems — per blok (bukan dedup tipe)', () => {
   it('mengikuti urutan blok asli di kanvas', () => {
-    const items = buildNavItems([block('Gallery'), block('Couple'), block('RSVP')]);
-    expect(items.map((i) => i.type)).toEqual(['Gallery', 'Couple', 'RSVP']);
+    const items = buildNavItems([block('Gallery', 'g1'), block('Couple', 'c1'), block('RSVP', 'r1')]);
+    expect(items.map((i) => i.blockId)).toEqual(['g1', 'c1', 'r1']);
   });
 
-  it('menghilangkan duplikat jenis blok', () => {
-    const items = buildNavItems([block('Couple'), block('Gallery'), block('Gallery'), block('Couple')]);
-    expect(items.map((i) => i.type)).toEqual(['Couple', 'Gallery']);
-  });
-
-  it('mengabaikan jenis blok non-penting (Hero, Divider, CopyText, Popup, Quote, Music, Photo, Countdown...)', () => {
+  it('menampilkan dua EventDetail terpisah (Akad & Resepsi)', () => {
     const items = buildNavItems([
-      block('Hero'), block('Divider'), block('Gallery'), block('CopyText'),
+      block('EventDetail', 'akad', { title: 'Akad Nikah' }),
+      block('EventDetail', 'resepsi', { title: 'Resepsi' })
+    ]);
+    expect(items).toHaveLength(2);
+    expect(items[0].label).toBe('Akad Nikah');
+    expect(items[1].label).toBe('Resepsi');
+  });
+
+  it('mengabaikan jenis blok non-penting', () => {
+    const items = buildNavItems([
+      block('Hero'), block('Divider'), block('Gallery', 'g1'), block('CopyText'),
       block('Popup'), block('Quote'), block('Music'), block('Photo'),
       block('Countdown'), block('Envelope'), block('GiftList'), block('Thanks')
     ]);
@@ -33,82 +38,61 @@ describe('buildNavItems — hanya blok penting (dedup + filter + urutan kanvas)'
     expect(buildNavItems([block('Hero'), block('Divider'), block('CopyText')])).toEqual([]);
   });
 
-  it('tidak pernah menyertakan jenis di luar 6 blok penting', () => {
-    const all = [
-      'Hero', 'Music', 'Photo', 'Quote', 'Countdown', 'Envelope', 'GiftList', 'Thanks',
-      'Couple', 'Gallery', 'Story', 'EventDetail', 'RSVP', 'Maps'
-    ].map(block);
-    for (const item of buildNavItems(all)) {
-      expect(IMPORTANT).toContain(item.type);
-    }
+  it('memotong maksimal 6 item', () => {
+    const blocks = IMPORTANT.map((t, i) => block(t, `${t}-${i}`));
+    const extra = [block('Couple', 'extra-couple')];
+    expect(buildNavItems([...blocks, ...extra])).toHaveLength(6);
   });
 });
 
 describe('buildNavSlots — maksimal 6 pill, tanpa menu "Lebih"', () => {
-  it('menampilkan semua blok penting yang ada, urutan kanvas, tanpa "Lebih"', () => {
-    const blocks = ['Story', 'Couple', 'EventDetail', 'RSVP', 'Gallery', 'Maps'].map(block);
+  it('menampilkan semua blok penting yang ada, urutan kanvas', () => {
+    const blocks = ['Story', 'Couple', 'EventDetail', 'RSVP', 'Gallery', 'Maps'].map((t, i) => block(t, `${t}-${i}`));
     const slots = buildNavSlots(blocks);
-    expect(slots.visible.map((i) => i.type)).toEqual(['Story', 'Couple', 'EventDetail', 'RSVP', 'Gallery', 'Maps']);
-    expect(slots.visible.length).toBe(6);
+    expect(slots.visible).toHaveLength(6);
     expect(slots.more).toEqual([]);
   });
 
-  it('bila blok penting tidak ada, item menyesuaikan (4-5 pill, tidak diisi jenis lain)', () => {
-    const slots = buildNavSlots(['Couple', 'EventDetail', 'Gallery', 'RSVP', 'Maps'].map(block));
-    expect(slots.visible.map((i) => i.type)).toEqual(['Couple', 'EventDetail', 'Gallery', 'RSVP', 'Maps']);
-    expect(slots.visible.length).toBe(5);
-    expect(slots.more).toEqual([]);
-  });
-
-  it('tidak pernah memproduksi menu "Lebih" walau kanvas penuh dengan blok lain', () => {
+  it('tidak pernah memproduksi menu "Lebih"', () => {
     const all = [
       'Hero', 'Music', 'Photo', 'Quote', 'Countdown', 'Envelope', 'GiftList', 'Thanks',
       'Couple', 'Gallery', 'Story', 'EventDetail', 'RSVP', 'Maps'
-    ].map(block);
+    ].map((t, i) => block(t, `${t}-${i}`));
     const slots = buildNavSlots(all);
     expect(slots.more).toEqual([]);
     expect(slots.visible.length).toBeLessThanOrEqual(6);
-    for (const item of slots.visible) {
-      expect(IMPORTANT).toContain(item.type);
-    }
-  });
-
-  it('hasil akhir menjaga urutan kanvas & dedup tanpa kehilangan blok penting', () => {
-    const all = [
-      block('Music'), block('Couple'), block('Couple'), block('EventDetail'), block('Gallery'),
-      block('Maps'), block('RSVP'), block('Envelope'), block('Photo')
-    ];
-    const slots = buildNavSlots(all);
-    const visibleTypes = slots.visible.map((i) => i.type);
-    const unique = [...new Set(visibleTypes)];
-    expect(unique).toEqual(visibleTypes);
-    const canvasOrder = ['Couple', 'EventDetail', 'Gallery', 'Maps', 'RSVP'];
-    expect(visibleTypes).toEqual(canvasOrder);
   });
 });
 
-describe('GuestNav — render bottom nav tanpa menu "Lebih"', () => {
-  it('merender semua pill penting yang ada (label kanonik, urutan kanvas) dan TIDAK ada "Lainnya"', () => {
-    render(<GuestNav blocks={['Story', 'Couple', 'EventDetail', 'Gallery', 'RSVP', 'Maps'].map(block)} />);
+describe('GuestNav — render bottom nav', () => {
+  it('merender pill per blok penting (title custom) tanpa menu "Lebih"', () => {
+    render(
+      <GuestNav
+        blocks={[
+          block('Story', 's1', { title: 'Kisah Kami' }),
+          block('Couple', 'c1'),
+          block('EventDetail', 'e1', { title: 'Akad' }),
+          block('Gallery', 'g1'),
+          block('RSVP', 'r1'),
+          block('Maps', 'm1')
+        ]}
+      />
+    );
 
-    for (const label of ['Kisah', 'Mempelai', 'Acara', 'Galeri', 'RSVP', 'Lokasi']) {
-      expect(screen.getByRole('button', { name: label })).toBeInTheDocument();
-    }
-    // Tidak pernah ada tombol "Lebih"/"Lainnya" (MoreHorizontal dihapus).
-    expect(screen.queryByRole('button', { name: /Lainnya|Lebih|More|Lainnya/i })).not.toBeInTheDocument();
-    expect(screen.queryByText('Navigasi lainnya')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Kisah Kami' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Mempelai' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Akad' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Lainnya|Lebih/i })).not.toBeInTheDocument();
   });
 
-  it('menyaring blok non-penting dari DOM (Hero/Musik tidak muncul sebagai pill)', () => {
-    render(<GuestNav blocks={[block('Hero'), block('Music'), block('Couple')]} />);
-
+  it('menyaring blok non-penting dari DOM', () => {
+    render(<GuestNav blocks={[block('Hero'), block('Music'), block('Couple', 'c1')]} />);
     expect(screen.getByRole('button', { name: 'Mempelai' })).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Awal' })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Musik' })).not.toBeInTheDocument();
   });
 
-  it('tidak merender nav sama sekali bila tidak ada blok penting', () => {
-    const { container } = render(<GuestNav blocks={[block('Hero'), block('Divider'), block('CopyText')]} />);
+  it('tidak merender nav bila tidak ada blok penting', () => {
+    const { container } = render(<GuestNav blocks={[block('Hero'), block('Divider')]} />);
     expect(container.innerHTML).toBe('');
   });
 });

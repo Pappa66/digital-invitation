@@ -72,19 +72,27 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 
 ## Setup Supabase
 
+**Jalur cepat (sekali jalan, DESTRUKTIF):**
 1. Buat project Supabase (Free Tier).
-2. Buka **SQL Editor** → jalankan seluruh isi `supabase/schema.sql`.
-   - Membuat tabel `projects`, `project_designs`, `rsvps`, `checkins`, `access_tokens`.
-   - Mengaktifkan RLS (owner-only untuk dashboard; insert publik untuk RSVP).
+2. Buka **SQL Editor** → tempel **seluruh** isi `supabase/install.sql` → RUN.
+   - Skrip ini = `reset.sql` (hapus semua objek lama) + `apply_all.sql` (buat ulang 0001..0021).
+   - Membuat tabel `projects`, `project_designs`, `rsvps`, `checkins`, `access_tokens`, `orders`, `settings`, `clients`, `share_edit_tokens`, `template_demos`, dll.
+   - Mengaktifkan RLS + fungsi publik (`get_published_design`, `get_design_by_share_token`, `save_design_by_share_token`, dll).
    - Membuat bucket storage `invitation-assets` (public read).
-   - Membuat fungsi `get_published_design` untuk rute publik (bypass RLS TS).
-3. **Authentication** → Email/Password → tambah user internal pertama.
+3. **Authentication** → Email/Password + Google → tambah user internal pertama.
 4. **Storage** → pastikan bucket `invitation-assets` berstatus public.
 5. Salin URL & anon key ke `.env.local`.
 
+**Migrasi bertahap (non-destruktif):** jalankan file di `supabase/migrations/` berurutan (0001..0021) via `supabase db push`.
+
+> Menjalankan `apply_all.sql` dua kali di DB yang sama akan error
+> (`policy ... already exists`). Untuk itu gunakan `install.sql`
+> (reset dulu) atau `reset.sql` lalu `apply_all.sql`.
+>
 > Catatan RLS: rute publik `/[slug]` tidak membaca tabel langsung (ditolak RLS),
 > melainkan via RPC `get_published_design` (security definer). Form RSVP
 > public hanya menulis ke `rsvps` jika project berstatus `published`.
+
 
 ## Deploy Vercel
 

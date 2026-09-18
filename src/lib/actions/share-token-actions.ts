@@ -113,3 +113,39 @@ export async function listShareTokens(
     }))
   };
 }
+
+export type ShareTokenDesign = {
+  canvas_data: unknown;
+  project_id: string;
+  project_title: string;
+  project_slug: string;
+};
+
+/** Ambil desain (canvas_data) via token edit — tanpa login. */
+export async function loadDesignByShareToken(token: string): Promise<{ data?: ShareTokenDesign; error?: string }> {
+  const supabase = await createServerSupabase();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data, error } = await (supabase.rpc as any)('get_design_by_share_token', { p_token: token });
+  if (error) return { error: error.message };
+  const row = Array.isArray(data) ? data[0] : null;
+  if (!row) return { error: 'Token tidak valid atau kedaluwarsa' };
+  return {
+    data: {
+      canvas_data: row.canvas_data,
+      project_id: row.project_id,
+      project_title: row.project_title ?? 'Undangan',
+      project_slug: row.project_slug ?? ''
+    }
+  };
+}
+
+/** Simpan desain via token edit — tanpa login. */
+export async function saveDesignByShareToken(token: string, canvas: unknown): Promise<{ error?: string }> {
+  const supabase = await createServerSupabase();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { error } = await (supabase.rpc as any)('save_design_by_share_token', {
+    p_token: token,
+    p_canvas: canvas
+  });
+  return { error: error?.message };
+}

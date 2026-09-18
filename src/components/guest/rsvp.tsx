@@ -44,7 +44,7 @@ interface RSVPFormProps {
 
 export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormProps) {
   const [name, setName] = useState('');
-  const [attendance, setAttendance] = useState<'hadir' | 'tidak' | 'ragu'>('hadir');
+  const [attendance, setAttendance] = useState<'hadir' | 'tidak'>('hadir');
   const [guestCount, setGuestCount] = useState(1);
   const [message, setMessage] = useState('');
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
@@ -209,21 +209,21 @@ export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormPr
         <div>
           <p className="mb-2 text-sm opacity-80">Kehadiran</p>
           <div className="flex rounded-full border border-current/15 p-1" role="radiogroup" aria-label="Kehadiran">
-            {(['hadir', 'ragu', 'tidak'] as const).map((opt) => (
+            {(['hadir', 'tidak'] as const).map((opt) => (
               <button
                 key={opt}
                 type="button"
                 role="radio"
                 aria-checked={attendance === opt}
-                aria-label={opt === 'hadir' ? 'Hadir' : opt === 'ragu' ? 'Ragu-ragu' : 'Tidak Hadir'}
+                aria-label={opt === 'hadir' ? 'Hadir' : 'Tidak Hadir'}
                 onClick={() => setAttendance(opt)}
-                className={`flex-1 whitespace-nowrap rounded-full px-3 py-2.5 text-xs font-semibold uppercase tracking-wide transition-all ${
+                className={`flex-1 whitespace-nowrap rounded-full px-4 py-2.5 text-xs font-semibold uppercase tracking-wide transition-all ${
                   attendance === opt
                     ? 'bg-[var(--color-primary)] text-white shadow-md'
                     : 'hover:bg-current/10 text-current/70'
                 }`}
               >
-                {opt === 'hadir' ? 'Hadir' : opt === 'ragu' ? 'Ragu' : 'Tidak'}
+                {opt === 'hadir' ? 'Hadir' : 'Tidak Hadir'}
               </button>
             ))}
           </div>

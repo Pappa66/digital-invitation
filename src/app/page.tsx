@@ -27,18 +27,19 @@ import {
   Star,
   Camera
 } from 'lucide-react';
-import { DEMO_TEMPLATES, getTemplate } from '@/lib/templates';
+import { DEMO_TEMPLATES, getTemplate, getTemplateTheme } from '@/lib/templates';
 import { CATEGORIES, categoryLabel, type TemplateCategory } from '@/lib/template-categories';
 import TemplatePreview from '@/components/landing/template-preview';
 import OrderDialog from '@/components/landing/order-dialog';
 
 import { LANDING_CONTENT_DEFAULTS, type LandingContent } from '@/lib/settings';
 import { listTemplateDemos, type TemplateDemo } from '@/lib/api/template-demo-client';
-import type { CanvasData, TemplateMeta } from '@/lib/types';
+import type { TemplateMeta } from '@/lib/types';
+import type { PuckData } from '@/lib/canvas/puck-format';
 
 interface CardData {
   meta: TemplateMeta;
-  canvas: CanvasData;
+  canvas: PuckData;
 }
 
 const ICON_MAP: Record<string, typeof Palette> = {
@@ -61,7 +62,7 @@ const ICON_MAP: Record<string, typeof Palette> = {
 };
 
 const PER_PAGE = 9;
-const FEATURED = ['elegant-gold', 'blush-romance', 'ivory-dawn'];
+const FEATURED = ['elegant-gold', 'blush-romance', 'garden-romantic'];
 
 /** Struktur konten landing yang dinamis. Fallback ke default bila kosong. */
 const EMPTY_CONTENT = null as LandingContent | null;
@@ -169,7 +170,7 @@ export default function LandingPage() {
   const paged = filtered.slice((safePage - 1) * PER_PAGE, safePage * PER_PAGE);
 
   useEffect(() => {
-    const families = Array.from(new Set(DEMO_TEMPLATES.flatMap((t) => { const c = getTemplate(t.id); return c ? [c.theme.font_heading, c.theme.font_body] : []; })));
+    const families = Array.from(new Set(DEMO_TEMPLATES.flatMap((t) => { const th = getTemplateTheme(t.id); return [th.fontHeading, th.fontBody]; })));
     const href = `https://fonts.googleapis.com/css2?${families.map((f) => `family=${encodeURIComponent(f)}`).join('&')}&display=swap`;
     const link = document.createElement('link');
     link.rel = 'stylesheet';
@@ -306,7 +307,7 @@ export default function LandingPage() {
                   ) : featuredDemoImages[0] ? (
                     <Image src={featuredDemoImages[0]} alt="Demo undangan" fill className="object-cover" sizes="(max-width: 768px) 60vw, 320px" />
                   ) : collagePreviews[0] ? (
-                    <TemplatePreview canvas={collagePreviews[0].canvas} bg={collagePreviews[0].canvas.theme.background} />
+                    <TemplatePreview canvas={collagePreviews[0].canvas} bg={collagePreviews[0].canvas.root.props?.background} />
                   ) : null}
                 </div>
                 {/* foto kecil kanan atas */}
@@ -316,7 +317,7 @@ export default function LandingPage() {
                   ) : featuredDemoImages[1] ? (
                     <Image src={featuredDemoImages[1]} alt="Demo undangan" fill className="object-cover" sizes="(max-width: 768px) 40vw, 220px" />
                   ) : collagePreviews[1] ? (
-                    <TemplatePreview canvas={collagePreviews[1].canvas} bg={collagePreviews[1].canvas.theme.background} />
+                    <TemplatePreview canvas={collagePreviews[1].canvas} bg={collagePreviews[1].canvas.root.props?.background} />
                   ) : null}
                 </div>
                 {/* foto kecil kanan bawah */}
@@ -326,7 +327,7 @@ export default function LandingPage() {
                   ) : featuredDemoImages[2] ? (
                     <Image src={featuredDemoImages[2]} alt="Demo undangan" fill className="object-cover" sizes="(max-width: 768px) 40vw, 220px" />
                   ) : collagePreviews[2] ? (
-                    <TemplatePreview canvas={collagePreviews[2].canvas} bg={collagePreviews[2].canvas.theme.background} />
+                    <TemplatePreview canvas={collagePreviews[2].canvas} bg={collagePreviews[2].canvas.root.props?.background} />
                   ) : null}
                 </div>
               </div>
@@ -627,7 +628,7 @@ function CatalogCard({
   demo
 }: {
   meta: TemplateMeta;
-  canvas: CanvasData;
+  canvas: PuckData;
   number: number;
   demo: TemplateDemo | null;
 }) {
@@ -672,7 +673,7 @@ function CatalogCard({
           {demoImage ? (
             <DemoCardMedia src={demoImage} alt={`Pratinjau template ${meta.name}`} canvas={canvas} eager={number === 1} />
           ) : (
-            <TemplatePreview canvas={canvas} bg={canvas.theme.background} />
+            <TemplatePreview canvas={canvas} bg={canvas.root.props?.background} />
           )}
           <span
             className={`absolute left-3 top-3 z-10 rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] backdrop-blur-sm ${
@@ -714,11 +715,11 @@ function DemoCardMedia({
 }: {
   src: string;
   alt: string;
-  canvas: CanvasData;
+  canvas: PuckData;
   eager?: boolean;
 }) {
   const [broken, setBroken] = useState(false);
-  if (broken) return <TemplatePreview canvas={canvas} bg={canvas.theme.background} />;
+  if (broken) return <TemplatePreview canvas={canvas} bg={canvas.root.props?.background} />;
 
   return (
     <div className="relative aspect-[3/4] bg-muted">

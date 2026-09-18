@@ -10,6 +10,9 @@ import { getReligion, isKnownDefault, type ReligionKey } from '@/lib/religions';
 /** Sentinel selectedBlockId untuk seleksi cover "Buka Undangan" di kanvas. */
 export const COVER_BLOCK_ID = '__cover__';
 
+/** Scope selectedDecor untuk sticker kanvas penuh. */
+export const CANVAS_STICKER_SCOPE = '__canvas__';
+
 interface BuilderState {
   canvas: CanvasData;
   selectedBlockId: string | null;
@@ -44,6 +47,9 @@ interface BuilderState {
   updateDecor: (blockId: string, decorId: string, partial: Partial<DecorAsset>) => void;
   removeDecor: (blockId: string, decorId: string) => void;
   selectDecor: (key: string | null) => void;
+  addCanvasSticker: (asset: DecorAsset) => void;
+  updateCanvasSticker: (stickerId: string, partial: Partial<DecorAsset>) => void;
+  removeCanvasSticker: (stickerId: string) => void;
   setFlow: (flow: 'stack' | 'free') => void;
   addBlock: (type: BlockType, index?: number) => void;
   removeBlock: (blockId: string) => void;
@@ -493,6 +499,33 @@ selectedDecor: null,
     })),
 
   selectDecor: (key) => set({ selectedDecor: key }),
+
+  addCanvasSticker: (asset) =>
+    set((state) => ({
+      canvas: {
+        ...state.canvas,
+        stickers: [...(state.canvas.stickers ?? []), asset]
+      },
+      selectedDecor: `${CANVAS_STICKER_SCOPE}::${asset.id}`,
+      selectedBlockId: null
+    })),
+
+  updateCanvasSticker: (stickerId, partial) =>
+    set((state) => ({
+      canvas: {
+        ...state.canvas,
+        stickers: (state.canvas.stickers ?? []).map((s) => (s.id === stickerId ? { ...s, ...partial } : s))
+      }
+    })),
+
+  removeCanvasSticker: (stickerId) =>
+    set((state) => ({
+      canvas: {
+        ...state.canvas,
+        stickers: (state.canvas.stickers ?? []).filter((s) => s.id !== stickerId)
+      },
+      selectedDecor: state.selectedDecor === `${CANVAS_STICKER_SCOPE}::${stickerId}` ? null : state.selectedDecor
+    })),
 
   setFlow: (flow) => set((state) => ({ canvas: { ...state.canvas, flow } })),
 

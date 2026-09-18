@@ -1,28 +1,26 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import type { CanvasData } from '@/lib/types';
-import GuestRenderer from '@/components/guest/GuestRenderer';
+import { Render } from '@puckeditor/core';
+import { config } from '@/puck/config';
+import type { PuckData } from '@/lib/canvas/puck-format';
 
 const CANVAS_W = 430;
 
 interface TemplatePreviewProps {
-  canvas: CanvasData;
+  canvas: PuckData;
   /** Warna latar tema untuk menutup area putih kosong sambil menunggu render/gambar. */
   bg?: string;
 }
 
 /**
- * Render asli template di-scale agar muat di kartu. Pointer & timer dimatikan.
- *
- * Konten (lebar desain 430px) di-`position: absolute` agar TIDAK memengaruhi
- * tinggi/layout, merusak ukuran track grid, atau mendorong kartu. Kartu murni
- * dikendalikan oleh `aspect-[3/4]` + `overflow-hidden`; bagian bawah konten
- * yang lebih tinggi dari kartu terpotong rapi di ujung kartu.
+ * Render asli template Puck di-scale agar muat di kartu. Pointer & animasi
+ * dimatikan (preview). Konten di-absolute agar tidak mendorong layout kartu.
  */
 export default function TemplatePreview({ canvas, bg }: TemplatePreviewProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(0.6);
+  const theme = canvas.root.props;
 
   useEffect(() => {
     const el = ref.current;
@@ -43,13 +41,12 @@ export default function TemplatePreview({ canvas, bg }: TemplatePreviewProps) {
       className="pointer-events-none relative min-w-0 select-none overflow-hidden"
       style={{
         aspectRatio: '3 / 4',
-        background: `linear-gradient(135deg, ${canvas.theme.primary}11 0%, ${canvas.theme.secondary}22 60%, ${bg ?? '#ffffff'} 100%)`
+        background: `linear-gradient(135deg, ${theme?.primary ?? '#BFA06A'}11 0%, ${theme?.secondary ?? '#D9A7A4'}22 60%, ${bg ?? '#ffffff'} 100%)`
       }}
     >
-      {/* Kanvas asli — absolute + transform scale (origin kiri-atas). Tidak menyumbang layout. */}
       <div className="absolute left-0 top-0 will-change-transform" style={{ width: CANVAS_W }}>
         <div className="w-full" style={{ transform: `scale(${scale})`, transformOrigin: 'top left' }} aria-hidden data-preview>
-          <GuestRenderer canvas={canvas} preview />
+          <Render config={config} data={canvas} />
         </div>
       </div>
       <div

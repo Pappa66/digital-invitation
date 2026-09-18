@@ -74,12 +74,36 @@ export interface Database {
           }
         ];
       };
+      guests: {
+        Row: {
+          id: string;
+          project_id: string;
+          name: string;
+          phone: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          project_id: string;
+          name: string;
+          phone?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          project_id?: string;
+          name?: string;
+          phone?: string | null;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
       rsvps: {
         Row: {
           id: string;
           project_id: string;
           name: string;
-          attendance: 'hadir' | 'tidak' | 'ragu';
+          attendance: 'hadir' | 'tidak';
           guest_count: number;
           message: string | null;
           meal_choice: string | null;
@@ -91,7 +115,7 @@ export interface Database {
           id?: string;
           project_id: string;
           name: string;
-          attendance: 'hadir' | 'tidak' | 'ragu';
+          attendance: 'hadir' | 'tidak';
           guest_count?: number;
           message?: string | null;
           meal_choice?: string | null;
@@ -103,7 +127,7 @@ export interface Database {
           id?: string;
           project_id?: string;
           name?: string;
-          attendance?: 'hadir' | 'tidak' | 'ragu';
+          attendance?: 'hadir' | 'tidak';
           guest_count?: number;
           message?: string | null;
           meal_choice?: string | null;

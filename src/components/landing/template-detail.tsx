@@ -5,8 +5,10 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, ArrowRight, ExternalLink, Loader2, MessageCircle, PlayCircle, Sparkles, Wand2 } from 'lucide-react';
-import type { CanvasData, TemplateMeta } from '@/lib/types';
-import GuestRenderer from '@/components/guest/GuestRenderer';
+import { Render } from '@puckeditor/core';
+import { config } from '@/puck/config';
+import type { TemplateMeta } from '@/lib/types';
+import type { PuckData } from '@/lib/canvas/puck-format';
 import OrderDialog from '@/components/landing/order-dialog';
 import PhoneFrame from '@/components/ui/phone-frame';
 import { clientCreateProject } from '@/lib/api/project-client';
@@ -15,7 +17,7 @@ import { listTemplateDemos, demoByTemplateId } from '@/lib/api/template-demo-cli
 interface TemplateDetailProps {
   meta: TemplateMeta;
   index: number;
-  canvas: CanvasData;
+  canvas: PuckData;
   categoryLabel: string;
   total: number;
   prev: { id: string; name: string } | null;
@@ -145,7 +147,7 @@ export default function TemplateDetail({ meta, index, canvas, categoryLabel, tot
               </div>
             ) : (
               <PhoneFrame accent={meta.secondary}>
-                <GuestRenderer canvas={canvas} preview width="mobile" />
+                <Render config={config} data={canvas} />
               </PhoneFrame>
             )}
           </div>

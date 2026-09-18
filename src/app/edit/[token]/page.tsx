@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { validateShareToken } from '@/lib/actions/share-token-actions';
-import EditTokenClient from './client';
+import PuckBuilder from '@/puck/PuckBuilder';
 
 interface Props {
   params: Promise<{ token: string }>;
@@ -40,11 +40,5 @@ export default async function EditTokenPage({ params }: Props) {
     );
   }
 
-  return (
-    <EditTokenClient
-      projectId={validation.project_id}
-      projectTitle={validation.project_title ?? 'Undangan'}
-      token={token}
-    />
-  );
+  return <PuckBuilder projectId={validation.project_id} editToken={token} />;
 }

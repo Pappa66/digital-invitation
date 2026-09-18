@@ -1,0 +1,24 @@
+import type { HeroProps } from '@/puck/types';
+import { BlockShell } from './shell';
+
+export default function Hero({ caption, groom, bride, date, place, bgImage, position, entrance }: HeroProps) {
+  return (
+    <BlockShell position={position} entrance={entrance}>
+      <section className="relative flex min-h-[100dvh] w-full flex-col items-center justify-center overflow-hidden bg-neutral-900 px-6 py-16 text-center text-white">
+        {bgImage ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={bgImage} alt="" className="absolute inset-0 h-full w-full object-cover opacity-55" />
+        ) : null}
+        <div className="relative z-10 flex flex-col items-center">
+          <p className="text-[11px] uppercase tracking-[0.35em] opacity-85">{caption}</p>
+          <h1 className="mt-5 font-heading text-4xl leading-tight sm:text-5xl">{bride}</h1>
+          <span className="my-2 text-sm opacity-60">&amp;</span>
+          <h1 className="font-heading text-4xl leading-tight sm:text-5xl">{groom}</h1>
+          <div className="mt-7 h-px w-24 bg-white/30" />
+          <p className="mt-5 text-xs uppercase tracking-[0.28em] opacity-90">{date}</p>
+          {place ? <p className="mt-2 text-xs opacity-70">{place}</p> : null}
+        </div>
+      </section>
+    </BlockShell>
+  );
+}

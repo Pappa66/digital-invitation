@@ -214,6 +214,8 @@ export interface DecorAsset {
   imageUrl?: string;
   photoShape?: PhotoDecorShape;
   width?: number;
+  /** Tinggi gambar dekor (px). Bila kosong, mengikuti width (persegi). */
+  height?: number;
   // ornament (SVG library)
   ornament?: string;
 }
@@ -242,6 +244,8 @@ export interface CanvasData {
   blocks: Block[];
   /** Penataan kanvas: stack (vertikal) atau free (posisi bebas). Default: 'stack'. */
   flow?: 'stack' | 'free';
+  /** Sticker/gambar dekor bebas posisi di seluruh halaman undangan. */
+  stickers?: DecorAsset[];
 }
 
 export interface Project {
@@ -271,7 +275,7 @@ export interface Rsvp {
   id: string;
   project_id: string;
   name: string;
-  attendance: 'hadir' | 'tidak' | 'ragu';
+  attendance: 'hadir' | 'tidak';
   guest_count: number;
   message: string | null;
   created_at: string;

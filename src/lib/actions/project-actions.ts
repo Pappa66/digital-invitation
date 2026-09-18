@@ -4,6 +4,8 @@ import { revalidatePath } from 'next/cache';
 import { createServerSupabase, requireUser } from '@/lib/supabase/server';
 import type { CanvasData } from '@/lib/types';
 import { emptyCanvas, getTemplate } from '@/lib/templates';
+import { emptyPuckData } from '@/lib/canvas/puck-format';
+import type { Json } from '@/lib/types/supabase';
 import { canvasToJson, jsonToCanvas } from '@/lib/canvas-json';
 import { sanitizeTitle, slugify } from '@/lib/slug';
 
@@ -30,7 +32,8 @@ export async function createProject(title: string, templateId?: string) {
   const trimmed = sanitizeTitle(title);
   const slug = await makeUniqueSlug(supabase, slugify(trimmed), user.id);
 
-  const canvas: CanvasData = templateId ? structuredClone(getTemplate(templateId) ?? emptyCanvas()) : emptyCanvas();
+  // Proyek baru memakai format Puck (template baru) atau kanvas Puck kosong.
+  const design = (templateId ? getTemplate(templateId) : null) ?? emptyPuckData();
 
   const { data, error } = await supabase
     .from('projects')
@@ -42,7 +45,7 @@ export async function createProject(title: string, templateId?: string) {
 
   const { error: designError } = await supabase.from('project_designs').insert({
     project_id: data.id,
-    canvas_data: canvasToJson(canvas)
+    canvas_data: design as unknown as Json
   });
 
   if (designError) return { error: designError.message };

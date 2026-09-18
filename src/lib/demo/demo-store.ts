@@ -1,7 +1,7 @@
 'use client';
 
 import type { CanvasData, Project, Rsvp, Checkin } from '@/lib/types';
-import { getTemplate, emptyCanvas } from '@/lib/templates';
+import { emptyCanvas } from '@/lib/templates';
 import { slugify } from '@/lib/slug';
 import { demoIsDemoMode } from '@/lib/env';
 
@@ -71,7 +71,7 @@ function seedTemplates() {
       created_at: now,
       updated_at: now
     });
-    designs[id] = structuredClone(getTemplate(s.template) ?? emptyCanvas());
+    designs[id] = structuredClone(emptyCanvas());
   }
   write(PROJECTS_KEY, created);
   write(DESIGNS_KEY, designs);
@@ -92,6 +92,7 @@ export function demoGetDesign(id: string): CanvasData | null {
 }
 
 export function demoCreateProject(title: string, templateId?: string): { id: string } {
+  void templateId;
   seedTemplates();
   const projects = listProjects();
   const id = uid();
@@ -109,7 +110,7 @@ export function demoCreateProject(title: string, templateId?: string): { id: str
   projects.unshift(project);
   write(PROJECTS_KEY, projects);
   const designs = read<Record<string, CanvasData>>(DESIGNS_KEY, {});
-  designs[id] = templateId ? structuredClone(getTemplate(templateId) ?? emptyCanvas()) : emptyCanvas();
+  designs[id] = emptyCanvas();
   write(DESIGNS_KEY, designs);
   return { id };
 }
@@ -238,7 +239,7 @@ export function demoAddRsvp(
   projectId: string,
   input: {
     name: string;
-    attendance: 'hadir' | 'tidak' | 'ragu';
+    attendance: 'hadir' | 'tidak';
     guest_count: number;
     message: string;
     meal_choice?: string | null;

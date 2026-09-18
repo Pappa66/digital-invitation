@@ -15,6 +15,7 @@ import {
 import { demoGetProject, demoGetDesign, demoListRsvps, demoListCheckins } from '@/lib/demo/demo-store';
 import { supabase } from '@/lib/supabase/client';
 import type { Rsvp, Checkin } from '@/lib/types';
+import GuestListPanel from '@/components/invite/guest-list';
 
 interface InviteManagerProps {
   projectId: string;
@@ -402,8 +403,12 @@ export default function InviteManager({ projectId, slug: slugProp, title: titleP
           <textarea value={template} onChange={(e) => editTemplate(e.target.value)} rows={6} className={`${INPUT_CLS} mt-2`} />
         </Panel>
 
+        {!accessToken && !demoIsDemoMode() ? (
+          <GuestListPanel projectId={projectId} slug={slug} template={template} />
+        ) : null}
+
         <Panel>
-          <PanelTitle icon={<Users className="h-3.5 w-3.5" />}>Daftar Nama Tamu</PanelTitle>
+          <PanelTitle icon={<Users className="h-3.5 w-3.5" />}>Impor Cepat / Offline</PanelTitle>
           <textarea
             value={bulkText}
             onChange={(e) => updateBulk(e.target.value)}
@@ -511,12 +516,10 @@ export default function InviteManager({ projectId, slug: slugProp, title: titleP
                         className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold ${
                           r.attendance === 'hadir'
                             ? 'bg-emerald-100 text-emerald-700'
-                            : r.attendance === 'ragu'
-                              ? 'bg-amber-100 text-amber-700'
-                              : 'bg-red-100 text-red-700'
+                            : 'bg-red-100 text-red-700'
                         }`}
                       >
-                        {r.attendance === 'hadir' ? 'Hadir' : r.attendance === 'ragu' ? 'Ragu' : 'Tidak Hadir'}
+                        {r.attendance === 'hadir' ? 'Hadir' : 'Tidak Hadir'}
                       </span>
                     </div>
                     {r.meal_choice ? (

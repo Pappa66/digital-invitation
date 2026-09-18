@@ -2,6 +2,7 @@ import { notFound, redirect } from 'next/navigation';
 import { createServerSupabase, requireUser } from '@/lib/supabase/server';
 import InviteManager from '@/components/invite/invite-manager';
 import { demoIsDemoMode } from '@/lib/env';
+import { isPuckData } from '@/lib/canvas/puck-format';
 
 interface PageProps {
   params: Promise<{ projectId: string }>;
@@ -54,8 +55,10 @@ export default async function InvitePage({ params, searchParams }: PageProps) {
     .eq('project_id', projectId)
     .maybeSingle();
 
-  const canvas = design?.canvas_data as { settings?: { religion?: string } } | undefined;
-  const religion = canvas?.settings?.religion;
+  const raw = design?.canvas_data as unknown;
+  const religion = isPuckData(raw)
+    ? raw.root.props?.religion
+    : (raw as { settings?: { religion?: string } } | undefined)?.settings?.religion;
 
   // Siapkan token akses agar link "Kelola Tamu" bisa dibagikan ke pihak lain.
   const { data: tokenRes } = await supabase.rpc('ensure_invite_token', {

@@ -1,6 +1,7 @@
 import React from 'react';
 import { ImageResponse } from 'next/og';
 import { createServerSupabase } from '@/lib/supabase/server';
+import { isPuckData } from '@/lib/canvas/puck-format';
 import { demoIsDemoMode } from '@/lib/env';
 
 export const runtime = 'nodejs';
@@ -24,15 +25,26 @@ export async function GET(request: Request) {
       const { data } = await supabase.rpc('get_published_design', { p_slug: slug });
       const row = Array.isArray(data) ? data[0] : null;
       if (row) {
-        const canvas = row.canvas_data as {
-          theme?: { primary?: string; secondary?: string; background?: string };
-          blocks?: { type: string; props?: Record<string, unknown> }[];
-        };
+        const raw = row.canvas_data as unknown;
+        let hero: Record<string, unknown> | undefined;
+        if (isPuckData(raw)) {
+          const props = raw.root.props;
+          primary = props?.primary ?? primary;
+          secondary = props?.secondary ?? secondary;
+          background = props?.background ?? background;
+          const hb = raw.content.find((c) => c.type === 'Hero') as { props?: Record<string, unknown> } | undefined;
+          hero = hb?.props;
+        } else {
+          const canvas = raw as {
+            theme?: { primary?: string; secondary?: string; background?: string };
+            blocks?: { type: string; props?: Record<string, unknown> }[];
+          };
+          primary = canvas?.theme?.primary ?? primary;
+          secondary = canvas?.theme?.secondary ?? secondary;
+          background = canvas?.theme?.background ?? background;
+          hero = (canvas?.blocks ?? []).find((b) => b.type === 'Hero')?.props;
+        }
         title = row.title ?? title;
-        primary = canvas?.theme?.primary ?? primary;
-        secondary = canvas?.theme?.secondary ?? secondary;
-        background = canvas?.theme?.background ?? background;
-        const hero = (canvas?.blocks ?? []).find((b) => b.type === 'Hero')?.props;
         const groom = typeof hero?.groom === 'string' ? hero.groom : '';
         const bride = typeof hero?.bride === 'string' ? hero.bride : '';
         if (groom || bride) names = `${groom} & ${bride}`;

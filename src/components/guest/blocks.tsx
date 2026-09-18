@@ -186,16 +186,35 @@ function DecorText({ props }: { props: DecorAsset }) {
 
 function DecorImage({ props }: { props: DecorAsset }) {
   const url = props.imageUrl ?? '';
-  if (!url) return null;
+  if (!url) {
+    return (
+      <div
+        className="flex items-center justify-center rounded-lg border-2 border-dashed border-current/25 bg-current/5 text-[10px] opacity-60"
+        style={{ width: props.width ?? 120, height: props.height ?? props.width ?? 120 }}
+      >
+        PNG
+      </div>
+    );
+  }
   const width = props.width ?? 120;
-  const cls = (props.photoShape ?? 'rounded') === 'circle' ? 'rounded-full object-cover' : (PHOTO_SHAPE_CLASS[props.photoShape ?? 'rounded']);
+  const height = props.height ?? width;
+  const shape = props.photoShape ?? 'rounded';
+  const cls =
+    shape === 'circle'
+      ? 'rounded-full object-contain'
+      : shape === 'tilt'
+        ? '-rotate-3 object-contain'
+        : shape === 'square'
+          ? 'rounded-none object-contain'
+          : 'rounded-lg object-contain';
   return (
     <img
       src={url}
       alt=""
       width={width}
-      style={{ width, height: width, opacity: props.opacity ?? 1 }}
-      className={`${cls} ${props.photoShape === 'circle' ? 'aspect-square' : ''}`}
+      height={height}
+      style={{ width, height, opacity: props.opacity ?? 1 }}
+      className={cls}
     />
   );
 }

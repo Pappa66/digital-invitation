@@ -10,6 +10,7 @@ import ConfirmDialog from '@/components/dashboard/confirm-dialog';
 import ShareDialog from '@/components/dashboard/share-dialog';
 import AbsenShareDialog from '@/components/ui/absen-share-dialog';
 import { supabase } from '@/lib/supabase/client';
+import { isPuckData } from '@/lib/canvas/puck-format';
 import { demoGetDesign } from '@/lib/demo/demo-store';
 import { demoIsDemoMode } from '@/lib/env';
 
@@ -48,9 +49,16 @@ export default function ProjectCard({ project, onDuplicated, onDeleted, heroFall
           return;
         }
         const { data } = await supabase.from('project_designs').select('canvas_data').eq('project_id', project.id).maybeSingle();
-        const canvas = data?.canvas_data as { blocks?: { type: string; props?: Record<string, unknown> }[] } | null;
-        const hero = canvas?.blocks?.find((b) => b.type === 'Hero')?.props as Record<string, unknown> | undefined;
-        const names = [hero?.bride, hero?.groom].filter((v) => typeof v === 'string' && (v as string).trim()).join(' & ');
+        const raw = data?.canvas_data as unknown;
+        let heroProps: Record<string, unknown> | undefined;
+        if (isPuckData(raw)) {
+          const h = raw.content.find((c) => c.type === 'Hero') as { props?: Record<string, unknown> } | undefined;
+          heroProps = h?.props;
+        } else {
+          const legacy = raw as { blocks?: { type: string; props?: Record<string, unknown> }[] } | null;
+          heroProps = legacy?.blocks?.find((b) => b.type === 'Hero')?.props;
+        }
+        const names = [heroProps?.bride, heroProps?.groom].filter((v) => typeof v === 'string' && (v as string).trim()).join(' & ');
         if (alive && names) setCouple(names as string);
       } catch {
         /* ignore */

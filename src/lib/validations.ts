@@ -143,6 +143,7 @@ export const DecorAssetSchema = z.object({
   imageUrl: z.string().max(1000).optional(),
   photoShape: z.enum(['square', 'circle', 'rounded', 'tilt']).optional(),
   width: z.number().min(1).max(2000).optional(),
+  height: z.number().min(1).max(2000).optional(),
   ornament: z.string().max(50).optional()
 });
 
@@ -172,7 +173,8 @@ export const CanvasDataSchema = z.object({
   theme: ThemeSchema,
   settings: SettingsSchema,
   blocks: z.array(BlockSchema).max(50),
-  flow: z.enum(['stack', 'free']).optional()
+  flow: z.enum(['stack', 'free']).optional(),
+  stickers: z.array(DecorAssetSchema).max(40).optional()
 }).strict();
 
 export type ValidatedCanvasData = z.infer<typeof CanvasDataSchema>;

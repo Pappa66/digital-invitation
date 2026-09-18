@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import DashboardClient from '@/components/dashboard/dashboard-client';
 import { demoIsDemoMode } from '@/lib/env';
 import type { Project, CanvasData } from '@/lib/types';
+import { isPuckData } from '@/lib/canvas/puck-format';
 
 export const dynamic = 'force-dynamic';
 
@@ -35,9 +36,15 @@ export default async function DashboardPage() {
       if (designs) {
         for (const d of designs as { project_id: string; canvas_data: unknown }[]) {
           try {
-            const cd = d.canvas_data as CanvasData;
-            const hero = cd?.blocks?.find((b) => b.type === 'Hero');
-            const bg = hero?.props?.bg_image;
+            const raw = d.canvas_data;
+            let bg: unknown;
+            if (isPuckData(raw)) {
+              const h = raw.content.find((c) => c.type === 'Hero') as { props?: Record<string, unknown> } | undefined;
+              bg = h?.props?.bg_image;
+            } else {
+              const cd = raw as CanvasData;
+              bg = cd?.blocks?.find((b) => b.type === 'Hero')?.props?.bg_image;
+            }
             if (typeof bg === 'string' && bg.trim()) {
               thumbnails[d.project_id] = bg;
             }

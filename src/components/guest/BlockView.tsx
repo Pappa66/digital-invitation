@@ -146,6 +146,7 @@ export default function BlockView({ block, projectId, editable = false, greeting
         <div
           ref={undefined}
           data-block-type={block.type}
+          data-block-id={block.id}
           className={`relative w-full min-w-0 max-w-full overflow-hidden box-border transition-[background-color,background-image,opacity] duration-500 ease-out${hideClasses ? ' ' + hideClasses : ''}${revealClass ? ' ' + revealClass : ''}`}
         >
           {renderCard ? <div className={cardWrapCls}>{body}</div> : body}

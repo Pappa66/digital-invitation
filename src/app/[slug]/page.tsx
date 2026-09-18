@@ -5,6 +5,8 @@ import { Suspense } from 'react';
 import { createServerSupabase, requireUser } from '@/lib/supabase/server';
 import GuestView from '@/components/guest/GuestView';
 import GuestDemoView from '@/components/guest/GuestDemoView';
+import PuckGuestView from '@/puck/PuckGuestView';
+import { isPuckData } from '@/lib/canvas/puck-format';
 import { demoIsDemoMode } from '@/lib/env';
 
 interface PageProps {
@@ -29,9 +31,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       const row = Array.isArray(data) ? data[0] : null;
       if (row) {
         // Tampilkan nama pasangan (Hero bride & groom) bila ada, fallback ke judul desain
-        const canvas = row.canvas_data as { blocks?: { type: string; props?: Record<string, unknown> }[] } | null;
-        const hero = canvas?.blocks?.find((b) => b.type === 'Hero')?.props as Record<string, unknown> | undefined;
-        const couple = [hero?.bride, hero?.groom].filter((v) => typeof v === 'string' && (v as string).trim()).join(' & ');
+        const canvas = row.canvas_data as unknown;
+        let heroProps: Record<string, unknown> | undefined;
+        if (isPuckData(canvas)) {
+          const hero = canvas.content.find((c) => c.type === 'Hero') as { props?: Record<string, unknown> } | undefined;
+          heroProps = hero?.props;
+        } else {
+          const legacy = canvas as { blocks?: { type: string; props?: Record<string, unknown> }[] } | null;
+          heroProps = legacy?.blocks?.find((b) => b.type === 'Hero')?.props;
+        }
+        const couple = [heroProps?.bride, heroProps?.groom].filter((v) => typeof v === 'string' && (v as string).trim()).join(' & ');
         title = (couple as string) || row.title;
       }
     } catch {
@@ -126,6 +135,9 @@ export default async function GuestPage({ params, searchParams }: PageProps) {
         .eq('project_id', project.id)
         .maybeSingle();
       if (!draft?.canvas_data) notFound();
+      if (isPuckData(draft.canvas_data)) {
+        return <PuckGuestView canvas={draft.canvas_data} projectId={project.id} greetingName={to} />;
+      }
       return (
         <GuestView
           projectId={project.id}
@@ -135,6 +147,10 @@ export default async function GuestPage({ params, searchParams }: PageProps) {
       );
     }
     notFound();
+  }
+
+  if (isPuckData(row.canvas_data)) {
+    return <PuckGuestView canvas={row.canvas_data} projectId={row.project_id} greetingName={to} />;
   }
 
   return (

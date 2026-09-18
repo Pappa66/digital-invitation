@@ -26,3 +26,11 @@ class MockIntersectionObserver implements IntersectionObserver {
 }
 
 globalThis.IntersectionObserver = MockIntersectionObserver as unknown as typeof IntersectionObserver;
+
+// jsdom tidak punya ResizeObserver (dibutuhkan @dnd-kit / Puck).
+class MockResizeObserver {
+  observe(): void {}
+  unobserve(): void {}
+  disconnect(): void {}
+}
+globalThis.ResizeObserver = MockResizeObserver as unknown as typeof ResizeObserver;
