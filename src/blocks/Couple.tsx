@@ -9,32 +9,64 @@ function Photo({ src, alt }: { src?: string; alt: string }) {
   return <div className="flex h-28 w-28 items-center justify-center rounded-full bg-[var(--color-secondary,#e7ddcc)] text-xs opacity-60">Foto</div>;
 }
 
-export default function Couple({ title, groom, groomParents, groomPhoto, bride, brideParents, bridePhoto, position, entrance, blockStyle }: CoupleProps) {
+interface PersonProps {
+  name: string;
+  parents?: string;
+  photo?: string;
+  reverse?: boolean;
+}
+
+function Person({ name, parents, photo, reverse }: PersonProps) {
+  return (
+    <div className={`flex items-center gap-4 ${reverse ? 'flex-row-reverse text-right' : 'text-left'}`}>
+      <Photo src={photo} alt={name} />
+      <div className="min-w-0">
+        <p className="text-xl" style={{ fontFamily: 'var(--font-heading)' }}>
+          {name}
+        </p>
+        {parents ? <p className="mt-1 text-xs opacity-70">{parents}</p> : null}
+      </div>
+    </div>
+  );
+}
+
+export default function Couple({ title, groom, groomParents, groomPhoto, bride, brideParents, bridePhoto, variant = 'vertical', position, entrance, blockStyle }: CoupleProps) {
   return (
     <BlockShell position={position} entrance={entrance} blockStyle={blockStyle}>
       <section className="bg-[var(--color-background,#fbf7f1)] px-6 py-14 text-center text-[var(--color-text,#4a4036)]">
         <h2 className="text-2xl" style={{ fontFamily: 'var(--font-heading)' }}>
           {title}
         </h2>
-        <div className="mt-8 flex flex-col items-center gap-8 sm:flex-row sm:justify-center sm:gap-12">
-          <div className="flex flex-col items-center">
-            <Photo src={groomPhoto} alt={groom} />
-            <p className="mt-3 font-heading text-xl" style={{ fontFamily: 'var(--font-heading)' }}>
-              {groom}
-            </p>
-            {groomParents ? <p className="mt-1 text-xs opacity-70">{groomParents}</p> : null}
+
+        {variant === 'side' ? (
+          <div className="mx-auto mt-8 flex max-w-sm flex-col gap-6">
+            <Person name={groom} parents={groomParents} photo={groomPhoto} />
+            <div className="text-center text-2xl opacity-60" style={{ color: 'var(--color-primary)' }}>
+              &amp;
+            </div>
+            <Person name={bride} parents={brideParents} photo={bridePhoto} reverse />
           </div>
-          <span className="font-script text-2xl opacity-60" style={{ color: 'var(--color-primary)' }}>
-            &amp;
-          </span>
-          <div className="flex flex-col items-center">
-            <Photo src={bridePhoto} alt={bride} />
-            <p className="mt-3 font-heading text-xl" style={{ fontFamily: 'var(--font-heading)' }}>
-              {bride}
-            </p>
-            {brideParents ? <p className="mt-1 text-xs opacity-70">{brideParents}</p> : null}
+        ) : (
+          <div className="mt-8 flex flex-col items-center gap-8 sm:flex-row sm:justify-center sm:gap-12">
+            <div className="flex flex-col items-center">
+              <Photo src={groomPhoto} alt={groom} />
+              <p className="mt-3 text-xl" style={{ fontFamily: 'var(--font-heading)' }}>
+                {groom}
+              </p>
+              {groomParents ? <p className="mt-1 text-xs opacity-70">{groomParents}</p> : null}
+            </div>
+            <span className="text-2xl opacity-60" style={{ color: 'var(--color-primary)' }}>
+              &amp;
+            </span>
+            <div className="flex flex-col items-center">
+              <Photo src={bridePhoto} alt={bride} />
+              <p className="mt-3 text-xl" style={{ fontFamily: 'var(--font-heading)' }}>
+                {bride}
+              </p>
+              {brideParents ? <p className="mt-1 text-xs opacity-70">{brideParents}</p> : null}
+            </div>
           </div>
-        </div>
+        )}
       </section>
     </BlockShell>
   );

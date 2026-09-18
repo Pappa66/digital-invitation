@@ -100,7 +100,16 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
         bride: { type: 'text' },
         date: { type: 'text' },
         place: { type: 'text' },
-        bgImage: { type: 'custom', label: 'Gambar Latar', render: AssetField },
+        bgImage: { type: 'custom', label: 'Gambar/Video Latar', render: AssetField },
+        variant: {
+          type: 'select',
+          label: 'Tata Letak',
+          options: [
+            { label: 'Tengah', value: 'center' },
+            { label: 'Kiri', value: 'left' },
+            { label: 'Bawah', value: 'bottom' }
+          ]
+        },
         blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Hero')
@@ -112,6 +121,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
         date: 'Minggu, 1 Januari 2027',
         place: 'The Ritz-Carlton, Jakarta',
         bgImage: '',
+        variant: 'center',
         entrance: 'fade',
         blockStyle: {},
         position: defaultPosition
@@ -128,6 +138,14 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
         bride: { type: 'text' },
         brideParents: { type: 'text' },
         bridePhoto: { type: 'custom', label: 'Foto Wanita', render: AssetField },
+        variant: {
+          type: 'select',
+          label: 'Tata Letak',
+          options: [
+            { label: 'Vertikal', value: 'vertical' },
+            { label: 'Samping', value: 'side' }
+          ]
+        },
         blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Mempelai')
@@ -140,6 +158,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
         bride: 'Nama Wanita',
         brideParents: 'Putri dari Bpk. & Ibu',
         bridePhoto: '',
+        variant: 'vertical',
         entrance: 'fade',
         blockStyle: {},
         position: defaultPosition
@@ -573,6 +592,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
       },
       coverGreeting: { type: 'text', label: 'Sapaan Cover' },
       coverButtonText: { type: 'text', label: 'Teks Tombol Cover' },
+      coverBgImage: { type: 'custom', label: 'Gambar Cover', render: AssetField },
       coverStyle: {
         type: 'select',
         label: 'Gaya Cover',
@@ -624,6 +644,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
       coverGreeting: 'Kepada Yth.',
       coverButtonText: 'Buka Undangan',
       coverStyle: 'floral',
+      coverBgImage: '',
       musicUrl: '',
       musicAutoplay: 'yes',
       musicOffsetSec: 0,

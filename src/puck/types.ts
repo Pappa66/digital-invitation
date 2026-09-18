@@ -46,6 +46,7 @@ export interface HeroProps extends BaseBlockProps {
   date: string;
   place?: string;
   bgImage?: string;
+  variant?: 'center' | 'left' | 'bottom';
 }
 
 export interface CoupleProps extends BaseBlockProps {
@@ -56,6 +57,7 @@ export interface CoupleProps extends BaseBlockProps {
   bride: string;
   brideParents?: string;
   bridePhoto?: string;
+  variant?: 'vertical' | 'side';
 }
 
 export interface RsvpProps extends BaseBlockProps {

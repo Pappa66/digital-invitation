@@ -26,6 +26,7 @@ export function emptyPuckData(): PuckData {
         coverGreeting: 'Kepada Yth.',
         coverButtonText: 'Buka Undangan',
         coverStyle: 'floral',
+        coverBgImage: '',
         musicUrl: '',
         musicAutoplay: 'yes',
         musicOffsetSec: 0,
