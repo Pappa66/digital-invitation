@@ -5,6 +5,7 @@ import { Users, Plus, Trash2, Copy, Check, Send } from 'lucide-react';
 import { listGuests, addGuests, deleteGuest, type Guest } from '@/lib/actions/guest-actions';
 import { parseGuestLines, waLink } from '@/lib/religions';
 import { getSiteOrigin } from '@/lib/site';
+import { guestLink, guestMessage } from '@/lib/guest-links';
 
 interface GuestListPanelProps {
   projectId: string;
@@ -35,13 +36,8 @@ export default function GuestListPanel({ projectId, slug, template }: GuestListP
   }, [projectId]);
 
   const origin = getSiteOrigin();
-  const linkFor = (name: string) => `${origin}/${slug ?? ''}?to=${encodeURIComponent(name)}`;
-  const msgFor = (name: string) =>
-    (template ?? 'Assalamualaikum {nama}, kami mengundang Anda ke acara pernikahan kami: {link}')
-      .split('{nama}')
-      .join(name)
-      .split('{link}')
-      .join(linkFor(name));
+  const linkFor = (name: string) => guestLink(origin, slug, name);
+  const msgFor = (name: string) => guestMessage(template, name, linkFor(name));
 
   async function reload() {
     const r = await listGuests(projectId);
