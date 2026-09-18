@@ -57,6 +57,8 @@ export interface HeroProps extends BaseBlockProps {
   bgFit?: 'cover' | 'contain';
   /** Posisi fokus gambar latar (object-position). */
   bgPosition?: string;
+  /** Zoom gambar latar (1 = normal). */
+  bgZoom?: number;
   variant?: 'center' | 'left' | 'bottom';
   /** Ukuran font nama (CSS font-size). */
   nameSize?: string;
@@ -76,6 +78,7 @@ export interface CoupleProps extends BaseBlockProps {
   bridePhoto?: string;
   /** Posisi fokus foto mempelai (object-position). */
   photoPosition?: string;
+  photoZoom?: number;
   variant?: 'vertical' | 'side';
   /** Ukuran font nama (CSS font-size). */
   nameSize?: string;
@@ -200,6 +203,7 @@ export interface PhotoProps extends BaseBlockProps {
   shape?: 'square' | 'rounded' | 'circle' | 'tilt';
   fit?: 'cover' | 'contain';
   imgPosition?: string;
+  imgZoom?: number;
 }
 
 export interface LiveStreamingProps extends BaseBlockProps {

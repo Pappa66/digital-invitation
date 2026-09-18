@@ -8,7 +8,7 @@ const LAYOUT: Record<NonNullable<HeroProps['variant']>, { section: string; inner
   bottom: { section: 'items-center justify-end text-center', inner: 'items-center', align: '' }
 };
 
-export default function Hero({ caption, groom, bride, date, place, bgImage, bgFit = 'cover', bgPosition = 'center', variant = 'center', nameSize, nameFont, nameColor, position, entrance, blockStyle, id, puck }: HeroProps & { id?: string; puck?: { isEditing?: boolean } }) {
+export default function Hero({ caption, groom, bride, date, place, bgImage, bgFit = 'cover', bgPosition = 'center', bgZoom = 1, variant = 'center', nameSize, nameFont, nameColor, position, entrance, blockStyle, id, puck }: HeroProps & { id?: string; puck?: { isEditing?: boolean } }) {
   const v = LAYOUT[variant];
   const textColor = blockStyle?.textColor || '#ffffff';
   const nameStyle: React.CSSProperties = {
@@ -30,9 +30,11 @@ export default function Hero({ caption, groom, bride, date, place, bgImage, bgFi
               src={bgImage}
               fit={bgFit}
               position={bgPosition}
+              zoom={bgZoom}
               editable={puck?.isEditing}
               componentId={id}
               propKey="bgPosition"
+              zoomKey="bgZoom"
               className="absolute inset-0"
               imgClassName="opacity-55"
             />

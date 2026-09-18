@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { createUsePuck } from '@puckeditor/core';
 import type { config } from '@/puck/config';
 import { setComponentProp } from '@/puck/overrides/position-utils';
@@ -10,7 +10,9 @@ const usePuckStore = createUsePuck<typeof config>();
 interface PanOverlayProps {
   componentId: string;
   propKey: string;
+  zoomKey: string;
   position: string;
+  zoom: number;
 }
 
 function parsePos(pos: string): { x: number; y: number } {
@@ -18,10 +20,25 @@ function parsePos(pos: string): { x: number; y: number } {
   return { x: Number.isFinite(m[0]) ? m[0] : 50, y: Number.isFinite(m[1]) ? m[1] : 50 };
 }
 
-/** Overlay transparan untuk menggeser fokus foto (object-position) dengan kursor. */
-function PanOverlay({ componentId, propKey, position }: PanOverlayProps) {
+/** Overlay: geser (object-position) + scroll untuk zoom. */
+function PanOverlay({ componentId, propKey, zoomKey, position, zoom }: PanOverlayProps) {
   const dispatch = usePuckStore((s) => s.dispatch);
+  const ref = useRef<HTMLDivElement>(null);
   const start = useRef<{ x: number; y: number; ox: number; oy: number; w: number; h: number } | null>(null);
+
+  // Zoom via scroll (non-passive agar bisa preventDefault).
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const next = Math.max(1, Math.min(3, zoom - e.deltaY * 0.0015));
+      dispatch({ type: 'setData', data: (prev) => setComponentProp(prev, componentId, zoomKey, Number(next.toFixed(2))) });
+    };
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => el.removeEventListener('wheel', onWheel);
+  }, [componentId, zoomKey, zoom, dispatch]);
 
   function onPointerDown(e: React.PointerEvent<HTMLDivElement>) {
     e.stopPropagation();
@@ -35,7 +52,6 @@ function PanOverlay({ componentId, propKey, position }: PanOverlayProps) {
   function onPointerMove(e: React.PointerEvent<HTMLDivElement>) {
     const s = start.current;
     if (!s) return;
-    // Geser gambar ke kiri = fokus bergeser ke kanan (kebalikannya).
     const nx = Math.max(0, Math.min(100, s.ox - ((e.clientX - s.x) / s.w) * 100));
     const ny = Math.max(0, Math.min(100, s.oy - ((e.clientY - s.y) / s.h) * 100));
     dispatch({ type: 'setData', data: (prev) => setComponentProp(prev, componentId, propKey, `${Math.round(nx)}% ${Math.round(ny)}%`) });
@@ -52,8 +68,9 @@ function PanOverlay({ componentId, propKey, position }: PanOverlayProps) {
 
   return (
     <div
+      ref={ref}
       className="absolute inset-0 z-10 cursor-move"
-      title="Geser untuk atur fokus foto"
+      title="Geser untuk fokus · scroll untuk zoom"
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
@@ -66,15 +83,29 @@ interface EditableImageProps {
   alt?: string;
   fit?: 'cover' | 'contain';
   position?: string;
+  zoom?: number;
   editable?: boolean;
   componentId?: string;
   propKey?: string;
+  zoomKey?: string;
   className?: string;
   imgClassName?: string;
 }
 
-/** Gambar dengan fokus yang bisa digeser (editor) dan statis (tamu). */
-export default function EditableImage({ src, alt = '', fit = 'cover', position = 'center', editable, componentId, propKey = 'imgPosition', className, imgClassName }: EditableImageProps) {
+/** Gambar dengan fokus (geser) & zoom (scroll) di editor; statis di tamu. */
+export default function EditableImage({
+  src,
+  alt = '',
+  fit = 'cover',
+  position = 'center',
+  zoom = 1,
+  editable,
+  componentId,
+  propKey = 'imgPosition',
+  zoomKey = 'imgZoom',
+  className,
+  imgClassName
+}: EditableImageProps) {
   return (
     <div className={`relative overflow-hidden ${className ?? ''}`}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -84,9 +115,9 @@ export default function EditableImage({ src, alt = '', fit = 'cover', position =
         loading={editable ? undefined : 'lazy'}
         decoding="async"
         className={`h-full w-full ${imgClassName ?? ''}`}
-        style={{ objectFit: fit, objectPosition: position }}
+        style={{ objectFit: fit, objectPosition: position, transform: zoom && zoom !== 1 ? `scale(${zoom})` : undefined }}
       />
-      {editable && componentId ? <PanOverlay componentId={componentId} propKey={propKey} position={position} /> : null}
+      {editable && componentId ? <PanOverlay componentId={componentId} propKey={propKey} zoomKey={zoomKey} position={position} zoom={zoom} /> : null}
     </div>
   );
 }
