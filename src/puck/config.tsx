@@ -170,6 +170,15 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
       fields: {
         title: { type: 'text' },
         targetDate: { type: 'text' },
+        variant: {
+          type: 'select',
+          label: 'Gaya',
+          options: [
+            { label: 'Lingkaran', value: 'circles' },
+            { label: 'Kotak', value: 'boxes' },
+            { label: 'Baris', value: 'line' }
+          ]
+        },
         blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Countdown')
@@ -177,6 +186,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
       defaultProps: {
         title: 'Menghitung Hari',
         targetDate: '2027-01-01T08:00:00+07:00',
+        variant: 'circles',
         entrance: 'fade',
         blockStyle: {},
         position: defaultPosition
@@ -197,6 +207,15 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
           },
           defaultItemProps: { label: 'Acara', date: 'Tanggal', time: 'Waktu', place: 'Tempat' }
         },
+        variant: {
+          type: 'select',
+          label: 'Gaya',
+          options: [
+            { label: 'Kartu', value: 'cards' },
+            { label: 'Baris', value: 'inline' },
+            { label: 'Roman', value: 'roman' }
+          ]
+        },
         blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Acara')
@@ -207,6 +226,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
           { label: 'Akad Nikah', date: 'Sabtu, 12 Desember 2026', time: '08.00 - 10.00 WIB', place: 'The Ritz-Carlton Grand Ballroom' },
           { label: 'Resepsi', date: 'Sabtu, 12 Desember 2026', time: '11.00 - 14.00 WIB', place: 'The Ritz-Carlton Grand Ballroom' }
         ],
+        variant: 'cards',
         entrance: 'fade',
         blockStyle: {},
         position: defaultPosition
@@ -226,6 +246,15 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
           },
           defaultItemProps: { year: '2024', title: 'Momen', description: 'Cerita singkat momen ini.' }
         },
+        variant: {
+          type: 'select',
+          label: 'Gaya',
+          options: [
+            { label: 'Timeline', value: 'timeline' },
+            { label: 'Kartu', value: 'cards' },
+            { label: 'Minimal', value: 'minimal' }
+          ]
+        },
         blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Kisah')
@@ -236,6 +265,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
           { year: '2019', title: 'Pertemuan Pertama', description: 'Kami bertemu pertama kali di kampus.' },
           { year: '2024', title: 'Lamaran', description: 'Kami memutuskan melangkah ke jenjang yang lebih serius.' }
         ],
+        variant: 'timeline',
         entrance: 'fade',
         blockStyle: {},
         position: defaultPosition
@@ -282,15 +312,27 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
     Quote: {
       label: 'Kutipan',
       fields: {
+        arabic: { type: 'textarea', label: 'Teks Arab (opsional)' },
         text: { type: 'textarea' },
         source: { type: 'text' },
+        variant: {
+          type: 'select',
+          label: 'Gaya',
+          options: [
+            { label: 'Polos', value: 'plain' },
+            { label: 'Kotak', value: 'boxed' },
+            { label: 'Ornamen', value: 'ornament' }
+          ]
+        },
         blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Kutipan')
       },
       defaultProps: {
+        arabic: '',
         text: 'Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan hidup dari jenismu sendiri.',
         source: 'QS. Ar-Rum: 21',
+        variant: 'plain',
         entrance: 'fade',
         blockStyle: {},
         position: defaultPosition
@@ -672,7 +714,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
       >
         <link
           rel="stylesheet"
-          href={`https://fonts.googleapis.com/css2?${Array.from(new Set([fontHeading, fontBody]))
+          href={`https://fonts.googleapis.com/css2?${Array.from(new Set([fontHeading, fontBody, 'Amiri', 'Noto Naskh Arabic']))
             .map((f) => `family=${encodeURIComponent(f)}`)
             .join('&')}&display=swap`}
         />

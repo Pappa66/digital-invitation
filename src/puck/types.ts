@@ -83,11 +83,13 @@ export interface GalleryImage {
 export interface CountdownProps extends BaseBlockProps {
   title: string;
   targetDate: string;
+  variant?: 'circles' | 'boxes' | 'line';
 }
 
 export interface EventDetailProps extends BaseBlockProps {
   title: string;
   events: EventItem[];
+  variant?: 'cards' | 'inline' | 'roman';
 }
 
 export interface GalleryProps extends BaseBlockProps {
@@ -106,11 +108,15 @@ export interface StoryItem {
 export interface StoryProps extends BaseBlockProps {
   title: string;
   items: StoryItem[];
+  variant?: 'timeline' | 'cards' | 'minimal';
 }
 
 export interface QuoteProps extends BaseBlockProps {
   text: string;
+  /** Teks Arab (opsional) — dirender RTL dengan font Arab. */
+  arabic?: string;
   source?: string;
+  variant?: 'plain' | 'boxed' | 'ornament';
 }
 
 export interface ThanksProps extends BaseBlockProps {
