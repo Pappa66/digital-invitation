@@ -22,6 +22,7 @@ import PositionField from '@/puck/fields/PositionField';
 import ColorField from '@/puck/fields/ColorField';
 import AssetField from '@/puck/fields/AssetField';
 import DecorField from '@/puck/fields/DecorField';
+import PanelSection from '@/puck/fields/PanelSection';
 import DecorLayer from '@/blocks/DecorLayer';
 import { defaultTheme } from '@/puck/theme';
 import { RELIGIONS } from '@/lib/religions';
@@ -46,6 +47,12 @@ const colorField = (label: string) => ({
   type: 'custom' as const,
   label,
   render: ColorField
+});
+
+const panelSection = (label: string) => ({
+  type: 'custom' as const,
+  label,
+  render: PanelSection
 });
 
 const entranceField = {
@@ -84,6 +91,25 @@ const styleField = {
     accentColor: colorField('Warna Aksen'),
     bgColor: colorField('Warna Latar'),
     headingFont: { type: 'select' as const, label: 'Font Judul', options: fontOptions },
+    headingSize: {
+      type: 'select' as const,
+      label: 'Ukuran Judul',
+      options: [
+        { label: 'Kecil', value: '1.25rem' },
+        { label: 'Sedang', value: '1.5rem' },
+        { label: 'Besar', value: '2rem' },
+        { label: 'Ekstra', value: '2.75rem' }
+      ]
+    },
+    textAlign: {
+      type: 'select' as const,
+      label: 'Perataan',
+      options: [
+        { label: 'Kiri', value: 'left' },
+        { label: 'Tengah', value: 'center' },
+        { label: 'Kanan', value: 'right' }
+      ]
+    },
     bgImage: { type: 'custom' as const, label: 'Gambar Latar', render: AssetField },
     bgGradient: { type: 'text' as const, label: 'Gradien Latar (CSS)' },
     bgOverlay: { type: 'number' as const, label: 'Overlay Gelap (0–1)' }
@@ -95,6 +121,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
     Hero: {
       label: 'Hero',
       fields: {
+        _content: panelSection('Konten'),
         caption: { type: 'text' },
         groom: { type: 'text' },
         bride: { type: 'text' },
@@ -110,6 +137,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
             { label: 'Bawah', value: 'bottom' }
           ]
         },
+        _style: panelSection('Gaya & Tata Letak'),
         blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Hero')
@@ -131,6 +159,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
     Couple: {
       label: 'Mempelai',
       fields: {
+        _content: panelSection('Konten'),
         title: { type: 'text' },
         groom: { type: 'text' },
         groomParents: { type: 'text' },
@@ -146,6 +175,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
             { label: 'Samping', value: 'side' }
           ]
         },
+        _style: panelSection('Gaya & Tata Letak'),
         blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Mempelai')
@@ -168,6 +198,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
     Countdown: {
       label: 'Hitung Hari',
       fields: {
+        _content: panelSection('Konten'),
         title: { type: 'text' },
         targetDate: { type: 'text' },
         variant: {
@@ -179,6 +210,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
             { label: 'Baris', value: 'line' }
           ]
         },
+        _style: panelSection('Gaya & Tata Letak'),
         blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Countdown')
@@ -196,6 +228,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
     EventDetail: {
       label: 'Detail Acara',
       fields: {
+        _content: panelSection('Konten'),
         title: { type: 'text' },
         events: {
           type: 'array',
@@ -216,6 +249,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
             { label: 'Roman', value: 'roman' }
           ]
         },
+        _style: panelSection('Gaya & Tata Letak'),
         blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Acara')
@@ -236,6 +270,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
     Story: {
       label: 'Kisah Cinta',
       fields: {
+        _content: panelSection('Konten'),
         title: { type: 'text' },
         items: {
           type: 'array',
@@ -255,6 +290,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
             { label: 'Minimal', value: 'minimal' }
           ]
         },
+        _style: panelSection('Gaya & Tata Letak'),
         blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Kisah')
@@ -275,6 +311,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
     Gallery: {
       label: 'Galeri',
       fields: {
+        _content: panelSection('Konten'),
         title: { type: 'text' },
         variant: {
           type: 'select',
@@ -295,6 +332,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
           },
           defaultItemProps: { url: '', caption: '' }
         },
+        _style: panelSection('Gaya & Tata Letak'),
         blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Galeri')
@@ -312,6 +350,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
     Quote: {
       label: 'Kutipan',
       fields: {
+        _content: panelSection('Konten'),
         arabic: { type: 'textarea', label: 'Teks Arab (opsional)' },
         text: { type: 'textarea' },
         source: { type: 'text' },
@@ -324,6 +363,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
             { label: 'Ornamen', value: 'ornament' }
           ]
         },
+        _style: panelSection('Gaya & Tata Letak'),
         blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Kutipan')
@@ -342,9 +382,11 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
     Maps: {
       label: 'Lokasi (Maps)',
       fields: {
+        _content: panelSection('Konten'),
         title: { type: 'text' },
         address: { type: 'text' },
         embedUrl: { type: 'text' },
+        _style: panelSection('Gaya & Tata Letak'),
         blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Lokasi')
@@ -362,6 +404,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
     GiftList: {
       label: 'Daftar Kado',
       fields: {
+        _content: panelSection('Konten'),
         title: { type: 'text' },
         accounts: {
           type: 'array',
@@ -373,6 +416,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
           defaultItemProps: { bankName: 'Bank', accountNumber: '0000000000', accountHolder: 'Nama' }
         },
         address: { type: 'textarea' },
+        _style: panelSection('Gaya & Tata Letak'),
         blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Kado')
@@ -390,6 +434,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
     Divider: {
       label: 'Pembatas',
       fields: {
+        _content: panelSection('Konten'),
         variant: {
           type: 'select',
           label: 'Gaya',
@@ -401,6 +446,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
             { label: 'Daun', value: 'leaves' }
           ]
         },
+        _style: panelSection('Gaya & Tata Letak'),
         blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Pembatas')
@@ -416,9 +462,11 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
     RunningText: {
       label: 'Teks Berjalan',
       fields: {
+        _content: panelSection('Konten'),
         text: { type: 'text' },
         speed: { type: 'number', label: 'Kecepatan' },
         separator: { type: 'text', label: 'Pemisah' },
+        _style: panelSection('Gaya & Tata Letak'),
         blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Teks Berjalan')
@@ -436,6 +484,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
     Text: {
       label: 'Teks',
       fields: {
+        _content: panelSection('Konten'),
         title: { type: 'text' },
         body: { type: 'textarea' },
         align: {
@@ -447,6 +496,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
             { label: 'Kanan', value: 'right' }
           ]
         },
+        _style: panelSection('Gaya & Tata Letak'),
         blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Teks')
@@ -464,6 +514,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
     Photo: {
       label: 'Foto',
       fields: {
+        _content: panelSection('Konten'),
         image: { type: 'custom', label: 'Gambar', render: AssetField },
         caption: { type: 'text' },
         shape: {
@@ -476,6 +527,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
             { label: 'Miring', value: 'tilt' }
           ]
         },
+        _style: panelSection('Gaya & Tata Letak'),
         blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Foto')
@@ -493,9 +545,11 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
     LiveStreaming: {
       label: 'Live Streaming',
       fields: {
+        _content: panelSection('Konten'),
         title: { type: 'text' },
         embedUrl: { type: 'text', label: 'URL Streaming' },
         note: { type: 'textarea' },
+        _style: panelSection('Gaya & Tata Letak'),
         blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Streaming')
@@ -513,9 +567,11 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
     CopyText: {
       label: 'Teks Salin',
       fields: {
+        _content: panelSection('Konten'),
         title: { type: 'text' },
         label: { type: 'text' },
         value: { type: 'text' },
+        _style: panelSection('Gaya & Tata Letak'),
         blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Teks Salin')
@@ -533,8 +589,10 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
     Watermark: {
       label: 'Watermark',
       fields: {
+        _content: panelSection('Konten'),
         text: { type: 'text' },
         opacity: { type: 'number', label: 'Opacity (0-1)' },
+        _style: panelSection('Gaya & Tata Letak'),
         blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Watermark')
@@ -551,8 +609,10 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
     Thanks: {
       label: 'Ucapan Terima Kasih',
       fields: {
+        _content: panelSection('Konten'),
         title: { type: 'text' },
         message: { type: 'textarea' },
+        _style: panelSection('Gaya & Tata Letak'),
         blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Terima Kasih')
@@ -569,6 +629,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
     Envelope: {
       label: 'Amplop Online',
       fields: {
+        _content: panelSection('Konten'),
         title: { type: 'text' },
         note: { type: 'text' },
         accounts: {
@@ -580,6 +641,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
           },
           defaultItemProps: { bankName: 'Bank', accountNumber: '0000000000', accountHolder: 'Nama' }
         },
+        _style: panelSection('Gaya & Tata Letak'),
         blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Amplop')
@@ -597,9 +659,11 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
     Rsvp: {
       label: 'Konfirmasi Kehadiran',
       fields: {
+        _content: panelSection('Konten'),
         title: { type: 'text' },
         note: { type: 'textarea' },
         buttonText: { type: 'text' },
+        _style: panelSection('Gaya & Tata Letak'),
         blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi RSVP')

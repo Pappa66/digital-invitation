@@ -27,8 +27,15 @@ function styleVars(blockStyle?: BlockStyleLite): CSSProperties {
   if (blockStyle?.accentColor) vars['--color-primary'] = blockStyle.accentColor;
   if (blockStyle?.bgColor) vars['--color-background'] = blockStyle.bgColor;
   if (blockStyle?.headingFont) vars['--font-heading'] = `'${blockStyle.headingFont}', serif`;
+  if (blockStyle?.headingSize) vars['--block-heading-size'] = blockStyle.headingSize;
+  if (blockStyle?.textAlign) vars['--block-ta'] = blockStyle.textAlign;
   if (blockStyle?.bgImage || blockStyle?.bgGradient) vars['--color-background'] = 'transparent';
   return vars as CSSProperties;
+}
+
+/** Kelas bantu untuk tipografi/perataan per-bagian (lihat globals.css). */
+function styleClass(blockStyle?: BlockStyleLite): string {
+  return [blockStyle?.headingSize ? 'block-hs' : '', blockStyle?.textAlign ? 'block-ta' : ''].filter(Boolean).join(' ');
 }
 
 /**
@@ -66,10 +73,12 @@ export function BlockShell({ position, entrance = 'fade', blockStyle, children }
   );
 
   const base: CSSProperties = { ...styleVars(blockStyle), ...bgStyle };
+  const cls = styleClass(blockStyle);
 
   if (position?.mode === 'absolute') {
     return (
       <div
+        className={cls || undefined}
         style={{
           ...base,
           position: 'absolute',
@@ -86,7 +95,7 @@ export function BlockShell({ position, entrance = 'fade', blockStyle, children }
   }
 
   return (
-    <div className="relative w-full" style={base}>
+    <div className={`relative w-full ${cls}`} style={base}>
       {inner}
     </div>
   );

@@ -293,3 +293,13 @@ body {
     clip-path: inset(0 0 0 0);
   }
 }
+/* ===== Override tipografi & perataan per-bagian (dari blockStyle) ===== */
+.block-hs :is(h1, h2, h3, h4) {
+  font-size: var(--block-heading-size);
+}
+.block-ta {
+  text-align: var(--block-ta);
+}
+.block-ta :is(h1, h2, h3, h4, p, span, div, blockquote, figure) {
+  text-align: inherit;
+}

@@ -20,8 +20,11 @@ export interface Position {
 export interface BaseBlockProps {
   position: Position;
   entrance?: EntranceKind;
-  /** Override warna per-bagian (menurun sebagai CSS var ke elemen anak). */
+  /** Override warna/font/latar per-bagian. */
   blockStyle?: BlockStyleLite;
+  /** Field display-only penanda seksi panel (tidak dirender). */
+  _content?: string;
+  _style?: string;
 }
 
 /** Override warna per-bagian: teks, aksen (primary), latar. */
@@ -31,6 +34,10 @@ export interface BlockStyleLite {
   bgColor?: string;
   /** Font judul khusus bagian ini (Google Font). */
   headingFont?: string;
+  /** Ukuran judul bagian (CSS font-size, mis. "2rem"). */
+  headingSize?: string;
+  /** Perataan teks bagian. */
+  textAlign?: 'left' | 'center' | 'right';
   /** Gambar latar bagian (URL). */
   bgImage?: string;
   /** Gradien latar bagian (CSS background). */
