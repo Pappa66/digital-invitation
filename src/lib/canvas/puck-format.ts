@@ -1,8 +1,8 @@
 import type { Data } from '@puckeditor/core';
-import type { InvitationRootProps, POCProps } from '@/puck/types';
+import type { InvitationRootProps, InvitationProps } from '@/puck/types';
 import { defaultTheme } from '@/puck/theme';
 
-export type PuckData = Data<POCProps, InvitationRootProps>;
+export type PuckData = Data<InvitationProps, InvitationRootProps>;
 
 /**
  * Mendeteksi data Puck (`{ root, content }`) vs format lama CanvasData

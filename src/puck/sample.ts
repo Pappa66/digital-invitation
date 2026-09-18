@@ -1,12 +1,12 @@
 import type { Data } from '@puckeditor/core';
 import { defaultPosition } from '@/puck/config';
 import { defaultTheme } from '@/puck/theme';
-import type { InvitationRootProps, POCProps } from '@/puck/types';
+import type { InvitationRootProps, InvitationProps } from '@/puck/types';
 
 const flow = defaultPosition;
 
 /** Data contoh untuk membuktikan render (termasuk di SSR). */
-export const sampleData: Data<POCProps, InvitationRootProps> = {
+export const sampleData: Data<InvitationProps, InvitationRootProps> = {
   root: {
     props: {
       ...defaultTheme,

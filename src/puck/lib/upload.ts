@@ -14,7 +14,7 @@ function fileToDataUrl(file: Blob): Promise<string> {
 
 /**
  * Unggah gambar: kompres dulu, lalu coba Supabase Storage (bila sudah login).
- * Fallback POC (belum login / offline): data URL agar gambar tetap tampil di
+ * Fallback lokal (belum login / offline): data URL agar gambar tetap tampil di
  * editor. Integrasi Storage penuh menyusul di Fase 3.
  */
 export async function uploadImage(file: File): Promise<string> {

@@ -20,7 +20,7 @@ import DecorField from '@/puck/fields/DecorField';
 import DecorLayer from '@/blocks/DecorLayer';
 import { defaultTheme } from '@/puck/theme';
 import { RELIGIONS } from '@/lib/religions';
-import type { InvitationRootProps, POCProps, Position } from '@/puck/types';
+import type { InvitationRootProps, InvitationProps, Position } from '@/puck/types';
 
 export const defaultPosition: Position = {
   mode: 'flow',
@@ -68,7 +68,7 @@ const FONTS = [
 ];
 const fontOptions = FONTS.map((f) => ({ label: f, value: f }));
 
-export const config: Config<POCProps, InvitationRootProps> = {
+export const config: Config<InvitationProps, InvitationRootProps> = {
   components: {
     Hero: {
       label: 'Hero',
@@ -462,7 +462,7 @@ export const config: Config<POCProps, InvitationRootProps> = {
     },
     render: ({ children, primary, secondary, background, text, fontHeading, fontBody, decor }) => (
       <div
-        className="poc-canvas relative mx-auto min-h-[100dvh] w-full max-w-[430px] overflow-x-hidden"
+        className="invitation-canvas relative mx-auto min-h-[100dvh] w-full max-w-[430px] overflow-x-hidden"
         style={
           {
             '--color-primary': primary,

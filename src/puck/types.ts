@@ -1,5 +1,5 @@
 /**
- * Kontrak data POC Fase 0 (Puck + model Elementor).
+ * Kontrak data undangan (engine Puck, model ala Elementor).
  * Setiap blok punya `position`: default flow (vertikal), opsi absolute per elemen.
  */
 
@@ -190,7 +190,7 @@ export interface InvitationRootProps extends InvitationTheme {
 }
 
 /** Peta nama komponen → tipe props. Dipakai sebagai generic `Config<Props>`. */
-export interface POCProps {
+export interface InvitationProps {
   Hero: HeroProps;
   Couple: CoupleProps;
   Rsvp: RsvpProps;
