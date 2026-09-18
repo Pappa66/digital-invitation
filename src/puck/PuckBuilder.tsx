@@ -14,6 +14,7 @@ import { clientSetProjectStatus } from '@/lib/api/project-client';
 import { saveDesignByShareToken } from '@/lib/actions/share-token-actions';
 import BuilderHeader from '@/puck/components/builder-header';
 import TemplatePicker from '@/puck/components/template-picker';
+import MediaLibrary from '@/puck/components/media-library';
 import type { PuckData } from '@/lib/canvas/puck-format';
 
 interface PuckBuilderProps {
@@ -28,6 +29,7 @@ export default function PuckBuilder({ projectId, editToken }: PuckBuilderProps) 
   const { data, setData, access, legacy, meta, setMeta } = usePuckProject(projectId, editToken);
   const [busy, setBusy] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
+  const [mediaOpen, setMediaOpen] = useState(false);
   const [emptyDismissed, setEmptyDismissed] = useState(false);
   const [editorKey, setEditorKey] = useState(0);
   const [device, setDevice] = useState<'mobile' | 'tablet' | 'desktop'>('mobile');
@@ -83,6 +85,7 @@ export default function PuckBuilder({ projectId, editToken }: PuckBuilderProps) 
         device={device}
         onDevice={setDevice}
         onOpenPicker={() => setPickerOpen(true)}
+        onOpenMedia={() => setMediaOpen(true)}
         onPublish={() => data && handlePublish(data)}
       />
 
@@ -99,6 +102,8 @@ export default function PuckBuilder({ projectId, editToken }: PuckBuilderProps) 
       </div>
 
       {(pickerOpen || (data.content.length === 0 && !emptyDismissed)) && <TemplatePicker onSelect={selectTemplate} onClose={closePicker} />}
+
+      <MediaLibrary open={mediaOpen} onClose={() => setMediaOpen(false)} />
     </div>
   );
 }
