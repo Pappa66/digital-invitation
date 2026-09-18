@@ -29,6 +29,14 @@ export interface BlockStyleLite {
   textColor?: string;
   accentColor?: string;
   bgColor?: string;
+  /** Font judul khusus bagian ini (Google Font). */
+  headingFont?: string;
+  /** Gambar latar bagian (URL). */
+  bgImage?: string;
+  /** Gradien latar bagian (CSS background). */
+  bgGradient?: string;
+  /** Lapisan gelap di atas latar gambar/gradien (0–1). */
+  bgOverlay?: number;
 }
 
 export interface HeroProps extends BaseBlockProps {

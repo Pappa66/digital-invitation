@@ -61,17 +61,6 @@ const entranceField = {
   ]
 };
 
-/** Field warna per-bagian (opsional, override tema). */
-const styleField = {
-  type: 'object' as const,
-  label: 'Warna Bagian',
-  objectFields: {
-    textColor: colorField('Warna Teks'),
-    accentColor: colorField('Warna Aksen'),
-    bgColor: colorField('Warna Latar')
-  }
-};
-
 const FONTS = [
   'Cormorant Garamond',
   'Playfair Display',
@@ -85,6 +74,21 @@ const FONTS = [
   'Karla'
 ];
 const fontOptions = FONTS.map((f) => ({ label: f, value: f }));
+
+/** Field gaya per-bagian (warna/font/latar) — opsional, override tema. */
+const styleField = {
+  type: 'object' as const,
+  label: 'Gaya Bagian',
+  objectFields: {
+    textColor: colorField('Warna Teks'),
+    accentColor: colorField('Warna Aksen'),
+    bgColor: colorField('Warna Latar'),
+    headingFont: { type: 'select' as const, label: 'Font Judul', options: fontOptions },
+    bgImage: { type: 'custom' as const, label: 'Gambar Latar', render: AssetField },
+    bgGradient: { type: 'text' as const, label: 'Gradien Latar (CSS)' },
+    bgOverlay: { type: 'number' as const, label: 'Overlay Gelap (0–1)' }
+  }
+};
 
 export const config: Config<InvitationProps, InvitationRootProps> = {
   components: {

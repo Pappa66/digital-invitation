@@ -6,8 +6,12 @@ export default function Hero({ caption, groom, bride, date, place, bgImage, posi
     <BlockShell position={position} entrance={entrance} blockStyle={blockStyle}>
       <section className="relative flex min-h-[100dvh] w-full flex-col items-center justify-center overflow-hidden bg-neutral-900 px-6 py-16 text-center text-white">
         {bgImage ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={bgImage} alt="" className="absolute inset-0 h-full w-full object-cover opacity-55" />
+          /\.(mp4|webm|ogg|mov|m4v)(\?|$)/i.test(bgImage) ? (
+            <video src={bgImage} autoPlay loop muted playsInline className="absolute inset-0 h-full w-full object-cover opacity-55" />
+          ) : (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={bgImage} alt="" className="absolute inset-0 h-full w-full object-cover opacity-55" />
+          )
         ) : null}
         <div className="relative z-10 flex flex-col items-center">
           <p className="text-[11px] uppercase tracking-[0.35em] opacity-85">{caption}</p>

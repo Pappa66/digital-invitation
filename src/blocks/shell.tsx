@@ -1,6 +1,4 @@
-'use client';
-
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import { motion, type Variants } from 'framer-motion';
 import type { BlockStyleLite, EntranceKind, Position } from '@/puck/types';
 
@@ -17,30 +15,40 @@ interface BlockShellProps {
   position?: Position;
   /** Animasi masuk (guest). Default 'fade'; 'none' = tanpa animasi. */
   entrance?: EntranceKind;
-  /** Override warna per-bagian (teks/aksen/latar). */
+  /** Override warna/font/latar per-bagian. */
   blockStyle?: BlockStyleLite;
   children: ReactNode;
 }
 
 /** CSS var override dari blockStyle — menurun ke elemen anak. */
-function styleVars(blockStyle?: BlockStyleLite): React.CSSProperties {
+function styleVars(blockStyle?: BlockStyleLite): CSSProperties {
   const vars: Record<string, string> = {};
   if (blockStyle?.textColor) vars['--color-text'] = blockStyle.textColor;
   if (blockStyle?.accentColor) vars['--color-primary'] = blockStyle.accentColor;
   if (blockStyle?.bgColor) vars['--color-background'] = blockStyle.bgColor;
-  return vars as React.CSSProperties;
+  if (blockStyle?.headingFont) vars['--font-heading'] = `'${blockStyle.headingFont}', serif`;
+  if (blockStyle?.bgImage || blockStyle?.bgGradient) vars['--color-background'] = 'transparent';
+  return vars as CSSProperties;
 }
 
 /**
- * Pembungkus tiap blok. Default: flow (ikut aliran vertikal).
- * Jika `position.mode === 'absolute'`, elemen dilepas dari flow
- * (ala Elementor Advanced → Positioning → Absolute).
+ * Pembungkus tiap blok. Default: flow; `absolute` = lepas dari aliran.
+ * Override warna/font/latar per-bagian lewat `blockStyle`.
  */
 export function BlockShell({ position, entrance = 'fade', blockStyle, children }: BlockShellProps) {
   const variant = entrance && entrance !== 'none' ? VARIANTS[entrance] : null;
-  const vars = styleVars(blockStyle);
+  const hasBgMedia = Boolean(blockStyle?.bgImage || blockStyle?.bgGradient);
 
-  const inner = variant ? (
+  const bgStyle: CSSProperties = hasBgMedia
+    ? {
+        backgroundImage: blockStyle?.bgGradient || (blockStyle?.bgImage ? `url(${blockStyle.bgImage})` : undefined),
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }
+    : {};
+
+  const animated = variant ? (
     <motion.div variants={variant} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.15 }} transition={{ duration: 0.5, ease: 'easeOut' }}>
       {children}
     </motion.div>
@@ -48,11 +56,22 @@ export function BlockShell({ position, entrance = 'fade', blockStyle, children }
     <>{children}</>
   );
 
+  const inner = hasBgMedia ? (
+    <div className="relative">
+      <div className="pointer-events-none absolute inset-0 z-0" style={{ background: `rgba(0,0,0,${blockStyle?.bgOverlay ?? 0})` }} />
+      <div className="relative z-10">{animated}</div>
+    </div>
+  ) : (
+    animated
+  );
+
+  const base: CSSProperties = { ...styleVars(blockStyle), ...bgStyle };
+
   if (position?.mode === 'absolute') {
     return (
       <div
         style={{
-          ...vars,
+          ...base,
           position: 'absolute',
           left: position.x,
           top: position.y,
@@ -67,7 +86,7 @@ export function BlockShell({ position, entrance = 'fade', blockStyle, children }
   }
 
   return (
-    <div className="relative w-full" style={vars}>
+    <div className="relative w-full" style={base}>
       {inner}
     </div>
   );
