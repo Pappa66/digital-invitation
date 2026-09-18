@@ -3,6 +3,7 @@ import { config } from '@/puck/config';
 import { defaultTheme } from '@/puck/theme';
 
 const CORE_COMPONENTS = [
+  'Cover',
   'Hero',
   'Couple',
   'Countdown',

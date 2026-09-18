@@ -19,27 +19,28 @@ interface PuckGuestViewProps {
   greetingName?: string;
 }
 
-/** Undangan format Puck: blok + cover + musik + buku tamu + absensi + share + confetti. */
+/** Undangan format Puck: blok (termasuk Cover) + musik + buku tamu + absensi + share + confetti. */
 export default function PuckGuestView({ canvas, projectId, greetingName }: PuckGuestViewProps) {
   const theme = (canvas.root.props ?? {}) as InvitationRootProps;
   const hero = readHero(canvas);
   const settings = buildGuestSettings(theme);
-  const showCover = theme.showCover !== 'no';
-  const [opened, setOpened] = useState(!showCover);
+  const hasCoverBlock = canvas.content.some((c) => c.type === 'Cover');
+  const fallbackCover = !hasCoverBlock && theme.showCover !== 'no';
+  const [opened, setOpened] = useState(!fallbackCover);
 
   useEffect(() => {
-    if (!showCover) return;
+    if (!fallbackCover) return;
     const handler = () => {
       setOpened(true);
       void fireConfetti();
     };
     window.addEventListener('invite-opened', handler);
     return () => window.removeEventListener('invite-opened', handler);
-  }, [showCover]);
+  }, [fallbackCover]);
 
   return (
     <>
-      <Render config={config} data={canvas} metadata={{ projectId }} />
+      <Render config={config} data={canvas} metadata={{ projectId, greetingName }} />
       {theme.guestBookEnabled !== 'no' ? <GuestBookWall projectId={projectId} title={theme.guestBookTitle} /> : null}
       {theme.checkinEnabled !== 'no' ? <CheckIn projectId={projectId} greetingName={greetingName} preview={false} /> : null}
       {opened ? <MusicPlayer settings={settings} /> : null}
@@ -51,7 +52,7 @@ export default function PuckGuestView({ canvas, projectId, greetingName }: PuckG
           heroImage={hero.bgImage}
         />
       ) : null}
-      {showCover ? <CoverModal {...buildCoverProps(theme, hero, greetingName)} /> : null}
+      {fallbackCover ? <CoverModal {...buildCoverProps(theme, hero, greetingName)} /> : null}
     </>
   );
 }

@@ -9,14 +9,18 @@ const LAYOUT: Record<NonNullable<HeroProps['variant']>, { section: string; inner
 
 export default function Hero({ caption, groom, bride, date, place, bgImage, variant = 'center', nameSize, nameFont, nameColor, position, entrance, blockStyle }: HeroProps) {
   const v = LAYOUT[variant];
+  const textColor = blockStyle?.textColor || '#ffffff';
   const nameStyle: React.CSSProperties = {
     fontFamily: nameFont ? `'${nameFont}', serif` : 'var(--font-heading)',
     fontSize: nameSize || undefined,
-    color: nameColor || undefined
+    color: nameColor || textColor
   };
   return (
     <BlockShell position={position} entrance={entrance} blockStyle={blockStyle}>
-      <section className={`relative flex min-h-[100dvh] w-full flex-col overflow-hidden bg-neutral-900 px-6 py-16 text-white ${v.section}`}>
+      <section
+        className={`relative flex min-h-[100dvh] w-full flex-col overflow-hidden bg-neutral-900 px-6 py-16 ${v.section}`}
+        style={{ color: textColor }}
+      >
         {bgImage ? (
           /\.(mp4|webm|ogg|mov|m4v)(\?|$)/i.test(bgImage) ? (
             <video src={bgImage} autoPlay loop muted playsInline className="absolute inset-0 h-full w-full object-cover opacity-55" />

@@ -1,5 +1,6 @@
 import type { Config } from '@puckeditor/core';
 import Hero from '@/blocks/Hero';
+import Cover from '@/blocks/Cover';
 import Couple from '@/blocks/Couple';
 import Rsvp from '@/blocks/Rsvp';
 import Countdown from '@/blocks/Countdown';
@@ -120,6 +121,50 @@ const styleField = {
 
 export const config: Config<InvitationProps, InvitationRootProps> = {
   components: {
+    Cover: {
+      label: 'Cover',
+      fields: {
+        _content: panelSection('Konten'),
+        caption: { type: 'text' },
+        bride: { type: 'text' },
+        groom: { type: 'text' },
+        date: { type: 'text' },
+        place: { type: 'text' },
+        bgImage: { type: 'custom', label: 'Gambar/Video Cover', render: AssetField },
+        greeting: { type: 'text', label: 'Sapaan (Kepada Yth.)' },
+        buttonText: { type: 'text', label: 'Teks Tombol' },
+        _style: panelSection('Gaya & Tata Letak'),
+        coverStyle: {
+          type: 'select',
+          label: 'Gaya Cover',
+          options: [
+            { label: 'Floral', value: 'floral' },
+            { label: 'Buku', value: 'book' },
+            { label: 'Roll Film', value: 'filmroll' },
+            { label: 'TV Jadul', value: 'oldtv' },
+            { label: 'Koran', value: 'newspaper' }
+          ]
+        },
+        blockStyle: styleField,
+        entrance: entranceField,
+        position: positionField('Posisi Cover')
+      },
+      defaultProps: {
+        caption: 'Undangan Pernikahan',
+        bride: 'Nama Wanita',
+        groom: 'Nama Pria',
+        date: 'Minggu, 1 Januari 2027',
+        place: '',
+        bgImage: '',
+        greeting: 'Kepada Yth.',
+        buttonText: 'Buka Undangan',
+        coverStyle: 'floral',
+        entrance: 'none',
+        blockStyle: {},
+        position: defaultPosition
+      },
+      render: (props) => <Cover {...props} />
+    },
     Hero: {
       label: 'Hero',
       fields: {
@@ -846,7 +891,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
     )
   },
   categories: {
-    intro: { title: 'Header & Intro', components: ['Hero', 'Couple', 'Quote'] },
+    intro: { title: 'Header & Intro', components: ['Cover', 'Hero', 'Couple', 'Quote'] },
     konten: { title: 'Konten', components: ['Countdown', 'EventDetail', 'Story', 'Text', 'Thanks'] },
     media: { title: 'Media & Lokasi', components: ['Gallery', 'Photo', 'Maps', 'LiveStreaming'] },
     interaktif: { title: 'Interaktif', components: ['Rsvp', 'GiftList', 'Envelope', 'CopyText'] },

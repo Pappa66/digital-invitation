@@ -300,6 +300,6 @@ body {
 .block-ta {
   text-align: var(--block-ta);
 }
-.block-ta :is(h1, h2, h3, h4, p, span, div, blockquote, figure) {
+.block-ta :is(section, h1, h2, h3, h4, p, span, div, blockquote, figure) {
   text-align: inherit;
 }

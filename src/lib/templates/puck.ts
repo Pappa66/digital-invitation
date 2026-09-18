@@ -44,6 +44,12 @@ function hero(id: string, caption: string, bride: string, groom: string, date: s
     props: { id, caption, bride, groom, date, place, bgImage, entrance: 'fade', position: flow }
   } as Block;
 }
+function cover(id: string, caption: string, bride: string, groom: string, date: string, bgImage = ''): Block {
+  return {
+    type: 'Cover',
+    props: { id, caption, bride, groom, date, bgImage, greeting: 'Kepada Yth.', buttonText: 'Buka Undangan', coverStyle: 'floral', entrance: 'none', position: flow }
+  } as Block;
+}
 function couple(id: string, groom: string, groomParents: string, bride: string, brideParents: string): Block {
   return {
     type: 'Couple',
@@ -145,7 +151,15 @@ function build(bp: Blueprint): PuckTemplate {
           frame: bp.frame ?? 'none'
         }
       },
-      content: bp.blocks
+      content: [
+        (() => {
+          const h = bp.blocks.find((b) => b.type === 'Hero') as { props?: Record<string, unknown> } | undefined;
+          const p = h?.props ?? {};
+          const st = (v: unknown, f = '') => (typeof v === 'string' ? v : f);
+          return cover(`${bp.id}-cover`, st(p.caption, 'Undangan Pernikahan'), st(p.bride), st(p.groom), st(p.date), st(p.bgImage));
+        })(),
+        ...bp.blocks
+      ]
     }
   };
 }

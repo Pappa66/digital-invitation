@@ -211,6 +211,18 @@ export interface WatermarkProps extends BaseBlockProps {
   opacity?: number;
 }
 
+export interface CoverProps extends BaseBlockProps {
+  caption: string;
+  bride: string;
+  groom: string;
+  date: string;
+  place?: string;
+  bgImage?: string;
+  greeting?: string;
+  buttonText?: string;
+  coverStyle?: 'floral' | 'book' | 'filmroll' | 'oldtv' | 'newspaper';
+}
+
 /** Props root (tema) — disimpan di `Data.root.props`. */
 export interface InvitationTheme {
   primary: string;
@@ -289,4 +301,5 @@ export interface InvitationProps {
   LiveStreaming: LiveStreamingProps;
   CopyText: CopyTextProps;
   Watermark: WatermarkProps;
+  Cover: CoverProps;
 }
