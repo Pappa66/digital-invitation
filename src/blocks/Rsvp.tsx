@@ -14,7 +14,7 @@ interface Props extends RsvpProps {
 
 const THROTTLE_MS = 30_000;
 
-export default function Rsvp({ title, note, buttonText, position, entrance, puck }: Props) {
+export default function Rsvp({ title, note, buttonText, position, entrance, blockStyle, puck }: Props) {
   const projectId = puck?.metadata?.projectId ?? '';
   const [name, setName] = useState('');
   const [attendance, setAttendance] = useState<'hadir' | 'tidak'>('hadir');
@@ -77,7 +77,7 @@ export default function Rsvp({ title, note, buttonText, position, entrance, puck
     'w-full rounded-xl border border-current/15 bg-transparent px-4 py-2.5 text-sm outline-none transition-colors focus:border-current';
 
   return (
-    <BlockShell position={position} entrance={entrance}>
+    <BlockShell position={position} entrance={entrance} blockStyle={blockStyle}>
       <section className="bg-[var(--color-background,#fbf7f1)] px-6 py-14 text-center text-[var(--color-text,#4a4036)]">
         <h2 className="text-2xl" style={{ fontFamily: 'var(--font-heading)' }}>
           {title}

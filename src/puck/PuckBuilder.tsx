@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Puck } from '@puckeditor/core';
 import '@puckeditor/core/puck.css';
+import '@/puck/editor-theme.css';
 import { config } from '@/puck/config';
 import ComponentOverlay from '@/puck/overrides/ComponentOverlay';
 import { usePuckAutosave, savePuckNow } from '@/puck/hooks/use-puck-autosave';
@@ -67,13 +68,14 @@ export default function PuckBuilder({ projectId, editToken }: PuckBuilderProps) 
   if (access === 'checking' || !data) return <LoadingScreen />;
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden bg-white">
+    <div className="puck-brand flex h-screen flex-col overflow-hidden bg-white">
       <BuilderHeader
         meta={meta}
         saveStatus={saveStatus}
         busy={busy}
         isEditLink={isEditLink}
         legacy={legacy}
+        projectId={projectId}
         onOpenPicker={() => setPickerOpen(true)}
         onPublish={() => data && handlePublish(data)}
       />

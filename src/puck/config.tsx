@@ -54,6 +54,17 @@ const entranceField = {
   ]
 };
 
+/** Field warna per-bagian (opsional, override tema). */
+const styleField = {
+  type: 'object' as const,
+  label: 'Warna Bagian',
+  objectFields: {
+    textColor: colorField('Warna Teks'),
+    accentColor: colorField('Warna Aksen'),
+    bgColor: colorField('Warna Latar')
+  }
+};
+
 const FONTS = [
   'Cormorant Garamond',
   'Playfair Display',
@@ -79,6 +90,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
         date: { type: 'text' },
         place: { type: 'text' },
         bgImage: { type: 'custom', label: 'Gambar Latar', render: AssetField },
+        blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Hero')
       },
@@ -90,6 +102,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
         place: 'The Ritz-Carlton, Jakarta',
         bgImage: '',
         entrance: 'fade',
+        blockStyle: {},
         position: defaultPosition
       },
       render: (props) => <Hero {...props} />
@@ -100,8 +113,11 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
         title: { type: 'text' },
         groom: { type: 'text' },
         groomParents: { type: 'text' },
+        groomPhoto: { type: 'custom', label: 'Foto Pria', render: AssetField },
         bride: { type: 'text' },
         brideParents: { type: 'text' },
+        bridePhoto: { type: 'custom', label: 'Foto Wanita', render: AssetField },
+        blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Mempelai')
       },
@@ -109,9 +125,12 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
         title: 'Mempelai',
         groom: 'Nama Pria',
         groomParents: 'Putra dari Bpk. & Ibu',
+        groomPhoto: '',
         bride: 'Nama Wanita',
         brideParents: 'Putri dari Bpk. & Ibu',
+        bridePhoto: '',
         entrance: 'fade',
+        blockStyle: {},
         position: defaultPosition
       },
       render: (props) => <Couple {...props} />
@@ -121,6 +140,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
       fields: {
         title: { type: 'text' },
         targetDate: { type: 'text' },
+        blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Countdown')
       },
@@ -128,6 +148,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
         title: 'Menghitung Hari',
         targetDate: '2027-01-01T08:00:00+07:00',
         entrance: 'fade',
+        blockStyle: {},
         position: defaultPosition
       },
       render: (props) => <Countdown {...props} />
@@ -146,6 +167,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
           },
           defaultItemProps: { label: 'Acara', date: 'Tanggal', time: 'Waktu', place: 'Tempat' }
         },
+        blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Acara')
       },
@@ -156,6 +178,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
           { label: 'Resepsi', date: 'Sabtu, 12 Desember 2026', time: '11.00 - 14.00 WIB', place: 'The Ritz-Carlton Grand Ballroom' }
         ],
         entrance: 'fade',
+        blockStyle: {},
         position: defaultPosition
       },
       render: (props) => <EventDetail {...props} />
@@ -173,6 +196,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
           },
           defaultItemProps: { year: '2024', title: 'Momen', description: 'Cerita singkat momen ini.' }
         },
+        blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Kisah')
       },
@@ -183,6 +207,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
           { year: '2024', title: 'Lamaran', description: 'Kami memutuskan melangkah ke jenjang yang lebih serius.' }
         ],
         entrance: 'fade',
+        blockStyle: {},
         position: defaultPosition
       },
       render: (props) => <Story {...props} />
@@ -196,7 +221,10 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
           label: 'Tampilan',
           options: [
             { label: 'Grid', value: 'grid' },
-            { label: 'Carousel (geser)', value: 'carousel' }
+            { label: 'Carousel (geser)', value: 'carousel' },
+            { label: 'Masonry', value: 'masonry' },
+            { label: 'Polaroid', value: 'polaroid' },
+            { label: 'Mosaic', value: 'mosaic' }
           ]
         },
         images: {
@@ -207,6 +235,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
           },
           defaultItemProps: { url: '', caption: '' }
         },
+        blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Galeri')
       },
@@ -215,6 +244,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
         variant: 'grid',
         images: [],
         entrance: 'fade',
+        blockStyle: {},
         position: defaultPosition
       },
       render: (props) => <Gallery {...props} />
@@ -224,6 +254,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
       fields: {
         text: { type: 'textarea' },
         source: { type: 'text' },
+        blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Kutipan')
       },
@@ -231,6 +262,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
         text: 'Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan hidup dari jenismu sendiri.',
         source: 'QS. Ar-Rum: 21',
         entrance: 'fade',
+        blockStyle: {},
         position: defaultPosition
       },
       render: (props) => <Quote {...props} />
@@ -241,6 +273,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
         title: { type: 'text' },
         address: { type: 'text' },
         embedUrl: { type: 'text' },
+        blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Lokasi')
       },
@@ -249,6 +282,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
         address: 'The Ritz-Carlton Grand Ballroom, Jakarta',
         embedUrl: '',
         entrance: 'fade',
+        blockStyle: {},
         position: defaultPosition
       },
       render: (props) => <Maps {...props} />
@@ -267,6 +301,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
           defaultItemProps: { bankName: 'Bank', accountNumber: '0000000000', accountHolder: 'Nama' }
         },
         address: { type: 'textarea' },
+        blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Kado')
       },
@@ -275,6 +310,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
         accounts: [{ bankName: 'Bank Mandiri', accountNumber: '1234567890', accountHolder: 'Sena Ayudia' }],
         address: '',
         entrance: 'fade',
+        blockStyle: {},
         position: defaultPosition
       },
       render: (props) => <GiftList {...props} />
@@ -293,12 +329,14 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
             { label: 'Daun', value: 'leaves' }
           ]
         },
+        blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Pembatas')
       },
       defaultProps: {
         variant: 'line',
         entrance: 'none',
+        blockStyle: {},
         position: defaultPosition
       },
       render: (props) => <Divider {...props} />
@@ -309,6 +347,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
         text: { type: 'text' },
         speed: { type: 'number', label: 'Kecepatan' },
         separator: { type: 'text', label: 'Pemisah' },
+        blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Teks Berjalan')
       },
@@ -317,6 +356,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
         speed: 40,
         separator: '✦',
         entrance: 'none',
+        blockStyle: {},
         position: defaultPosition
       },
       render: (props) => <RunningText {...props} />
@@ -326,6 +366,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
       fields: {
         title: { type: 'text' },
         message: { type: 'textarea' },
+        blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Terima Kasih')
       },
@@ -333,6 +374,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
         title: 'Terima Kasih',
         message: 'Merupakan suatu kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.',
         entrance: 'fade',
+        blockStyle: {},
         position: defaultPosition
       },
       render: (props) => <Thanks {...props} />
@@ -351,6 +393,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
           },
           defaultItemProps: { bankName: 'Bank', accountNumber: '0000000000', accountHolder: 'Nama' }
         },
+        blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Amplop')
       },
@@ -359,6 +402,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
         note: 'Doa restu Anda adalah hadiah terbaik. Namun jika ingin memberi tanda kasih, silakan gunakan rekening berikut.',
         accounts: [{ bankName: 'Bank Mandiri', accountNumber: '1234567890', accountHolder: 'Panca Priyantoro' }],
         entrance: 'fade',
+        blockStyle: {},
         position: defaultPosition
       },
       render: (props) => <Envelope {...props} />
@@ -369,6 +413,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
         title: { type: 'text' },
         note: { type: 'textarea' },
         buttonText: { type: 'text' },
+        blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi RSVP')
       },
@@ -377,6 +422,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
         note: 'Mohon konfirmasi kehadiran Anda sebelum 30 November 2026.',
         buttonText: 'Kirim Konfirmasi',
         entrance: 'fade',
+        blockStyle: {},
         position: defaultPosition
       },
       render: (props) => <Rsvp {...props} />

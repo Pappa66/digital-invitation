@@ -1,0 +1,50 @@
+/**
+ * Tema editor Puck diselaraskan dengan brand (ivory + emas antique).
+ * Cukup override token `--puck-*` pada wrapper `.puck-brand`.
+ */
+.puck-brand {
+  --puck-color-white: #ffffff;
+  --puck-color-black: #2b2620;
+
+  --puck-color-surface: #ffffff;
+  --puck-color-surface-muted: #faf7f2;
+  --puck-color-surface-subtle: #f4efe6;
+  --puck-color-surface-inverse: #2b2620;
+
+  --puck-color-text: #2b2620;
+  --puck-color-text-muted: #6b5f4d;
+  --puck-color-text-subtle: #8a7a66;
+  --puck-color-text-inverse: #faf7f2;
+  --puck-color-text-primary: #2b2620;
+  --puck-color-text-secondary: #574327;
+
+  --puck-color-border: #e7ddcc;
+  --puck-color-border-muted: #eee4cf;
+  --puck-color-border-hover: #c9a45c;
+  --puck-color-border-inverse: rgba(255, 255, 255, 0.2);
+
+  --puck-color-focus-ring: #a9894a;
+  --puck-color-interactive: #a9894a;
+  --puck-color-interactive-hover: #8a6d2f;
+  --puck-color-interactive-active: #6e5530;
+  --puck-color-selection-bg: rgba(201, 164, 92, 0.16);
+  --puck-color-selection-border: #c9a45c;
+  --puck-color-highlight: rgba(201, 164, 92, 0.25);
+
+  /* Ramp aksen (azure → emas) */
+  --puck-color-azure-01: #fbf7f1;
+  --puck-color-azure-02: #f5eedf;
+  --puck-color-azure-03: #efe4cc;
+  --puck-color-azure-04: #e3d2a8;
+  --puck-color-azure-05: #d6be83;
+  --puck-color-azure-06: #c9a45c;
+  --puck-color-azure-07: #b98a3e;
+  --puck-color-azure-08: #a9793a;
+  --puck-color-azure-09: #8a6d2f;
+  --puck-color-azure-10: #6e5530;
+  --puck-color-azure-11: #574327;
+  --puck-color-azure-12: #3f301b;
+
+  --puck-font-family: 'Jost', system-ui, -apple-system, sans-serif;
+  --puck-font-family-monospaced: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+}

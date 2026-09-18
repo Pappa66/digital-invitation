@@ -74,6 +74,33 @@ export interface Database {
           }
         ];
       };
+      assets: {
+        Row: {
+          id: string;
+          user_id: string;
+          url: string;
+          path: string | null;
+          name: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          url: string;
+          path?: string | null;
+          name?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          url?: string;
+          path?: string | null;
+          name?: string | null;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
       guests: {
         Row: {
           id: string;

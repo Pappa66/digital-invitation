@@ -20,6 +20,15 @@ export interface Position {
 export interface BaseBlockProps {
   position: Position;
   entrance?: EntranceKind;
+  /** Override warna per-bagian (menurun sebagai CSS var ke elemen anak). */
+  blockStyle?: BlockStyleLite;
+}
+
+/** Override warna per-bagian: teks, aksen (primary), latar. */
+export interface BlockStyleLite {
+  textColor?: string;
+  accentColor?: string;
+  bgColor?: string;
 }
 
 export interface HeroProps extends BaseBlockProps {
@@ -35,8 +44,10 @@ export interface CoupleProps extends BaseBlockProps {
   title: string;
   groom: string;
   groomParents?: string;
+  groomPhoto?: string;
   bride: string;
   brideParents?: string;
+  bridePhoto?: string;
 }
 
 export interface RsvpProps extends BaseBlockProps {
@@ -72,8 +83,8 @@ export interface EventDetailProps extends BaseBlockProps {
 export interface GalleryProps extends BaseBlockProps {
   title: string;
   images: GalleryImage[];
-  /** 'grid' (default) atau 'carousel' (geser). */
-  variant?: 'grid' | 'carousel';
+  /** Gaya tampilan galeri. */
+  variant?: 'grid' | 'carousel' | 'masonry' | 'polaroid' | 'mosaic';
 }
 
 export interface StoryItem {

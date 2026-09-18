@@ -36,6 +36,8 @@ export async function uploadImage(file: File): Promise<string> {
         .upload(path, blob, { contentType: file.type || 'image/png' });
       if (!error) {
         const { data: pub } = supabase.storage.from('invitation-assets').getPublicUrl(path);
+        // Catat ke pustaka media (abaikan bila gagal).
+        await supabase.from('assets').insert({ user_id: user.id, url: pub.publicUrl, path, name: file.name });
         return pub.publicUrl;
       }
     }

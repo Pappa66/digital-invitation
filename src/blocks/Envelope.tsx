@@ -1,9 +1,9 @@
 import type { EnvelopeProps } from '@/puck/types';
 import { BlockShell } from './shell';
 
-export default function Envelope({ title, note, accounts, position, entrance }: EnvelopeProps) {
+export default function Envelope({ title, note, accounts, position, entrance, blockStyle }: EnvelopeProps) {
   return (
-    <BlockShell position={position} entrance={entrance}>
+    <BlockShell position={position} entrance={entrance} blockStyle={blockStyle}>
       <section className="bg-[var(--color-background,#fbf7f1)] px-6 py-14 text-center text-[var(--color-text,#4a4036)]">
         <h2 className="text-2xl" style={{ fontFamily: 'var(--font-heading)' }}>
           {title}

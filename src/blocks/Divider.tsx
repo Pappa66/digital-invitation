@@ -9,9 +9,9 @@ const GLYPH: Record<DividerVariant, string> = {
   leaves: '❧ ❧'
 };
 
-export default function Divider({ variant = 'line', position, entrance }: DividerProps) {
+export default function Divider({ variant = 'line', position, entrance, blockStyle }: DividerProps) {
   return (
-    <BlockShell position={position} entrance={entrance}>
+    <BlockShell position={position} entrance={entrance} blockStyle={blockStyle}>
       <div className="flex items-center justify-center gap-4 bg-[var(--color-background,#fbf7f1)] px-6 py-8" aria-hidden>
         {variant === 'line' ? (
           <span className="h-px w-40" style={{ backgroundColor: 'var(--color-secondary,#c9a227)' }} />

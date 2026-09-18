@@ -1,9 +1,9 @@
 import type { QuoteProps } from '@/puck/types';
 import { BlockShell } from './shell';
 
-export default function Quote({ text, source, position, entrance }: QuoteProps) {
+export default function Quote({ text, source, position, entrance, blockStyle }: QuoteProps) {
   return (
-    <BlockShell position={position} entrance={entrance}>
+    <BlockShell position={position} entrance={entrance} blockStyle={blockStyle}>
       <section className="bg-[var(--color-background,#fbf7f1)] px-8 py-14 text-center text-[var(--color-text,#4a4036)]">
         <p className="text-3xl leading-none" style={{ color: 'var(--color-primary)', fontFamily: 'var(--font-heading)' }}>
           &ldquo;

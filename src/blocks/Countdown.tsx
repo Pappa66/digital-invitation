@@ -13,7 +13,7 @@ function diffParts(target: number, now: number) {
   return { days, hours, minutes, seconds };
 }
 
-export default function Countdown({ title, targetDate, position, entrance }: CountdownProps) {
+export default function Countdown({ title, targetDate, position, entrance, blockStyle }: CountdownProps) {
   // `now` null saat SSR/awal render agar tidak ada hydration mismatch.
   const [now, setNow] = useState<number | null>(null);
 
@@ -37,7 +37,7 @@ export default function Countdown({ title, targetDate, position, entrance }: Cou
   ];
 
   return (
-    <BlockShell position={position} entrance={entrance}>
+    <BlockShell position={position} entrance={entrance} blockStyle={blockStyle}>
       <section className="bg-[var(--color-background,#fbf7f1)] px-6 py-14 text-center text-[var(--color-text,#4a4036)]">
         <h2 className="text-2xl" style={{ fontFamily: 'var(--font-heading)' }}>
           {title}

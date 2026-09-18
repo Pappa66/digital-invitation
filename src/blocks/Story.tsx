@@ -1,9 +1,9 @@
 import type { StoryProps } from '@/puck/types';
 import { BlockShell } from './shell';
 
-export default function Story({ title, items, position, entrance }: StoryProps) {
+export default function Story({ title, items, position, entrance, blockStyle }: StoryProps) {
   return (
-    <BlockShell position={position} entrance={entrance}>
+    <BlockShell position={position} entrance={entrance} blockStyle={blockStyle}>
       <section className="bg-[var(--color-background,#fbf7f1)] px-6 py-14 text-[var(--color-text,#4a4036)]">
         <h2 className="text-center text-2xl" style={{ fontFamily: 'var(--font-heading)' }}>
           {title}

@@ -1,7 +1,10 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { getSiteOrigin } from '@/lib/site';
+import { generateShareToken } from '@/lib/actions/share-token-actions';
+import { guestLink } from '@/lib/guest-links';
 import type { ProjectMeta } from '@/puck/hooks/use-puck-project';
 
 type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';
@@ -12,12 +15,39 @@ interface BuilderHeaderProps {
   busy: boolean;
   isEditLink: boolean;
   legacy: boolean;
+  projectId: string;
   onOpenPicker: () => void;
   onPublish: () => void;
 }
 
-/** Header editor: judul, status simpan, aksi template/publish/preview. */
-export default function BuilderHeader({ meta, saveStatus, busy, isEditLink, legacy, onOpenPicker, onPublish }: BuilderHeaderProps) {
+const BTN = 'rounded-md border border-[#e0d6c2] bg-white px-3 py-1.5 text-xs font-medium text-[#4a443c] hover:border-[#c9a45c]';
+
+/** Header editor: judul, status simpan, aksi template/publish/preview + tamu/share. */
+export default function BuilderHeader({ meta, saveStatus, busy, isEditLink, legacy, projectId, onOpenPicker, onPublish }: BuilderHeaderProps) {
+  const [busyLink, setBusyLink] = useState(false);
+  const [toast, setToast] = useState('');
+
+  async function copy(value: string, label: string) {
+    try {
+      await navigator.clipboard.writeText(value);
+      setToast(`${label} disalin`);
+      setTimeout(() => setToast(''), 1800);
+    } catch {
+      setToast('Gagal menyalin');
+    }
+  }
+
+  async function shareEditLink() {
+    setBusyLink(true);
+    try {
+      const res = await generateShareToken(projectId, 72);
+      if (res.data?.token) await copy(`${getSiteOrigin()}/edit/${res.data.token}`, 'Link edit');
+      else setToast(res.error ?? 'Gagal membuat link edit');
+    } finally {
+      setBusyLink(false);
+    }
+  }
+
   return (
     <header className="flex h-12 shrink-0 items-center justify-between border-b border-[#e7ddcc] bg-white px-4">
       <div className="flex min-w-0 items-center gap-3">
@@ -26,18 +56,31 @@ export default function BuilderHeader({ meta, saveStatus, busy, isEditLink, lega
         </Link>
         <span className="truncate text-sm font-medium text-[#4a443c]">{meta.title}</span>
         {isEditLink ? <span className="rounded bg-sky-100 px-2 py-0.5 text-[10px] text-sky-700">Mode Link Edit</span> : null}
-        {legacy ? <span className="rounded bg-amber-100 px-2 py-0.5 text-[10px] text-amber-700">Desain lama — dimulai dari kanvas kosong</span> : null}
+        {legacy ? <span className="rounded bg-amber-100 px-2 py-0.5 text-[10px] text-amber-700">Desain lama — kanvas kosong</span> : null}
       </div>
       <div className="flex items-center gap-2">
+        {toast ? <span className="text-xs text-emerald-600">{toast}</span> : null}
         <span className="text-xs text-[#8a7a66]">
           {saveStatus === 'saving' && 'Menyimpan…'}
           {saveStatus === 'saved' && 'Tersimpan'}
           {saveStatus === 'error' && <span className="text-red-500">Gagal menyimpan</span>}
         </span>
+
         {!isEditLink ? (
           <>
-            <button type="button" onClick={onOpenPicker} className="rounded-md border border-[#e0d6c2] bg-white px-3 py-1.5 text-xs font-medium text-[#4a443c] hover:border-[#c9a45c]">
+            <button type="button" onClick={onOpenPicker} className={BTN}>
               Template
+            </button>
+            <Link href={`/invite/${projectId}`} className={BTN}>
+              Kelola Tamu
+            </Link>
+            {meta.slug ? (
+              <button type="button" onClick={() => copy(guestLink(getSiteOrigin(), meta.slug ?? undefined, ''), 'Link undangan')} className={BTN}>
+                Bagikan
+              </button>
+            ) : null}
+            <button type="button" onClick={shareEditLink} disabled={busyLink} className={BTN}>
+              {busyLink ? 'Membuat…' : 'Link Edit'}
             </button>
             <button
               type="button"
@@ -51,6 +94,7 @@ export default function BuilderHeader({ meta, saveStatus, busy, isEditLink, lega
             </button>
           </>
         ) : null}
+
         {meta.slug ? (
           <a
             href={`${getSiteOrigin()}/${meta.slug}${isEditLink ? '' : '?preview=1'}`}

@@ -1,9 +1,9 @@
 import type { ThanksProps } from '@/puck/types';
 import { BlockShell } from './shell';
 
-export default function Thanks({ title, message, position, entrance }: ThanksProps) {
+export default function Thanks({ title, message, position, entrance, blockStyle }: ThanksProps) {
   return (
-    <BlockShell position={position} entrance={entrance}>
+    <BlockShell position={position} entrance={entrance} blockStyle={blockStyle}>
       <section className="bg-[var(--color-background,#fbf7f1)] px-8 py-16 text-center text-[var(--color-text,#4a4036)]">
         <h2 className="text-2xl" style={{ fontFamily: 'var(--font-heading)' }}>
           {title}

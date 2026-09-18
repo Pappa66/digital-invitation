@@ -1,9 +1,9 @@
 import type { HeroProps } from '@/puck/types';
 import { BlockShell } from './shell';
 
-export default function Hero({ caption, groom, bride, date, place, bgImage, position, entrance }: HeroProps) {
+export default function Hero({ caption, groom, bride, date, place, bgImage, position, entrance, blockStyle }: HeroProps) {
   return (
-    <BlockShell position={position} entrance={entrance}>
+    <BlockShell position={position} entrance={entrance} blockStyle={blockStyle}>
       <section className="relative flex min-h-[100dvh] w-full flex-col items-center justify-center overflow-hidden bg-neutral-900 px-6 py-16 text-center text-white">
         {bgImage ? (
           // eslint-disable-next-line @next/next/no-img-element

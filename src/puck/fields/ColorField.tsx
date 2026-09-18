@@ -1,7 +1,7 @@
 'use client';
 
 interface ColorFieldProps {
-  value: string;
+  value?: string;
   onChange: (value: string) => void;
   field?: { label?: string };
   readOnly?: boolean;
