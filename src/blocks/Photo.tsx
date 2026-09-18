@@ -15,7 +15,7 @@ export default function Photo({ image, caption, shape = 'rounded', position, ent
         {image ? (
           <figure className="mx-auto max-w-sm">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={image} alt={caption || ''} className={`w-full object-cover shadow-soft ${SHAPE[shape]}`} />
+            <img src={image} alt={caption || ''} loading="lazy" decoding="async" className={`w-full object-cover shadow-soft ${SHAPE[shape]}`} />
             {caption ? <figcaption className="mt-2 text-xs opacity-70">{caption}</figcaption> : null}
           </figure>
         ) : (

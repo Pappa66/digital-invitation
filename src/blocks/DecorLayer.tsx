@@ -41,6 +41,8 @@ export default function DecorLayer({ decor }: { decor?: DecorItem[] }) {
 
         return (
           <motion.img
+            loading="lazy"
+            decoding="async"
             key={d.id}
             src={d.imageUrl}
             alt=""

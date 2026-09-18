@@ -817,9 +817,10 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
     },
     render: ({ children, primary, secondary, background, text, fontHeading, fontBody, decor, frame }) => (
       <div
-        className="invitation-canvas relative mx-auto min-h-[100dvh] w-full max-w-[var(--canvas-max-w,430px)] overflow-x-hidden"
+        className="invitation-canvas relative mx-auto min-h-[100dvh] w-full overflow-x-hidden"
         style={
           {
+            maxWidth: 'var(--canvas-max-w, 430px)',
             '--color-primary': primary,
             '--color-secondary': secondary,
             '--color-background': background,

@@ -261,6 +261,117 @@ const BLUEPRINTS: Blueprint[] = [
       thanks('terracotta-boho-thanks'),
       rsvp('terracotta-boho-rsvp')
     ]
+  },
+  {
+    id: 'navy-elegance',
+    name: 'Navy Elegance',
+    category: 'classic',
+    description: 'Biru navy klasik dengan aksen emas — formal dan berkelas.',
+    primary: '#1F3A5F',
+    secondary: '#C9A227',
+    background: '#F6F7F9',
+    text: '#232B36',
+    fontHeading: 'Playfair Display',
+    fontBody: 'Jost',
+    decor: decor('navy-elegance', [
+      { imageUrl: '/stickers/gold-frame.svg', x: 30, y: 40, width: 370, rotation: 0, opacity: 0.25, zIndex: 2, loop: 'none' }
+    ]),
+    blocks: [
+      hero('navy-elegance-hero', 'The Wedding of', 'Anindya Kirana', 'Raka Wijaya', 'Sabtu, 14 Maret 2026', 'Hotel Indonesia Kempinski, Jakarta'),
+      quote('navy-elegance-quote', 'Dan di antara tanda-tanda kekuasaan-Nya, Dia menciptakan untukmu pasangan agar kamu merasa tenteram.', 'QS. Ar-Rum: 21'),
+      couple('navy-elegance-couple', 'Raka Wijaya', 'Putra dari Bpk. & Ibu Wijaya', 'Anindya Kirana', 'Putri dari Bpk. & Ibu Kirana'),
+      countdown('navy-elegance-countdown', '2026-03-14T09:00:00+07:00'),
+      events('navy-elegance-event', 'Sabtu, 14 Maret 2026', 'Hotel Indonesia Kempinski'),
+      story('navy-elegance-story'),
+      gallery('navy-elegance-gallery'),
+      maps('navy-elegance-maps', 'Hotel Indonesia Kempinski, Jakarta'),
+      gift('navy-elegance-gift', 'Bank BCA', '2468013579', 'Anindya Kirana'),
+      thanks('navy-elegance-thanks'),
+      rsvp('navy-elegance-rsvp')
+    ]
+  },
+  {
+    id: 'sage-minimal',
+    name: 'Sage Minimal',
+    category: 'modern',
+    description: 'Hijau sage tenang dan minimalis untuk undangan kontemporer.',
+    primary: '#6B7F6B',
+    secondary: '#C9A227',
+    background: '#F7F8F5',
+    text: '#333A33',
+    fontHeading: 'Cormorant Garamond',
+    fontBody: 'Karla',
+    decor: decor('sage-minimal', [
+      { imageUrl: '/stickers/leaf-garland.svg', x: -30, y: 0, width: 490, rotation: 0, opacity: 0.35, zIndex: 2, loop: 'none' }
+    ]),
+    blocks: [
+      hero('sage-minimal-hero', 'The Wedding of', 'Maia Larasati', 'Bima Aditya', 'Minggu, 7 Juni 2026', 'Plataran Komodo, Labuan Bajo'),
+      couple('sage-minimal-couple', 'Bima Aditya', 'Putra dari Bpk. & Ibu Aditya', 'Maia Larasati', 'Putri dari Bpk. & Ibu Larasati'),
+      countdown('sage-minimal-countdown', '2026-06-07T10:00:00+08:00'),
+      events('sage-minimal-event', 'Minggu, 7 Juni 2026', 'Plataran Komodo'),
+      story('sage-minimal-story'),
+      gallery('sage-minimal-gallery'),
+      maps('sage-minimal-maps', 'Plataran Komodo, Labuan Bajo'),
+      thanks('sage-minimal-thanks'),
+      rsvp('sage-minimal-rsvp')
+    ]
+  },
+  {
+    id: 'rose-blush',
+    name: 'Rose Blush',
+    category: 'romance',
+    description: 'Nuansa rose lembut dan romantis.',
+    primary: '#C97B84',
+    secondary: '#C9A227',
+    background: '#FDF6F7',
+    text: '#4A3A3C',
+    fontHeading: 'Cormorant Garamond',
+    fontBody: 'Poppins',
+    decor: decor('rose-blush', [
+      { imageUrl: '/stickers/rose-left.svg', x: -20, y: 80, width: 150, rotation: -6, opacity: 0.9, zIndex: 2, loop: 'float' },
+      { imageUrl: '/stickers/rose-right.svg', x: 310, y: 980, width: 150, rotation: 6, opacity: 0.9, zIndex: 2, loop: 'float' }
+    ]),
+    blocks: [
+      hero('rose-blush-hero', 'The Wedding of', 'Alika Pramesti', 'Dion Saputra', 'Sabtu, 25 April 2026', 'The Grand Ballroom, Surabaya'),
+      quote('rose-blush-quote', 'Cinta bukan tentang menemukan yang sempurna, melainkan memilih untuk tumbuh bersama.', 'Kami'),
+      couple('rose-blush-couple', 'Dion Saputra', 'Putra dari Bpk. & Ibu Saputra', 'Alika Pramesti', 'Putri dari Bpk. & Ibu Pramesti'),
+      countdown('rose-blush-countdown', '2026-04-25T09:00:00+07:00'),
+      events('rose-blush-event', 'Sabtu, 25 April 2026', 'The Grand Ballroom Surabaya'),
+      story('rose-blush-story'),
+      gallery('rose-blush-gallery'),
+      maps('rose-blush-maps', 'The Grand Ballroom, Surabaya'),
+      envelope('rose-blush-envelope', 'Bank Mandiri', '1397531888', 'Alika Pramesti'),
+      thanks('rose-blush-thanks'),
+      rsvp('rose-blush-rsvp')
+    ]
+  },
+  {
+    id: 'noir-gold',
+    name: 'Noir Gold',
+    category: 'modern',
+    description: 'Hitam elegan dengan aksen emas — mewah dan dramatis.',
+    primary: '#C9A227',
+    secondary: '#E7C873',
+    background: '#14110C',
+    text: '#F3ECDD',
+    fontHeading: 'Playfair Display',
+    fontBody: 'DM Sans',
+    decor: decor('noir-gold', [
+      { imageUrl: '/stickers/sparkle.svg', x: 70, y: 240, width: 60, rotation: 0, opacity: 0.8, zIndex: 2, loop: 'pulse' },
+      { imageUrl: '/stickers/gold-frame.svg', x: 30, y: 40, width: 370, rotation: 0, opacity: 0.2, zIndex: 2, loop: 'none' }
+    ]),
+    blocks: [
+      hero('noir-gold-hero', 'The Wedding of', 'Gita Maharani', 'Arga Pratama', 'Jumat, 20 Februari 2026', 'The Langham, Jakarta'),
+      couple('noir-gold-couple', 'Arga Pratama', 'Putra dari Bpk. & Ibu Pratama', 'Gita Maharani', 'Putri dari Bpk. & Ibu Maharani'),
+      countdown('noir-gold-countdown', '2026-02-20T18:00:00+07:00'),
+      events('noir-gold-event', 'Jumat, 20 Februari 2026', 'The Langham Grand Ballroom'),
+      story('noir-gold-story'),
+      gallery('noir-gold-gallery'),
+      maps('noir-gold-maps', 'The Langham, Jakarta'),
+      envelope('noir-gold-envelope', 'Bank BCA', '8642097531', 'Arga Pratama'),
+      thanks('noir-gold-thanks'),
+      rsvp('noir-gold-rsvp')
+    ]
   }
 ];
 

@@ -13,7 +13,7 @@ export default function GalleryCarousel({ images }: { images: { url: string; cap
           <div key={`${img.url}-${i}`} className="min-w-0 shrink-0 grow-0 basis-[85%] px-1.5">
             <figure className="overflow-hidden rounded-2xl bg-black/5">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={img.url} alt={img.caption || ''} className="aspect-[3/4] w-full object-cover" />
+              <img src={img.url} alt={img.caption || ''} loading="lazy" decoding="async" className="aspect-[3/4] w-full object-cover" />
               {img.caption ? <figcaption className="px-3 py-2 text-[11px] opacity-70">{img.caption}</figcaption> : null}
             </figure>
           </div>

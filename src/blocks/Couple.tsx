@@ -4,7 +4,7 @@ import { BlockShell } from './shell';
 function Photo({ src, alt }: { src?: string; alt: string }) {
   if (src) {
     // eslint-disable-next-line @next/next/no-img-element
-    return <img src={src} alt={alt} className="h-28 w-28 rounded-full object-cover shadow-soft" />;
+    return <img src={src} alt={alt} loading="lazy" decoding="async" className="h-28 w-28 rounded-full object-cover shadow-soft" />;
   }
   return <div className="flex h-28 w-28 items-center justify-center rounded-full bg-[var(--color-secondary,#e7ddcc)] text-xs opacity-60">Foto</div>;
 }

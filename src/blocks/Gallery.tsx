@@ -4,7 +4,7 @@ import GalleryCarousel from './GalleryCarousel';
 
 function Img({ img }: { img: GalleryImage }) {
   // eslint-disable-next-line @next/next/no-img-element
-  return <img src={img.url} alt={img.caption || ''} className="h-full w-full object-cover" />;
+  return <img src={img.url} alt={img.caption || ''} loading="lazy" decoding="async" className="h-full w-full object-cover" />;
 }
 
 function Polaroid({ img, rotate }: { img: GalleryImage; rotate: number }) {
