@@ -19,8 +19,7 @@ export function setComponentPosition(data: Data, id: string, patch: Partial<Posi
   return { ...data, content } as Data;
 }
 
-/** Hitung posisi awal saat elemen flow diubah menjadi absolute. */
-export function initialAbsoluteFromRect(
+/** Hitung posisi awal saat elemen flow diubah menjadi absolute. */export function initialAbsoluteFromRect(
   rect: { left: number; top: number; width: number },
   canvas: { left: number; top: number }
 ): Partial<Position> {
@@ -30,4 +29,12 @@ export function initialAbsoluteFromRect(
     y: Math.round(rect.top - canvas.top),
     width: Math.round(rect.width)
   };
+}
+
+/** Set properti arbitrer pada komponen berdasarkan id (imutabel). */
+export function setComponentProp(data: Data, id: string, key: string, value: unknown): Data {
+  const content = (data.content as ComponentLike[]).map((item) =>
+    item?.props?.id === id ? { ...item, props: { ...item.props, [key]: value } } : item
+  );
+  return { ...data, content } as Data;
 }

@@ -1,5 +1,6 @@
 import type { HeroProps } from '@/puck/types';
 import { BlockShell } from './shell';
+import EditableImage from './EditableImage';
 
 const LAYOUT: Record<NonNullable<HeroProps['variant']>, { section: string; inner: string; align: string }> = {
   center: { section: 'items-center justify-center text-center', inner: 'items-center', align: '' },
@@ -7,7 +8,7 @@ const LAYOUT: Record<NonNullable<HeroProps['variant']>, { section: string; inner
   bottom: { section: 'items-center justify-end text-center', inner: 'items-center', align: '' }
 };
 
-export default function Hero({ caption, groom, bride, date, place, bgImage, bgFit = 'cover', bgPosition = 'center', variant = 'center', nameSize, nameFont, nameColor, position, entrance, blockStyle }: HeroProps) {
+export default function Hero({ caption, groom, bride, date, place, bgImage, bgFit = 'cover', bgPosition = 'center', variant = 'center', nameSize, nameFont, nameColor, position, entrance, blockStyle, id, puck }: HeroProps & { id?: string; puck?: { isEditing?: boolean } }) {
   const v = LAYOUT[variant];
   const textColor = blockStyle?.textColor || '#ffffff';
   const nameStyle: React.CSSProperties = {
@@ -25,8 +26,16 @@ export default function Hero({ caption, groom, bride, date, place, bgImage, bgFi
           /\.(mp4|webm|ogg|mov|m4v)(\?|$)/i.test(bgImage) ? (
             <video src={bgImage} autoPlay loop muted playsInline className="absolute inset-0 h-full w-full opacity-55" style={{ objectFit: bgFit, objectPosition: bgPosition }} />
           ) : (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={bgImage} alt="" className="absolute inset-0 h-full w-full opacity-55" style={{ objectFit: bgFit, objectPosition: bgPosition }} />
+            <EditableImage
+              src={bgImage}
+              fit={bgFit}
+              position={bgPosition}
+              editable={puck?.isEditing}
+              componentId={id}
+              propKey="bgPosition"
+              className="absolute inset-0"
+              imgClassName="opacity-55"
+            />
           )
         ) : null}
         <div className={`relative z-10 flex flex-col ${v.inner}`} style={{ textShadow: '0 2px 14px rgba(0,0,0,0.45)' }}>
