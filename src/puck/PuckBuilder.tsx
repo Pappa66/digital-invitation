@@ -30,6 +30,7 @@ export default function PuckBuilder({ projectId, editToken }: PuckBuilderProps) 
   const [pickerOpen, setPickerOpen] = useState(false);
   const [emptyDismissed, setEmptyDismissed] = useState(false);
   const [editorKey, setEditorKey] = useState(0);
+  const [device, setDevice] = useState<'mobile' | 'tablet' | 'desktop'>('mobile');
 
   const saveStatus = usePuckAutosave({
     projectId,
@@ -68,7 +69,10 @@ export default function PuckBuilder({ projectId, editToken }: PuckBuilderProps) 
   if (access === 'checking' || !data) return <LoadingScreen />;
 
   return (
-    <div className="puck-brand flex h-screen flex-col overflow-hidden bg-white">
+    <div
+      className="puck-brand flex h-screen flex-col overflow-hidden bg-white"
+      style={{ '--canvas-max-w': device === 'tablet' ? '768px' : device === 'desktop' ? 'none' : '430px' } as React.CSSProperties}
+    >
       <BuilderHeader
         meta={meta}
         saveStatus={saveStatus}
@@ -76,6 +80,8 @@ export default function PuckBuilder({ projectId, editToken }: PuckBuilderProps) 
         isEditLink={isEditLink}
         legacy={legacy}
         projectId={projectId}
+        device={device}
+        onDevice={setDevice}
         onOpenPicker={() => setPickerOpen(true)}
         onPublish={() => data && handlePublish(data)}
       />

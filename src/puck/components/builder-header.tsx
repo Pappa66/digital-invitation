@@ -9,6 +9,7 @@ import { guestLink } from '@/lib/guest-links';
 import type { ProjectMeta } from '@/puck/hooks/use-puck-project';
 
 type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';
+export type DeviceKind = 'mobile' | 'tablet' | 'desktop';
 
 interface BuilderHeaderProps {
   meta: ProjectMeta;
@@ -17,6 +18,8 @@ interface BuilderHeaderProps {
   isEditLink: boolean;
   legacy: boolean;
   projectId: string;
+  device: DeviceKind;
+  onDevice: (device: DeviceKind) => void;
   onOpenPicker: () => void;
   onPublish: () => void;
 }
@@ -24,7 +27,7 @@ interface BuilderHeaderProps {
 const BTN = 'rounded-md border border-[#e0d6c2] bg-white px-3 py-1.5 text-xs font-medium text-[#4a443c] hover:border-[#c9a45c]';
 
 /** Header editor: judul, status simpan, aksi template/publish/preview + tamu/share. */
-export default function BuilderHeader({ meta, saveStatus, busy, isEditLink, legacy, projectId, onOpenPicker, onPublish }: BuilderHeaderProps) {
+export default function BuilderHeader({ meta, saveStatus, busy, isEditLink, legacy, projectId, device, onDevice, onOpenPicker, onPublish }: BuilderHeaderProps) {
   const [busyLink, setBusyLink] = useState(false);
   const [toast, setToast] = useState('');
 
@@ -80,6 +83,19 @@ export default function BuilderHeader({ meta, saveStatus, busy, isEditLink, lega
 
         {!isEditLink ? (
           <>
+            <div className="flex items-center overflow-hidden rounded-md border border-[#e0d6c2]">
+              {(['mobile', 'tablet', 'desktop'] as const).map((d) => (
+                <button
+                  key={d}
+                  type="button"
+                  onClick={() => onDevice(d)}
+                  aria-pressed={device === d}
+                  className={`px-2.5 py-1.5 text-xs font-medium ${device === d ? 'bg-[#c9a45c] text-white' : 'bg-white text-[#4a443c] hover:bg-[#f4efe6]'}`}
+                >
+                  {d === 'mobile' ? 'HP' : d === 'tablet' ? 'Tablet' : 'Desktop'}
+                </button>
+              ))}
+            </div>
             <button type="button" onClick={onOpenPicker} className={BTN}>
               Template
             </button>

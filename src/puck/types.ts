@@ -54,6 +54,12 @@ export interface HeroProps extends BaseBlockProps {
   place?: string;
   bgImage?: string;
   variant?: 'center' | 'left' | 'bottom';
+  /** Ukuran font nama (CSS font-size). */
+  nameSize?: string;
+  /** Font nama (Google Font). */
+  nameFont?: string;
+  /** Warna nama. */
+  nameColor?: string;
 }
 
 export interface CoupleProps extends BaseBlockProps {
@@ -65,6 +71,12 @@ export interface CoupleProps extends BaseBlockProps {
   brideParents?: string;
   bridePhoto?: string;
   variant?: 'vertical' | 'side';
+  /** Ukuran font nama (CSS font-size). */
+  nameSize?: string;
+  /** Font nama (Google Font). */
+  nameFont?: string;
+  /** Warna nama. */
+  nameColor?: string;
 }
 
 export interface RsvpProps extends BaseBlockProps {
@@ -124,6 +136,8 @@ export interface QuoteProps extends BaseBlockProps {
   arabic?: string;
   source?: string;
   variant?: 'plain' | 'boxed' | 'ornament';
+  /** ID kutipan dari pustaka (per agama); bila kosong pakai teks manual. */
+  preset?: string;
 }
 
 export interface ThanksProps extends BaseBlockProps {

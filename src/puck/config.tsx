@@ -26,6 +26,7 @@ import PanelSection from '@/puck/fields/PanelSection';
 import DecorLayer from '@/blocks/DecorLayer';
 import { defaultTheme } from '@/puck/theme';
 import { RELIGIONS } from '@/lib/religions';
+import { WEDDING_QUOTES, RELIGION_LABELS } from '@/lib/quotes';
 import type { InvitationRootProps, InvitationProps, Position } from '@/puck/types';
 
 export const defaultPosition: Position = {
@@ -137,7 +138,19 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
             { label: 'Bawah', value: 'bottom' }
           ]
         },
-        _style: panelSection('Gaya & Tata Letak'),
+        _style: panelSection('Nama & Gaya'),
+        nameFont: { type: 'select', label: 'Font Nama', options: fontOptions },
+        nameSize: {
+          type: 'select',
+          label: 'Ukuran Nama',
+          options: [
+            { label: 'Sedang', value: '2rem' },
+            { label: 'Besar', value: '2.5rem' },
+            { label: 'Ekstra', value: '3rem' },
+            { label: 'Jumbo', value: '3.5rem' }
+          ]
+        },
+        nameColor: colorField('Warna Nama'),
         blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Hero')
@@ -150,6 +163,9 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
         place: 'The Ritz-Carlton, Jakarta',
         bgImage: '',
         variant: 'center',
+        nameFont: '',
+        nameSize: '',
+        nameColor: '',
         entrance: 'fade',
         blockStyle: {},
         position: defaultPosition
@@ -175,7 +191,18 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
             { label: 'Samping', value: 'side' }
           ]
         },
-        _style: panelSection('Gaya & Tata Letak'),
+        _style: panelSection('Nama & Gaya'),
+        nameFont: { type: 'select', label: 'Font Nama', options: fontOptions },
+        nameSize: {
+          type: 'select',
+          label: 'Ukuran Nama',
+          options: [
+            { label: 'Sedang', value: '1.25rem' },
+            { label: 'Besar', value: '1.5rem' },
+            { label: 'Ekstra', value: '2rem' }
+          ]
+        },
+        nameColor: colorField('Warna Nama'),
         blockStyle: styleField,
         entrance: entranceField,
         position: positionField('Posisi Mempelai')
@@ -189,6 +216,9 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
         brideParents: 'Putri dari Bpk. & Ibu',
         bridePhoto: '',
         variant: 'vertical',
+        nameFont: '',
+        nameSize: '',
+        nameColor: '',
         entrance: 'fade',
         blockStyle: {},
         position: defaultPosition
@@ -351,9 +381,17 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
       label: 'Kutipan',
       fields: {
         _content: panelSection('Konten'),
-        arabic: { type: 'textarea', label: 'Teks Arab (opsional)' },
-        text: { type: 'textarea' },
-        source: { type: 'text' },
+        preset: {
+          type: 'select',
+          label: 'Pustaka Kutipan (per agama)',
+          options: [
+            { label: '— Manual / kustom —', value: '' },
+            ...WEDDING_QUOTES.map((q) => ({ label: `${RELIGION_LABELS[q.religion]} — ${q.reference}`, value: q.id }))
+          ]
+        },
+        arabic: { type: 'textarea', label: 'Teks Arab (manual)' },
+        text: { type: 'textarea', label: 'Teks / Terjemahan' },
+        source: { type: 'text', label: 'Sumber' },
         variant: {
           type: 'select',
           label: 'Gaya',
@@ -369,6 +407,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
         position: positionField('Posisi Kutipan')
       },
       defaultProps: {
+        preset: '',
         arabic: '',
         text: 'Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan hidup dari jenismu sendiri.',
         source: 'QS. Ar-Rum: 21',
@@ -761,7 +800,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
     },
     render: ({ children, primary, secondary, background, text, fontHeading, fontBody, decor }) => (
       <div
-        className="invitation-canvas relative mx-auto min-h-[100dvh] w-full max-w-[430px] overflow-x-hidden"
+        className="invitation-canvas relative mx-auto min-h-[100dvh] w-full max-w-[var(--canvas-max-w,430px)] overflow-x-hidden"
         style={
           {
             '--color-primary': primary,

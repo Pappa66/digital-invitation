@@ -14,14 +14,15 @@ interface PersonProps {
   parents?: string;
   photo?: string;
   reverse?: boolean;
+  nameStyle?: React.CSSProperties;
 }
 
-function Person({ name, parents, photo, reverse }: PersonProps) {
+function Person({ name, parents, photo, reverse, nameStyle }: PersonProps) {
   return (
     <div className={`flex items-center gap-4 ${reverse ? 'flex-row-reverse text-right' : 'text-left'}`}>
       <Photo src={photo} alt={name} />
       <div className="min-w-0">
-        <p className="text-xl" style={{ fontFamily: 'var(--font-heading)' }}>
+        <p className="text-xl" style={nameStyle}>
           {name}
         </p>
         {parents ? <p className="mt-1 text-xs opacity-70">{parents}</p> : null}
@@ -30,7 +31,12 @@ function Person({ name, parents, photo, reverse }: PersonProps) {
   );
 }
 
-export default function Couple({ title, groom, groomParents, groomPhoto, bride, brideParents, bridePhoto, variant = 'vertical', position, entrance, blockStyle }: CoupleProps) {
+export default function Couple({ title, groom, groomParents, groomPhoto, bride, brideParents, bridePhoto, variant = 'vertical', nameSize, nameFont, nameColor, position, entrance, blockStyle }: CoupleProps) {
+  const nameStyle: React.CSSProperties = {
+    fontFamily: nameFont ? `'${nameFont}', serif` : 'var(--font-heading)',
+    fontSize: nameSize || undefined,
+    color: nameColor || undefined
+  };
   return (
     <BlockShell position={position} entrance={entrance} blockStyle={blockStyle}>
       <section className="bg-[var(--color-background,#fbf7f1)] px-6 py-14 text-center text-[var(--color-text,#4a4036)]">
@@ -40,17 +46,17 @@ export default function Couple({ title, groom, groomParents, groomPhoto, bride, 
 
         {variant === 'side' ? (
           <div className="mx-auto mt-8 flex max-w-sm flex-col gap-6">
-            <Person name={groom} parents={groomParents} photo={groomPhoto} />
+            <Person name={groom} parents={groomParents} photo={groomPhoto} nameStyle={nameStyle} />
             <div className="text-center text-2xl opacity-60" style={{ color: 'var(--color-primary)' }}>
               &amp;
             </div>
-            <Person name={bride} parents={brideParents} photo={bridePhoto} reverse />
+            <Person name={bride} parents={brideParents} photo={bridePhoto} reverse nameStyle={nameStyle} />
           </div>
         ) : (
           <div className="mt-8 flex flex-col items-center gap-8 sm:flex-row sm:justify-center sm:gap-12">
             <div className="flex flex-col items-center">
               <Photo src={groomPhoto} alt={groom} />
-              <p className="mt-3 text-xl" style={{ fontFamily: 'var(--font-heading)' }}>
+              <p className="mt-3 text-xl" style={nameStyle}>
                 {groom}
               </p>
               {groomParents ? <p className="mt-1 text-xs opacity-70">{groomParents}</p> : null}
@@ -60,7 +66,7 @@ export default function Couple({ title, groom, groomParents, groomPhoto, bride, 
             </span>
             <div className="flex flex-col items-center">
               <Photo src={bridePhoto} alt={bride} />
-              <p className="mt-3 text-xl" style={{ fontFamily: 'var(--font-heading)' }}>
+              <p className="mt-3 text-xl" style={nameStyle}>
                 {bride}
               </p>
               {brideParents ? <p className="mt-1 text-xs opacity-70">{brideParents}</p> : null}
