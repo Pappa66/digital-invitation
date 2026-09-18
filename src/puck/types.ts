@@ -264,6 +264,8 @@ export interface InvitationRootProps extends InvitationTheme {
   checkinEnabled?: 'yes' | 'no';
   /** Agama untuk preset ucapan (mempengaruhi wording di kelola tamu). */
   religion?: string;
+  /** Bingkai dekoratif mengelilingi undangan. */
+  frame?: 'none' | 'classic' | 'double' | 'corner' | 'arch' | 'floral' | 'thick' | 'dashed' | 'ornate';
 }
 
 /** Peta nama komponen → tipe props. Dipakai sebagai generic `Config<Props>`. */

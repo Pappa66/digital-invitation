@@ -24,6 +24,7 @@ import AssetField from '@/puck/fields/AssetField';
 import DecorField from '@/puck/fields/DecorField';
 import PanelSection from '@/puck/fields/PanelSection';
 import DecorLayer from '@/blocks/DecorLayer';
+import { GuestFrame } from '@/components/guest/guest-frame';
 import { defaultTheme } from '@/puck/theme';
 import { RELIGIONS } from '@/lib/religions';
 import { WEDDING_QUOTES, RELIGION_LABELS } from '@/lib/quotes';
@@ -780,6 +781,21 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
         type: 'select',
         label: 'Agama (Preset Ucapan)',
         options: RELIGIONS.map((r) => ({ label: r.label, value: r.key }))
+      },
+      frame: {
+        type: 'select',
+        label: 'Bingkai Undangan',
+        options: [
+          { label: 'Tanpa bingkai', value: 'none' },
+          { label: 'Classic', value: 'classic' },
+          { label: 'Double', value: 'double' },
+          { label: 'Corner', value: 'corner' },
+          { label: 'Arch', value: 'arch' },
+          { label: 'Floral', value: 'floral' },
+          { label: 'Thick', value: 'thick' },
+          { label: 'Dashed', value: 'dashed' },
+          { label: 'Ornate', value: 'ornate' }
+        ]
       }
     },
     defaultProps: {
@@ -796,9 +812,10 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
       guestBookEnabled: 'yes',
       guestBookTitle: 'Buku Tamu & Ucapan',
       checkinEnabled: 'yes',
-      religion: 'islam'
+      religion: 'islam',
+      frame: 'none'
     },
-    render: ({ children, primary, secondary, background, text, fontHeading, fontBody, decor }) => (
+    render: ({ children, primary, secondary, background, text, fontHeading, fontBody, decor, frame }) => (
       <div
         className="invitation-canvas relative mx-auto min-h-[100dvh] w-full max-w-[var(--canvas-max-w,430px)] overflow-x-hidden"
         style={
@@ -823,6 +840,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
         />
         {children}
         <DecorLayer decor={decor} />
+        <GuestFrame mode={frame} color={secondary} fixed={false} />
       </div>
     )
   },
