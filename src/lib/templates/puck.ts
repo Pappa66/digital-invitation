@@ -33,6 +33,7 @@ interface Blueprint {
   text: string;
   fontHeading: string;
   fontBody: string;
+  frame?: 'none' | 'classic' | 'double' | 'corner' | 'arch' | 'floral' | 'thick' | 'dashed' | 'ornate';
   decor: DecorItem[];
   blocks: Block[];
 }
@@ -86,8 +87,8 @@ function story(id: string): Block {
     }
   } as Block;
 }
-function gallery(id: string): Block {
-  return { type: 'Gallery', props: { id, title: 'Momen Bahagia Kami', images: [], entrance: 'fade', position: flow } } as Block;
+function gallery(id: string, variant: 'grid' | 'carousel' | 'masonry' | 'polaroid' | 'mosaic' = 'grid'): Block {
+  return { type: 'Gallery', props: { id, title: 'Momen Bahagia Kami', images: [], variant, entrance: 'fade', position: flow } } as Block;
 }
 function maps(id: string, place: string): Block {
   return { type: 'Maps', props: { id, title: 'Lokasi Acara', address: place, embedUrl: '', entrance: 'fade', position: flow } } as Block;
@@ -140,7 +141,8 @@ function build(bp: Blueprint): PuckTemplate {
           text: bp.text,
           fontHeading: bp.fontHeading,
           fontBody: bp.fontBody,
-          decor: bp.decor
+          decor: bp.decor,
+          frame: bp.frame ?? 'none'
         }
       },
       content: bp.blocks
@@ -384,6 +386,7 @@ const BLUEPRINTS: Blueprint[] = [
     text: '#2E3A34',
     fontHeading: 'Cormorant Garamond',
     fontBody: 'Jost',
+    frame: 'arch',
     decor: decor('emerald-khaki', [
       { imageUrl: '/stickers/leaf-garland.svg', x: -40, y: 0, width: 510, rotation: 0, opacity: 0.45, zIndex: 2, loop: 'none' },
       { imageUrl: '/stickers/leaf-garland.svg', x: -40, y: 1500, width: 510, rotation: 180, opacity: 0.35, zIndex: 2, loop: 'none' },
@@ -396,7 +399,7 @@ const BLUEPRINTS: Blueprint[] = [
       countdown('emerald-khaki-countdown', '2026-10-03T09:00:00+07:00'),
       events('emerald-khaki-event', 'Sabtu, 3 Oktober 2026', 'Bogor Botanical Garden'),
       story('emerald-khaki-story'),
-      gallery('emerald-khaki-gallery'),
+      gallery('emerald-khaki-gallery', 'masonry'),
       maps('emerald-khaki-maps', 'Kebun Raya Bogor, Jawa Barat'),
       gift('emerald-khaki-gift', 'Bank BNI', '0987654321', 'Ayu Paramita'),
       thanks('emerald-khaki-thanks'),
@@ -483,6 +486,228 @@ const BLUEPRINTS: Blueprint[] = [
       envelope('golden-marigold-envelope', 'Bank Mandiri', '1029384756', 'Sekar Ayu'),
       thanks('golden-marigold-thanks'),
       rsvp('golden-marigold-rsvp')
+    ]
+  },
+  {
+    id: 'azure-coast',
+    name: 'Azure Coast',
+    category: 'outdoor',
+    description: 'Biru laut pantai dengan khaki pasir — segar dan lapang.',
+    primary: '#2E6E8E',
+    secondary: '#D9CBB0',
+    background: '#F4F8FA',
+    text: '#24343C',
+    fontHeading: 'Lora',
+    fontBody: 'Jost',
+    frame: 'corner',
+    decor: decor('azure-coast', [
+      { imageUrl: '/stickers/leaf-garland.svg', x: -40, y: 0, width: 510, rotation: 0, opacity: 0.3, zIndex: 2, loop: 'none' }
+    ]),
+    blocks: [
+      hero('azure-coast-hero', 'The Wedding of', 'Kania Puspita', 'Reza Ardiansyah', 'Sabtu, 6 Juni 2026', 'AYANA Bali'),
+      couple('azure-coast-couple', 'Reza Ardiansyah', 'Putra dari Bpk. & Ibu Ardiansyah', 'Kania Puspita', 'Putri dari Bpk. & Ibu Puspita'),
+      countdown('azure-coast-countdown', '2026-06-06T10:00:00+08:00'),
+      events('azure-coast-event', 'Sabtu, 6 Juni 2026', 'AYANA Resort, Bali'),
+      story('azure-coast-story'),
+      gallery('azure-coast-gallery', 'masonry'),
+      maps('azure-coast-maps', 'AYANA Resort, Bali'),
+      thanks('azure-coast-thanks'),
+      rsvp('azure-coast-rsvp')
+    ]
+  },
+  {
+    id: 'sakura-pink',
+    name: 'Sakura Pink',
+    category: 'romance',
+    description: 'Merah muda sakura yang manis dan feminine.',
+    primary: '#D68A9C',
+    secondary: '#C9A227',
+    background: '#FFF6F7',
+    text: '#4A3A3E',
+    fontHeading: 'Playfair Display',
+    fontBody: 'Poppins',
+    decor: decor('sakura-pink', [
+      { imageUrl: '/stickers/rose-left.svg', x: -20, y: 60, width: 140, rotation: -6, opacity: 0.85, zIndex: 2, loop: 'float' },
+      { imageUrl: '/stickers/sparkle.svg', x: 340, y: 520, width: 50, rotation: 0, opacity: 0.7, zIndex: 2, loop: 'pulse' }
+    ]),
+    blocks: [
+      hero('sakura-pink-hero', 'The Wedding of', 'Hana Salsabila', 'Yudha Pratama', 'Minggu, 17 Mei 2026', 'The Ritz-Carlton, Bali'),
+      couple('sakura-pink-couple', 'Yudha Pratama', 'Putra dari Bpk. & Ibu Pratama', 'Hana Salsabila', 'Putri dari Bpk. & Ibu Salsabila'),
+      countdown('sakura-pink-countdown', '2026-05-17T10:00:00+08:00'),
+      events('sakura-pink-event', 'Minggu, 17 Mei 2026', 'The Ritz-Carlton Bali'),
+      story('sakura-pink-story'),
+      gallery('sakura-pink-gallery', 'polaroid'),
+      maps('sakura-pink-maps', 'The Ritz-Carlton, Bali'),
+      thanks('sakura-pink-thanks'),
+      rsvp('sakura-pink-rsvp')
+    ]
+  },
+  {
+    id: 'forest-pine',
+    name: 'Forest Pine',
+    category: 'outdoor',
+    description: 'Hijau pinus dalam dan hangat, nuansa hutan.',
+    primary: '#2C4A34',
+    secondary: '#B5A27C',
+    background: '#F2F4EF',
+    text: '#28332A',
+    fontHeading: 'Cormorant Garamond',
+    fontBody: 'Jost',
+    frame: 'arch',
+    decor: decor('forest-pine', [
+      { imageUrl: '/stickers/leaf-garland.svg', x: -40, y: 0, width: 510, rotation: 0, opacity: 0.4, zIndex: 2, loop: 'none' }
+    ]),
+    blocks: [
+      hero('forest-pine-hero', 'The Wedding of', 'Birna Larasati', 'Wisnu Aji', 'Sabtu, 10 Oktober 2026', 'The Lodge, Bandung'),
+      couple('forest-pine-couple', 'Wisnu Aji', 'Putra dari Bpk. & Ibu Aji', 'Birna Larasati', 'Putri dari Bpk. & Ibu Larasati'),
+      countdown('forest-pine-countdown', '2026-10-10T09:00:00+07:00'),
+      events('forest-pine-event', 'Sabtu, 10 Oktober 2026', 'The Lodge, Lembang'),
+      story('forest-pine-story'),
+      gallery('forest-pine-gallery', 'masonry'),
+      maps('forest-pine-maps', 'Lembang, Bandung'),
+      thanks('forest-pine-thanks'),
+      rsvp('forest-pine-rsvp')
+    ]
+  },
+  {
+    id: 'copper-autumn',
+    name: 'Copper Autumn',
+    category: 'outdoor',
+    description: 'Tembaga musim gugur yang hangat dan earthy.',
+    primary: '#A85A2A',
+    secondary: '#C9A227',
+    background: '#FBF3E9',
+    text: '#3F2E22',
+    fontHeading: 'Lora',
+    fontBody: 'Karla',
+    decor: decor('copper-autumn', [
+      { imageUrl: '/stickers/leaf-garland.svg', x: -40, y: 0, width: 510, rotation: 0, opacity: 0.35, zIndex: 2, loop: 'none' }
+    ]),
+    blocks: [
+      hero('copper-autumn-hero', 'The Wedding of', 'Maya Kusuma', 'Adit Nugroho', 'Minggu, 22 November 2026', 'Padma Resort, Ubud'),
+      couple('copper-autumn-couple', 'Adit Nugroho', 'Putra dari Bpk. & Ibu Nugroho', 'Maya Kusuma', 'Putri dari Bpk. & Ibu Kusuma'),
+      countdown('copper-autumn-countdown', '2026-11-22T10:00:00+08:00'),
+      events('copper-autumn-event', 'Minggu, 22 November 2026', 'Padma Resort Ubud'),
+      story('copper-autumn-story'),
+      gallery('copper-autumn-gallery', 'mosaic'),
+      maps('copper-autumn-maps', 'Padma Resort, Ubud'),
+      gift('copper-autumn-gift', 'Bank Mandiri', '5566778899', 'Maya Kusuma'),
+      thanks('copper-autumn-thanks'),
+      rsvp('copper-autumn-rsvp')
+    ]
+  },
+  {
+    id: 'monochrome',
+    name: 'Monochrome',
+    category: 'modern',
+    description: 'Monokrom tegas dan modern, minimalis.',
+    primary: '#2B2B2B',
+    secondary: '#9A9A9A',
+    background: '#FAFAFA',
+    text: '#1E1E1E',
+    fontHeading: 'Playfair Display',
+    fontBody: 'DM Sans',
+    frame: 'thick',
+    decor: decor('monochrome', [
+      { imageUrl: '/stickers/gold-frame.svg', x: 30, y: 40, width: 370, rotation: 0, opacity: 0.12, zIndex: 2, loop: 'none' }
+    ]),
+    blocks: [
+      hero('monochrome-hero', 'The Wedding of', 'Rania Azzahra', 'Leo Mahendra', 'Sabtu, 4 April 2026', 'Grand Hyatt, Jakarta'),
+      quote('monochrome-quote', 'Kesederhanaan adalah puncak dari keanggunan.', 'Kami'),
+      couple('monochrome-couple', 'Leo Mahendra', 'Putra dari Bpk. & Ibu Mahendra', 'Rania Azzahra', 'Putri dari Bpk. & Ibu Azzahra'),
+      countdown('monochrome-countdown', '2026-04-04T09:00:00+07:00'),
+      events('monochrome-event', 'Sabtu, 4 April 2026', 'Grand Hyatt Jakarta'),
+      story('monochrome-story'),
+      gallery('monochrome-gallery', 'mosaic'),
+      maps('monochrome-maps', 'Grand Hyatt, Jakarta'),
+      thanks('monochrome-thanks'),
+      rsvp('monochrome-rsvp')
+    ]
+  },
+  {
+    id: 'ocean-teal',
+    name: 'Ocean Teal',
+    category: 'modern',
+    description: 'Teal laut dalam dengan aksen emas, modern dan sejuk.',
+    primary: '#137A82',
+    secondary: '#C9A227',
+    background: '#F0F7F7',
+    text: '#1E3A3C',
+    fontHeading: 'Cormorant Garamond',
+    fontBody: 'Montserrat',
+    frame: 'corner',
+    decor: decor('ocean-teal', [
+      { imageUrl: '/stickers/sparkle.svg', x: 70, y: 260, width: 56, rotation: 0, opacity: 0.7, zIndex: 2, loop: 'pulse' }
+    ]),
+    blocks: [
+      hero('ocean-teal-hero', 'The Wedding of', 'Salsa Amira', 'Dika Firmansyah', 'Minggu, 26 Juli 2026', 'The Apurva Kempinski, Bali'),
+      couple('ocean-teal-couple', 'Dika Firmansyah', 'Putra dari Bpk. & Ibu Firmansyah', 'Salsa Amira', 'Putri dari Bpk. & Ibu Amira'),
+      countdown('ocean-teal-countdown', '2026-07-26T10:00:00+08:00'),
+      events('ocean-teal-event', 'Minggu, 26 Juli 2026', 'The Apurva Kempinski Bali'),
+      story('ocean-teal-story'),
+      gallery('ocean-teal-gallery', 'carousel'),
+      maps('ocean-teal-maps', 'The Apurva Kempinski, Bali'),
+      thanks('ocean-teal-thanks'),
+      rsvp('ocean-teal-rsvp')
+    ]
+  },
+  {
+    id: 'burgundy-royal',
+    name: 'Burgundy Royal',
+    category: 'classic',
+    description: 'Merah burgundy mewah dengan emas kerajaan.',
+    primary: '#6E1F2B',
+    secondary: '#C9A227',
+    background: '#FAF4F2',
+    text: '#3A2428',
+    fontHeading: 'Playfair Display',
+    fontBody: 'Jost',
+    frame: 'ornate',
+    decor: decor('burgundy-royal', [
+      { imageUrl: '/stickers/gold-frame.svg', x: 30, y: 40, width: 370, rotation: 0, opacity: 0.22, zIndex: 2, loop: 'none' },
+      { imageUrl: '/stickers/rose-right.svg', x: 300, y: 980, width: 140, rotation: 8, opacity: 0.85, zIndex: 2, loop: 'float' }
+    ]),
+    blocks: [
+      hero('burgundy-royal-hero', 'The Wedding of', 'Isabella Putri', 'Rangga Wibowo', 'Sabtu, 21 Maret 2026', 'Hotel Mulia, Jakarta'),
+      quote('burgundy-royal-quote', 'Kasih tidak berkesudahan; sabar menanggung segala sesuatu.', '1 Korintus 13:7'),
+      couple('burgundy-royal-couple', 'Rangga Wibowo', 'Putra dari Bpk. & Ibu Wibowo', 'Isabella Putri', 'Putri dari Bpk. & Ibu Putri'),
+      countdown('burgundy-royal-countdown', '2026-03-21T09:00:00+07:00'),
+      events('burgundy-royal-event', 'Sabtu, 21 Maret 2026', 'Hotel Mulia Senayan'),
+      story('burgundy-royal-story'),
+      gallery('burgundy-royal-gallery', 'polaroid'),
+      maps('burgundy-royal-maps', 'Hotel Mulia, Jakarta'),
+      envelope('burgundy-royal-envelope', 'Bank BCA', '7788990011', 'Isabella Putri'),
+      thanks('burgundy-royal-thanks'),
+      rsvp('burgundy-royal-rsvp')
+    ]
+  },
+  {
+    id: 'champagne-gold',
+    name: 'Champagne Gold',
+    category: 'classic',
+    description: 'Emas champagne lembut nan elegan.',
+    primary: '#B08D57',
+    secondary: '#E7C873',
+    background: '#FBF7EF',
+    text: '#3B3226',
+    fontHeading: 'Cormorant Garamond',
+    fontBody: 'Karla',
+    frame: 'double',
+    decor: decor('champagne-gold', [
+      { imageUrl: '/stickers/gold-frame.svg', x: 30, y: 40, width: 370, rotation: 0, opacity: 0.25, zIndex: 2, loop: 'none' },
+      { imageUrl: '/stickers/sparkle.svg', x: 330, y: 600, width: 54, rotation: 0, opacity: 0.7, zIndex: 2, loop: 'pulse' }
+    ]),
+    blocks: [
+      hero('champagne-gold-hero', 'The Wedding of', 'Anaya Maheswari', 'Bramantyo', 'Sabtu, 28 Februari 2026', 'The St. Regis, Jakarta'),
+      couple('champagne-gold-couple', 'Bramantyo', 'Putra dari Bpk. & Ibu Bramantyo', 'Anaya Maheswari', 'Putri dari Bpk. & Ibu Maheswari'),
+      countdown('champagne-gold-countdown', '2026-02-28T09:00:00+07:00'),
+      events('champagne-gold-event', 'Sabtu, 28 Februari 2026', 'The St. Regis Jakarta'),
+      story('champagne-gold-story'),
+      gallery('champagne-gold-gallery', 'grid'),
+      maps('champagne-gold-maps', 'The St. Regis, Jakarta'),
+      gift('champagne-gold-gift', 'Bank BNI', '4455667788', 'Anaya Maheswari'),
+      thanks('champagne-gold-thanks'),
+      rsvp('champagne-gold-rsvp')
     ]
   }
 ];
