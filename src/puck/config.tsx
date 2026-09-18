@@ -84,6 +84,17 @@ const FONTS = [
   'Karla'
 ];
 const fontOptions = FONTS.map((f) => ({ label: f, value: f }));
+const FIT_OPTIONS = [
+  { label: 'Isi penuh (cover)', value: 'cover' },
+  { label: 'Muat semua (contain)', value: 'contain' }
+];
+const POSITION_OPTIONS = [
+  { label: 'Tengah', value: 'center' },
+  { label: 'Atas', value: 'top' },
+  { label: 'Bawah', value: 'bottom' },
+  { label: 'Kiri', value: 'left' },
+  { label: 'Kanan', value: 'right' }
+];
 
 /** Field gaya per-bagian (warna/font/latar) — opsional, override tema. */
 const styleField = {
@@ -175,6 +186,8 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
         date: { type: 'text' },
         place: { type: 'text' },
         bgImage: { type: 'custom', label: 'Gambar/Video Latar', render: AssetField },
+        bgFit: { type: 'select', label: 'Cara Pas Gambar', options: FIT_OPTIONS },
+        bgPosition: { type: 'select', label: 'Fokus Gambar', options: POSITION_OPTIONS },
         variant: {
           type: 'select',
           label: 'Tata Letak',
@@ -208,6 +221,8 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
         date: 'Minggu, 1 Januari 2027',
         place: 'The Ritz-Carlton, Jakarta',
         bgImage: '',
+        bgFit: 'cover',
+        bgPosition: 'center',
         variant: 'center',
         nameFont: '',
         nameSize: '',
@@ -229,6 +244,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
         bride: { type: 'text' },
         brideParents: { type: 'text' },
         bridePhoto: { type: 'custom', label: 'Foto Wanita', render: AssetField },
+        photoPosition: { type: 'select', label: 'Fokus Foto', options: POSITION_OPTIONS },
         variant: {
           type: 'select',
           label: 'Tata Letak',
@@ -261,6 +277,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
         bride: 'Nama Wanita',
         brideParents: 'Putri dari Bpk. & Ibu',
         bridePhoto: '',
+        photoPosition: 'center',
         variant: 'vertical',
         nameFont: '',
         nameSize: '',
@@ -612,6 +629,8 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
             { label: 'Miring', value: 'tilt' }
           ]
         },
+        fit: { type: 'select', label: 'Cara Pas Gambar', options: FIT_OPTIONS },
+        imgPosition: { type: 'select', label: 'Fokus Gambar', options: POSITION_OPTIONS },
         _style: panelSection('Gaya & Tata Letak'),
         blockStyle: styleField,
         entrance: entranceField,
@@ -621,6 +640,8 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
         image: '',
         caption: '',
         shape: 'rounded',
+        fit: 'cover',
+        imgPosition: 'center',
         entrance: 'fade',
         blockStyle: {},
         position: defaultPosition

@@ -7,7 +7,7 @@ const LAYOUT: Record<NonNullable<HeroProps['variant']>, { section: string; inner
   bottom: { section: 'items-center justify-end text-center', inner: 'items-center', align: '' }
 };
 
-export default function Hero({ caption, groom, bride, date, place, bgImage, variant = 'center', nameSize, nameFont, nameColor, position, entrance, blockStyle }: HeroProps) {
+export default function Hero({ caption, groom, bride, date, place, bgImage, bgFit = 'cover', bgPosition = 'center', variant = 'center', nameSize, nameFont, nameColor, position, entrance, blockStyle }: HeroProps) {
   const v = LAYOUT[variant];
   const textColor = blockStyle?.textColor || '#ffffff';
   const nameStyle: React.CSSProperties = {
@@ -23,10 +23,10 @@ export default function Hero({ caption, groom, bride, date, place, bgImage, vari
       >
         {bgImage ? (
           /\.(mp4|webm|ogg|mov|m4v)(\?|$)/i.test(bgImage) ? (
-            <video src={bgImage} autoPlay loop muted playsInline className="absolute inset-0 h-full w-full object-cover opacity-55" />
+            <video src={bgImage} autoPlay loop muted playsInline className="absolute inset-0 h-full w-full opacity-55" style={{ objectFit: bgFit, objectPosition: bgPosition }} />
           ) : (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={bgImage} alt="" className="absolute inset-0 h-full w-full object-cover opacity-55" />
+            <img src={bgImage} alt="" className="absolute inset-0 h-full w-full opacity-55" style={{ objectFit: bgFit, objectPosition: bgPosition }} />
           )
         ) : null}
         <div className={`relative z-10 flex flex-col ${v.inner}`} style={{ textShadow: '0 2px 14px rgba(0,0,0,0.45)' }}>
