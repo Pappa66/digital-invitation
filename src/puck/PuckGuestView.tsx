@@ -36,7 +36,7 @@ export default function PuckGuestView({ canvas, projectId, greetingName }: PuckG
 
   return (
     <>
-      <Render config={config} data={canvas} metadata={{ projectId, greetingName }} />
+      <Render config={config} data={canvas} metadata={{ projectId, greetingName, heroImage: hero.bgImage }} />
       {theme.guestBookEnabled !== 'no' ? <GuestBookWall projectId={projectId} title={theme.guestBookTitle} /> : null}
       {theme.checkinEnabled !== 'no' ? <CheckIn projectId={projectId} greetingName={greetingName} preview={false} /> : null}
       {opened ? <MusicPlayer settings={settings} /> : null}

@@ -5,7 +5,7 @@ import type { CoverProps } from '@/puck/types';
 import { BlockShell } from './shell';
 
 interface Props extends CoverProps {
-  puck?: { isEditing?: boolean; metadata?: { greetingName?: string; preview?: boolean } };
+  puck?: { isEditing?: boolean; metadata?: { greetingName?: string; preview?: boolean; heroImage?: string } };
 }
 
 /**
@@ -17,15 +17,16 @@ export default function Cover({ caption, bride, groom, date, bgImage, greeting, 
   const editing = puck?.isEditing;
   const preview = puck?.metadata?.preview;
   const greetingName = puck?.metadata?.greetingName;
+  const bg = bgImage || puck?.metadata?.heroImage || '';
   const h = preview ? 'min-h-[560px]' : 'min-h-[100dvh]';
 
   if (editing) {
     return (
       <BlockShell position={position} entrance={entrance} blockStyle={blockStyle}>
         <section className={`relative flex ${h} w-full flex-col items-center justify-center overflow-hidden bg-neutral-900 px-6 py-16 text-center text-white`}>
-          {bgImage ? (
+          {bg ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={bgImage} alt="" className="absolute inset-0 h-full w-full object-cover opacity-60" />
+            <img src={bg} alt="" className="absolute inset-0 h-full w-full object-cover opacity-60" />
           ) : null}
           <span className="absolute left-3 top-3 rounded bg-black/50 px-2 py-0.5 text-[10px] text-white">Cover</span>
           <div className="relative z-10 flex flex-col items-center" style={{ textShadow: '0 2px 14px rgba(0,0,0,0.45)' }}>
@@ -48,7 +49,7 @@ export default function Cover({ caption, bride, groom, date, bgImage, greeting, 
       bride={bride}
       groom={groom}
       date={date}
-      bgImage={bgImage}
+      bgImage={bg}
       greetingName={greetingName}
       primary="var(--color-primary, #3b5ba5)"
       secondary="var(--color-secondary, #c9a227)"
