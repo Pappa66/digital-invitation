@@ -1,5 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  poweredByHeader: false,
+  turbopack: { root: import.meta.dirname },
+  experimental: {
+    optimizePackageImports: ['lucide-react', 'framer-motion', '@puckeditor/core', 'embla-carousel-react']
+  },
   images: {
     qualities: [70, 75, 80],
     remotePatterns: [

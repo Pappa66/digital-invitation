@@ -838,6 +838,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
         label: 'Agama (Preset Ucapan)',
         options: RELIGIONS.map((r) => ({ label: r.label, value: r.key }))
       },
+      canvasWidth: { type: 'number', label: 'Lebar Undangan (px)', min: 320, max: 1200 },
       frame: {
         type: 'select',
         label: 'Bingkai Undangan',
@@ -864,14 +865,15 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
       guestBookTitle: 'Buku Tamu & Ucapan',
       checkinEnabled: 'yes',
       religion: 'islam',
+      canvasWidth: 430,
       frame: 'none'
     },
-    render: ({ children, primary, secondary, background, text, fontHeading, fontBody, decor, frame }) => (
+    render: ({ children, primary, secondary, background, text, fontHeading, fontBody, decor, frame, canvasWidth }) => (
       <div
         className="invitation-canvas relative mx-auto min-h-[100dvh] w-full overflow-x-hidden"
         style={
           {
-            maxWidth: 'var(--canvas-max-w, 430px)',
+            '--invite-max-w': `${Number(canvasWidth) || 430}px`,
             '--color-primary': primary,
             '--color-secondary': secondary,
             '--color-background': background,

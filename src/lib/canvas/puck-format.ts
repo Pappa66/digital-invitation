@@ -34,6 +34,7 @@ export function emptyPuckData(): PuckData {
         guestBookTitle: 'Buku Tamu & Ucapan',
         checkinEnabled: 'yes',
         religion: 'islam',
+        canvasWidth: 430,
         frame: 'none'
       }
     },

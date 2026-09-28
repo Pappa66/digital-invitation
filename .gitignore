@@ -43,3 +43,9 @@ next-env.d.ts
 
 # opencode config (contains API keys)
 opencode.json
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

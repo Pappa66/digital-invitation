@@ -10,7 +10,6 @@ vi.mock('next/image', () => ({
   }
 }));
 
-vi.mock('canvas-confetti', () => ({ default: vi.fn() }));
 
 // lottie-web butuh canvas (tidak tersedia di jsdom).
 vi.mock('lottie-react', () => ({ default: () => null }));

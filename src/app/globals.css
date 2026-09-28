@@ -315,3 +315,15 @@ body.puck-modal-open .puck-selected-wrapper {
 @media (max-width: 640px) { .hide-mobile { display: none !important; } }
 @media (min-width: 641px) and (max-width: 1024px) { .hide-tablet { display: none !important; } }
 @media (min-width: 1025px) { .hide-desktop { display: none !important; } }
+
+/* Kanvas undangan: full-bleed di HP; dibatasi (bisa diatur) di tablet/desktop. */
+.invitation-canvas {
+  width: 100%;
+  max-width: 100%;
+  margin-inline: auto;
+}
+@media (min-width: 641px) {
+  .invitation-canvas {
+    max-width: var(--preview-max-w, var(--invite-max-w, 430px));
+  }
+}

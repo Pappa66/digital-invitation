@@ -103,7 +103,7 @@ export default function PuckBuilder({ projectId, editToken }: PuckBuilderProps) 
   return (
     <div
       className="puck-brand flex h-screen flex-col overflow-hidden bg-white"
-      style={{ '--canvas-max-w': device === 'tablet' ? '768px' : device === 'desktop' ? 'none' : '430px' } as React.CSSProperties}
+      style={{ '--preview-max-w': device === 'tablet' ? '768px' : device === 'desktop' ? 'none' : '430px' } as React.CSSProperties}
     >
       <BuilderHeader
         meta={meta}
