@@ -308,3 +308,10 @@ body {
 body.puck-modal-open .puck-selected-wrapper {
   outline: none !important;
 }
+
+/* Jarak (padding) & sembunyikan per perangkat (dari blockStyle). */
+.block-pad-sm section { padding-top: 2rem; padding-bottom: 2rem; }
+.block-pad-lg section { padding-top: 5rem; padding-bottom: 5rem; }
+@media (max-width: 640px) { .hide-mobile { display: none !important; } }
+@media (min-width: 641px) and (max-width: 1024px) { .hide-tablet { display: none !important; } }
+@media (min-width: 1025px) { .hide-desktop { display: none !important; } }

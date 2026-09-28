@@ -35,7 +35,10 @@ function styleVars(blockStyle?: BlockStyleLite): CSSProperties {
 
 /** Kelas bantu untuk tipografi/perataan per-bagian (lihat globals.css). */
 function styleClass(blockStyle?: BlockStyleLite): string {
-  return [blockStyle?.headingSize ? 'block-hs' : '', blockStyle?.textAlign ? 'block-ta' : ''].filter(Boolean).join(' ');
+  const cls = [blockStyle?.headingSize ? 'block-hs' : '', blockStyle?.textAlign ? 'block-ta' : ''];
+  if (blockStyle?.padding) cls.push(`block-pad-${blockStyle.padding}`);
+  if (blockStyle?.hideOn && blockStyle.hideOn !== 'none') cls.push(`hide-${blockStyle.hideOn}`);
+  return cls.filter(Boolean).join(' ');
 }
 
 /**

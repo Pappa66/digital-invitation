@@ -117,6 +117,25 @@ const styleField = {
         { label: 'Kanan', value: 'right' }
       ]
     },
+    padding: {
+      type: 'select' as const,
+      label: 'Jarak (Padding)',
+      options: [
+        { label: 'Ketat', value: 'sm' },
+        { label: 'Sedang', value: 'md' },
+        { label: 'Lega', value: 'lg' }
+      ]
+    },
+    hideOn: {
+      type: 'select' as const,
+      label: 'Sembunyikan di',
+      options: [
+        { label: 'Tidak', value: 'none' },
+        { label: 'Ponsel', value: 'mobile' },
+        { label: 'Tablet', value: 'tablet' },
+        { label: 'Desktop', value: 'desktop' }
+      ]
+    },
     bgImage: { type: 'custom' as const, label: 'Gambar Latar', render: AssetField },
     bgGradient: { type: 'text' as const, label: 'Gradien Latar (CSS)' },
     bgOverlay: { type: 'number' as const, label: 'Overlay Gelap (0–1)' }

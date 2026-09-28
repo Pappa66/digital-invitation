@@ -15,7 +15,7 @@ import { saveDesignByShareToken } from '@/lib/actions/share-token-actions';
 import BuilderHeader from '@/puck/components/builder-header';
 import TemplatePicker from '@/puck/components/template-picker';
 import MediaLibrary from '@/puck/components/media-library';
-import type { PuckData } from '@/lib/canvas/puck-format';
+import { isPuckData, type PuckData } from '@/lib/canvas/puck-format';
 
 interface PuckBuilderProps {
   projectId: string;
@@ -56,6 +56,32 @@ export default function PuckBuilder({ projectId, editToken }: PuckBuilderProps) 
     setEmptyDismissed(true);
   }
 
+  function exportJson() {
+    if (!data) return;
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `${meta.slug || 'undangan'}.json`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+
+  function importJson(file: File) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const parsed = JSON.parse(String(reader.result));
+        if (isPuckData(parsed)) {
+          setData(parsed);
+          setEditorKey((k) => k + 1);
+        }
+      } catch {
+        /* file tidak valid diabaikan */
+      }
+    };
+    reader.readAsText(file);
+  }
+
   function selectTemplate(id: string | null) {
     if (id) {
       const tpl = getPuckTemplate(id);
@@ -86,6 +112,8 @@ export default function PuckBuilder({ projectId, editToken }: PuckBuilderProps) 
         onDevice={setDevice}
         onOpenPicker={() => setPickerOpen(true)}
         onOpenMedia={() => setMediaOpen(true)}
+        onExport={exportJson}
+        onImport={importJson}
         onPublish={() => data && handlePublish(data)}
       />
 

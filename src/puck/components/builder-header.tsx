@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Link from 'next/link';
 import { getSiteOrigin } from '@/lib/site';
 import { generateShareToken } from '@/lib/actions/share-token-actions';
@@ -22,15 +22,18 @@ interface BuilderHeaderProps {
   onDevice: (device: DeviceKind) => void;
   onOpenPicker: () => void;
   onOpenMedia: () => void;
+  onExport: () => void;
+  onImport: (file: File) => void;
   onPublish: () => void;
 }
 
 const BTN = 'rounded-md border border-[#e0d6c2] bg-white px-3 py-1.5 text-xs font-medium text-[#4a443c] hover:border-[#c9a45c]';
 
 /** Header editor: judul, status simpan, aksi template/publish/preview + tamu/share. */
-export default function BuilderHeader({ meta, saveStatus, busy, isEditLink, legacy, projectId, device, onDevice, onOpenPicker, onOpenMedia, onPublish }: BuilderHeaderProps) {
+export default function BuilderHeader({ meta, saveStatus, busy, isEditLink, legacy, projectId, device, onDevice, onOpenPicker, onOpenMedia, onExport, onImport, onPublish }: BuilderHeaderProps) {
   const [busyLink, setBusyLink] = useState(false);
   const [toast, setToast] = useState('');
+  const importRef = useRef<HTMLInputElement>(null);
 
   async function copy(value: string, label: string) {
     try {
@@ -103,6 +106,23 @@ export default function BuilderHeader({ meta, saveStatus, busy, isEditLink, lega
             <button type="button" onClick={onOpenMedia} className={BTN}>
               Media
             </button>
+            <button type="button" onClick={onExport} className={BTN}>
+              Ekspor
+            </button>
+            <button type="button" onClick={() => importRef.current?.click()} className={BTN}>
+              Impor
+            </button>
+            <input
+              ref={importRef}
+              type="file"
+              accept="application/json,.json"
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) onImport(f);
+                if (importRef.current) importRef.current.value = '';
+              }}
+            />
             <Link href={`/invite/${projectId}`} className={BTN}>
               Kelola Tamu
             </Link>

@@ -44,6 +44,10 @@ export interface BlockStyleLite {
   bgGradient?: string;
   /** Lapisan gelap di atas latar gambar/gradien (0–1). */
   bgOverlay?: number;
+  /** Kerapatan jarak (padding) bagian. */
+  padding?: 'sm' | 'md' | 'lg';
+  /** Sembunyikan bagian pada perangkat tertentu. */
+  hideOn?: 'none' | 'mobile' | 'tablet' | 'desktop';
 }
 
 export interface HeroProps extends BaseBlockProps {
