@@ -14,6 +14,7 @@ import {
 } from '@/lib/religions';
 import { demoGetProject, demoGetDesign, demoListRsvps, demoListCheckins } from '@/lib/demo/demo-store';
 import { supabase } from '@/lib/supabase/client';
+import { isPuckData } from '@/lib/canvas/puck-format';
 import type { Rsvp, Checkin } from '@/lib/types';
 import GuestListPanel from '@/components/invite/guest-list';
 
@@ -138,7 +139,7 @@ export default function InviteManager({ projectId, slug: slugProp, title: titleP
       setTitle(proj.title);
     }
     const design = demoGetDesign(projectId);
-    const rel = design?.settings?.religion;
+    const rel = isPuckData(design) ? design.root.props?.religion : (design as { settings?: { religion?: string } } | null)?.settings?.religion;
     if (rel && RELIGIONS.some((r) => r.key === rel)) applyReligion(rel as ReligionKey);
     else applyReligion('islam');
     // eslint-disable-next-line react-hooks/exhaustive-deps

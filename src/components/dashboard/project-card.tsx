@@ -43,7 +43,9 @@ export default function ProjectCard({ project, onDuplicated, onDeleted, heroFall
       try {
         if (demoIsDemoMode()) {
           const design = demoGetDesign(project.id);
-          const hero = design?.blocks.find((b) => b.type === 'Hero')?.props as Record<string, unknown> | undefined;
+          const hero = (isPuckData(design)
+            ? (design.content.find((c) => c.type === 'Hero') as { props?: Record<string, unknown> } | undefined)?.props
+            : (design as { blocks?: { type: string; props?: Record<string, unknown> }[] } | null)?.blocks?.find((b) => b.type === 'Hero')?.props) as Record<string, unknown> | undefined;
           const names = [hero?.bride, hero?.groom].filter((v) => typeof v === 'string' && (v as string).trim()).join(' & ');
           if (alive && names) setCouple(names as string);
           return;

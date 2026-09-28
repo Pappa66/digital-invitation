@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 
 vi.mock('next/image', () => ({
   default: function MockImage(props: React.ImgHTMLAttributes<HTMLImageElement> & { fill?: boolean; priority?: boolean }) {
@@ -37,5 +37,16 @@ describe('PuckGuestView', () => {
     const data = { ...sampleData, root: { props: { ...sampleData.root.props, showCover: 'no' as const, checkinEnabled: 'yes' as const } } } as typeof sampleData;
     render(<PuckGuestView canvas={data} projectId="p1" />);
     expect(screen.getByText(/Absensi/i)).toBeInTheDocument();
+  });
+
+  it('share muncul setelah undangan dibuka (invite-opened)', () => {
+    render(<PuckGuestView canvas={sampleData} projectId="p1" />);
+    expect(screen.queryByLabelText('Bagikan undangan')).toBeNull();
+
+    act(() => {
+      window.dispatchEvent(new CustomEvent('invite-opened'));
+    });
+
+    expect(screen.getByLabelText('Bagikan undangan')).toBeInTheDocument();
   });
 });

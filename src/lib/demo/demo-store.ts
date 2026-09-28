@@ -1,7 +1,8 @@
 'use client';
 
 import type { CanvasData, Project, Rsvp, Checkin } from '@/lib/types';
-import { emptyCanvas } from '@/lib/templates';
+import { emptyPuckData, isPuckData } from '@/lib/canvas/puck-format';
+import { getPuckTemplate } from '@/lib/templates/puck';
 import { slugify } from '@/lib/slug';
 import { demoIsDemoMode } from '@/lib/env';
 
@@ -53,12 +54,12 @@ function seedTemplates() {
   const projects = listProjects();
   if (projects.length > 0) return;
   const seeds: { title: string; template: string }[] = [
-    { title: 'Perkawinan Panca & Sena', template: 'elegant-gold' },
+    { title: 'Perkawinan Panca & Sena', template: 'ivory-gold' },
     { title: 'Perkawinan Bayu & Kintan', template: 'emerald-khaki' }
   ];
   const now = new Date().toISOString();
   const created: Project[] = [];
-  const designs: Record<string, CanvasData> = {};
+  const designs: Record<string, unknown> = {};
   for (const s of seeds) {
     const id = uid();
     created.push({
@@ -71,7 +72,7 @@ function seedTemplates() {
       created_at: now,
       updated_at: now
     });
-    designs[id] = structuredClone(emptyCanvas());
+    designs[id] = getPuckTemplate(s.template) ?? emptyPuckData();
   }
   write(PROJECTS_KEY, created);
   write(DESIGNS_KEY, designs);
@@ -86,8 +87,8 @@ export function demoGetProject(id: string): Project | null {
   return listProjects().find((p) => p.id === id) ?? null;
 }
 
-export function demoGetDesign(id: string): CanvasData | null {
-  const designs = read<Record<string, CanvasData>>(DESIGNS_KEY, {});
+export function demoGetDesign(id: string): unknown {
+  const designs = read<Record<string, unknown>>(DESIGNS_KEY, {});
   return designs[id] ?? null;
 }
 
@@ -109,14 +110,14 @@ export function demoCreateProject(title: string, templateId?: string): { id: str
   };
   projects.unshift(project);
   write(PROJECTS_KEY, projects);
-  const designs = read<Record<string, CanvasData>>(DESIGNS_KEY, {});
-  designs[id] = emptyCanvas();
+  const designs = read<Record<string, unknown>>(DESIGNS_KEY, {});
+  designs[id] = emptyPuckData();
   write(DESIGNS_KEY, designs);
   return { id };
 }
 
 /** Membuat proyek dari CanvasData utuh (template buatan user / template baru). */
-export function demoCreateProjectFromData(title: string, canvas: CanvasData): { id: string } {
+export function demoCreateProjectFromData(title: string, canvas: unknown): { id: string } {
   seedTemplates();
   const projects = listProjects();
   const id = uid();
@@ -133,8 +134,8 @@ export function demoCreateProjectFromData(title: string, canvas: CanvasData): { 
   };
   projects.unshift(project);
   write(PROJECTS_KEY, projects);
-  const designs = read<Record<string, CanvasData>>(DESIGNS_KEY, {});
-  designs[id] = structuredClone(canvas);
+  const designs = read<Record<string, unknown>>(DESIGNS_KEY, {});
+  designs[id] = canvas;
   write(DESIGNS_KEY, designs);
   return { id };
 }
@@ -156,8 +157,8 @@ export function demoDuplicateProject(id: string): { id: string } {
   };
   projects.unshift(copy);
   write(PROJECTS_KEY, projects);
-  const designs = read<Record<string, CanvasData>>(DESIGNS_KEY, {});
-  designs[newId] = structuredClone(designs[id] ?? emptyCanvas());
+  const designs = read<Record<string, unknown>>(DESIGNS_KEY, {});
+  designs[newId] = structuredClone(designs[id] ?? emptyPuckData());
   write(DESIGNS_KEY, designs);
   return { id: newId };
 }
@@ -165,7 +166,7 @@ export function demoDuplicateProject(id: string): { id: string } {
 export function demoDeleteProject(id: string) {
   const projects = listProjects().filter((p) => p.id !== id);
   write(PROJECTS_KEY, projects);
-  const designs = read<Record<string, CanvasData>>(DESIGNS_KEY, {});
+  const designs = read<Record<string, unknown>>(DESIGNS_KEY, {});
   delete designs[id];
   write(DESIGNS_KEY, designs);
 }
@@ -195,13 +196,20 @@ export function demoSetProjectStatus(id: string, status: 'draft' | 'published'):
   return { slug: project.slug };
 }
 
-export function demoSaveDesign(id: string, canvas: CanvasData) {
-  const designs = read<Record<string, CanvasData>>(DESIGNS_KEY, {});
-  designs[id] = structuredClone(canvas);
+export function demoSaveDesign(id: string, canvas: unknown) {
+  const designs = read<Record<string, unknown>>(DESIGNS_KEY, {});
+  designs[id] = canvas;
   write(DESIGNS_KEY, designs);
-  // Auto-update thumbnail from hero bg_image
-  const heroBlock = canvas.blocks.find((b) => b.type === 'Hero');
-  const heroBg = typeof heroBlock?.props?.bg_image === 'string' ? heroBlock.props.bg_image.trim() : '';
+  // Auto-update thumbnail dari Hero (Puck atau legacy).
+  let heroBg = '';
+  if (isPuckData(canvas)) {
+    const hero = canvas.content.find((c) => c.type === 'Hero') as { props?: Record<string, unknown> } | undefined;
+    heroBg = typeof hero?.props?.bg_image === 'string' ? (hero.props.bg_image as string).trim() : '';
+  } else {
+    const legacy = canvas as CanvasData | null;
+    const hero = legacy?.blocks?.find((b) => b.type === 'Hero');
+    heroBg = typeof hero?.props?.bg_image === 'string' ? (hero.props.bg_image as string).trim() : '';
+  }
   const projects = listProjects().map((p) =>
     p.id === id ? { ...p, thumbnail: heroBg || p.thumbnail, updated_at: new Date().toISOString() } : p
   );
@@ -211,7 +219,7 @@ export function demoSaveDesign(id: string, canvas: CanvasData) {
 export function demoGetPublished(
   slug: string,
   opts?: { allowDraft?: boolean }
-): { id: string; canvas: CanvasData } | null {
+): { id: string; canvas: unknown } | null {
   seedTemplates();
   const project = listProjects().find(
     (p) => p.slug === slug && (opts?.allowDraft ? true : p.status === 'published')

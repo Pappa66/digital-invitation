@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import type { CanvasData } from '@/lib/types';
 import GuestRenderer from '@/components/guest/GuestRenderer';
+import PuckGuestView from '@/puck/PuckGuestView';
+import { isPuckData } from '@/lib/canvas/puck-format';
+import type { CanvasData } from '@/lib/types';
 import { demoGetPublished } from '@/lib/demo/demo-store';
 
 interface GuestDemoViewProps {
@@ -13,7 +15,7 @@ interface GuestDemoViewProps {
 
 export default function GuestDemoView({ slug, title }: GuestDemoViewProps) {
   const searchParams = useSearchParams();
-  const [canvas, setCanvas] = useState<CanvasData | null>(null);
+  const [canvas, setCanvas] = useState<unknown>(null);
   const [projectId, setProjectId] = useState('');
   const [missing, setMissing] = useState(false);
   const [greeting, setGreeting] = useState<string | undefined>(undefined);
@@ -32,8 +34,10 @@ export default function GuestDemoView({ slug, title }: GuestDemoViewProps) {
 
   useEffect(() => {
     if (!canvas) return;
-    const fonts = Array.from(new Set([canvas.theme.font_heading, canvas.theme.font_body]));
-    const families = fonts.map((f) => `family=${encodeURIComponent(f)}`).join('&');
+    const fonts = isPuckData(canvas)
+      ? [canvas.root.props?.fontHeading ?? 'Cormorant Garamond', canvas.root.props?.fontBody ?? 'Jost']
+      : [(canvas as CanvasData).theme?.font_heading ?? 'Cormorant Garamond', (canvas as CanvasData).theme?.font_body ?? 'Jost'];
+    const families = Array.from(new Set(fonts)).map((f) => `family=${encodeURIComponent(f)}`).join('&');
     const link = document.createElement('link');
     link.href = `https://fonts.googleapis.com/css2?${families}&display=swap`;
     link.rel = 'stylesheet';
@@ -53,12 +57,12 @@ export default function GuestDemoView({ slug, title }: GuestDemoViewProps) {
   }
 
   if (!canvas) {
-    return (
-      <div className="flex min-h-screen items-center justify-center text-sm text-gray-400">
-        Memuat...
-      </div>
-    );
+    return <div className="flex min-h-screen items-center justify-center text-sm text-gray-400">Memuat...</div>;
   }
 
-  return <GuestRenderer canvas={canvas} projectId={projectId} greetingName={greeting} />;
+  if (isPuckData(canvas)) {
+    return <PuckGuestView canvas={canvas} projectId={projectId} greetingName={greeting} />;
+  }
+
+  return <GuestRenderer canvas={canvas as CanvasData} projectId={projectId} greetingName={greeting} />;
 }
