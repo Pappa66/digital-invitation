@@ -16,6 +16,17 @@ interface Props extends RsvpProps {
 }
 
 const THROTTLE_MS = 30_000;
+const CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+
+function genCode(): string {
+  const a = new Uint8Array(6);
+  try {
+    crypto.getRandomValues(a);
+  } catch {
+    for (let i = 0; i < 6; i++) a[i] = Math.floor(Math.random() * 256);
+  }
+  return Array.from(a, (n) => CODE_ALPHABET[n % CODE_ALPHABET.length]).join('');
+}
 
 function randomToken(): string {
   try {
@@ -38,6 +49,7 @@ export default function Rsvp({ title, note, buttonText, position, entrance, bloc
   const [errorMsg, setErrorMsg] = useState('');
   const [checkinToken, setCheckinToken] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [code, setCode] = useState<string | null>(null);
   const qrWrapRef = useRef<HTMLDivElement>(null);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -66,6 +78,7 @@ export default function Rsvp({ title, note, buttonText, position, entrance, bloc
 
     setStatus('submitting');
     const clientToken = randomToken();
+    const clientCode = genCode();
     let error: { message?: string } | null = null;
 
     if (demoIsDemoMode()) {
@@ -80,12 +93,13 @@ export default function Rsvp({ title, note, buttonText, position, entrance, bloc
         p_attendance: attendance,
         p_guest_count: guestCount,
         p_message: message.trim() || null,
-        p_checkin_token: clientToken
+        p_checkin_token: clientToken,
+        p_checkin_code: clientCode
       });
       if (rpcErr) {
         const { error: e } = await supabase
           .from('rsvps')
-          .insert({ project_id: projectId, name: cleanName, attendance, guest_count: guestCount, message: message.trim() || null, checkin_token: clientToken });
+          .insert({ project_id: projectId, name: cleanName, attendance, guest_count: guestCount, message: message.trim() || null, checkin_token: clientToken, checkin_code: clientCode });
         error = e;
       } else {
         const row = Array.isArray(rpcData) ? rpcData[0] : null;
@@ -104,6 +118,7 @@ export default function Rsvp({ title, note, buttonText, position, entrance, bloc
       /* ignore */
     }
     setCheckinToken(clientToken);
+    setCode(clientCode);
     setStatus('success');
   }
 
@@ -127,6 +142,13 @@ export default function Rsvp({ title, note, buttonText, position, entrance, bloc
                   <QRCode value={qrUrl} size={150} fgColor="#2B2620" title={qrUrl} />
                 </div>
                 <p className="mt-3 text-xs leading-relaxed opacity-75">Pindai QR ini oleh panitia saat tiba di lokasi.</p>
+              {code ? (
+                <div className="mx-auto mt-3 flex items-center justify-center gap-2 rounded-lg bg-[var(--color-primary,#3b5ba5)]/10 px-3 py-2">
+                  <span className="text-[10px] uppercase tracking-wide opacity-70">Kode manual</span>
+                  <code className="font-mono text-lg font-bold tracking-[0.25em]">{code}</code>
+                  <button type="button" onClick={() => { void navigator.clipboard?.writeText(code); }} className="rounded border border-current/20 px-2 py-0.5 text-[10px]">Salin</button>
+                </div>
+              ) : null}
                 <div className="mx-auto mt-3 flex max-w-[260px] items-center gap-1.5 rounded-lg border border-dashed border-current/25 bg-white/70 px-2.5 py-1.5">
                   <code className="min-w-0 flex-1 break-all font-mono text-[11px] opacity-80">{checkinToken}</code>
                   <button

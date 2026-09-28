@@ -53,18 +53,25 @@ describe('verifyCheckinToken — RPC record_checkin_from_token', () => {
     });
   });
 
-  it('menolak project/token non-uuid SEBELUM menyentuh DB', async () => {
+  it('menolak project non-uuid SEBELUM menyentuh DB', async () => {
     expect(await verifyCheckinToken('proyek', 'token')).toEqual({
-      error: 'ID proyek atau token tidak valid'
+      error: 'ID proyek tidak valid'
     });
     expect(createServerSupabaseMock).not.toHaveBeenCalled();
   });
 
-  it('menolak token bukan uuid meskipun project uuid valid', async () => {
-    expect(await verifyCheckinToken(PROJECT_ID, 'abc')).toEqual({
-      error: 'ID proyek atau token tidak valid'
+  it('menolak kode/token tidak valid sebelum akses DB', async () => {
+    expect(await verifyCheckinToken(PROJECT_ID, 'ab')).toEqual({
+      error: 'Token/kode tidak valid'
     });
     expect(createServerSupabaseMock).not.toHaveBeenCalled();
+  });
+
+  it('kode pendek memakai RPC record_checkin_by_code', async () => {
+    const rpc = mockRpc({ data: [{ ok: true, error: null, name: 'Sena', guest_count: 1, created_at: '2026-08-19T00:00:00Z' }], error: null });
+    const res = await verifyCheckinToken(PROJECT_ID, 'A7K2QX');
+    expect(rpc).toHaveBeenCalledWith('record_checkin_by_code', { p_project_id: PROJECT_ID, p_code: 'A7K2QX' });
+    expect(res.ok).toBe(true);
   });
 
   it('meneruskan error RPC (rate-limit/token invalid) ke pemanggil', async () => {

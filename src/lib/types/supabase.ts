@@ -136,6 +136,7 @@ export interface Database {
           meal_choice: string | null;
           menu_options: { label: string; value: string }[] | null;
           checkin_token: string;
+          checkin_code: string | null;
           created_at: string;
         };
         Insert: {
@@ -148,6 +149,7 @@ export interface Database {
           meal_choice?: string | null;
           menu_options?: { label: string; value: string }[] | null;
           checkin_token?: string;
+          checkin_code?: string | null;
           created_at?: string;
         };
         Update: {

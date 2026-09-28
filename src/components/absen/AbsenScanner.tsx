@@ -43,7 +43,7 @@ export function parseAbsenTokenFromQr(text: string): string | null {
   } catch {
     /* bukan URL — jatuh ke fallback token polos */
   }
-  if (/^[A-Za-z0-9][A-Za-z0-9-]{7,63}$/.test(trimmed)) return trimmed;
+  if (/^[A-Za-z0-9][A-Za-z0-9-]{3,63}$/.test(trimmed)) return trimmed;
   return null;
 }
 
