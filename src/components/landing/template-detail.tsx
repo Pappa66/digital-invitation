@@ -12,6 +12,7 @@ import type { PuckData } from '@/lib/canvas/puck-format';
 import OrderDialog from '@/components/landing/order-dialog';
 import PhoneFrame from '@/components/ui/phone-frame';
 import { clientCreateProject } from '@/lib/api/project-client';
+import { supabase } from '@/lib/supabase/client';
 import { listTemplateDemos, demoByTemplateId } from '@/lib/api/template-demo-client';
 
 interface TemplateDetailProps {
@@ -42,8 +43,13 @@ export default function TemplateDetail({ meta, index, canvas, categoryLabel, tot
   const [editBusy, setEditBusy] = useState(false);
   const [editError, setEditError] = useState('');
   const [pricing, setPricing] = useState({ base_price: 0, discount_percent: 0, promo_code: '' });
+  const [canEdit, setCanEdit] = useState(false);
 
   const [demo, setDemo] = useState<{ demo_image: string | null; demo_link: string | null } | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setCanEdit(!!data.user)).catch(() => {});
+  }, []);
 
   useEffect(() => {
     let alive = true;
@@ -147,7 +153,7 @@ export default function TemplateDetail({ meta, index, canvas, categoryLabel, tot
               </div>
             ) : (
               <PhoneFrame accent={meta.secondary}>
-                <Render config={config} data={canvas} />
+                <Render config={config} data={canvas} metadata={{ preview: true }} />
               </PhoneFrame>
             )}
           </div>
@@ -174,14 +180,16 @@ export default function TemplateDetail({ meta, index, canvas, categoryLabel, tot
               <MessageCircle className="h-4 w-4" aria-hidden />
               Pesan Template Ini
             </button>
-            <button
-              onClick={editInBuilder}
-              disabled={editBusy}
-              className="mt-3 flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-gold/70 bg-card px-5 py-3 text-sm font-semibold text-gold-deep transition-colors hover:bg-gold/10 disabled:opacity-60"
-            >
-              {editBusy ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : <Wand2 className="h-4 w-4" aria-hidden />}
-              {editBusy ? 'Membuka Builder…' : 'Edit Langsung di Builder'}
-            </button>
+            {canEdit ? (
+              <button
+                onClick={editInBuilder}
+                disabled={editBusy}
+                className="mt-3 flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-gold/70 bg-card px-5 py-3 text-sm font-semibold text-gold-deep transition-colors hover:bg-gold/10 disabled:opacity-60"
+              >
+                {editBusy ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : <Wand2 className="h-4 w-4" aria-hidden />}
+                {editBusy ? 'Membuka Builder…' : 'Edit Langsung di Builder'}
+              </button>
+            ) : null}
             {editError && <p className="mt-2 text-center text-xs text-destructive">{editError}</p>}
             <p className="mt-3 text-center text-xs text-muted-foreground">Isi form pemesanan — tim kami yang akan mengerjakan desainnya untuk Anda.</p>
 

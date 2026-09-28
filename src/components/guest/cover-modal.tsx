@@ -78,7 +78,9 @@ export default function CoverModal({
     setOpen(false);
     document.body.style.overflow = '';
     window.setTimeout(() => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: 'auto' });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
     }, 300);
   }
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import QRCode from 'react-qr-code';
 import { Check, Copy } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
@@ -38,6 +38,7 @@ export default function Rsvp({ title, note, buttonText, position, entrance, bloc
   const [errorMsg, setErrorMsg] = useState('');
   const [checkinToken, setCheckinToken] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const qrWrapRef = useRef<HTMLDivElement>(null);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

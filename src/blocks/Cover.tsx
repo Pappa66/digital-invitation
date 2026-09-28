@@ -5,7 +5,7 @@ import type { CoverProps } from '@/puck/types';
 import { BlockShell } from './shell';
 
 interface Props extends CoverProps {
-  puck?: { isEditing?: boolean; metadata?: { greetingName?: string } };
+  puck?: { isEditing?: boolean; metadata?: { greetingName?: string; preview?: boolean } };
 }
 
 /**
@@ -15,12 +15,14 @@ interface Props extends CoverProps {
  */
 export default function Cover({ caption, bride, groom, date, bgImage, greeting, buttonText, coverStyle = 'floral', position, entrance, blockStyle, puck }: Props) {
   const editing = puck?.isEditing;
+  const preview = puck?.metadata?.preview;
   const greetingName = puck?.metadata?.greetingName;
+  const h = preview ? 'min-h-[560px]' : 'min-h-[100dvh]';
 
   if (editing) {
     return (
       <BlockShell position={position} entrance={entrance} blockStyle={blockStyle}>
-        <section className="relative flex min-h-[100dvh] w-full flex-col items-center justify-center overflow-hidden bg-neutral-900 px-6 py-16 text-center text-white">
+        <section className={`relative flex ${h} w-full flex-col items-center justify-center overflow-hidden bg-neutral-900 px-6 py-16 text-center text-white`}>
           {bgImage ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={bgImage} alt="" className="absolute inset-0 h-full w-full object-cover opacity-60" />
