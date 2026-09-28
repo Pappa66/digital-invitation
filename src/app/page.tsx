@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { getSiteOrigin } from '@/lib/site';
@@ -597,8 +597,6 @@ function FilterPill({ active, onClick, label }: { active: boolean; onClick: () =
 
 function FAQItem({ q, a, defaultOpen = false }: { q: string; a: string; defaultOpen?: boolean }) {
   const [open, setOpen] = useState(defaultOpen);
-  const contentRef = useRef<HTMLDivElement>(null);
-
   return (
     <div className="rounded-2xl border border-border bg-card/70 shadow-soft">
       <button
@@ -609,12 +607,10 @@ function FAQItem({ q, a, defaultOpen = false }: { q: string; a: string; defaultO
         <span className="font-heading text-base font-medium text-foreground">{q}</span>
         <span aria-hidden className={`text-gold-strong transition-transform duration-300 ${open ? 'rotate-45' : ''}`}>+</span>
       </button>
-      <div
-        ref={contentRef}
-        className="overflow-hidden transition-all duration-300 ease-in-out"
-        style={{ maxHeight: open ? `${contentRef.current?.scrollHeight ?? 200}px` : '0px' }}
-      >
-        <p className="px-5 pb-5 text-sm leading-relaxed text-muted-foreground">{a}</p>
+      <div className={`grid transition-all duration-300 ease-in-out ${open ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
+        <div className="overflow-hidden">
+          <p className="px-5 pb-5 text-sm leading-relaxed text-muted-foreground">{a}</p>
+        </div>
       </div>
     </div>
   );

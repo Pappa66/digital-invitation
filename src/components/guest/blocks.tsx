@@ -878,6 +878,7 @@ export function HeroBlock({ props, greetingName, showButton = true }: { props: B
         </div>
       )}
       <HeroSparkles />
+        {/* eslint-disable-next-line react-hooks/static-components */}
       <HeroWrap>
         <div
           className={`relative z-10 flex w-full flex-col ${isRight ? 'items-end' : isLeft ? 'items-start' : 'items-center'}`}

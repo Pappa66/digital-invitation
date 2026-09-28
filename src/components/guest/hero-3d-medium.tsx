@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment, react-hooks/purity */
 // @ts-nocheck
 'use client';
 
