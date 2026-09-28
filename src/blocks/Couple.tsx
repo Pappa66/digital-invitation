@@ -1,6 +1,7 @@
 import type { CoupleProps } from '@/puck/types';
 import { BlockShell } from './shell';
 import EditableImage from './EditableImage';
+import EditableText from './EditableText';
 
 function Photo({ src, alt, pos = 'center', zoom = 1, editable, componentId }: { src?: string; alt: string; pos?: string; zoom?: number; editable?: boolean; componentId?: string }) {
   if (src) {
@@ -31,16 +32,15 @@ interface PersonProps {
   photoZoom?: number;
   editable?: boolean;
   componentId?: string;
+  nameKey?: string;
 }
 
-function Person({ name, parents, photo, reverse, nameStyle, photoPosition, photoZoom, editable, componentId }: PersonProps) {
+function Person({ name, parents, photo, reverse, nameStyle, photoPosition, photoZoom, editable, componentId, nameKey }: PersonProps) {
   return (
     <div className={`flex items-center gap-4 ${reverse ? 'flex-row-reverse text-right' : 'text-left'}`}>
       <Photo src={photo} alt={name} pos={photoPosition} zoom={photoZoom} editable={editable} componentId={componentId} />
       <div className="min-w-0">
-        <p className="text-xl" style={nameStyle}>
-          {name}
-        </p>
+        <EditableText as="p" value={name} editing={editable} componentId={componentId} propKey={nameKey} className="text-xl" style={nameStyle} />
         {parents ? <p className="mt-1 text-xs opacity-70">{parents}</p> : null}
       </div>
     </div>
@@ -56,25 +56,21 @@ export default function Couple({ title, groom, groomParents, groomPhoto, bride, 
   return (
     <BlockShell position={position} entrance={entrance} blockStyle={blockStyle}>
       <section className="bg-[var(--color-background,#fbf7f1)] px-6 py-14 text-center text-[var(--color-text,#4a4036)]">
-        <h2 className="text-2xl" style={{ fontFamily: 'var(--font-heading)' }}>
-          {title}
-        </h2>
+        <EditableText as="h2" value={title} editing={puck?.isEditing} componentId={id} propKey="title" className="text-2xl" style={{ fontFamily: 'var(--font-heading)' }} />
 
         {variant === 'side' ? (
           <div className="mx-auto mt-8 flex max-w-sm flex-col gap-6">
-            <Person name={groom} parents={groomParents} photo={groomPhoto} nameStyle={nameStyle} photoPosition={photoPosition} photoZoom={photoZoom} editable={puck?.isEditing} componentId={id} />
+            <Person name={groom} parents={groomParents} photo={groomPhoto} nameStyle={nameStyle} photoPosition={photoPosition} photoZoom={photoZoom} editable={puck?.isEditing} componentId={id} nameKey="groom" />
             <div className="text-center text-2xl opacity-60" style={{ color: 'var(--color-primary)' }}>
               &amp;
             </div>
-            <Person name={bride} parents={brideParents} photo={bridePhoto} reverse nameStyle={nameStyle} photoPosition={photoPosition} photoZoom={photoZoom} editable={puck?.isEditing} componentId={id} />
+            <Person name={bride} parents={brideParents} photo={bridePhoto} reverse nameStyle={nameStyle} photoPosition={photoPosition} photoZoom={photoZoom} editable={puck?.isEditing} componentId={id} nameKey="bride" />
           </div>
         ) : (
           <div className="mt-8 flex flex-col items-center gap-8 sm:flex-row sm:justify-center sm:gap-12">
             <div className="flex flex-col items-center">
               <Photo src={groomPhoto} alt={groom} pos={photoPosition} zoom={photoZoom} editable={puck?.isEditing} componentId={id} />
-              <p className="mt-3 text-xl" style={nameStyle}>
-                {groom}
-              </p>
+              <EditableText as="p" value={groom} editing={puck?.isEditing} componentId={id} propKey="groom" className="mt-3 text-xl" style={nameStyle} />
               {groomParents ? <p className="mt-1 text-xs opacity-70">{groomParents}</p> : null}
             </div>
             <span className="text-2xl opacity-60" style={{ color: 'var(--color-primary)' }}>
@@ -82,9 +78,7 @@ export default function Couple({ title, groom, groomParents, groomPhoto, bride, 
             </span>
             <div className="flex flex-col items-center">
               <Photo src={bridePhoto} alt={bride} pos={photoPosition} zoom={photoZoom} editable={puck?.isEditing} componentId={id} />
-              <p className="mt-3 text-xl" style={nameStyle}>
-                {bride}
-              </p>
+              <EditableText as="p" value={bride} editing={puck?.isEditing} componentId={id} propKey="bride" className="mt-3 text-xl" style={nameStyle} />
               {brideParents ? <p className="mt-1 text-xs opacity-70">{brideParents}</p> : null}
             </div>
           </div>
