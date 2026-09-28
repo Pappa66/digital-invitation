@@ -1,9 +1,12 @@
 'use client';
 
 import { useState } from 'react';
+import QRCode from 'react-qr-code';
+import { Check, Copy } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
 import { demoIsDemoMode } from '@/lib/env';
 import { demoAddRsvp } from '@/lib/demo/demo-store';
+import { getSiteOrigin } from '@/lib/site';
 import type { RsvpProps } from '@/puck/types';
 import { BlockShell } from './shell';
 
@@ -14,6 +17,17 @@ interface Props extends RsvpProps {
 
 const THROTTLE_MS = 30_000;
 
+function randomToken(): string {
+  try {
+    return crypto.randomUUID();
+  } catch {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+      const r = (Math.random() * 16) | 0;
+      return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
+    });
+  }
+}
+
 export default function Rsvp({ title, note, buttonText, position, entrance, blockStyle, puck }: Props) {
   const projectId = puck?.metadata?.projectId ?? '';
   const [name, setName] = useState('');
@@ -22,6 +36,8 @@ export default function Rsvp({ title, note, buttonText, position, entrance, bloc
   const [message, setMessage] = useState('');
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
+  const [checkinToken, setCheckinToken] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -48,6 +64,7 @@ export default function Rsvp({ title, note, buttonText, position, entrance, bloc
     }
 
     setStatus('submitting');
+    const clientToken = randomToken();
     let error: { message?: string } | null = null;
 
     if (demoIsDemoMode()) {
@@ -56,7 +73,7 @@ export default function Rsvp({ title, note, buttonText, position, entrance, bloc
     } else {
       const { error: e } = await supabase
         .from('rsvps')
-        .insert({ project_id: projectId, name: cleanName, attendance, guest_count: guestCount, message: message.trim() || null });
+        .insert({ project_id: projectId, name: cleanName, attendance, guest_count: guestCount, message: message.trim() || null, checkin_token: clientToken });
       error = e;
     }
 
@@ -70,11 +87,12 @@ export default function Rsvp({ title, note, buttonText, position, entrance, bloc
     } catch {
       /* ignore */
     }
+    setCheckinToken(clientToken);
     setStatus('success');
   }
 
-  const inputClass =
-    'w-full rounded-xl border border-current/15 bg-transparent px-4 py-2.5 text-sm outline-none transition-colors focus:border-current';
+  const inputClass = 'w-full rounded-xl border border-current/15 bg-transparent px-4 py-2.5 text-sm outline-none transition-colors focus:border-current';
+  const qrUrl = checkinToken ? `${getSiteOrigin()}/absen/${projectId}?t=${checkinToken}` : '';
 
   return (
     <BlockShell position={position} entrance={entrance} blockStyle={blockStyle}>
@@ -85,7 +103,33 @@ export default function Rsvp({ title, note, buttonText, position, entrance, bloc
         {note ? <p className="mt-2 text-sm opacity-70">{note}</p> : null}
 
         {status === 'success' ? (
-          <p className="mx-auto mt-6 max-w-sm text-sm leading-relaxed">Terima kasih atas konfirmasi Anda.</p>
+          <div className="mx-auto mt-8 w-full max-w-sm">
+            <p className="text-sm leading-relaxed">Terima kasih atas konfirmasinya.</p>
+            {checkinToken && attendance !== 'tidak' ? (
+              <div className="mt-5 rounded-2xl border border-current/10 bg-white/60 p-4">
+                <div className="mx-auto w-fit rounded-xl bg-white p-3 shadow-soft">
+                  <QRCode value={qrUrl} size={150} fgColor="#2B2620" title={qrUrl} />
+                </div>
+                <p className="mt-3 text-xs leading-relaxed opacity-75">Pindai QR ini oleh panitia saat tiba di lokasi.</p>
+                <div className="mx-auto mt-3 flex max-w-[260px] items-center gap-1.5 rounded-lg border border-dashed border-current/25 bg-white/70 px-2.5 py-1.5">
+                  <code className="min-w-0 flex-1 break-all font-mono text-[11px] opacity-80">{checkinToken}</code>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      void navigator.clipboard?.writeText(checkinToken).then(() => {
+                        setCopied(true);
+                        setTimeout(() => setCopied(false), 1500);
+                      });
+                    }}
+                    className="flex shrink-0 items-center gap-1 rounded-md border border-current/20 px-2 py-1 text-[10px] font-semibold hover:bg-current/10"
+                  >
+                    {copied ? <Check className="h-3 w-3 text-emerald-600" /> : <Copy className="h-3 w-3" />}
+                    Salin
+                  </button>
+                </div>
+              </div>
+            ) : null}
+          </div>
         ) : (
           <form onSubmit={handleSubmit} className="mx-auto mt-6 w-full max-w-sm space-y-4 text-left" noValidate>
             <div>
