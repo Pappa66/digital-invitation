@@ -138,10 +138,36 @@ export default function Rsvp({ title, note, buttonText, position, entrance, bloc
             <p className="text-sm leading-relaxed">Terima kasih atas konfirmasinya.</p>
             {checkinToken && attendance !== 'tidak' ? (
               <div className="mt-5 rounded-2xl border border-current/10 bg-white/60 p-4">
-                <div className="mx-auto w-fit rounded-xl bg-white p-3 shadow-soft">
+                <div ref={qrWrapRef} className="mx-auto w-fit rounded-xl bg-white p-3 shadow-soft">
                   <QRCode value={qrUrl} size={150} fgColor="#2B2620" title={qrUrl} />
                 </div>
                 <p className="mt-3 text-xs leading-relaxed opacity-75">Pindai QR ini oleh panitia saat tiba di lokasi.</p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const svg = qrWrapRef.current?.querySelector('svg');
+                    if (!svg) return;
+                    const qr = svg.outerHTML;
+                    const size = 150, pad = 16, extra = 70;
+                    const w = size + pad * 2, h = size + pad * 2 + extra;
+                    const esc = (t: string) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                    const doc = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">`
+                      + `<rect width="100%" height="100%" fill="#ffffff"/>`
+                      + `<g transform="translate(${pad},${pad})">${qr}</g>`
+                      + (code ? `<text x="${w / 2}" y="${size + pad * 2 + 26}" text-anchor="middle" font-family="monospace" font-size="20" font-weight="bold" fill="#2B2620">${esc(code)}</text>` : '')
+                      + `<text x="${w / 2}" y="${size + pad * 2 + 48}" text-anchor="middle" font-family="monospace" font-size="9" fill="#666666">${esc(checkinToken ?? '')}</text>`
+                      + `</svg>`;
+                    const blob = new Blob([doc], { type: 'image/svg+xml' });
+                    const a = document.createElement('a');
+                    a.href = URL.createObjectURL(blob);
+                    a.download = `qr-absen-${code ?? checkinToken}.svg`;
+                    a.click();
+                    URL.revokeObjectURL(a.href);
+                  }}
+                  className="mt-3 rounded-full border border-current/25 px-4 py-1.5 text-[11px] font-semibold"
+                >
+                  Unduh QR + Kode
+                </button>
               {code ? (
                 <div className="mx-auto mt-3 flex items-center justify-center gap-2 rounded-lg bg-[var(--color-primary,#3b5ba5)]/10 px-3 py-2">
                   <span className="text-[10px] uppercase tracking-wide opacity-70">Kode manual</span>
