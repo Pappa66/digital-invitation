@@ -539,6 +539,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
         title: 'Kirim Hadiah',
         accounts: [{ bankName: 'Bank Mandiri', accountNumber: '1234567890', accountHolder: 'Sena Ayudia' }],
         address: '',
+        buttonText: 'Beri Hadiah',
         entrance: 'fade',
         blockStyle: {},
         position: defaultPosition

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import Story from '@/blocks/Story';
 import Quote from '@/blocks/Quote';
 import Thanks from '@/blocks/Thanks';
@@ -58,6 +58,7 @@ describe('GiftList & Envelope', () => {
         position={flow}
       />
     );
+    fireEvent.click(screen.getByRole('button', { name: /beri hadiah/i }));
     expect(screen.getByText('1234567890')).toBeInTheDocument();
     expect(screen.getByText(/Sena/)).toBeInTheDocument();
   });

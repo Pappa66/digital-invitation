@@ -2,7 +2,10 @@ import { describe, expect, it, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 
 vi.mock('@/lib/supabase/client', () => ({
-  supabase: { from: () => ({ insert: async () => ({ error: null }) }) }
+  supabase: {
+    from: () => ({ insert: async () => ({ error: null }) }),
+    rpc: async () => ({ data: [{ ok: true, error: null }], error: null })
+  }
 }));
 vi.mock('@/lib/env', () => ({ demoIsDemoMode: () => false }));
 vi.mock('@/lib/site', () => ({ getSiteOrigin: () => 'https://example.com' }));

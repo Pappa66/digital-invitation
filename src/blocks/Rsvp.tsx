@@ -71,10 +71,25 @@ export default function Rsvp({ title, note, buttonText, position, entrance, bloc
       const res = demoAddRsvp(projectId, { name: cleanName, attendance, guest_count: guestCount, message: message.trim(), meal_choice: null });
       error = res.error ? { message: res.error } : null;
     } else {
-      const { error: e } = await supabase
-        .from('rsvps')
-        .insert({ project_id: projectId, name: cleanName, attendance, guest_count: guestCount, message: message.trim() || null, checkin_token: clientToken });
-      error = e;
+      // RPC server-side (rate-limit + dedupe); fallback insert bila migrasi belum dijalankan.
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { data: rpcData, error: rpcErr } = await (supabase.rpc as any)('submit_rsvp', {
+        p_project_id: projectId,
+        p_name: cleanName,
+        p_attendance: attendance,
+        p_guest_count: guestCount,
+        p_message: message.trim() || null,
+        p_checkin_token: clientToken
+      });
+      if (rpcErr) {
+        const { error: e } = await supabase
+          .from('rsvps')
+          .insert({ project_id: projectId, name: cleanName, attendance, guest_count: guestCount, message: message.trim() || null, checkin_token: clientToken });
+        error = e;
+      } else {
+        const row = Array.isArray(rpcData) ? rpcData[0] : null;
+        if (row && row.ok === false) error = { message: row.error ?? 'Ditolak' };
+      }
     }
 
     if (error) {

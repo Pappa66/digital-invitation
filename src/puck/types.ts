@@ -175,6 +175,7 @@ export interface GiftListProps extends BaseBlockProps {
   title: string;
   accounts: GiftAccount[];
   address?: string;
+  buttonText?: string;
 }
 
 export type DividerVariant = 'line' | 'dots' | 'diamond' | 'hearts' | 'leaves';
