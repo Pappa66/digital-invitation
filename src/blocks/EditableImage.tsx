@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createUsePuck } from '@puckeditor/core';
 import type { config } from '@/puck/config';
 import { setComponentProp } from '@/puck/overrides/position-utils';
@@ -13,6 +13,7 @@ interface PanOverlayProps {
   zoomKey: string;
   position: string;
   zoom: number;
+  onInteract?: () => void;
 }
 
 function parsePos(pos: string): { x: number; y: number } {
@@ -21,7 +22,7 @@ function parsePos(pos: string): { x: number; y: number } {
 }
 
 /** Overlay: geser (object-position) + scroll untuk zoom. */
-function PanOverlay({ componentId, propKey, zoomKey, position, zoom }: PanOverlayProps) {
+function PanOverlay({ componentId, propKey, zoomKey, position, zoom, onInteract }: PanOverlayProps) {
   const dispatch = usePuckStore((s) => s.dispatch);
   const ref = useRef<HTMLDivElement>(null);
   const start = useRef<{ x: number; y: number; ox: number; oy: number; w: number; h: number } | null>(null);
@@ -33,6 +34,7 @@ function PanOverlay({ componentId, propKey, zoomKey, position, zoom }: PanOverla
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
       e.stopPropagation();
+      onInteract?.();
       const next = Math.max(1, Math.min(3, zoom - e.deltaY * 0.0015));
       dispatch({ type: 'setData', data: (prev) => setComponentProp(prev, componentId, zoomKey, Number(next.toFixed(2))) });
     };
@@ -43,6 +45,7 @@ function PanOverlay({ componentId, propKey, zoomKey, position, zoom }: PanOverla
   function onPointerDown(e: React.PointerEvent<HTMLDivElement>) {
     e.stopPropagation();
     e.preventDefault();
+    onInteract?.();
     const rect = e.currentTarget.getBoundingClientRect();
     const cur = parsePos(position);
     start.current = { x: e.clientX, y: e.clientY, ox: cur.x, oy: cur.y, w: rect.width || 1, h: rect.height || 1 };
@@ -106,6 +109,7 @@ export default function EditableImage({
   className,
   imgClassName
 }: EditableImageProps) {
+  const [adjusting, setAdjusting] = useState(false);
   return (
     <div className={`relative overflow-hidden ${className ?? ''}`}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -117,7 +121,19 @@ export default function EditableImage({
         className={`h-full w-full ${imgClassName ?? ''}`}
         style={{ objectFit: fit, objectPosition: position, transform: zoom && zoom !== 1 ? `scale(${zoom})` : undefined }}
       />
-      {editable && componentId ? <PanOverlay componentId={componentId} propKey={propKey} zoomKey={zoomKey} position={position} zoom={zoom} /> : null}
+      {editable ? <div className="pointer-events-none absolute inset-0 z-20 border-2 border-dashed border-[#c9a45c]/70" aria-hidden /> : null}
+      {editable && componentId ? (
+        <PanOverlay componentId={componentId} propKey={propKey} zoomKey={zoomKey} position={position} zoom={zoom} onInteract={() => setAdjusting(true)} />
+      ) : null}
+      {editable && adjusting ? (
+        <button
+          type="button"
+          onClick={() => setAdjusting(false)}
+          className="absolute bottom-2 right-2 z-30 rounded-full bg-[#c9a45c] px-3 py-1 text-[10px] font-semibold text-white shadow"
+        >
+          Simpan
+        </button>
+      ) : null}
     </div>
   );
 }

@@ -381,6 +381,7 @@ export default function InviteManager({ projectId, slug: slugProp, title: titleP
 
         <Panel>
           <PanelTitle>Agama &amp; Ucapan</PanelTitle>
+          <p className="mt-2 rounded-lg bg-[#fbf3e9] px-3 py-2 text-[11px] leading-relaxed text-[#8a6d2f]">Disarankan membuka undangan di browser <b>Google Chrome</b> agar musik, animasi, dan RSVP berjalan optimal.</p>
           <div className="mt-3 grid grid-cols-3 gap-1.5">
             {RELIGIONS.map((r) => (
               <SegBtn key={r.key} active={religion === r.key} onClick={() => applyReligion(r.key)}>

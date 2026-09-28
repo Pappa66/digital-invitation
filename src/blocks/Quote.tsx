@@ -10,22 +10,23 @@ const BOX: Record<NonNullable<QuoteProps['variant']>, string> = {
 
 export default function Quote({ text, arabic, source, variant = 'plain', preset, position, entrance, blockStyle }: QuoteProps) {
   const lib = getQuoteById(preset);
-  const arabicText = lib?.original ?? arabic;
+  const original = lib?.original ?? arabic ?? '';
   const bodyText = lib?.translation ?? text;
   const sourceText = lib?.reference ?? source;
+  const isArabic = /[\u0600-\u06FF]/.test(original);
 
   return (
     <BlockShell position={position} entrance={entrance} blockStyle={blockStyle}>
       <section className="bg-[var(--color-background,#fbf7f1)] px-8 py-14 text-center text-[var(--color-text,#4a4036)]">
         <div className={BOX[variant]}>
-          {arabicText ? (
+          {original ? (
             <p
-              dir="rtl"
-              lang="ar"
-              className="mb-3 text-2xl leading-loose"
-              style={{ fontFamily: "'Amiri', 'Scheherazade New', 'Noto Naskh Arabic', serif" }}
+              dir={isArabic ? 'rtl' : 'ltr'}
+              lang={isArabic ? 'ar' : undefined}
+              className={isArabic ? 'mb-3 text-2xl leading-loose' : 'mb-3 text-lg leading-relaxed opacity-90'}
+              style={isArabic ? { fontFamily: "'Amiri', 'Scheherazade New', 'Noto Naskh Arabic', serif" } : undefined}
             >
-              {arabicText}
+              {original}
             </p>
           ) : (
             <p className="text-3xl leading-none" style={{ color: 'var(--color-primary)', fontFamily: 'var(--font-heading)' }}>

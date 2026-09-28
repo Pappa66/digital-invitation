@@ -56,9 +56,10 @@ function couple(id: string, groom: string, groomParents: string, bride: string, 
     props: { id, title: 'Mempelai', groom, groomParents, bride, brideParents, entrance: 'fade', position: flow }
   } as Block;
 }
-function quote(id: string, text: string, source: string): Block {
-  return { type: 'Quote', props: { id, text, source, entrance: 'fade', position: flow } } as Block;
+function quote(id: string, text: string, source: string, preset = ''): Block {
+  return { type: 'Quote', props: { id, text, source, preset, variant: 'plain', entrance: 'fade', position: flow } } as Block;
 }
+
 function countdown(id: string, targetDate: string): Block {
   return { type: 'Countdown', props: { id, title: 'Menghitung Hari', targetDate, entrance: 'fade', position: flow } } as Block;
 }
@@ -182,7 +183,7 @@ const BLUEPRINTS: Blueprint[] = [
     ]),
     blocks: [
       hero('ivory-gold-hero', 'The Wedding of', 'Sena Ayudia', 'Panca Priyantoro', 'Sabtu, 12 Desember 2026', 'The Ritz-Carlton, Jakarta'),
-      quote('ivory-gold-quote', 'Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan hidup dari jenismu sendiri.', 'QS. Ar-Rum: 21'),
+      quote('ivory-gold-quote', 'Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan hidup dari jenismu sendiri.', 'QS. Ar-Rum: 21', 'islam-arrum-21'),
       couple('ivory-gold-couple', 'Panca Priyantoro, S.T.', 'Putra dari Bpk. H. Darmo & Ibu Hj. Wulan', 'Sena Ayudia, S.E.', 'Putri dari Bpk. Ir. Rendra & Ibu Hj. Lily'),
       countdown('ivory-gold-countdown', '2026-12-12T08:00:00+07:00'),
       events('ivory-gold-event', 'Sabtu, 12 Desember 2026', 'The Ritz-Carlton Grand Ballroom'),
@@ -294,7 +295,7 @@ const BLUEPRINTS: Blueprint[] = [
     ]),
     blocks: [
       hero('navy-elegance-hero', 'The Wedding of', 'Anindya Kirana', 'Raka Wijaya', 'Sabtu, 14 Maret 2026', 'Hotel Indonesia Kempinski, Jakarta'),
-      quote('navy-elegance-quote', 'Dan di antara tanda-tanda kekuasaan-Nya, Dia menciptakan untukmu pasangan agar kamu merasa tenteram.', 'QS. Ar-Rum: 21'),
+      quote('navy-elegance-quote', 'Dan di antara tanda-tanda kekuasaan-Nya, Dia menciptakan untukmu pasangan agar kamu merasa tenteram.', 'QS. Ar-Rum: 21', 'islam-arrum-21'),
       couple('navy-elegance-couple', 'Raka Wijaya', 'Putra dari Bpk. & Ibu Wijaya', 'Anindya Kirana', 'Putri dari Bpk. & Ibu Kirana'),
       countdown('navy-elegance-countdown', '2026-03-14T09:00:00+07:00'),
       events('navy-elegance-event', 'Sabtu, 14 Maret 2026', 'Hotel Indonesia Kempinski'),
@@ -408,7 +409,7 @@ const BLUEPRINTS: Blueprint[] = [
     ]),
     blocks: [
       hero('emerald-khaki-hero', 'The Wedding of', 'Ayu Paramita', 'Damar Wicaksono', 'Sabtu, 3 Oktober 2026', 'Bogor Botanical Garden'),
-      quote('emerald-khaki-quote', 'Dan segala sesuatu Kami ciptakan berpasang-pasangan supaya kamu mengingat kebesaran Allah.', 'QS. Adz-Dzariyat: 49'),
+      quote('emerald-khaki-quote', 'Dan segala sesuatu Kami ciptakan berpasang-pasangan supaya kamu mengingat kebesaran Allah.', 'QS. Adz-Dzariyat: 49', 'islam-adzdzariyat-49'),
       couple('emerald-khaki-couple', 'Damar Wicaksono', 'Putra dari Bpk. & Ibu Wicaksono', 'Ayu Paramita', 'Putri dari Bpk. & Ibu Paramita'),
       countdown('emerald-khaki-countdown', '2026-10-03T09:00:00+07:00'),
       events('emerald-khaki-event', 'Sabtu, 3 Oktober 2026', 'Bogor Botanical Garden'),
