@@ -9,7 +9,7 @@ import { config } from '@/puck/config';
 import ComponentOverlay from '@/puck/overrides/ComponentOverlay';
 import { usePuckAutosave, savePuckNow } from '@/puck/hooks/use-puck-autosave';
 import { usePuckProject } from '@/puck/hooks/use-puck-project';
-import { getPuckTemplate } from '@/lib/templates/puck';
+import { saveUserTemplate } from '@/lib/user-templates';
 import { clientSetProjectStatus } from '@/lib/api/project-client';
 import { saveDesignByShareToken } from '@/lib/actions/share-token-actions';
 import BuilderHeader from '@/puck/components/builder-header';
@@ -82,15 +82,19 @@ export default function PuckBuilder({ projectId, editToken }: PuckBuilderProps) 
     reader.readAsText(file);
   }
 
-  function selectTemplate(id: string | null) {
-    if (id) {
-      const tpl = getPuckTemplate(id);
-      if (tpl) {
-        setData(tpl);
-        setEditorKey((k) => k + 1);
-      }
+  function selectTemplate(next: PuckData | null) {
+    if (next) {
+      setData(next);
+      setEditorKey((k) => k + 1);
     }
     closePicker();
+  }
+
+  function saveAsTemplate() {
+    if (!data) return;
+    const name = window.prompt('Nama template:', meta.title || 'Template Saya');
+    if (name === null) return;
+    saveUserTemplate(name, data);
   }
 
   if (access === 'denied') return <DeniedScreen />;
@@ -114,6 +118,7 @@ export default function PuckBuilder({ projectId, editToken }: PuckBuilderProps) 
         onOpenMedia={() => setMediaOpen(true)}
         onExport={exportJson}
         onImport={importJson}
+        onSaveTemplate={saveAsTemplate}
         onPublish={() => data && handlePublish(data)}
       />
 

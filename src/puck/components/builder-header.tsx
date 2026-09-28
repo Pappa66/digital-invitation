@@ -24,13 +24,14 @@ interface BuilderHeaderProps {
   onOpenMedia: () => void;
   onExport: () => void;
   onImport: (file: File) => void;
+  onSaveTemplate: () => void;
   onPublish: () => void;
 }
 
 const BTN = 'rounded-md border border-[#e0d6c2] bg-white px-3 py-1.5 text-xs font-medium text-[#4a443c] hover:border-[#c9a45c]';
 
 /** Header editor: judul, status simpan, aksi template/publish/preview + tamu/share. */
-export default function BuilderHeader({ meta, saveStatus, busy, isEditLink, legacy, projectId, device, onDevice, onOpenPicker, onOpenMedia, onExport, onImport, onPublish }: BuilderHeaderProps) {
+export default function BuilderHeader({ meta, saveStatus, busy, isEditLink, legacy, projectId, device, onDevice, onOpenPicker, onOpenMedia, onExport, onImport, onSaveTemplate, onPublish }: BuilderHeaderProps) {
   const [busyLink, setBusyLink] = useState(false);
   const [toast, setToast] = useState('');
   const importRef = useRef<HTMLInputElement>(null);
@@ -105,6 +106,9 @@ export default function BuilderHeader({ meta, saveStatus, busy, isEditLink, lega
             </button>
             <button type="button" onClick={onOpenMedia} className={BTN}>
               Media
+            </button>
+            <button type="button" onClick={onSaveTemplate} className={BTN}>
+              Simpan Template
             </button>
             <button type="button" onClick={onExport} className={BTN}>
               Ekspor
