@@ -293,6 +293,9 @@ export interface InvitationRootProps extends InvitationTheme {
   checkinEnabled?: 'yes' | 'no';
   /** Agama untuk preset ucapan (mempengaruhi wording di kelola tamu). */
   religion?: string;
+  /** Overlay seluruh undangan (0-1) + warna. */
+  overlayOpacity?: number;
+  overlayColor?: string;
   /** Lebar undangan (px) di layar besar. Default 430. */
   canvasWidth?: number;
   /** Bingkai dekoratif mengelilingi undangan. */

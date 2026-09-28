@@ -156,7 +156,7 @@ export default function BuilderHeader({ meta, saveStatus, busy, isEditLink, lega
 
         {meta.slug ? (
           <a
-            href={`${getSiteOrigin()}/${meta.slug}${isEditLink ? '' : '?preview=1'}`}
+            href={`${typeof window !== 'undefined' ? window.location.origin : getSiteOrigin()}/${meta.slug}${isEditLink ? '' : '?preview=1'}`}
             target="_blank"
             rel="noopener noreferrer"
             className="rounded-md bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-3 py-1.5 text-xs font-medium text-white hover:opacity-90"

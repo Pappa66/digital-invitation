@@ -840,6 +840,8 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
         options: RELIGIONS.map((r) => ({ label: r.label, value: r.key }))
       },
       canvasWidth: { type: 'number', label: 'Lebar Undangan (px)', min: 320, max: 1200 },
+      overlayColor: colorField('Warna Overlay'),
+      overlayOpacity: { type: 'number', label: 'Overlay Opacity (0–1)', min: 0, max: 1 },
       frame: {
         type: 'select',
         label: 'Bingkai Undangan',
@@ -867,9 +869,11 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
       checkinEnabled: 'yes',
       religion: 'islam',
       canvasWidth: 430,
+      overlayColor: '#000000',
+      overlayOpacity: 0,
       frame: 'none'
     },
-    render: ({ children, primary, secondary, background, text, fontHeading, fontBody, decor, frame, canvasWidth }) => (
+    render: ({ children, primary, secondary, background, text, fontHeading, fontBody, decor, frame, canvasWidth, overlayColor, overlayOpacity }) => (
       <div
         className="invitation-canvas relative mx-auto min-h-[100dvh] w-full overflow-x-hidden"
         style={
@@ -896,6 +900,9 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
         {children}
         <DecorLayer decor={decor} />
         <GuestFrame mode={frame} color={secondary} fixed={false} />
+        {Number(overlayOpacity) > 0 ? (
+          <div className="pointer-events-none absolute inset-0 z-[60]" style={{ background: overlayColor || '#000000', opacity: Number(overlayOpacity) }} aria-hidden />
+        ) : null}
       </div>
     )
   },

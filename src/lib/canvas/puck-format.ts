@@ -35,6 +35,8 @@ export function emptyPuckData(): PuckData {
         checkinEnabled: 'yes',
         religion: 'islam',
         canvasWidth: 430,
+        overlayColor: '#000000',
+        overlayOpacity: 0,
         frame: 'none'
       }
     },
