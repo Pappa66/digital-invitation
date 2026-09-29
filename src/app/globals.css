@@ -327,3 +327,11 @@ body.puck-modal-open .puck-selected-wrapper {
     max-width: var(--preview-max-w, var(--invite-max-w, 430px));
   }
 }
+
+/* Ken-burns halus untuk gambar cover undangan. */
+.cover-kenburns { animation: coverKenburns 20s ease-in-out infinite alternate; }
+@keyframes coverKenburns {
+  from { transform: scale(1) translateY(0); }
+  to { transform: scale(1.1) translateY(-2%); }
+}
+@media (prefers-reduced-motion: reduce) { .cover-kenburns { animation: none; } }

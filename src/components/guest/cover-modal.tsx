@@ -99,7 +99,7 @@ export default function CoverModal({
         <div
           className="fixed inset-0 z-50 overflow-hidden"
           style={{
-            background: `color-mix(in srgb, ${background} 45%, #000 55%)`,
+            background: `linear-gradient(160deg, color-mix(in srgb, ${primary} 55%, #0b0905) 0%, #0b0905 70%)`,
             color: text
           }}
           role="dialog"
@@ -144,7 +144,7 @@ export default function CoverModal({
                     loop
                     muted
                     playsInline
-                    className="absolute inset-0 h-full w-full object-cover opacity-85"
+                    className="absolute inset-0 h-full w-full object-cover opacity-85 cover-kenburns"
                   />
                 ) : (
                   <Image
