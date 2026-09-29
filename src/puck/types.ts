@@ -276,6 +276,8 @@ export interface DecorItem {
 /** Props root lengkap: tema + dekor kanvas + pengaturan tamu. */
 export interface InvitationRootProps extends InvitationTheme {
   decor: DecorItem[];
+  /** Field display-only (panel). */
+  _anim?: string;
   /** Tampilkan cover "Buka Undangan" (default 'yes'). */
   showCover?: 'yes' | 'no';
   coverGreeting?: string;
