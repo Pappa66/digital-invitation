@@ -30,6 +30,7 @@ interface PersonProps {
   nameStyle?: React.CSSProperties;
   photoPosition?: string;
   photoZoom?: number;
+  swap?: boolean;
   editable?: boolean;
   componentId?: string;
   nameKey?: string;
@@ -47,7 +48,14 @@ function Person({ name, parents, photo, reverse, nameStyle, photoPosition, photo
   );
 }
 
-export default function Couple({ title, groom, groomParents, groomPhoto, bride, brideParents, bridePhoto, photoPosition, photoZoom = 1, variant = 'vertical', nameSize, nameFont, nameColor, position, entrance, blockStyle, id, puck }: CoupleProps & { id?: string; puck?: { isEditing?: boolean } }) {
+export default function Couple({ title, groom, groomParents, groomPhoto, bride, brideParents, bridePhoto, photoPosition, photoZoom = 1, swap = 'no', variant = 'vertical', nameSize, nameFont, nameColor, position, entrance, blockStyle, id, puck }: CoupleProps & { id?: string; puck?: { isEditing?: boolean } }) {
+  const doSwap = swap === 'yes';
+  const A = doSwap
+    ? { n: bride, p: brideParents, ph: bridePhoto, k: 'bride' }
+    : { n: groom, p: groomParents, ph: groomPhoto, k: 'groom' };
+  const B = doSwap
+    ? { n: groom, p: groomParents, ph: groomPhoto, k: 'groom' }
+    : { n: bride, p: brideParents, ph: bridePhoto, k: 'bride' };
   const nameStyle: React.CSSProperties = {
     fontFamily: nameFont ? `'${nameFont}', serif` : 'var(--font-heading)',
     fontSize: nameSize || undefined,
@@ -60,26 +68,26 @@ export default function Couple({ title, groom, groomParents, groomPhoto, bride, 
 
         {variant === 'side' ? (
           <div className="mx-auto mt-8 flex max-w-sm flex-col gap-6">
-            <Person name={groom} parents={groomParents} photo={groomPhoto} nameStyle={nameStyle} photoPosition={photoPosition} photoZoom={photoZoom} editable={puck?.isEditing} componentId={id} nameKey="groom" />
+            <Person name={A.n} parents={A.p} photo={A.ph} nameStyle={nameStyle} photoPosition={photoPosition} photoZoom={photoZoom} editable={puck?.isEditing} componentId={id} nameKey={A.k} />
             <div className="text-center text-2xl opacity-60" style={{ color: 'var(--color-primary)' }}>
               &amp;
             </div>
-            <Person name={bride} parents={brideParents} photo={bridePhoto} reverse nameStyle={nameStyle} photoPosition={photoPosition} photoZoom={photoZoom} editable={puck?.isEditing} componentId={id} nameKey="bride" />
+            <Person name={B.n} parents={B.p} photo={B.ph} reverse nameStyle={nameStyle} photoPosition={photoPosition} photoZoom={photoZoom} editable={puck?.isEditing} componentId={id} nameKey={B.k} />
           </div>
         ) : (
           <div className="mt-8 flex flex-col items-center gap-8 sm:flex-row sm:justify-center sm:gap-12">
             <div className="flex flex-col items-center">
-              <Photo src={groomPhoto} alt={groom} pos={photoPosition} zoom={photoZoom} editable={puck?.isEditing} componentId={id} />
-              <EditableText as="p" value={groom} editing={puck?.isEditing} componentId={id} propKey="groom" className="mt-3 text-xl" style={nameStyle} />
-              {groomParents ? <p className="mt-1 text-xs opacity-70">{groomParents}</p> : null}
+              <Photo src={A.ph} alt={A.n} pos={photoPosition} zoom={photoZoom} editable={puck?.isEditing} componentId={id} />
+              <EditableText as="p" value={A.n} editing={puck?.isEditing} componentId={id} propKey={A.k} className="mt-3 text-xl" style={nameStyle} />
+              {A.p ? <p className="mt-1 text-xs opacity-70">{A.p}</p> : null}
             </div>
             <span className="text-2xl opacity-60" style={{ color: 'var(--color-primary)' }}>
               &amp;
             </span>
             <div className="flex flex-col items-center">
-              <Photo src={bridePhoto} alt={bride} pos={photoPosition} zoom={photoZoom} editable={puck?.isEditing} componentId={id} />
-              <EditableText as="p" value={bride} editing={puck?.isEditing} componentId={id} propKey="bride" className="mt-3 text-xl" style={nameStyle} />
-              {brideParents ? <p className="mt-1 text-xs opacity-70">{brideParents}</p> : null}
+              <Photo src={B.ph} alt={B.n} pos={photoPosition} zoom={photoZoom} editable={puck?.isEditing} componentId={id} />
+              <EditableText as="p" value={B.n} editing={puck?.isEditing} componentId={id} propKey={B.k} className="mt-3 text-xl" style={nameStyle} />
+              {B.p ? <p className="mt-1 text-xs opacity-70">{B.p}</p> : null}
             </div>
           </div>
         )}

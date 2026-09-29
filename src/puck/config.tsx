@@ -258,6 +258,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
         bride: { type: 'text' },
         brideParents: { type: 'text' },
         bridePhoto: { type: 'custom', label: 'Foto Wanita', render: AssetField },
+        swap: { type: 'radio', label: 'Tukar Posisi (Pria/Wanita)', options: [{ label: 'Normal', value: 'no' }, { label: 'Tukar', value: 'yes' }] },
         variant: {
           type: 'select',
           label: 'Tata Letak',
@@ -290,7 +291,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
         bride: 'Nama Wanita',
         brideParents: 'Putri dari Bpk. & Ibu',
         bridePhoto: '',
-        photoPosition: 'center',
+        swap: 'no',
         photoZoom: 1,
         variant: 'vertical',
         nameFont: '',

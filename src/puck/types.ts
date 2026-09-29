@@ -82,6 +82,8 @@ export interface CoupleProps extends BaseBlockProps {
   bridePhoto?: string;
   /** Posisi fokus foto mempelai (object-position). */
   photoPosition?: string;
+  /** Tukar posisi pria/wanita. */
+  swap?: 'yes' | 'no';
   photoZoom?: number;
   variant?: 'vertical' | 'side';
   /** Ukuran font nama (CSS font-size). */

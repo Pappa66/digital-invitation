@@ -4,11 +4,11 @@ import type { BlockStyleLite, EntranceKind, Position } from '@/puck/types';
 
 const VARIANTS: Record<Exclude<EntranceKind, 'none' | 'parallax'>, Variants> = {
   fade: { hidden: { opacity: 0 }, show: { opacity: 1 } },
-  slide: { hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0 } },
-  slideUp: { hidden: { opacity: 0, y: -24 }, show: { opacity: 1, y: 0 } },
-  slideDown: { hidden: { opacity: 0, y: 40 }, show: { opacity: 1, y: 0 } },
-  zoom: { hidden: { opacity: 0, scale: 0.97 }, show: { opacity: 1, scale: 1 } },
-  flip: { hidden: { opacity: 0, rotateX: 45 }, show: { opacity: 1, rotateX: 0 } }
+  slide: { hidden: { opacity: 0, y: 48 }, show: { opacity: 1, y: 0 } },
+  slideUp: { hidden: { opacity: 0, y: -48 }, show: { opacity: 1, y: 0 } },
+  slideDown: { hidden: { opacity: 0, y: 64 }, show: { opacity: 1, y: 0 } },
+  zoom: { hidden: { opacity: 0, scale: 0.88 }, show: { opacity: 1, scale: 1 } },
+  flip: { hidden: { opacity: 0, rotateX: 70 }, show: { opacity: 1, rotateX: 0 } }
 };
 
 interface BlockShellProps {
@@ -48,7 +48,7 @@ function styleClass(blockStyle?: BlockStyleLite): string {
 export function BlockShell({ position, entrance = 'fade', blockStyle, children }: BlockShellProps) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
-  const parallaxY = useTransform(scrollYProgress, [0, 1], ['-12%', '12%']);
+  const parallaxY = useTransform(scrollYProgress, [0, 1], ['-18%', '18%']);
   const isParallax = entrance === 'parallax';
   const variant = entrance && entrance !== 'none' && !isParallax ? VARIANTS[entrance as Exclude<EntranceKind, 'none' | 'parallax'>] : null;
   const hasBgMedia = Boolean(blockStyle?.bgImage || blockStyle?.bgGradient);
@@ -65,7 +65,7 @@ export function BlockShell({ position, entrance = 'fade', blockStyle, children }
   const animated = isParallax ? (
     <motion.div style={{ y: parallaxY }}>{children}</motion.div>
   ) : variant ? (
-    <motion.div variants={variant} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.15 }} transition={{ duration: 0.5, ease: 'easeOut' }}>
+    <motion.div variants={variant} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.15 }} transition={{ duration: 0.7, ease: 'easeOut' }}>
       {children}
     </motion.div>
   ) : (

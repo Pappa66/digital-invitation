@@ -73,6 +73,7 @@ export default function CoverModal({
   }, [open]);
 
   const use3d = coverStyle === 'floral';
+  const hasImage = Boolean(coverBgImage || bgImage);
 
   function finish() {
     setOpen(false);
@@ -99,7 +100,7 @@ export default function CoverModal({
         <div
           className="fixed inset-0 z-50 overflow-hidden"
           style={{
-            background: `linear-gradient(160deg, color-mix(in srgb, ${primary} 55%, #0b0905) 0%, #0b0905 70%)`,
+            background: hasImage ? '#0b0905' : `linear-gradient(160deg, color-mix(in srgb, ${primary} 55%, #0b0905) 0%, #0b0905 70%)`,
             color: text
           }}
           role="dialog"
@@ -108,7 +109,7 @@ export default function CoverModal({
         >
           {/* Latar samping (viewport lebar): charcoal hangat + cahaya emas redup
               yang memusat (radial), bukan strip diagonal yang terpeleset. */}
-          <div
+          {!hasImage && <div
             aria-hidden
             className="pointer-events-none absolute inset-0"
             style={{
@@ -117,7 +118,7 @@ export default function CoverModal({
                 `radial-gradient(ellipse 80% 45% at 50% 100%, color-mix(in srgb, ${primary} 14%, transparent) 0%, transparent 58%)`
               ].join(', ')
             }}
-          />
+          />}
 
           {/* Kolom konten cover — full layar. Di layar ponsel (potrait) menjadi
               full-bleed; di layar lebih lebar tetap full-bleed agar foto &
@@ -144,7 +145,7 @@ export default function CoverModal({
                     loop
                     muted
                     playsInline
-                    className="absolute inset-0 h-full w-full object-cover opacity-85 cover-kenburns"
+                    className="absolute inset-0 h-full w-full object-cover cover-kenburns"
                   />
                 ) : (
                   <Image
@@ -152,7 +153,7 @@ export default function CoverModal({
                     className="object-cover opacity-70"
                   />
                 )}
-                <div className="absolute inset-0" style={{ background: 'rgba(18,13,9,0.18)' }} />
+                <div className="absolute inset-0" style={{ background: 'rgba(18,13,9,0.12)' }} />
               </div>
             )}
 
