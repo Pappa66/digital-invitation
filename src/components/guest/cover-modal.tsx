@@ -142,20 +142,20 @@ export default function CoverModal({
                     loop
                     muted
                     playsInline
-                    className="absolute inset-0 h-full w-full object-cover opacity-70"
+                    className="absolute inset-0 h-full w-full object-cover opacity-95"
                   />
                 ) : (
                   <Image
                     src={(coverBgImage || bgImage)!} alt="" fill priority sizes="100vw"
-                    className="object-cover opacity-70"
+                    className="object-cover opacity-95"
                   />
                 )}
-                <div className="absolute inset-0" style={{ background: 'rgba(18,13,9,0.34)' }} />
+                <div className="absolute inset-0" style={{ background: 'rgba(18,13,9,0.10)' }} />
               </div>
             )}
 
             {/* Layer tirai bunga procedural (floral) — hiasan di atas foto. */}
-            {use3d && (
+            {use3d && !(coverBgImage || bgImage) && (
               <Suspense fallback={<div className="absolute inset-0" style={{ background: `radial-gradient(ellipse 80% 60% at 50% 50%, color-mix(in srgb, ${primary} 18%, transparent), transparent 70%)` }} />}>
                 <FloralCurtain open={open} primary={primary} secondary={secondary} />
               </Suspense>

@@ -172,14 +172,7 @@ export default function TemplateDetail({ meta, index, canvas, categoryLabel, tot
               <MessageCircle className="h-4 w-4" aria-hidden />
               Pesan Template Ini
             </button>
-            <button
-              onClick={editInBuilder}
-              disabled={editBusy}
-              className="mt-3 flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-gold/70 bg-card px-5 py-3 text-sm font-semibold text-gold-deep transition-colors hover:bg-gold/10 disabled:opacity-60"
-            >
-              {editBusy ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : <Wand2 className="h-4 w-4" aria-hidden />}
-              {editBusy ? 'Membuka Builder…' : 'Edit Langsung di Builder'}
-            </button>
+            
             {editError && <p className="mt-2 text-center text-xs text-destructive">{editError}</p>}
             <p className="mt-3 text-center text-xs text-muted-foreground">Isi form pemesanan — tim kami yang akan mengerjakan desainnya untuk Anda.</p>
 
