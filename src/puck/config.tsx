@@ -24,6 +24,7 @@ import ColorField from '@/puck/fields/ColorField';
 import AssetField from '@/puck/fields/AssetField';
 import DecorField from '@/puck/fields/DecorField';
 import PanelSection from '@/puck/fields/PanelSection';
+import ApplyEntranceField from '@/puck/fields/ApplyEntranceField';
 import DecorLayer from '@/blocks/DecorLayer';
 import { GuestFrame } from '@/components/guest/guest-frame';
 import { defaultTheme } from '@/puck/theme';
@@ -841,6 +842,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
         options: RELIGIONS.map((r) => ({ label: r.label, value: r.key }))
       },
       canvasWidth: { type: 'number', label: 'Lebar Undangan (px)', min: 320, max: 1200 },
+      _anim: { type: 'custom', label: 'Animasi Semua Section', render: ApplyEntranceField },
       overlayColor: colorField('Warna Overlay'),
       overlayOpacity: { type: 'number', label: 'Overlay Opacity (0–1)', min: 0, max: 1 },
       frame: {
