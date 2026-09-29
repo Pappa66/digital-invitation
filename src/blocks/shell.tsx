@@ -2,7 +2,7 @@ import { useRef, type CSSProperties, type ReactNode } from 'react';
 import { motion, useScroll, useTransform, type Variants } from 'framer-motion';
 import type { BlockStyleLite, EntranceKind, Position } from '@/puck/types';
 
-const VARIANTS: Record<Exclude<EntranceKind, 'none'>, Variants> = {
+const VARIANTS: Record<Exclude<EntranceKind, 'none' | 'parallax'>, Variants> = {
   fade: { hidden: { opacity: 0 }, show: { opacity: 1 } },
   slide: { hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0 } },
   slideUp: { hidden: { opacity: 0, y: -24 }, show: { opacity: 1, y: 0 } },
