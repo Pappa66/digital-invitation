@@ -51,7 +51,7 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
   const rootClass =
     'guest-root relative w-full min-w-0 overflow-x-clip box-border ' +
     (canvas.theme.card_style ? 'guest-card-style ' : '') +
-    (width === 'desktop' ? 'mx-auto max-w-[430px] sm:max-w-[430px]' : 'mx-auto w-full max-w-[430px]');
+    (width === 'desktop' ? 'mx-auto max-w-[430px] sm:max-w-[430px]' : 'mx-auto w-full max-w-none sm:max-w-[430px]');
 
   const coverProps = {
     caption: typeof heroBlock?.props.caption === 'string' ? heroBlock.props.caption : 'Undangan Pernikahan',
