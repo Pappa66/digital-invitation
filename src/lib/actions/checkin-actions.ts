@@ -33,20 +33,23 @@ function parseUuid(value: string): string | null {
  */
 export async function verifyCheckinToken(projectId: string, token: string): Promise<VerifyCheckinResult> {
   const project = parseUuid(projectId);
-  const checkinToken = parseUuid(token);
-  if (!project || !checkinToken) {
-    return { error: 'ID proyek atau token tidak valid' };
-  }
+  if (!project) return { error: 'ID proyek tidak valid' };
+  const raw = (token || '').trim();
+  const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(raw);
+  if (!isUuid && !/^[A-Za-z0-9]{4,16}$/.test(raw)) return { error: 'Token/kode tidak valid' };
 
   const supabase = await createServerSupabase();
-  const { data, error } = await supabase.rpc('record_checkin_from_token', {
-    p_project_id: project,
-    p_token: checkinToken
-  });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const rpc = supabase.rpc as any;
+  const { data, error } = isUuid
+    ? await rpc('record_checkin_from_token', { p_project_id: project, p_token: raw })
+    : await rpc('record_checkin_by_code', { p_project_id: project, p_code: raw });
 
   if (error) return { error: error.message };
 
-  const row = data?.[0];
+  const row = (Array.isArray(data) ? data[0] : null) as
+    | { ok?: boolean; error?: string | null; name?: string | null; guest_count?: number | null; created_at?: string | null }
+    | null;
   if (!row) return { error: 'Check-in gagal: tidak ada respons' };
   if (!row.ok) return { error: row.error ?? 'Check-in ditolak' };
 

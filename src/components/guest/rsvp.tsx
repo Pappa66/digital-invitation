@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import QRCode from 'react-qr-code';
 import { supabase } from '@/lib/supabase/client';
 import { demoIsDemoMode } from '@/lib/env';
@@ -51,6 +51,8 @@ export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormPr
   const [errorMsg, setErrorMsg] = useState('');
   /** Token check-in personal dari RSVP yang baru dibuat (untuk QR absen). */
   const [checkinToken, setCheckinToken] = useState<string | null>(null);
+  const [code, setCode] = useState<string | null>(null);
+  const qrWrapRef = useRef<HTMLDivElement>(null);
   const variant = str(blockProps, 'variant') || 'centered';
   const menuGroups = parseMenuConfig(str(blockProps, 'menu_config'));
   const [menuSelections, setMenuSelections] = useState<Record<string, string>>({});
@@ -95,6 +97,10 @@ export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormPr
 
     // Generate token client-side agar QR selalu muncul (anon user tidak bisa
     // SELECT balik row mereka sendiri karena RLS hanya izinkan authenticated).
+    const CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    const arr = new Uint8Array(6);
+    try { crypto.getRandomValues(arr); } catch { for (let i=0;i<6;i++) arr[i]=Math.floor(Math.random()*256); }
+    const clientCode = Array.from(arr, (n) => CODE_ALPHABET[n % CODE_ALPHABET.length]).join('');
     let clientToken: string | null = null;
     try {
       clientToken = crypto.randomUUID();
@@ -127,7 +133,7 @@ export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormPr
     } else {
       const r = await supabase
         .from('rsvps')
-        .insert({ project_id: projectId, name: cleanName, attendance, guest_count: guestCount, message: message.trim() || null, meal_choice: mealChoice, menu_options: menuOptions, checkin_token: clientToken })
+        .insert({ project_id: projectId, name: cleanName, attendance, guest_count: guestCount, message: message.trim() || null, meal_choice: mealChoice, menu_options: menuOptions, checkin_token: clientToken, checkin_code: clientCode })
         .select('checkin_token');
       error = r.error;
       if (!r.error) {
@@ -163,10 +169,24 @@ export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormPr
         <div className="mt-6">
           {checkinToken && attendance !== 'tidak' ? (
             <div className="rounded-2xl border border-current/10 bg-white/60 p-4">
-              <div className="mx-auto w-fit rounded-xl bg-white p-3 shadow-soft">
+              <div ref={qrWrapRef} className="mx-auto w-fit rounded-xl bg-white p-3 shadow-soft">
                 <QRCode value={qrUrl} size={150} fgColor="#2B2620" title={qrUrl} />
               </div>
               <p className="mt-3 text-xs leading-relaxed opacity-75">Pindai QR ini oleh panitia saat tiba di lokasi.</p>
+              {code ? (
+                <div className="mx-auto mt-3 flex items-center justify-center gap-2 rounded-lg bg-black/5 px-3 py-2">
+                  <span className="text-[10px] uppercase tracking-wide opacity-70">Kode manual</span>
+                  <code className="font-mono text-lg font-bold tracking-[0.25em]">{code}</code>
+                  <button type="button" onClick={() => { void navigator.clipboard?.writeText(code); }} className="rounded border border-current/20 px-2 py-0.5 text-[10px]">Salin</button>
+                </div>
+              ) : null}
+              <button type="button" onClick={() => {
+                const svg = qrWrapRef.current?.querySelector('svg'); if(!svg) return;
+                const size=150,pad=16,extra=70,w=size+pad*2,h=size+pad*2+extra;
+                const esc=(t:string)=>t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+                const doc=`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><rect width="100%" height="100%" fill="#ffffff"/><g transform="translate(${pad},${pad})">${svg.outerHTML}</g>`+(code?`<text x="${w/2}" y="${size+pad*2+26}" text-anchor="middle" font-family="monospace" font-size="20" font-weight="bold" fill="#2B2620">${esc(code)}</text>`:'')+`<text x="${w/2}" y="${size+pad*2+48}" text-anchor="middle" font-family="monospace" font-size="9" fill="#666666">${esc(checkinToken??'')}</text></svg>`;
+                const blob=new Blob([doc],{type:'image/svg+xml'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`qr-absen-${code??checkinToken}.svg`; a.click(); URL.revokeObjectURL(a.href);
+              }} className="mt-3 rounded-full border border-current/25 px-4 py-1.5 text-[11px] font-semibold">Unduh QR + Kode</button>
               <div className="mx-auto mt-4 flex max-w-[260px] flex-col items-center gap-2">
                 <p className="text-[10px] uppercase tracking-wide opacity-60">Token manual (untuk panitia)</p>
                 <div className="flex w-full items-center gap-1.5 rounded-lg border border-dashed border-current/25 bg-white/70 px-2.5 py-1.5">

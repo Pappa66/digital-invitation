@@ -281,6 +281,7 @@ export interface Rsvp {
   menu_options?: { label: string; value: string }[] | null;
   /** Token personal untuk QR absen (check-in hari-H tanpa login). */
   checkin_token?: string | null;
+  checkin_code?: string | null;
 }
 
 /** Check-in kehadiran hari-H dari QR absensi. */
