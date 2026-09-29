@@ -6,7 +6,7 @@
 export type PositionMode = 'flow' | 'absolute';
 
 /** Animasi masuk saat section terlihat (guest). 'none' = tanpa animasi. */
-export type EntranceKind = 'none' | 'fade' | 'slide' | 'zoom' | 'slideUp' | 'slideDown' | 'flip';
+export type EntranceKind = 'none' | 'fade' | 'slide' | 'zoom' | 'slideUp' | 'slideDown' | 'flip' | 'parallax';
 
 export interface Position {
   mode: PositionMode;

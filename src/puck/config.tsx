@@ -67,6 +67,7 @@ const entranceField = {
     { label: 'Slide turun', value: 'slideDown' },
     { label: 'Zoom', value: 'zoom' },
     { label: 'Flip', value: 'flip' },
+    { label: 'Parallax (scroll)', value: 'parallax' },
     { label: 'Tanpa animasi', value: 'none' }
   ]
 };

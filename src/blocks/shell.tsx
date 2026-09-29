@@ -1,5 +1,5 @@
-import type { CSSProperties, ReactNode } from 'react';
-import { motion, type Variants } from 'framer-motion';
+import { useRef, type CSSProperties, type ReactNode } from 'react';
+import { motion, useScroll, useTransform, type Variants } from 'framer-motion';
 import type { BlockStyleLite, EntranceKind, Position } from '@/puck/types';
 
 const VARIANTS: Record<Exclude<EntranceKind, 'none'>, Variants> = {
@@ -46,7 +46,11 @@ function styleClass(blockStyle?: BlockStyleLite): string {
  * Override warna/font/latar per-bagian lewat `blockStyle`.
  */
 export function BlockShell({ position, entrance = 'fade', blockStyle, children }: BlockShellProps) {
-  const variant = entrance && entrance !== 'none' ? VARIANTS[entrance] : null;
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
+  const parallaxY = useTransform(scrollYProgress, [0, 1], ['-12%', '12%']);
+  const isParallax = entrance === 'parallax';
+  const variant = entrance && entrance !== 'none' && !isParallax ? VARIANTS[entrance as Exclude<EntranceKind, 'none' | 'parallax'>] : null;
   const hasBgMedia = Boolean(blockStyle?.bgImage || blockStyle?.bgGradient);
 
   const bgStyle: CSSProperties = hasBgMedia
@@ -58,7 +62,9 @@ export function BlockShell({ position, entrance = 'fade', blockStyle, children }
       }
     : {};
 
-  const animated = variant ? (
+  const animated = isParallax ? (
+    <motion.div style={{ y: parallaxY }}>{children}</motion.div>
+  ) : variant ? (
     <motion.div variants={variant} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.15 }} transition={{ duration: 0.5, ease: 'easeOut' }}>
       {children}
     </motion.div>
@@ -98,7 +104,7 @@ export function BlockShell({ position, entrance = 'fade', blockStyle, children }
   }
 
   return (
-    <div className={`relative w-full ${cls}`} style={base}>
+    <div ref={ref} className={`relative w-full ${cls}`} style={base}>
       {inner}
     </div>
   );

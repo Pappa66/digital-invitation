@@ -144,7 +144,7 @@ export default function CoverModal({
                     loop
                     muted
                     playsInline
-                    className="absolute inset-0 h-full w-full object-cover opacity-70"
+                    className="absolute inset-0 h-full w-full object-cover opacity-85"
                   />
                 ) : (
                   <Image
@@ -152,7 +152,7 @@ export default function CoverModal({
                     className="object-cover opacity-70"
                   />
                 )}
-                <div className="absolute inset-0" style={{ background: 'rgba(18,13,9,0.34)' }} />
+                <div className="absolute inset-0" style={{ background: 'rgba(18,13,9,0.18)' }} />
               </div>
             )}
 
