@@ -97,7 +97,7 @@ export default function CoverModal({
         <div
           className="fixed inset-0 z-50 overflow-hidden"
           style={{
-            background: `color-mix(in srgb, ${background} 45%, #000 55%)`,
+            background: '#0b0905',
             color: text
           }}
           role="dialog"

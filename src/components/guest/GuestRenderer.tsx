@@ -91,7 +91,7 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
           )}
           {immersive && <MusicPlayer settings={canvas.settings} />}
           {immersive && <ShareBar {...shareMeta} />}
-          <GuestNav blocks={canvas.blocks} />
+          {/* nav dihilangkan */}
           <GuestFrame mode={canvas.theme.frame} color={canvas.theme.secondary} fixed={!preview} />
           {immersive && showCover && <CoverModal {...coverProps} />}
         </div>
@@ -123,7 +123,7 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
         )}
         {immersive && <MusicPlayer settings={canvas.settings} />}
         {immersive && <ShareBar {...shareMeta} />}
-        <GuestNav blocks={canvas.blocks} />
+        {/* nav dihilangkan */}
         <GuestFrame mode={canvas.theme.frame} color={canvas.theme.secondary} fixed={!preview} />
         {immersive && showCover && <CoverModal {...coverProps} />}
       </div>
