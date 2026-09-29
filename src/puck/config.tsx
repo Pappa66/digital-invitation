@@ -722,6 +722,7 @@ export const config: Config<InvitationProps, InvitationRootProps> = {
       defaultProps: {
         text: 'Prasha Digital',
         opacity: 0.08,
+        href: '',
         entrance: 'none',
         blockStyle: {},
         position: defaultPosition

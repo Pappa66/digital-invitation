@@ -228,6 +228,7 @@ export interface CopyTextProps extends BaseBlockProps {
 export interface WatermarkProps extends BaseBlockProps {
   text: string;
   opacity?: number;
+  href?: string;
 }
 
 export interface CoverProps extends BaseBlockProps {

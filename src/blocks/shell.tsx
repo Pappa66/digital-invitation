@@ -95,7 +95,8 @@ export function BlockShell({ position, entrance = 'fade', blockStyle, children }
           top: position.y,
           width: position.width && position.width !== 'auto' ? position.width : undefined,
           transform: position.rotation ? `rotate(${position.rotation}deg)` : undefined,
-          zIndex: position.zIndex ?? 0
+          zIndex: position.zIndex ?? 0,
+          overflow: 'hidden'
         }}
       >
         {inner}
@@ -104,7 +105,7 @@ export function BlockShell({ position, entrance = 'fade', blockStyle, children }
   }
 
   return (
-    <div ref={ref} className={`relative w-full ${cls}`} style={base}>
+    <div ref={ref} className={`relative w-full overflow-hidden ${cls}`} style={base}>
       {inner}
     </div>
   );

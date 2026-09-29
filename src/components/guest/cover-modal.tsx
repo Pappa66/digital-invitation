@@ -158,7 +158,7 @@ export default function CoverModal({
             )}
 
             {/* Layer tirai bunga procedural (floral) — hiasan di atas foto. */}
-            {use3d && (
+            {use3d && !hasImage && (
               <Suspense fallback={<div className="absolute inset-0" style={{ background: `radial-gradient(ellipse 80% 60% at 50% 50%, color-mix(in srgb, ${primary} 18%, transparent), transparent 70%)` }} />}>
                 <FloralCurtain open={open} primary={primary} secondary={secondary} />
               </Suspense>
