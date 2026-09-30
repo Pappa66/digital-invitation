@@ -113,10 +113,18 @@ export default function MusicPlayer({ settings }: MusicPlayerProps) {
   const startAudio = useCallback(() => {
     const a = audioRef.current;
     if (!a || !isAudio) return;
-    a.currentTime = wantStart;
-    const p = a.play();
-    if (p && typeof p.catch === 'function') p.catch(() => {});
-    setPlaying(true);
+    const begin = () => {
+      try {
+        if (wantStart > 0 && Math.abs(a.currentTime - wantStart) > 0.3) a.currentTime = wantStart;
+      } catch {
+        /* ignore */
+      }
+      const p = a.play();
+      if (p && typeof p.catch === 'function') p.catch(() => {});
+      setPlaying(true);
+    };
+    if (a.readyState >= 1) begin();
+    else a.addEventListener('loadedmetadata', begin, { once: true });
   }, [isAudio, wantStart, setPlaying]);
 
   const startYt = useCallback(() => {
@@ -152,7 +160,7 @@ export default function MusicPlayer({ settings }: MusicPlayerProps) {
     return () => {
       window.removeEventListener('invite-opened', kick);
     };
-  }, [autoplay, armed, isAudio, yt, startAudio, startYt]);
+  }, [autoplay, armed, isAudio, yt?.id, startAudio, startYt]);
 
   // Inisialisasi YouTube IFrame Player API.
   useEffect(() => {
