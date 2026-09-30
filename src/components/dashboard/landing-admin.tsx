@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import MediaLibrary from '@/components/dashboard/media-library';
 
 type Patch = React.Dispatch<React.SetStateAction<LandingContent>>;
 
@@ -21,6 +22,7 @@ export default function LandingAdmin() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ ok: boolean; text: string } | null>(null);
+  const [mediaIndex, setMediaIndex] = useState<number | null>(null);
 
   useEffect(() => {
     getLandingContent()
@@ -117,6 +119,9 @@ export default function LandingAdmin() {
                       placeholder="Alt"
                       className="w-28"
                     />
+                    <Button type="button" variant="outline" size="sm" onClick={() => setMediaIndex(i)} aria-label="Pilih dari media" className="shrink-0">
+                      <ImageIcon className="h-4 w-4" />
+                    </Button>
                     {content.hero.images.length > 1 && (
                       <Button type="button" variant="ghost" size="icon" onClick={() => removeHeroImage(i)} aria-label="Hapus" className="shrink-0">
                         <Trash2 className="h-4 w-4 text-red-600" />
@@ -132,6 +137,14 @@ export default function LandingAdmin() {
               )}
               <p className="mt-1 text-[11px] text-muted-foreground">Kosongkan = template default.</p>
             </div>
+            <MediaLibrary
+              open={mediaIndex !== null}
+              onClose={() => setMediaIndex(null)}
+              onSelect={(url) => {
+                if (mediaIndex !== null) updateHeroImage(mediaIndex, 'url', url);
+                setMediaIndex(null);
+              }}
+            />
           </CardContent>
         </Card>
 
