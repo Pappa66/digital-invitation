@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect, useRef, useState } from 'react';
+
 import type { CanvasData } from '@/lib/types';
 import BlockView from '@/components/guest/BlockView';
 import MusicPlayer from '@/components/guest/music-player';
@@ -53,6 +55,29 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
     (canvas.theme.card_style ? 'guest-card-style ' : '') +
     (width === 'desktop' ? 'mx-auto max-w-[430px] sm:max-w-[430px]' : 'mx-auto w-full max-w-none sm:max-w-[430px]');
 
+  const rootRef = useRef<HTMLDivElement>(null);
+  const [revealOn, setRevealOn] = useState(false);
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const els = Array.from(root.querySelectorAll<HTMLElement>('[data-reveal]'));
+    if (!els.length || typeof IntersectionObserver === 'undefined') return;
+    setRevealOn(true);
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            e.target.setAttribute('data-reveal-visible', '');
+            io.unobserve(e.target);
+          }
+        }
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -8% 0px' }
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, [canvas.blocks.length, preview]);
+
   const coverProps = {
     caption: typeof heroBlock?.props.caption === 'string' ? heroBlock.props.caption : 'Undangan Pernikahan',
     bride: typeof heroBlock?.props.bride === 'string' ? heroBlock.props.bride : '',
@@ -103,9 +128,9 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
   return (
     <PreviewContext.Provider value={!!preview}>
       <ThemeContext.Provider value={canvas.theme}>
-      <div className={rootClass} style={styleVars}>
+      <div ref={rootRef} className={`${rootClass}${revealOn ? " js-reveal" : ""}`} style={styleVars}>
         {canvas.blocks.map((block, i) => (
-          <div key={block.id}>
+          <div key={block.id} data-reveal>
             <BlockView block={block} projectId={projectId} greetingName={greetingName} cardStyle={canvas.theme.card_style} demo={immersive && !!demo} showCoverButton={!showCover} />
             {i < canvas.blocks.length - 1 && <SectionGap />}
           </div>
