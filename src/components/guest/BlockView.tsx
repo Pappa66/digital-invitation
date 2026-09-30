@@ -182,7 +182,7 @@ function StyledSection({ style, children }: { style?: BlockStyle; children: Reac
   const textOverride = hasColorOverride ? ' data-text-override' : '';
 
   if (style.bgImage) {
-    const mono = style.bgMonochrome !== false;
+    const mono = style.bgMonochrome === true;
     const isVideoBg = /\.(mp4|webm|ogg|mov|m4v)(\?|$)/i.test(style.bgImage);
     return (
       <div className={`relative overflow-hidden transition-[background-color,background-image] duration-500 ease-out${textOverride}`} style={css}>
