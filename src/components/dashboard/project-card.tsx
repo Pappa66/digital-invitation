@@ -120,7 +120,7 @@ export default function ProjectCard({ project, onDuplicated, onDeleted, heroFall
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0 flex-1">
             <div className="flex min-w-0 items-center gap-2">
-              <p className="truncate text-sm font-medium text-gray-900">{couple || project.title}</p>
+              <p className="truncate text-sm font-medium text-gray-900">{project.title || couple}</p>
               <span
                 className={`flex shrink-0 items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[10px] font-medium ${
                   status === 'published' ? 'bg-emerald-50 text-emerald-700' : 'bg-gray-100 text-gray-500'
@@ -132,7 +132,7 @@ export default function ProjectCard({ project, onDuplicated, onDeleted, heroFall
               </span>
             </div>
             {couple && couple !== project.title && (
-              <p className="truncate text-[11px] text-gray-400">{project.title}</p>
+              <p className="truncate text-[11px] text-gray-400">{couple}</p>
             )}
             <p className="mt-0.5 text-[11px] text-gray-400">
               {new Date(project.updated_at || project.created_at).toLocaleDateString('id-ID')}
