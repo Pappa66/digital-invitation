@@ -94,7 +94,8 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
     coverGreeting: canvas.settings.cover_greeting,
     coverButtonText: canvas.settings.cover_button_text,
     coverBgImage: canvas.settings.cover_bg_image,
-    coverStyle: canvas.theme.cover_style
+    coverStyle: canvas.theme.cover_style,
+    coverValign: canvas.theme.cover_valign
   };
 
   if (flow === 'free') {

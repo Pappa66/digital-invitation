@@ -707,6 +707,14 @@ export default function PropertiesPanel({ mobileOpen = false, onClose }: { mobil
                   <ColorPicker label="Background" value={canvas.theme.background} onChange={(c) => setTheme({ background: c })} />
                   <ColorPicker label="Teks" value={canvas.theme.text} onChange={(c) => setTheme({ text: c })} />
                   <ColorPicker label="Teks Cover" value={canvas.theme.cover_text ?? '#ffffff'} onChange={(c) => setTheme({ cover_text: c })} />
+                  <div className="mt-2">
+                    <span className="mb-1 block text-xs font-medium text-[#6b6257]">Posisi Teks Cover</span>
+                    <div className="flex gap-1">
+                      {([['between','Sebar'],['center','Tengah'],['top','Atas'],['bottom','Bawah']] as const).map(([v,l]) => (
+                        <button key={v} type="button" onClick={() => setTheme({ cover_valign: v })} className={`flex-1 rounded-md border px-2 py-1 text-[11px] ${(canvas.theme.cover_valign ?? 'between') === v ? 'border-[#2b2620] bg-[#2b2620] text-white' : 'border-black/10 text-[#6b6257] hover:bg-black/5'}`}>{l}</button>
+                      ))}
+                    </div>
+                  </div>
                 </>
               }
             />

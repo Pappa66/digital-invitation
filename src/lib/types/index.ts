@@ -49,6 +49,8 @@ export interface Theme {
   card_entrance?: string;
   /** Warna teks cover undangan (default putih). */
   cover_text?: string;
+  /** Posisi vertikal teks cover: sebar (default), tengah, atas, bawah. */
+  cover_valign?: 'between' | 'center' | 'top' | 'bottom';
   /**
    * Ornamen dekoratif (SVG library) untuk section pengantar/sepanjang undangan.
    * Nilai: kunci di ornaments.tsx (mis. 'flourish', 'eucalyptus', 'rose-branch').

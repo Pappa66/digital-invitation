@@ -21,6 +21,7 @@ interface CoverModalProps {
   secondary: string;
   background: string;
   text: string;
+  coverValign?: 'between' | 'center' | 'top' | 'bottom';
   /** Skala huruf nama (dipakai template agar nama terlihat besar & mewah). */
   namesScale?: string;
   /** Ornamen SVG dekoratif (kunci di ornaments.tsx). */
@@ -54,6 +55,7 @@ export default function CoverModal({
   secondary,
   background,
   text,
+  coverValign,
   namesScale = 'text-[clamp(2rem,6vw,3.5rem)]',
   ornament,
   coverGreeting,
@@ -164,7 +166,7 @@ export default function CoverModal({
             {/* Floating petals animation */}
             <FloatingPetals color={primary} />
 
-            <div className="relative z-40 flex h-full w-full flex-col items-center justify-between px-6 py-12 text-center text-[color:var(--cover-text,#ffffff)] sm:px-10" style={{ paddingBottom: 'max(3rem, env(safe-area-inset-bottom))' }}>
+            <div className={`relative z-40 flex h-full w-full flex-col items-center ${coverValign === 'center' ? 'justify-center gap-10' : coverValign === 'top' ? 'justify-start gap-10' : coverValign === 'bottom' ? 'justify-end gap-10' : 'justify-between'} px-6 py-12 text-center text-[color:var(--cover-text,#ffffff)] sm:px-10`} style={{ paddingBottom: 'max(3rem, env(safe-area-inset-bottom))' }}>
               <div
                 className="mt-2 flex flex-col items-center"
               >
