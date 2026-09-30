@@ -1209,6 +1209,12 @@ export default function PropertiesPanel({ mobileOpen = false, onClose }: { mobil
                         >
                           Crop & Posisi Gambar
                         </button>
+                        <button
+                          onClick={() => setBlockProps(block.id, { bg_image: '', bg_position: '', bg_fit: '' })}
+                          className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-xs font-medium text-red-500 hover:bg-red-100"
+                        >
+                          Hapus Foto Hero
+                        </button>
                       )}
                     </div>
                   )}
