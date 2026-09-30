@@ -37,6 +37,7 @@ export default function BuilderPage() {
   const [guideOpen, setGuideOpen] = useState(false);
   const [access, setAccess] = useState<'checking' | 'ok' | 'denied'>('checking');
   const autoSlugRef = useRef<string | null>(null);
+  const manualTitleRef = useRef(false);
 
   useEffect(() => {
     async function load() {
@@ -80,13 +81,14 @@ export default function BuilderPage() {
     setRenameStatus('saving');
     const { error, slug } = await clientRenameProject(projectId, trimmed);
     if (!error && slug) setPreviewSlug(slug);
-    if (!error) autoSlugRef.current = trimmed;
+    if (!error) manualTitleRef.current = true;
     setRenameStatus(error ? 'idle' : 'saved');
     setTimeout(() => setRenameStatus('idle'), 1500);
   }
 
   // Otomatis: slug dinamis dari nama pasangan (Hero bride & groom) — update judul & slug tanpa edit manual
   useEffect(() => {
+    if (manualTitleRef.current) return;
     const hero = canvas.blocks.find((b) => b.type === 'Hero')?.props as Record<string, unknown> | undefined;
     const bride = typeof hero?.bride === 'string' ? hero.bride.trim() : '';
     const groom = typeof hero?.groom === 'string' ? hero.groom.trim() : '';
@@ -98,8 +100,7 @@ export default function BuilderPage() {
     const needSlugFix = wantSlug && haveSlug && wantSlug !== haveSlug && haveSlug.startsWith('elegant-gold');
     // Hanya auto bila judul masih default / masih sama dengan auto sebelumnya (jangan timpa edit manual) — atau slug lama masih template
     const isDefault = title === 'Tanpa Judul' || title === 'Elegant Gold' || title.trim() === '';
-    const isAuto = autoSlugRef.current !== null && title === autoSlugRef.current;
-    if (!isDefault && !isAuto && !needSlugFix) return;
+    if (!isDefault && !needSlugFix) return;
     if (autoTitle === title && !needSlugFix) return;
     // Debounce 800ms agar tidak spam saat ketik
     const t = setTimeout(async () => {
@@ -165,7 +166,7 @@ export default function BuilderPage() {
             <PenLine className="h-3.5 w-3.5 shrink-0 text-[#8a7a66]" />
             <input
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              onChange={(e) => { manualTitleRef.current = true; setTitle(e.target.value); }}
               onBlur={handleRename}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') e.currentTarget.blur();
