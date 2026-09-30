@@ -1203,6 +1203,7 @@ export default function PropertiesPanel({ mobileOpen = false, onClose }: { mobil
                         </div>
                       )}
                       {block.props.bg_image && (
+                        <>
                         <button
                           onClick={() => setCropOpen(true)}
                           className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-md border border-[#c9a45c]/40 bg-[#c9a45c]/5 px-3 py-2 text-xs font-medium text-[#c9a45c] hover:bg-[#c9a45c]/10"
@@ -1215,6 +1216,7 @@ export default function PropertiesPanel({ mobileOpen = false, onClose }: { mobil
                         >
                           Hapus Foto Hero
                         </button>
+                        </>
                       )}
                     </div>
                   )}
