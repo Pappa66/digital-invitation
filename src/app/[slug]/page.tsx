@@ -21,6 +21,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const host = (await headers()).get('x-forwarded-host') ?? 'localhost:3000';
   const proto = (await headers()).get('x-forwarded-proto') ?? 'http';
   const origin = `${proto}://${host}`;
+  let ogImage = `/api/og?slug=${encodeURIComponent(slug)}`;
 
   if (!demoIsDemoMode()) {
     try {
@@ -29,10 +30,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       const row = Array.isArray(data) ? data[0] : null;
       if (row) {
         // Tampilkan nama pasangan (Hero bride & groom) bila ada, fallback ke judul desain
-        const canvas = row.canvas_data as { blocks?: { type: string; props?: Record<string, unknown> }[] } | null;
+        const canvas = row.canvas_data as {
+          blocks?: { type: string; props?: Record<string, unknown> }[];
+          settings?: Record<string, unknown>;
+        } | null;
         const hero = canvas?.blocks?.find((b) => b.type === 'Hero')?.props as Record<string, unknown> | undefined;
         const couple = [hero?.bride, hero?.groom].filter((v) => typeof v === 'string' && (v as string).trim()).join(' & ');
         title = (couple as string) || row.title;
+        const coverImg = typeof canvas?.settings?.cover_bg_image === 'string' ? (canvas.settings.cover_bg_image as string) : '';
+        const heroImg = typeof hero?.bg_image === 'string' ? (hero.bg_image as string) : '';
+        const picked = (coverImg || heroImg).trim();
+        if (picked) ogImage = picked.startsWith('http') ? picked : `${origin}${picked}`;
       }
     } catch {
       /* generic */
@@ -52,7 +60,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       locale: 'id_ID',
       images: [
         {
-          url: `/api/og?slug=${encodeURIComponent(slug)}`,
+          url: ogImage,
           width: 1200,
           height: 630,
           alt: `Undangan ${title}`
@@ -63,7 +71,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       card: 'summary_large_image',
       title,
       description: `Undangan digital ${title}.`,
-      images: [`/api/og?slug=${encodeURIComponent(slug)}`]
+      images: [ogImage]
     }
   };
 }
