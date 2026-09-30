@@ -47,6 +47,8 @@ export interface Theme {
    * Animasi masuk kartu: 'fade' | 'slide' | 'zoom' | 'blur' | 'rise'
    */
   card_entrance?: string;
+  /** Warna teks cover undangan (default putih). */
+  cover_text?: string;
   /**
    * Ornamen dekoratif (SVG library) untuk section pengantar/sepanjang undangan.
    * Nilai: kunci di ornaments.tsx (mis. 'flourish', 'eucalyptus', 'rose-branch').

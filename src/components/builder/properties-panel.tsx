@@ -706,6 +706,7 @@ export default function PropertiesPanel({ mobileOpen = false, onClose }: { mobil
                   <ColorPicker label="Secondary" value={canvas.theme.secondary} onChange={(c) => setTheme({ secondary: c })} />
                   <ColorPicker label="Background" value={canvas.theme.background} onChange={(c) => setTheme({ background: c })} />
                   <ColorPicker label="Teks" value={canvas.theme.text} onChange={(c) => setTheme({ text: c })} />
+                  <ColorPicker label="Teks Cover" value={canvas.theme.cover_text ?? '#ffffff'} onChange={(c) => setTheme({ cover_text: c })} />
                 </>
               }
             />

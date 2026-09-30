@@ -164,7 +164,7 @@ export default function CoverModal({
             {/* Floating petals animation */}
             <FloatingPetals color={primary} />
 
-            <div className="relative z-40 flex h-full w-full flex-col items-center justify-between px-6 py-12 text-center text-white sm:px-10" style={{ paddingBottom: 'max(3rem, env(safe-area-inset-bottom))' }}>
+            <div className="relative z-40 flex h-full w-full flex-col items-center justify-between px-6 py-12 text-center text-[color:var(--cover-text,#ffffff)] sm:px-10" style={{ paddingBottom: 'max(3rem, env(safe-area-inset-bottom))' }}>
               <div
                 className="mt-2 flex flex-col items-center"
               >

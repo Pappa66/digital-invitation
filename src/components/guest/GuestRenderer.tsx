@@ -46,6 +46,7 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
     '--color-secondary': canvas.theme.secondary,
     '--color-background': canvas.theme.background,
     '--color-text': canvas.theme.text,
+    '--cover-text': canvas.theme.cover_text ?? '#ffffff',
     '--font-heading': `'${canvas.theme.font_heading}', serif`,
     '--font-body': `'${canvas.theme.font_body}', sans-serif`
   } as React.CSSProperties;
