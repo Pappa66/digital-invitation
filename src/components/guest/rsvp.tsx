@@ -144,10 +144,15 @@ export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormPr
         newToken = typeof latest?.checkin_token === 'string' ? latest.checkin_token : null;
       }
     } else {
-      const r = await supabase
+      const baseRow = { project_id: projectId, name: cleanName, attendance, guest_count: guestCount, message: message.trim() || null, meal_choice: mealChoice, menu_options: menuOptions, checkin_token: clientToken };
+      let r = await supabase
         .from('rsvps')
-        .insert({ project_id: projectId, name: cleanName, attendance, guest_count: guestCount, message: message.trim() || null, meal_choice: mealChoice, menu_options: menuOptions, checkin_token: clientToken, checkin_code: clientCode })
+        .insert({ ...baseRow, checkin_code: clientCode })
         .select('checkin_token');
+      // Tahan-gagal: bila kolom checkin_code belum ada di DB, ulangi tanpa kode.
+      if (r.error && /checkin_code/i.test(r.error.message)) {
+        r = await supabase.from('rsvps').insert(baseRow).select('checkin_token');
+      }
       error = r.error;
       if (!r.error) {
         const row = Array.isArray(r.data) ? r.data[0] : null;
