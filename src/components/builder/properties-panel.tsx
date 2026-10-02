@@ -976,6 +976,13 @@ export default function PropertiesPanel({ mobileOpen = false, onClose }: { mobil
                       />
                     </button>
                   </label>
+                  {canvas.settings.guest_book_enabled !== false && (
+                    <ColorPicker
+                      label="Latar Buku Tamu"
+                      value={canvas.settings.guest_book_bg ?? ''}
+                      onChange={(c) => setSettings({ guest_book_bg: c })}
+                    />
+                  )}
                 </div>
               }
             />

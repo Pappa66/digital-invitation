@@ -75,6 +75,8 @@ export interface Settings {
   /** Teks atas pada kartu IG Story (default "Undangan Pernikahan"). */
   share_card_caption?: string;
   guest_book_enabled: boolean;
+  /** Latar section Buku Tamu (warna/gradien CSS). */
+  guest_book_bg?: string;
   /** Tampilkan bagian Absensi Kehadiran (QR check-in) pada undangan. */
   checkin_enabled?: boolean;
   /** Agama undangan (untuk templating ucapan & wording). Default: 'islam'. */

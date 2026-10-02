@@ -159,7 +159,7 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
             {i < canvas.blocks.length - 1 && <SectionGap />}
           </div>
         ))}
-        {!preview && canvas.settings.guest_book_enabled && <GuestBookWall projectId={projectId} />}
+        {!preview && canvas.settings.guest_book_enabled && <GuestBookWall projectId={projectId} background={canvas.settings.guest_book_bg} />}
         {!preview && projectId && canvas.settings.checkin_enabled !== false && (
           <CheckIn
             projectId={projectId}
