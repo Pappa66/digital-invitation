@@ -161,7 +161,7 @@ export default function ShareBar({ coupleNames, date, theme, heroImage }: ShareB
       if (!blob) return;
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = 'twibbon-undangan.png';
+      a.download = 'kartu-undangan.png';
       a.click();
       URL.revokeObjectURL(a.href);
     } catch {
@@ -219,7 +219,7 @@ export default function ShareBar({ coupleNames, date, theme, heroImage }: ShareB
               className="mt-3 flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-border bg-card px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted disabled:opacity-60"
             >
               {storyLoading ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : <Instagram className="h-4 w-4" aria-hidden />}
-              {storyLoading ? 'Membuat...' : heroImage ? 'Download Twibbon (Hero)' : 'Download Template IG Story'}
+              {storyLoading ? 'Membuat...' : heroImage ? 'Unduh Kartu (Foto Hero)' : 'Unduh Kartu IG Story'}
             </button>
           )}
           <p className="mt-3 truncate rounded-lg bg-muted px-3 py-2 font-mono text-[11px] text-muted-foreground">{url}</p>
