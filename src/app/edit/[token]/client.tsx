@@ -115,9 +115,7 @@ export default function EditTokenClient({ projectId, projectTitle, token }: Edit
       </div>
 
       {/* Builder workspace */}
-      <div className="min-h-0 flex-1">
-        <BuilderWorkspace projectId={projectId} />
-      </div>
+      <BuilderWorkspace projectId={projectId} />
 
       <GuideModal
         open={guideOpen}
