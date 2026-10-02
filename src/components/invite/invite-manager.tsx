@@ -464,6 +464,12 @@ export default function InviteManager({ projectId, slug: slugProp, title: titleP
               {copied === 'all-links' ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Link2 className="h-3.5 w-3.5" />}
               Salin Semua Link
             </button>
+            <button onClick={() => download('semua-pesan.txt', allMessages)} disabled={rows.length === 0} className={BTN_OUTLINE}>
+              <Download className="h-3.5 w-3.5" /> Unduh Semua Pesan
+            </button>
+            <button onClick={() => download('semua-link.txt', links.join('\n'))} disabled={rows.length === 0} className={BTN_OUTLINE}>
+              <Download className="h-3.5 w-3.5" /> Unduh Semua Link
+            </button>
             <button onClick={exportGuests} disabled={rows.length === 0} className={BTN_OUTLINE}>
               <Download className="h-3.5 w-3.5" />
               Unduh Daftar Tamu (CSV)
