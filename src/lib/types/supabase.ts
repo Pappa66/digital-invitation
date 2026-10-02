@@ -449,6 +449,10 @@ export interface Database {
           slug: string;
         }[];
       };
+      delete_rsvp: {
+        Args: { p_project_id: string; p_rsvp_id: string; p_token?: string | null };
+        Returns: boolean;
+      };
       get_share_edit_canvas: {
         Args: { p_token: string };
         Returns: {

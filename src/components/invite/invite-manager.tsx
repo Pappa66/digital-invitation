@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { Copy, Check, Send, Users, ListChecks, Link2, ExternalLink, ShieldCheck, Radio, Download, Upload, UserCheck, QrCode, CalendarClock, Mail } from 'lucide-react';
+import { Copy, Check, Send, Users, ListChecks, Link2, ExternalLink, ShieldCheck, Radio, Download, Upload, Trash2, UserCheck, QrCode, CalendarClock, Mail } from 'lucide-react';
 import { demoIsDemoMode } from '@/lib/env';
 import { getSiteOrigin } from '@/lib/site';
 import {
@@ -276,6 +276,24 @@ export default function InviteManager({ projectId, slug: slugProp, title: titleP
     a.download = name;
     a.click();
     URL.revokeObjectURL(url);
+  }
+
+  async function deleteRsvp(id: string) {
+    if (!confirm('Hapus ucapan/RSVP ini?')) return;
+    if (demoIsDemoMode()) {
+      setRsvps((prev) => prev.filter((r) => r.id !== id));
+      return;
+    }
+    const { error } = await supabase.rpc('delete_rsvp', {
+      p_project_id: projectId,
+      p_rsvp_id: id,
+      p_token: accessToken ?? null
+    });
+    if (error) {
+      alert('Gagal menghapus: ' + error.message);
+      return;
+    }
+    setRsvps((prev) => prev.filter((r) => r.id !== id));
   }
 
   function exportRsvps() {
@@ -573,6 +591,15 @@ export default function InviteManager({ projectId, slug: slugProp, title: titleP
                       {r.guest_count} tamu · {new Date(r.created_at).toLocaleString('id-ID')}
                     </p>
                   </div>
+                  <button
+                    type="button"
+                    onClick={() => void deleteRsvp(r.id)}
+                    className="shrink-0 rounded-md border border-red-200 bg-white p-1.5 text-red-500 hover:bg-red-50"
+                    aria-label="Hapus ucapan"
+                    title="Hapus ucapan"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </button>
                 </div>
               ))}
             </div>
