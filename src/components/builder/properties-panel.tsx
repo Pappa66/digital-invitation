@@ -1925,6 +1925,17 @@ export default function PropertiesPanel({ mobileOpen = false, onClose }: { mobil
                                     />
                                   </button>
                                 </label>
+                                <div className="mt-2">
+                                  <label className="mb-1 block text-xs font-medium text-[#4a443c]">Blur Latar: {block.style?.bgBlur ?? 0}px</label>
+                                  <input
+                                    type="range"
+                                    min={0}
+                                    max={30}
+                                    value={block.style?.bgBlur ?? 0}
+                                    onChange={(e) => setBlockStyle(block.id, { bgBlur: Number(e.target.value) })}
+                                    className="w-full"
+                                  />
+                                </div>
                               </>
                             )}
                           </div>

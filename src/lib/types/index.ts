@@ -164,6 +164,8 @@ export interface BlockStyle {
   bgPosition?: string;
   /** Gambar latar grayscale + redup. Default: true. */
   bgMonochrome?: boolean;
+  /** Blur gambar latar dalam px (0-30). Default 0. */
+  bgBlur?: number;
   /** Radius sudut section (CSS, mis. "24px"). */
   borderRadius?: string;
   /** Border sekeliling section (CSS, mis. "2px solid #c9a45c"). */

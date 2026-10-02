@@ -183,6 +183,8 @@ function StyledSection({ style, children }: { style?: BlockStyle; children: Reac
 
   if (style.bgImage) {
     const mono = style.bgMonochrome === true;
+    const blur = Math.max(0, Math.min(30, Number(style.bgBlur) || 0));
+    const blurStyle = blur ? { filter: `blur(${blur}px)`, transform: 'scale(1.08)' } : undefined;
     const isVideoBg = /\.(mp4|webm|ogg|mov|m4v)(\?|$)/i.test(style.bgImage);
     return (
       <div className={`relative overflow-hidden transition-[background-color,background-image] duration-500 ease-out${textOverride}`} style={css}>
@@ -195,7 +197,7 @@ function StyledSection({ style, children }: { style?: BlockStyle; children: Reac
               muted
               playsInline
               className={`absolute inset-0 h-full w-full object-cover ${mono ? 'opacity-30 saturate-0' : 'opacity-40'}`}
-              style={{ objectPosition: style.bgPosition || 'center' }}
+              style={{ objectPosition: style.bgPosition || 'center', ...blurStyle }}
             />
           ) : (
             <Image
@@ -206,7 +208,7 @@ function StyledSection({ style, children }: { style?: BlockStyle; children: Reac
               quality={75}
               loading="lazy"
               className={`${style.bgFit === 'contain' ? 'object-contain' : 'object-cover'} ${mono ? 'opacity-30 saturate-0' : 'opacity-40'}`}
-              style={{ objectPosition: style.bgPosition || 'center' }}
+              style={{ objectPosition: style.bgPosition || 'center', ...blurStyle }}
             />
           )}
           {mono && <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/20 to-black/30" />}
