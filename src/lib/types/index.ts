@@ -46,7 +46,6 @@ export interface Theme {
   /**
    * Animasi masuk kartu: 'fade' | 'slide' | 'zoom' | 'blur' | 'rise'
    */
-  card_entrance?: string;
   /** Warna teks cover undangan (default putih). */
   cover_text?: string;
   /** Posisi vertikal teks cover: sebar (default), tengah, atas, bawah. */
@@ -182,7 +181,7 @@ export interface BlockStyle {
   opacity?: number;
   /** Perataan teks section. */
   textAlign?: 'left' | 'center' | 'right';
-  /** Animasi masuk section ini (override theme.card_entrance). 'none' = tanpa animasi. */
+  /** Animasi masuk section ini. 'none' = tanpa animasi. */
   entrance?: 'fade' | 'slide' | 'zoom' | 'blur' | 'rise' | 'flip3d' | 'parallax' | 'stagger' | 'float' | 'book' | 'magazine' | 'filmroll' | 'oldtv' | 'newspaper' | 'vintage' | 'mandala' | 'islamic' | 'ulos' | 'lantern' | 'wayang' | 'batik' | 'none';
   /** Tunda animasi masuk (ms). */
   entranceDelay?: number;

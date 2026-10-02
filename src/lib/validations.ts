@@ -25,7 +25,6 @@ export const ThemeSchema = z.object({
   frame: z.string().max(20).optional(),
   card_style: z.boolean().optional(),
   card_variant: z.string().max(30).optional(),
-  card_entrance: z.string().max(20).optional(),
   cover_text: z.string().max(20).optional(),
   cover_valign: z.enum(['between', 'center', 'top', 'bottom']).optional(),
   scroll_anim: z.enum(['none', 'fade-up', 'fade', 'zoom', 'slide-left', 'slide-right']).optional(),

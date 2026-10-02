@@ -707,6 +707,15 @@ export default function PropertiesPanel({ mobileOpen = false, onClose }: { mobil
                   <ColorPicker label="Background" value={canvas.theme.background} onChange={(c) => setTheme({ background: c })} />
                   <ColorPicker label="Teks" value={canvas.theme.text} onChange={(c) => setTheme({ text: c })} />
                   <ColorPicker label="Teks Cover" value={canvas.theme.cover_text ?? '#ffffff'} onChange={(c) => setTheme({ cover_text: c })} />
+                  <div className="-mt-1 mb-2 text-right">
+                    <button
+                      type="button"
+                      onClick={() => setTheme({ cover_text: undefined })}
+                      className="text-[10px] text-[#8a7a66] underline hover:text-[#c9a45c]"
+                    >
+                      Auto kontras
+                    </button>
+                  </div>
                   <div className="mt-2">
                     <span className="mb-1 block text-xs font-medium text-[#6b6257]">Posisi Teks Cover</span>
                     <div className="flex gap-1">

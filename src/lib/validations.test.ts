@@ -110,7 +110,7 @@ describe('validateCanvasData — 20 block type + field yang disinkronkan BE', ()
 
   it('meloloskan theme.card_variant dan theme.card_style', () => {
     const canvas = baseCanvas();
-    canvas.theme = { ...canvas.theme, card_style: true, card_variant: 'glass', card_entrance: 'fade' };
+    canvas.theme = { ...canvas.theme, card_style: true, card_variant: 'glass' };
     canvas.blocks = [block('Hero', {})];
     const result = validateCanvasData(canvas);
     expect(result).not.toBeNull();

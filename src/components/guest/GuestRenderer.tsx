@@ -25,6 +25,17 @@ interface GuestRendererProps {
 
 const CANVAS_W = 420;
 
+function isLightHex(hex: string): boolean {
+  const h = (hex || '').replace('#', '').trim();
+  if (h.length !== 6 && h.length !== 3) return false;
+  const full = h.length === 3 ? h.split('').map((c) => c + c).join('') : h;
+  const r = parseInt(full.slice(0, 2), 16);
+  const g = parseInt(full.slice(2, 4), 16);
+  const b = parseInt(full.slice(4, 6), 16);
+  if ([r, g, b].some((n) => Number.isNaN(n))) return false;
+  return (0.299 * r + 0.587 * g + 0.114 * b) / 255 > 0.6;
+}
+
 function SectionGap() {
   return <div className="h-4" aria-hidden />;
 }
@@ -46,12 +57,16 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
   const revealAnim = canvas.theme.scroll_anim ?? 'fade-up';
   const revealIntensity = Math.max(0, Math.min(100, Number(canvas.theme.scroll_intensity ?? 60)));
 
+  const coverHasImage = !!(canvas.settings.cover_bg_image || (typeof heroBlock?.props.bg_image === 'string' && heroBlock.props.bg_image));
+  const coverTextColor =
+    canvas.theme.cover_text || (coverHasImage ? '#ffffff' : isLightHex(canvas.theme.background) ? '#2b2620' : '#ffffff');
+
   const styleVars = {
     '--color-primary': canvas.theme.primary,
     '--color-secondary': canvas.theme.secondary,
     '--color-background': canvas.theme.background,
     '--color-text': canvas.theme.text,
-    '--cover-text': canvas.theme.cover_text ?? '#ffffff',
+    '--cover-text': coverTextColor,
     '--reveal-dist': `${(12 + revealIntensity * 0.36).toFixed(0)}px`,
     '--reveal-dur': `${(0.4 + revealIntensity * 0.006).toFixed(2)}s`,
     '--font-heading': `'${canvas.theme.font_heading}', serif`,
