@@ -224,9 +224,9 @@ export default function RSVPForm({ projectId, blockProps, readonly, checkinEnabl
                 <p className="text-[10px] leading-relaxed opacity-60">Jika kamera panitia bermasalah, tunjukkan kode di atas.</p>
               </div>
             </div>
-          ) : (
-            <p className="text-xs leading-relaxed opacity-75">QR absen tersedia setelah konfirmasi Anda tercatat.</p>
-          )}
+          ) : checkinEnabled !== false && attendance !== 'tidak' ? (
+            <p className="text-xs leading-relaxed opacity-75">QR absen akan tersedia setelah konfirmasi tercatat.</p>
+          ) : null}
         </div>
       </div>
     </Inner>
