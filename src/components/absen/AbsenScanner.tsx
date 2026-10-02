@@ -122,6 +122,8 @@ export default function AbsenScanner({ projectId }: AbsenScannerProps) {
       scannerRef.current = null;
     }
 
+    // Tunggu React merender container kamera (status 'scanning') sebelum start.
+    await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
     const el = document.getElementById(containerId);
     if (!el) return;
 
