@@ -184,13 +184,19 @@ export async function setProjectStatus(projectId: string, status: 'draft' | 'pub
  * sehingga link bisa dibagikan publik lewat "Tautan Kelola Tamu".
  * Hanya pemilik proyek yang boleh memicu pembuatan token (via RPC ensure_invite_token).
  */
-export async function getInviteAccessToken(projectId: string): Promise<{ token?: string; error?: string }> {
+export async function getInviteAccessToken(
+  projectId: string,
+  days = 90,
+  rotate = false
+): Promise<{ token?: string; error?: string }> {
   const user = await requireUser();
   if (!user) return { error: 'Unauthorized' };
 
   const supabase = await createServerSupabase();
   const { data: tokenRes, error } = await supabase.rpc('ensure_invite_token', {
-    p_project_id: projectId
+    p_project_id: projectId,
+    p_days: days,
+    p_rotate: rotate
   });
 
   if (error) return { error: error.message };

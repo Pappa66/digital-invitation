@@ -78,6 +78,7 @@ export default function ShareDialog({ open, projectId, slug, title, onClose, rel
   const [manageToken, setManageToken] = useState<string | null>(null);
   const [manageLoading, setManageLoading] = useState(false);
   const [manageError, setManageError] = useState('');
+  const [manageDays, setManageDays] = useState(30);
   // Edit link state
   const [editTokens, setEditTokens] = useState<(ShareTokenInfo & { is_active: boolean; note?: string })[]>([]);
   const [editLoading, setEditLoading] = useState(false);
@@ -115,10 +116,10 @@ export default function ShareDialog({ open, projectId, slug, title, onClose, rel
   const cleanName = name.trim();
   const link = `${base}/${slug}${cleanName ? `?to=${encodeURIComponent(cleanName)}` : ''}`;
   const manageLink = manageToken ? `${base}/invite/${projectId}?t=${manageToken}` : `${base}/invite/${projectId}`;
-  function refreshManageToken() {
+  function refreshManageToken(days = manageDays, rotate = false) {
     setManageLoading(true);
     setManageError('');
-    clientGetInviteAccessToken(projectId)
+    clientGetInviteAccessToken(projectId, days, rotate)
       .then((res) => {
         if (res.token) setManageToken(res.token);
         else setManageError(res.error ?? 'Gagal membuat tautan kelola.');
@@ -388,12 +389,34 @@ export default function ShareDialog({ open, projectId, slug, title, onClose, rel
                 <div className="mt-1">
                   <button
                     type="button"
-                    onClick={refreshManageToken}
+                    onClick={() => refreshManageToken()}
                     className="rounded-md border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
                   >
                     Buat Tautan Kelola
                   </button>
                   {manageError && <p className="mt-1 text-[11px] text-red-500">{manageError}</p>}
+                </div>
+              )}
+              {manageToken && (
+                <div className="mt-2 flex flex-wrap items-center gap-2">
+                  <span className="text-[11px] text-gray-500">Masa berlaku</span>
+                  <select
+                    value={manageDays}
+                    onChange={(e) => setManageDays(Number(e.target.value))}
+                    className="rounded-md border border-gray-300 bg-white px-2 py-1 text-xs"
+                  >
+                    <option value={30}>1 bulan</option>
+                    <option value={90}>3 bulan</option>
+                    <option value={180}>6 bulan</option>
+                  </select>
+                  <button
+                    type="button"
+                    onClick={() => refreshManageToken(manageDays, true)}
+                    className="rounded-md border border-gray-300 px-3 py-1 text-xs font-medium text-gray-700 hover:bg-gray-50"
+                  >
+                    Terapkan
+                  </button>
+                  {manageError && <p className="text-[11px] text-red-500">{manageError}</p>}
                 </div>
               )}
             </Section>

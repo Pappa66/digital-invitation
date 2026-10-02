@@ -74,9 +74,13 @@ export async function clientSetProjectStatus(
  * Ambil token akses "Kelola Tamu". Demo tidak butuh token (halaman /invite
  * langsung terbuka di demo store); produksi memanggil server action.
  */
-export async function clientGetInviteAccessToken(projectId: string): Promise<{ token?: string; error?: string }> {
+export async function clientGetInviteAccessToken(
+  projectId: string,
+  days = 90,
+  rotate = false
+): Promise<{ token?: string; error?: string }> {
   if (demoIsDemoMode()) return { token: 'demo' };
-  return getInviteAccessToken(projectId);
+  return getInviteAccessToken(projectId, days, rotate);
 }
 
 /**

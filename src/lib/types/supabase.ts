@@ -450,11 +450,12 @@ export interface Database {
         }[];
       };
       ensure_invite_token: {
-        Args: { p_project_id: string; p_label?: string };
+        Args: { p_project_id: string; p_label?: string; p_days?: number; p_rotate?: boolean };
         Returns: {
           id: string;
           token: string;
           project_id: string;
+          expires_at: string;
         }[];
       };
       revoke_invite_token: {
