@@ -132,10 +132,10 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
                 key={block.id}
                 style={{ position: 'absolute', left: block.layout.x, top: block.layout.y, width: block.layout.width, maxWidth: CANVAS_W }}
               >
-                <BlockView block={block} projectId={projectId} greetingName={greetingName} cardStyle={canvas.theme.card_style} demo={immersive && !!demo} showCoverButton={!showCover} />
+                <BlockView block={block} projectId={projectId} greetingName={greetingName} cardStyle={canvas.theme.card_style} demo={immersive && !!demo} showCoverButton={!showCover} checkinEnabled={canvas.settings.checkin_enabled !== false} />
               </div>
             ) : (
-              <BlockView key={block.id} block={block} projectId={projectId} greetingName={greetingName} cardStyle={canvas.theme.card_style} demo={immersive && !!demo} showCoverButton={!showCover} />
+              <BlockView key={block.id} block={block} projectId={projectId} greetingName={greetingName} cardStyle={canvas.theme.card_style} demo={immersive && !!demo} showCoverButton={!showCover} checkinEnabled={canvas.settings.checkin_enabled !== false} />
             )
           )}
           {immersive && <MusicPlayer settings={canvas.settings} />}
@@ -155,7 +155,7 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
       <div ref={rootRef} className={`${rootClass}${revealOn && revealAnim !== "none" ? " js-reveal" : ""}`} style={styleVars}>
         {canvas.blocks.map((block, i) => (
           <div key={block.id} data-reveal={revealAnim}>
-            <BlockView block={block} projectId={projectId} greetingName={greetingName} cardStyle={canvas.theme.card_style} demo={immersive && !!demo} showCoverButton={!showCover} />
+            <BlockView block={block} projectId={projectId} greetingName={greetingName} cardStyle={canvas.theme.card_style} demo={immersive && !!demo} showCoverButton={!showCover} checkinEnabled={canvas.settings.checkin_enabled !== false} />
             {i < canvas.blocks.length - 1 && <SectionGap />}
           </div>
         ))}

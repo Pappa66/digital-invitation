@@ -40,9 +40,10 @@ interface RSVPFormProps {
   blockProps: BlockProps;
   /** Mode rendered tanpa DB (preview builder). Jika dengan-db, gunakan projectId. */
   readonly?: boolean;
+  checkinEnabled?: boolean;
 }
 
-export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormProps) {
+export default function RSVPForm({ projectId, blockProps, readonly, checkinEnabled = true }: RSVPFormProps) {
   const [name, setName] = useState('');
   const [attendance, setAttendance] = useState<'hadir' | 'tidak'>('hadir');
   const [guestCount, setGuestCount] = useState(1);
@@ -178,14 +179,15 @@ export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormPr
   const inputClass =
     'w-full rounded-xl border border-current/15 bg-transparent px-4 py-2.5 text-sm outline-none transition-colors focus:border-current';
 
-  const qrUrl = checkinToken ? `${getSiteOrigin()}/absen/${projectId}?t=${checkinToken}` : '';
+  const qrValue = code || checkinToken;
+  const qrUrl = qrValue ? `${getSiteOrigin()}/absen/${projectId}?t=${qrValue}` : '';
 
   const formContent = status === 'success' ? (
     <Inner name="success">
       <div className={`mx-auto mt-8 w-full px-6 py-10 ${variant === 'card' ? 'rounded-2xl border border-current/10' : ''}`}>
         <p className="text-lg">{str(blockProps, 'success_message') || 'Terima kasih atas konfirmasinya.'}</p>
         <div className="mt-6">
-          {checkinToken && attendance !== 'tidak' ? (
+          {checkinEnabled !== false && qrValue && attendance !== 'tidak' ? (
             <div className="rounded-2xl border border-current/10 bg-white/60 p-4">
               <div ref={qrWrapRef} className="mx-auto w-fit rounded-xl bg-white p-3 shadow-soft">
                 <QRCode value={qrUrl} size={150} fgColor="#2B2620" title={qrUrl} />
@@ -202,17 +204,17 @@ export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormPr
                 const svg = qrWrapRef.current?.querySelector('svg'); if(!svg) return;
                 const size=150,pad=16,extra=70,w=size+pad*2,h=size+pad*2+extra;
                 const esc=(t:string)=>t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-                const doc=`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><rect width="100%" height="100%" fill="#ffffff"/><g transform="translate(${pad},${pad})">${svg.outerHTML}</g>`+(code?`<text x="${w/2}" y="${size+pad*2+26}" text-anchor="middle" font-family="monospace" font-size="20" font-weight="bold" fill="#2B2620">${esc(code)}</text>`:'')+`<text x="${w/2}" y="${size+pad*2+48}" text-anchor="middle" font-family="monospace" font-size="9" fill="#666666">${esc(checkinToken??'')}</text></svg>`;
+                const doc=`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><rect width="100%" height="100%" fill="#ffffff"/><g transform="translate(${pad},${pad})">${svg.outerHTML}</g>`+(code?`<text x="${w/2}" y="${size+pad*2+26}" text-anchor="middle" font-family="monospace" font-size="20" font-weight="bold" fill="#2B2620">${esc(code)}</text>`:'')+`</svg>`;
                 const blob=new Blob([doc],{type:'image/svg+xml'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`qr-absen-${code??checkinToken}.svg`; a.click(); URL.revokeObjectURL(a.href);
               }} className="mt-3 rounded-full border border-current/25 px-4 py-1.5 text-[11px] font-semibold">Unduh QR + Kode</button>
               <div className="mx-auto mt-4 flex max-w-[260px] flex-col items-center gap-2">
-                <p className="text-[10px] uppercase tracking-wide opacity-60">Token manual (untuk panitia)</p>
+                <p className="text-[10px] uppercase tracking-wide opacity-60">Kode manual (untuk panitia)</p>
                 <div className="flex w-full items-center gap-1.5 rounded-lg border border-dashed border-current/25 bg-white/70 px-2.5 py-1.5">
-                  <code className="min-w-0 flex-1 break-all font-mono text-[11px] leading-snug opacity-80">{checkinToken}</code>
+                  <code className="min-w-0 flex-1 break-all font-mono text-[13px] font-bold tracking-[0.2em] opacity-90">{code || checkinToken}</code>
                   <button
                     type="button"
                     onClick={() => {
-                      void navigator.clipboard?.writeText(checkinToken).catch(() => {});
+                      void navigator.clipboard?.writeText(code || checkinToken || '').catch(() => {});
                     }}
                     className="shrink-0 rounded-md border border-current/20 px-2 py-1 text-[10px] font-semibold transition-colors hover:bg-current/10"
                   >

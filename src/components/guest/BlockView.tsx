@@ -38,9 +38,10 @@ interface BlockViewProps {
   cardStyle?: boolean;
   demo?: boolean;
   showCoverButton?: boolean;
+  checkinEnabled?: boolean;
 }
 
-export default function BlockView({ block, projectId, editable = false, greetingName, cardStyle, demo, showCoverButton = true }: BlockViewProps) {
+export default function BlockView({ block, projectId, editable = false, greetingName, cardStyle, demo, showCoverButton = true, checkinEnabled = true }: BlockViewProps) {
   const preview = usePreview();
   const theme = useTheme();
   let view: React.ReactNode;
@@ -64,7 +65,7 @@ export default function BlockView({ block, projectId, editable = false, greeting
       view = <GalleryBlock props={block.props} />;
       break;
     case 'RSVP':
-      view = <RSVPForm projectId={projectId ?? ''} blockProps={block.props} readonly={!projectId} />;
+      view = <RSVPForm projectId={projectId ?? ''} blockProps={block.props} readonly={!projectId} checkinEnabled={checkinEnabled} />;
       break;
     case 'Envelope':
       view = <EnvelopeBlock props={block.props} />;
