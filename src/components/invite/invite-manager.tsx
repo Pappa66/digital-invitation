@@ -436,7 +436,7 @@ export default function InviteManager({ projectId, slug: slugProp, title: titleP
             Terdeteksi <b className="text-[#8a6d2f]">{rows.length}</b> tamu. Tersimpan otomatis — bisa dilanjutkan kapan saja.
           </p>
           <div className="mt-2 flex flex-wrap gap-2">
-            <button type="button" onClick={() => download('contoh-daftar-tamu.csv', 'Nama,No HP\nBudi Santoso,08123456789\nSiti Aminah,081298765432\n')} className={BTN_OUTLINE}>
+            <button type="button" onClick={() => download('contoh-daftar-tamu.csv', 'Nama,No HP\nBudi Santoso,+628123456789\nSiti Aminah,+6281298765432\n')} className={BTN_OUTLINE}>
               <Download className="h-3.5 w-3.5" /> Unduh Contoh Format
             </button>
             <button type="button" onClick={() => fileRef.current?.click()} className={BTN_OUTLINE}>
