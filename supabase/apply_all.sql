@@ -222,15 +222,17 @@ create or replace function public.get_invite_by_token(p_project_id uuid, p_token
 returns table (project_id uuid, title text, slug text)
 language plpgsql
 security definer
-set search_path = public
+set search_path = public, extensions
 as $$
 declare
   v_project public.projects%rowtype;
   v_token public.access_tokens%rowtype;
 begin
   select * into v_token
-  from public.access_tokens
-  where project_id = p_project_id and token = p_token;
+  from public.access_tokens at
+  where at.project_id = p_project_id
+    and at.token = p_token
+    and at.revoked_at is null;
 
   if not found then
     return;
@@ -240,12 +242,12 @@ begin
     return;
   end if;
 
-  select * into v_project from public.projects where id = p_project_id;
+  select * into v_project from public.projects p where p.id = p_project_id;
   if not found then
     return;
   end if;
 
-  update public.access_tokens set last_used_at = now() where id = v_token.id;
+  update public.access_tokens at set last_used_at = now() where at.id = v_token.id;
 
   return query
     select p.id, p.title, p.slug
