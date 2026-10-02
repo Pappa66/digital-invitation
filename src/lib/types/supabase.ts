@@ -449,6 +449,14 @@ export interface Database {
           slug: string;
         }[];
       };
+      get_share_edit_canvas: {
+        Args: { p_token: string };
+        Returns: {
+          canvas_data: unknown;
+          slug: string;
+          title: string;
+        }[];
+      };
       ensure_invite_token: {
         Args: { p_project_id: string; p_label?: string; p_days?: number; p_rotate?: boolean };
         Returns: {

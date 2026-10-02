@@ -23,7 +23,7 @@ interface EditTokenClientProps {
  * tapi TIDAK bisa: dashboard, publish, save-as-template, share.
  * Semua perubahan langsung save ke project utama.
  */
-export default function EditTokenClient({ projectId, projectTitle }: EditTokenClientProps) {
+export default function EditTokenClient({ projectId, projectTitle, token }: EditTokenClientProps) {
   const canvas = useBuilderStore((s) => s.canvas);
   const init = useBuilderStore((s) => s.init);
   const saveStatus = useAutosave({ projectId, canvas });
@@ -33,26 +33,33 @@ export default function EditTokenClient({ projectId, projectTitle }: EditTokenCl
 
   useEffect(() => {
     async function load() {
-      const { data, error } = await supabase
-        .from('project_designs')
-        .select('canvas_data')
-        .eq('project_id', projectId)
-        .maybeSingle();
-      if (!error && data?.canvas_data) {
-        init(data.canvas_data as unknown as CanvasData, projectId);
-      }
-      const { data: proj } = await supabase
-        .from('projects')
-        .select('slug')
-        .eq('id', projectId)
-        .maybeSingle();
-      if (proj?.slug) {
-        setPreviewUrl(`${getSiteOrigin()}/${proj.slug}`);
+      if (token) {
+        const { data } = await supabase.rpc('get_share_edit_canvas', { p_token: token });
+        const row = Array.isArray(data) ? (data[0] as { canvas_data?: CanvasData; slug?: string } | undefined) : undefined;
+        if (row?.canvas_data) init(row.canvas_data, projectId);
+        if (row?.slug) setPreviewUrl(`${getSiteOrigin()}/${row.slug}`);
+      } else {
+        const { data, error } = await supabase
+          .from('project_designs')
+          .select('canvas_data')
+          .eq('project_id', projectId)
+          .maybeSingle();
+        if (!error && data?.canvas_data) {
+          init(data.canvas_data as unknown as CanvasData, projectId);
+        }
+        const { data: proj } = await supabase
+          .from('projects')
+          .select('slug')
+          .eq('id', projectId)
+          .maybeSingle();
+        if (proj?.slug) {
+          setPreviewUrl(`${getSiteOrigin()}/${proj.slug}`);
+        }
       }
       setReady(true);
     }
     load();
-  }, [projectId, init]);
+  }, [projectId, init, token]);
 
   if (!ready) return <BuilderSkeleton />;
 
