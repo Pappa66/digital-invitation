@@ -59,12 +59,18 @@ export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormPr
   const deadlineLabel = deadlineRaw
     ? new Date(deadlineRaw).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
     : '';
+  const isClosed = deadlineRaw
+    ? new Date(deadlineRaw).getTime() + 24 * 60 * 60 * 1000 <= Date.now()
+    : false;
   const deadlineNode = deadlineLabel ? (
-    <p className="mt-1 text-xs uppercase tracking-[0.15em] opacity-70">Konfirmasi sebelum {deadlineLabel}</p>
+    <p className="mt-1 text-xs uppercase tracking-[0.15em] opacity-70">
+      {isClosed ? 'Konfirmasi telah ditutup' : `Konfirmasi sebelum ${deadlineLabel}`}
+    </p>
   ) : null;
   const [menuSelections, setMenuSelections] = useState<Record<string, string>>({});
 
   async function handleSubmit(e: React.FormEvent) {
+    if (isClosed) return;
     e.preventDefault();
     if (readonly || !projectId) return;
 
@@ -305,10 +311,10 @@ export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormPr
         </div>
         <button
           type="submit"
-          disabled={status === 'submitting'}
+          disabled={status === 'submitting' || isClosed}
           className="w-full rounded-full bg-[var(--color-primary)] px-4 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-60"
         >
-          {status === 'submitting' ? 'Mengirim...' : String(blockProps.button_text || 'Kirim Konfirmasi')}
+          {isClosed ? 'Konfirmasi Ditutup' : status === 'submitting' ? 'Mengirim...' : String(blockProps.button_text || 'Kirim Konfirmasi')}
         </button>
         {status === 'error' && (
           <p id="rsvp-form-error" role="alert" className="text-center text-xs text-red-500">
