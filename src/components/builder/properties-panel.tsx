@@ -577,7 +577,7 @@ export default function PropertiesPanel({ mobileOpen = false, onClose }: { mobil
   const setReligion = useBuilderStore((s) => s.setReligion);
 
   const [mediaOpen, setMediaOpen] = useState(false);
-  const [mediaMode, setMediaMode] = useState<'hero' | 'gallery' | 'bg' | 'photo' | 'decor' | 'couple_groom' | 'couple_bride' | 'cover' | null>(null);
+  const [mediaMode, setMediaMode] = useState<'hero' | 'gallery' | 'bg' | 'photo' | 'decor' | 'couple_groom' | 'couple_bride' | 'cover' | 'card' | null>(null);
   const [cropOpen, setCropOpen] = useState(false);
   const [panelTab, setPanelTab] = useState<'content' | 'style' | 'advanced'>('content');
 
@@ -1015,6 +1015,41 @@ export default function PropertiesPanel({ mobileOpen = false, onClose }: { mobil
                           value={canvas.settings.cover_button_text || ''}
                           onChange={(e) => setSettings({ cover_button_text: e.target.value })}
                           placeholder="Buka Undangan"
+                          className="mt-1 w-full rounded-md border border-[#e0d6c2] bg-white px-3 py-1.5 text-sm focus:border-[#c9a45c] focus:outline-none"
+                        />
+                      </label>
+                      <label className="block">
+                        <span className="text-xs font-medium text-[#4a443c]">Kartu IG — Gambar Latar</span>
+                        <p className="text-[11px] text-[#8a7a66]">Kosongkan = pakai foto Hero.</p>
+                        <div className="mt-1 flex gap-2">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setMediaMode('card');
+                              setMediaOpen(true);
+                            }}
+                            className="flex flex-1 items-center gap-2 rounded-md border border-dashed border-[#c9a45c]/40 bg-[#faf7f2] px-3 py-2 text-xs text-[#8a7a66] hover:border-[#c9a45c] hover:bg-white"
+                          >
+                            {canvas.settings.share_card_bg ? 'Ganti Gambar' : 'Pilih Gambar'}
+                          </button>
+                          {canvas.settings.share_card_bg && (
+                            <button
+                              type="button"
+                              onClick={() => setSettings({ share_card_bg: '' })}
+                              className="rounded-md border border-red-200 bg-white px-3 py-2 text-xs text-red-500 hover:bg-red-50"
+                            >
+                              Hapus
+                            </button>
+                          )}
+                        </div>
+                      </label>
+                      <label className="block">
+                        <span className="text-xs font-medium text-[#4a443c]">Kartu IG — Teks Atas</span>
+                        <input
+                          type="text"
+                          value={canvas.settings.share_card_caption || ''}
+                          onChange={(e) => setSettings({ share_card_caption: e.target.value })}
+                          placeholder="Undangan Pernikahan"
                           className="mt-1 w-full rounded-md border border-[#e0d6c2] bg-white px-3 py-1.5 text-sm focus:border-[#c9a45c] focus:outline-none"
                         />
                       </label>
@@ -2168,6 +2203,7 @@ export default function PropertiesPanel({ mobileOpen = false, onClose }: { mobil
           if (mediaMode === 'couple_groom' && block?.type === 'Couple') setBlockProps(block.id, { groom_photo: url });
           if (mediaMode === 'couple_bride' && block?.type === 'Couple') setBlockProps(block.id, { bride_photo: url });
           if (mediaMode === 'cover') setSettings({ cover_bg_image: url });
+          if (mediaMode === 'card') setSettings({ share_card_bg: url });
           if (mediaMode === 'decor' && activeDecor)
             updateDecor(activeDecor.block.id, activeDecor.asset.id, { imageUrl: url });
           setMediaMode(null);

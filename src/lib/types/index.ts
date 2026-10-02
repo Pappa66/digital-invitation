@@ -71,6 +71,10 @@ export interface Theme {
 
 export interface Settings {
   music_url: string;
+  /** Gambar latar khusus kartu IG Story (kosong = pakai foto Hero). */
+  share_card_bg?: string;
+  /** Teks atas pada kartu IG Story (default "Undangan Pernikahan"). */
+  share_card_caption?: string;
   guest_book_enabled: boolean;
   /** Tampilkan bagian Absensi Kehadiran (QR check-in) pada undangan. */
   checkin_enabled?: boolean;

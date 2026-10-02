@@ -12,12 +12,16 @@ interface ShareBarProps {
   date?: string;
   /** Warna tema untuk gradien poster story. */
   theme?: { primary: string; secondary: string; background: string };
-  /** Foto hero untuk twibbon IG Story (opsional — bila ada, jadi background). */
+  /** Foto hero untuk kartu IG Story (opsional — bila ada, jadi background). */
   heroImage?: string;
+  /** Gambar latar manual khusus kartu (menimpa hero). */
+  cardBg?: string;
+  /** Teks atas kartu (menimpa default). */
+  cardCaption?: string;
 }
 
 /** Tombol mengambang bagikan undangan + QR, di pojok kanan bawah halaman tamu. */
-export default function ShareBar({ coupleNames, date, theme, heroImage }: ShareBarProps) {
+export default function ShareBar({ coupleNames, date, theme, heroImage, cardBg, cardCaption }: ShareBarProps) {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const [storyLoading, setStoryLoading] = useState(false);
@@ -68,6 +72,8 @@ export default function ShareBar({ coupleNames, date, theme, heroImage }: ShareB
       const primary = theme?.primary || '#D4AF37';
       const secondary = theme?.secondary || '#8A6D2F';
       const names = coupleNames || 'Kami Berdua';
+      const captionLine = (cardCaption || '').trim() || 'Undangan Pernikahan';
+      const bgImage = cardBg || heroImage;
       const dateLine = date || '';
 
       // Helper: gambar hero sebagai background cover (twibbon) bila ada
@@ -88,14 +94,14 @@ export default function ShareBar({ coupleNames, date, theme, heroImage }: ShareB
         ctx.fillRect(0, 0, W, H);
       };
 
-      if (heroImage) {
+      if (bgImage) {
         try {
           const img = await new Promise<HTMLImageElement>((res, rej) => {
             const im = new Image();
             im.crossOrigin = 'anonymous';
             im.onload = () => res(im);
             im.onerror = rej;
-            im.src = heroImage;
+            im.src = bgImage;
           });
           drawCover(img);
         } catch {
@@ -131,7 +137,7 @@ export default function ShareBar({ coupleNames, date, theme, heroImage }: ShareB
       ctx.shadowColor = 'rgba(0,0,0,0.45)';
       ctx.shadowBlur = 12;
       ctx.font = 'italic 42px Georgia, serif';
-      ctx.fillText('Undangan Pernikahan', W / 2, H * 0.72);
+      ctx.fillText(captionLine, W / 2, H * 0.72);
       ctx.shadowBlur = 0;
       // Nama pasangan — besar, twibbon style
       ctx.font = 'italic 84px Georgia, serif';

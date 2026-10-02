@@ -42,6 +42,8 @@ export const ThemeSchema = z.object({
 // ---------------------------------------------------------------
 export const SettingsSchema = z.object({
   music_url: z.string().max(500).default(''),
+  share_card_bg: z.string().max(500).optional(),
+  share_card_caption: z.string().max(120).optional(),
   guest_book_enabled: z.boolean().default(true),
   checkin_enabled: z.boolean().optional(),
   religion: z.string().max(20).optional(),

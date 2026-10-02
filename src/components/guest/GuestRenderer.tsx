@@ -39,7 +39,9 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
     coupleNames,
     date: typeof heroBlock?.props.date === 'string' ? heroBlock.props.date : undefined,
     theme: { primary: canvas.theme.primary, secondary: canvas.theme.secondary, background: canvas.theme.background },
-    heroImage: typeof heroBlock?.props.bg_image === 'string' ? heroBlock.props.bg_image : undefined
+    heroImage: typeof heroBlock?.props.bg_image === 'string' ? heroBlock.props.bg_image : undefined,
+    cardBg: canvas.settings.share_card_bg,
+    cardCaption: canvas.settings.share_card_caption
   };
   const revealAnim = canvas.theme.scroll_anim ?? 'fade-up';
   const revealIntensity = Math.max(0, Math.min(100, Number(canvas.theme.scroll_intensity ?? 60)));
