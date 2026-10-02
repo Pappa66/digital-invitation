@@ -873,7 +873,7 @@ export function HeroBlock({ props, greetingName, showButton = true }: { props: B
         {showOrnament && (
           <Inner name="ornament">
             <div
-              className={isRight ? 'mt-4 ml-auto text-white opacity-80' : isLeft ? 'mt-4 mr-auto text-white opacity-80' : 'mt-4 text-white opacity-80'}
+              className={isRight ? 'mt-4 ml-auto opacity-80' : isLeft ? 'mt-4 mr-auto opacity-80' : 'mt-4 opacity-80'}
             >
               <Ornament ornament={str(props, 'ornament') || theme?.ornament} />
             </div>
@@ -933,7 +933,7 @@ export function HeroBlock({ props, greetingName, showButton = true }: { props: B
           <Inner name="button">
             <button
               onClick={openInvitation}
-              className="mt-10 inline-flex items-center gap-2 rounded-full border border-white/40 bg-white/10 px-8 py-3 text-sm font-semibold text-white backdrop-blur-sm transition-transform hover:scale-[1.04] active:scale-95"
+              className="mt-10 inline-flex items-center gap-2 rounded-full border border-white/40 bg-white/10 px-8 py-3 text-sm font-semibold backdrop-blur-sm transition-transform hover:scale-[1.04] active:scale-95"
             >
               <MailOpen className="h-4 w-4" />
               Buka Undangan

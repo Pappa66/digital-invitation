@@ -23,3 +23,15 @@ test('absen tanpa login menampilkan status', async ({ page }) => {
   expect(res?.ok()).toBeTruthy();
   await expect(page.getByText(/Absensi Kehadiran/i).first()).toBeVisible({ timeout: 15000 });
 });
+
+test('halaman templates termuat', async ({ page }) => {
+  const res = await page.goto('/templates');
+  expect(res?.ok()).toBeTruthy();
+  await expect(page.locator('body')).toBeVisible();
+});
+
+test('undangan demo punya elemen interaktif', async ({ page }) => {
+  await page.goto('/undangan-demo');
+  await expect(page.locator('body')).toBeVisible();
+  await expect(page.getByText(/undangan tidak ditemukan|buku tamu|rsvp|ucapan|buka undangan/i).first()).toBeVisible({ timeout: 20000 });
+});
