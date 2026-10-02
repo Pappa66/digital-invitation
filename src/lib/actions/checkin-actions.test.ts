@@ -53,16 +53,16 @@ describe('verifyCheckinToken — RPC record_checkin_from_token', () => {
     });
   });
 
-  it('menolak project/token non-uuid SEBELUM menyentuh DB', async () => {
+  it('menolak project non-uuid SEBELUM menyentuh DB', async () => {
     expect(await verifyCheckinToken('proyek', 'token')).toEqual({
-      error: 'ID proyek atau token tidak valid'
+      error: 'ID proyek tidak valid'
     });
     expect(createServerSupabaseMock).not.toHaveBeenCalled();
   });
 
-  it('menolak token bukan uuid meskipun project uuid valid', async () => {
+  it('menolak token/kode terlalu pendek sebelum menyentuh DB', async () => {
     expect(await verifyCheckinToken(PROJECT_ID, 'abc')).toEqual({
-      error: 'ID proyek atau token tidak valid'
+      error: 'Token/kode tidak valid'
     });
     expect(createServerSupabaseMock).not.toHaveBeenCalled();
   });
