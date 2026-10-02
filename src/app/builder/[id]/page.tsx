@@ -38,6 +38,7 @@ export default function BuilderPage() {
   const [access, setAccess] = useState<'checking' | 'ok' | 'denied'>('checking');
   const autoSlugRef = useRef<string | null>(null);
   const manualTitleRef = useRef(false);
+  const loadedRef = useRef(false);
 
   useEffect(() => {
     async function load() {
@@ -50,6 +51,7 @@ export default function BuilderPage() {
         setPreviewSlug(proj?.slug ?? null);
         setStatus(proj?.status ?? 'draft');
         setAccess('ok');
+        loadedRef.current = true;
         return;
       }
       const { allowed } = await clientVerifyProjectAccess(projectId);
@@ -71,6 +73,7 @@ export default function BuilderPage() {
       autoSlugRef.current = proj?.title ?? null;
       setPreviewSlug(proj?.slug ?? null);
       setStatus(proj?.status ?? 'draft');
+      loadedRef.current = true;
     }
     load();
   }, [projectId, init]);
@@ -88,7 +91,7 @@ export default function BuilderPage() {
 
   // Otomatis: slug dinamis dari nama pasangan (Hero bride & groom) — update judul & slug tanpa edit manual
   useEffect(() => {
-    if (manualTitleRef.current) return;
+    if (manualTitleRef.current || !loadedRef.current) return;
     const hero = canvas.blocks.find((b) => b.type === 'Hero')?.props as Record<string, unknown> | undefined;
     const bride = typeof hero?.bride === 'string' ? hero.bride.trim() : '';
     const groom = typeof hero?.groom === 'string' ? hero.groom.trim() : '';
@@ -100,7 +103,7 @@ export default function BuilderPage() {
     const needSlugFix = wantSlug && haveSlug && wantSlug !== haveSlug && haveSlug.startsWith('elegant-gold');
     // Hanya auto bila judul masih default / masih sama dengan auto sebelumnya (jangan timpa edit manual) — atau slug lama masih template
     const isDefault = title === 'Tanpa Judul' || title === 'Elegant Gold' || title.trim() === '';
-    if (!isDefault && !needSlugFix) return;
+    if (!isDefault) return;
     if (autoTitle === title && !needSlugFix) return;
     // Debounce 800ms agar tidak spam saat ketik
     const t = setTimeout(async () => {
