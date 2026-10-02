@@ -636,7 +636,8 @@ function EditLinkTab({
   const EXPIRY_OPTIONS = [
     { hours: 1, label: '1 Jam' },
     { hours: 24, label: '24 Jam' },
-    { hours: 168, label: '7 Hari' }
+    { hours: 168, label: '7 Hari' },
+    { hours: 720, label: '1 Bulan' }
   ];
 
   const activeTokens = tokens.filter((t) => t.is_active && new Date(t.expires_at) > new Date());
@@ -716,7 +717,7 @@ function EditLinkTab({
             </button>
           </div>
           <p className="mt-1.5 text-[10px] text-green-600">
-            Berlaku {expiry < 24 ? `${expiry} jam` : `${expiry / 24} hari`} dari sekarang.
+            Berlaku {expiry < 24 ? `${expiry} jam` : expiry === 720 ? '1 bulan' : `${expiry / 24} hari`} dari sekarang.
           </p>
         </div>
       )}
