@@ -55,6 +55,13 @@ export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormPr
   const qrWrapRef = useRef<HTMLDivElement>(null);
   const variant = str(blockProps, 'variant') || 'centered';
   const menuGroups = parseMenuConfig(str(blockProps, 'menu_config'));
+  const deadlineRaw = str(blockProps, 'deadline');
+  const deadlineLabel = deadlineRaw
+    ? new Date(deadlineRaw).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
+    : '';
+  const deadlineNode = deadlineLabel ? (
+    <p className="mt-1 text-xs uppercase tracking-[0.15em] opacity-70">Konfirmasi sebelum {deadlineLabel}</p>
+  ) : null;
   const [menuSelections, setMenuSelections] = useState<Record<string, string>>({});
 
   async function handleSubmit(e: React.FormEvent) {
@@ -325,6 +332,7 @@ export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormPr
             <Editable prop="note">{str(blockProps, 'note')}</Editable>
           </p>
         </Inner>
+        {deadlineNode}
         {formContent}
       </section>
     );
@@ -342,6 +350,7 @@ export default function RSVPForm({ projectId, blockProps, readonly }: RSVPFormPr
           <Editable prop="note">{str(blockProps, 'note')}</Editable>
         </p>
       </Inner>
+      {deadlineNode}
       {formContent}
     </section>
   );
