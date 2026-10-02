@@ -104,7 +104,7 @@ begin
   -- Bersihkan token yang sudah kedaluwarsa.
   update public.access_tokens
      set revoked_at = now()
-   where project_id = p_project_id
+   where access_tokens.project_id = p_project_id
      and revoked_at is null
      and expires_at is not null
      and expires_at <= now();
@@ -122,12 +122,12 @@ begin
     -- Tidak ada token aktif: cabut sisa lalu buat satu token baru.
     update public.access_tokens
        set revoked_at = now()
-     where project_id = p_project_id
+     where access_tokens.project_id = p_project_id
        and revoked_at is null;
 
     insert into public.access_tokens (project_id, token, label, created_by, expires_at)
     values (p_project_id, encode(gen_random_bytes(24), 'hex'), p_label, v_uid, v_expires)
-    returning id, token, project_id into id, token, project_id;
+    returning access_tokens.id, access_tokens.token, access_tokens.project_id into id, token, project_id;
   else
     id := v_token_id;
     token := v_token;
@@ -150,7 +150,7 @@ set search_path = public
 as $$
   update public.access_tokens
      set revoked_at = now()
-   where project_id = p_project_id
+   where access_tokens.project_id = p_project_id
      and revoked_at is null
      and (
        exists (

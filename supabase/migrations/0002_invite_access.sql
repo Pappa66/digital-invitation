@@ -99,7 +99,7 @@ begin
   -- Token baru selalu dibuat baru agar unik & tak tertebak.
   insert into public.access_tokens (project_id, token, label, created_by)
   values (p_project_id, encode(gen_random_bytes(24), 'hex'), p_label, v_uid)
-  returning id, token, project_id into id, token, project_id;
+  returning access_tokens.id, access_tokens.token, access_tokens.project_id into id, token, project_id;
 
   return next;
 end;
