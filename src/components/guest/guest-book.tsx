@@ -66,17 +66,29 @@ export default function GuestBookWall({ projectId, title, background, background
       style={background ? { background } : undefined}
     >
       {backgroundImage && (
-        <div
-          aria-hidden
-          className="pointer-events-none absolute"
-          style={{
-            inset: backgroundBlur ? `-${Math.max(16, backgroundBlur * 2)}px` : '0px',
-            backgroundImage: `url("${backgroundImage}")`,
-            backgroundSize: backgroundFit || 'cover',
-            backgroundPosition: backgroundPosition || 'center',
-            filter: backgroundBlur ? `blur(${backgroundBlur}px)` : undefined
-          }}
-        />
+        <>
+          <div
+            aria-hidden
+            className="pointer-events-none absolute"
+            style={{
+              inset: backgroundBlur ? `-${Math.max(16, backgroundBlur * 2)}px` : '0px',
+              backgroundImage: `url("${backgroundImage}")`,
+              backgroundSize: backgroundFit || 'cover',
+              backgroundPosition: backgroundPosition || 'center',
+              filter: backgroundBlur ? `blur(${backgroundBlur}px)` : undefined
+            }}
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 top-0 h-24"
+            style={{ background: 'linear-gradient(to bottom, var(--color-background), transparent)' }}
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-24"
+            style={{ background: 'linear-gradient(to top, var(--color-background), transparent)' }}
+          />
+        </>
       )}
       <div
         aria-hidden
