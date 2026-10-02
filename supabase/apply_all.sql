@@ -1031,13 +1031,13 @@ grant execute on function public.revoke_invite_token(uuid) to authenticated;
 -- 7) RPC BUKU TAMU AMAN: hanya name+message+created_at dari project
 --    published (publik) / pemilik-internal (preview). Tanpa data intim.
 create or replace function public.get_guest_book_messages(p_project_id uuid)
-returns table (id uuid, name text, message text, created_at timestamptz)
+returns table (id uuid, name text, message text, attendance text, created_at timestamptz)
 language sql
 stable
 security definer
 set search_path = public
 as $$
-  select r.id, r.name, r.message, r.created_at
+  select r.id, r.name, r.message, r.attendance, r.created_at
   from public.rsvps r
   join public.projects p on p.id = r.project_id
   where r.project_id = p_project_id

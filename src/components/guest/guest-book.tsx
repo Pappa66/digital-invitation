@@ -46,7 +46,18 @@ export default function GuestBookWall({ projectId, title }: GuestBookWallProps) 
         ) : (
           messages.slice(0, 8).map((r) => (
             <div key={r.id} className="rounded-2xl border border-current/10 bg-white/5 px-4 py-3">
-              <p className="text-xs font-medium uppercase tracking-wide opacity-70">{r.name}</p>
+              <p className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide opacity-70">
+                <span>{r.name}</span>
+                {r.attendance && (
+                  <span
+                    className={`rounded-full px-1.5 py-0.5 text-[9px] font-semibold normal-case tracking-normal ${
+                      r.attendance === 'tidak' ? 'bg-red-500/15 text-red-500' : 'bg-emerald-500/15 text-emerald-600'
+                    }`}
+                  >
+                    {r.attendance === 'tidak' ? 'Tidak Hadir' : 'Hadir'}
+                  </span>
+                )}
+              </p>
               <p className="mt-1 text-sm leading-relaxed">{r.message}</p>
             </div>
           ))
