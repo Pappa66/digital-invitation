@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Copy, Check, Send, Users, ListChecks, Link2, ExternalLink, ShieldCheck, Radio, Download, UserCheck, QrCode, CalendarClock, Mail } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { Copy, Check, Send, Users, ListChecks, Link2, ExternalLink, ShieldCheck, Radio, Download, Upload, UserCheck, QrCode, CalendarClock, Mail } from 'lucide-react';
 import { demoIsDemoMode } from '@/lib/env';
 import { getSiteOrigin } from '@/lib/site';
 import {
@@ -177,6 +177,27 @@ export default function InviteManager({ projectId, slug: slugProp, title: titleP
   function editTemplate(text: string) {
     setTemplate(text);
     setPresetId('custom');
+  }
+
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  function importCsv(file: File) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const text = String(reader.result ?? '');
+      const lines = text.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+      if (lines.length && /^nama/i.test((lines[0].split(/[|,;\t]/)[0] || '').trim())) lines.shift();
+      const parsed = lines
+        .map((l) => {
+          const parts = l.split(/[|,;\t]/).map((x) => x.trim()).filter(Boolean);
+          const name = parts[0] ?? '';
+          const phone = parts.find((x) => /^(\+?62|0)8\d{7,12}$/.test(x.replace(/[\s.-]/g, ''))) ?? parts[1] ?? '';
+          return phone ? `${name} | ${phone}` : name;
+        })
+        .filter(Boolean);
+      if (parsed.length) updateBulk([bulkText.trim(), ...parsed].filter(Boolean).join('\n'));
+    };
+    reader.readAsText(file);
   }
 
   function updateBulk(text: string) {
@@ -414,6 +435,25 @@ export default function InviteManager({ projectId, slug: slugProp, title: titleP
           <p className="mt-1.5 text-[11px] text-[#b3a69a]">
             Terdeteksi <b className="text-[#8a6d2f]">{rows.length}</b> tamu. Tersimpan otomatis — bisa dilanjutkan kapan saja.
           </p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            <button type="button" onClick={() => download('contoh-daftar-tamu.csv', 'Nama,No HP\nBudi Santoso,08123456789\nSiti Aminah,081298765432\n')} className={BTN_OUTLINE}>
+              <Download className="h-3.5 w-3.5" /> Unduh Contoh Format
+            </button>
+            <button type="button" onClick={() => fileRef.current?.click()} className={BTN_OUTLINE}>
+              <Upload className="h-3.5 w-3.5" /> Import CSV
+            </button>
+            <input
+              ref={fileRef}
+              type="file"
+              accept=".csv,text/csv"
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) importCsv(f);
+                e.currentTarget.value = '';
+              }}
+            />
+          </div>
 
           <div className="mt-3 flex flex-wrap gap-2">
             <button onClick={() => copy('all-messages', allMessages)} disabled={rows.length === 0} className={BTN_OUTLINE}>

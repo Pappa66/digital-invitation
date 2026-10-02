@@ -1260,6 +1260,52 @@ export default function PropertiesPanel({ mobileOpen = false, onClose }: { mobil
                       <p className="text-[10px] text-[#8a7a66]">Foto hero memenuhi layar penuh. Atur posisi foto di bawah untuk fokus yang pas.</p>
                     </div>
                   )}
+                  {block.type === 'Watermark' && (
+                    <div className="space-y-3">
+                      <div>
+                        <label className="mb-1 block text-xs font-medium text-[#4a443c]">Rata Teks</label>
+                        <div className="flex gap-1">
+                          {([['left', 'Kiri'], ['center', 'Tengah'], ['right', 'Kanan'], ['justify', 'Justify']] as const).map(([v, l]) => (
+                            <button
+                              key={v}
+                              onClick={() => setBlockProps(block.id, { align: v })}
+                              className={`flex-1 rounded-md border px-2 py-1.5 text-xs ${(block.props.align ?? 'center') === v ? 'border-[#c9a45c] bg-[#c9a45c] text-white' : 'border-[#e0d6c2] text-[#6b5f4d] hover:bg-[#faf7f2]'}`}
+                            >
+                              {l}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <label className="mb-1 block text-xs font-medium text-[#4a443c]">Posisi Vertikal</label>
+                        <div className="flex gap-1">
+                          {([['top', 'Atas'], ['middle', 'Tengah'], ['bottom', 'Bawah']] as const).map(([v, l]) => (
+                            <button
+                              key={v}
+                              onClick={() => setBlockProps(block.id, { valign: v })}
+                              className={`flex-1 rounded-md border px-2 py-1.5 text-xs ${(block.props.valign ?? 'middle') === v ? 'border-[#c9a45c] bg-[#c9a45c] text-white' : 'border-[#e0d6c2] text-[#6b5f4d] hover:bg-[#faf7f2]'}`}
+                            >
+                              {l}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <label className="mb-1 block text-xs font-medium text-[#4a443c]">Jenis Font</label>
+                        <div className="flex gap-1">
+                          {([['body', 'Body'], ['heading', 'Heading'], ['script', 'Script']] as const).map(([v, l]) => (
+                            <button
+                              key={v}
+                              onClick={() => setBlockProps(block.id, { font: v })}
+                              className={`flex-1 rounded-md border px-2 py-1.5 text-xs ${(block.props.font ?? 'body') === v ? 'border-[#c9a45c] bg-[#c9a45c] text-white' : 'border-[#e0d6c2] text-[#6b5f4d] hover:bg-[#faf7f2]'}`}
+                            >
+                              {l}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
                   {VARIANTS[block.type] && (
                     <div>
                       <label className="mb-1 block text-xs font-medium text-[#4a443c]">Gaya</label>

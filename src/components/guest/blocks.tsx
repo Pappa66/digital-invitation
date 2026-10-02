@@ -2435,17 +2435,29 @@ export function WatermarkBlock({ props }: { props: BlockProps }) {
   const text = str(props, 'text') || 'Made with Love by';
   const brand = str(props, 'brand') || 'PT. Prasha Digital Indonesia';
   const url = str(props, 'url');
-  const theme = useTheme();
+  const align = str(props, 'align') || 'center';
+  const valign = str(props, 'valign') || 'middle';
+  const font = str(props, 'font') || 'body';
+  const alignClass =
+    align === 'left'
+      ? 'justify-start text-left'
+      : align === 'right'
+        ? 'justify-end text-right'
+        : align === 'justify'
+          ? 'justify-start text-justify'
+          : 'justify-center text-center';
+  const valignClass = valign === 'top' ? 'items-start' : valign === 'bottom' ? 'items-end' : 'items-center';
+  const fontClass = font === 'heading' ? 'font-heading' : font === 'script' ? 'font-script' : 'font-body';
   const content = (
-    <p className="font-body text-xs tracking-wide opacity-70">
+    <p className={`${fontClass} text-xs tracking-wide opacity-70`}>
       {text}{' '}
       <span className="font-heading font-medium opacity-70">{brand}</span>
     </p>
   );
 
   return (
-    <section className="px-6 py-8 sm:py-10">
-      <div className="flex items-center justify-center gap-3">
+    <section className={`flex min-h-[140px] px-6 py-8 sm:py-10 ${valignClass}`}>
+      <div className={`flex w-full items-center gap-3 ${alignClass}`}>
         <span className="h-px w-10 bg-current/20" />
         {url ? (
           <a
