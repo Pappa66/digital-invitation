@@ -43,6 +43,10 @@ function Ornament({ className = '' }: { className?: string }) {
 
 export default function LoginPage() {
   const router = useRouter();
+  function safeNext() {
+    const n = new URLSearchParams(window.location.search).get('next') ?? '/dashboard';
+    return n.startsWith('/') ? n : '/dashboard';
+  }
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const isDemo = demoIsDemoMode();
@@ -71,7 +75,7 @@ export default function LoginPage() {
         provider: 'google',
         options: {
           // Pakai custom domain dinamis, bukan vercel.app
-          redirectTo: `${getSiteOrigin()}/auth/callback`
+          redirectTo: `${getSiteOrigin()}/auth/callback?next=${encodeURIComponent(safeNext())}`
         }
       });
       if (error) {
@@ -85,7 +89,7 @@ export default function LoginPage() {
   }
 
   async function enterDemo() {
-    router.push('/dashboard');
+    router.push(safeNext());
     router.refresh();
   }
 
