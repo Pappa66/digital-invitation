@@ -28,6 +28,8 @@ export const ThemeSchema = z.object({
   card_entrance: z.string().max(20).optional(),
   cover_text: z.string().max(20).optional(),
   cover_valign: z.enum(['between', 'center', 'top', 'bottom']).optional(),
+  scroll_anim: z.enum(['none', 'fade-up', 'fade', 'zoom', 'slide-left', 'slide-right']).optional(),
+  scroll_intensity: z.number().min(0).max(100).optional(),
   ornament: z.string().max(50).optional(),
   cover_style: z.enum(['floral', 'book', 'filmroll', 'oldtv', 'newspaper']).optional(),
   // Legacy (tidak dirender lagi) — ditoleransi agar data lama tetap valid.

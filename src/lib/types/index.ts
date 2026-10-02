@@ -51,6 +51,10 @@ export interface Theme {
   cover_text?: string;
   /** Posisi vertikal teks cover: sebar (default), tengah, atas, bawah. */
   cover_valign?: 'between' | 'center' | 'top' | 'bottom';
+  /** Animasi scroll section: none | fade-up | fade | zoom | slide-left | slide-right. */
+  scroll_anim?: 'none' | 'fade-up' | 'fade' | 'zoom' | 'slide-left' | 'slide-right';
+  /** Intensitas animasi scroll 0-100. */
+  scroll_intensity?: number;
   /**
    * Ornamen dekoratif (SVG library) untuk section pengantar/sepanjang undangan.
    * Nilai: kunci di ornaments.tsx (mis. 'flourish', 'eucalyptus', 'rose-branch').

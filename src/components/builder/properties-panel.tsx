@@ -726,6 +726,30 @@ export default function PropertiesPanel({ mobileOpen = false, onClose }: { mobil
                 <div className="space-y-3">
                   <FontSelect label="Font Heading" value={canvas.theme.font_heading} onChange={(v) => setTheme({ font_heading: v })} />
                   <FontSelect label="Font Body" value={canvas.theme.font_body} onChange={(v) => setTheme({ font_body: v })} />
+                  <div className="mt-3 space-y-2">
+                    <label className="block text-xs font-medium text-[#4a443c]">Animasi Scroll</label>
+                    <select
+                      value={canvas.theme.scroll_anim ?? 'fade-up'}
+                      onChange={(e) => setTheme({ scroll_anim: e.target.value as 'none' | 'fade-up' | 'fade' | 'zoom' | 'slide-left' | 'slide-right' })}
+                      className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-2 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
+                    >
+                      <option value="none">Tanpa animasi</option>
+                      <option value="fade-up">Fade + Naik</option>
+                      <option value="fade">Fade</option>
+                      <option value="zoom">Zoom</option>
+                      <option value="slide-left">Geser dari Kiri</option>
+                      <option value="slide-right">Geser dari Kanan</option>
+                    </select>
+                    <label className="block text-xs font-medium text-[#4a443c]">Intensitas: {canvas.theme.scroll_intensity ?? 60}%</label>
+                    <input
+                      type="range"
+                      min={0}
+                      max={100}
+                      value={canvas.theme.scroll_intensity ?? 60}
+                      onChange={(e) => setTheme({ scroll_intensity: Number(e.target.value) })}
+                      className="w-full"
+                    />
+                  </div>
                 </div>
               }
             />

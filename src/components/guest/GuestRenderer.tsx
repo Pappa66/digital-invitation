@@ -41,12 +41,17 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
     theme: { primary: canvas.theme.primary, secondary: canvas.theme.secondary, background: canvas.theme.background },
     heroImage: typeof heroBlock?.props.bg_image === 'string' ? heroBlock.props.bg_image : undefined
   };
+  const revealAnim = canvas.theme.scroll_anim ?? 'fade-up';
+  const revealIntensity = Math.max(0, Math.min(100, Number(canvas.theme.scroll_intensity ?? 60)));
+
   const styleVars = {
     '--color-primary': canvas.theme.primary,
     '--color-secondary': canvas.theme.secondary,
     '--color-background': canvas.theme.background,
     '--color-text': canvas.theme.text,
     '--cover-text': canvas.theme.cover_text ?? '#ffffff',
+    '--reveal-dist': `${(12 + revealIntensity * 0.36).toFixed(0)}px`,
+    '--reveal-dur': `${(0.4 + revealIntensity * 0.006).toFixed(2)}s`,
     '--font-heading': `'${canvas.theme.font_heading}', serif`,
     '--font-body': `'${canvas.theme.font_body}', sans-serif`
   } as React.CSSProperties;
@@ -130,9 +135,9 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
   return (
     <PreviewContext.Provider value={!!preview}>
       <ThemeContext.Provider value={canvas.theme}>
-      <div ref={rootRef} className={`${rootClass}${revealOn ? " js-reveal" : ""}`} style={styleVars}>
+      <div ref={rootRef} className={`${rootClass}${revealOn && revealAnim !== "none" ? " js-reveal" : ""}`} style={styleVars}>
         {canvas.blocks.map((block, i) => (
-          <div key={block.id} data-reveal>
+          <div key={block.id} data-reveal={revealAnim}>
             <BlockView block={block} projectId={projectId} greetingName={greetingName} cardStyle={canvas.theme.card_style} demo={immersive && !!demo} showCoverButton={!showCover} />
             {i < canvas.blocks.length - 1 && <SectionGap />}
           </div>
