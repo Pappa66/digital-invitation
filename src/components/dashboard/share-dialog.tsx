@@ -76,6 +76,8 @@ export default function ShareDialog({ open, projectId, slug, title, onClose, rel
   const [bulkText, setBulkText] = useState<string>(() => loadState(STORAGE_BULK(projectId), ''));
   const [sentIndexes, setSentIndexes] = useState<Set<number>>(new Set());
   const [manageToken, setManageToken] = useState<string | null>(null);
+  const [manageLoading, setManageLoading] = useState(false);
+  const [manageError, setManageError] = useState('');
   // Edit link state
   const [editTokens, setEditTokens] = useState<(ShareTokenInfo & { is_active: boolean; note?: string })[]>([]);
   const [editLoading, setEditLoading] = useState(false);
@@ -88,9 +90,20 @@ export default function ShareDialog({ open, projectId, slug, title, onClose, rel
   useEffect(() => {
     if (!open) return;
     let alive = true;
-    clientGetInviteAccessToken(projectId).then((res) => {
-      if (alive && res.token) setManageToken(res.token);
-    });
+    setManageLoading(true);
+    setManageError('');
+    clientGetInviteAccessToken(projectId)
+      .then((res) => {
+        if (!alive) return;
+        if (res.token) setManageToken(res.token);
+        else setManageError(res.error ?? 'Gagal membuat tautan kelola.');
+      })
+      .catch((e: unknown) => {
+        if (alive) setManageError(e instanceof Error ? e.message : 'Gagal membuat tautan kelola.');
+      })
+      .finally(() => {
+        if (alive) setManageLoading(false);
+      });
     return () => {
       alive = false;
     };
@@ -102,6 +115,17 @@ export default function ShareDialog({ open, projectId, slug, title, onClose, rel
   const cleanName = name.trim();
   const link = `${base}/${slug}${cleanName ? `?to=${encodeURIComponent(cleanName)}` : ''}`;
   const manageLink = manageToken ? `${base}/invite/${projectId}?t=${manageToken}` : `${base}/invite/${projectId}`;
+  function refreshManageToken() {
+    setManageLoading(true);
+    setManageError('');
+    clientGetInviteAccessToken(projectId)
+      .then((res) => {
+        if (res.token) setManageToken(res.token);
+        else setManageError(res.error ?? 'Gagal membuat tautan kelola.');
+      })
+      .catch((e: unknown) => setManageError(e instanceof Error ? e.message : 'Gagal membuat tautan kelola.'))
+      .finally(() => setManageLoading(false));
+  }
   const message = fill(template, cleanName, link);
 
   const rows = parseGuestLines(bulkText);
@@ -359,6 +383,19 @@ export default function ShareDialog({ open, projectId, slug, title, onClose, rel
                 onCopy={() => copy('team-link', manageLink)}
                 copied={copied === 'team-link'}
               />
+              {manageLoading && <p className="mt-1 text-[11px] text-gray-400">Menyiapkan tautan kelola…</p>}
+              {!manageLoading && !manageToken && (
+                <div className="mt-1">
+                  <button
+                    type="button"
+                    onClick={refreshManageToken}
+                    className="rounded-md border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
+                  >
+                    Buat Tautan Kelola
+                  </button>
+                  {manageError && <p className="mt-1 text-[11px] text-red-500">{manageError}</p>}
+                </div>
+              )}
             </Section>
           )}
 
