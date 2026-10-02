@@ -11,6 +11,9 @@ interface GuestBookWallProps {
   title?: string;
   background?: string;
   backgroundImage?: string;
+  backgroundFit?: 'cover' | 'contain';
+  backgroundPosition?: string;
+  backgroundBlur?: number;
 }
 
 function initial(name: string): string {
@@ -33,7 +36,7 @@ function timeAgo(iso?: string): string {
 }
 
 /** Buku tamu: ucapan & doa terbaru dari para tamu (reload saat RSVP baru masuk). */
-export default function GuestBookWall({ projectId, title, background, backgroundImage }: GuestBookWallProps) {
+export default function GuestBookWall({ projectId, title, background, backgroundImage, backgroundFit, backgroundPosition, backgroundBlur }: GuestBookWallProps) {
   const [items, setItems] = useState<Rsvp[]>([]);
 
   useEffect(() => {
@@ -60,14 +63,21 @@ export default function GuestBookWall({ projectId, title, background, background
   return (
     <section
       className="relative overflow-hidden px-6 py-16"
-      style={
-        backgroundImage
-          ? { backgroundImage: `url("${backgroundImage}")`, backgroundSize: 'cover', backgroundPosition: 'center' }
-          : background
-            ? { background }
-            : undefined
-      }
+      style={background ? { background } : undefined}
     >
+      {backgroundImage && (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            backgroundImage: `url("${backgroundImage}")`,
+            backgroundSize: backgroundFit || 'cover',
+            backgroundPosition: backgroundPosition || 'center',
+            filter: backgroundBlur ? `blur(${backgroundBlur}px)` : undefined,
+            transform: backgroundBlur ? 'scale(1.08)' : undefined
+          }}
+        />
+      )}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-48"

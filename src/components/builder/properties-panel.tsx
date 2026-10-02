@@ -1006,6 +1006,38 @@ export default function PropertiesPanel({ mobileOpen = false, onClose }: { mobil
                             </button>
                           )}
                         </div>
+                        {canvas.settings.guest_book_bg_image && (
+                          <div className="space-y-2">
+                            <div>
+                              <label className="mb-1 block text-xs font-medium text-[#4a443c]">Ukuran Latar</label>
+                              <select
+                                value={canvas.settings.guest_book_bg_fit ?? 'cover'}
+                                onChange={(e) => setSettings({ guest_book_bg_fit: e.target.value as 'cover' | 'contain' })}
+                                className="w-full rounded-md border border-[#e0d6c2] bg-[#faf7f2] px-2 py-2 text-sm outline-none focus:ring-2 focus:ring-[#c9a45c]"
+                              >
+                                <option value="cover">Penuhi (cover)</option>
+                                <option value="contain">Utuh (contain)</option>
+                              </select>
+                            </div>
+                            <DragPosition
+                              src={canvas.settings.guest_book_bg_image}
+                              value={canvas.settings.guest_book_bg_position ?? 'center'}
+                              fit={canvas.settings.guest_book_bg_fit}
+                              onChange={(v) => setSettings({ guest_book_bg_position: v })}
+                            />
+                            <div>
+                              <label className="mb-1 block text-xs font-medium text-[#4a443c]">Blur Latar: {canvas.settings.guest_book_bg_blur ?? 0}px</label>
+                              <input
+                                type="range"
+                                min={0}
+                                max={30}
+                                value={canvas.settings.guest_book_bg_blur ?? 0}
+                                onChange={(e) => setSettings({ guest_book_bg_blur: Number(e.target.value) })}
+                                className="w-full"
+                              />
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   )}

@@ -159,7 +159,7 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
             {i < canvas.blocks.length - 1 && <SectionGap />}
           </div>
         ))}
-        {!preview && canvas.settings.guest_book_enabled && <GuestBookWall projectId={projectId} background={canvas.settings.guest_book_bg} backgroundImage={canvas.settings.guest_book_bg_image} />}
+        {!preview && canvas.settings.guest_book_enabled && <GuestBookWall projectId={projectId} background={canvas.settings.guest_book_bg} backgroundImage={canvas.settings.guest_book_bg_image} backgroundFit={canvas.settings.guest_book_bg_fit} backgroundPosition={canvas.settings.guest_book_bg_position} backgroundBlur={canvas.settings.guest_book_bg_blur} />}
         {!preview && projectId && canvas.settings.checkin_enabled !== false && (
           <CheckIn
             projectId={projectId}
