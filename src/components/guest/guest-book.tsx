@@ -68,13 +68,13 @@ export default function GuestBookWall({ projectId, title, background, background
       {backgroundImage && (
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0"
+          className="pointer-events-none absolute"
           style={{
+            inset: backgroundBlur ? `-${Math.max(16, backgroundBlur * 2)}px` : '0px',
             backgroundImage: `url("${backgroundImage}")`,
             backgroundSize: backgroundFit || 'cover',
             backgroundPosition: backgroundPosition || 'center',
-            filter: backgroundBlur ? `blur(${backgroundBlur}px)` : undefined,
-            transform: backgroundBlur ? 'scale(1.08)' : undefined
+            filter: backgroundBlur ? `blur(${backgroundBlur}px)` : undefined
           }}
         />
       )}
