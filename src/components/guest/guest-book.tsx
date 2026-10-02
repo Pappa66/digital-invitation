@@ -10,6 +10,7 @@ interface GuestBookWallProps {
   projectId?: string;
   title?: string;
   background?: string;
+  backgroundImage?: string;
 }
 
 function initial(name: string): string {
@@ -32,7 +33,7 @@ function timeAgo(iso?: string): string {
 }
 
 /** Buku tamu: ucapan & doa terbaru dari para tamu (reload saat RSVP baru masuk). */
-export default function GuestBookWall({ projectId, title, background }: GuestBookWallProps) {
+export default function GuestBookWall({ projectId, title, background, backgroundImage }: GuestBookWallProps) {
   const [items, setItems] = useState<Rsvp[]>([]);
 
   useEffect(() => {
@@ -57,7 +58,16 @@ export default function GuestBookWall({ projectId, title, background }: GuestBoo
   const messages = items.filter((r) => (r.message ?? '').trim().length > 0);
 
   return (
-    <section className="relative overflow-hidden px-6 py-16" style={background ? { background } : undefined}>
+    <section
+      className="relative overflow-hidden px-6 py-16"
+      style={
+        backgroundImage
+          ? { backgroundImage: `url("${backgroundImage}")`, backgroundSize: 'cover', backgroundPosition: 'center' }
+          : background
+            ? { background }
+            : undefined
+      }
+    >
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-48"

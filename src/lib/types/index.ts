@@ -77,6 +77,8 @@ export interface Settings {
   guest_book_enabled: boolean;
   /** Latar section Buku Tamu (warna/gradien CSS). */
   guest_book_bg?: string;
+  /** Gambar latar section Buku Tamu (menimpa warna). */
+  guest_book_bg_image?: string;
   /** Tampilkan bagian Absensi Kehadiran (QR check-in) pada undangan. */
   checkin_enabled?: boolean;
   /** Agama undangan (untuk templating ucapan & wording). Default: 'islam'. */

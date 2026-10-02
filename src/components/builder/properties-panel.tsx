@@ -577,7 +577,7 @@ export default function PropertiesPanel({ mobileOpen = false, onClose }: { mobil
   const setReligion = useBuilderStore((s) => s.setReligion);
 
   const [mediaOpen, setMediaOpen] = useState(false);
-  const [mediaMode, setMediaMode] = useState<'hero' | 'gallery' | 'bg' | 'photo' | 'decor' | 'couple_groom' | 'couple_bride' | 'cover' | 'card' | null>(null);
+  const [mediaMode, setMediaMode] = useState<'hero' | 'gallery' | 'bg' | 'photo' | 'decor' | 'couple_groom' | 'couple_bride' | 'cover' | 'card' | 'guestbook_bg' | null>(null);
   const [cropOpen, setCropOpen] = useState(false);
   const [panelTab, setPanelTab] = useState<'content' | 'style' | 'advanced'>('content');
 
@@ -977,11 +977,37 @@ export default function PropertiesPanel({ mobileOpen = false, onClose }: { mobil
                     </button>
                   </label>
                   {canvas.settings.guest_book_enabled !== false && (
-                    <ColorPicker
-                      label="Latar Buku Tamu"
-                      value={canvas.settings.guest_book_bg ?? ''}
-                      onChange={(c) => setSettings({ guest_book_bg: c })}
-                    />
+                    <div className="space-y-2">
+                      <ColorPicker
+                        label="Latar Buku Tamu (warna)"
+                        value={canvas.settings.guest_book_bg ?? ''}
+                        onChange={(c) => setSettings({ guest_book_bg: c })}
+                      />
+                      <div>
+                        <p className="mb-1 text-xs font-medium text-[#4a443c]">Gambar Latar Buku Tamu</p>
+                        <div className="flex gap-2">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setMediaMode('guestbook_bg');
+                              setMediaOpen(true);
+                            }}
+                            className="flex flex-1 items-center gap-2 rounded-md border border-dashed border-[#c9a45c]/40 bg-[#faf7f2] px-3 py-2 text-xs text-[#8a7a66] hover:border-[#c9a45c] hover:bg-white"
+                          >
+                            {canvas.settings.guest_book_bg_image ? 'Ganti Gambar' : 'Pilih Gambar'}
+                          </button>
+                          {canvas.settings.guest_book_bg_image && (
+                            <button
+                              type="button"
+                              onClick={() => setSettings({ guest_book_bg_image: '' })}
+                              className="rounded-md border border-red-200 bg-white px-3 py-2 text-xs text-red-500 hover:bg-red-50"
+                            >
+                              Hapus
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
                   )}
                 </div>
               }
@@ -2220,6 +2246,7 @@ export default function PropertiesPanel({ mobileOpen = false, onClose }: { mobil
           if (mediaMode === 'couple_bride' && block?.type === 'Couple') setBlockProps(block.id, { bride_photo: url });
           if (mediaMode === 'cover') setSettings({ cover_bg_image: url });
           if (mediaMode === 'card') setSettings({ share_card_bg: url });
+          if (mediaMode === 'guestbook_bg') setSettings({ guest_book_bg_image: url });
           if (mediaMode === 'decor' && activeDecor)
             updateDecor(activeDecor.block.id, activeDecor.asset.id, { imageUrl: url });
           setMediaMode(null);

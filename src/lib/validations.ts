@@ -45,6 +45,7 @@ export const SettingsSchema = z.object({
   share_card_caption: z.string().max(120).optional(),
   guest_book_enabled: z.boolean().default(true),
   guest_book_bg: z.string().max(300).optional(),
+  guest_book_bg_image: z.string().max(500).optional(),
   checkin_enabled: z.boolean().optional(),
   religion: z.string().max(20).optional(),
   music_autoplay: z.boolean().optional(),
