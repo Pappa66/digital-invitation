@@ -1,4 +1,6 @@
 -- Sertakan status kehadiran di buku tamu.
+drop function if exists public.get_guest_book_messages(uuid);
+
 create or replace function public.get_guest_book_messages(p_project_id uuid)
 returns table (id uuid, name text, message text, attendance text, created_at timestamptz)
 language sql

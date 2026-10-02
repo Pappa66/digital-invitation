@@ -1030,6 +1030,8 @@ grant execute on function public.revoke_invite_token(uuid) to authenticated;
 
 -- 7) RPC BUKU TAMU AMAN: hanya name+message+created_at dari project
 --    published (publik) / pemilik-internal (preview). Tanpa data intim.
+drop function if exists public.get_guest_book_messages(uuid);
+
 create or replace function public.get_guest_book_messages(p_project_id uuid)
 returns table (id uuid, name text, message text, attendance text, created_at timestamptz)
 language sql
