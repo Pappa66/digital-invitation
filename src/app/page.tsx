@@ -137,7 +137,11 @@ export default function LandingPage() {
     () => {
       const base = demoIds === null ? DEMO_TEMPLATES : DEMO_TEMPLATES.filter((t) => demoIds.has(t.id));
       const allowed = landingContent?.template_ids ?? [];
-      const source = allowed.length ? base.filter((t) => allowed.includes(t.id)) : base;
+      const source = landingContent?.only_custom
+        ? []
+        : allowed.length
+          ? base.filter((t) => allowed.includes(t.id))
+          : base;
       const baseCards = source.map((meta) => ({ meta, canvas: getTemplate(meta.id)! }));
       const customCards = customTemplates.map((t) => ({
         meta: { id: t.id, name: t.name, category: t.category } as unknown as (typeof DEMO_TEMPLATES)[number],

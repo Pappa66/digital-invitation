@@ -162,7 +162,17 @@ export default function LandingAdmin() {
             <CardTitle className="text-base">Template yang Tampil di Landing</CardTitle>
             <CardDescription>Pilih template yang muncul di katalog. Kosong = semua template tampil.</CardDescription>
           </CardHeader>
-          <CardContent className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+          <CardContent>
+            <label className="mb-3 flex items-center gap-2 rounded-md border border-input px-3 py-2 text-xs">
+              <input
+                type="checkbox"
+                checked={!!content.only_custom}
+                onChange={(e) => setContent((c) => ({ ...c, only_custom: e.target.checked }))}
+                className="h-3.5 w-3.5"
+              />
+              Hanya tampilkan template buatan sendiri (sembunyikan semua template bawaan)
+            </label>
+            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
             {DEMO_TEMPLATES.map((t) => {
               const checked = (content.template_ids ?? []).includes(t.id);
               return (
@@ -172,6 +182,7 @@ export default function LandingAdmin() {
                 </label>
               );
             })}
+            </div>
           </CardContent>
         </Card>
 
