@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { getSiteOrigin } from '@/lib/site';
 import PricingSection from '@/components/landing/pricing-section';
+import { listVisibleTemplates } from '@/lib/api/custom-templates';
 import {
   ArrowRight,
   ChevronLeft,
@@ -77,6 +78,7 @@ export default function LandingPage() {
   const [demoIds, setDemoIds] = useState<Set<string> | null>(null);
   const [demos, setDemos] = useState<TemplateDemo[]>([]);
   const [landingReady, setLandingReady] = useState(false);
+  const [customTemplates, setCustomTemplates] = useState<{ id: string; name: string; category: string; canvas: unknown }[]>([]);
 
   // Fallback: bila Supabase redirect ke /?code=... (whitelist belum berisi /auth/callback), lempar ke handler yang benar
   useEffect(() => {
@@ -124,15 +126,26 @@ export default function LandingPage() {
     setOrderOpen(true);
   }
 
+  useEffect(() => {
+    listVisibleTemplates()
+      .then((rows) => setCustomTemplates(rows.map((r) => ({ id: r.id, name: r.name, category: r.category ?? 'Template Saya', canvas: r.canvas_data }))))
+      .catch(() => {});
+  }, []);
+
   const isLandingLoading = !landingReady && demoIds === null;
   const cards = useMemo<CardData[]>(
     () => {
       const base = demoIds === null ? DEMO_TEMPLATES : DEMO_TEMPLATES.filter((t) => demoIds.has(t.id));
       const allowed = landingContent?.template_ids ?? [];
       const source = allowed.length ? base.filter((t) => allowed.includes(t.id)) : base;
-      return source.map((meta) => ({ meta, canvas: getTemplate(meta.id)! }));
+      const baseCards = source.map((meta) => ({ meta, canvas: getTemplate(meta.id)! }));
+      const customCards = customTemplates.map((t) => ({
+        meta: { id: t.id, name: t.name, category: t.category } as unknown as (typeof DEMO_TEMPLATES)[number],
+        canvas: t.canvas
+      }));
+      return [...baseCards, ...customCards] as typeof baseCards;
     },
-    [demoIds, landingContent]
+    [demoIds, landingContent, customTemplates]
   );
 
   const filtered = useMemo(() => {
