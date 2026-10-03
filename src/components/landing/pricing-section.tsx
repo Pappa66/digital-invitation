@@ -31,7 +31,7 @@ export default function PricingSection({ basePrice, discountPercent, promoCode, 
     return () => clearInterval(timer);
   }, [promoExpiresAt]);
 
-  const hasDiscount = discountPercent > 0 && timeLeft;
+  const hasDiscount = discountPercent > 0;
   const discountedPrice = hasDiscount ? Math.round(basePrice * (1 - discountPercent / 100)) : basePrice;
 
   function copyCode() {
