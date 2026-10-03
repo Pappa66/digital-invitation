@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
 import { demoListRsvps, demoSetRsvpListener } from '@/lib/demo/demo-store';
 import { demoIsDemoMode } from '@/lib/env';
@@ -16,7 +17,8 @@ interface GuestBookWallProps {
   backgroundBlur?: number;
 }
 
-const PAGE = 8;
+const PER_PAGE = 10;
+const MAX_PAGES = 10; // maksimal 100 ucapan
 
 function initial(name: string): string {
   return (name || '?').trim().charAt(0).toUpperCase() || '?';
@@ -48,29 +50,37 @@ export default function GuestBookWall({
   backgroundBlur
 }: GuestBookWallProps) {
   const [items, setItems] = useState<Rsvp[]>([]);
-  const [hasMore, setHasMore] = useState(false);
-  const [loadingMore, setLoadingMore] = useState(false);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const loadPage = useCallback(
-    async (offset: number) => {
+    async (pageIndex: number) => {
       if (!projectId) {
         setItems([]);
-        setHasMore(false);
+        setTotal(0);
         return;
       }
-      if (demoIsDemoMode()) {
-        setItems(demoListRsvps(projectId).filter((r) => (r.message ?? '').trim().length > 0));
-        setHasMore(false);
-        return;
+      setLoading(true);
+      try {
+        if (demoIsDemoMode()) {
+          const all = demoListRsvps(projectId).filter((r) => (r.message ?? '').trim().length > 0);
+          setTotal(all.length);
+          setItems(all.slice(pageIndex * PER_PAGE, pageIndex * PER_PAGE + PER_PAGE));
+          return;
+        }
+        const { data } = await supabase.rpc('get_guest_book_messages', {
+          p_project_id: projectId,
+          p_limit: PER_PAGE,
+          p_offset: pageIndex * PER_PAGE
+        });
+        const rows = (data ?? []) as unknown as Rsvp[];
+        setItems(rows);
+        const first = rows[0] as { total?: number } | undefined;
+        setTotal(rows.length ? Number(first?.total ?? rows.length) : 0);
+      } finally {
+        setLoading(false);
       }
-      const { data } = await supabase.rpc('get_guest_book_messages', {
-        p_project_id: projectId,
-        p_limit: PAGE,
-        p_offset: offset
-      });
-      const rows = (data ?? []) as Rsvp[];
-      setItems((prev) => (offset === 0 ? rows : [...prev, ...rows]));
-      setHasMore(rows.length === PAGE);
     },
     [projectId]
   );
@@ -80,6 +90,7 @@ export default function GuestBookWall({
       setItems([]);
       return;
     }
+    setPage(0);
     void loadPage(0);
     const off = demoSetRsvpListener(() => {
       void loadPage(0);
@@ -87,15 +98,13 @@ export default function GuestBookWall({
     return off;
   }, [projectId, loadPage]);
 
-  const messages = items.filter((r) => (r.message ?? '').trim().length > 0);
+  const totalPages = Math.min(MAX_PAGES, Math.max(1, Math.ceil(total / PER_PAGE)));
 
-  async function loadMore() {
-    setLoadingMore(true);
-    try {
-      await loadPage(items.length);
-    } finally {
-      setLoadingMore(false);
-    }
+  function goTo(p: number) {
+    const np = Math.min(Math.max(0, p), totalPages - 1);
+    if (np === page) return;
+    setPage(np);
+    void loadPage(np);
   }
 
   return (
@@ -149,7 +158,7 @@ export default function GuestBookWall({
       </div>
 
       <div className="relative mx-auto max-w-md space-y-4">
-        {messages.length === 0 ? (
+        {items.length === 0 && !loading ? (
           <div
             className="rounded-[26px] px-6 py-10 text-center"
             style={{ border: '1px dashed color-mix(in srgb, var(--color-primary) 30%, transparent)' }}
@@ -157,7 +166,7 @@ export default function GuestBookWall({
             <p className="text-sm opacity-60">Belum ada ucapan. Jadilah yang pertama memberi doa terbaik.</p>
           </div>
         ) : (
-          messages.map((r) => (
+          items.map((r) => (
             <article
               key={r.id}
               className="relative overflow-hidden rounded-[26px] p-5"
@@ -212,15 +221,41 @@ export default function GuestBookWall({
           ))
         )}
 
-        {hasMore && (
-          <button
-            type="button"
-            onClick={() => void loadMore()}
-            disabled={loadingMore}
-            className="mx-auto mt-2 flex items-center gap-2 rounded-full border border-current/25 px-5 py-2 text-xs font-semibold transition-colors hover:bg-current/10 disabled:opacity-60"
-          >
-            {loadingMore ? 'Memuat...' : 'Tampilkan lebih banyak'}
-          </button>
+        {totalPages > 1 && (
+          <nav className="mt-4 flex items-center justify-center gap-1.5" aria-label="Navigasi halaman ucapan">
+            <button
+              type="button"
+              onClick={() => goTo(page - 1)}
+              disabled={page === 0}
+              aria-label="Sebelumnya"
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-current/25 transition-colors hover:bg-current/10 disabled:opacity-40"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+            {Array.from({ length: totalPages }, (_, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => goTo(i)}
+                aria-current={page === i ? 'page' : undefined}
+                className={`h-8 min-w-8 rounded-full px-2 text-xs font-semibold transition-colors ${
+                  page === i ? 'text-white' : 'border border-current/25 hover:bg-current/10'
+                }`}
+                style={page === i ? { background: 'var(--color-primary)' } : undefined}
+              >
+                {i + 1}
+              </button>
+            ))}
+            <button
+              type="button"
+              onClick={() => goTo(page + 1)}
+              disabled={page >= totalPages - 1}
+              aria-label="Berikutnya"
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-current/25 transition-colors hover:bg-current/10 disabled:opacity-40"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+          </nav>
         )}
       </div>
     </section>

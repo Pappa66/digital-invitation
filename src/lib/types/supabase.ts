@@ -479,8 +479,10 @@ export interface Database {
         Returns: {
           id: string;
           name: string;
-          message: string | null;
+          message: string;
+          attendance: string | null;
           created_at: string;
+          total: number;
         }[];
       };
       get_invite_rsvps: {
