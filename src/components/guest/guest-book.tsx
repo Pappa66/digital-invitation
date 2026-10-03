@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase/client';
 import { demoListRsvps, demoSetRsvpListener } from '@/lib/demo/demo-store';
 import { demoIsDemoMode } from '@/lib/env';
@@ -15,6 +15,8 @@ interface GuestBookWallProps {
   backgroundPosition?: string;
   backgroundBlur?: number;
 }
+
+const PAGE = 8;
 
 function initial(name: string): string {
   return (name || '?').trim().charAt(0).toUpperCase() || '?';
@@ -36,29 +38,65 @@ function timeAgo(iso?: string): string {
 }
 
 /** Buku tamu: ucapan & doa terbaru dari para tamu (reload saat RSVP baru masuk). */
-export default function GuestBookWall({ projectId, title, background, backgroundImage, backgroundFit, backgroundPosition, backgroundBlur }: GuestBookWallProps) {
+export default function GuestBookWall({
+  projectId,
+  title,
+  background,
+  backgroundImage,
+  backgroundFit,
+  backgroundPosition,
+  backgroundBlur
+}: GuestBookWallProps) {
   const [items, setItems] = useState<Rsvp[]>([]);
+  const [hasMore, setHasMore] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
 
-  useEffect(() => {
-    if (!projectId) return setItems([]);
-
-    const load = () => {
-      if (demoIsDemoMode()) {
-        setItems(demoListRsvps(projectId));
+  const loadPage = useCallback(
+    async (offset: number) => {
+      if (!projectId) {
+        setItems([]);
+        setHasMore(false);
         return;
       }
-      // RPC aman: hanya name+message+attendance+created_at dari project published.
-      supabase
-        .rpc('get_guest_book_messages', { p_project_id: projectId })
-        .then(({ data }) => setItems((data ?? []) as Rsvp[]));
-    };
+      if (demoIsDemoMode()) {
+        setItems(demoListRsvps(projectId).filter((r) => (r.message ?? '').trim().length > 0));
+        setHasMore(false);
+        return;
+      }
+      const { data } = await supabase.rpc('get_guest_book_messages', {
+        p_project_id: projectId,
+        p_limit: PAGE,
+        p_offset: offset
+      });
+      const rows = (data ?? []) as Rsvp[];
+      setItems((prev) => (offset === 0 ? rows : [...prev, ...rows]));
+      setHasMore(rows.length === PAGE);
+    },
+    [projectId]
+  );
 
-    load();
-    const off = demoSetRsvpListener(load);
+  useEffect(() => {
+    if (!projectId) {
+      setItems([]);
+      return;
+    }
+    void loadPage(0);
+    const off = demoSetRsvpListener(() => {
+      void loadPage(0);
+    });
     return off;
-  }, [projectId]);
+  }, [projectId, loadPage]);
 
   const messages = items.filter((r) => (r.message ?? '').trim().length > 0);
+
+  async function loadMore() {
+    setLoadingMore(true);
+    try {
+      await loadPage(items.length);
+    } finally {
+      setLoadingMore(false);
+    }
+  }
 
   return (
     <section
@@ -90,6 +128,7 @@ export default function GuestBookWall({ projectId, title, background, background
           />
         </>
       )}
+
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-48"
@@ -118,7 +157,7 @@ export default function GuestBookWall({ projectId, title, background, background
             <p className="text-sm opacity-60">Belum ada ucapan. Jadilah yang pertama memberi doa terbaik.</p>
           </div>
         ) : (
-          messages.slice(0, 8).map((r) => (
+          messages.map((r) => (
             <article
               key={r.id}
               className="relative overflow-hidden rounded-[26px] p-5"
@@ -171,6 +210,17 @@ export default function GuestBookWall({ projectId, title, background, background
               />
             </article>
           ))
+        )}
+
+        {hasMore && (
+          <button
+            type="button"
+            onClick={() => void loadMore()}
+            disabled={loadingMore}
+            className="mx-auto mt-2 flex items-center gap-2 rounded-full border border-current/25 px-5 py-2 text-xs font-semibold transition-colors hover:bg-current/10 disabled:opacity-60"
+          >
+            {loadingMore ? 'Memuat...' : 'Tampilkan lebih banyak'}
+          </button>
         )}
       </div>
     </section>

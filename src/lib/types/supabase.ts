@@ -475,7 +475,7 @@ export interface Database {
         Returns: undefined;
       };
       get_guest_book_messages: {
-        Args: { p_project_id: string };
+        Args: { p_project_id: string; p_limit?: number; p_offset?: number };
         Returns: {
           id: string;
           name: string;
