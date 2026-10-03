@@ -82,6 +82,7 @@ export default function SettingsPage() {
     setSaving(false);
     if (whatsAppRes.ok && pricingRes.ok && brandRes.ok) {
       setSettings((s) => ({ ...s, whatsapp: toWaNumber(s.whatsapp) }));
+      await loadPricing();
       setMessage({ ok: true, text: 'Pengaturan berhasil disimpan.' });
     } else {
       setMessage({ ok: false, text: `Gagal menyimpan: ${whatsAppRes.error || pricingRes.error || brandRes.error}` });

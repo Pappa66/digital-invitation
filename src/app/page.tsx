@@ -322,7 +322,9 @@ export default function LandingPage() {
                 <div className="relative col-span-7 row-span-2 min-w-0 overflow-hidden rounded-2xl border border-border bg-card shadow-card">
                   {collageImages[0] ? (
                     <Image src={collageImages[0].url} alt={collageImages[0].alt || 'Undangan'} fill className="object-cover" sizes="(max-width: 768px) 60vw, 320px" />
-                  ) : featuredDemoImages[0] ? (
+                  ) : !landingContent ? (
+                      <div className="absolute inset-0 animate-pulse bg-black/5" />
+                    ) : featuredDemoImages[0] ? (
                     <Image src={featuredDemoImages[0]} alt="Demo undangan" fill className="object-cover" sizes="(max-width: 768px) 60vw, 320px" />
                   ) : collagePreviews[0] ? (
                     <TemplatePreview canvas={collagePreviews[0].canvas} bg={collagePreviews[0].canvas.theme.background} />
@@ -332,7 +334,9 @@ export default function LandingPage() {
                 <div className="relative col-span-5 min-w-0 overflow-hidden rounded-2xl border border-border bg-card shadow-soft">
                   {collageImages[1] ? (
                     <Image src={collageImages[1].url} alt={collageImages[1].alt || 'Undangan'} fill className="object-cover" sizes="(max-width: 768px) 40vw, 220px" />
-                  ) : featuredDemoImages[1] ? (
+                  ) : !landingContent ? (
+                      <div className="absolute inset-0 animate-pulse bg-black/5" />
+                    ) : featuredDemoImages[1] ? (
                     <Image src={featuredDemoImages[1]} alt="Demo undangan" fill className="object-cover" sizes="(max-width: 768px) 40vw, 220px" />
                   ) : collagePreviews[1] ? (
                     <TemplatePreview canvas={collagePreviews[1].canvas} bg={collagePreviews[1].canvas.theme.background} />
@@ -342,7 +346,9 @@ export default function LandingPage() {
                 <div className="relative col-span-5 min-w-0 overflow-hidden rounded-2xl border border-border bg-card shadow-soft">
                   {collageImages[2] ? (
                     <Image src={collageImages[2].url} alt={collageImages[2].alt || 'Undangan'} fill className="object-cover" sizes="(max-width: 768px) 40vw, 220px" />
-                  ) : featuredDemoImages[2] ? (
+                  ) : !landingContent ? (
+                      <div className="absolute inset-0 animate-pulse bg-black/5" />
+                    ) : featuredDemoImages[2] ? (
                     <Image src={featuredDemoImages[2]} alt="Demo undangan" fill className="object-cover" sizes="(max-width: 768px) 40vw, 220px" />
                   ) : collagePreviews[2] ? (
                     <TemplatePreview canvas={collagePreviews[2].canvas} bg={collagePreviews[2].canvas.theme.background} />
