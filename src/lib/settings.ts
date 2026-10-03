@@ -167,6 +167,8 @@ export interface LandingContent {
     website: string;
     tagline: string;
   };
+  /** Daftar id template yang tampil di katalog landing. Kosong = semua. */
+  template_ids: string[];
 }
 
 export const LANDING_CONTENT_DEFAULTS: LandingContent = {
@@ -220,7 +222,8 @@ export const LANDING_CONTENT_DEFAULTS: LandingContent = {
     instagram: 'prashadigitalindonesia',
     website: 'https://prashadigitalindonesia.com',
     tagline: 'Made with Love by PT. Prasha Digital Indonesia'
-  }
+  },
+  template_ids: []
 };
 
 /** Ambil konten landing dari Supabase (dipakai landing page publik). */

@@ -127,10 +127,12 @@ export default function LandingPage() {
   const isLandingLoading = !landingReady && demoIds === null;
   const cards = useMemo<CardData[]>(
     () => {
-      const source = demoIds === null ? DEMO_TEMPLATES : DEMO_TEMPLATES.filter((t) => demoIds.has(t.id));
+      const base = demoIds === null ? DEMO_TEMPLATES : DEMO_TEMPLATES.filter((t) => demoIds.has(t.id));
+      const allowed = landingContent?.template_ids ?? [];
+      const source = allowed.length ? base.filter((t) => allowed.includes(t.id)) : base;
       return source.map((meta) => ({ meta, canvas: getTemplate(meta.id)! }));
     },
-    [demoIds]
+    [demoIds, landingContent]
   );
 
   const filtered = useMemo(() => {
