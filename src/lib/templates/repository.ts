@@ -64,7 +64,7 @@ export function normalizeCustomTemplate(row: CustomTemplate): TemplateRegistryIt
   const theme = row.canvas_data?.theme;
   const primary = theme?.primary || FALLBACK_PRIMARY;
   const secondary = theme?.secondary || FALLBACK_SECONDARY;
-  const description = 'Template buatan sendiri';
+  const description = 'Desain siap pakai — pratinjau asli, langsung bisa dipesan.';
   return {
     id: row.id,
     name: row.name,
