@@ -5,7 +5,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { getSiteOrigin } from '@/lib/site';
 import PricingBubble from '@/components/landing/pricing-bubble';
-import { listVisibleTemplates } from '@/lib/api/custom-templates';
 import {
   ArrowRight,
   ChevronLeft,
@@ -26,9 +25,12 @@ import {
   Clock,
   Mail,
   Star,
-  Camera
+  Camera,
+  Search,
+  X
 } from 'lucide-react';
 import { DEMO_TEMPLATES, getTemplate } from '@/lib/templates';
+import { listPublicTemplates, listSeedTemplates, type TemplateRegistryItem } from '@/lib/templates/repository';
 import { CATEGORIES, categoryLabel, type TemplateCategory } from '@/lib/template-categories';
 import TemplatePreview from '@/components/landing/template-preview';
 import OrderDialog from '@/components/landing/order-dialog';
@@ -78,7 +80,9 @@ export default function LandingPage() {
   const [demoIds, setDemoIds] = useState<Set<string> | null>(null);
   const [demos, setDemos] = useState<TemplateDemo[]>([]);
   const [landingReady, setLandingReady] = useState(false);
-  const [customTemplates, setCustomTemplates] = useState<{ id: string; name: string; category: string; canvas: unknown }[]>([]);
+  // Mulai dari seed agar katalog langsung tampil; kustom menyusul dari DB.
+  const [templates, setTemplates] = useState<TemplateRegistryItem[]>(() => listSeedTemplates());
+  const [search, setSearch] = useState('');
 
   // Fallback: bila Supabase redirect ke /?code=... (whitelist belum berisi /auth/callback), lempar ke handler yang benar
   useEffect(() => {
@@ -127,46 +131,46 @@ export default function LandingPage() {
   }
 
   useEffect(() => {
-    listVisibleTemplates()
-      .then((rows) => setCustomTemplates(rows.map((r) => ({ id: r.id, name: r.name, category: r.category ?? 'Template Saya', canvas: r.canvas_data }))))
+    let alive = true;
+    listPublicTemplates()
+      .then((rows) => {
+        if (alive) setTemplates(rows);
+      })
       .catch(() => {});
+    return () => {
+      alive = false;
+    };
   }, []);
 
   const isLandingLoading = !landingReady && demoIds === null;
   const cards = useMemo<CardData[]>(
     () => {
-      const base = demoIds === null ? DEMO_TEMPLATES : DEMO_TEMPLATES.filter((t) => demoIds.has(t.id));
+      const seedItems = templates.filter((t) => t.source === 'seed');
+      const customItems = templates.filter((t) => t.source === 'custom');
+      const base = demoIds === null ? seedItems : seedItems.filter((t) => demoIds.has(t.id));
       const allowed = landingContent?.template_ids ?? [];
-      const source = landingContent?.only_custom
+      const visibleSeed = landingContent?.only_custom
         ? []
         : allowed.length
           ? base.filter((t) => allowed.includes(t.id))
           : base;
-      const baseCards = source.map((meta) => ({ meta, canvas: getTemplate(meta.id)! }));
-      const customCards = customTemplates.map((t) => {
-        const cv = t.canvas as { theme?: { primary?: string; secondary?: string } } | null;
-        return {
-          meta: {
-            id: t.id,
-            name: t.name,
-            category: t.category,
-            description: 'Template buatan sendiri',
-            primary: cv?.theme?.primary,
-            secondary: cv?.theme?.secondary,
-            isCustom: true
-          } as unknown as (typeof DEMO_TEMPLATES)[number],
-          canvas: t.canvas
-        };
-      });
-      return [...baseCards, ...customCards] as typeof baseCards;
+      const seedCards = visibleSeed.map((t) => ({ meta: t.meta, canvas: t.canvas }));
+      const customCards = customItems.map((t) => ({ meta: t.meta, canvas: t.canvas }));
+      return [...seedCards, ...customCards];
     },
-    [demoIds, landingContent, customTemplates]
+    [demoIds, landingContent, templates]
   );
 
+  const query = search.trim().toLowerCase();
   const filtered = useMemo(() => {
-    if (category === 'semua') return cards;
-    return cards.filter((c) => (c.meta.category ?? '').toLowerCase() === category);
-  }, [cards, category]);
+    return cards.filter((c) => {
+      const matchCategory = category === 'semua' || (c.meta.category ?? '').toLowerCase() === category;
+      if (!matchCategory) return false;
+      if (!query) return true;
+      const haystack = `${c.meta.name} ${c.meta.description ?? ''} ${c.meta.category ?? ''}`.toLowerCase();
+      return haystack.includes(query);
+    });
+  }, [cards, category, query]);
 
   const featuredCards = useMemo(
     () => DEMO_TEMPLATES.filter((t) => FEATURED.includes(t.id)).map((meta) => ({ meta, canvas: getTemplate(meta.id)! })).slice(0, 3),
@@ -398,7 +402,32 @@ export default function LandingPage() {
               <h2 className="mt-5 font-heading text-display-lg font-medium text-foreground sm:text-display-xl">Demo Undangan</h2>
               <p className="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-muted-foreground lg:text-base">Pratinjau asli setiap desain — klik untuk melihat detail, lalu pesan.</p>
             </div>
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-2">
+            {/* PENCARIAN TEMPLATE */}
+            <div className="mx-auto mt-9 max-w-md">
+              <label htmlFor="catalog-search" className="sr-only">Cari template</label>
+              <div className="relative">
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden />
+                <input
+                  id="catalog-search"
+                  type="search"
+                  value={search}
+                  onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+                  placeholder="Cari template berdasarkan nama atau kategori…"
+                  className="h-11 w-full rounded-full border border-input bg-card pl-10 pr-11 text-sm text-foreground shadow-soft placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                />
+                {search.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => { setSearch(''); setPage(1); }}
+                    aria-label="Bersihkan pencarian"
+                    className="absolute right-1.5 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted"
+                  >
+                    <X className="h-4 w-4" aria-hidden />
+                  </button>
+                )}
+              </div>
+            </div>
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
               <FilterPill active={category === 'semua'} onClick={() => { setCategory('semua'); setPage(1); }} label="Semua" />
               {CATEGORIES.map((c) => (
                 <FilterPill key={c.key} active={category === c.key} onClick={() => { setCategory(c.key); setPage(1); }} label={c.label} />
@@ -418,10 +447,14 @@ export default function LandingPage() {
               </div>
             ) : paged.length === 0 ? (
               <div className="mt-16 flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card/60 px-6 py-16 text-center">
-                <p className="font-heading text-lg font-medium text-foreground">Belum ada template pada kategori ini</p>
-                <p className="mt-1 text-sm text-muted-foreground">Coba pilih kategori lain atau kembali ke “Semua”.</p>
+                <p className="font-heading text-lg font-medium text-foreground">
+                  {query ? 'Tidak ada template yang cocok' : 'Belum ada template pada kategori ini'}
+                </p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {query ? 'Coba kata kunci lain atau ubah filter kategori.' : 'Coba pilih kategori lain atau kembali ke “Semua”.'}
+                </p>
                 <button
-                  onClick={() => { setCategory('semua'); setPage(1); }}
+                  onClick={() => { setCategory('semua'); setSearch(''); setPage(1); }}
                   className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-lg bg-gradient-to-r from-gold to-gold-strong px-6 py-2.5 text-sm font-semibold text-foreground shadow-gold transition-transform hover:scale-[1.02]"
                 >
                   Lihat Semua Template

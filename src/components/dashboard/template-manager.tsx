@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Check, Eye, EyeOff, Loader2, Pencil, Plus, Trash2, X } from 'lucide-react';
+import { Check, Copy, Eye, EyeOff, Loader2, Pencil, Plus, Search, Trash2, Upload, X } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
 import { emptyCanvas } from '@/lib/templates';
 import {
@@ -13,6 +13,10 @@ import {
   type CustomTemplate
 } from '@/lib/api/custom-templates';
 import { clientCreateProjectFromData } from '@/lib/api/project-client';
+import { userTemplatesList } from '@/lib/demo/user-templates';
+import { CATEGORIES } from '@/lib/template-categories';
+import TemplatePreview from '@/components/landing/template-preview';
+import ConfirmDialog from '@/components/dashboard/confirm-dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import type { CanvasData } from '@/lib/types';
@@ -22,7 +26,18 @@ interface ProjectLite {
   title: string;
 }
 
-/** Manajemen template kustom (DB): buat dari undangan, ubah, sembunyikan, hapus. */
+type SortBy = 'newest' | 'name';
+
+const DEFAULT_CATEGORY = CATEGORIES[0]?.key ?? 'classic';
+
+/** Label kategori yang aman: key CATEGORIES → label, selain itu tampilkan apa adanya. */
+function displayCategory(category: string | null | undefined): string {
+  if (!category) return 'Template Saya';
+  const found = CATEGORIES.find((c) => c.key === category.toLowerCase());
+  return found ? found.label : category;
+}
+
+/** Manajemen template kustom (DB): buat dari undangan, ubah, sembunyikan, duplikat, hapus. */
 export default function TemplateManager() {
   const router = useRouter();
   const [items, setItems] = useState<CustomTemplate[]>([]);
@@ -30,10 +45,15 @@ export default function TemplateManager() {
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
+  const [notice, setNotice] = useState('');
   const [fromProject, setFromProject] = useState('');
   const [editing, setEditing] = useState<string | null>(null);
   const [editName, setEditName] = useState('');
-  const [editCategory, setEditCategory] = useState('');
+  const [editCategory, setEditCategory] = useState<string>(DEFAULT_CATEGORY);
+  const [query, setQuery] = useState('');
+  const [sortBy, setSortBy] = useState<SortBy>('newest');
+  const [deleteTarget, setDeleteTarget] = useState<CustomTemplate | null>(null);
+  const [localCount, setLocalCount] = useState(0);
 
   async function refresh() {
     setLoading(true);
@@ -46,6 +66,7 @@ export default function TemplateManager() {
 
   useEffect(() => {
     void refresh();
+    setLocalCount(userTemplatesList().length);
     void (async () => {
       const { data } = await supabase
         .from('projects')
@@ -55,10 +76,26 @@ export default function TemplateManager() {
     })();
   }, []);
 
+  const filteredItems = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    const filtered = q
+      ? items.filter((t) => `${t.name} ${t.category ?? ''}`.toLowerCase().includes(q))
+      : items;
+    const sorted = [...filtered];
+    if (sortBy === 'name') sorted.sort((a, b) => a.name.localeCompare(b.name, 'id'));
+    else sorted.sort((a, b) => (a.created_at < b.created_at ? 1 : -1));
+    return sorted;
+  }, [items, query, sortBy]);
+
+  /** Opsi kategori: key standar + nilai lama yang belum termasuk key (jaga data). */
+  const knownKeys = useMemo(() => new Set<string>(CATEGORIES.map((c) => c.key)), []);
+  const legacyCategory = editCategory && !knownKeys.has(editCategory) ? editCategory : null;
+
   async function createFromProject() {
     if (!fromProject) return;
     setBusy(true);
     setError('');
+    setNotice('');
     try {
       const { data } = await supabase
         .from('project_designs')
@@ -80,9 +117,10 @@ export default function TemplateManager() {
     }
   }
 
-  async function useTemplate(t: CustomTemplate) {
+  async function applyTemplate(t: CustomTemplate) {
     setBusy(true);
     setError('');
+    setNotice('');
     try {
       const res = await clientCreateProjectFromData(t.name, t.canvas_data);
       if (res.error || !res.id) {
@@ -98,10 +136,64 @@ export default function TemplateManager() {
   async function createBlank() {
     setBusy(true);
     setError('');
+    setNotice('');
     try {
       const res = await createTemplate({ name: 'Template Baru', canvas: emptyCanvas() });
       if (res.error) setError(res.error);
       await refresh();
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function duplicateTemplate(t: CustomTemplate) {
+    setBusy(true);
+    setError('');
+    setNotice('');
+    try {
+      const res = await createTemplate({
+        name: `${t.name} (Salinan)`,
+        category: t.category ?? undefined,
+        canvas: t.canvas_data,
+        visible: false
+      });
+      if (res.error) setError(res.error);
+      else setNotice(`Template "${t.name}" diduplikat.`);
+      await refresh();
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  /** Impor template dari localStorage ("Template Saya") ke DB. Tidak menghapus localStorage. */
+  async function importLocalTemplates() {
+    const locals = userTemplatesList();
+    if (locals.length === 0) {
+      setNotice('Tidak ada template lokal untuk diimpor.');
+      return;
+    }
+    setBusy(true);
+    setError('');
+    setNotice('');
+    let imported = 0;
+    const failed: string[] = [];
+    try {
+      for (const t of locals) {
+        const res = await createTemplate({
+          name: t.name,
+          category: t.category,
+          canvas: t.canvas,
+          visible: false
+        });
+        if (res.error) failed.push(t.name);
+        else imported += 1;
+      }
+      await refresh();
+      if (failed.length > 0) {
+        setError(`${imported} template lokal diimpor, ${failed.length} gagal (${failed.join(', ')}).`);
+      } else {
+        setNotice(`${imported} template lokal berhasil diimpor ke database.`);
+      }
     } finally {
       setBusy(false);
     }
@@ -112,21 +204,32 @@ export default function TemplateManager() {
     await updateTemplate(t.id, { visible: !t.visible });
   }
 
-  async function remove(id: string) {
-    if (!confirm('Hapus template ini? Undangan asli tidak terhapus.')) return;
+  function requestRemove(t: CustomTemplate) {
+    setDeleteTarget(t);
+  }
+
+  async function confirmRemove() {
+    if (!deleteTarget) return;
+    const id = deleteTarget.id;
+    setBusy(true);
     setItems((prev) => prev.filter((x) => x.id !== id));
-    await deleteTemplate(id);
+    setDeleteTarget(null);
+    try {
+      await deleteTemplate(id);
+    } finally {
+      setBusy(false);
+    }
   }
 
   function startEdit(t: CustomTemplate) {
     setEditing(t.id);
     setEditName(t.name);
-    setEditCategory(t.category ?? 'Template Saya');
+    setEditCategory(t.category || DEFAULT_CATEGORY);
   }
 
   async function saveEdit(id: string) {
     const name = editName.trim() || 'Template Baru';
-    const category = editCategory.trim() || 'Template Saya';
+    const category = editCategory || DEFAULT_CATEGORY;
     setItems((prev) => prev.map((x) => (x.id === id ? { ...x, name, category } : x)));
     setEditing(null);
     await updateTemplate(id, { name, category });
@@ -137,17 +240,24 @@ export default function TemplateManager() {
       <div className="flex items-center justify-between gap-2">
         <div>
           <h3 className="text-sm font-semibold text-gray-900">Manajemen Template</h3>
-          <p className="text-xs text-gray-500">Buat dari undangan, ubah, atur tampil, atau hapus.</p>
+          <p className="text-xs text-gray-500">Buat dari undangan, ubah, atur tampil, duplikat, atau hapus.</p>
         </div>
-        <Button variant="outline" size="sm" onClick={() => void createBlank()} disabled={busy}>
-          {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />} Template Kosong
-        </Button>
+        <div className="flex flex-wrap items-center gap-2">
+          <Button variant="outline" size="sm" onClick={() => void importLocalTemplates()} disabled={busy}>
+            {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />} Impor Template Lokal
+            {localCount > 0 ? ` (${localCount})` : ''}
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => void createBlank()} disabled={busy}>
+            {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />} Template Kosong
+          </Button>
+        </div>
       </div>
 
       <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center">
         <select
           value={fromProject}
           onChange={(e) => setFromProject(e.target.value)}
+          aria-label="Pilih undangan untuk dijadikan template"
           className="h-9 flex-1 rounded-md border border-gray-300 bg-white px-2 text-sm"
         >
           <option value="">Pilih undangan untuk dijadikan template…</option>
@@ -162,32 +272,80 @@ export default function TemplateManager() {
         </Button>
       </div>
 
-      {error && <p className="mt-2 text-xs text-red-600">{error}</p>}
+      {/* Notifikasi error/sukses diumumkan ke screen reader. */}
+      <div aria-live="polite" role="status" className="mt-2 min-h-4 text-xs">
+        {error ? (
+          <span className="text-red-600">{error}</span>
+        ) : notice ? (
+          <span className="text-emerald-600">{notice}</span>
+        ) : null}
+      </div>
+
+      {items.length > 0 && !loading && (
+        <div className="mt-1 flex flex-col gap-2 sm:flex-row sm:items-center">
+          <div className="relative flex-1">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" aria-hidden />
+            <Input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Cari template..."
+              aria-label="Cari template"
+              className="h-9 pl-9 text-sm"
+            />
+          </div>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value as SortBy)}
+            aria-label="Urutkan template"
+            className="h-9 rounded-md border border-gray-300 bg-white px-2 text-sm"
+          >
+            <option value="newest">Terbaru</option>
+            <option value="name">Nama (A–Z)</option>
+          </select>
+        </div>
+      )}
 
       {loading ? (
         <p className="mt-4 text-xs text-gray-400">Memuat template…</p>
       ) : items.length === 0 ? (
         <p className="mt-4 text-xs text-gray-400">Belum ada template kustom.</p>
+      ) : filteredItems.length === 0 ? (
+        <p className="mt-4 text-xs text-gray-400">Tidak ada template yang cocok dengan pencarian.</p>
       ) : (
         <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {items.map((t) => (
+          {filteredItems.map((t) => (
             <div key={t.id} className="rounded-lg border border-gray-200 p-3">
+              <div className="mb-3 overflow-hidden rounded-md border border-gray-200 bg-gray-50">
+                <TemplatePreview canvas={t.canvas_data} bg={t.canvas_data.theme.background} />
+              </div>
               {editing === t.id ? (
                 <div className="space-y-2">
-                  <Input value={editName} onChange={(e) => setEditName(e.target.value)} placeholder="Nama" className="h-8 text-sm" />
-                  <Input
+                  <Input value={editName} onChange={(e) => setEditName(e.target.value)} placeholder="Nama" className="h-8 text-sm" aria-label="Nama template" />
+                  <select
                     value={editCategory}
                     onChange={(e) => setEditCategory(e.target.value)}
-                    placeholder="Kategori"
-                    className="h-8 text-sm"
-                  />
+                    aria-label="Kategori template"
+                    className="h-8 w-full rounded-md border border-gray-300 bg-white px-2 text-sm"
+                  >
+                    {legacyCategory && <option value={legacyCategory}>{legacyCategory}</option>}
+                    {CATEGORIES.map((c) => (
+                      <option key={c.key} value={c.key}>
+                        {c.label}
+                      </option>
+                    ))}
+                  </select>
                   <div className="flex gap-2">
                     <Button size="sm" onClick={() => void saveEdit(t.id)}>
                       <Check className="h-3.5 w-3.5" /> Simpan
                     </Button>
-                    <Button size="sm" variant="outline" onClick={() => setEditing(null)}>
-                      <X className="h-3.5 w-3.5" />
-                    </Button>
+                    <button
+                      type="button"
+                      onClick={() => setEditing(null)}
+                      aria-label="Batal ubah"
+                      className="inline-flex h-11 w-11 items-center justify-center rounded-md border border-gray-300 text-gray-600 hover:bg-gray-50"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
                   </div>
                 </div>
               ) : (
@@ -195,7 +353,7 @@ export default function TemplateManager() {
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
                       <p className="truncate text-sm font-semibold text-gray-900">{t.name}</p>
-                      <p className="truncate text-[11px] text-gray-500">{t.category || 'Template Saya'}</p>
+                      <p className="truncate text-[11px] text-gray-500">{displayCategory(t.category)}</p>
                     </div>
                     <span
                       className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold ${
@@ -205,41 +363,50 @@ export default function TemplateManager() {
                       {t.visible ? 'Tampil' : 'Disembunyikan'}
                     </span>
                   </div>
-                  <div className="mt-3 flex gap-1.5">
+                  <div className="mt-3 flex flex-wrap items-center gap-1.5">
                     <button
                       type="button"
                       onClick={() => startEdit(t)}
-                      className="rounded-md border border-gray-300 p-1.5 text-gray-600 hover:bg-gray-50"
+                      className="inline-flex h-11 w-11 items-center justify-center rounded-md border border-gray-300 text-gray-600 hover:bg-gray-50"
                       aria-label="Ubah"
                       title="Ubah nama/kategori"
                     >
-                      <Pencil className="h-3.5 w-3.5" />
+                      <Pencil className="h-4 w-4" />
                     </button>
                     <button
                       type="button"
                       onClick={() => void toggleVisible(t)}
-                      className="rounded-md border border-gray-300 p-1.5 text-gray-600 hover:bg-gray-50"
+                      className="inline-flex h-11 w-11 items-center justify-center rounded-md border border-gray-300 text-gray-600 hover:bg-gray-50"
                       aria-label="Atur tampil"
                       title={t.visible ? 'Sembunyikan dari landing' : 'Tampilkan di landing'}
                     >
-                      {t.visible ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                      {t.visible ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>
                     <button
                       type="button"
-                      onClick={() => void useTemplate(t)}
-                      className="rounded-md border border-[#c9a45c]/40 bg-[#c9a45c]/5 px-2 py-1.5 text-[11px] font-medium text-[#c9a45c] hover:bg-[#c9a45c]/10"
+                      onClick={() => void duplicateTemplate(t)}
+                      className="inline-flex h-11 w-11 items-center justify-center rounded-md border border-gray-300 text-gray-600 hover:bg-gray-50"
+                      aria-label="Duplikat"
+                      title="Duplikat template"
+                    >
+                      <Copy className="h-4 w-4" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => void applyTemplate(t)}
+                      className="inline-flex min-h-11 items-center rounded-md border border-[#c9a45c]/40 bg-[#c9a45c]/5 px-3 text-[11px] font-medium text-[#c9a45c] hover:bg-[#c9a45c]/10"
                       title="Buat undangan dari template ini"
                     >
                       Pakai
                     </button>
                     <button
                       type="button"
-                      onClick={() => void remove(t.id)}
-                      className="ml-auto rounded-md border border-red-200 p-1.5 text-red-500 hover:bg-red-50"
+                      onClick={() => requestRemove(t)}
+                      className="ml-auto inline-flex h-11 w-11 items-center justify-center rounded-md border border-red-200 text-red-500 hover:bg-red-50"
                       aria-label="Hapus"
                       title="Hapus template"
                     >
-                      <Trash2 className="h-3.5 w-3.5" />
+                      <Trash2 className="h-4 w-4" />
                     </button>
                   </div>
                 </>
@@ -248,6 +415,21 @@ export default function TemplateManager() {
           ))}
         </div>
       )}
+
+      <ConfirmDialog
+        open={deleteTarget !== null}
+        title="Hapus template?"
+        message={
+          deleteTarget
+            ? `Template "${deleteTarget.name}" akan dihapus. Undangan asli tidak ikut terhapus.`
+            : 'Template akan dihapus. Undangan asli tidak ikut terhapus.'
+        }
+        confirmLabel="Hapus"
+        danger
+        busy={busy}
+        onConfirm={() => void confirmRemove()}
+        onCancel={() => setDeleteTarget(null)}
+      />
     </section>
   );
 }
