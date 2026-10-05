@@ -143,10 +143,21 @@ export default function LandingPage() {
           ? base.filter((t) => allowed.includes(t.id))
           : base;
       const baseCards = source.map((meta) => ({ meta, canvas: getTemplate(meta.id)! }));
-      const customCards = customTemplates.map((t) => ({
-        meta: { id: t.id, name: t.name, category: t.category } as unknown as (typeof DEMO_TEMPLATES)[number],
-        canvas: t.canvas
-      }));
+      const customCards = customTemplates.map((t) => {
+        const cv = t.canvas as { theme?: { primary?: string; secondary?: string } } | null;
+        return {
+          meta: {
+            id: t.id,
+            name: t.name,
+            category: t.category,
+            description: 'Template buatan sendiri',
+            primary: cv?.theme?.primary,
+            secondary: cv?.theme?.secondary,
+            isCustom: true
+          } as unknown as (typeof DEMO_TEMPLATES)[number],
+          canvas: t.canvas
+        };
+      });
       return [...baseCards, ...customCards] as typeof baseCards;
     },
     [demoIds, landingContent, customTemplates]
@@ -421,7 +432,7 @@ export default function LandingPage() {
                 {paged.map(({ meta, canvas }) => {
                   const number = cards.findIndex((c) => c.meta.id === meta.id) + 1;
                   const demo = demosByTemplate.get(meta.id) ?? null;
-                  return <CatalogCard key={meta.id} meta={meta} canvas={canvas} number={number} demo={demo} />;
+                  return <CatalogCard key={meta.id} meta={meta} canvas={canvas} number={number} demo={demo} onOrder={openOrder} />;
                 })}
               </div>
             )}
@@ -634,18 +645,31 @@ function CatalogCard({
   meta,
   canvas,
   number,
-  demo
+  demo,
+  onOrder
 }: {
   meta: TemplateMeta;
   canvas: CanvasData;
   number: number;
   demo: TemplateDemo | null;
+  onOrder?: (name?: string) => void;
 }) {
   const detailHref = `/templates/${meta.id}`;
+  const isCustom = (meta as { isCustom?: boolean }).isCustom === true;
   const demoImage = demo?.demo_image || null;
   const demoLink = demo?.demo_link || null;
 
   const cta = (() => {
+    if (isCustom) {
+      return (
+        <button
+          onClick={() => onOrder?.(meta.name)}
+          className="mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-gold to-gold-strong px-5 py-2.5 text-sm font-semibold text-foreground shadow-gold transition-transform hover:scale-[1.02] active:scale-[0.98]"
+        >
+          <Eye className="h-4 w-4" aria-hidden /> Pesan Sekarang
+        </button>
+      );
+    }
     // demo_image + demo_link → "Lihat Demo" (tab baru). demo_image saja → "Lihat Detail".
     // tanpa demo_image → "Preview" (outline) ke halaman detail.
     if (demoImage && demoLink) {
@@ -703,9 +727,15 @@ function CatalogCard({
         <div className="flex items-center gap-2">
           <span className="h-3.5 w-3.5 rounded-full border border-border" style={{ background: meta.primary }} />
           <span className="h-3.5 w-3.5 rounded-full border border-border" style={{ background: meta.secondary }} />
-          <Link href={detailHref} className="ml-1 truncate font-heading text-base font-medium text-foreground transition-colors hover:text-gold-deep">
-            {meta.name}
-          </Link>
+          {isCustom ? (
+            <button onClick={() => onOrder?.(meta.name)} className="ml-1 truncate font-heading text-base font-medium text-foreground transition-colors hover:text-gold-deep">
+              {meta.name}
+            </button>
+          ) : (
+            <Link href={detailHref} className="ml-1 truncate font-heading text-base font-medium text-foreground transition-colors hover:text-gold-deep">
+              {meta.name}
+            </Link>
+          )}
         </div>
         <p className="mt-2 line-clamp-2 flex-1 text-xs leading-relaxed text-muted-foreground">{meta.description}</p>
         {cta}
