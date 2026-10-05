@@ -54,6 +54,7 @@ interface ShareEditTokenRow {
 type LinkStatus = 'aktif' | 'kedaluwarsa' | 'dicabut';
 
 type StatusFilter = LinkStatus | 'semua';
+type TypeFilter = 'semua' | 'undangan' | 'absen' | 'kelola' | 'edit';
 
 /** Jumlah kartu undangan per halaman agar daftar tautan tidak memanjang. */
 const PAGE_SIZE = 6;
@@ -100,6 +101,7 @@ export default function TokensManager() {
   const [revoking, setRevoking] = useState(false);
   const [query, setQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('semua');
+  const [typeFilter, setTypeFilter] = useState<TypeFilter>('semua');
   const [page, setPage] = useState(1);
 
   useEffect(() => {
@@ -219,14 +221,16 @@ export default function TokensManager() {
       .filter((g) => {
         if (q && !g.project.title.toLowerCase().includes(q)) return false;
         if (statusFilter !== 'semua' && g.access.length === 0 && g.share.length === 0) return false;
+        if (typeFilter === 'kelola' && g.access.length === 0) return false;
+        if (typeFilter === 'edit' && g.share.length === 0) return false;
         return true;
       });
-  }, [groups, query, statusFilter]);
+  }, [groups, query, statusFilter, typeFilter]);
 
   // Kembali ke halaman pertama saat pencarian/filter berubah agar tidak kosong.
   useEffect(() => {
     setPage(1);
-  }, [query, statusFilter]);
+  }, [query, statusFilter, typeFilter]);
 
   const totalPages = Math.max(1, Math.ceil(filteredGroups.length / PAGE_SIZE));
   const safePage = Math.min(page, totalPages);
@@ -271,7 +275,8 @@ export default function TokensManager() {
         </div>
       ) : (
         <div>
-          <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center">
+          <div className="sticky top-0 z-10 mb-4 rounded-xl border border-border bg-background/95 px-3 py-3 backdrop-blur">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
             <div className="relative flex-1">
               <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden />
               <Input
@@ -293,6 +298,20 @@ export default function TokensManager() {
               <option value="kedaluwarsa">Kedaluwarsa</option>
               <option value="dicabut">Dicabut</option>
             </select>
+            </div>
+            <div className="mt-2 flex flex-wrap gap-1.5" role="group" aria-label="Filter jenis tautan">
+              {([['semua', 'Semua'], ['undangan', 'Undangan'], ['absen', 'Absen'], ['kelola', 'Kelola Tamu'], ['edit', 'Edit']] as const).map(([v, l]) => (
+                <button
+                  key={v}
+                  type="button"
+                  onClick={() => setTypeFilter(v)}
+                  aria-pressed={typeFilter === v}
+                  className={`min-h-9 rounded-full border px-3 text-xs font-medium transition-colors ${typeFilter === v ? 'border-gold bg-gold text-primary-foreground' : 'border-border text-muted-foreground hover:bg-muted'}`}
+                >
+                  {l}
+                </button>
+              ))}
+            </div>
           </div>
 
           {filteredGroups.length === 0 ? (
@@ -311,6 +330,7 @@ export default function TokensManager() {
               </div>
 
               <div className="mt-3 space-y-2">
+                {(typeFilter === 'semua' || typeFilter === 'undangan') && (
                 <LinkRow
                   label="Undangan"
                   desc="Halaman publik undangan"
@@ -319,6 +339,8 @@ export default function TokensManager() {
                   copied={copied === `pub-${project.id}`}
                   onCopy={() => void copy(`pub-${project.id}`, `${origin}/${project.slug}`)}
                 />
+                )}
+                {(typeFilter === 'semua' || typeFilter === 'absen') && (
                 <LinkRow
                   label="Absen"
                   desc="Check-in QR tamu di venue"
@@ -327,8 +349,9 @@ export default function TokensManager() {
                   copied={copied === `absen-${project.id}`}
                   onCopy={() => void copy(`absen-${project.id}`, `${origin}/absen/${project.id}`)}
                 />
+                )}
 
-                {access.map((t) => (
+                {(typeFilter === 'semua' || typeFilter === 'kelola') && access.map((t) => (
                   <LinkRow
                     key={t.id}
                     label={`Kelola Tamu${t.label ? ` · ${t.label}` : ''}`}
@@ -343,7 +366,7 @@ export default function TokensManager() {
                   />
                 ))}
 
-                {share.map((t) => (
+                {(typeFilter === 'semua' || typeFilter === 'edit') && share.map((t) => (
                   <LinkRow
                     key={t.id}
                     label={`Edit${t.note ? ` · ${t.note}` : ''}`}
@@ -358,7 +381,7 @@ export default function TokensManager() {
                   />
                 ))}
 
-                {access.length === 0 && share.length === 0 && (
+                {typeFilter !== 'undangan' && typeFilter !== 'absen' && access.length === 0 && share.length === 0 && (
                   <p className="rounded-xl border border-dashed border-border px-3 py-2 text-[11px] text-muted-foreground">
                     Belum ada tautan kelola/edit. Buat dari tombol Bagikan pada kartu undangan.
                   </p>
