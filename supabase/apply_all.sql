@@ -1602,6 +1602,7 @@ create index if not exists share_edit_tokens_project_idx
 alter table public.share_edit_tokens enable row level security;
 
 -- Owner bisa CRUD token project-nya sendiri
+drop policy if exists "share_tokens_manage_owner" on public.share_edit_tokens;
 create policy "share_tokens_manage_owner"
   on public.share_edit_tokens for all
   to authenticated
@@ -1621,6 +1622,7 @@ create policy "share_tokens_manage_owner"
   );
 
 -- Service role (server actions) bisa akses semua
+drop policy if exists "share_tokens_service_role" on public.share_edit_tokens;
 create policy "share_tokens_service_role"
   on public.share_edit_tokens for all
   to service_role
