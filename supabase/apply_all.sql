@@ -2840,3 +2840,6 @@ exception when others then null; end $$;
 do $$ begin
   revoke execute on function public.list_share_edit_tokens() from public, anon;
 exception when others then null; end $$;
+-- Hindari kegagalan insert karena tabrakan kode 6 karakter.
+drop index if exists public.rsvps_checkin_code_uidx;
+create index if not exists rsvps_checkin_code_idx on public.rsvps (checkin_code);

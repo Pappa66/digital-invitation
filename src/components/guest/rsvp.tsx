@@ -287,20 +287,13 @@ export default function RSVPForm({ projectId, blockProps, readonly, checkinEnabl
       }
     } else {
       const baseRow = { project_id: projectId, name: cleanName, attendance, guest_count: guestCount, message: message.trim() || null, meal_choice: mealChoice, menu_options: menuOptions, checkin_token: clientToken };
-      let r = await supabase
-        .from('rsvps')
-        .insert({ ...baseRow, checkin_code: clientCode })
-        .select('checkin_token');
-      // Tahan-gagal: bila kolom checkin_code belum ada di DB, ulangi tanpa kode.
-      if (r.error && /checkin_code/i.test(r.error.message)) {
-        r = await supabase.from('rsvps').insert(baseRow).select('checkin_token');
+      let r = await supabase.from('rsvps').insert({ ...baseRow, checkin_code: clientCode });
+      // Tahan-gagal: bila kolom checkin_code belum ada / kode bentrok, ulangi tanpa kode.
+      if (r.error && /checkin_code|duplicate/i.test(r.error.message)) {
+        r = await supabase.from('rsvps').insert(baseRow);
       }
       error = r.error;
-      if (!r.error) {
-        const row = Array.isArray(r.data) ? r.data[0] : null;
-        // Prioritaskan token dari DB (jika SELECT berhasil), fallback ke clientToken
-        newToken = (typeof row?.checkin_token === 'string' ? row.checkin_token : null) ?? clientToken;
-      }
+      if (!r.error) newToken = clientToken;
     }
 
     if (error) {
