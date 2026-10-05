@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, useId, type ReactNode } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { getSiteOrigin } from '@/lib/site';
@@ -9,6 +9,7 @@ import {
   ArrowRight,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   Eye,
   Palette,
   Smartphone,
@@ -266,11 +267,17 @@ export default function LandingPage() {
 
       {/* BG */}
       <div aria-hidden className="pointer-events-none fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsla(40,50%,57%,0.14),transparent_55%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(200,155,138,0.07),transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(var(--gold)/0.14),transparent_55%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,hsl(var(--rose)/0.08),transparent_50%)]" />
       </div>
 
       <div className="relative z-10">
+        <a
+          href="#catalog"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:inline-flex focus:min-h-11 focus:items-center focus:rounded-lg focus:bg-card focus:px-4 focus:text-sm focus:font-semibold focus:text-foreground focus:shadow-card"
+        >
+          Lompat ke katalog
+        </a>
         {/* HEADER */}
         <header className="sticky top-0 z-40 border-b border-border/80 bg-background/90 backdrop-blur">
           <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4 sm:px-6">
@@ -279,19 +286,19 @@ export default function LandingPage() {
                 <Image src="/logo/prasha.png" width={40} height={40} alt="Prasha Digital Indonesia" className="h-10 w-10 object-cover" />
               </span>
               <div className="leading-tight">
-                <p className="font-script text-2xl text-gold-strong">Prasha</p>
-                <p className="-mt-1 text-[9px] font-semibold uppercase tracking-[0.35em] text-muted-foreground">Digital Indonesia</p>
+                <p className="font-script text-2xl text-gold-deep">Prasha</p>
+                <p className="-mt-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">Digital Indonesia</p>
               </div>
             </a>
-            <nav className="hidden items-center gap-6 text-sm font-medium text-muted-foreground md:flex" aria-label="Navigasi halaman">
-              <a href="#catalog" className="transition-colors hover:text-foreground">Demo Template</a>
-              <a href="#cara" className="transition-colors hover:text-foreground">Cara Kerja</a>
-              <a href="#fitur" className="transition-colors hover:text-foreground">Fitur</a>
-              <a href="#faq" className="transition-colors hover:text-foreground">FAQ</a>
+            <nav className="hidden items-center gap-4 text-sm font-medium text-muted-foreground md:flex" aria-label="Navigasi halaman">
+              <a href="#catalog" className="inline-flex min-h-11 items-center rounded-md px-1.5 transition-colors hover:text-foreground">Demo Template</a>
+              <a href="#cara" className="inline-flex min-h-11 items-center rounded-md px-1.5 transition-colors hover:text-foreground">Cara Kerja</a>
+              <a href="#fitur" className="inline-flex min-h-11 items-center rounded-md px-1.5 transition-colors hover:text-foreground">Fitur</a>
+              <a href="#faq" className="inline-flex min-h-11 items-center rounded-md px-1.5 transition-colors hover:text-foreground">FAQ</a>
             </nav>
             <button
               onClick={() => openOrder()}
-              className="rounded-md bg-gradient-to-r from-gold to-gold-strong px-4 py-2 text-sm font-semibold text-foreground shadow-gold transition-transform hover:scale-[1.03] active:scale-[0.98]"
+              className="inline-flex min-h-11 items-center justify-center whitespace-nowrap rounded-lg bg-gradient-to-r from-gold to-gold-strong px-4 text-sm font-semibold text-foreground shadow-gold transition-transform hover:scale-[1.03] active:scale-[0.98] motion-reduce:hover:scale-100 motion-reduce:active:scale-100"
             >
               Pesan Undangan
             </button>
@@ -303,7 +310,7 @@ export default function LandingPage() {
           <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-20 xl:grid-cols-[1.15fr_0.85fr]">
             <div className="text-center lg:text-left">
               <p className="font-script text-3xl text-gold-deep sm:text-4xl lg:text-5xl">{content.hero.kicker}</p>
-              <h1 className="mt-6 font-heading text-display-xl font-medium leading-[1.1] tracking-tight sm:text-display-2xl lg:text-[3.5rem] lg:leading-[1.08]">
+              <h1 className="mt-6 font-heading text-display-xl font-medium sm:text-display-2xl">
                 {content.hero.title_a}
                 <span className="block">
                   <em className="bg-gradient-to-r from-gold-deep to-gold-ink bg-clip-text font-semibold italic text-transparent">{content.hero.title_b}</em>
@@ -315,7 +322,7 @@ export default function LandingPage() {
               <div className="mt-9 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
                 <a
                   href="#catalog"
-                  className="flex min-h-12 items-center gap-2 rounded-lg bg-gradient-to-r from-gold to-gold-strong px-7 py-3 text-sm font-semibold text-foreground shadow-gold transition-transform hover:scale-[1.02] active:scale-[0.98] lg:min-h-14 lg:px-9 lg:text-base"
+                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border border-gold/60 bg-transparent px-7 py-3 text-sm font-semibold text-gold-deep transition-colors hover:bg-gold/10 active:scale-[0.98] motion-reduce:active:scale-100 lg:min-h-14 lg:px-9 lg:text-base"
                 >
                   {content.hero.cta_primary} <ArrowRight className="h-4 w-4" aria-hidden />
                 </a>
@@ -335,7 +342,7 @@ export default function LandingPage() {
             </div>
             {/* KOLASE 3 GAMBAR — larger on desktop */}
             <div className="relative mx-auto w-full max-w-md min-w-0 lg:max-w-lg xl:max-w-xl" aria-hidden>
-              <div className="grid min-w-0 grid-cols-12 grid-rows-2 gap-4 lg:gap-5" style={{ height: 460 }}>
+              <div className="grid aspect-[7/9] min-w-0 grid-cols-12 grid-rows-2 gap-4 lg:gap-5">
                 {/* foto besar kiri */}
                 <div className="relative col-span-7 row-span-2 min-w-0 overflow-hidden rounded-2xl border border-border bg-card shadow-card">
                   {collageImages[0] ? (
@@ -381,8 +388,8 @@ export default function LandingPage() {
         </section>
 
         {/* SOCIAL PROOF BAR */}
-        <section className="border-y border-border bg-gradient-to-r from-gold/5 via-background to-gold/5">
-          <div className="mx-auto grid max-w-5xl grid-cols-3 gap-4 px-4 py-10 sm:px-6 lg:gap-8 lg:py-14">
+        <section aria-label="Pencapaian" className="border-t border-border bg-gradient-to-r from-gold/5 via-background to-gold/5">
+          <div className="mx-auto grid max-w-6xl grid-cols-3 gap-4 px-4 py-10 sm:px-6 lg:gap-8 lg:py-14">
             {content.stats.map((stat) => (
               <div key={stat.label || String(stat.value)} className="text-center">
                 <p className="font-heading text-3xl font-bold text-gold-deep sm:text-4xl lg:text-5xl">
@@ -397,11 +404,11 @@ export default function LandingPage() {
         {/* KATALOG */}
         <section id="catalog" className="scroll-mt-20 border-t border-border bg-card/50">
           <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:py-24">
-            <div className="text-center">
-              <p className="font-script text-3xl text-gold-deep">Lihat Demo</p>
-              <h2 className="mt-5 font-heading text-display-lg font-medium text-foreground sm:text-display-xl">Demo Undangan</h2>
-              <p className="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-muted-foreground lg:text-base">Pratinjau asli setiap desain — klik untuk melihat detail, lalu pesan.</p>
-            </div>
+            <SectionHeading
+              kicker="Lihat Demo"
+              title="Demo Undangan"
+              description="Pratinjau asli setiap desain — klik untuk melihat detail, lalu pesan."
+            />
             {/* PENCARIAN TEMPLATE */}
             <div className="mx-auto mt-9 max-w-md">
               <label htmlFor="catalog-search" className="sr-only">Cari template</label>
@@ -413,14 +420,14 @@ export default function LandingPage() {
                   value={search}
                   onChange={(e) => { setSearch(e.target.value); setPage(1); }}
                   placeholder="Cari template berdasarkan nama atau kategori…"
-                  className="h-11 w-full rounded-full border border-input bg-card pl-10 pr-11 text-sm text-foreground shadow-soft placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  className="h-11 w-full rounded-full border border-input bg-card pl-10 pr-12 text-sm text-foreground shadow-soft placeholder:text-muted-foreground"
                 />
                 {search.length > 0 && (
                   <button
                     type="button"
                     onClick={() => { setSearch(''); setPage(1); }}
                     aria-label="Bersihkan pencarian"
-                    className="absolute right-1.5 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted"
+                    className="absolute right-1 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted"
                   >
                     <X className="h-4 w-4" aria-hidden />
                   </button>
@@ -434,7 +441,7 @@ export default function LandingPage() {
               ))}
             </div>
             {isLandingLoading ? (
-              <div className="mt-14 grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-14">
+              <div className="mt-12 grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-14">
                 {Array.from({ length: 6 }).map((_, i) => (
                   <div key={i} className="animate-pulse overflow-hidden rounded-3xl border bg-card">
                     <div className="h-64 bg-muted" />
@@ -446,7 +453,7 @@ export default function LandingPage() {
                 ))}
               </div>
             ) : paged.length === 0 ? (
-              <div className="mt-16 flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card/60 px-6 py-16 text-center">
+              <div className="mt-12 flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card/60 px-6 py-16 text-center">
                 <p className="font-heading text-lg font-medium text-foreground">
                   {query ? 'Tidak ada template yang cocok' : 'Belum ada template pada kategori ini'}
                 </p>
@@ -455,13 +462,13 @@ export default function LandingPage() {
                 </p>
                 <button
                   onClick={() => { setCategory('semua'); setSearch(''); setPage(1); }}
-                  className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-lg bg-gradient-to-r from-gold to-gold-strong px-6 py-2.5 text-sm font-semibold text-foreground shadow-gold transition-transform hover:scale-[1.02]"
+                  className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-lg bg-gradient-to-r from-gold to-gold-strong px-6 py-2.5 text-sm font-semibold text-foreground shadow-gold transition-transform hover:scale-[1.02] motion-reduce:hover:scale-100"
                 >
                   Lihat Semua Template
                 </button>
               </div>
             ) : (
-              <div className="mt-14 grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-14">
+              <div className="mt-12 grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-14">
                 {paged.map(({ meta, canvas }) => {
                   const number = cards.findIndex((c) => c.meta.id === meta.id) + 1;
                   const demo = demosByTemplate.get(meta.id) ?? null;
@@ -494,11 +501,8 @@ export default function LandingPage() {
         {/* CARA KERJA */}
         <section id="cara" className="scroll-mt-20 border-t border-border bg-muted/60">
           <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:py-24">
-            <div className="mb-14 text-center">
-              <p className="font-script text-3xl text-gold-deep">Mudah &amp; Cepat</p>
-              <h2 className="mt-3 font-heading text-display-lg font-medium text-foreground sm:text-display-xl">4 Langkah Saja</h2>
-            </div>
-            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-10">
+            <SectionHeading kicker="Mudah &amp; Cepat" title="4 Langkah Saja" />
+            <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-10">
               {content.steps.map((s, i) => {
                 const IconTrail = ICON_MAP[s.icon] ?? Sparkles;
                 return (
@@ -517,11 +521,8 @@ export default function LandingPage() {
         {/* FITUR */}
         <section id="fitur" className="scroll-mt-20 border-t border-border">
           <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:py-24">
-            <div className="text-center">
-              <p className="font-script text-3xl text-gold-deep">Fitur Lengkap</p>
-              <h2 className="mt-3 font-heading text-display-lg font-medium text-foreground sm:text-display-xl">Semua Kebutuhan Undangan</h2>
-            </div>
-            <div className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+            <SectionHeading kicker="Fitur Lengkap" title="Semua Kebutuhan Undangan" />
+            <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
               {content.features.map((f) => {
                 const IconTrail = ICON_MAP[f.icon] ?? Sparkles;
                 return (
@@ -538,52 +539,53 @@ export default function LandingPage() {
 
         {/* FAQ */}
         <section id="faq" className="scroll-mt-20 border-t border-border bg-muted/60">
-          <div className="mx-auto max-w-3xl px-4 py-20 sm:px-6 lg:py-24">
-            <div className="text-center">
-              <p className="font-script text-3xl text-gold-deep">Pertanyaan Umum</p>
-              <h2 className="mt-3 font-heading text-display-lg font-medium text-foreground sm:text-display-xl">FAQ</h2>
-            </div>
-            <div className="mt-12 space-y-3">
-              {content.faq.map((item, i) => (
-                <FAQItem key={i} q={item.q} a={item.a} defaultOpen={i === 0} />
-              ))}
+          <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:py-24">
+            <div className="mx-auto max-w-3xl">
+              <SectionHeading kicker="Pertanyaan Umum" title="FAQ" />
+              <div className="mt-12 space-y-3">
+                {content.faq.map((item, i) => (
+                  <FAQItem key={i} q={item.q} a={item.a} defaultOpen={i === 0} />
+                ))}
+              </div>
             </div>
           </div>
         </section>
 
         {/* CTA */}
-        <section className="border-t border-border">
-          <div className="mx-auto max-w-4xl px-4 py-24 text-center sm:px-6 lg:py-32">
-            <p className="font-script text-4xl text-gold-deep lg:text-5xl">{content.cta.kicker}</p>
-            <h2 className="mx-auto mt-5 max-w-2xl font-heading text-display-lg font-medium leading-snug text-foreground sm:text-display-xl">
-              {content.cta.title}
-            </h2>
-            <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-muted-foreground lg:text-base">
-              {content.cta.body}
-            </p>
-            <button
-              onClick={() => openOrder()}
-              className="mt-9 inline-flex min-h-12 items-center gap-2 rounded-lg bg-gradient-to-r from-gold to-gold-strong px-8 py-3.5 text-sm font-semibold text-foreground shadow-gold transition-transform hover:scale-[1.02] active:scale-[0.98] lg:min-h-14 lg:px-10 lg:text-base"
-            >
-              {content.cta.button_text} <ArrowRight className="h-4 w-4" aria-hidden />
-            </button>
-            <p className="mt-5 text-xs text-muted-foreground lg:text-sm">Dibalas lewat WhatsApp — tanpa perlu membuat akun.</p>
+        <section className="border-t border-border bg-gradient-to-b from-background via-gold/5 to-background">
+          <div className="mx-auto max-w-6xl px-4 py-20 text-center sm:px-6 lg:py-28">
+            <div className="mx-auto max-w-3xl">
+              <p className="font-script text-4xl text-gold-deep lg:text-5xl">{content.cta.kicker}</p>
+              <h2 className="mx-auto mt-4 max-w-2xl font-heading text-display-lg font-medium leading-snug text-foreground sm:text-display-xl">
+                {content.cta.title}
+              </h2>
+              <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground lg:text-base">
+                {content.cta.body}
+              </p>
+              <button
+                onClick={() => openOrder()}
+                className="mt-8 inline-flex min-h-12 items-center gap-2 rounded-lg bg-gradient-to-r from-gold to-gold-strong px-8 py-3.5 text-sm font-semibold text-foreground shadow-gold transition-transform hover:scale-[1.02] active:scale-[0.98] motion-reduce:hover:scale-100 motion-reduce:active:scale-100 lg:min-h-14 lg:px-10 lg:text-base"
+              >
+                {content.cta.button_text} <ArrowRight className="h-4 w-4" aria-hidden />
+              </button>
+              <p className="mt-4 text-xs text-muted-foreground lg:text-sm">Dibalas lewat WhatsApp — tanpa perlu membuat akun.</p>
+            </div>
           </div>
         </section>
 
         {/* FOOTER */}
         <footer className="border-t border-border bg-background">
           <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:py-14">
-            <div className="grid gap-8 sm:grid-cols-3 lg:gap-12">
+            <div className="grid gap-10 sm:grid-cols-3 lg:gap-12">
               {/* Brand */}
               <div>
-                <a href="https://prashadigitalindonesia.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 transition-opacity hover:opacity-80">
+                <a href="https://prashadigitalindonesia.com" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-3 transition-opacity hover:opacity-80">
                   <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-foreground ring-1 ring-foreground/20">
                     <Image src="/logo/prasha.png" width={36} height={36} alt="Prasha Digital Indonesia" className="h-9 w-9 object-cover" />
                   </span>
                   <div className="leading-tight">
-                    <p className="font-script text-xl text-gold-strong">Prasha</p>
-                    <p className="-mt-1 text-[8px] font-semibold uppercase tracking-[0.35em] text-muted-foreground">Digital Indonesia</p>
+                    <p className="font-script text-xl text-gold-deep">Prasha</p>
+                    <p className="-mt-1 text-label font-semibold uppercase tracking-[0.3em] text-muted-foreground">Digital Indonesia</p>
                   </div>
                 </a>
                 <p className="mt-3 text-xs leading-relaxed text-muted-foreground lg:text-sm">{content.footer.description}</p>
@@ -591,29 +593,29 @@ export default function LandingPage() {
 
               {/* Links */}
               <div>
-                <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-foreground">Menu</p>
-                <nav className="flex flex-col gap-2 text-xs text-muted-foreground" aria-label="Menu footer">
-                  <a href="#catalog" className="transition-colors hover:text-foreground">Demo Template</a>
-                  <a href="#cara" className="transition-colors hover:text-foreground">Cara Kerja</a>
-                  <a href="#fitur" className="transition-colors hover:text-foreground">Fitur</a>
-                  <a href="#faq" className="transition-colors hover:text-foreground">FAQ</a>
+                <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-foreground">Menu</p>
+                <nav className="flex flex-col gap-0.5 text-xs text-muted-foreground" aria-label="Menu footer">
+                  <a href="#catalog" className="inline-flex min-h-11 w-fit items-center transition-colors hover:text-foreground">Demo Template</a>
+                  <a href="#cara" className="inline-flex min-h-11 w-fit items-center transition-colors hover:text-foreground">Cara Kerja</a>
+                  <a href="#fitur" className="inline-flex min-h-11 w-fit items-center transition-colors hover:text-foreground">Fitur</a>
+                  <a href="#faq" className="inline-flex min-h-11 w-fit items-center transition-colors hover:text-foreground">FAQ</a>
                 </nav>
               </div>
 
               {/* Contact */}
               <div>
-                <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-foreground">Hubungi Kami</p>
-                <div className="flex flex-col gap-2 text-xs text-muted-foreground">
-                  <a href={`https://wa.me/${content.footer.whatsapp}`} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-foreground">WhatsApp</a>
-                  <a href={`https://instagram.com/${content.footer.instagram}`} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-foreground">Instagram</a>
-                  <a href={content.footer.website} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-foreground">Website</a>
+                <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-foreground">Hubungi Kami</p>
+                <div className="flex flex-col gap-0.5 text-xs text-muted-foreground">
+                  <a href={`https://wa.me/${content.footer.whatsapp}`} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 w-fit items-center transition-colors hover:text-foreground">WhatsApp</a>
+                  <a href={`https://instagram.com/${content.footer.instagram}`} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 w-fit items-center transition-colors hover:text-foreground">Instagram</a>
+                  <a href={content.footer.website} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 w-fit items-center transition-colors hover:text-foreground">Website</a>
                 </div>
               </div>
             </div>
 
-            <div className="mt-8 border-t border-border pt-5 text-center">
-              <p className="text-[10px] uppercase tracking-widest text-muted-foreground">{content.footer.tagline}</p>
-              <p className="mt-1 text-[10px] text-muted-foreground">&copy; {new Date().getFullYear()} Prasha Digital Indonesia. Hak cipta dilindungi.</p>
+            <div className="mt-10 border-t border-border pt-6 text-center">
+              <p className="text-label uppercase tracking-widest text-muted-foreground">{content.footer.tagline}</p>
+              <p className="mt-1 text-body-xs text-muted-foreground">&copy; {new Date().getFullYear()} Prasha Digital Indonesia. Hak cipta dilindungi.</p>
             </div>
           </div>
         </footer>
@@ -627,6 +629,19 @@ export default function LandingPage() {
           promoExpiresAt={pricing.promo_expires_at}
           onClose={() => setOrderOpen(false)}
         />
+      )}
+    </div>
+  );
+}
+
+/** Heading section dengan ritme seragam: eyebrow (label uppercase) → judul → deskripsi opsional. */
+function SectionHeading({ kicker, title, description }: { kicker: string; title: ReactNode; description?: string }) {
+  return (
+    <div className="text-center">
+      <p className="text-label font-semibold uppercase tracking-[0.2em] text-gold-deep">{kicker}</p>
+      <h2 className="mt-3 font-heading text-display-lg font-medium text-foreground sm:text-display-xl">{title}</h2>
+      {description && (
+        <p className="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-muted-foreground lg:text-base">{description}</p>
       )}
     </div>
   );
@@ -651,20 +666,23 @@ function FilterPill({ active, onClick, label }: { active: boolean; onClick: () =
 function FAQItem({ q, a, defaultOpen = false }: { q: string; a: string; defaultOpen?: boolean }) {
   const [open, setOpen] = useState(defaultOpen);
   const contentRef = useRef<HTMLDivElement>(null);
+  const panelId = useId();
 
   return (
     <div className="rounded-2xl border border-border bg-card/70 shadow-soft">
       <button
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
+        aria-controls={panelId}
         className="flex min-h-14 w-full items-center justify-between gap-4 px-5 py-4 text-left"
       >
         <span className="font-heading text-base font-medium text-foreground">{q}</span>
-        <span aria-hidden className={`text-gold-strong transition-transform duration-300 ${open ? 'rotate-45' : ''}`}>+</span>
+        <ChevronDown aria-hidden className={`h-5 w-5 shrink-0 text-gold-deep transition-transform duration-300 motion-reduce:transition-none ${open ? 'rotate-180' : ''}`} />
       </button>
       <div
         ref={contentRef}
-        className="overflow-hidden transition-all duration-300 ease-in-out"
+        id={panelId}
+        className="overflow-hidden transition-all duration-300 ease-in-out motion-reduce:transition-none"
         style={{ maxHeight: open ? `${contentRef.current?.scrollHeight ?? 200}px` : '0px' }}
       >
         <p className="px-5 pb-5 text-sm leading-relaxed text-muted-foreground">{a}</p>
@@ -697,7 +715,7 @@ function CatalogCard({
       return (
         <button
           onClick={() => onOrder?.(meta.name)}
-          className="mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-gold to-gold-strong px-5 py-2.5 text-sm font-semibold text-foreground shadow-gold transition-transform hover:scale-[1.02] active:scale-[0.98]"
+          className="mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-gold to-gold-strong px-5 py-2.5 text-sm font-semibold text-foreground shadow-gold transition-transform hover:scale-[1.02] active:scale-[0.98] motion-reduce:hover:scale-100 motion-reduce:active:scale-100"
         >
           <Eye className="h-4 w-4" aria-hidden /> Pesan Sekarang
         </button>
@@ -711,7 +729,7 @@ function CatalogCard({
           href={demoLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-gold to-gold-strong px-5 py-2.5 text-sm font-semibold text-foreground shadow-gold shadow-[inset_0_1px_0_rgba(255,255,255,0.28)] transition-transform hover:scale-[1.02] active:scale-[0.98]"
+          className="mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-gold to-gold-strong px-5 py-2.5 text-sm font-semibold text-foreground shadow-gold shadow-[inset_0_1px_0_rgba(255,255,255,0.28)] transition-transform hover:scale-[1.02] active:scale-[0.98] motion-reduce:hover:scale-100 motion-reduce:active:scale-100"
         >
           <Eye className="h-4 w-4" aria-hidden /> Lihat Demo
         </a>
@@ -723,8 +741,8 @@ function CatalogCard({
         href={detailHref}
         className={`mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold transition-transform ${
           gold
-            ? 'bg-gradient-to-r from-gold to-gold-strong text-foreground shadow-gold shadow-[inset_0_1px_0_rgba(255,255,255,0.28)] hover:scale-[1.02] active:scale-[0.98]'
-            : 'border border-gold/50 bg-background text-gold-deep transition-colors hover:bg-gold/10 active:scale-[0.98]'
+            ? 'bg-gradient-to-r from-gold to-gold-strong text-foreground shadow-gold shadow-[inset_0_1px_0_rgba(255,255,255,0.28)] hover:scale-[1.02] active:scale-[0.98] motion-reduce:hover:scale-100 motion-reduce:active:scale-100'
+            : 'border border-gold/50 bg-background text-gold-deep transition-colors hover:bg-gold/10 active:scale-[0.98] motion-reduce:active:scale-100'
         }`}
       >
         <Eye className="h-4 w-4" aria-hidden /> {gold ? 'Lihat Detail' : 'Preview'}
@@ -733,22 +751,22 @@ function CatalogCard({
   })();
 
   return (
-    <article className="group flex flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-soft transition-all duration-300 hover:-translate-y-1.5 hover:shadow-card">
+    <article className="group flex flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-soft transition-all duration-300 hover:-translate-y-1.5 hover:shadow-card motion-reduce:hover:translate-y-0">
       <div className="relative px-6 pt-6">
-        <div className="relative overflow-hidden rounded-[2rem] bg-muted shadow-soft ring-1 ring-foreground/5">
+        <div className="relative overflow-hidden rounded-2xl bg-muted shadow-soft ring-1 ring-foreground/5">
           {demoImage ? (
             <DemoCardMedia src={demoImage} alt={`Pratinjau template ${meta.name}`} canvas={canvas} eager={number === 1} />
           ) : (
             <TemplatePreview canvas={canvas} bg={canvas.theme.background} />
           )}
           <span
-            className={`absolute left-3 top-3 z-10 rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] backdrop-blur-sm ${
+            className={`absolute left-3 top-3 z-10 rounded-full border px-2.5 py-1 text-label font-semibold uppercase tracking-[0.15em] backdrop-blur-sm ${
               demoImage ? 'border-white/25 bg-black/40 text-white' : 'border-gold/60 bg-card/90 text-gold-deep'
             }`}
           >
             {categoryLabel(meta.category)}
           </span>
-          <span className="absolute right-4 top-4 z-10 rounded-full border border-border bg-card/80 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground backdrop-blur-sm">
+          <span className="absolute right-4 top-4 z-10 rounded-full border border-border bg-card/80 px-2.5 py-1 text-label font-medium uppercase tracking-[0.15em] text-muted-foreground/70 backdrop-blur-sm">
             {String(number).padStart(2, '0')}
           </span>
           <span className="pointer-events-none absolute inset-x-0 top-0 z-10 flex justify-center" aria-hidden>

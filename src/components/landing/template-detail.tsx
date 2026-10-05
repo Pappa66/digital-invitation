@@ -133,7 +133,7 @@ export default function TemplateDetail({ meta, index, canvas, categoryLabel, tot
                         href={demoLink}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-gold to-gold-strong px-6 py-3 text-sm font-semibold text-foreground shadow-gold transition-transform hover:scale-[1.04] active:scale-[0.98]"
+                        className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-gold to-gold-strong px-6 py-3 text-sm font-semibold text-foreground shadow-gold transition-transform hover:scale-[1.04] active:scale-[0.98] motion-reduce:hover:scale-100 motion-reduce:active:scale-100"
                       >
                         <PlayCircle className="h-4 w-4" aria-hidden /> Lihat Demo
                         <ExternalLink className="h-3.5 w-3.5 opacity-70" aria-hidden />
@@ -167,7 +167,7 @@ export default function TemplateDetail({ meta, index, canvas, categoryLabel, tot
 
             <button
               onClick={() => setOrderOpen(true)}
-              className="mt-6 flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-gold to-gold-strong px-5 py-3.5 text-sm font-semibold text-foreground shadow-gold transition-transform hover:scale-[1.01] active:scale-[0.99]"
+              className="mt-6 flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-gold to-gold-strong px-5 py-3.5 text-sm font-semibold text-foreground shadow-gold transition-transform hover:scale-[1.01] active:scale-[0.99] motion-reduce:hover:scale-100 motion-reduce:active:scale-100"
             >
               <MessageCircle className="h-4 w-4" aria-hidden />
               Pesan Template Ini

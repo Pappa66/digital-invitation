@@ -214,7 +214,7 @@ export default function OrderDialog({ templateName, basePrice = 0, discountPerce
                   </button>
                 </div>
                 {promoError && <p className="mt-1.5 text-xs text-destructive">{promoError}</p>}
-                {promoApplied && <p className="mt-1.5 text-xs font-medium text-green-700">Kode promo berhasil diterapkan!</p>}
+                {promoApplied && <p className="mt-1.5 text-xs font-medium text-gold-deep">Kode promo berhasil diterapkan!</p>}
               </div>
             )}
 
@@ -231,7 +231,7 @@ export default function OrderDialog({ templateName, basePrice = 0, discountPerce
             </div>
             <button
               type="submit"
-              className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-gold to-gold-strong px-5 py-3 text-sm font-semibold text-foreground shadow-gold transition-transform hover:scale-[1.01] active:scale-[0.99]"
+              className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-gold to-gold-strong px-5 py-3 text-sm font-semibold text-foreground shadow-gold transition-transform hover:scale-[1.01] active:scale-[0.99] motion-reduce:hover:scale-100 motion-reduce:active:scale-100"
             >
               <MessageCircle className="h-4 w-4" aria-hidden /> {basePrice > 0 ? `Pesan - ${formatRupiah(finalPrice)}` : 'Kirim Pesanan'}
             </button>
