@@ -449,6 +449,17 @@ export interface Database {
           slug: string;
         }[];
       };
+      update_rsvp_by_token: {
+        Args: {
+          p_token: string;
+          p_attendance: string;
+          p_guest_count: number;
+          p_message: string;
+          p_meal_choice?: string | null;
+          p_menu_options?: unknown;
+        };
+        Returns: { ok: boolean; error: string | null }[];
+      };
       delete_rsvp: {
         Args: { p_project_id: string; p_rsvp_id: string; p_token?: string | null };
         Returns: boolean;
