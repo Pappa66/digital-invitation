@@ -1365,30 +1365,6 @@ export function EventDetailBlock({ props }: { props: BlockProps }) {
       `&location=${encodeURIComponent(address)}`
     );
   })();
-
-  /** Suntingan .ics siap unduh; null bila tanggal acara tak dikenali. */
-  const icsContent = buildIcsContent({
-    title: title || 'Undangan',
-    date: dateStr,
-    time: str(props, 'time'),
-    location: str(props, 'location'),
-    address,
-    description: [str(props, 'location'), address].filter(Boolean).join('\n')
-  });
-
-  /** Unduh berkas .ics secara client-side (tanpa server). */
-  function downloadCalendar() {
-    if (!icsContent || typeof window === 'undefined') return;
-    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = icsFileName(title || 'undangan');
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
-  }
   return (
     <section className={`px-6 py-8 sm:py-10 md:py-14 text-center ${band ? 'py-10 sm:py-14 md:py-20' : ''}`}>
       <div
@@ -1475,21 +1451,6 @@ export function EventDetailBlock({ props }: { props: BlockProps }) {
                       <Calendar className="h-3.5 w-3.5" /> Simpan ke Kalender
                     </a>
                   ))}
-                  {icsContent &&
-                    (preview ? (
-                      <span className="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-current/25 px-4 py-2 text-xs font-medium">
-                        <CalendarPlus className="h-3.5 w-3.5" /> Simpan Tanggal
-                      </span>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={downloadCalendar}
-                        aria-label="Simpan tanggal acara ke kalender (unduh file .ics)"
-                        className="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-current/25 px-4 py-2 text-xs font-medium transition-colors hover:bg-current/10"
-                      >
-                        <CalendarPlus className="h-3.5 w-3.5" aria-hidden /> Simpan Tanggal
-                      </button>
-                    ))}
                 </div>
               </Inner>
             )}
