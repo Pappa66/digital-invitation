@@ -81,6 +81,24 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
   const revealAnim = canvas.theme.scroll_anim ?? 'fade-up';
   const revealIntensity = Math.max(0, Math.min(100, Number(canvas.theme.scroll_intensity ?? 60)));
 
+  const [watermarkBrand, setWatermarkBrand] = useState('');
+  useEffect(() => {
+    if (preview || demo || demoIsDemoMode()) return;
+    let alive = true;
+    import('@/lib/settings')
+      .then(({ getBusinessName }) =>
+        getBusinessName()
+          .then((n) => {
+            if (alive && n) setWatermarkBrand(n);
+          })
+          .catch(() => {})
+      )
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, [preview, demo]);
+
   const coverHasImage = !!(canvas.settings.cover_bg_image || (typeof heroBlock?.props.bg_image === 'string' && heroBlock.props.bg_image));
   const coverTextColor =
     canvas.theme.cover_text || (coverHasImage ? '#ffffff' : isLightHex(canvas.theme.background) ? '#2b2620' : '#ffffff');
@@ -221,6 +239,11 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
           />
         )}
         <ClosingSection names={coupleNames} />
+        {!preview && watermarkBrand && (
+          <div className="px-6 pb-28 pt-1 text-center">
+            <p className="text-[11px] uppercase tracking-[0.2em] opacity-55">Dibuat dengan ♥ oleh {watermarkBrand}</p>
+          </div>
+        )}
         {immersive && <MusicPlayer settings={canvas.settings} />}
         {immersive && <ShareBar {...shareMeta} />}
         {/* nav dihilangkan */}
