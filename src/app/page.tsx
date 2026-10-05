@@ -304,12 +304,6 @@ export default function LandingPage() {
                 >
                   {content.hero.cta_primary} <ArrowRight className="h-4 w-4" aria-hidden />
                 </a>
-                <button
-                  onClick={() => openOrder()}
-                  className="min-h-12 rounded-lg border border-gold/60 px-7 py-3 text-sm font-medium text-gold-deep transition-colors hover:bg-gold/10 lg:min-h-14 lg:px-9 lg:text-base"
-                >
-                  {content.hero.cta_secondary}
-                </button>
               </div>
               {/* Harga/promo sebagai bubble di dalam hero (spec hero-pricing-bubble.md) */}
               {pricing.show_pricing && pricing.base_price > 0 && (

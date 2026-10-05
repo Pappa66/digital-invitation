@@ -100,15 +100,9 @@ export default function LandingAdmin() {
                 className="mt-1 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
               />
             </div>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div>
-                <Label className="text-xs">Teks tombol utama</Label>
-                <Input value={content.hero.cta_primary} onChange={(e) => setHero(content.hero.cta_primary, { cta_primary: e.target.value })} className="mt-1" />
-              </div>
-              <div>
-                <Label className="text-xs">Teks tombol kedua</Label>
-                <Input value={content.hero.cta_secondary} onChange={(e) => setHero(content.hero.cta_secondary, { cta_secondary: e.target.value })} className="mt-1" />
-              </div>
+            <div>
+              <Label className="text-xs">Teks tombol utama</Label>
+              <Input value={content.hero.cta_primary} onChange={(e) => setHero(content.hero.cta_primary, { cta_primary: e.target.value })} className="mt-1" />
             </div>
 
             <div>

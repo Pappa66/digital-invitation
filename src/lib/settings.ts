@@ -147,7 +147,6 @@ export interface LandingContent {
     title_b: string;
     subtitle: string;
     cta_primary: string;
-    cta_secondary: string;
     images: LandingImage[];
   };
   stats: LandingStat[];
@@ -181,7 +180,6 @@ export const LANDING_CONTENT_DEFAULTS: LandingContent = {
     subtitle:
       'Pilih desain favorit, isi form pemesanan, dan tim kami menyusun teks, foto, musik, serta link undangannya — Anda tinggal terima hasilnya.',
     cta_primary: 'Jelajahi Demo',
-    cta_secondary: 'Pesan Undangan',
     images: []
   },
   stats: [
