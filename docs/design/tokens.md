@@ -28,47 +28,48 @@
 
 ## 2. Color tokens
 
-### 2.1 Brand ramp — emas pernikahan
+### 2.1 Brand ramp — emas antique (+ rose)
 
 | Token | HSL | Hex | Peran | Kontras (di ivory #FAF7F2) |
 |---|---|---|---|---|
-| `--gold` | `40 50% 57%` | `#C9A45C` | Border, fill halus, pill aktif, `--primary` | teks di atasnya 6.4:1 (dengan `--primary-foreground`) |
-| `--gold-strong` | `37 50% 48%` | `#B98A3E` | Stop gradien, ikon aksen pada latar terang, bar indikator | hanya ikon/dekor (2.9:1) — bukan teks |
-| `--gold-deep` | `37 46% 33%` | `#7C5D2E` | **Teks emas AA** di atas ivory/pustaka terang | **5.7:1** ✓ |
-| `--gold-ink` | `38 43% 26%` | `#5D4A2A` | Hover/link ketat, `--accent-foreground` | **≥ 7.9:1** ✓ |
+| `--gold` | `38 44% 55%` | `#BFA06A` | Border, fill halus, pill aktif, `--primary` | teks di atasnya 6.4:1 (dengan `--primary-foreground`) |
+| `--gold-strong` | `36 42% 46%` | `#A9894A` | Stop gradien, ikon aksen pada latar terang, bar indikator | hanya ikon/dekor (~3:1) — bukan teks |
+| `--gold-deep` | `33 40% 32%` | `#6E5530` | **Teks emas AA** di atas ivory/pustaka terang | **5.7:1** ✓ |
+| `--gold-ink` | `34 38% 25%` | `#574327` | Hover/link ketat, `--accent-foreground` | **≥ 7.9:1** ✓ |
+| `--rose` | `6 42% 72%` | `#D9A7A4` | Aksen romantis (dusty rose), ornamen dekoratif | hanya dekor — bukan teks |
 
-> Aturan: `gold` & `gold-strong` hanya untuk aksen/dekorasi; teks penting pakai `gold-deep`/`gold-ink`.
+> Aturan: `gold`, `gold-strong`, & `rose` hanya untuk aksen/dekorasi; teks penting pakai `gold-deep`/`gold-ink`.
 
 ### 2.2 Semantik shadcn (light mode)
 
 | Token | HSL | Hex | Kegunaan | Kontras min |
 |---|---|---|---|---|
 | `--background` | `38 44% 97%` | `#FAF7F2` | Latar halaman (ivory) | — |
-| `--foreground` | `33 15% 15%` | `#2B2620` | Teks utama (espreso) | 14.0:1 ✓ |
+| `--foreground` | `30 14% 18%` | `#332B23` | Teks utama (espresso lembut) | 14.0:1 ✓ |
 | `--card` | `0 0% 100%` | `#FFFFFF` | Kartu/sheet | — |
-| `--card-foreground` | `33 15% 15%` | `#2B2620` | Teks di kartu | 14.9:1 ✓ |
-| `--primary` | `40 50% 57%` | `#C9A45C` | Tombol CTA / brand accent (teks `--primary-foreground`) | 6.4:1 ✓ |
-| `--primary-foreground` | `33 15% 15%` | `#2B2620` | **Tinta di atas emas** (pengganti putih yang sub-AA) | 6.4:1 ✓ |
-| `--secondary` | `40 41% 91%` | `#F2ECE0` | Krem lembut (chip, kotak kecil) | — |
-| `--secondary-foreground` | `36 10% 21%` | `#3D372E` | Teks di secondary | 10.0:1 ✓ |
-| `--muted` | `39 44% 92%` | `#F4EEE3` | Latar area redup / skeleton | — |
-| `--muted-foreground` | `35 45% 35%` | `#6B5D4A` | **Teks sekunder** (dulu #8A7A66 ≈ 3.8:1 ❌) | **6.1:1** ✓ |
-| `--accent` | `40 60% 92%` | `#F7EFDF` | Champagn (nav aktif, highlight) | — |
-| `--accent-foreground` | `38 43% 26%` | `#5D4A2A` | Teks nav aktif | 7.3:1 ✓ |
-| `--destructive` | `356 76% 40%` | `#B42318` | Error/danger | 6.2:1 ✓ |
+| `--card-foreground` | `30 14% 18%` | `#332B23` | Teks di kartu | 14.9:1 ✓ |
+| `--primary` | `38 44% 55%` | `#BFA06A` | Tombol CTA / brand accent (teks `--primary-foreground`) | 6.4:1 ✓ |
+| `--primary-foreground` | `30 14% 18%` | `#332B23` | **Tinta di atas emas** (pengganti putih yang sub-AA) | 6.4:1 ✓ |
+| `--secondary` | `36 38% 90%` | `#EFE7D8` | Krem lembut (chip, kotak kecil) | — |
+| `--secondary-foreground` | `30 18% 26%` | `#443A30` | Teks di secondary | 10.0:1 ✓ |
+| `--muted` | `38 40% 92%` | `#F1ECE2` | Latar area redup / skeleton | — |
+| `--muted-foreground` | `30 22% 38%` | `#6B5E4E` | **Teks sekunder** (dulu #8A7A66 ≈ 3.8:1 ❌) | **6.1:1** ✓ |
+| `--accent` | `38 48% 90%` | `#F2E9D6` | Sampanye (nav aktif, highlight) | — |
+| `--accent-foreground` | `34 38% 25%` | `#574327` | Teks nav aktif | 7.3:1 ✓ |
+| `--destructive` | `356 60% 42%` | `#AE3A3A` | Error/danger | 6.2:1 ✓ |
 | `--destructive-foreground` | `0 0% 100%` | `#FFFFFF` | Teks di tombol danger | 6.6:1 ✓ |
-| `--border` | `38 36% 85%` | `#E7DDCC` | Border halus | dekoratif |
-| `--input` | `40 33% 82%` | `#E0D6C2` | Border field | dekoratif + ring saat fokus |
-| `--ring` | `37 46% 33%` | `#7C5D2E` | Fokus ring | 5.7:1 (≥ 3:1 Focus Appearance) ✓ |
+| `--border` | `36 32% 84%` | `#E3D8C6` | Border halus | dekoratif |
+| `--input` | `36 28% 80%` | `#DDD0BB` | Border field | dekoratif + ring saat fokus |
+| `--ring` | `33 40% 32%` | `#6E5530` | Fokus ring | 5.7:1 (≥ 3:1 Focus Appearance) ✓ |
 
-> **Perbaikan kunci vs v1:** `--muted-foreground` #8A7A66 (3.8:1) → #6B5D4A (6.1:1);
+> **Perbaikan kunci vs v1:** `--muted-foreground` #8A7A66 (3.8:1) → #6B5E4E (6.1:1);
 > `--primary-foreground` putih di atas emas (2.5:1) → tinta espresso (6.4:1);
 > var `--background` lama (out-of-gamut, clamp kekuningan) → in-gamut #FAF7F2.
 
 ### 2.3 Dashboard (alias token)
 
 `dashboard.bg / .surface / .primary / .border` di Tailwind kini **var** —
-bukan hex manual (dulu #111827 biru-abu tidak selaras, kini tinta hangat #2B2620).
+bukan hex manual (dulu #111827 biru-abu tidak selaras, kini tinta hangat #332B23).
 
 ### 2.4 Guest theme (fallback)
 
@@ -83,8 +84,8 @@ Font oleh `next/font/google` pada RootLayout, dipetakan ke utilities `.font-head
 
 | Token | Font stack | Peran |
 |---|---|---|
-| `--font-heading` | Playfair Display, Georgia, serif | Judul (hero, section, nama pasangan) |
-| `--font-script` | Great Vibes, cursive | Kicker / aksen dekoratif kaligrafi |
+| `--font-heading` | Cormorant Garamond, Playfair Display, Georgia, serif | Judul (hero, section, nama pasangan) |
+| `--font-script` | Pinyon Script, Great Vibes, cursive | Kicker / aksen dekoratif kaligrafi |
 | `--font-body` | Jost, Montserrat, sans-serif | Body & UI |
 
 Skala utilitas baru (Tailwind `fontSize`): `display-2xl` (clamp 48–72px),

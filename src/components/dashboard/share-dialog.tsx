@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Copy,
   Check,
@@ -20,6 +20,7 @@ import { RELIGIONS, getReligion, waLink, parseGuestLines, type ReligionKey } fro
 import { clientGetInviteAccessToken } from '@/lib/api/project-client';
 import { getSiteOrigin } from '@/lib/site';
 import { generateShareToken, listShareTokens, revokeShareToken, type ShareTokenInfo } from '@/lib/actions/share-token-actions';
+import { useFocusTrap } from '@/lib/hooks/use-focus-trap';
 
 interface ShareDialogProps {
   open: boolean;
@@ -87,6 +88,8 @@ export default function ShareDialog({ open, projectId, slug, title, onClose, rel
   const [editGenerated, setEditGenerated] = useState<{ token: string; url: string } | null>(null);
   const [editCopied, setEditCopied] = useState(false);
   const [editError, setEditError] = useState<string | null>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(dialogRef, open);
 
   useEffect(() => {
     if (!open) return;
@@ -202,6 +205,7 @@ export default function ShareDialog({ open, projectId, slug, title, onClose, rel
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-foreground/40" onClick={onClose} aria-hidden />
       <div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-label={`Bagikan ${title}`}

@@ -5,6 +5,7 @@ import Image from 'next/image';
 import imageCompression from 'browser-image-compression';
 import { Upload, X, Loader2, AlertTriangle, CheckCircle, Info, Video, Trash2 } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
+import { useFocusTrap } from '@/lib/hooks/use-focus-trap';
 
 const BUCKET = 'invitation-assets';
 
@@ -88,6 +89,8 @@ export default function MediaLibrary({ open, onClose, onSelect, imageType = 'gen
   const [showSpecs, setShowSpecs] = useState(false);
   const [deleting, setDeleting] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(dialogRef, open);
 
   const loadFiles = useCallback(async () => {
     setLoading(true);
@@ -184,6 +187,7 @@ export default function MediaLibrary({ open, onClose, onSelect, imageType = 'gen
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/40 p-4">
       <div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-label="Media Library"

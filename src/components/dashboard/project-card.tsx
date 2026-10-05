@@ -35,6 +35,8 @@ export default function ProjectCard({ project, onDuplicated, onDeleted, heroFall
   const [couple, setCouple] = useState<string | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const menuItemRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   // Mode demo tidak punya backend statistik — sembunyikan tombolnya.
   const demo = demoIsDemoMode();
@@ -78,6 +80,35 @@ export default function ProjectCard({ project, onDuplicated, onDeleted, heroFall
       return () => document.removeEventListener('pointerdown', handleClickOutside);
     }
   }, [menuOpen]);
+
+  // Saat menu terbuka, pindahkan fokus ke item pertama (pola menu ARIA).
+  useEffect(() => {
+    if (!menuOpen) return;
+    const t = window.setTimeout(() => menuItemRefs.current.find(Boolean)?.focus(), 0);
+    return () => window.clearTimeout(t);
+  }, [menuOpen]);
+
+  function closeMenu(refocus = false) {
+    setMenuOpen(false);
+    if (refocus) triggerRef.current?.focus();
+  }
+
+  function handleMenuKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      closeMenu(true);
+      return;
+    }
+    if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+    e.preventDefault();
+    const items = menuItemRefs.current.filter(
+      (el): el is HTMLButtonElement => el !== null && !el.disabled
+    );
+    if (items.length === 0) return;
+    const idx = items.indexOf(document.activeElement as HTMLButtonElement);
+    const next = e.key === 'ArrowDown' ? (idx + 1) % items.length : (idx - 1 + items.length) % items.length;
+    items[next]?.focus();
+  }
 
   async function handleDuplicate() {
     setBusy(true);
@@ -144,80 +175,81 @@ export default function ProjectCard({ project, onDuplicated, onDeleted, heroFall
             </p>
           </div>
         </div>
-        <div className="mt-3 flex flex-wrap items-center gap-2">
+        <div className="mt-3 flex items-stretch gap-2">
+          {/* Aksi primer — selalu tampak */}
           <button
             onClick={() => router.push(`/builder/${project.id}`)}
-            className="flex min-h-11 items-center gap-1 rounded-lg bg-gradient-to-r from-gold to-gold-strong px-3.5 text-xs font-semibold text-primary-foreground shadow-gold transition-opacity hover:opacity-90"
+            className="flex min-h-11 flex-1 items-center justify-center gap-1 rounded-lg bg-gradient-to-r from-gold to-gold-strong px-3.5 text-xs font-semibold text-primary-foreground shadow-gold transition-opacity hover:opacity-90"
           >
             <Pencil className="h-3.5 w-3.5" aria-hidden /> Edit
           </button>
           <button
             onClick={() => setShareOpen(true)}
-            className="flex min-h-11 items-center gap-1 rounded-lg border border-input px-3.5 text-xs font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+            className="flex min-h-11 flex-1 items-center justify-center gap-1 rounded-lg border border-input px-3.5 text-xs font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
           >
             <Share2 className="h-3.5 w-3.5" aria-hidden /> Share
           </button>
-          {/* Desktop: all icon buttons */}
-          <div className="hidden items-center gap-0.5 sm:flex">
-            {!demo && (
-              <IconBtn label="Statistik" onClick={() => setStatsOpen(true)}>
-                <BarChart3 className="h-4 w-4" />
-              </IconBtn>
-            )}
-            <IconBtn label="Salin" onClick={() => setConfirm('duplicate')}>
-              <Copy className="h-4 w-4" />
-            </IconBtn>
-            <IconBtn label="QR Absen" onClick={() => setAbsenOpen(true)}>
-              <QrCode className="h-4 w-4" />
-            </IconBtn>
-            <IconBtn
-              label={status === 'published' ? 'Jadikan draft' : 'Publish'}
-              onClick={handleToggleStatus}
-              disabled={statusBusy}
-            >
-              {status === 'published' ? <Globe className="h-4 w-4 text-emerald-600" aria-hidden /> : <GlobeLock className="h-4 w-4" aria-hidden />}
-            </IconBtn>
-            <IconBtn label="Buka publik" onClick={() => router.push(publicUrl)}>
-              <ExternalLink className="h-4 w-4" />
-            </IconBtn>
-            <IconBtn label="Hapus" danger onClick={() => setConfirm('delete')}>
-              <Trash2 className="h-4 w-4" />
-            </IconBtn>
-          </div>
-          {/* Mobile: overflow menu */}
-          <div className="relative sm:hidden" ref={menuRef}>
+
+          {/* Aksi lain — menu overflow "…" (semua breakpoint) */}
+          <div className="relative shrink-0" ref={menuRef}>
             <button
+              ref={triggerRef}
               onClick={() => setMenuOpen((v) => !v)}
-              aria-label="Lainnya"
+              aria-label="Menu aksi lainnya"
+              aria-haspopup="menu"
               aria-expanded={menuOpen}
-              className="inline-flex h-11 w-11 items-center justify-center rounded-md border border-input text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-input text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
             >
               <MoreHorizontal className="h-4 w-4" aria-hidden />
             </button>
             {menuOpen && (
-              <div className="absolute right-0 top-full z-50 mt-1 w-44 rounded-2xl border border-border bg-popover py-1 text-popover-foreground shadow-dialog">
+              <div
+                role="menu"
+                aria-label="Aksi lainnya"
+                onKeyDown={handleMenuKeyDown}
+                className="absolute right-0 top-full z-50 mt-1 w-52 overflow-hidden rounded-2xl border border-border bg-popover py-1 text-popover-foreground shadow-dialog"
+              >
                 {!demo && (
-                  <button onClick={() => { setMenuOpen(false); setStatsOpen(true); }} className="flex min-h-10 w-full items-center gap-2 px-3 text-xs text-foreground transition-colors hover:bg-muted">
-                    <BarChart3 className="h-3.5 w-3.5" aria-hidden /> Statistik
-                  </button>
+                  <MenuItem
+                    innerRef={(el) => { menuItemRefs.current[0] = el; }}
+                    onClick={() => { closeMenu(); setStatsOpen(true); }}
+                  >
+                    <BarChart3 className="h-4 w-4" aria-hidden /> Statistik
+                  </MenuItem>
                 )}
-                <button onClick={() => { setMenuOpen(false); setConfirm('duplicate'); }} className="flex min-h-10 w-full items-center gap-2 px-3 text-xs text-foreground transition-colors hover:bg-muted">
-                  <Copy className="h-3.5 w-3.5" aria-hidden /> Salin
-                </button>
-                <button onClick={() => { setMenuOpen(false); setAbsenOpen(true); }} className="flex min-h-10 w-full items-center gap-2 px-3 text-xs text-foreground transition-colors hover:bg-muted">
-                  <QrCode className="h-3.5 w-3.5" aria-hidden /> QR Absen
-                </button>
-                <button onClick={() => { setMenuOpen(false); handleToggleStatus(); }} className="flex min-h-10 w-full items-center gap-2 px-3 text-xs text-foreground transition-colors hover:bg-muted">
-                  {status === 'published' ? <GlobeLock className="h-3.5 w-3.5" aria-hidden /> : <Globe className="h-3.5 w-3.5" aria-hidden />}
+                <MenuItem
+                  innerRef={(el) => { menuItemRefs.current[1] = el; }}
+                  onClick={() => { closeMenu(); setConfirm('duplicate'); }}
+                >
+                  <Copy className="h-4 w-4" aria-hidden /> Salin
+                </MenuItem>
+                <MenuItem
+                  innerRef={(el) => { menuItemRefs.current[2] = el; }}
+                  onClick={() => { closeMenu(); setAbsenOpen(true); }}
+                >
+                  <QrCode className="h-4 w-4" aria-hidden /> QR Absen
+                </MenuItem>
+                <MenuItem
+                  innerRef={(el) => { menuItemRefs.current[3] = el; }}
+                  onClick={() => { closeMenu(); router.push(publicUrl); }}
+                >
+                  <ExternalLink className="h-4 w-4" aria-hidden /> Buka Publik
+                </MenuItem>
+                <MenuItem
+                  innerRef={(el) => { menuItemRefs.current[4] = el; }}
+                  onClick={() => { closeMenu(); handleToggleStatus(); }}
+                >
+                  {status === 'published' ? <GlobeLock className="h-4 w-4" aria-hidden /> : <Globe className="h-4 w-4" aria-hidden />}
                   {status === 'published' ? 'Jadikan Draft' : 'Publish'}
-                </button>
-                <button onClick={() => { setMenuOpen(false); router.push(publicUrl); }} className="flex min-h-10 w-full items-center gap-2 px-3 text-xs text-foreground transition-colors hover:bg-muted">
-                  <ExternalLink className="h-3.5 w-3.5" aria-hidden /> Buka Publik
-                </button>
+                </MenuItem>
                 <div className="my-1 border-t border-border" />
-                <button onClick={() => { setMenuOpen(false); setConfirm('delete'); }} className="flex min-h-10 w-full items-center gap-2 px-3 text-xs text-destructive transition-colors hover:bg-destructive/10">
-                  <Trash2 className="h-3.5 w-3.5" aria-hidden /> Hapus
-                </button>
+                <MenuItem
+                  danger
+                  innerRef={(el) => { menuItemRefs.current[5] = el; }}
+                  onClick={() => { closeMenu(); setConfirm('delete'); }}
+                >
+                  <Trash2 className="h-4 w-4" aria-hidden /> Hapus
+                </MenuItem>
               </div>
             )}
           </div>
@@ -252,29 +284,25 @@ export default function ProjectCard({ project, onDuplicated, onDeleted, heroFall
   );
 }
 
-function IconBtn({
-  label,
+function MenuItem({
+  innerRef,
   danger = false,
-  disabled = false,
   onClick,
   children
 }: {
-  label: string;
+  innerRef?: React.Ref<HTMLButtonElement>;
   danger?: boolean;
-  disabled?: boolean;
   onClick: () => void;
   children: React.ReactNode;
 }) {
   return (
     <button
+      ref={innerRef}
+      type="button"
+      role="menuitem"
       onClick={onClick}
-      aria-label={label}
-      title={label}
-      disabled={disabled}
-      className={`inline-flex h-11 w-11 items-center justify-center rounded-md transition-colors disabled:pointer-events-none disabled:opacity-40 ${
-        danger
-          ? 'text-muted-foreground hover:bg-destructive/10 hover:text-destructive'
-          : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+      className={`flex min-h-11 w-full items-center gap-2 px-3 text-xs transition-colors ${
+        danger ? 'text-destructive hover:bg-destructive/10' : 'text-foreground hover:bg-muted'
       }`}
     >
       {children}

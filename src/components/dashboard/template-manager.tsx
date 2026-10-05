@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Check, Copy, Eye, EyeOff, Loader2, Pencil, Plus, Search, Trash2, Upload, X } from 'lucide-react';
+import { Check, Copy, Loader2, Pencil, Plus, Search, Trash2, Upload, X } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
 import { emptyCanvas } from '@/lib/templates';
 import {
@@ -19,6 +19,7 @@ import TemplatePreview from '@/components/landing/template-preview';
 import ConfirmDialog from '@/components/dashboard/confirm-dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Switch } from '@/components/ui/switch';
 import { DashboardSkeleton } from '@/components/ui/skeleton';
 import type { CanvasData } from '@/lib/types';
 
@@ -200,9 +201,9 @@ export default function TemplateManager() {
     }
   }
 
-  async function toggleVisible(t: CustomTemplate) {
-    setItems((prev) => prev.map((x) => (x.id === t.id ? { ...x, visible: !t.visible } : x)));
-    await updateTemplate(t.id, { visible: !t.visible });
+  async function toggleVisible(t: CustomTemplate, visible: boolean) {
+    setItems((prev) => prev.map((x) => (x.id === t.id ? { ...x, visible } : x)));
+    await updateTemplate(t.id, { visible });
   }
 
   function requestRemove(t: CustomTemplate) {
@@ -358,15 +359,17 @@ export default function TemplateManager() {
                       <p className="truncate text-sm font-semibold text-foreground">{t.name}</p>
                       <p className="truncate text-[11px] text-muted-foreground">{displayCategory(t.category)}</p>
                     </div>
-                    <span
-                      className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold ${
-                        t.visible ? 'bg-emerald-100 text-emerald-800' : 'bg-muted text-muted-foreground'
-                      }`}
-                    >
-                      {t.visible ? 'Tampil' : 'Disembunyikan'}
-                    </span>
                   </div>
                   <div className="mt-3 flex flex-wrap items-center gap-1.5">
+                    <label className="inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-md border border-input px-2.5 text-[11px] font-medium text-muted-foreground">
+                      <Switch
+                        checked={t.visible}
+                        onCheckedChange={(v) => void toggleVisible(t, v)}
+                        aria-label={`Tampil di landing: ${t.name}`}
+                        className="data-[state=checked]:bg-gold-strong"
+                      />
+                      {t.visible ? 'Tampil di Landing' : 'Disembunyikan'}
+                    </label>
                     <button
                       type="button"
                       onClick={() => startEdit(t)}
@@ -375,15 +378,6 @@ export default function TemplateManager() {
                       title="Ubah nama/kategori"
                     >
                       <Pencil className="h-4 w-4" />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => void toggleVisible(t)}
-                      className="inline-flex h-11 w-11 items-center justify-center rounded-md border border-input text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-                      aria-label="Atur tampil"
-                      title={t.visible ? 'Sembunyikan dari landing' : 'Tampilkan di landing'}
-                    >
-                      {t.visible ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>
                     <button
                       type="button"

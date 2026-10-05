@@ -71,11 +71,12 @@ describe('ProjectCard — akses statistik host', () => {
     expect(rpcMock).not.toHaveBeenCalled();
   });
 
-  it('tombol Statistik membuka dialog dan memuat statistik undangan itu', async () => {
+  it('tombol Statistik (menu overflow) membuka dialog dan memuat statistik undangan itu', async () => {
     const user = userEvent.setup();
     render(<ProjectCard project={project} onDuplicated={() => {}} onDeleted={() => {}} />);
 
-    await user.click(screen.getByRole('button', { name: 'Statistik' }));
+    await user.click(screen.getByRole('button', { name: 'Menu aksi lainnya' }));
+    await user.click(screen.getByRole('menuitem', { name: 'Statistik' }));
 
     expect(await screen.findByText('Total RSVP')).toBeInTheDocument();
     await waitFor(() =>
@@ -84,11 +85,13 @@ describe('ProjectCard — akses statistik host', () => {
     expect(screen.getByText('9')).toBeInTheDocument();
   });
 
-  it('mode demo menyembunyikan tombol Statistik dan tidak memanggil RPC', () => {
+  it('mode demo menyembunyikan Statistik dan tidak memanggil RPC', async () => {
+    const user = userEvent.setup();
     demoModeMock.mockReturnValue(true);
     render(<ProjectCard project={project} onDuplicated={() => {}} onDeleted={() => {}} />);
 
-    expect(screen.queryByRole('button', { name: 'Statistik' })).not.toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Menu aksi lainnya' }));
+    expect(screen.queryByRole('menuitem', { name: 'Statistik' })).not.toBeInTheDocument();
     expect(rpcMock).not.toHaveBeenCalled();
   });
 });

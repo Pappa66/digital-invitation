@@ -13,7 +13,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { DEMO_TEMPLATES } from '@/lib/templates';
 import MediaLibrary from '@/components/dashboard/media-library';
 
 type Patch = React.Dispatch<React.SetStateAction<LandingContent>>;
@@ -31,14 +30,6 @@ export default function LandingAdmin() {
       .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
-
-  function toggleTemplate(id: string) {
-    setContent((c) => {
-      const cur = c.template_ids ?? [];
-      const next = cur.includes(id) ? cur.filter((x) => x !== id) : [...cur, id];
-      return { ...c, template_ids: next };
-    });
-  }
 
   async function handleSave() {
     setSaving(true);
@@ -148,35 +139,6 @@ export default function LandingAdmin() {
                 setMediaIndex(null);
               }}
             />
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base">Template yang Tampil di Landing</CardTitle>
-            <CardDescription>Pilih template yang muncul di katalog. Kosong = semua template tampil.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <label className="mb-3 flex items-center gap-2 rounded-md border border-input px-3 py-2 text-xs">
-              <input
-                type="checkbox"
-                checked={!!content.only_custom}
-                onChange={(e) => setContent((c) => ({ ...c, only_custom: e.target.checked }))}
-                className="h-3.5 w-3.5"
-              />
-              Hanya tampilkan template buatan sendiri (sembunyikan semua template bawaan)
-            </label>
-            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-            {DEMO_TEMPLATES.map((t) => {
-              const checked = (content.template_ids ?? []).includes(t.id);
-              return (
-                <label key={t.id} className="flex items-center gap-2 rounded-md border border-input px-3 py-2 text-xs">
-                  <input type="checkbox" checked={checked} onChange={() => toggleTemplate(t.id)} className="h-3.5 w-3.5" />
-                  <span className="truncate">{t.name}</span>
-                </label>
-              );
-            })}
-            </div>
           </CardContent>
         </Card>
 

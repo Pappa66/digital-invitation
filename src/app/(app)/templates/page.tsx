@@ -10,6 +10,7 @@ import { userTemplatesList, userTemplateDelete } from '@/lib/demo/user-templates
 import type { UserTemplate } from '@/lib/demo/user-templates';
 import GuideModal from '@/components/ui/guide-modal';
 import TemplateManager from '@/components/dashboard/template-manager';
+import LandingTemplatePicker from '@/components/dashboard/landing-template-picker';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
@@ -106,6 +107,8 @@ export default function TemplatesPage() {
           Mulai Kosong
         </Button>
       </div>
+
+      <LandingTemplatePicker />
 
       <TemplateManager />
 
