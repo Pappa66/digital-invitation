@@ -2631,6 +2631,8 @@ end $$;
 -- memvalidasi token lalu menulis canvas_data (aditif, tidak menghapus data).
 -- ============================================================
 
+drop function if exists public.save_design_by_share_token(text, jsonb);
+
 create or replace function public.save_design_by_share_token(
   p_token text,
   p_canvas jsonb

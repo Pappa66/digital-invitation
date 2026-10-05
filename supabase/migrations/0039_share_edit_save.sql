@@ -9,6 +9,8 @@
 -- (memakai public.is_project_published). Bila baris project_designs belum ada,
 -- dibuat baru; bila sudah ada, hanya kolom canvas_data/updated_at yang diubah.
 
+drop function if exists public.save_design_by_share_token(text, jsonb);
+
 create or replace function public.save_design_by_share_token(
   p_token text,
   p_canvas jsonb
