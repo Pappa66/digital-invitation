@@ -317,9 +317,6 @@ export default function LandingPage() {
                   />
                 </div>
               )}
-              <p className="mt-7 text-xs text-muted-foreground lg:text-sm">
-                {DEMO_TEMPLATES.length} demo siap dilihat &middot; Pilih desain, isi form, kami kerjakan sisanya.
-              </p>
             </div>
             {/* KOLASE 3 GAMBAR — larger on desktop */}
             <div className="relative mx-auto w-full max-w-md min-w-0 lg:max-w-lg xl:max-w-xl" aria-hidden>
