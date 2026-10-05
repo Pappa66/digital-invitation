@@ -110,6 +110,7 @@ export default function GuestBookWall({
 
   return (
     <section
+      id="buku-tamu"
       className="relative overflow-hidden px-6 py-16"
       style={background ? { background } : undefined}
     >

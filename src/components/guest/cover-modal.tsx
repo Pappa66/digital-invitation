@@ -176,7 +176,6 @@ export default function CoverModal({
                 <p className="text-xs uppercase tracking-[0.35em] opacity-90">{caption}</p>
                 <h1
                   className={`font-script mt-4 flex flex-col items-center leading-tight ${namesScale}`}
-                  style={{ fontFamily: 'Great Vibes, cursive' }}
                 >
                   <span>{bride}</span>
                   <span className="my-1 font-sans text-[0.45em] font-light uppercase tracking-[0.2em] opacity-60">&</span>

@@ -173,6 +173,14 @@ export default function RSVPForm({ projectId, blockProps, readonly, checkinEnabl
       }
       setCheckinToken(newToken);
       setStatus('success');
+      if (typeof window !== 'undefined') {
+        window.setTimeout(() => {
+          const el = document.getElementById('buku-tamu');
+          if (!el) return;
+          const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+          el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+        }, 400);
+      }
     }
   }
 

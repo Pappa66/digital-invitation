@@ -813,9 +813,9 @@ export function HeroBlock({ props, greetingName, showButton = true }: { props: B
           (el.nextElementSibling as HTMLElement | null) ??
           el;
         const rect = target.getBoundingClientRect();
-        window.scrollTo({ top: window.scrollY + rect.top, behavior: 'smooth' });
+        window.scrollTo({ top: window.scrollY + rect.top, behavior: window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
       } else {
-        window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+        window.scrollTo({ top: window.innerHeight, behavior: window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
       }
     }, 650);
   }
