@@ -647,7 +647,7 @@ function FilterPill({ active, onClick, label }: { active: boolean; onClick: () =
     <button
       onClick={onClick}
       aria-pressed={active}
-      className={`inline-flex min-h-11 items-center rounded-full px-5 text-sm transition-colors ${
+      className={`inline-flex min-h-8 items-center rounded-full px-3 text-xs transition-colors sm:min-h-11 sm:px-5 sm:text-sm ${
         active
           ? 'bg-gradient-to-r from-gold to-gold-strong font-semibold text-foreground shadow-gold'
           : 'border border-input bg-card text-foreground/80 hover:border-gold hover:text-foreground'
