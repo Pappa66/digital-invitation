@@ -110,9 +110,7 @@ create policy "designs_delete_own"
 drop policy if exists "rsvps_insert_public" on public.rsvps;
 create policy "rsvps_insert_public"
   on public.rsvps for insert
-  with check (
-    exists (select 1 from public.projects p where p.id = rsvps.project_id and p.status = 'published')
-  );
+  with check (public.is_project_published(project_id));
 
 drop policy if exists "rsvps_select_public" on public.rsvps;
 create policy "rsvps_select_public"
@@ -2603,3 +2601,9 @@ grant select on public.custom_templates to anon, authenticated;
 grant insert, update, delete on public.custom_templates to authenticated;
 
 create index if not exists custom_templates_visible_idx on public.custom_templates (visible, sort_order);
+-- RLS insert RSVP sebelumnya memakai subquery langsung ke projects yang di-filter
+-- RLS untuk anon (terlihat kosong) sehingga insert ditolak. Pakai is_project_published().
+drop policy if exists "rsvps_insert_public" on public.rsvps;
+create policy "rsvps_insert_public"
+  on public.rsvps for insert
+  with check (public.is_project_published(project_id));

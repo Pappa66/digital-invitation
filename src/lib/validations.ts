@@ -109,6 +109,9 @@ export const BlockLayoutSchema = z.object({
 // ---------------------------------------------------------------
 export const BlockStyleSchema = z.object({
   textColor: z.string().max(20).optional(),
+  headingColor: z.string().max(20).optional(),
+  subtitleColor: z.string().max(20).optional(),
+  accentColor: z.string().max(20).optional(),
   textSizes: z.record(z.string(), z.string().max(20)).optional(),
   textFonts: z.record(z.string(), z.string().max(100)).optional(),
   bgColor: z.string().max(20).optional(),
