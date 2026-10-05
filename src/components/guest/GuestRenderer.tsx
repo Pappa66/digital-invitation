@@ -82,17 +82,23 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
   const revealIntensity = Math.max(0, Math.min(100, Number(canvas.theme.scroll_intensity ?? 60)));
 
   const [watermarkBrand, setWatermarkBrand] = useState('');
+  const [watermarkUrl, setWatermarkUrl] = useState('');
   useEffect(() => {
     if (preview || demo || demoIsDemoMode()) return;
     let alive = true;
     import('@/lib/settings')
-      .then(({ getBusinessName }) =>
+      .then(({ getBusinessName, getWatermarkUrl }) => {
         getBusinessName()
           .then((n) => {
             if (alive && n) setWatermarkBrand(n);
           })
-          .catch(() => {})
-      )
+          .catch(() => {});
+        getWatermarkUrl()
+          .then((u) => {
+            if (alive && u) setWatermarkUrl(u);
+          })
+          .catch(() => {});
+      })
       .catch(() => {});
     return () => {
       alive = false;
@@ -241,7 +247,18 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
         <ClosingSection names={coupleNames} />
         {!preview && watermarkBrand && (
           <div className="px-6 pb-28 pt-1 text-center">
-            <p className="text-[11px] uppercase tracking-[0.2em] opacity-55">Dibuat dengan ♥ oleh {watermarkBrand}</p>
+            {watermarkUrl ? (
+              <a
+                href={watermarkUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[11px] uppercase tracking-[0.2em] opacity-55 underline-offset-4 hover:underline"
+              >
+                Dibuat dengan ♥ oleh {watermarkBrand}
+              </a>
+            ) : (
+              <p className="text-[11px] uppercase tracking-[0.2em] opacity-55">Dibuat dengan ♥ oleh {watermarkBrand}</p>
+            )}
           </div>
         )}
         {immersive && <MusicPlayer settings={canvas.settings} />}

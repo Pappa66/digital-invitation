@@ -99,6 +99,25 @@ export async function savePricing(pricing: LandingPricing): Promise<{ ok: boolea
 /** Key untuk business name. */
 export const SETTING_BUSINESS_NAME = 'business_name';
 
+/** Key untuk link watermark undangan. */
+export const SETTING_WATERMARK_URL = 'watermark_url';
+
+/** Ambil link watermark dari Supabase. */
+export async function getWatermarkUrl(): Promise<string> {
+  try {
+    const supabase = getClientSupabase();
+    const { data, error } = await supabase
+      .from('settings')
+      .select('value')
+      .eq('key', SETTING_WATERMARK_URL)
+      .maybeSingle();
+    if (error || !data?.value) return '';
+    return data.value;
+  } catch {
+    return '';
+  }
+}
+
 /** Ambil business name dari Supabase. */
 export async function getBusinessName(): Promise<string> {
   try {

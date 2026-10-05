@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
+import { SETTING_WATERMARK_URL, getWatermarkUrl } from '@/lib/settings';
 
 interface SiteSettings {
   whatsapp: string;
@@ -18,6 +19,7 @@ interface SiteSettings {
   promo_expires_at: string;
   show_pricing: boolean;
   business_name: string;
+  watermark_url: string;
 }
 
 const defaults: SiteSettings = {
@@ -27,7 +29,8 @@ const defaults: SiteSettings = {
   promo_code: '',
   promo_expires_at: '',
   show_pricing: true,
-  business_name: 'PT. Prasha Digital Indonesia'
+  business_name: 'PT. Prasha Digital Indonesia',
+  watermark_url: ''
 };
 
 export default function SettingsPage() {
@@ -37,7 +40,7 @@ export default function SettingsPage() {
   const [message, setMessage] = useState<{ ok: boolean; text: string } | null>(null);
 
   async function loadPricing() {
-    const [pricing, bn] = await Promise.all([getPricing(), getBusinessName()]);
+    const [pricing, bn, wmUrl] = await Promise.all([getPricing(), getBusinessName(), getWatermarkUrl()]);
     setSettings((s) => ({
       ...s,
       base_price: pricing.base_price,
@@ -45,7 +48,8 @@ export default function SettingsPage() {
       promo_code: pricing.promo_code,
       promo_expires_at: pricing.promo_expires_at,
       show_pricing: pricing.show_pricing,
-      business_name: bn || defaults.business_name
+      business_name: bn || defaults.business_name,
+      watermark_url: wmUrl || ''
     }));
   }
 
@@ -64,7 +68,7 @@ export default function SettingsPage() {
     setSaving(true);
     setMessage(null);
 
-    const [whatsAppRes, pricingRes, brandRes] = await Promise.all([
+    const [whatsAppRes, pricingRes, brandRes, wmRes] = await Promise.all([
       saveSetting(SETTING_ORDER_WHATSAPP, toWaNumber(settings.whatsapp)),
       savePricing({
         base_price: settings.base_price,
@@ -73,7 +77,8 @@ export default function SettingsPage() {
         promo_expires_at: settings.promo_expires_at,
         show_pricing: settings.show_pricing
       }),
-      saveSetting(SETTING_BUSINESS_NAME, settings.business_name)
+      saveSetting(SETTING_BUSINESS_NAME, settings.business_name),
+      saveSetting(SETTING_WATERMARK_URL, settings.watermark_url)
     ]);
 
     try {
@@ -81,7 +86,7 @@ export default function SettingsPage() {
     } catch { /* ignore */ }
 
     setSaving(false);
-    if (whatsAppRes.ok && pricingRes.ok && brandRes.ok) {
+    if (whatsAppRes.ok && pricingRes.ok && brandRes.ok && wmRes.ok) {
       setSettings((s) => ({ ...s, whatsapp: toWaNumber(s.whatsapp) }));
       await loadPricing();
       setMessage({ ok: true, text: 'Pengaturan berhasil disimpan.' });
@@ -140,6 +145,17 @@ export default function SettingsPage() {
                 placeholder="PT. Prasha Digital Indonesia"
               />
               <p className="mt-1 text-xs text-muted-foreground">Muncul di watermark &quot;Made with Love by ...&quot;</p>
+            </div>
+            <div className="mt-3">
+              <label htmlFor="watermark-url" className="mb-1 block text-xs font-medium text-foreground">Link Watermark (opsional)</label>
+              <Input
+                id="watermark-url"
+                type="url"
+                value={settings.watermark_url}
+                onChange={(e) => update('watermark_url', e.target.value)}
+                placeholder="https://prashadigitalindonesia.com"
+              />
+              <p className="mt-1 text-xs text-muted-foreground">Kalau diisi, watermark di undangan jadi tautan yang bisa diklik.</p>
             </div>
           </section>
         </div>
