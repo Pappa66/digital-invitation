@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Check, Copy, Loader2, Pencil, Plus, Search, Trash2, Upload, X } from 'lucide-react';
+import { Check, ChevronLeft, ChevronRight, Copy, Loader2, Pencil, Plus, Search, Trash2, Upload, X } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
 import { emptyCanvas } from '@/lib/templates';
 import {
@@ -32,6 +32,9 @@ type SortBy = 'newest' | 'name';
 
 const DEFAULT_CATEGORY = CATEGORIES[0]?.key ?? 'classic';
 
+/** Jumlah kartu template kustom per halaman agar daftar tidak memanjang. */
+const PAGE_SIZE = 12;
+
 /** Label kategori yang aman: key CATEGORIES → label, selain itu tampilkan apa adanya. */
 function displayCategory(category: string | null | undefined): string {
   if (!category) return 'Template Saya';
@@ -54,6 +57,7 @@ export default function TemplateManager() {
   const [editCategory, setEditCategory] = useState<string>(DEFAULT_CATEGORY);
   const [query, setQuery] = useState('');
   const [sortBy, setSortBy] = useState<SortBy>('newest');
+  const [page, setPage] = useState(1);
   const [deleteTarget, setDeleteTarget] = useState<CustomTemplate | null>(null);
   const [localCount, setLocalCount] = useState(0);
 
@@ -88,6 +92,15 @@ export default function TemplateManager() {
     else sorted.sort((a, b) => (a.created_at < b.created_at ? 1 : -1));
     return sorted;
   }, [items, query, sortBy]);
+
+  // Kembali ke halaman pertama saat filter/urutan berubah agar tidak kosong.
+  useEffect(() => {
+    setPage(1);
+  }, [query, sortBy]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredItems.length / PAGE_SIZE));
+  const safePage = Math.min(page, totalPages);
+  const pagedItems = filteredItems.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
 
   /** Opsi kategori: key standar + nilai lama yang belum termasuk key (jaga data). */
   const knownKeys = useMemo(() => new Set<string>(CATEGORIES.map((c) => c.key)), []);
@@ -316,10 +329,10 @@ export default function TemplateManager() {
       ) : filteredItems.length === 0 ? (
         <p className="mt-4 text-xs text-muted-foreground">Tidak ada template yang cocok dengan pencarian.</p>
       ) : (
-        <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredItems.map((t) => (
+        <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {pagedItems.map((t) => (
             <div key={t.id} className="rounded-2xl border border-border bg-card p-3 shadow-soft">
-              <div className="mb-3 aspect-[3/4] overflow-hidden rounded-lg border border-border bg-muted">
+              <div className="mb-3 h-40 overflow-hidden rounded-lg border border-border bg-muted">
                 <TemplatePreview canvas={t.canvas_data} bg={t.canvas_data.theme.background} />
               </div>
               {editing === t.id ? (
@@ -410,6 +423,32 @@ export default function TemplateManager() {
               )}
             </div>
           ))}
+        </div>
+      )}
+
+      {!loading && filteredItems.length > 0 && totalPages > 1 && (
+        <div className="mt-4 flex items-center justify-center gap-2">
+          <button
+            type="button"
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            disabled={safePage === 1}
+            aria-label="Halaman sebelumnya"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-input text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:pointer-events-none disabled:opacity-40"
+          >
+            <ChevronLeft className="h-4 w-4" aria-hidden />
+          </button>
+          <span className="text-xs text-muted-foreground">
+            Halaman {safePage} dari {totalPages}
+          </span>
+          <button
+            type="button"
+            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+            disabled={safePage === totalPages}
+            aria-label="Halaman berikutnya"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-input text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:pointer-events-none disabled:opacity-40"
+          >
+            <ChevronRight className="h-4 w-4" aria-hidden />
+          </button>
         </div>
       )}
 

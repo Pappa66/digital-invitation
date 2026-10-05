@@ -16,7 +16,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 
-const PER_PAGE = 8;
+const PER_PAGE = 12;
 
 export default function TemplatesPage() {
   const router = useRouter();
@@ -99,7 +99,7 @@ export default function TemplatesPage() {
   const paged = filtered.slice((safePage - 1) * PER_PAGE, safePage * PER_PAGE);
 
   return (
-    <div>
+    <div className="mx-auto max-w-6xl">
       <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
         <div>
           <h2 className="text-lg font-semibold text-foreground">Template</h2>
@@ -124,9 +124,20 @@ export default function TemplatesPage() {
         </Button>
       </div>
 
-      <LandingTemplatePicker />
-
-      <TemplateManager />
+      {/* Gabungan kontrol "Tampil di Landing": template bawaan (allowlist) di atas,
+          lalu template kustom (kolom visible) — masing-masing punya satu switch. */}
+      <section aria-labelledby="tampil-landing-heading" className="mb-8">
+        <div className="mb-3">
+          <h3 id="tampil-landing-heading" className="text-sm font-semibold text-foreground">
+            Tampil di Landing
+          </h3>
+          <p className="mt-0.5 text-xs text-muted-foreground">
+            Atur template bawaan dan template buatan sendiri yang muncul di katalog publik — satu tombol per template.
+          </p>
+        </div>
+        <LandingTemplatePicker />
+        <TemplateManager />
+      </section>
 
       {userTemplates.length > 0 && (
         <section className="mb-8">

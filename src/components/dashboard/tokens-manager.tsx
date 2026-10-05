@@ -1,15 +1,18 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Ban,
   Check,
   CheckCircle,
+  ChevronLeft,
+  ChevronRight,
   Clock,
   Copy,
   ExternalLink,
   QrCode,
+  Search,
   Users
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
@@ -19,6 +22,7 @@ import { revokeInviteAccessToken } from '@/lib/actions/project-actions';
 import { revokeShareToken } from '@/lib/actions/share-token-actions';
 import ConfirmDialog from '@/components/dashboard/confirm-dialog';
 import { DashboardSkeleton } from '@/components/ui/skeleton';
+import { Input } from '@/components/ui/input';
 
 interface ProjectLite {
   id: string;
@@ -48,6 +52,11 @@ interface ShareEditTokenRow {
 }
 
 type LinkStatus = 'aktif' | 'kedaluwarsa' | 'dicabut';
+
+type StatusFilter = LinkStatus | 'semua';
+
+/** Jumlah kartu undangan per halaman agar daftar tautan tidak memanjang. */
+const PAGE_SIZE = 6;
 
 type RevokeTarget =
   | { kind: 'access'; projectId: string; projectTitle: string }
@@ -89,6 +98,9 @@ export default function TokensManager() {
   const [copied, setCopied] = useState<string | null>(null);
   const [target, setTarget] = useState<RevokeTarget>(null);
   const [revoking, setRevoking] = useState(false);
+  const [query, setQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('semua');
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     setOrigin(getSiteOrigin());
@@ -185,11 +197,40 @@ export default function TokensManager() {
     }
   }
 
-  const groups = projects.map((project) => ({
-    project,
-    access: accessTokens.filter((t) => t.project_id === project.id),
-    share: shareTokens.filter((t) => t.project_id === project.id)
-  }));
+  const groups = useMemo(
+    () =>
+      projects.map((project) => ({
+        project,
+        access: accessTokens.filter((t) => t.project_id === project.id),
+        share: shareTokens.filter((t) => t.project_id === project.id)
+      })),
+    [projects, accessTokens, shareTokens]
+  );
+
+  // Filter: nama undangan + status tautan kelola/edit (base link selalu tampil).
+  const filteredGroups = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return groups
+      .map((g) => ({
+        ...g,
+        access: statusFilter === 'semua' ? g.access : g.access.filter((t) => accessStatus(t) === statusFilter),
+        share: statusFilter === 'semua' ? g.share : g.share.filter((t) => shareStatus(t) === statusFilter)
+      }))
+      .filter((g) => {
+        if (q && !g.project.title.toLowerCase().includes(q)) return false;
+        if (statusFilter !== 'semua' && g.access.length === 0 && g.share.length === 0) return false;
+        return true;
+      });
+  }, [groups, query, statusFilter]);
+
+  // Kembali ke halaman pertama saat pencarian/filter berubah agar tidak kosong.
+  useEffect(() => {
+    setPage(1);
+  }, [query, statusFilter]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredGroups.length / PAGE_SIZE));
+  const safePage = Math.min(page, totalPages);
+  const pagedGroups = filteredGroups.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
 
   return (
     <div className="mx-auto max-w-5xl">
@@ -229,8 +270,40 @@ export default function TokensManager() {
           </p>
         </div>
       ) : (
-        <div className="space-y-4">
-          {groups.map(({ project, access, share }) => (
+        <div>
+          <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center">
+            <div className="relative flex-1">
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden />
+              <Input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Cari nama undangan..."
+                aria-label="Cari nama undangan"
+                className="pl-9 text-sm"
+              />
+            </div>
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}
+              aria-label="Filter status tautan"
+              className="h-9 rounded-md border border-input bg-card px-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <option value="semua">Semua status</option>
+              <option value="aktif">Aktif</option>
+              <option value="kedaluwarsa">Kedaluwarsa</option>
+              <option value="dicabut">Dicabut</option>
+            </select>
+          </div>
+
+          {filteredGroups.length === 0 ? (
+            <div className="rounded-2xl border border-dashed border-border bg-card p-8 text-center">
+              <p className="text-sm font-medium text-foreground">Tidak ada tautan yang cocok</p>
+              <p className="mt-1 text-xs text-muted-foreground">Ubah kata kunci atau filter status.</p>
+            </div>
+          ) : (
+            <>
+              <div className="space-y-4">
+          {pagedGroups.map(({ project, access, share }) => (
             <section key={project.id} className="rounded-2xl border border-border bg-card p-4 shadow-soft">
               <div className="min-w-0">
                 <h3 className="truncate text-sm font-semibold text-foreground">{project.title}</h3>
@@ -293,6 +366,35 @@ export default function TokensManager() {
               </div>
             </section>
           ))}
+              </div>
+
+              {totalPages > 1 && (
+                <div className="mt-6 flex items-center justify-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setPage((p) => Math.max(1, p - 1))}
+                    disabled={safePage === 1}
+                    aria-label="Halaman sebelumnya"
+                    className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-input text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:pointer-events-none disabled:opacity-40"
+                  >
+                    <ChevronLeft className="h-4 w-4" aria-hidden />
+                  </button>
+                  <span className="text-xs text-muted-foreground">
+                    Halaman {safePage} dari {totalPages}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                    disabled={safePage === totalPages}
+                    aria-label="Halaman berikutnya"
+                    className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-input text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:pointer-events-none disabled:opacity-40"
+                  >
+                    <ChevronRight className="h-4 w-4" aria-hidden />
+                  </button>
+                </div>
+              )}
+            </>
+          )}
         </div>
       )}
 
