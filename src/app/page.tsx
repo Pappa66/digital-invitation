@@ -804,29 +804,16 @@ function CatalogCard({
       </div>
     </article>
       {demoOpen && (
-        <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-3"
-          role="dialog"
-          aria-modal="true"
-          aria-label={`Pratinjau ${meta.name}`}
-          onClick={() => setDemoOpen(false)}
-        >
-          <div
-            className="relative h-[90vh] w-full max-w-[430px] overflow-hidden rounded-2xl bg-white shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
+        <div className="fixed inset-0 z-40 overflow-y-auto bg-background" role="dialog" aria-modal="true" aria-label={`Pratinjau ${meta.name}`}>
+          <button
+            type="button"
+            onClick={() => setDemoOpen(false)}
+            className="fixed right-3 top-3 z-[60] flex h-11 w-11 items-center justify-center rounded-full bg-black/40 text-white shadow-soft backdrop-blur transition-colors hover:bg-black/60"
+            aria-label="Tutup pratinjau"
           >
-            <button
-              type="button"
-              onClick={() => setDemoOpen(false)}
-              className="absolute right-2 top-2 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur transition-colors hover:bg-black/60"
-              aria-label="Tutup pratinjau"
-            >
-              ✕
-            </button>
-            <div className="h-full overflow-y-auto">
-              <GuestRenderer canvas={canvas} preview />
-            </div>
-          </div>
+            ✕
+          </button>
+          <GuestRenderer canvas={canvas} />
         </div>
       )}
     </>
