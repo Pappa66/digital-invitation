@@ -319,7 +319,7 @@ export default function TemplateManager() {
         <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {filteredItems.map((t) => (
             <div key={t.id} className="rounded-2xl border border-border bg-card p-3 shadow-soft">
-              <div className="mb-3 overflow-hidden rounded-lg border border-border bg-muted">
+              <div className="mb-3 aspect-[3/4] overflow-hidden rounded-lg border border-border bg-muted">
                 <TemplatePreview canvas={t.canvas_data} bg={t.canvas_data.theme.background} />
               </div>
               {editing === t.id ? (

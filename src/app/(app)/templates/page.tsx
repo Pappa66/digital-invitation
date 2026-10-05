@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { HelpCircle, Loader2, Plus, Sparkles, Trash2, ChevronLeft, ChevronRight, Eye, Search } from 'lucide-react';
-import { TEMPLATE_LIST } from '@/lib/templates';
+import { TEMPLATE_LIST, getTemplate } from '@/lib/templates';
+import { createTemplate } from '@/lib/api/custom-templates';
 import { CATEGORIES, categoryLabel, type TemplateCategory } from '@/lib/template-categories';
 import { clientCreateProject, clientCreateProjectFromData } from '@/lib/api/project-client';
 import { userTemplatesList, userTemplateDelete } from '@/lib/demo/user-templates';
@@ -46,6 +47,21 @@ export default function TemplatesPage() {
     setBusyId('_blank');
     setError(null);
     await go(await clientCreateProject(title.trim() || 'Template Baru'));
+  }
+
+  async function duplicateSeed(templateId: string, name: string, category?: string) {
+    setBusyId(templateId);
+    setError(null);
+    const canvas = getTemplate(templateId);
+    if (!canvas) {
+      setError('Template tidak ditemukan.');
+      setBusyId(null);
+      return;
+    }
+    const res = await createTemplate({ name: `${name} (salinan)`, category: category || 'Template Saya', canvas });
+    setBusyId(null);
+    if (res.error) setError(res.error);
+    else setError('Disalin ke Template Saya — buka menu Template untuk mengeditnya.');
   }
 
   async function startBuiltIn(templateId: string) {
@@ -238,6 +254,14 @@ export default function TemplatesPage() {
                   <Button onClick={() => { setSelectedTemplate({ id: t.id, name: t.name }); setNameDialogOpen(true); }} disabled={busyId !== null} className="mt-4 w-full">
                     {busyId === t.id ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : null}
                     Pakai Template
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => void duplicateSeed(t.id, t.name, t.category)}
+                    disabled={busyId !== null}
+                    className="mt-2 w-full"
+                  >
+                    Duplikat ke Template Saya
                   </Button>
                 </div>
               </div>
