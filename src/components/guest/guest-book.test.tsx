@@ -1,5 +1,5 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import GuestBookWall from '@/components/guest/guest-book';
 
 const { rpcMock, selectMock } = vi.hoisted(() => ({
@@ -92,5 +92,64 @@ describe('GuestBookWall — buku tamu aman via RPC', () => {
     render(<GuestBookWall />);
     expect(await screen.findByText(/Belum ada ucapan/)).toBeInTheDocument();
     expect(rpcMock).not.toHaveBeenCalled();
+  });
+});
+
+describe('GuestBookWall — auto-refresh aman (tanpa Realtime)', () => {
+  /** Atur visibilitas tab untuk mensimulasikan document.hidden. */
+  function setHidden(value: boolean) {
+    Object.defineProperty(document, 'hidden', { configurable: true, get: () => value });
+  }
+
+  afterEach(() => {
+    // Hapus override instance agar getter asli document.hidden kembali aktif.
+    delete (document as unknown as { hidden?: boolean }).hidden;
+    vi.useRealTimers();
+  });
+
+  it('memuat ulang halaman aktif tiap 30 detik via RPC', async () => {
+    vi.useFakeTimers();
+    rpcMock.mockResolvedValue({ data: [message('1', 'Budi', 'Halo')], error: null });
+    render(<GuestBookWall projectId={PROJECT_ID} />);
+    await act(async () => {
+      await Promise.resolve();
+    });
+    expect(rpcMock).toHaveBeenCalledTimes(1);
+
+    await act(async () => {
+      vi.advanceTimersByTime(30_000);
+      await Promise.resolve();
+    });
+    expect(rpcMock).toHaveBeenCalledTimes(2);
+    expect(rpcMock).toHaveBeenLastCalledWith('get_guest_book_messages', expect.objectContaining({ p_offset: 0 }));
+  });
+
+  it('menjeda saat tab tersembunyi dan menyegarkan saat kembali terlihat', async () => {
+    vi.useFakeTimers();
+    rpcMock.mockResolvedValue({ data: [], error: null });
+    render(<GuestBookWall projectId={PROJECT_ID} />);
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    // Tab disembunyikan → interval dijeda.
+    setHidden(true);
+    await act(async () => {
+      document.dispatchEvent(new Event('visibilitychange'));
+    });
+    const base = rpcMock.mock.calls.length;
+    await act(async () => {
+      vi.advanceTimersByTime(90_000);
+      await Promise.resolve();
+    });
+    expect(rpcMock.mock.calls.length).toBe(base);
+
+    // Tab kembali terlihat → refresh segera.
+    setHidden(false);
+    await act(async () => {
+      document.dispatchEvent(new Event('visibilitychange'));
+      await Promise.resolve();
+    });
+    expect(rpcMock.mock.calls.length).toBeGreaterThan(base);
   });
 });

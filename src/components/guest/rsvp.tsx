@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import QRCode from 'react-qr-code';
 import { supabase } from '@/lib/supabase/client';
 import { demoIsDemoMode } from '@/lib/env';
@@ -35,6 +35,20 @@ export function parseMenuConfig(raw: string): { label: string; options: string[]
 const THROTTLE_MS = 30_000;
 const throttleKey = (projectId: string) => `di_rsvp_last_${projectId}`;
 
+/** Kunci localStorage data konfirmasi tersimpan (per proyek) untuk fitur ubah. */
+const savedKey = (projectId: string) => `di_rsvp_saved_${projectId}`;
+
+/** Data RSVP tersimpan agar tamu bisa mengubah konfirmasinya lewat token. */
+interface SavedRsvp {
+  token: string;
+  name: string;
+  attendance: 'hadir' | 'tidak';
+  guest_count: number;
+  message: string;
+  meal_choice: string | null;
+  menu_options: { label: string; value: string }[] | null;
+}
+
 interface RSVPFormProps {
   projectId: string;
   blockProps: BlockProps;
@@ -53,6 +67,11 @@ export default function RSVPForm({ projectId, blockProps, readonly, checkinEnabl
   /** Token check-in personal dari RSVP yang baru dibuat (untuk QR absen). */
   const [checkinToken, setCheckinToken] = useState<string | null>(null);
   const [code, setCode] = useState<string | null>(null);
+  /** Data RSVP tersimpan (localStorage) untuk fitur "Ubah konfirmasi". */
+  const [saved, setSaved] = useState<SavedRsvp | null>(null);
+  /** Apakah form sedang dalam mode ubah (memakai RPC update, bukan insert). */
+  const [editing, setEditing] = useState(false);
+  const [editToken, setEditToken] = useState<string | null>(null);
   const qrWrapRef = useRef<HTMLDivElement>(null);
   const variant = str(blockProps, 'variant') || 'centered';
   const menuGroups = parseMenuConfig(str(blockProps, 'menu_config'));
@@ -69,6 +88,86 @@ export default function RSVPForm({ projectId, blockProps, readonly, checkinEnabl
     </p>
   ) : null;
   const [menuSelections, setMenuSelections] = useState<Record<string, string>>({});
+
+  // Muat data konfirmasi tersimpan (bila ada) agar tamu bisa mengubahnya.
+  useEffect(() => {
+    if (!projectId) {
+      // Sinkronisasi dengan localStorage eksternal; aman dipanggil sekali saat mount.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setSaved(null);
+      return;
+    }
+    try {
+      const raw = localStorage.getItem(savedKey(projectId));
+      if (!raw) {
+        setSaved(null);
+        return;
+      }
+      const parsed = JSON.parse(raw) as Partial<SavedRsvp>;
+      if (parsed && typeof parsed.token === 'string' && parsed.token) {
+        setSaved({
+          token: parsed.token,
+          name: typeof parsed.name === 'string' ? parsed.name : '',
+          attendance: parsed.attendance === 'tidak' ? 'tidak' : 'hadir',
+          guest_count: typeof parsed.guest_count === 'number' ? parsed.guest_count : 1,
+          message: typeof parsed.message === 'string' ? parsed.message : '',
+          meal_choice: typeof parsed.meal_choice === 'string' ? parsed.meal_choice : null,
+          menu_options: Array.isArray(parsed.menu_options) ? parsed.menu_options : null
+        });
+      } else {
+        setSaved(null);
+      }
+    } catch {
+      setSaved(null);
+    }
+  }, [projectId]);
+
+  /** Simpan data konfirmasi ke localStorage (per proyek). */
+  function persistSaved(rec: SavedRsvp) {
+    try {
+      localStorage.setItem(savedKey(projectId), JSON.stringify(rec));
+    } catch {
+      /* ignore */
+    }
+  }
+
+  /** Isi ulang form dari data tersimpan dan masuk mode ubah (RPC update). */
+  function startEdit() {
+    if (!saved) return;
+    setName(saved.name);
+    setAttendance(saved.attendance);
+    setGuestCount(saved.guest_count);
+    setMessage(saved.message);
+    const selections: Record<string, string> = {};
+    for (const m of saved.menu_options ?? []) {
+      if (m && typeof m.label === 'string') selections[m.label] = m.value;
+    }
+    setMenuSelections(selections);
+    setEditToken(saved.token);
+    setEditing(true);
+    setCheckinToken(saved.token);
+    setCode(null);
+    setErrorMsg('');
+    setStatus('idle');
+    if (typeof window !== 'undefined') {
+      window.setTimeout(() => document.getElementById('rsvp-name')?.focus(), 50);
+    }
+  }
+
+  /** Batal mode ubah dan kembali ke form kosong. */
+  function cancelEdit() {
+    setEditing(false);
+    setEditToken(null);
+    setName('');
+    setAttendance('hadir');
+    setGuestCount(1);
+    setMessage('');
+    setMenuSelections({});
+    setCheckinToken(null);
+    setCode(null);
+    setErrorMsg('');
+    setStatus('idle');
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     if (isClosed) return;
@@ -87,7 +186,57 @@ export default function RSVPForm({ projectId, blockProps, readonly, checkinEnabl
       return;
     }
 
-    // Throttle sederhana: satu konfirmasi per 30 detik per browser.
+    const menuOptions =
+      menuGroups.length > 0
+        ? menuGroups
+            .map((g) => ({ label: g.label, value: menuSelections[g.label] ?? '' }))
+            .filter((m) => m.value)
+        : null;
+    const mealChoice = menuOptions?.map((m) => m.value).join(' / ') ?? null;
+
+    // === Mode ubah konfirmasi: pakai token tersimpan + RPC update (bukan insert) ===
+    const isEditMode = editing && !!editToken;
+    if (isEditMode) {
+      const token = editToken as string;
+      setStatus('submitting');
+      let editError: { message?: string } | null = null;
+      if (!demoIsDemoMode()) {
+        const r = await supabase.rpc('update_rsvp_by_token', {
+          p_token: token,
+          p_attendance: attendance,
+          p_guest_count: guestCount,
+          p_message: message.trim(),
+          p_meal_choice: mealChoice,
+          p_menu_options: menuOptions
+        });
+        const row = Array.isArray(r.data) ? r.data[0] : null;
+        if (r.error) editError = { message: r.error.message };
+        else if (row && row.ok === false) editError = { message: row.error ?? 'Gagal memperbarui.' };
+      }
+      if (editError) {
+        setErrorMsg('Gagal memperbarui. Silakan coba lagi.');
+        setStatus('error');
+        return;
+      }
+      const rec: SavedRsvp = {
+        token,
+        name: cleanName,
+        attendance,
+        guest_count: guestCount,
+        message: message.trim(),
+        meal_choice: mealChoice,
+        menu_options: menuOptions
+      };
+      setSaved(rec);
+      persistSaved(rec);
+      setCheckinToken(token);
+      setEditing(false);
+      setEditToken(null);
+      setStatus('success');
+      return;
+    }
+
+    // Throttle sederhana: satu konfirmasi per 30 detik per browser (khusus insert).
     try {
       const last = Number(localStorage.getItem(throttleKey(projectId)) ?? 0);
       if (Date.now() - last < THROTTLE_MS) { // eslint-disable-line react-hooks/purity
@@ -100,14 +249,6 @@ export default function RSVPForm({ projectId, blockProps, readonly, checkinEnabl
     }
 
     setStatus('submitting');
-
-    const menuOptions =
-      menuGroups.length > 0
-        ? menuGroups
-            .map((g) => ({ label: g.label, value: menuSelections[g.label] ?? '' }))
-            .filter((m) => m.value)
-        : null;
-    const mealChoice = menuOptions?.map((m) => m.value).join(' / ') ?? null;
 
     // Generate token client-side agar QR selalu muncul (anon user tidak bisa
     // SELECT balik row mereka sendiri karena RLS hanya izinkan authenticated).
@@ -171,6 +312,20 @@ export default function RSVPForm({ projectId, blockProps, readonly, checkinEnabl
       } catch {
         /* ignore */
       }
+      // Simpan data untuk fitur "Ubah konfirmasi" — hanya bila token tersedia.
+      if (newToken) {
+        const rec: SavedRsvp = {
+          token: newToken,
+          name: cleanName,
+          attendance,
+          guest_count: guestCount,
+          message: message.trim(),
+          meal_choice: mealChoice,
+          menu_options: menuOptions
+        };
+        setSaved(rec);
+        persistSaved(rec);
+      }
       setCheckinToken(newToken);
       setStatus('success');
       if (typeof window !== 'undefined') {
@@ -194,6 +349,15 @@ export default function RSVPForm({ projectId, blockProps, readonly, checkinEnabl
     <Inner name="success">
       <div className={`mx-auto mt-8 w-full px-6 py-10 ${variant === 'card' ? 'rounded-2xl border border-current/10' : ''}`}>
         <p className="text-lg">{str(blockProps, 'success_message') || 'Terima kasih atas konfirmasinya.'}</p>
+        {saved && (
+          <button
+            type="button"
+            onClick={startEdit}
+            className="mt-4 inline-flex min-h-11 items-center justify-center rounded-full border border-current/25 px-5 py-2 text-xs font-semibold transition-colors hover:bg-current/10"
+          >
+            Ubah konfirmasi
+          </button>
+        )}
         <div className="mt-6">
           {checkinEnabled !== false && qrValue && attendance !== 'tidak' ? (
             <div className="rounded-2xl border border-current/10 bg-white/60 p-4">
@@ -324,13 +488,36 @@ export default function RSVPForm({ projectId, blockProps, readonly, checkinEnabl
             className={inputClass}
           />
         </div>
+        {editing && (
+          <p role="status" className="rounded-xl border border-current/15 bg-current/5 px-3 py-2 text-center text-xs opacity-80">
+            Mode ubah konfirmasi — data tersimpan telah diisi ulang.
+          </p>
+        )}
+        {!editing && saved && (
+          <button
+            type="button"
+            onClick={startEdit}
+            className="w-full rounded-full border border-current/25 px-4 py-3 text-xs font-semibold transition-colors hover:bg-current/10"
+          >
+            Ubah konfirmasi
+          </button>
+        )}
         <button
           type="submit"
           disabled={status === 'submitting' || isClosed}
           className="w-full rounded-full bg-[var(--color-primary)] px-4 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-60"
         >
-          {isClosed ? 'Konfirmasi Ditutup' : status === 'submitting' ? 'Mengirim...' : String(blockProps.button_text || 'Kirim Konfirmasi')}
+          {isClosed ? 'Konfirmasi Ditutup' : status === 'submitting' ? 'Mengirim...' : editing ? 'Perbarui Konfirmasi' : String(blockProps.button_text || 'Kirim Konfirmasi')}
         </button>
+        {editing && (
+          <button
+            type="button"
+            onClick={cancelEdit}
+            className="w-full rounded-full px-4 py-2 text-xs font-medium opacity-70 transition-opacity hover:opacity-100"
+          >
+            Batal
+          </button>
+        )}
         {status === 'error' && (
           <p id="rsvp-form-error" role="alert" className="text-center text-xs text-red-500">
             {errorMsg || 'Gagal mengirim. Silakan coba lagi.'}

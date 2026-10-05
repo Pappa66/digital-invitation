@@ -3,19 +3,22 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import RSVPForm, { parseMenuConfig } from '@/components/guest/rsvp';
 
-const { insertMock, selectMock } = vi.hoisted(() => ({
+const { insertMock, selectMock, rpcMock, demoModeMock } = vi.hoisted(() => ({
   insertMock: vi.fn(),
-  selectMock: vi.fn()
+  selectMock: vi.fn(),
+  rpcMock: vi.fn(),
+  demoModeMock: vi.fn(() => false)
 }));
 
 vi.mock('@/lib/supabase/client', () => ({
   supabase: {
-    from: () => ({ insert: insertMock })
+    from: () => ({ insert: insertMock }),
+    rpc: rpcMock
   }
 }));
 
 vi.mock('@/lib/env', () => ({
-  demoIsDemoMode: () => false
+  demoIsDemoMode: demoModeMock
 }));
 
 const PROJECT_ID = 'proj-123';
@@ -31,6 +34,10 @@ function mockInsertOk(data: unknown = [{ checkin_token: CHECKIN_TOKEN }]) {
 beforeEach(() => {
   insertMock.mockReset();
   selectMock.mockReset();
+  rpcMock.mockReset();
+  rpcMock.mockResolvedValue({ data: [{ ok: true, error: null }], error: null });
+  demoModeMock.mockReset();
+  demoModeMock.mockReturnValue(false);
   mockInsertOk();
   localStorage.clear();
 });
@@ -269,5 +276,115 @@ describe('RSVP — QR personal di layar sukses (US-2 / FE-1)', () => {
     await user.click(screen.getByRole('button', { name: /Kirim Konfirmasi/i }));
     expect(insertMock).not.toHaveBeenCalled();
     expect(container.querySelector('svg')).toBeNull();
+  });
+});
+
+describe('RSVP — ubah konfirmasi via token (Sprint 4)', () => {
+  const TOKEN = '123e4567-e89b-12d3-a456-426614174000';
+  const SAVED_KEY = `di_rsvp_saved_${PROJECT_ID}`;
+
+  function seedSaved(overrides: Record<string, unknown> = {}) {
+    localStorage.setItem(
+      SAVED_KEY,
+      JSON.stringify({
+        token: TOKEN,
+        name: 'Budi Santoso',
+        attendance: 'hadir',
+        guest_count: 2,
+        message: 'Semoga lancar',
+        meal_choice: null,
+        menu_options: null,
+        ...overrides
+      })
+    );
+  }
+
+  it('menyimpan data konfirmasi ke localStorage setelah insert sukses', async () => {
+    const user = userEvent.setup();
+    render(<RSVPForm projectId={PROJECT_ID} blockProps={{ success_message: 'Terima kasih!' }} />);
+
+    await user.type(screen.getByLabelText('Nama Anda'), 'Budi Santoso');
+    await user.click(screen.getByRole('button', { name: /Kirim Konfirmasi/i }));
+    await screen.findByText('Terima kasih!');
+
+    const raw = localStorage.getItem(SAVED_KEY);
+    expect(raw).toBeTruthy();
+    expect(JSON.parse(raw!)).toMatchObject({
+      token: CHECKIN_TOKEN,
+      name: 'Budi Santoso',
+      attendance: 'hadir',
+      guest_count: 1,
+      message: ''
+    });
+  });
+
+  it('menampilkan "Ubah konfirmasi", mengisi ulang form, lalu memanggil RPC update (bukan insert)', async () => {
+    seedSaved();
+    const user = userEvent.setup();
+    render(<RSVPForm projectId={PROJECT_ID} blockProps={{ success_message: 'Terima kasih!' }} />);
+
+    const editBtn = await screen.findByRole('button', { name: /Ubah konfirmasi/i });
+    await user.click(editBtn);
+
+    // Form terisi ulang dari data tersimpan.
+    expect(screen.getByLabelText('Nama Anda')).toHaveValue('Budi Santoso');
+    expect(screen.getByLabelText('Jumlah tamu')).toHaveValue('2');
+    expect(screen.getByLabelText('Doa & Ucapan')).toHaveValue('Semoga lancar');
+
+    await user.click(screen.getByRole('button', { name: /Perbarui Konfirmasi/i }));
+
+    await waitFor(() => expect(rpcMock).toHaveBeenCalledTimes(1));
+    expect(rpcMock).toHaveBeenCalledWith(
+      'update_rsvp_by_token',
+      expect.objectContaining({
+        p_token: TOKEN,
+        p_attendance: 'hadir',
+        p_guest_count: 2,
+        p_message: 'Semoga lancar'
+      })
+    );
+    expect(insertMock).not.toHaveBeenCalled();
+    expect(await screen.findByText('Terima kasih!')).toBeInTheDocument();
+
+    // Data tersimpan ikut diperbarui dan melewati throttle.
+    expect(JSON.parse(localStorage.getItem(SAVED_KEY)!)).toMatchObject({ token: TOKEN, guest_count: 2 });
+  });
+
+  it('menampilkan pesan error bila RPC update mengembalikan ok=false tanpa menyentuh insert', async () => {
+    seedSaved();
+    rpcMock.mockResolvedValue({ data: [{ ok: false, error: 'Kehadiran tidak valid' }], error: null });
+    const user = userEvent.setup();
+    render(<RSVPForm projectId={PROJECT_ID} blockProps={{}} />);
+
+    await user.click(await screen.findByRole('button', { name: /Ubah konfirmasi/i }));
+    await user.click(screen.getByRole('button', { name: /Perbarui Konfirmasi/i }));
+
+    expect(await screen.findByRole('alert')).toHaveTextContent('Gagal memperbarui. Silakan coba lagi.');
+    expect(insertMock).not.toHaveBeenCalled();
+  });
+
+  it('mode demo: update hanya di state lokal, tanpa RPC/insert', async () => {
+    demoModeMock.mockReturnValue(true);
+    seedSaved();
+    const user = userEvent.setup();
+    render(<RSVPForm projectId={PROJECT_ID} blockProps={{ success_message: 'OK!' }} />);
+
+    await user.click(await screen.findByRole('button', { name: /Ubah konfirmasi/i }));
+    await user.click(screen.getByRole('button', { name: /Perbarui Konfirmasi/i }));
+
+    expect(await screen.findByText('OK!')).toBeInTheDocument();
+    expect(rpcMock).not.toHaveBeenCalled();
+    expect(insertMock).not.toHaveBeenCalled();
+  });
+
+  it('tanpa data tersimpan: perilaku insert tetap seperti semula', async () => {
+    const user = userEvent.setup();
+    render(<RSVPForm projectId={PROJECT_ID} blockProps={{}} />);
+    expect(screen.queryByRole('button', { name: /Ubah konfirmasi/i })).toBeNull();
+
+    await user.type(screen.getByLabelText('Nama Anda'), 'Budi Santoso');
+    await user.click(screen.getByRole('button', { name: /Kirim Konfirmasi/i }));
+    await waitFor(() => expect(insertMock).toHaveBeenCalledTimes(1));
+    expect(rpcMock).not.toHaveBeenCalled();
   });
 });

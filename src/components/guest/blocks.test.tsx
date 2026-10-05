@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { render } from '@testing-library/react';
 import { within } from '@testing-library/react';
 import BlockView from '@/components/guest/BlockView';
+import { buildIcsContent, icsFileName, parseEventDateTime } from '@/components/guest/blocks';
 import type { Block } from '@/lib/types';
 
 // Matikan next/image agar test hanya fokus pada konten (tanpa server runtime).
@@ -123,5 +124,68 @@ describe('XSS prevention (STRICT: no raw HTML injection)', () => {
   it('maps block data through the secure component switch (no dangerouslySetInnerHTML)', () => {
     const { container } = render(<BlockView block={heroBlock()} projectId="" />);
     expect(container.querySelector('[dangerouslySetInnerHTML]')).toBeNull();
+  });
+});
+
+describe('EventDetail — Simpan Tanggal (.ics)', () => {
+  it('parse tanggal Indonesia + rentang waktu', () => {
+    const p = parseEventDateTime('Sabtu, 12 Desember 2026', '08.00 - 10.00 WIB');
+    expect(p).not.toBeNull();
+    expect(p!.allDay).toBe(false);
+    expect(p!.start.getFullYear()).toBe(2026);
+    expect(p!.start.getMonth()).toBe(11);
+    expect(p!.start.getDate()).toBe(12);
+    expect(p!.start.getHours()).toBe(8);
+    expect(p!.end.getHours()).toBe(10);
+  });
+
+  it('menerima format ISO dan menandai all-day tanpa waktu', () => {
+    const p = parseEventDateTime('2027-01-01', '');
+    expect(p).not.toBeNull();
+    expect(p!.allDay).toBe(true);
+  });
+
+  it('mengembalikan null untuk tanggal kosong / tak valid (tanpa error)', () => {
+    expect(parseEventDateTime('', '08.00')).toBeNull();
+    expect(parseEventDateTime('besok', '08.00')).toBeNull();
+    expect(parseEventDateTime('31 Februari 2026', '')).toBeNull();
+  });
+
+  it('membangun .ics dari data acara; null bila tanggal invalid', () => {
+    const ics = buildIcsContent({
+      title: 'Akad Nikah',
+      date: '12 Desember 2026',
+      time: '08.00 - 10.00 WIB',
+      location: 'Jakarta'
+    });
+    expect(ics).toContain('BEGIN:VCALENDAR');
+    expect(ics).toContain('SUMMARY:Akad Nikah');
+    expect(ics).toMatch(/DTSTART:20261212T080000/);
+    expect(ics).toMatch(/DTEND:20261212T100000/);
+    expect(ics).toContain('LOCATION:Jakarta');
+    expect(buildIcsContent({ date: '' })).toBeNull();
+  });
+
+  it('nama file .ics aman', () => {
+    expect(icsFileName('Akad Nikah!')).toBe('akad-nikah.ics');
+    expect(icsFileName('')).toBe('acara.ics');
+  });
+
+  it('menampilkan tombol "Simpan Tanggal" hanya bila tanggal valid', () => {
+    const { container: ok } = render(
+      <BlockView
+        block={{ id: 'ed', type: 'EventDetail', props: { title: 'Akad', date: '12 Desember 2026', time: '08.00', location: 'Jakarta' } }}
+        projectId="x"
+      />
+    );
+    expect(within(ok).getByRole('button', { name: /Simpan tanggal/i })).toBeInTheDocument();
+
+    const { container: none } = render(
+      <BlockView
+        block={{ id: 'ed2', type: 'EventDetail', props: { title: 'Akad', date: 'besok', location: 'Jakarta' } }}
+        projectId="x"
+      />
+    );
+    expect(within(none).queryByRole('button', { name: /Simpan tanggal/i })).toBeNull();
   });
 });

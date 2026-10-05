@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef, useContext } from 'react';
 import { motion, AnimatePresence, type Target } from 'framer-motion';
 import Image from 'next/image';
-import { Calendar, MapPin, Heart, Sparkles, Gem, BookOpen, Sprout, MailOpen, Plus, Radio, X, Dot, Type, Image as ImageIcon, ChevronDown } from 'lucide-react';
+import { Calendar, CalendarPlus, MapPin, Heart, Sparkles, Gem, BookOpen, Sprout, MailOpen, Plus, Radio, X, Dot, Type, Image as ImageIcon, ChevronDown } from 'lucide-react';
 import type { BlockProps, DecorAsset, DecorShapeKind } from '@/lib/types';
 import type { ReligionKey } from '@/lib/religions';
 import { Editable, BuilderEditableContext } from '@/components/builder/inline-edit';
@@ -30,6 +30,173 @@ function bool(props: BlockProps, key: string): boolean {
 function arr(props: BlockProps, key: string): string[] {
   const v = props[key];
   return Array.isArray(v) ? (v as string[]) : [];
+}
+
+/* ===================== Add to Calendar (.ics) ===================== */
+/**
+ * Utilitas "Simpan Tanggal": membangun file .ics sepenuhnya di client dari
+ * data acara. Toleran terhadap data parsial — bila tanggal tak dikenali,
+ * pemanggil tidak menampilkan tombol.
+ */
+
+/** Nama bulan Indonesia (termasuk singkatan umum) untuk parsing tanggal teks. */
+const ID_MONTHS: Record<string, number> = {
+  januari: 0, jan: 0,
+  februari: 1, feb: 1,
+  maret: 2, mar: 2,
+  april: 3, apr: 3,
+  mei: 4,
+  juni: 5, jun: 5,
+  juli: 6, jul: 6,
+  agustus: 7, agu: 7, ags: 7, aug: 7,
+  september: 8, sep: 8, sept: 8,
+  oktober: 9, okt: 9, oct: 9,
+  november: 10, nov: 10,
+  desember: 11, des: 11, dec: 11
+};
+
+function pad2(n: number): string {
+  return String(n).padStart(2, '0');
+}
+
+/** Tanggal-waktu lokal format .ics (floating, tanpa sufiks zona). */
+function icsDateTime(d: Date): string {
+  return `${d.getFullYear()}${pad2(d.getMonth() + 1)}${pad2(d.getDate())}T${pad2(d.getHours())}${pad2(d.getMinutes())}${pad2(d.getSeconds())}`;
+}
+
+/** Tanggal saja format .ics (all-day). */
+function icsDateValue(d: Date): string {
+  return `${d.getFullYear()}${pad2(d.getMonth() + 1)}${pad2(d.getDate())}`;
+}
+
+export interface ParsedEventTime {
+  start: Date;
+  end: Date;
+  allDay: boolean;
+}
+
+/**
+ * Parse tanggal/waktu acara secara toleran dari teks bebas berbahasa
+ * Indonesia ("Sabtu, 12 Desember 2026") maupun ISO ("2026-12-12").
+ * Waktu opsional ("08.00 - 10.00 WIB"). Mengembalikan null bila tanggal
+ * kosong/tidak valid sehingga UI dapat menyembunyikan tombol.
+ */
+export function parseEventDateTime(dateRaw: string, timeRaw: string): ParsedEventTime | null {
+  const dateText = (dateRaw || '').trim();
+  if (!dateText) return null;
+
+  let year: number;
+  let month: number;
+  let day: number;
+
+  const iso = dateText.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if (iso) {
+    year = Number(iso[1]);
+    month = Number(iso[2]) - 1;
+    day = Number(iso[3]);
+  } else {
+    const m = dateText.toLowerCase().match(/(\d{1,2})\s+([a-z]+)\s+(\d{4})/);
+    if (!m) return null;
+    const key = m[2];
+    if (!(key in ID_MONTHS)) return null;
+    day = Number(m[1]);
+    month = ID_MONTHS[key];
+    year = Number(m[3]);
+  }
+
+  if (!Number.isFinite(day) || !Number.isFinite(month) || !Number.isFinite(year)) return null;
+
+  // Waktu opsional: jam:menit pertama = mulai, kedua = selesai.
+  const times = Array.from((timeRaw || '').matchAll(/(\d{1,2})[.:](\d{2})/g))
+    .map((t) => ({ h: Number(t[1]), m: Number(t[2]) }))
+    .filter((t) => t.h >= 0 && t.h < 24 && t.m >= 0 && t.m < 60);
+
+  const allDay = times.length === 0;
+  const start = new Date(year, month, day, times[0]?.h ?? 0, times[0]?.m ?? 0, 0, 0);
+  if (Number.isNaN(start.getTime())) return null;
+  // Tolak tanggal yang bergulir (mis. 31 Februari) agar tak menyesatkan.
+  if (start.getFullYear() !== year || start.getMonth() !== month || start.getDate() !== day) return null;
+
+  let end: Date;
+  if (allDay) {
+    end = new Date(year, month, day + 1, 0, 0, 0, 0);
+  } else if (times[1]) {
+    end = new Date(year, month, day, times[1].h, times[1].m, 0, 0);
+    if (end.getTime() <= start.getTime()) end = new Date(start.getTime() + 60 * 60 * 1000);
+  } else {
+    end = new Date(start.getTime() + 60 * 60 * 1000);
+  }
+
+  return { start, end, allDay };
+}
+
+/** Escape teks sesuai RFC 5545. */
+function icsEscape(text: string): string {
+  return text
+    .replace(/\\/g, '\\\\')
+    .replace(/\r?\n/g, '\\n')
+    .replace(/,/g, '\\,')
+    .replace(/;/g, '\\;');
+}
+
+export interface IcsEventInput {
+  title?: string;
+  date?: string;
+  time?: string;
+  location?: string;
+  address?: string;
+  description?: string;
+}
+
+/** Bangun isi berkas .ics; null bila tanggal tidak valid. */
+export function buildIcsContent(event: IcsEventInput): string | null {
+  const parsed = parseEventDateTime(event.date ?? '', event.time ?? '');
+  if (!parsed) return null;
+
+  const summary = (event.title || '').trim() || 'Acara';
+  const location = [event.location, event.address]
+    .map((s) => (s || '').trim())
+    .filter(Boolean)
+    .join(', ');
+  const description = (event.description || '').trim();
+  const uid = (() => {
+    try {
+      return crypto.randomUUID();
+    } catch {
+      return `di-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+    }
+  })();
+  const stamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, 'Z');
+
+  const lines = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Prasha Digital//Undangan Digital//ID',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    'BEGIN:VEVENT',
+    `UID:${uid}`,
+    `DTSTAMP:${stamp}`,
+    parsed.allDay ? `DTSTART;VALUE=DATE:${icsDateValue(parsed.start)}` : `DTSTART:${icsDateTime(parsed.start)}`,
+    parsed.allDay ? `DTEND;VALUE=DATE:${icsDateValue(parsed.end)}` : `DTEND:${icsDateTime(parsed.end)}`,
+    `SUMMARY:${icsEscape(summary)}`
+  ];
+  if (location) lines.push(`LOCATION:${icsEscape(location)}`);
+  if (description) lines.push(`DESCRIPTION:${icsEscape(description)}`);
+  lines.push('END:VEVENT', 'END:VCALENDAR');
+  return lines.join('\r\n');
+}
+
+/** Nama berkas .ics yang aman dari judul acara. */
+export function icsFileName(title?: string): string {
+  const base = (title || 'acara')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 60);
+  return `${base || 'acara'}.ics`;
 }
 
 /**
@@ -1198,6 +1365,30 @@ export function EventDetailBlock({ props }: { props: BlockProps }) {
       `&location=${encodeURIComponent(address)}`
     );
   })();
+
+  /** Suntingan .ics siap unduh; null bila tanggal acara tak dikenali. */
+  const icsContent = buildIcsContent({
+    title: title || 'Undangan',
+    date: dateStr,
+    time: str(props, 'time'),
+    location: str(props, 'location'),
+    address,
+    description: [str(props, 'location'), address].filter(Boolean).join('\n')
+  });
+
+  /** Unduh berkas .ics secara client-side (tanpa server). */
+  function downloadCalendar() {
+    if (!icsContent || typeof window === 'undefined') return;
+    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = icsFileName(title || 'undangan');
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
   return (
     <section className={`px-6 py-8 sm:py-10 md:py-14 text-center ${band ? 'py-10 sm:py-14 md:py-20' : ''}`}>
       <div
@@ -1284,6 +1475,21 @@ export function EventDetailBlock({ props }: { props: BlockProps }) {
                       <Calendar className="h-3.5 w-3.5" /> Simpan ke Kalender
                     </a>
                   ))}
+                  {icsContent &&
+                    (preview ? (
+                      <span className="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-current/25 px-4 py-2 text-xs font-medium">
+                        <CalendarPlus className="h-3.5 w-3.5" /> Simpan Tanggal
+                      </span>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={downloadCalendar}
+                        aria-label="Simpan tanggal acara ke kalender (unduh file .ics)"
+                        className="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-current/25 px-4 py-2 text-xs font-medium transition-colors hover:bg-current/10"
+                      >
+                        <CalendarPlus className="h-3.5 w-3.5" aria-hidden /> Simpan Tanggal
+                      </button>
+                    ))}
                 </div>
               </Inner>
             )}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
 import { demoListRsvps, demoSetRsvpListener } from '@/lib/demo/demo-store';
@@ -54,6 +54,8 @@ export default function GuestBookWall({
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
+  /** Halaman aktif disimpan di ref agar interval mengambil halaman terkini. */
+  const pageRef = useRef(0);
 
   const loadPage = useCallback(
     async (pageIndex: number) => {
@@ -93,11 +95,57 @@ export default function GuestBookWall({
       return;
     }
     setPage(0);
+    pageRef.current = 0;
     void loadPage(0);
     const off = demoSetRsvpListener(() => {
       void loadPage(0);
     });
     return off;
+  }, [projectId, loadPage]);
+
+  useEffect(() => {
+    pageRef.current = page;
+  }, [page]);
+
+  /**
+   * Auto-refresh buku tamu tanpa Realtime (aman, tak membuka tabel rsvps):
+   * muat ulang halaman aktif via RPC `get_guest_book_messages` tiap 30 detik.
+   * Dijeda saat tab tersembunyi dan langsung dimuat ulang begitu kembali
+   * terlihat. Interval selalu dibersihkan saat unmount / projectId berubah.
+   */
+  useEffect(() => {
+    if (!projectId) return;
+    const REFRESH_MS = 30_000;
+    let timer: ReturnType<typeof setInterval> | null = null;
+
+    const refresh = () => {
+      if (typeof document !== 'undefined' && document.hidden) return;
+      void loadPage(pageRef.current);
+    };
+    const start = () => {
+      if (timer !== null) return;
+      timer = setInterval(refresh, REFRESH_MS);
+    };
+    const stop = () => {
+      if (timer === null) return;
+      clearInterval(timer);
+      timer = null;
+    };
+    const onVisibility = () => {
+      if (document.hidden) {
+        stop();
+      } else {
+        start();
+        refresh();
+      }
+    };
+
+    if (typeof document === 'undefined' || !document.hidden) start();
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => {
+      stop();
+      document.removeEventListener('visibilitychange', onVisibility);
+    };
   }, [projectId, loadPage]);
 
   const totalPages = Math.min(MAX_PAGES, Math.max(1, Math.ceil(total / PER_PAGE)));
