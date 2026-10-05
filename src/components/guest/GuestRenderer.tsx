@@ -14,6 +14,8 @@ import { GuestFrame } from '@/components/guest/guest-frame';
 import GuestNav from '@/components/guest/guest-nav';
 import CoverModal from '@/components/guest/cover-modal';
 import SectionHeading from '@/components/guest/section-heading';
+import { supabase } from '@/lib/supabase/client';
+import { demoIsDemoMode } from '@/lib/env';
 
 interface GuestRendererProps {
   canvas: CanvasData;
@@ -101,7 +103,33 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
     (width === 'desktop' ? 'mx-auto max-w-[430px] sm:max-w-[430px]' : 'mx-auto w-full max-w-none sm:max-w-[430px]');
 
   const rootRef = useRef<HTMLDivElement>(null);
+  const viewedRef = useRef(false);
   const [revealOn, setRevealOn] = useState(false);
+
+  /**
+   * Read-receipt: tandai undangan tamu benar-benar dibuka (bukan preview
+   * builder / demo) SEKALI PER SESI per project. Fire-and-forget — tidak
+   * memblokir render dan error diabaikan agar tidak mengganggu tamu.
+   */
+  useEffect(() => {
+    if (viewedRef.current) return;
+    if (preview || demo || !projectId || demoIsDemoMode()) return;
+    viewedRef.current = true;
+    const key = `di_viewed_${projectId}`;
+    try {
+      if (sessionStorage.getItem(key)) return;
+      sessionStorage.setItem(key, '1');
+    } catch {
+      /* sessionStorage tidak tersedia — tetap coba catat */
+    }
+    void supabase
+      .rpc('record_invitation_view', { p_project_id: projectId })
+      .then(
+        () => undefined,
+        () => undefined
+      );
+  }, [preview, demo, projectId]);
+
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;

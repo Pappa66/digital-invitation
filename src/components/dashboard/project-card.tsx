@@ -3,11 +3,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { Copy, Pencil, Share2, Trash2, ExternalLink, Globe, GlobeLock, QrCode, MoreHorizontal } from 'lucide-react';
+import { BarChart3, Copy, Pencil, Share2, Trash2, ExternalLink, Globe, GlobeLock, QrCode, MoreHorizontal } from 'lucide-react';
 import type { Project } from '@/lib/types';
 import { clientDuplicateProject, clientDeleteProject, clientSetProjectStatus } from '@/lib/api/project-client';
 import ConfirmDialog from '@/components/dashboard/confirm-dialog';
 import ShareDialog from '@/components/dashboard/share-dialog';
+import StatsDialog from '@/components/dashboard/stats-dialog';
 import AbsenShareDialog from '@/components/ui/absen-share-dialog';
 import { supabase } from '@/lib/supabase/client';
 import { demoGetDesign } from '@/lib/demo/demo-store';
@@ -28,11 +29,15 @@ export default function ProjectCard({ project, onDuplicated, onDeleted, heroFall
   const [busy, setBusy] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
   const [absenOpen, setAbsenOpen] = useState(false);
+  const [statsOpen, setStatsOpen] = useState(false);
   const [status, setStatus] = useState<Project['status']>(project.status);
   const [statusBusy, setStatusBusy] = useState(false);
   const [couple, setCouple] = useState<string | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  // Mode demo tidak punya backend statistik — sembunyikan tombolnya.
+  const demo = demoIsDemoMode();
 
   const publicUrl = `/${project.slug}`;
 
@@ -154,6 +159,11 @@ export default function ProjectCard({ project, onDuplicated, onDeleted, heroFall
           </button>
           {/* Desktop: all icon buttons */}
           <div className="hidden items-center gap-0.5 sm:flex">
+            {!demo && (
+              <IconBtn label="Statistik" onClick={() => setStatsOpen(true)}>
+                <BarChart3 className="h-4 w-4" />
+              </IconBtn>
+            )}
             <IconBtn label="Salin" onClick={() => setConfirm('duplicate')}>
               <Copy className="h-4 w-4" />
             </IconBtn>
@@ -186,6 +196,11 @@ export default function ProjectCard({ project, onDuplicated, onDeleted, heroFall
             </button>
             {menuOpen && (
               <div className="absolute right-0 top-full z-50 mt-1 w-44 rounded-lg border border-gray-200 bg-white py-1 shadow-lg">
+                {!demo && (
+                  <button onClick={() => { setMenuOpen(false); setStatsOpen(true); }} className="flex w-full items-center gap-2 px-3 py-2 text-xs text-gray-700 hover:bg-gray-50">
+                    <BarChart3 className="h-3.5 w-3.5" /> Statistik
+                  </button>
+                )}
                 <button onClick={() => { setMenuOpen(false); setConfirm('duplicate'); }} className="flex w-full items-center gap-2 px-3 py-2 text-xs text-gray-700 hover:bg-gray-50">
                   <Copy className="h-3.5 w-3.5" /> Salin
                 </button>
@@ -230,6 +245,9 @@ export default function ProjectCard({ project, onDuplicated, onDeleted, heroFall
       />
       <ShareDialog open={shareOpen} projectId={project.id} slug={project.slug} title={project.title} onClose={() => setShareOpen(false)} />
       <AbsenShareDialog open={absenOpen} projectId={project.id} onClose={() => setAbsenOpen(false)} />
+      {!demo && (
+        <StatsDialog open={statsOpen} projectId={project.id} title={project.title} onClose={() => setStatsOpen(false)} />
+      )}
     </div>
   );
 }
