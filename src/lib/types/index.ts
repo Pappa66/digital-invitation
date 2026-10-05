@@ -265,6 +265,11 @@ export interface CanvasData {
   blocks: Block[];
   /** Penataan kanvas: stack (vertikal) atau free (posisi bebas). Default: 'stack'. */
   flow?: 'stack' | 'free';
+  /**
+   * Versi skema canvas. Absen / 0 = data lama; diisi oleh `migrateCanvas`
+   * saat dibaca. Dipakai untuk upcast non-destruktif ke depan.
+   */
+  schema_version?: number;
 }
 
 export interface Project {

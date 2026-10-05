@@ -17,7 +17,7 @@ import { demoGetDesign, demoGetProject, demoIsDemoMode } from '@/lib/demo/demo-s
 import { clientVerifyProjectAccess } from '@/lib/api/project-client';
 import { getSiteOrigin } from '@/lib/site';
 import { BuilderSkeleton } from '@/components/ui/skeleton';
-import type { CanvasData } from '@/lib/types';
+import { migrateCanvas } from '@/lib/canvas-migrate';
 
 export default function BuilderPage() {
   const params = useParams<{ id: string }>();
@@ -44,7 +44,7 @@ export default function BuilderPage() {
     async function load() {
       if (demoIsDemoMode()) {
         const design = demoGetDesign(projectId);
-        if (design) init(design, projectId);
+        if (design) init(migrateCanvas(design), projectId);
         const proj = demoGetProject(projectId);
         setTitle(proj?.title ?? 'Tanpa Judul');
         autoSlugRef.current = proj?.title ?? null;
@@ -66,7 +66,9 @@ export default function BuilderPage() {
         .eq('project_id', projectId)
         .maybeSingle();
       if (!error && data?.canvas_data) {
-        init(data.canvas_data as unknown as CanvasData, projectId);
+        // Migrasi sebelum masuk store agar data lama punya schema_version dan
+        // key tambahan tetap utuh (tidak membuat builder kosong).
+        init(migrateCanvas(data.canvas_data), projectId);
       }
       const { data: proj } = await supabase.from('projects').select('slug, title, status').eq('id', projectId).maybeSingle();
       setTitle(proj?.title ?? 'Tanpa Judul');

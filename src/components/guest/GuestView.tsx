@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { migrateCanvas } from '@/lib/canvas-migrate';
 import { validateCanvasData } from '@/lib/validations';
 import GuestRenderer from '@/components/guest/GuestRenderer';
 import { GuestSkeleton, Spinner } from '@/components/ui/skeleton';
@@ -18,7 +19,9 @@ interface GuestViewProps {
  * placeholder error yang aman (tanpa konten data pengguna).
  */
 export default function GuestView({ projectId, canvas, to }: GuestViewProps) {
-  const validated = validateCanvasData(canvas);
+  // Migrasi dulu (isi/tandai schema_version, toleran key asing) agar undangan
+  // lama tetap bisa dirender, lalu tetap lakukan gate validasi struktural.
+  const validated = validateCanvasData(migrateCanvas(canvas));
   const [ready, setReady] = useState(() => {
     // Di test (jsdom) langsung ready agar tidak flaky
     if (typeof window === 'undefined') return true;

@@ -4,10 +4,15 @@ import { z } from 'zod';
  * Skema validasi kanvas undangan — SUMBER KEBENARAN: src/lib/types/index.ts.
  *
  * Kebijakan strictness:
- *  - STRUKTUR TOP-LEVEL (theme/settings/block/canvas): strict, karena
- *    hanya mengenali blok & field resmi. Data di luar itu = data korup.
+ *  - STRUKTUR TOP-LEVEL (theme/settings/block/canvas): field yang DIKENAL tetap
+ *    divalidasi ketat (tipe/rentang/enum), tetapi objek bersifat PASSTHROUGH:
+ *    key tambahan yang belum dikenal skema TIDAK ditolak/dibuang. Ini mencegah
+ *    undangan lama tampil "blank" saat penulis/versi lebih baru menambah key.
  *  - props / style / decoration: PERMISSIVE (tidak .strict()), karena isi
  *    konten blok terus berkembang dan tidak boleh memblokir render sah.
+ *
+ * Catatan: toleransi ini HANYA untuk key tambahan. Nilai field resmi yang
+ * salah tipe/enum/rentang tetap ditolak (lihat validateCanvasData).
  */
 
 // ---------------------------------------------------------------
@@ -34,7 +39,7 @@ export const ThemeSchema = z.object({
   // Legacy (tidak dirender lagi) — ditoleransi agar data lama tetap valid.
   cover_3d: z.boolean().optional(),
   model3d: z.string().max(200).optional()
-}).strict();
+}).passthrough();
 
 // ---------------------------------------------------------------
 // SETTINGS — sinkron dgn interface Settings (types/index.ts)
@@ -66,7 +71,7 @@ export const SettingsSchema = z.object({
   promo_code: z.string().max(50).optional(),
   promo_expires_at: z.string().max(30).optional(),
   show_pricing: z.boolean().optional()
-}).strict();
+}).passthrough();
 
 // ---------------------------------------------------------------
 // BANK ACCOUNT — sinkron dgn interface BankAccount
@@ -75,7 +80,7 @@ export const BankAccountSchema = z.object({
   bank_name: z.string().max(50),
   account_number: z.string().max(30),
   account_holder: z.string().max(80)
-}).strict();
+}).passthrough();
 
 // ---------------------------------------------------------------
 // BLOCK PROPS — PERMISSIVE (index signature seperti BlockProps)
@@ -102,7 +107,7 @@ export const BlockLayoutSchema = z.object({
   y: z.number(),
   width: z.number().min(100).max(2000),
   height: z.number().min(0).max(5000).optional()
-}).strict();
+}).passthrough();
 
 // ---------------------------------------------------------------
 // BLOCK STYLE — PERMISSIVE, sinkron dgn interface BlockStyle
@@ -130,7 +135,7 @@ export const BlockStyleSchema = z.object({
   entrance: z.enum(['fade', 'slide', 'zoom', 'blur', 'rise', 'flip3d', 'parallax', 'stagger', 'float', 'none', 'book', 'magazine', 'filmroll', 'oldtv', 'newspaper', 'vintage', 'mandala', 'islamic', 'ulos', 'lantern', 'wayang', 'batik']).optional(),
   entranceDelay: z.number().min(0).max(10000).optional(),
   hideOn: z.array(z.enum(['mobile', 'tablet', 'desktop'])).optional()
-});
+}).passthrough();
 
 // ---------------------------------------------------------------
 // DECOR ASSET — PERMISSIVE, sinkron dgn interface DecorAsset
@@ -158,10 +163,10 @@ export const DecorAssetSchema = z.object({
   photoShape: z.enum(['square', 'circle', 'rounded', 'tilt']).optional(),
   width: z.number().min(1).max(2000).optional(),
   ornament: z.string().max(50).optional()
-});
+}).passthrough();
 
 // ---------------------------------------------------------------
-// BLOCK — struktur top-level strict, 20 tipe resmi
+// BLOCK — struktur top-level (field dikenal divalidasi, key tambahan ditoleransi), 20 tipe resmi
 // ---------------------------------------------------------------
 export const BLOCK_TYPES = [
   'Hero', 'Couple', 'Countdown', 'EventDetail', 'Story', 'Gallery',
@@ -177,17 +182,17 @@ export const BlockSchema = z.object({
   style: BlockStyleSchema.optional(),
   inner: z.record(z.string(), z.object({ x: z.number(), y: z.number() })).nullable().optional(),
   decor: z.array(DecorAssetSchema).max(50).optional()
-}).strict();
+}).passthrough();
 
 // ---------------------------------------------------------------
-// CANVAS DATA — struktur top-level strict
+// CANVAS DATA — struktur top-level (field dikenal divalidasi, key tambahan ditoleransi)
 // ---------------------------------------------------------------
 export const CanvasDataSchema = z.object({
   theme: ThemeSchema,
   settings: SettingsSchema,
   blocks: z.array(BlockSchema).max(50),
   flow: z.enum(['stack', 'free']).optional()
-}).strict();
+}).passthrough();
 
 export type ValidatedCanvasData = z.infer<typeof CanvasDataSchema>;
 

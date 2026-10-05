@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import type { CanvasData } from '@/lib/types';
+import { migrateCanvas } from '@/lib/canvas-migrate';
 import GuestRenderer from '@/components/guest/GuestRenderer';
 import { demoGetPublished } from '@/lib/demo/demo-store';
 
@@ -25,7 +26,8 @@ export default function GuestDemoView({ slug, title }: GuestDemoViewProps) {
       setMissing(true);
       return;
     }
-    setCanvas(res.canvas);
+    // Migrasi ringan agar kanvas demo lama tetap tampil (isi schema_version).
+    setCanvas(migrateCanvas(res.canvas));
     setProjectId(res.id);
     setGreeting(searchParams.get('to') ?? undefined);
   }, [slug, searchParams]);

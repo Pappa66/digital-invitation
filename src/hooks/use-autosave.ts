@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { supabase } from '@/lib/supabase/client';
 import type { CanvasData } from '@/lib/types';
 import { canvasToJson } from '@/lib/canvas-json';
+import { migrateCanvas } from '@/lib/canvas-migrate';
 import { demoIsDemoMode, demoSaveDesign } from '@/lib/demo/demo-store';
 
 interface UseAutosaveOptions {
@@ -62,8 +63,12 @@ export function useAutosave({ projectId, canvas, accessToken }: UseAutosaveOptio
 
       setStatus('saving');
 
+      // Normalisasi (isi schema_version, toleran key asing) agar payload
+      // konsisten tanpa mengubah alur owner/token yang sudah ada.
+      const payload = migrateCanvas(canvas);
+
       if (demoIsDemoMode()) {
-        demoSaveDesign(projectId, canvas);
+        demoSaveDesign(projectId, payload);
         setStatus('saved');
         setTimeout(() => setStatus('idle'), 1500);
         return;
@@ -72,7 +77,7 @@ export function useAutosave({ projectId, canvas, accessToken }: UseAutosaveOptio
       try {
         if (accessToken) {
           // Mode tamu: token divalidasi & ditulis oleh RPC security definer.
-          const result = await saveViaShareToken(accessToken, canvas);
+          const result = await saveViaShareToken(accessToken, payload);
           if (controller.signal.aborted) return;
           if (!result.ok) {
             setStatus('error');
@@ -87,7 +92,7 @@ export function useAutosave({ projectId, canvas, accessToken }: UseAutosaveOptio
         const { error } = await supabase
           .from('project_designs')
           .update({
-            canvas_data: canvasToJson(canvas),
+            canvas_data: canvasToJson(payload),
             updated_at: new Date().toISOString()
           })
           .eq('project_id', projectId);
@@ -116,20 +121,23 @@ export function useAutosave({ projectId, canvas, accessToken }: UseAutosaveOptio
 }
 
 export async function saveCanvasNow(projectId: string, canvas: CanvasData, accessToken?: string) {
+  // Normalisasi sebelum kirim (idempoten; sama seperti jalur autosave).
+  const payload = migrateCanvas(canvas);
+
   if (demoIsDemoMode()) {
-    demoSaveDesign(projectId, canvas);
+    demoSaveDesign(projectId, payload);
     return { error: null };
   }
 
   if (accessToken) {
-    const result = await saveViaShareToken(accessToken, canvas);
+    const result = await saveViaShareToken(accessToken, payload);
     return { error: result.ok ? null : { message: result.error ?? 'Gagal menyimpan' } };
   }
 
   const { error } = await supabase
     .from('project_designs')
     .update({
-      canvas_data: canvasToJson(canvas),
+      canvas_data: canvasToJson(payload),
       updated_at: new Date().toISOString()
     })
     .eq('project_id', projectId);

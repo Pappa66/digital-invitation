@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { supabase } from '@/lib/supabase/client';
 import type { CanvasData } from '@/lib/types';
+import { migrateCanvas } from '@/lib/canvas-migrate';
+import { validateCanvasData } from '@/lib/validations';
 
 export interface CustomTemplate {
   id: string;
@@ -48,12 +50,18 @@ export async function createTemplate(input: {
     data: { user }
   } = await supabase.auth.getUser();
   if (!user) return { error: 'Harus login.' };
+  // Batas tulis: normalisasi + validasi agar template rusak tidak pernah
+  // tersimpan (dan tidak membuat undangan turunannya tampil kosong).
+  const canvas = migrateCanvas(input.canvas);
+  if (!validateCanvasData(canvas)) {
+    return { error: 'Data kanvas tidak valid; template tidak disimpan.' };
+  }
   const { data, error } = await sb
     .from('custom_templates')
     .insert({
       name: input.name.trim() || 'Template Baru',
       category: input.category ?? 'Template Saya',
-      canvas_data: input.canvas,
+      canvas_data: canvas,
       visible: input.visible ?? true,
       created_by: user.id
     })
@@ -68,9 +76,18 @@ export async function updateTemplate(
   patch: Partial<Pick<CustomTemplate, 'name' | 'category' | 'visible' | 'canvas_data' | 'sort_order'>>
 ): Promise<{ error?: string }> {
   const sb = supabase as any;
+  // Batas tulis: bila canvas ikut diubah, normalisasi + validasi dulu.
+  let nextPatch = patch;
+  if (patch.canvas_data !== undefined) {
+    const canvas = migrateCanvas(patch.canvas_data);
+    if (!validateCanvasData(canvas)) {
+      return { error: 'Data kanvas tidak valid; perubahan tidak disimpan.' };
+    }
+    nextPatch = { ...patch, canvas_data: canvas };
+  }
   const { error } = await sb
     .from('custom_templates')
-    .update({ ...patch, updated_at: new Date().toISOString() })
+    .update({ ...nextPatch, updated_at: new Date().toISOString() })
     .eq('id', id);
   return { error: error?.message };
 }

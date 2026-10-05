@@ -82,6 +82,17 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 4. **Storage** → pastikan bucket `invitation-assets` berstatus public.
 5. Salin URL & anon key ke `.env.local`.
 
+### Regenerate tipe Supabase (opsional)
+
+```bash
+npm run db:types
+```
+
+Butuh Supabase CLI terpasang **dan kredensial/proyek Supabase** (login
+`supabase login` + link proyek). Perintah ini menulis ulang
+`src/lib/types/supabase.ts`; jangan dijalankan tanpa akses DB karena file
+tersebut dikomit.
+
 > Catatan RLS: rute publik `/[slug]` tidak membaca tabel langsung (ditolak RLS),
 > melainkan via RPC `get_published_design` (security definer). Form RSVP
 > public hanya menulis ke `rsvps` jika project berstatus `published`.

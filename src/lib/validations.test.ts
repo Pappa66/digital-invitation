@@ -153,6 +153,28 @@ describe('validateCanvasData — 20 block type + field yang disinkronkan BE', ()
     expect(result).not.toBeNull();
     expect(result!.flow).toBe('free');
   });
+
+  it('meloloskan key asing di canvas/theme/settings/block/style dan TIDAK membuangnya', () => {
+    const canvas = baseCanvas();
+    (canvas as unknown as Record<string, unknown>).future_top = { a: 1 };
+    (canvas.theme as unknown as Record<string, unknown>).future_theme_key = 'x';
+    (canvas.settings as unknown as Record<string, unknown>).future_setting = 42;
+    canvas.blocks = [{
+      id: 'b1',
+      type: 'Hero',
+      props: { bride: 'A' },
+      future_block_key: true,
+      style: { textColor: '#ffffff', future_style_key: 'y' }
+    }];
+    const result = validateCanvasData(canvas);
+    expect(result).not.toBeNull();
+    expect(result!.theme.primary).toBe('#D4AF37');
+    expect((result as unknown as Record<string, unknown>).future_top).toEqual({ a: 1 });
+    expect((result!.theme as unknown as Record<string, unknown>).future_theme_key).toBe('x');
+    expect((result!.settings as unknown as Record<string, unknown>).future_setting).toBe(42);
+    expect((result!.blocks[0] as unknown as Record<string, unknown>).future_block_key).toBe(true);
+    expect((result!.blocks[0].style as unknown as Record<string, unknown>).future_style_key).toBe('y');
+  });
 });
 
 describe('validateCanvasData — kasus GAGAL (harus null)', () => {
@@ -203,16 +225,21 @@ describe('validateCanvasData — kasus GAGAL (harus null)', () => {
     expect(validateCanvasData(canvas)).toBeNull();
   });
 
-  it('menolak kunci top-level ekstra (skema strict)', () => {
+  it('menoleransi kunci top-level ekstra (forward-compatible, tidak dibuang)', () => {
     const canvas = baseCanvas();
     (canvas as unknown as Record<string, unknown>).extra_key = 'boo';
-    expect(validateCanvasData(canvas)).toBeNull();
+    const result = validateCanvasData(canvas);
+    expect(result).not.toBeNull();
+    // Key asing tetap ikut (passthrough), bukan dibuang diam-diam.
+    expect((result as unknown as Record<string, unknown>).extra_key).toBe('boo');
   });
 
-  it('menolak kunci theme ekstra (skema strict)', () => {
+  it('menoleransi kunci theme ekstra (forward-compatible, tidak dibuang)', () => {
     const canvas = baseCanvas();
     (canvas.theme as unknown as Record<string, unknown>).hacked = 'yes';
-    expect(validateCanvasData(canvas)).toBeNull();
+    const result = validateCanvasData(canvas);
+    expect(result).not.toBeNull();
+    expect((result!.theme as unknown as Record<string, unknown>).hacked).toBe('yes');
   });
 
   it('menolak layout width < 100', () => {
@@ -245,6 +272,21 @@ describe('validateCanvasData — kasus GAGAL (harus null)', () => {
     const badUrl = baseCanvas();
     badUrl.settings = { ...badUrl.settings, music_url: `https://x/${'a'.repeat(501)}` };
     expect(validateCanvasData(badUrl)).toBeNull();
+  });
+
+  it('key asing di banyak level TIDAK melonggarkan field resmi (flow invalid tetap ditolak)', () => {
+    const canvas = baseCanvas();
+    (canvas as unknown as Record<string, unknown>).future_top = 1;
+    (canvas.theme as unknown as Record<string, unknown>).future_theme = 'x';
+    canvas.flow = 'diagonal';
+    expect(validateCanvasData(canvas)).toBeNull();
+  });
+
+  it('key asing TIDAK melonggarkan tipe field resmi (theme.primary bukan string tetap ditolak)', () => {
+    const canvas = baseCanvas();
+    (canvas.theme as unknown as Record<string, unknown>).future_theme = 'ok';
+    (canvas.theme as unknown as Record<string, unknown>).primary = 123;
+    expect(validateCanvasData(canvas)).toBeNull();
   });
 
   it('meloloskan props null dan array objek non-BankAccount (regresi: image_positions/gift_items dari builder)', () => {
