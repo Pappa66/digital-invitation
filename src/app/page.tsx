@@ -342,42 +342,25 @@ export default function LandingPage() {
               )}
             </div>
             {/* KOLASE 3 GAMBAR — larger on desktop */}
+            {collageImages.length > 0 && (
             <div className="relative mx-auto w-full max-w-md min-w-0 lg:max-w-lg xl:max-w-xl" aria-hidden>
               <div className="grid aspect-[7/9] min-w-0 grid-cols-12 grid-rows-2 gap-4 lg:gap-5">
                 {/* foto besar kiri */}
                 <div className="relative col-span-7 row-span-2 min-w-0 overflow-hidden rounded-2xl border border-border bg-card shadow-card">
                   {collageImages[0] ? (
                     <Image src={collageImages[0].url} alt={collageImages[0].alt || 'Undangan'} fill className="object-cover" sizes="(max-width: 768px) 60vw, 320px" />
-                  ) : !landingContent ? (
-                      <div className="absolute inset-0 animate-pulse bg-black/5" />
-                    ) : featuredDemoImages[0] ? (
-                    <Image src={featuredDemoImages[0]} alt="Demo undangan" fill className="object-cover" sizes="(max-width: 768px) 60vw, 320px" />
-                  ) : collagePreviews[0] ? (
-                    <TemplatePreview canvas={collagePreviews[0].canvas} bg={collagePreviews[0].canvas.theme.background} />
                   ) : null}
                 </div>
                 {/* foto kecil kanan atas */}
                 <div className="relative col-span-5 min-w-0 overflow-hidden rounded-2xl border border-border bg-card shadow-soft">
                   {collageImages[1] ? (
                     <Image src={collageImages[1].url} alt={collageImages[1].alt || 'Undangan'} fill className="object-cover" sizes="(max-width: 768px) 40vw, 220px" />
-                  ) : !landingContent ? (
-                      <div className="absolute inset-0 animate-pulse bg-black/5" />
-                    ) : featuredDemoImages[1] ? (
-                    <Image src={featuredDemoImages[1]} alt="Demo undangan" fill className="object-cover" sizes="(max-width: 768px) 40vw, 220px" />
-                  ) : collagePreviews[1] ? (
-                    <TemplatePreview canvas={collagePreviews[1].canvas} bg={collagePreviews[1].canvas.theme.background} />
                   ) : null}
                 </div>
                 {/* foto kecil kanan bawah */}
                 <div className="relative col-span-5 min-w-0 overflow-hidden rounded-2xl border border-border bg-card shadow-soft">
                   {collageImages[2] ? (
                     <Image src={collageImages[2].url} alt={collageImages[2].alt || 'Undangan'} fill className="object-cover" sizes="(max-width: 768px) 40vw, 220px" />
-                  ) : !landingContent ? (
-                      <div className="absolute inset-0 animate-pulse bg-black/5" />
-                    ) : featuredDemoImages[2] ? (
-                    <Image src={featuredDemoImages[2]} alt="Demo undangan" fill className="object-cover" sizes="(max-width: 768px) 40vw, 220px" />
-                  ) : collagePreviews[2] ? (
-                    <TemplatePreview canvas={collagePreviews[2].canvas} bg={collagePreviews[2].canvas.theme.background} />
                   ) : null}
                 </div>
               </div>
@@ -385,6 +368,7 @@ export default function LandingPage() {
               <div className="absolute -right-3 -top-3 -z-10 h-24 w-24 rounded-full bg-gradient-to-br from-gold/20 to-transparent lg:-right-4 lg:-top-4 lg:h-28 lg:w-28" />
               <div className="absolute -bottom-5 -left-5 -z-10 h-32 w-32 rounded-full border border-gold/20 lg:-bottom-6 lg:-left-6 lg:h-36 lg:w-36" />
             </div>
+            )}
           </div>
         </section>
 

@@ -116,7 +116,7 @@ export default function LandingAdmin() {
                     <Button type="button" variant="outline" size="sm" onClick={() => setMediaIndex(i)} aria-label="Pilih dari media" className="shrink-0">
                       <ImageIcon className="h-4 w-4" />
                     </Button>
-                    {content.hero.images.length > 1 && (
+                    {content.hero.images.length > 0 && (
                       <Button type="button" variant="ghost" size="icon" onClick={() => removeHeroImage(i)} aria-label="Hapus" className="shrink-0">
                         <Trash2 className="h-4 w-4 text-destructive" />
                       </Button>
