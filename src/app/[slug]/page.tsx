@@ -39,8 +39,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         title = (couple as string) || row.title;
         const coverImg = typeof canvas?.settings?.cover_bg_image === 'string' ? (canvas.settings.cover_bg_image as string) : '';
         const heroImg = typeof hero?.bg_image === 'string' ? (hero.bg_image as string) : '';
-        const picked = (coverImg || heroImg).trim();
-        if (picked) ogImage = picked.startsWith('http') ? picked : `${origin}${picked}`;
+        void coverImg;
+        void heroImg;
       }
     } catch {
       /* generic */
