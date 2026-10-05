@@ -24,6 +24,8 @@ export default function LandingTemplatePicker() {
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
   const [query, setQuery] = useState('');
+  const [page, setPage] = useState(1);
+  const PER = 10;
 
   useEffect(() => {
     let alive = true;
@@ -111,14 +113,14 @@ export default function LandingTemplatePicker() {
           <input
             type="search"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => { setQuery(e.target.value); setPage(1); }}
             placeholder="Cari template bawaan…"
             aria-label="Cari template bawaan"
             className="mb-2 h-9 w-full rounded-md border border-input bg-card px-3 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           />
           <div className="max-h-80 overflow-y-auto rounded-md border border-border p-2">
           <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-            {DEMO_TEMPLATES.filter((t) => t.name.toLowerCase().includes(query.trim().toLowerCase())).map((t) => {
+            {DEMO_TEMPLATES.filter((t) => t.name.toLowerCase().includes(query.trim().toLowerCase())).slice((page - 1) * PER, page * PER).map((t) => {
               const checked = (content.template_ids ?? []).includes(t.id);
               return (
                 <div
@@ -136,6 +138,32 @@ export default function LandingTemplatePicker() {
             })}
           </div>
           </div>
+          {(() => {
+            const total = DEMO_TEMPLATES.filter((t) => t.name.toLowerCase().includes(query.trim().toLowerCase())).length;
+            const pages = Math.max(1, Math.ceil(total / PER));
+            if (pages <= 1) return null;
+            return (
+              <div className="mt-3 flex items-center justify-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  disabled={page === 1}
+                  className="inline-flex h-9 items-center rounded-md border border-input px-3 text-xs font-medium text-foreground disabled:opacity-40"
+                >
+                  Sebelumnya
+                </button>
+                <span className="text-xs text-muted-foreground">Halaman {page} dari {pages}</span>
+                <button
+                  type="button"
+                  onClick={() => setPage((p) => Math.min(pages, p + 1))}
+                  disabled={page >= pages}
+                  className="inline-flex h-9 items-center rounded-md border border-input px-3 text-xs font-medium text-foreground disabled:opacity-40"
+                >
+                  Berikutnya
+                </button>
+              </div>
+            );
+          })()}
         </>
       )}
     </section>
