@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef, useContext } from 'react';
 import { motion, AnimatePresence, type Target } from 'framer-motion';
 import Image from 'next/image';
-import { Calendar, MapPin, Heart, Sparkles, Gem, BookOpen, Sprout, MailOpen, Plus, Radio, X, Dot, Type, Image as ImageIcon } from 'lucide-react';
+import { Calendar, MapPin, Heart, Sparkles, Gem, BookOpen, Sprout, MailOpen, Plus, Radio, X, Dot, Type, Image as ImageIcon, ChevronDown } from 'lucide-react';
 import type { BlockProps, DecorAsset, DecorShapeKind } from '@/lib/types';
 import type { ReligionKey } from '@/lib/religions';
 import { Editable, BuilderEditableContext } from '@/components/builder/inline-edit';
@@ -799,25 +799,29 @@ export function HeroBlock({ props, greetingName, showButton = true }: { props: B
   const hasBgImage = !!str(props, 'bg_image');
   const showGradient = !hasBgImage && heroStyle === 'gradient';
 
+  /** Gulir mulus ke blok berikutnya (umumnya Couple). Menghormati reduced-motion. */
+  function scrollToNext() {
+    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    const el = sectionRef.current;
+    if (el) {
+      const wrapper = el.closest('[data-block-type]');
+      const target =
+        (wrapper ? wrapper.nextElementSibling : null) ??
+        (el.nextElementSibling as HTMLElement | null) ??
+        el;
+      const rect = target.getBoundingClientRect();
+      window.scrollTo({ top: window.scrollY + rect.top, behavior: reduce ? 'auto' : 'smooth' });
+    } else {
+      window.scrollTo({ top: window.innerHeight, behavior: reduce ? 'auto' : 'smooth' });
+    }
+  }
+
   function openInvitation() {
     if (opened) return;
     setOpened(true);
     window.dispatchEvent(new CustomEvent('invite-opened'));
     // Gulir mulus ke blok berikutnya (umumnya Couple) setelah animasi fade selesai.
-    window.setTimeout(() => {
-      const el = sectionRef.current;
-      if (el) {
-        const wrapper = el.closest('[data-block-type]');
-        const target =
-          (wrapper ? wrapper.nextElementSibling : null) ??
-          (el.nextElementSibling as HTMLElement | null) ??
-          el;
-        const rect = target.getBoundingClientRect();
-        window.scrollTo({ top: window.scrollY + rect.top, behavior: window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
-      } else {
-        window.scrollTo({ top: window.innerHeight, behavior: window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
-      }
-    }, 650);
+    window.setTimeout(scrollToNext, 650);
   }
 
   const textColor = str(props, 'text_color') || '#ffffff';
@@ -942,6 +946,16 @@ export function HeroBlock({ props, greetingName, showButton = true }: { props: B
         )}
       </div>
       </HeroWrap>
+      {!inBuilder && (
+        <button
+          type="button"
+          onClick={scrollToNext}
+          aria-label="Gulir ke bagian berikutnya"
+          className="absolute bottom-6 left-1/2 z-20 flex h-11 w-11 -translate-x-1/2 items-center justify-center rounded-full border border-current/25 text-current opacity-70 transition-opacity hover:opacity-100"
+        >
+          <ChevronDown className="h-5 w-5 motion-safe:animate-bounce" aria-hidden />
+        </button>
+      )}
     </section>
   );
 }

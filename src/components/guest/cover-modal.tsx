@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, lazy, Suspense } from 'react';
+import { useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MailOpen, X } from 'lucide-react';
@@ -65,6 +65,8 @@ export default function CoverModal({
 }: CoverModalProps) {
   const [open, setOpen] = useState(true);
   const [phase, setPhase] = useState<'cover' | 'opening'>('cover');
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const primaryBtnRef = useRef<HTMLButtonElement>(null);
 
   // Block scroll when cover is open
   useEffect(() => {
@@ -76,27 +78,70 @@ export default function CoverModal({
 
   const use3d = coverStyle === 'floral';
 
-  function finish() {
+  const finish = useCallback(() => {
     setOpen(false);
     document.body.style.overflow = '';
     window.setTimeout(() => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }, 300);
-  }
+  }, []);
 
-  function openInvitation() {
+  const openInvitation = useCallback(() => {
     window.dispatchEvent(new CustomEvent('invite-opened'));
     if (coverStyle && coverStyle !== 'floral') {
       setPhase('opening');
     } else {
       finish();
     }
-  }
+  }, [coverStyle, finish]);
+
+  // Autofokus tombol "Buka Undangan" saat sampul tampil.
+  useEffect(() => {
+    if (!open) return;
+    const id = window.setTimeout(() => primaryBtnRef.current?.focus(), 50);
+    return () => window.clearTimeout(id);
+  }, [open]);
+
+  // Trap fokus di dalam dialog + ESC membuka undangan (tidak menutup diam-diam).
+  useEffect(() => {
+    if (!open) return;
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        openInvitation();
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      const root = dialogRef.current;
+      if (!root) return;
+      const nodes = Array.from(
+        root.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        )
+      );
+      if (nodes.length === 0) return;
+      const first = nodes[0];
+      const last = nodes[nodes.length - 1];
+      const active = document.activeElement;
+      if (e.shiftKey) {
+        if (active === first || !root.contains(active)) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else if (active === last || !root.contains(active)) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+    document.addEventListener('keydown', onKeyDown, true);
+    return () => document.removeEventListener('keydown', onKeyDown, true);
+  }, [open, openInvitation]);
 
   return (
     <AnimatePresence>
       {open && (
         <div
+          ref={dialogRef}
           className="fixed inset-0 z-50 overflow-hidden"
           style={{
             background: '#0b0905',
@@ -193,6 +238,7 @@ export default function CoverModal({
                 <div className="mb-6 h-px w-3/4 bg-current opacity-40" />
                 <div className="mb-8 text-xs sm:text-sm uppercase tracking-[0.25em] opacity-90">{date}</div>
                 <button
+                  ref={primaryBtnRef}
                   onClick={openInvitation}
                   className="inline-flex min-h-12 items-center gap-2 rounded-full border border-current/20 px-8 py-3 text-xs font-semibold uppercase tracking-[0.2em] shadow-soft transition-transform hover:scale-[1.04] active:scale-95"
                   style={{ background, color: primary }}

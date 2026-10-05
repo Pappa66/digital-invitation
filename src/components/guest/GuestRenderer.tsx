@@ -13,6 +13,7 @@ import { ThemeContext } from '@/components/guest/theme-context';
 import { GuestFrame } from '@/components/guest/guest-frame';
 import GuestNav from '@/components/guest/guest-nav';
 import CoverModal from '@/components/guest/cover-modal';
+import SectionHeading from '@/components/guest/section-heading';
 
 interface GuestRendererProps {
   canvas: CanvasData;
@@ -38,6 +39,27 @@ function isLightHex(hex: string): boolean {
 
 function SectionGap() {
   return <div className="h-4" aria-hidden />;
+}
+
+/**
+ * Section penutup sederhana: ucapan terima kasih + nama pasangan (dari Hero).
+ * Rendering kondisional (tanpa setting baru) dan padding bawah ekstra agar
+ * tidak bertabrakan dengan ShareBar yang mengambang.
+ */
+function ClosingSection({ names }: { names: string }) {
+  return (
+    <section aria-label="Terima kasih" className="relative px-6 pb-28 pt-16 text-center sm:pt-20">
+      <SectionHeading kicker="Terima Kasih" title={names || 'Terima Kasih'} />
+      <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed opacity-70">
+        Merupakan suatu kebahagiaan dan kehormatan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.
+      </p>
+      <span className="mx-auto mt-6 flex items-center justify-center gap-3 opacity-40" aria-hidden>
+        <span className="h-px w-12 bg-current" />
+        <span className="h-1.5 w-1.5 rotate-45" style={{ background: 'var(--color-primary)' }} />
+        <span className="h-px w-12 bg-current" />
+      </span>
+    </section>
+  );
 }
 
 export default function GuestRenderer({ canvas, projectId, greetingName, preview, demo, width = 'mobile' }: GuestRendererProps) {
@@ -170,6 +192,7 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
             seatLabel={typeof canvas.settings.seat_label === 'string' ? canvas.settings.seat_label : undefined}
           />
         )}
+        <ClosingSection names={coupleNames} />
         {immersive && <MusicPlayer settings={canvas.settings} />}
         {immersive && <ShareBar {...shareMeta} />}
         {/* nav dihilangkan */}

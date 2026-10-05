@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
 import { demoListRsvps, demoSetRsvpListener } from '@/lib/demo/demo-store';
 import { demoIsDemoMode } from '@/lib/env';
+import SectionHeading from '@/components/guest/section-heading';
 import type { Rsvp } from '@/lib/types';
 
 interface GuestBookWallProps {
@@ -149,15 +150,7 @@ export default function GuestBookWall({
         }}
       />
 
-      <div className="relative mx-auto mb-9 flex max-w-md flex-col items-center text-center">
-        <span className="text-[10px] uppercase tracking-[0.4em] opacity-60">Doa &amp; Ucapan</span>
-        <h2 className="mt-2 font-heading text-3xl md:text-4xl">{title || 'Buku Tamu'}</h2>
-        <span className="mt-3 flex items-center gap-2 opacity-50">
-          <span className="h-px w-10" style={{ background: 'currentColor' }} />
-          <span className="h-1.5 w-1.5 rotate-45" style={{ background: 'var(--color-primary)' }} />
-          <span className="h-px w-10" style={{ background: 'currentColor' }} />
-        </span>
-      </div>
+      <SectionHeading kicker="Doa & Ucapan" title={title || 'Buku Tamu'} />
 
       <div className="relative mx-auto max-w-md space-y-4">
         {items.length === 0 && !loading ? (
