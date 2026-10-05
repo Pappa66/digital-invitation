@@ -83,11 +83,12 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
 
   const [watermarkBrand, setWatermarkBrand] = useState('');
   const [watermarkUrl, setWatermarkUrl] = useState('');
+  const [watermarkText, setWatermarkText] = useState('');
   useEffect(() => {
     if (preview || demo || demoIsDemoMode()) return;
     let alive = true;
     import('@/lib/settings')
-      .then(({ getBusinessName, getWatermarkUrl }) => {
+      .then(({ getBusinessName, getWatermarkUrl, getWatermarkText }) => {
         getBusinessName()
           .then((n) => {
             if (alive && n) setWatermarkBrand(n);
@@ -96,6 +97,11 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
         getWatermarkUrl()
           .then((u) => {
             if (alive && u) setWatermarkUrl(u);
+          })
+          .catch(() => {});
+        getWatermarkText()
+          .then((t) => {
+            if (alive && t) setWatermarkText(t);
           })
           .catch(() => {});
       })
@@ -254,10 +260,10 @@ export default function GuestRenderer({ canvas, projectId, greetingName, preview
                 rel="noopener noreferrer"
                 className="text-[11px] uppercase tracking-[0.2em] opacity-55 underline-offset-4 hover:underline"
               >
-                Dibuat dengan ♥ oleh {watermarkBrand}
+                {watermarkText || 'Undangan oleh'} {watermarkBrand}
               </a>
             ) : (
-              <p className="text-[11px] uppercase tracking-[0.2em] opacity-55">Dibuat dengan ♥ oleh {watermarkBrand}</p>
+              <p className="text-[11px] uppercase tracking-[0.2em] opacity-55">{watermarkText || 'Undangan oleh'} {watermarkBrand}</p>
             )}
           </div>
         )}

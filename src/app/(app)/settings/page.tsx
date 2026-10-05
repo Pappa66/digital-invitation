@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { SETTING_WATERMARK_URL, getWatermarkUrl } from '@/lib/settings';
+import { SETTING_WATERMARK_URL, getWatermarkUrl, SETTING_WATERMARK_TEXT, getWatermarkText } from '@/lib/settings';
 
 interface SiteSettings {
   whatsapp: string;
@@ -20,6 +20,7 @@ interface SiteSettings {
   show_pricing: boolean;
   business_name: string;
   watermark_url: string;
+  watermark_text: string;
 }
 
 const defaults: SiteSettings = {
@@ -30,7 +31,8 @@ const defaults: SiteSettings = {
   promo_expires_at: '',
   show_pricing: true,
   business_name: 'PT. Prasha Digital Indonesia',
-  watermark_url: ''
+  watermark_url: '',
+  watermark_text: 'Undangan oleh'
 };
 
 export default function SettingsPage() {
@@ -40,7 +42,7 @@ export default function SettingsPage() {
   const [message, setMessage] = useState<{ ok: boolean; text: string } | null>(null);
 
   async function loadPricing() {
-    const [pricing, bn, wmUrl] = await Promise.all([getPricing(), getBusinessName(), getWatermarkUrl()]);
+    const [pricing, bn, wmUrl, wmText] = await Promise.all([getPricing(), getBusinessName(), getWatermarkUrl(), getWatermarkText()]);
     setSettings((s) => ({
       ...s,
       base_price: pricing.base_price,
@@ -49,7 +51,8 @@ export default function SettingsPage() {
       promo_expires_at: pricing.promo_expires_at,
       show_pricing: pricing.show_pricing,
       business_name: bn || defaults.business_name,
-      watermark_url: wmUrl || ''
+      watermark_url: wmUrl || '',
+      watermark_text: wmText || defaults.watermark_text
     }));
   }
 
@@ -78,7 +81,8 @@ export default function SettingsPage() {
         show_pricing: settings.show_pricing
       }),
       saveSetting(SETTING_BUSINESS_NAME, settings.business_name),
-      saveSetting(SETTING_WATERMARK_URL, settings.watermark_url)
+      saveSetting(SETTING_WATERMARK_URL, settings.watermark_url),
+      saveSetting(SETTING_WATERMARK_TEXT, settings.watermark_text)
     ]);
 
     try {
@@ -145,6 +149,17 @@ export default function SettingsPage() {
                 placeholder="PT. Prasha Digital Indonesia"
               />
               <p className="mt-1 text-xs text-muted-foreground">Muncul di watermark &quot;Made with Love by ...&quot;</p>
+            </div>
+            <div className="mt-3">
+              <label htmlFor="watermark-text" className="mb-1 block text-xs font-medium text-foreground">Teks Watermark</label>
+              <Input
+                id="watermark-text"
+                type="text"
+                value={settings.watermark_text}
+                onChange={(e) => update('watermark_text', e.target.value)}
+                placeholder="Undangan oleh"
+              />
+              <p className="mt-1 text-xs text-muted-foreground">Muncul sebelum nama bisnis di undangan.</p>
             </div>
             <div className="mt-3">
               <label htmlFor="watermark-url" className="mb-1 block text-xs font-medium text-foreground">Link Watermark (opsional)</label>

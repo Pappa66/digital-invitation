@@ -102,6 +102,25 @@ export const SETTING_BUSINESS_NAME = 'business_name';
 /** Key untuk link watermark undangan. */
 export const SETTING_WATERMARK_URL = 'watermark_url';
 
+/** Key untuk teks watermark undangan. */
+export const SETTING_WATERMARK_TEXT = 'watermark_text';
+
+/** Ambil teks watermark dari Supabase. */
+export async function getWatermarkText(): Promise<string> {
+  try {
+    const supabase = getClientSupabase();
+    const { data, error } = await supabase
+      .from('settings')
+      .select('value')
+      .eq('key', SETTING_WATERMARK_TEXT)
+      .maybeSingle();
+    if (error || !data?.value) return '';
+    return data.value;
+  } catch {
+    return '';
+  }
+}
+
 /** Ambil link watermark dari Supabase. */
 export async function getWatermarkUrl(): Promise<string> {
   try {
