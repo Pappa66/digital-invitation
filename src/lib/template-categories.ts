@@ -33,7 +33,7 @@ const LABELS: Record<TemplateCategory, string> = {
 
 /** Label aman untuk nilai category dari index.json (bisa saja label lama). */
 export function categoryLabel(category: string | undefined): string {
-  if (!category) return 'Classic';
+  if (!category) return 'Umum';
   const key = category.toLowerCase();
-  return LABELS[key as TemplateCategory] ?? 'Classic';
+  return LABELS[key as TemplateCategory] ?? 'Umum';
 }

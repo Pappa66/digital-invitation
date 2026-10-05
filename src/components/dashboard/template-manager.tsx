@@ -250,6 +250,12 @@ export default function TemplateManager() {
     await updateTemplate(id, { name, category });
   }
 
+  async function changeCategory(id: string, category: string) {
+    if (!category) return;
+    setItems((prev) => prev.map((x) => (x.id === id ? { ...x, category } : x)));
+    await updateTemplate(id, { category });
+  }
+
   return (
     <section className="mb-8 rounded-2xl border border-border bg-card p-4 shadow-soft">
       <div className="flex items-center justify-between gap-2">
@@ -370,7 +376,21 @@ export default function TemplateManager() {
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
                       <p className="truncate text-sm font-semibold text-foreground">{t.name}</p>
-                      <p className="truncate text-[11px] text-muted-foreground">{displayCategory(t.category)}</p>
+                      <select
+                        value={CATEGORIES.some((c) => c.key === (t.category ?? '').toLowerCase()) ? (t.category ?? '').toLowerCase() : ''}
+                        onChange={(e) => void changeCategory(t.id, e.target.value)}
+                        aria-label={`Kategori ${t.name}`}
+                        className="mt-1 h-8 w-full rounded-md border border-input bg-card px-2 text-[11px] text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      >
+                        {!CATEGORIES.some((c) => c.key === (t.category ?? '').toLowerCase()) && (
+                          <option value="">{displayCategory(t.category)}</option>
+                        )}
+                        {CATEGORIES.map((c) => (
+                          <option key={c.key} value={c.key}>
+                            {c.label}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                   </div>
                   <div className="mt-3 flex flex-wrap items-center gap-1.5">
