@@ -5,23 +5,26 @@ import { Check, Copy, MessageCircle, X, Tag } from 'lucide-react';
 import { buildOrderMessage, normalizePhone, whatsappOrderUrl } from '@/lib/order';
 import { getOrderWhatsapp, toWaNumber } from '@/lib/settings';
 import { clientSubmitOrder } from '@/lib/api/order-client';
+import { computeFinalPrice, isPromoExpired } from '@/lib/pricing';
 
 interface OrderDialogProps {
   templateName?: string;
   basePrice?: number;
   discountPercent?: number;
   promoCode?: string;
+  promoExpiresAt?: string;
   onClose: () => void;
 }
 
 import { formatRupiah } from '@/lib/format';
 
-export default function OrderDialog({ templateName, basePrice = 0, discountPercent = 0, promoCode, onClose }: OrderDialogProps) {
+export default function OrderDialog({ templateName, basePrice = 0, discountPercent = 0, promoCode, promoExpiresAt, onClose }: OrderDialogProps) {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [note, setNote] = useState('');
   const [sent, setSent] = useState(false);
+  const [sentMessage, setSentMessage] = useState('');
   const [copied, setCopied] = useState(false);
   const [waNumber, setWaNumber] = useState('');
   const [promoInput, setPromoInput] = useState('');
@@ -33,11 +36,17 @@ export default function OrderDialog({ templateName, basePrice = 0, discountPerce
   }, []);
 
   const phoneValid = normalizePhone(phone).length >= 8;
-  const hasDiscount = promoApplied && discountPercent > 0 && promoCode;
-  const finalPrice = hasDiscount ? Math.round(basePrice * (1 - discountPercent / 100)) : basePrice;
+  // Diskon aktif bila: ada diskon, promo belum kedaluwarsa, dan (tanpa kode ATAU kode sudah diverifikasi).
+  const hasDiscount = discountPercent > 0 && !isPromoExpired(promoExpiresAt) && (!promoCode || promoApplied);
+  const finalPrice = hasDiscount ? computeFinalPrice(basePrice, discountPercent) : basePrice;
 
   function applyPromo() {
     if (!promoCode) return;
+    if (isPromoExpired(promoExpiresAt)) {
+      setPromoApplied(false);
+      setPromoError('Kode promo sudah kedaluwarsa');
+      return;
+    }
     if (promoInput.trim().toUpperCase() === promoCode.toUpperCase()) {
       setPromoApplied(true);
       setPromoError('');
@@ -64,6 +73,7 @@ export default function OrderDialog({ templateName, basePrice = 0, discountPerce
       whatsapp: wa,
       note: (note.trim() || '') + priceInfo
     });
+    setSentMessage(message);
     try {
       await clientSubmitOrder({
         templateName,
@@ -115,9 +125,8 @@ export default function OrderDialog({ templateName, basePrice = 0, discountPerce
             <button
               type="button"
               onClick={() => {
-                navigator.clipboard?.writeText(
-                  buildOrderMessage({ template: templateName, name, whatsapp: toWaNumber(phone), note: note.trim() || undefined })
-                );
+                const text = sentMessage || buildOrderMessage({ template: templateName, name, whatsapp: toWaNumber(phone), note: note.trim() || undefined });
+                navigator.clipboard?.writeText(text);
                 setCopied(true);
               }}
               className="mt-3 flex min-h-11 items-center gap-2 rounded-lg bg-gold-strong px-4 py-2 text-xs font-semibold text-foreground transition-colors hover:bg-gold-deep hover:text-background"
@@ -179,7 +188,7 @@ export default function OrderDialog({ templateName, basePrice = 0, discountPerce
                   )}
                 </div>
                 {hasDiscount && (
-                  <p className="mt-1 text-xs font-medium text-gold-deep">Diskon {discountPercent}% dengan kode {promoCode}</p>
+                  <p className="mt-1 text-xs font-medium text-gold-deep">Diskon {discountPercent}%{promoCode ? ` dengan kode ${promoCode}` : ''}</p>
                 )}
               </div>
             )}

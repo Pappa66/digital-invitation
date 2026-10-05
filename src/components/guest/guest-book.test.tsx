@@ -43,22 +43,25 @@ describe('GuestBookWall — buku tamu aman via RPC', () => {
     expect(screen.getByText('Budi')).toBeInTheDocument();
   });
 
-  it('memanggil RPC yang benar, bukan SELECT langsung ke tabel rsvps (data intim tetap terlindungi)', async () => {
+  it('memanggil RPC yang benar (berpaginasi), bukan SELECT langsung ke tabel rsvps (data intim tetap terlindungi)', async () => {
     render(<GuestBookWall projectId={PROJECT_ID} />);
     await waitFor(() => expect(rpcMock).toHaveBeenCalled());
-    expect(rpcMock).toHaveBeenCalledWith('get_guest_book_messages', { p_project_id: PROJECT_ID });
+    expect(rpcMock).toHaveBeenCalledWith(
+      'get_guest_book_messages',
+      expect.objectContaining({ p_project_id: PROJECT_ID, p_limit: 10, p_offset: 0 })
+    );
     expect(selectMock).not.toHaveBeenCalled();
   });
 
-  it('membatasi tampilan 8 pesan terbaru walau RPC mengembalikan 24 (slice 0..8)', async () => {
+  it('membatasi tampilan 10 pesan per halaman walau RPC mengembalikan 24 (slice 0..10)', async () => {
     const many = Array.from({ length: 24 }, (_, i) => message(String(i + 1), `Tamu ${i + 1}`, `Ucapan nomor ${i + 1}`));
     rpcMock.mockResolvedValue({ data: many, error: null });
     render(<GuestBookWall projectId={PROJECT_ID} />);
 
     // Tunggu render selesai: pesan ke-1 tampil...
     expect(await screen.findByText('Ucapan nomor 1')).toBeInTheDocument();
-    // ...dan pesan ke-9 (indeks 8) TIDAK tampil karena di-slice.
-    await waitFor(() => expect(screen.queryByText('Ucapan nomor 9')).not.toBeInTheDocument());
+    // ...dan pesan ke-11 (di luar 10 per halaman) TIDAK tampil karena di-slice.
+    await waitFor(() => expect(screen.queryByText('Ucapan nomor 11')).not.toBeInTheDocument());
     expect(screen.queryByText('Ucapan nomor 24')).not.toBeInTheDocument();
   });
 

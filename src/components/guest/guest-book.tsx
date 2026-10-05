@@ -74,10 +74,11 @@ export default function GuestBookWall({
           p_limit: PER_PAGE,
           p_offset: pageIndex * PER_PAGE
         });
-        const rows = (data ?? []) as unknown as Rsvp[];
-        setItems(rows);
-        const first = rows[0] as { total?: number } | undefined;
-        setTotal(rows.length ? Number(first?.total ?? rows.length) : 0);
+        const raw = (data ?? []) as unknown as Rsvp[];
+        const rows = raw.filter((r) => (r.message ?? '').trim().length > 0);
+        setItems(rows.slice(0, PER_PAGE));
+        const first = raw[0] as { total?: number } | undefined;
+        setTotal(raw.length ? Number(first?.total ?? rows.length) : 0);
       } finally {
         setLoading(false);
       }

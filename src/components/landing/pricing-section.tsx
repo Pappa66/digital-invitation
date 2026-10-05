@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Tag, Clock, CheckCircle } from 'lucide-react';
+import { computeFinalPrice, getTimeRemaining, isPromoExpired } from '@/lib/pricing';
 
 interface PricingSectionProps {
   basePrice: number;
@@ -13,15 +14,6 @@ interface PricingSectionProps {
 
 import { formatRupiah } from '@/lib/format';
 
-function getTimeRemaining(expiresAt: string) {
-  const diff = new Date(expiresAt).getTime() - Date.now();
-  if (diff <= 0) return null;
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-  return { days, hours, minutes, total: diff };
-}
-
 export default function PricingSection({ basePrice, discountPercent, promoCode, promoExpiresAt, onOrder }: PricingSectionProps) {
   const [timeLeft, setTimeLeft] = useState(getTimeRemaining(promoExpiresAt));
   const [copied, setCopied] = useState(false);
@@ -31,8 +23,8 @@ export default function PricingSection({ basePrice, discountPercent, promoCode, 
     return () => clearInterval(timer);
   }, [promoExpiresAt]);
 
-  const hasDiscount = discountPercent > 0;
-  const discountedPrice = hasDiscount ? Math.round(basePrice * (1 - discountPercent / 100)) : basePrice;
+  const hasDiscount = discountPercent > 0 && !isPromoExpired(promoExpiresAt);
+  const discountedPrice = hasDiscount ? computeFinalPrice(basePrice, discountPercent) : basePrice;
 
   function copyCode() {
     navigator.clipboard.writeText(promoCode);

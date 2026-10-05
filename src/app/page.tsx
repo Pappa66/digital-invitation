@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { getSiteOrigin } from '@/lib/site';
-import PricingSection from '@/components/landing/pricing-section';
+import PricingBubble from '@/components/landing/pricing-bubble';
 import { listVisibleTemplates } from '@/lib/api/custom-templates';
 import {
   ArrowRight,
@@ -311,6 +311,18 @@ export default function LandingPage() {
                   {content.hero.cta_secondary}
                 </button>
               </div>
+              {/* Harga/promo sebagai bubble di dalam hero (spec hero-pricing-bubble.md) */}
+              {pricing.show_pricing && pricing.base_price > 0 && (
+                <div className="mt-8">
+                  <PricingBubble
+                    basePrice={pricing.base_price}
+                    discountPercent={pricing.discount_percent}
+                    promoCode={pricing.promo_code}
+                    promoExpiresAt={pricing.promo_expires_at}
+                    onOrder={() => openOrder()}
+                  />
+                </div>
+              )}
               <p className="mt-7 text-xs text-muted-foreground lg:text-sm">
                 {DEMO_TEMPLATES.length} demo siap dilihat &middot; Pilih desain, isi form, kami kerjakan sisanya.
               </p>
@@ -375,25 +387,6 @@ export default function LandingPage() {
             ))}
           </div>
         </section>
-
-        {/* PRICING */}
-        {pricing.show_pricing && pricing.base_price > 0 && (
-          <section className="border-t border-border bg-card/50">
-            <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6">
-              <p className="text-center font-script text-3xl text-gold-deep">Investasi</p>
-              <h2 className="mt-3 text-center font-heading text-display-lg font-medium text-foreground">Harga Undangan Digital</h2>
-              <div className="mt-8 flex justify-center">
-                <PricingSection
-                  basePrice={pricing.base_price}
-                  discountPercent={pricing.discount_percent}
-                  promoCode={pricing.promo_code}
-                  promoExpiresAt={pricing.promo_expires_at}
-                  onOrder={() => openOrder()}
-                />
-              </div>
-            </div>
-          </section>
-        )}
 
         {/* KATALOG */}
         <section id="catalog" className="scroll-mt-20 border-t border-border bg-card/50">
@@ -596,6 +589,7 @@ export default function LandingPage() {
           basePrice={pricing.base_price}
           discountPercent={pricing.discount_percent}
           promoCode={pricing.promo_code}
+          promoExpiresAt={pricing.promo_expires_at}
           onClose={() => setOrderOpen(false)}
         />
       )}

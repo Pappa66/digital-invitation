@@ -39,7 +39,7 @@ export default function TemplateDetail({ meta, index, canvas, categoryLabel, tot
   const [orderOpen, setOrderOpen] = useState(false);
   const [editBusy, setEditBusy] = useState(false);
   const [editError, setEditError] = useState('');
-  const [pricing, setPricing] = useState({ base_price: 0, discount_percent: 0, promo_code: '' });
+  const [pricing, setPricing] = useState({ base_price: 0, discount_percent: 0, promo_code: '', promo_expires_at: '' });
 
   const [demo, setDemo] = useState<{ demo_image: string | null; demo_link: string | null } | null>(null);
 
@@ -75,7 +75,7 @@ export default function TemplateDetail({ meta, index, canvas, categoryLabel, tot
 
   useEffect(() => {
     import('@/lib/settings').then(({ getPricing }) =>
-      getPricing().then((p) => setPricing({ base_price: p.base_price, discount_percent: p.discount_percent, promo_code: p.promo_code }))
+      getPricing().then((p) => setPricing({ base_price: p.base_price, discount_percent: p.discount_percent, promo_code: p.promo_code, promo_expires_at: p.promo_expires_at }))
     ).catch(() => {});
   }, []);
 
@@ -208,6 +208,7 @@ export default function TemplateDetail({ meta, index, canvas, categoryLabel, tot
           basePrice={pricing.base_price}
           discountPercent={pricing.discount_percent}
           promoCode={pricing.promo_code}
+          promoExpiresAt={pricing.promo_expires_at}
           onClose={() => setOrderOpen(false)}
         />
       )}
