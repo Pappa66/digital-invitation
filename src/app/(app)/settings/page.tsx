@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Loader2, MessageCircle, Save, Tag } from 'lucide-react';
 import { getOrderWhatsapp, saveSetting, SETTING_ORDER_WHATSAPP, toWaNumber, getPricing, savePricing, SETTING_BUSINESS_NAME, getBusinessName } from '@/lib/settings';
+import { computeFinalPrice, isPromoExpired } from '@/lib/pricing';
 import { formatRupiah } from '@/lib/format';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -195,10 +196,19 @@ export default function SettingsPage() {
               </div>
             </div>
           )}
-          {settings.base_price > 0 && settings.discount_percent > 0 && (
+          {settings.base_price > 0 && (
             <p className="mt-3 text-xs text-[#c9a45c]">
-              Harga final: {formatRupiah(Math.round(settings.base_price * (1 - settings.discount_percent / 100)))}
-              {settings.promo_code && ` (${settings.promo_code})`}
+              {settings.discount_percent > 0 && !isPromoExpired(settings.promo_expires_at) ? (
+                <>
+                  Harga final: {formatRupiah(computeFinalPrice(settings.base_price, settings.discount_percent))}
+                  {settings.promo_code && ` (${settings.promo_code})`}
+                </>
+              ) : (
+                <>
+                  Harga: {formatRupiah(settings.base_price)}
+                  {settings.discount_percent > 0 && isPromoExpired(settings.promo_expires_at) ? ' — promo kedaluwarsa' : ''}
+                </>
+              )}
             </p>
           )}
         </section>
