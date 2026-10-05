@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef, useContext } from 'react';
 import { motion, AnimatePresence, type Target } from 'framer-motion';
 import Image from 'next/image';
-import { Calendar, CalendarPlus, MapPin, Heart, Sparkles, Gem, BookOpen, Sprout, MailOpen, Plus, Radio, X, Dot, Type, Image as ImageIcon, ChevronDown } from 'lucide-react';
+import { Calendar, CalendarPlus, MapPin, Heart, Sparkles, Gem, BookOpen, Sprout, MailOpen, Plus, Radio, X, Dot, Type, Image as ImageIcon, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
 import type { BlockProps, DecorAsset, DecorShapeKind } from '@/lib/types';
 import type { ReligionKey } from '@/lib/religions';
 import { Editable, BuilderEditableContext } from '@/components/builder/inline-edit';
@@ -2008,6 +2008,26 @@ function GalleryCarousel({
             <motion.div key={idx} {...anim} transition={{ duration: 0.7 }} className="absolute inset-0 h-full w-full">
               <GalleryMedia src={images[idx]} position={positions?.[idx] || 'center'} sizes="100vw" quality={80} />
             </motion.div>
+          )}
+          {images.length > 1 && (
+            <>
+              <button
+                type="button"
+                onClick={() => setIdx((i) => (i - 1 + images.length) % images.length)}
+                aria-label="Foto sebelumnya"
+                className="absolute left-2 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-white/20 text-white shadow-[0_4px_20px_rgba(0,0,0,0.25)] backdrop-blur-md transition-colors hover:bg-white/35"
+              >
+                <ChevronLeft className="h-5 w-5" aria-hidden />
+              </button>
+              <button
+                type="button"
+                onClick={() => setIdx((i) => (i + 1) % images.length)}
+                aria-label="Foto berikutnya"
+                className="absolute right-2 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-white/20 text-white shadow-[0_4px_20px_rgba(0,0,0,0.25)] backdrop-blur-md transition-colors hover:bg-white/35"
+              >
+                <ChevronRight className="h-5 w-5" aria-hidden />
+              </button>
+            </>
           )}
         </div>
         {images.length > 1 && (
