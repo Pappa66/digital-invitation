@@ -11,15 +11,16 @@ import { getTemplate } from '@/lib/templates';
  * (gagal simpan/tidak bisa dirender tamu).
  *
  * Dua lapis:
- *  1. STATIC: kunci `style:`/`props:` yang dipakai preset Quick Styles dibaca
- *     dari sumber produksi (`properties-panel.tsx`) dan dibandingkan dengan
- *     skema validasi. Ini mencegah preset memperkenalkan kunci style baru yang
- *     belum disinkronkan ke schema.
+ * 1. STATIC: kunci `style:`/`props:` yang dipakai preset Quick Styles dibaca
+ *     dari sumber produksi (`properties-data.ts`, hasil ekstraksi murni dari
+ *     `properties-panel.tsx`) dan dibandingkan dengan skema validasi. Ini
+ *     mencegah preset memperkenalkan kunci style baru yang belum disinkronkan
+ *     ke schema.
  *  2. FUNCTIONAL: menerapkan preset bernilai konkret (hasil runtime tema) ke
  *     template asli, lalu menegaskan validateCanvasData tetap lulus.
  */
 
-const SOURCE = readFileSync('src/components/builder/properties-panel.tsx', 'utf8');
+const SOURCE = readFileSync('src/components/builder/properties-data.ts', 'utf8');
 const QUICK_SECTION = SOURCE.slice(
   SOURCE.indexOf('BLOCK QUICK STYLES'),
   SOURCE.indexOf('function isQuickPresetActive')
