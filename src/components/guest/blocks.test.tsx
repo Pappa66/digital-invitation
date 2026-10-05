@@ -178,7 +178,8 @@ describe('EventDetail — Simpan Tanggal (.ics)', () => {
         projectId="x"
       />
     );
-    expect(within(ok).getByRole('button', { name: /Simpan tanggal/i })).toBeInTheDocument();
+    expect(within(ok).queryByRole('button', { name: /Simpan tanggal/i })).toBeNull();
+    expect(within(ok).getByRole('link', { name: /Simpan ke Kalender/i })).toBeInTheDocument();
 
     const { container: none } = render(
       <BlockView

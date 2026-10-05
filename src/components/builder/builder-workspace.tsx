@@ -15,7 +15,7 @@ import {
 } from '@dnd-kit/core';
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { Undo2, Redo2 } from 'lucide-react';
-import type { BlockType } from '@/lib/types';
+import type { BlockType, CanvasData } from '@/lib/types';
 import ElementsSidebar from '@/components/builder/elements-sidebar';
 import BuilderCanvas from '@/components/builder/builder-canvas';
 import PropertiesPanel from '@/components/builder/properties-panel';
@@ -32,13 +32,19 @@ import type { Device } from '@/components/ui/device-toggle';
  *
  * `accessToken` hanya diisi di mode link edit (`/edit/[token]`) agar simpan
  * langsung (Ctrl+S / interaksi) memakai RPC token, bukan klien anon + RLS.
+ *
+ * `onSave` (opsional) mengganti mekanisme simpan default. Dipakai halaman
+ * `/templates/[id]/edit` untuk menulis ke `custom_templates` tanpa menyentuh
+ * `project_designs`/thumbnail. Bila tidak diisi, perilaku lama tetap utuh.
  */
 export default function BuilderWorkspace({
   projectId,
-  accessToken
+  accessToken,
+  onSave
 }: {
   projectId: string;
   accessToken?: string;
+  onSave?: (canvas: CanvasData) => Promise<{ error?: string }>;
 }) {
   const canvas = useBuilderStore((s) => s.canvas);
   const selectedBlockId = useBuilderStore((s) => s.selectedBlockId);
@@ -62,6 +68,13 @@ export default function BuilderWorkspace({
 
   async function triggerSave() {
     setSaveState('saving');
+    // Mode template kustom: delegasikan ke save kustom (custom_templates).
+    if (onSave) {
+      const { error } = await onSave(useBuilderStore.getState().canvas);
+      setSaveState(error ? 'idle' : 'saved');
+      setTimeout(() => setSaveState('idle'), 1500);
+      return;
+    }
     const { error } = await saveCanvasNow(projectId, useBuilderStore.getState().canvas, accessToken);
     if (!error && freeCanvasRef.current) {
       const { captureAndSaveThumbnail } = await import('@/lib/thumbnail');

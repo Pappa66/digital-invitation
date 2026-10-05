@@ -97,3 +97,19 @@ export async function deleteTemplate(id: string): Promise<{ error?: string }> {
   const { error } = await sb.from('custom_templates').delete().eq('id', id);
   return { error: error?.message };
 }
+
+/**
+ * Ambil satu baris template berdasarkan id (RLS: hanya yang tampil publik atau
+ * milik pemilik/internal). Dipakai halaman "Edit Isi" — tidak mengubah
+ * signature fungsi lain.
+ */
+export async function getCustomTemplate(id: string): Promise<CustomTemplate | null> {
+  const sb = supabase as any;
+  const { data, error } = await sb
+    .from('custom_templates')
+    .select('id, name, category, canvas_data, visible, sort_order, created_at')
+    .eq('id', id)
+    .maybeSingle();
+  if (error || !data) return null;
+  return data as CustomTemplate;
+}

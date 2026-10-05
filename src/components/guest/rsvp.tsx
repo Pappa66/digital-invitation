@@ -320,6 +320,7 @@ export default function RSVPForm({ projectId, blockProps, readonly, checkinEnabl
         persistSaved(rec);
       }
       setCheckinToken(newToken);
+      setCode(clientCode);
       setStatus('success');
       if (typeof window !== 'undefined') {
         window.setTimeout(() => {

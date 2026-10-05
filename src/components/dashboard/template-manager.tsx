@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Check, ChevronLeft, ChevronRight, Copy, Loader2, Pencil, Plus, Search, Trash2, Upload, X } from 'lucide-react';
+import { Check, ChevronLeft, ChevronRight, Copy, Loader2, Pencil, Plus, Search, SquarePen, Trash2, Upload, X } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
 import { emptyCanvas } from '@/lib/templates';
 import {
@@ -428,6 +428,15 @@ export default function TemplateManager() {
                       title="Buat undangan dari template ini"
                     >
                       Pakai
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => router.push(`/templates/${t.id}/edit`)}
+                      className="inline-flex min-h-11 items-center gap-1.5 rounded-md border border-input px-3 text-[11px] font-medium text-foreground transition-colors hover:bg-muted"
+                      aria-label={`Edit isi template ${t.name}`}
+                      title="Edit isi/tampilan template langsung"
+                    >
+                      <SquarePen className="h-3.5 w-3.5" aria-hidden /> Edit Isi
                     </button>
                     <button
                       type="button"

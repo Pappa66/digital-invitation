@@ -2843,3 +2843,9 @@ exception when others then null; end $$;
 -- Hindari kegagalan insert karena tabrakan kode 6 karakter.
 drop index if exists public.rsvps_checkin_code_uidx;
 create index if not exists rsvps_checkin_code_idx on public.rsvps (checkin_code);
+-- Izinkan pemilik (created_by) mengedit template miliknya walau sudah visible.
+drop policy if exists "custom_templates_write_owner" on public.custom_templates;
+create policy "custom_templates_write_owner"
+  on public.custom_templates for all
+  using (public.is_internal() or created_by = auth.uid())
+  with check (public.is_internal() or created_by = auth.uid());
