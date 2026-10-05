@@ -34,6 +34,7 @@ import { DEMO_TEMPLATES, getTemplate } from '@/lib/templates';
 import { listPublicTemplates, listSeedTemplates, type TemplateRegistryItem } from '@/lib/templates/repository';
 import { CATEGORIES, categoryLabel, type TemplateCategory } from '@/lib/template-categories';
 import TemplatePreview from '@/components/landing/template-preview';
+import GuestRenderer from '@/components/guest/GuestRenderer';
 import OrderDialog from '@/components/landing/order-dialog';
 
 import { LANDING_CONTENT_DEFAULTS, type LandingContent } from '@/lib/settings';
@@ -707,18 +708,27 @@ function CatalogCard({
 }) {
   const detailHref = `/templates/${meta.id}`;
   const isCustom = (meta as { isCustom?: boolean }).isCustom === true;
+  const [demoOpen, setDemoOpen] = useState(false);
   const demoImage = demo?.demo_image || null;
   const demoLink = demo?.demo_link || null;
 
   const cta = (() => {
     if (isCustom) {
       return (
-        <button
-          onClick={() => onOrder?.(meta.name)}
-          className="mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-gold to-gold-strong px-5 py-2.5 text-sm font-semibold text-foreground shadow-gold transition-transform hover:scale-[1.02] active:scale-[0.98] motion-reduce:hover:scale-100 motion-reduce:active:scale-100"
-        >
-          <Eye className="h-4 w-4" aria-hidden /> Pesan Sekarang
-        </button>
+        <div className="mt-5 flex flex-col gap-2">
+          <button
+            onClick={() => setDemoOpen(true)}
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-gold/50 bg-background px-5 py-2.5 text-sm font-semibold text-gold-deep transition-colors hover:bg-gold/10"
+          >
+            <Eye className="h-4 w-4" aria-hidden /> Lihat Demo
+          </button>
+          <button
+            onClick={() => onOrder?.(meta.name)}
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-gold to-gold-strong px-5 py-2.5 text-sm font-semibold text-foreground shadow-gold transition-transform hover:scale-[1.02] active:scale-[0.98] motion-reduce:hover:scale-100 motion-reduce:active:scale-100"
+          >
+            Pesan Sekarang
+          </button>
+        </div>
       );
     }
     // demo_image + demo_link → "Lihat Demo" (tab baru). demo_image saja → "Lihat Detail".
@@ -751,6 +761,7 @@ function CatalogCard({
   })();
 
   return (
+    <>
     <article className="group flex flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-soft transition-all duration-300 hover:-translate-y-1.5 hover:shadow-card motion-reduce:hover:translate-y-0">
       <div className="relative px-6 pt-6">
         <div className="relative overflow-hidden rounded-2xl bg-muted shadow-soft ring-1 ring-foreground/5">
@@ -792,6 +803,33 @@ function CatalogCard({
         {cta}
       </div>
     </article>
+      {demoOpen && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-3"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Pratinjau ${meta.name}`}
+          onClick={() => setDemoOpen(false)}
+        >
+          <div
+            className="relative h-[90vh] w-full max-w-[430px] overflow-hidden rounded-2xl bg-white shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setDemoOpen(false)}
+              className="absolute right-2 top-2 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur transition-colors hover:bg-black/60"
+              aria-label="Tutup pratinjau"
+            >
+              ✕
+            </button>
+            <div className="h-full overflow-y-auto">
+              <GuestRenderer canvas={canvas} preview />
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
