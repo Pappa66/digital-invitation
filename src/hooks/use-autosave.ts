@@ -9,9 +9,33 @@ import { demoIsDemoMode, demoSaveDesign } from '@/lib/demo/demo-store';
 interface UseAutosaveOptions {
   projectId: string;
   canvas: CanvasData;
+  /**
+   * Token link edit (`/edit/[token]`). Bila diisi, simpan lewat RPC
+   * `save_design_by_share_token` (security definer) karena sesi anon tidak
+   * melewati RLS `project_designs`. Mode owner (login) tidak mengisi ini.
+   */
+  accessToken?: string;
 }
 
-export function useAutosave({ projectId, canvas }: UseAutosaveOptions) {
+/**
+ * Simpan canvas lewat RPC token. Mengembalikan { ok, error } agar pemanggil
+ * bisa menampilkan status error yang jujur (bukan "Tersimpan" palsu).
+ */
+async function saveViaShareToken(
+  accessToken: string,
+  canvas: CanvasData
+): Promise<{ ok: boolean; error: string | null }> {
+  const { data, error } = await supabase.rpc('save_design_by_share_token', {
+    p_token: accessToken,
+    p_canvas: canvasToJson(canvas)
+  });
+
+  if (error) return { ok: false, error: error.message };
+  const row = Array.isArray(data) ? data[0] : undefined;
+  return { ok: Boolean(row?.ok), error: row?.error ?? null };
+}
+
+export function useAutosave({ projectId, canvas, accessToken }: UseAutosaveOptions) {
   const [status, setStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const firstRun = useRef(true);
   const abortRef = useRef<AbortController | null>(null);
@@ -46,6 +70,20 @@ export function useAutosave({ projectId, canvas }: UseAutosaveOptions) {
       }
 
       try {
+        if (accessToken) {
+          // Mode tamu: token divalidasi & ditulis oleh RPC security definer.
+          const result = await saveViaShareToken(accessToken, canvas);
+          if (controller.signal.aborted) return;
+          if (!result.ok) {
+            setStatus('error');
+          } else {
+            setStatus('saved');
+            setTimeout(() => setStatus('idle'), 1500);
+          }
+          return;
+        }
+
+        // Mode owner (login): perilaku lama, lewat RLS designs_update_own.
         const { error } = await supabase
           .from('project_designs')
           .update({
@@ -72,16 +110,22 @@ export function useAutosave({ projectId, canvas }: UseAutosaveOptions) {
     return () => {
       clearTimeout(timeout);
     };
-  }, [canvas, projectId]);
+  }, [canvas, projectId, accessToken]);
 
   return status;
 }
 
-export async function saveCanvasNow(projectId: string, canvas: CanvasData) {
+export async function saveCanvasNow(projectId: string, canvas: CanvasData, accessToken?: string) {
   if (demoIsDemoMode()) {
     demoSaveDesign(projectId, canvas);
     return { error: null };
   }
+
+  if (accessToken) {
+    const result = await saveViaShareToken(accessToken, canvas);
+    return { error: result.ok ? null : { message: result.error ?? 'Gagal menyimpan' } };
+  }
+
   const { error } = await supabase
     .from('project_designs')
     .update({

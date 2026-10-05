@@ -461,6 +461,13 @@ export interface Database {
           title: string;
         }[];
       };
+      save_design_by_share_token: {
+        Args: { p_token: string; p_canvas: Json };
+        Returns: {
+          ok: boolean;
+          error: string | null;
+        }[];
+      };
       ensure_invite_token: {
         Args: { p_project_id: string; p_label?: string; p_days?: number; p_rotate?: boolean };
         Returns: {

@@ -29,8 +29,17 @@ import type { Device } from '@/components/ui/device-toggle';
  * Pembungkus workspace builder. DndContext diletakkan DI SINI agar
  * draggable dari ElementsSidebar (widget-*) terdaftar dalam konteks yang
  * sama dengan droppable kanvas — tanpa ini, seret widget putus di tengah.
+ *
+ * `accessToken` hanya diisi di mode link edit (`/edit/[token]`) agar simpan
+ * langsung (Ctrl+S / interaksi) memakai RPC token, bukan klien anon + RLS.
  */
-export default function BuilderWorkspace({ projectId }: { projectId: string }) {
+export default function BuilderWorkspace({
+  projectId,
+  accessToken
+}: {
+  projectId: string;
+  accessToken?: string;
+}) {
   const canvas = useBuilderStore((s) => s.canvas);
   const selectedBlockId = useBuilderStore((s) => s.selectedBlockId);
   const [activeType, setActiveType] = useState<BlockType | null>(null);
@@ -53,7 +62,7 @@ export default function BuilderWorkspace({ projectId }: { projectId: string }) {
 
   async function triggerSave() {
     setSaveState('saving');
-    const { error } = await saveCanvasNow(projectId, useBuilderStore.getState().canvas);
+    const { error } = await saveCanvasNow(projectId, useBuilderStore.getState().canvas, accessToken);
     if (!error && freeCanvasRef.current) {
       const { captureAndSaveThumbnail } = await import('@/lib/thumbnail');
       captureAndSaveThumbnail(projectId, freeCanvasRef.current);

@@ -26,7 +26,7 @@ interface EditTokenClientProps {
 export default function EditTokenClient({ projectId, projectTitle, token }: EditTokenClientProps) {
   const canvas = useBuilderStore((s) => s.canvas);
   const init = useBuilderStore((s) => s.init);
-  const saveStatus = useAutosave({ projectId, canvas });
+  const saveStatus = useAutosave({ projectId, canvas, accessToken: token });
   const [ready, setReady] = useState(false);
   const [previewUrl, setPreviewUrl] = useState('');
   const [guideOpen, setGuideOpen] = useState(false);
@@ -87,7 +87,13 @@ export default function EditTokenClient({ projectId, projectTitle, token }: Edit
 
         <div className="flex items-center gap-2">
           <span className="text-[10px] text-[#8a7d6b]">
-            {saveStatus === 'saving' ? 'Menyimpan...' : saveStatus === 'saved' ? 'Tersimpan' : ''}
+            {saveStatus === 'saving'
+              ? 'Menyimpan...'
+              : saveStatus === 'saved'
+                ? 'Tersimpan'
+                : saveStatus === 'error'
+                  ? 'Gagal menyimpan'
+                  : ''}
           </span>
           {/* Preview */}
           {previewUrl && (
@@ -115,7 +121,7 @@ export default function EditTokenClient({ projectId, projectTitle, token }: Edit
       </div>
 
       {/* Builder workspace */}
-      <BuilderWorkspace projectId={projectId} />
+      <BuilderWorkspace projectId={projectId} accessToken={token} />
 
       <GuideModal
         open={guideOpen}
