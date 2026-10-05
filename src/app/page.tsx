@@ -329,7 +329,7 @@ export default function LandingPage() {
                 </a>
               </div>
               {/* Harga/promo sebagai bubble di dalam hero (spec hero-pricing-bubble.md) */}
-              {pricing.show_pricing && pricing.base_price > 0 && (
+              {pricing.show_pricing && pricing.base_price > 0 && collageImages.length > 0 && (
                 <div className="mt-8">
                   <PricingBubble
                     basePrice={pricing.base_price}
@@ -342,7 +342,7 @@ export default function LandingPage() {
               )}
             </div>
             {/* KOLASE 3 GAMBAR — larger on desktop */}
-            {collageImages.length > 0 && (
+            {collageImages.length > 0 ? (
             <div className="relative mx-auto w-full max-w-md min-w-0 lg:max-w-lg xl:max-w-xl" aria-hidden>
               <div className="grid aspect-[7/9] min-w-0 grid-cols-12 grid-rows-2 gap-4 lg:gap-5">
                 {/* foto besar kiri */}
@@ -368,7 +368,17 @@ export default function LandingPage() {
               <div className="absolute -right-3 -top-3 -z-10 h-24 w-24 rounded-full bg-gradient-to-br from-gold/20 to-transparent lg:-right-4 lg:-top-4 lg:h-28 lg:w-28" />
               <div className="absolute -bottom-5 -left-5 -z-10 h-32 w-32 rounded-full border border-gold/20 lg:-bottom-6 lg:-left-6 lg:h-36 lg:w-36" />
             </div>
-            )}
+            ) : pricing.show_pricing && pricing.base_price > 0 ? (
+            <div className="mx-auto w-full max-w-sm lg:justify-self-end lg:self-start lg:pt-4">
+              <PricingBubble
+                basePrice={pricing.base_price}
+                discountPercent={pricing.discount_percent}
+                promoCode={pricing.promo_code}
+                promoExpiresAt={pricing.promo_expires_at}
+                onOrder={() => openOrder()}
+              />
+            </div>
+            ) : null}
           </div>
         </section>
 
