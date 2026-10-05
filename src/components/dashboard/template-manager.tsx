@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Check, Eye, EyeOff, Loader2, Pencil, Plus, Trash2, X } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
 import { emptyCanvas } from '@/lib/templates';
@@ -11,6 +12,7 @@ import {
   deleteTemplate,
   type CustomTemplate
 } from '@/lib/api/custom-templates';
+import { clientCreateProjectFromData } from '@/lib/api/project-client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import type { CanvasData } from '@/lib/types';
@@ -22,6 +24,7 @@ interface ProjectLite {
 
 /** Manajemen template kustom (DB): buat dari undangan, ubah, sembunyikan, hapus. */
 export default function TemplateManager() {
+  const router = useRouter();
   const [items, setItems] = useState<CustomTemplate[]>([]);
   const [projects, setProjects] = useState<ProjectLite[]>([]);
   const [loading, setLoading] = useState(true);
@@ -72,6 +75,21 @@ export default function TemplateManager() {
       if (res.error) setError(res.error);
       else setFromProject('');
       await refresh();
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function useTemplate(t: CustomTemplate) {
+    setBusy(true);
+    setError('');
+    try {
+      const res = await clientCreateProjectFromData(t.name, t.canvas_data);
+      if (res.error || !res.id) {
+        setError(res.error ?? 'Gagal membuat undangan dari template.');
+        return;
+      }
+      router.push(`/builder/${res.id}`);
     } finally {
       setBusy(false);
     }
@@ -205,6 +223,14 @@ export default function TemplateManager() {
                       title={t.visible ? 'Sembunyikan dari landing' : 'Tampilkan di landing'}
                     >
                       {t.visible ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => void useTemplate(t)}
+                      className="rounded-md border border-[#c9a45c]/40 bg-[#c9a45c]/5 px-2 py-1.5 text-[11px] font-medium text-[#c9a45c] hover:bg-[#c9a45c]/10"
+                      title="Buat undangan dari template ini"
+                    >
+                      Pakai
                     </button>
                     <button
                       type="button"
