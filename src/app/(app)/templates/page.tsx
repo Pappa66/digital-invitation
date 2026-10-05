@@ -85,24 +85,24 @@ export default function TemplatesPage() {
     <div>
       <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h2 className="text-lg font-semibold">Template</h2>
-          <p className="text-sm text-gray-500">
+          <h2 className="text-lg font-semibold text-foreground">Template</h2>
+          <p className="text-sm text-muted-foreground">
             Mulai dari template jadi, buat dari kosong, atau pakai lagi desain yang kamu simpan sebagai template.
           </p>
         </div>
         <Button variant="outline" onClick={() => setGuideOpen(true)}>
-          <HelpCircle className="h-4 w-4" /> Panduan
+          <HelpCircle className="h-4 w-4" aria-hidden /> Panduan
         </Button>
       </div>
 
-      <div className="mb-6 flex flex-wrap items-center gap-2 rounded-lg border border-dashed bg-card px-4 py-4">
-        <Sparkles className="h-5 w-5 text-gray-400" />
+      <div className="mb-6 flex flex-wrap items-center gap-3 rounded-2xl border border-dashed border-border bg-card px-4 py-4 shadow-soft">
+        <Sparkles className="h-5 w-5 text-gold-strong" aria-hidden />
         <div className="flex-1">
-          <p className="text-sm font-medium text-gray-800">Mulai dari halaman kosong</p>
-          <p className="text-xs text-gray-500">Lewati template dan susun sendiri semuanya di Builder.</p>
+          <p className="text-sm font-medium text-foreground">Mulai dari halaman kosong</p>
+          <p className="text-xs text-muted-foreground">Lewati template dan susun sendiri semuanya di Builder.</p>
         </div>
         <Button onClick={startBlank} disabled={busyId !== null}>
-          {busyId === '_blank' ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
+          {busyId === '_blank' ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : <Plus className="h-4 w-4" aria-hidden />}
           Mulai Kosong
         </Button>
       </div>
@@ -111,37 +111,37 @@ export default function TemplatesPage() {
 
       {userTemplates.length > 0 && (
         <section className="mb-8">
-          <h3 className="mb-3 text-sm font-semibold text-gray-900">Template Saya</h3>
+          <h3 className="mb-3 text-sm font-semibold text-foreground">Template Saya</h3>
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {userTemplates.map((t) => (
               <div
                 key={t.id}
-                className="flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white transition-shadow hover:shadow-md"
+                className="flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-soft transition-shadow hover:shadow-card"
               >
                 <div
                   className="relative flex h-36 items-center justify-center"
                   style={{ background: `linear-gradient(135deg, ${t.primary} 0%, ${t.secondary} 100%)` }}
                 >
-                  <span className="rounded-full bg-white/20 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm">
+                  <span className="rounded-full bg-foreground/20 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm">
                     {t.category}
                   </span>
                   <button
                     onClick={() => removeUser(t.id)}
                     aria-label={`Hapus template ${t.name}`}
-                    className="absolute right-2 top-2 rounded-md bg-black/20 p-1.5 text-white hover:bg-black/40"
+                    className="absolute right-2 top-2 inline-flex h-9 w-9 items-center justify-center rounded-md bg-foreground/20 text-white transition-colors hover:bg-foreground/40"
                   >
-                    <Trash2 className="h-3.5 w-3.5" />
+                    <Trash2 className="h-3.5 w-3.5" aria-hidden />
                   </button>
                 </div>
 <div className="flex flex-1 flex-col p-4">
                       <div className="flex items-center gap-2">
-                        <span className="h-4 w-4 rounded-full border border-black/5" style={{ background: t.primary }} />
-                        <span className="h-4 w-4 rounded-full border border-black/5" style={{ background: t.secondary }} />
-                        <p className="ml-1 truncate text-sm font-semibold text-gray-900">{t.name}</p>
+                        <span className="h-4 w-4 rounded-full border border-foreground/5" style={{ background: t.primary }} aria-hidden />
+                        <span className="h-4 w-4 rounded-full border border-foreground/5" style={{ background: t.secondary }} aria-hidden />
+                        <p className="ml-1 truncate text-sm font-semibold text-foreground">{t.name}</p>
                       </div>
-                      <p className="mt-1.5 line-clamp-2 flex-1 text-xs leading-relaxed text-gray-500">{t.description}</p>
+                      <p className="mt-1.5 line-clamp-2 flex-1 text-xs leading-relaxed text-muted-foreground">{t.description}</p>
                       <Button onClick={() => startUser(t)} disabled={busyId !== null} className="mt-4 w-full">
-                        {busyId === t.id ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+                        {busyId === t.id ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : null}
                         Pakai Template
                       </Button>
                     </div>
@@ -154,20 +154,21 @@ export default function TemplatesPage() {
       <section>
         <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
           <div>
-            <h3 className="text-sm font-semibold text-gray-900">Template Bawaan</h3>
-            <p className="mt-0.5 text-xs text-gray-500">
+            <h3 className="text-sm font-semibold text-foreground">Template Bawaan</h3>
+            <p className="mt-0.5 text-xs text-muted-foreground">
               Klik preview untuk melihat detail desain, lalu pakai untuk mulai mendesain.
             </p>
           </div>
-          <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600">{filtered.length} template</span>
+          <span className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">{filtered.length} template</span>
         </div>
 
         <div className="mb-3 relative">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden />
           <Input
             value={search}
             onChange={(e) => { setSearch(e.target.value); setPage(1); }}
             placeholder="Cari template..."
+            aria-label="Cari template"
             className="pl-9 text-sm"
           />
         </div>
@@ -189,11 +190,11 @@ export default function TemplatesPage() {
             </Button>
           ))}
         </div>
-        <div className="mb-6 max-w-3xl rounded-xl border border-gray-200 bg-amber-50/60 px-4 py-3">
-          <p className="text-[11px] font-semibold uppercase tracking-wider text-amber-700">
+        <div className="mb-6 max-w-3xl rounded-2xl border border-gold/30 bg-accent px-4 py-3">
+          <p className="text-[11px] font-semibold uppercase tracking-wider text-accent-foreground">
             {category === 'semua' ? 'Filosofi Kategori' : `Makna ${categoryLabel(category)}`}
           </p>
-          <p className="mt-0.5 text-xs leading-relaxed text-gray-600">
+          <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">
             {category === 'semua'
               ? 'Setiap gaya membawa makna dan suasana tersendiri — pilih kategori yang paling dekat dengan cerita cinta kalian.'
               : CATEGORIES.find((c) => c.key === category)?.desc}
@@ -206,32 +207,33 @@ export default function TemplatesPage() {
             return (
               <div
                 key={t.id}
-                className="flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white transition-shadow hover:shadow-md"
+                className="flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-soft transition-shadow hover:shadow-card"
               >
                 <button
                   onClick={() => router.push(`/templates/${t.id}`)}
                   className="relative flex h-36 items-center justify-center"
                   style={{ background: `linear-gradient(135deg, ${t.primary} 0%, ${t.secondary} 100%)` }}
+                  aria-label={`Lihat preview template ${t.name}`}
                 >
                   <span className="pointer-events-none absolute left-2 bottom-1 select-none text-6xl font-bold text-white/20">
                     {String(number).padStart(2, '0')}
                   </span>
-                  <span className="rounded-full bg-white/20 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm">
+                  <span className="rounded-full bg-foreground/20 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm">
                     {categoryLabel(t.category)}
                   </span>
-                  <span className="absolute right-2 top-2 flex items-center gap-1 rounded-md bg-black/20 px-2 py-1 text-[10px] font-medium text-white hover:bg-black/40">
-                    <Eye className="h-3 w-3" /> Preview
+                  <span className="absolute right-2 top-2 flex items-center gap-1 rounded-md bg-foreground/20 px-2 py-1 text-[10px] font-medium text-white transition-colors hover:bg-foreground/40">
+                    <Eye className="h-3 w-3" aria-hidden /> Preview
                   </span>
                 </button>
                 <div className="flex flex-1 flex-col p-4">
                   <div className="flex items-center gap-2">
-                    <span className="h-4 w-4 rounded-full border border-black/5" style={{ background: t.primary }} />
-                    <span className="h-4 w-4 rounded-full border border-black/5" style={{ background: t.secondary }} />
-                    <p className="ml-1 text-sm font-semibold text-gray-900">{t.name}</p>
+                    <span className="h-4 w-4 rounded-full border border-foreground/5" style={{ background: t.primary }} aria-hidden />
+                    <span className="h-4 w-4 rounded-full border border-foreground/5" style={{ background: t.secondary }} aria-hidden />
+                    <p className="ml-1 truncate text-sm font-semibold text-foreground">{t.name}</p>
                   </div>
-                  <p className="mt-1.5 line-clamp-3 flex-1 text-xs leading-relaxed text-gray-500">{t.description}</p>
+                  <p className="mt-1.5 line-clamp-3 flex-1 text-xs leading-relaxed text-muted-foreground">{t.description}</p>
                   <Button onClick={() => { setSelectedTemplate({ id: t.id, name: t.name }); setNameDialogOpen(true); }} disabled={busyId !== null} className="mt-4 w-full">
-                    {busyId === t.id ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+                    {busyId === t.id ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : null}
                     Pakai Template
                   </Button>
                 </div>
@@ -303,35 +305,37 @@ export default function TemplatesPage() {
       />
 
       <Dialog open={nameDialogOpen} onOpenChange={(o) => { if (!o) { setNameDialogOpen(false); setSelectedTemplate(null); } }}>
-        <DialogContent className="w-full max-w-sm gap-2 p-5 sm:rounded-xl">
-          <DialogTitle className="text-base font-semibold text-gray-900">Buat Undangan Baru</DialogTitle>
-          <DialogDescription className="mt-2 text-sm leading-relaxed text-gray-600">
-            Beri nama undangan Anda dari template <span className="font-medium">{selectedTemplate?.name}</span>.
+        <DialogContent className="w-full max-w-sm gap-2 p-5 sm:rounded-2xl">
+          <DialogTitle className="text-base font-semibold text-foreground">Buat Undangan Baru</DialogTitle>
+          <DialogDescription className="mt-2 text-sm leading-relaxed text-muted-foreground">
+            Beri nama undangan Anda dari template <span className="font-medium text-foreground">{selectedTemplate?.name}</span>.
           </DialogDescription>
           <Input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="cth: Perkawinan Panca & Sena"
+            aria-label="Nama undangan"
             className="mt-3"
             autoFocus
           />
-          {error && <p className="mt-2 text-xs text-red-600">{error}</p>}
+          {error && <p className="mt-2 text-xs text-destructive" role="alert">{error}</p>}
           <div className="mt-5 flex justify-end gap-2">
-            <button
+            <Button
+              type="button"
+              variant="outline"
               onClick={() => { setNameDialogOpen(false); setSelectedTemplate(null); }}
               disabled={busyId !== null}
-              className="rounded-md border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
             >
               Batal
-            </button>
-            <button
+            </Button>
+            <Button
+              type="button"
               onClick={() => { if (selectedTemplate) startBuiltIn(selectedTemplate.id); }}
               disabled={busyId !== null}
-              className="rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700 disabled:opacity-50"
             >
-              {busyId ? <Loader2 className="mr-1 inline h-3 w-3 animate-spin" /> : null}
+              {busyId ? <Loader2 className="mr-1 h-3 w-3 animate-spin" aria-hidden /> : null}
               Buat
-            </button>
+            </Button>
           </div>
         </DialogContent>
       </Dialog>

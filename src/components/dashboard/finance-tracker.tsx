@@ -9,6 +9,7 @@ import { listFinanceRecords, addFinanceRecord, updateFinanceRecord, deleteFinanc
 import { formatRupiah } from '@/lib/format';
 import ConfirmDialog from '@/components/dashboard/confirm-dialog';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 import { InlineError, StatsSkeleton, TableSkeleton } from '@/components/ui/skeleton';
 
 interface FinanceRecord {
@@ -29,8 +30,8 @@ interface FinanceRecord {
 }
 
 const PAYMENT_STATUS_OPTIONS = [
-  { value: 'unpaid', label: 'Belum Dibayar', color: 'bg-red-100 text-red-700' },
-  { value: 'paid', label: 'Lunas', color: 'bg-green-100 text-green-700' }
+  { value: 'unpaid', label: 'Belum Dibayar', color: 'bg-destructive/10 text-destructive' },
+  { value: 'paid', label: 'Lunas', color: 'bg-emerald-100 text-emerald-800' }
 ];
 
 const EMPTY_RECORD = {
@@ -190,11 +191,11 @@ export default function FinanceTracker() {
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h2 className="text-lg font-semibold">Pencatatan Keuangan</h2>
-          <p className="text-sm text-gray-500">{records.length} catatan transaksi</p>
+          <p className="text-sm text-muted-foreground">{records.length} catatan transaksi</p>
         </div>
         <button
           onClick={() => setShowAddModal(true)}
-          className="flex items-center gap-2 rounded-md bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-4 py-2 text-sm font-semibold text-white shadow-sm hover:opacity-90"
+          className="flex items-center gap-2 rounded-md bg-gradient-to-r from-gold to-gold-strong px-4 py-2 text-sm font-semibold text-primary-foreground shadow-gold hover:opacity-90"
         >
           <Plus className="h-4 w-4" /> Tambah Transaksi
         </button>
@@ -205,13 +206,13 @@ export default function FinanceTracker() {
           <StatsSkeleton />
           <div className="mb-4">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <input
                 type="text"
                 placeholder="Cari transaksi..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full rounded-lg border border-gray-300 py-2 pl-10 pr-4 text-sm focus:border-[#c9a45c] focus:outline-none focus:ring-1 focus:ring-[#c9a45c]"
+                className="w-full rounded-lg border border-input py-2 pl-10 pr-4 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               />
             </div>
           </div>
@@ -227,13 +228,13 @@ export default function FinanceTracker() {
         <>
           {/* Stats Cards */}
           <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
-            <StatCard icon={DollarSign} tint="bg-blue-100" color="text-blue-600" label="Total Pendapatan" value={formatRupiah(stats.totalRevenue)} />
-            <StatCard icon={TrendingUp} tint="bg-green-100" color="text-green-600" label="Sudah Dibayar" value={formatRupiah(stats.totalPaid)} />
-            <StatCard icon={TrendingDown} tint="bg-yellow-100" color="text-yellow-600" label="Belum Dibayar" value={formatRupiah(stats.totalPending)} />
+            <StatCard icon={DollarSign} tint="bg-accent" color="text-gold-deep" label="Total Pendapatan" value={formatRupiah(stats.totalRevenue)} />
+            <StatCard icon={TrendingUp} tint="bg-emerald-100" color="text-emerald-700" label="Sudah Dibayar" value={formatRupiah(stats.totalPaid)} />
+            <StatCard icon={TrendingDown} tint="bg-amber-100" color="text-amber-700" label="Belum Dibayar" value={formatRupiah(stats.totalPending)} />
             <StatCard
               icon={Calculator}
-              tint="bg-purple-100"
-              color="text-purple-600"
+              tint="bg-secondary"
+              color="text-secondary-foreground"
               label="Status"
               value={`${stats.paidCount} Lunas · ${stats.unpaidCount} Belum`}
             />
@@ -242,61 +243,69 @@ export default function FinanceTracker() {
           {/* Search */}
           <div className="mb-4">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden />
               <input
                 type="text"
                 placeholder="Cari transaksi..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full rounded-lg border border-gray-300 py-2 pl-10 pr-4 text-sm focus:border-[#c9a45c] focus:outline-none focus:ring-1 focus:ring-[#c9a45c]"
+                className="w-full rounded-lg border border-input py-2 pl-10 pr-4 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               />
             </div>
           </div>
 
           {/* Records Table */}
           {filteredRecords.length === 0 ? (
-            <div className="rounded-xl border border-dashed border-gray-300 bg-white py-12 text-center">
-              <p className="text-gray-500">Belum ada catatan keuangan</p>
+            <div className="flex flex-col items-center rounded-2xl border border-dashed border-border bg-card px-6 py-14 text-center">
+              <span className="flex h-12 w-12 items-center justify-center rounded-full bg-gold/15">
+                <Calculator className="h-6 w-6 text-gold-strong" aria-hidden />
+              </span>
+              <p className="mt-3 text-sm font-medium text-foreground">Belum ada catatan keuangan</p>
+              <p className="mt-1 max-w-xs text-xs text-muted-foreground">Catat transaksi pertama untuk memantau pendapatan dan pembayaran.</p>
+              <Button onClick={() => setShowAddModal(true)} className="mt-4">
+                <Plus className="h-4 w-4" aria-hidden /> Tambah Transaksi
+              </Button>
             </div>
           ) : (
-            <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
+            <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-soft">
               <div className="overflow-x-auto">
                 <table className="w-full">
-                  <thead className="bg-gray-50">
+                  <caption className="sr-only">Catatan keuangan</caption>
+                  <thead className="bg-muted">
                     <tr>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500">Client</th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500">Desain</th>
-                      <th className="px-4 py-3 text-right text-xs font-medium text-gray-500">Harga</th>
-                      <th className="px-4 py-3 text-right text-xs font-medium text-gray-500">Diskon</th>
-                      <th className="px-4 py-3 text-right text-xs font-medium text-gray-500">Promo</th>
-                      <th className="px-4 py-3 text-right text-xs font-medium text-gray-500">Final</th>
-                      <th className="px-4 py-3 text-right text-xs font-medium text-gray-500">Dibayar</th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500">Status</th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500">Aksi</th>
+                      <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">Client</th>
+                      <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">Desain</th>
+                      <th scope="col" className="px-4 py-3 text-right text-xs font-medium text-muted-foreground">Harga</th>
+                      <th scope="col" className="px-4 py-3 text-right text-xs font-medium text-muted-foreground">Diskon</th>
+                      <th scope="col" className="px-4 py-3 text-right text-xs font-medium text-muted-foreground">Promo</th>
+                      <th scope="col" className="px-4 py-3 text-right text-xs font-medium text-muted-foreground">Final</th>
+                      <th scope="col" className="px-4 py-3 text-right text-xs font-medium text-muted-foreground">Dibayar</th>
+                      <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">Status</th>
+                      <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">Aksi</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-200">
+                  <tbody className="divide-y divide-border">
                     {filteredRecords.map((record) => (
-                      <tr key={record.id} className="hover:bg-gray-50">
+                      <tr key={record.id} className="hover:bg-accent/40">
                         <td className="px-4 py-3">
-                          <p className="font-medium text-gray-900">{record.client_name}</p>
+                          <p className="font-medium text-foreground">{record.client_name}</p>
                         </td>
-                        <td className="px-4 py-3 text-sm text-gray-700">{record.design_name || '-'}</td>
-                        <td className="px-4 py-3 text-right text-sm text-gray-700">{formatRupiah(record.base_price)}</td>
-                        <td className="px-4 py-3 text-right text-sm text-red-600">
+                        <td className="px-4 py-3 text-sm text-foreground">{record.design_name || '-'}</td>
+                        <td className="px-4 py-3 text-right text-sm text-foreground">{formatRupiah(record.base_price)}</td>
+                        <td className="px-4 py-3 text-right text-sm text-destructive">
                           {record.discount > 0 ? `-${formatRupiah(record.discount)}` : '-'}
                         </td>
                         <td className="px-4 py-3 text-right text-sm">
                           {record.promo_code ? (
-                            <span className="rounded bg-purple-100 px-2 py-0.5 text-xs text-purple-700">
+                            <span className="rounded bg-secondary px-2 py-0.5 text-xs text-secondary-foreground">
                               {record.promo_code} (-{formatRupiah(record.promo_amount)})
                             </span>
                           ) : (
                             '-'
                           )}
                         </td>
-                        <td className="px-4 py-3 text-right text-sm font-semibold text-gray-900">{formatRupiah(record.final_price)}</td>
-                        <td className="px-4 py-3 text-right text-sm text-green-600">{formatRupiah(record.payment_amount)}</td>
+                        <td className="px-4 py-3 text-right text-sm font-semibold text-foreground">{formatRupiah(record.final_price)}</td>
+                        <td className="px-4 py-3 text-right text-sm text-emerald-700">{formatRupiah(record.payment_amount)}</td>
                         <td className="px-4 py-3">
                           <span
                             className={`inline-block rounded-full px-2 py-1 text-xs font-medium ${
@@ -314,18 +323,18 @@ export default function FinanceTracker() {
                                   setPayAmount(0);
                                   setPayTarget(record);
                                 }}
-                                className="rounded bg-green-100 px-2 py-1 text-xs text-green-700 hover:bg-green-200"
+                                className="min-h-11 rounded-md bg-emerald-100 px-3 text-xs font-medium text-emerald-800 transition-colors hover:bg-emerald-200"
                               >
                                 Bayar
                               </button>
                             )}
                             <button
                               onClick={() => setDeleteTarget(record)}
-                              className="rounded p-1 text-gray-400 hover:bg-red-50 hover:text-red-600"
+                              className="inline-flex h-11 w-11 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
                               aria-label="Hapus catatan"
                               title="Hapus catatan"
                             >
-                              <Trash2 className="h-4 w-4" />
+                              <Trash2 className="h-4 w-4" aria-hidden />
                             </button>
                           </div>
                         </td>
@@ -341,7 +350,7 @@ export default function FinanceTracker() {
 
       {/* Add Record Modal */}
       <Dialog open={showAddModal} onOpenChange={(o) => { if (!o) setShowAddModal(false); }}>
-        <DialogContent className="max-h-[90vh] w-full max-w-lg overflow-y-auto p-6 sm:rounded-xl">
+        <DialogContent className="max-h-[90vh] w-full max-w-lg overflow-y-auto p-6 sm:rounded-2xl">
           <DialogTitle className="text-lg font-semibold">Tambah Transaksi Baru</DialogTitle>
           <DialogDescription className="sr-only">
             Isi data transaksi keuangan baru untuk client.
@@ -349,104 +358,104 @@ export default function FinanceTracker() {
           <div className="mt-3 space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label htmlFor="fin-client" className="mb-1 block text-sm font-medium text-gray-700">Nama Client *</label>
+                <label htmlFor="fin-client" className="mb-1 block text-sm font-medium text-foreground">Nama Client *</label>
                 <input
                   id="fin-client"
                   type="text"
                   value={newRecord.client_name}
                   onChange={(e) => setNewRecord({ ...newRecord, client_name: e.target.value })}
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#c9a45c] focus:outline-none"
+                  className="w-full rounded-lg border border-input px-3 py-2 text-sm focus:border-gold focus:outline-none"
                   placeholder="Nama client"
                 />
               </div>
               <div>
-                <label htmlFor="fin-design" className="mb-1 block text-sm font-medium text-gray-700">Nama Desain</label>
+                <label htmlFor="fin-design" className="mb-1 block text-sm font-medium text-foreground">Nama Desain</label>
                 <input
                   id="fin-design"
                   type="text"
                   value={newRecord.design_name}
                   onChange={(e) => setNewRecord({ ...newRecord, design_name: e.target.value })}
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#c9a45c] focus:outline-none"
+                  className="w-full rounded-lg border border-input px-3 py-2 text-sm focus:border-gold focus:outline-none"
                   placeholder="Nama desain"
                 />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label htmlFor="fin-base" className="mb-1 block text-sm font-medium text-gray-700">Harga Dasar (Rp)</label>
+                <label htmlFor="fin-base" className="mb-1 block text-sm font-medium text-foreground">Harga Dasar (Rp)</label>
                 <input
                   id="fin-base"
                   type="number"
                   value={newRecord.base_price || ''}
                   onChange={(e) => setNewRecord({ ...newRecord, base_price: parseInt(e.target.value) || 0 })}
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#c9a45c] focus:outline-none"
+                  className="w-full rounded-lg border border-input px-3 py-2 text-sm focus:border-gold focus:outline-none"
                   placeholder="0"
                 />
               </div>
               <div>
-                <label htmlFor="fin-discount" className="mb-1 block text-sm font-medium text-gray-700">Diskon (Rp)</label>
+                <label htmlFor="fin-discount" className="mb-1 block text-sm font-medium text-foreground">Diskon (Rp)</label>
                 <input
                   id="fin-discount"
                   type="number"
                   value={newRecord.discount || ''}
                   onChange={(e) => setNewRecord({ ...newRecord, discount: parseInt(e.target.value) || 0 })}
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#c9a45c] focus:outline-none"
+                  className="w-full rounded-lg border border-input px-3 py-2 text-sm focus:border-gold focus:outline-none"
                   placeholder="0"
                 />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label htmlFor="fin-promo-code" className="mb-1 block text-sm font-medium text-gray-700">Kode Promo</label>
+                <label htmlFor="fin-promo-code" className="mb-1 block text-sm font-medium text-foreground">Kode Promo</label>
                 <input
                   id="fin-promo-code"
                   type="text"
                   value={newRecord.promo_code}
                   onChange={(e) => setNewRecord({ ...newRecord, promo_code: e.target.value })}
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#c9a45c] focus:outline-none"
+                  className="w-full rounded-lg border border-input px-3 py-2 text-sm focus:border-gold focus:outline-none"
                   placeholder="Contoh: DISKON10"
                 />
               </div>
               <div>
-                <label htmlFor="fin-promo-nominal" className="mb-1 block text-sm font-medium text-gray-700">Nominal Promo (Rp)</label>
+                <label htmlFor="fin-promo-nominal" className="mb-1 block text-sm font-medium text-foreground">Nominal Promo (Rp)</label>
                 <input
                   id="fin-promo-nominal"
                   type="number"
                   value={newRecord.promo_amount || ''}
                   onChange={(e) => setNewRecord({ ...newRecord, promo_amount: parseInt(e.target.value) || 0 })}
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#c9a45c] focus:outline-none"
+                  className="w-full rounded-lg border border-input px-3 py-2 text-sm focus:border-gold focus:outline-none"
                   placeholder="0"
                 />
               </div>
             </div>
             <div>
-              <label htmlFor="fin-paid" className="mb-1 block text-sm font-medium text-gray-700">Jumlah Dibayar (Rp)</label>
+              <label htmlFor="fin-paid" className="mb-1 block text-sm font-medium text-foreground">Jumlah Dibayar (Rp)</label>
               <input
                 id="fin-paid"
                 type="number"
                 value={newRecord.payment_amount || ''}
                 onChange={(e) => setNewRecord({ ...newRecord, payment_amount: parseInt(e.target.value) || 0 })}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#c9a45c] focus:outline-none"
+                className="w-full rounded-lg border border-input px-3 py-2 text-sm focus:border-gold focus:outline-none"
                 placeholder="0"
               />
             </div>
             <div>
-              <label htmlFor="fin-notes" className="mb-1 block text-sm font-medium text-gray-700">Catatan</label>
+              <label htmlFor="fin-notes" className="mb-1 block text-sm font-medium text-foreground">Catatan</label>
               <textarea
                 id="fin-notes"
                 value={newRecord.notes}
                 onChange={(e) => setNewRecord({ ...newRecord, notes: e.target.value })}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#c9a45c] focus:outline-none"
+                className="w-full rounded-lg border border-input px-3 py-2 text-sm focus:border-gold focus:outline-none"
                 rows={2}
                 placeholder="Catatan tambahan..."
               />
             </div>
 
             {/* Preview Final Price */}
-            <div className="rounded-lg bg-gray-50 p-3">
+            <div className="rounded-lg bg-muted p-3">
               <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-500">Harga Final:</span>
-                <span className="font-bold text-gray-900">
+                <span className="text-muted-foreground">Harga Final:</span>
+                <span className="font-bold text-foreground">
                   {formatRupiah(
                     calculateFinalPrice(newRecord.base_price, newRecord.discount, newRecord.promo_amount)
                   )}
@@ -457,14 +466,14 @@ export default function FinanceTracker() {
             <div className="flex justify-end gap-3 pt-2">
               <button
                 onClick={() => setShowAddModal(false)}
-                className="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                className="rounded-lg border border-input px-4 py-2 text-sm text-foreground hover:bg-muted"
               >
                 Batal
               </button>
               <button
                 onClick={handleAddRecord}
                 disabled={!newRecord.client_name.trim()}
-                className="rounded-lg bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-4 py-2 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-50"
+                className="rounded-lg bg-gradient-to-r from-gold to-gold-strong px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-50"
               >
                 <Save className="mr-1 inline h-4 w-4" /> Simpan
               </button>
@@ -491,22 +500,22 @@ export default function FinanceTracker() {
 
       {/* Payment Dialog */}
       <Dialog open={!!payTarget} onOpenChange={(o) => { if (!o) setPayTarget(null); }}>
-        <DialogContent className="w-full max-w-sm gap-3 p-5 sm:rounded-xl">
-          <DialogTitle className="text-base font-semibold text-gray-900">Catat Pembayaran</DialogTitle>
-          <DialogDescription className="text-sm text-gray-600">
+        <DialogContent className="w-full max-w-sm gap-3 p-5 sm:rounded-2xl">
+          <DialogTitle className="text-base font-semibold text-foreground">Catat Pembayaran</DialogTitle>
+          <DialogDescription className="text-sm text-muted-foreground">
             {payTarget
               ? `Masukkan jumlah yang dibayar ${payTarget.client_name}. Sisa tagihan: ${formatRupiah(Math.max(0, payTarget.final_price - payTarget.payment_amount))}.`
               : 'Masukkan jumlah yang dibayar oleh client.'}
           </DialogDescription>
           <div>
-            <label htmlFor="pay-amount" className="mb-1 block text-sm font-medium text-gray-700">Jumlah (Rp)</label>
+            <label htmlFor="pay-amount" className="mb-1 block text-sm font-medium text-foreground">Jumlah (Rp)</label>
             <input
               id="pay-amount"
               type="number"
               min={0}
               value={payAmount || ''}
               onChange={(e) => setPayAmount(parseInt(e.target.value) || 0)}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#c9a45c] focus:outline-none"
+              className="w-full rounded-lg border border-input px-3 py-2 text-sm focus:border-gold focus:outline-none"
               placeholder="0"
             />
           </div>
@@ -514,14 +523,14 @@ export default function FinanceTracker() {
             <button
               onClick={() => setPayTarget(null)}
               disabled={payBusy}
-              className="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+              className="rounded-lg border border-input px-4 py-2 text-sm text-foreground hover:bg-muted disabled:opacity-50"
             >
               Batal
             </button>
             <button
               onClick={confirmPay}
               disabled={payBusy || payAmount <= 0}
-              className="rounded-lg bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-4 py-2 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-50"
+              className="rounded-lg bg-gradient-to-r from-gold to-gold-strong px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-50"
             >
               {payBusy ? 'Menyimpan...' : 'Simpan'}
             </button>
@@ -547,14 +556,14 @@ function StatCard({
   value: React.ReactNode;
 }) {
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-4">
+    <div className="rounded-2xl border border-border bg-card p-4 shadow-soft">
       <div className="flex items-center gap-3">
         <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${tint}`}>
           <Icon className={`h-5 w-5 ${color}`} />
         </div>
         <div className="min-w-0">
-          <p className="text-xs text-gray-500">{label}</p>
-          <p className="text-lg font-bold text-gray-900">{value}</p>
+          <p className="text-xs text-muted-foreground">{label}</p>
+          <p className="text-lg font-bold text-foreground">{value}</p>
         </div>
       </div>
     </div>

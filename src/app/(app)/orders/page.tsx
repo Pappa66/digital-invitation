@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import ConfirmDialog from '@/components/dashboard/confirm-dialog';
+import { TableSkeleton } from '@/components/ui/skeleton';
 
 interface OrderRow {
   id: string;
@@ -27,9 +28,9 @@ interface OrderRow {
 type FilterStatus = 'all' | 'pending' | 'approved' | 'rejected';
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; icon: typeof Clock }> = {
-  pending: { label: 'Menunggu', color: 'bg-amber-50 text-amber-700', icon: Clock },
-  approved: { label: 'Diterima', color: 'bg-green-50 text-green-700', icon: CheckCircle },
-  rejected: { label: 'Ditolak', color: 'bg-red-50 text-red-700', icon: XCircle }
+  pending: { label: 'Menunggu', color: 'bg-amber-100 text-amber-800', icon: Clock },
+  approved: { label: 'Diterima', color: 'bg-emerald-100 text-emerald-800', icon: CheckCircle },
+  rejected: { label: 'Ditolak', color: 'bg-destructive/10 text-destructive', icon: XCircle }
 };
 
 function buildReplyMessage(order: OrderRow): string {
@@ -203,7 +204,7 @@ export default function OrdersPage() {
       <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div>
           <h2 className="text-lg font-semibold">Kontak Masuk</h2>
-          <p className="mt-1 text-sm text-gray-500">{orders.length} pesanan dari form pemesanan.</p>
+          <p className="mt-1 text-sm text-muted-foreground">{orders.length} pesanan dari form pemesanan.</p>
         </div>
         <Button variant="outline" onClick={load} disabled={loading}>
           {loading ? <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> : null}
@@ -212,7 +213,7 @@ export default function OrdersPage() {
       </div>
 
       {error && (
-        <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+        <div role="alert" className="mb-4 rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">
           Gagal memuat: {error}
         </div>
       )}
@@ -232,25 +233,24 @@ export default function OrdersPage() {
           </Button>
         ))}
         <div className="relative ml-auto">
-          <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-400" />
+          <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" aria-hidden />
           <Input
             value={search}
             onChange={(e) => setSearchWithURL(e.target.value)}
             placeholder="Cari nama, template, WA..."
-            className="h-8 w-56 pl-8 text-xs"
+            aria-label="Cari pesanan"
+            className="h-9 w-56 pl-8 text-xs"
           />
         </div>
       </div>
 
       {loading ? (
-        <div className="flex items-center gap-2 py-10 text-sm text-gray-400">
-          <Loader2 className="h-4 w-4 animate-spin" /> Memuat pesanan...
-        </div>
+        <TableSkeleton rows={4} cols={4} />
       ) : filtered.length === 0 ? (
-        <div className="flex flex-col items-center rounded-xl border border-dashed border-gray-300 bg-white/60 px-6 py-14 text-center">
-          <Inbox className="h-8 w-8 text-gray-300" />
-          <p className="mt-3 text-sm font-medium text-gray-800">Belum ada pesanan</p>
-          <p className="mt-1 text-xs text-gray-500">Pesanan dari form pemesanan akan muncul di sini.</p>
+        <div className="flex flex-col items-center rounded-2xl border border-dashed border-border bg-card/60 px-6 py-14 text-center">
+          <Inbox className="h-8 w-8 text-border" />
+          <p className="mt-3 text-sm font-medium text-foreground">Belum ada pesanan</p>
+          <p className="mt-1 text-xs text-muted-foreground">Pesanan dari form pemesanan akan muncul di sini.</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -258,13 +258,13 @@ export default function OrdersPage() {
             const st = STATUS_CONFIG[o.status || 'pending'] ?? STATUS_CONFIG.pending;
             const StatusIcon = st.icon;
             return (
-              <div key={o.id} className="rounded-xl border border-gray-200 bg-white p-4 transition-shadow hover:shadow-sm">
+              <div key={o.id} className="rounded-2xl border border-border bg-card p-4 shadow-soft transition-shadow hover:shadow-card">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
-                      <p className="text-sm font-semibold text-gray-900">{o.name}</p>
+                      <p className="text-sm font-semibold text-foreground">{o.name}</p>
                       <Badge className={`gap-1 ${st.color} border-transparent`}>
-                        <StatusIcon className="h-3 w-3" /> {st.label}
+                        <StatusIcon className="h-3 w-3" aria-hidden /> {st.label}
                       </Badge>
                       {o.template_name && (
                         <Badge variant="secondary" className="gap-1">
@@ -272,19 +272,19 @@ export default function OrdersPage() {
                         </Badge>
                       )}
                     </div>
-                    {o.email && <p className="mt-0.5 text-xs text-gray-400">{o.email}</p>}
-                    <p className="mt-1 text-xs text-gray-500">{formatDate(o.created_at)}</p>
+                    {o.email && <p className="mt-0.5 text-xs text-muted-foreground">{o.email}</p>}
+                    <p className="mt-1 text-xs text-muted-foreground">{formatDate(o.created_at)}</p>
                   </div>
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex flex-wrap items-center gap-1.5">
                     {o.whatsapp && (
                       <a
                         href={`https://wa.me/${o.whatsapp}?text=${encodeURIComponent(buildReplyMessage(o))}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-1.5 rounded-md bg-green-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-green-700"
+                        className="flex min-h-11 items-center gap-1.5 rounded-md bg-emerald-600 px-3 text-xs font-medium text-white transition-colors hover:bg-emerald-700"
                         title="Balas via WhatsApp dengan pesan konfirmasi"
                       >
-                        <Send className="h-3.5 w-3.5" /> Balas WA
+                        <Send className="h-3.5 w-3.5" aria-hidden /> Balas WA
                       </a>
                     )}
                     {(o.status || 'pending') === 'pending' && (
@@ -293,19 +293,19 @@ export default function OrdersPage() {
                           onClick={() => updateStatus(o.id, 'approved')}
                           disabled={actionBusy === o.id}
                           aria-label="Setujui pesanan"
-                          className="rounded-md border border-green-200 p-1.5 text-green-600 hover:bg-green-50 disabled:opacity-40"
+                          className="inline-flex h-11 w-11 items-center justify-center rounded-md border border-emerald-200 text-emerald-700 transition-colors hover:bg-emerald-50 disabled:opacity-40"
                           title="Setujui pesanan"
                         >
-                          {actionBusy === o.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <CheckCircle className="h-3.5 w-3.5" />}
+                          {actionBusy === o.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden /> : <CheckCircle className="h-3.5 w-3.5" aria-hidden />}
                         </button>
                         <button
                           onClick={() => updateStatus(o.id, 'rejected')}
                           disabled={actionBusy === o.id}
                           aria-label="Tolak pesanan"
-                          className="rounded-md border border-red-200 p-1.5 text-red-400 hover:bg-red-50 disabled:opacity-40"
+                          className="inline-flex h-11 w-11 items-center justify-center rounded-md border border-destructive/30 text-destructive transition-colors hover:bg-destructive/10 disabled:opacity-40"
                           title="Tolak pesanan"
                         >
-                          {actionBusy === o.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <XCircle className="h-3.5 w-3.5" />}
+                          {actionBusy === o.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden /> : <XCircle className="h-3.5 w-3.5" aria-hidden />}
                         </button>
                       </>
                     )}
@@ -313,10 +313,10 @@ export default function OrdersPage() {
                       <Button
                         onClick={() => createProjectFromOrder(o)}
                         disabled={actionBusy === o.id}
-                        className="h-7 px-3 text-xs"
+                        className="h-11 px-3 text-xs"
                         title="Buat proyek undangan dari pesanan ini"
                       >
-                        {actionBusy === o.id ? <Loader2 className="mr-1 h-3 w-3 animate-spin" /> : null}
+                        {actionBusy === o.id ? <Loader2 className="mr-1 h-3 w-3 animate-spin" aria-hidden /> : null}
                         Buat Proyek
                       </Button>
                     )}
@@ -325,21 +325,21 @@ export default function OrdersPage() {
                         href={`/builder/${o.project_id}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-1.5 rounded-md border border-[#c9a45c] px-3 py-1.5 text-xs font-medium text-[#c9a45c] hover:bg-[#c9a45c]/5"
+                        className="flex min-h-11 items-center gap-1.5 rounded-md border border-gold px-3 text-xs font-medium text-gold-deep transition-colors hover:bg-gold/5"
                       >
-                        <ExternalLink className="h-3 w-3" /> Buka Proyek
+                        <ExternalLink className="h-3 w-3" aria-hidden /> Buka Proyek
                       </a>
                     )}
                     <button
                       onClick={() => setDeleteTarget(o)}
                       aria-label={`Hapus pesanan ${o.name}`}
-                      className="rounded-md border border-gray-200 p-1.5 text-gray-400 hover:bg-gray-50 hover:text-red-600"
+                      className="inline-flex h-11 w-11 items-center justify-center rounded-md border border-border text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
                     >
-                      <Trash2 className="h-3.5 w-3.5" />
+                      <Trash2 className="h-3.5 w-3.5" aria-hidden />
                     </button>
                   </div>
                 </div>
-                {o.note && <p className="mt-3 rounded-lg bg-gray-50 px-3 py-2 text-xs leading-relaxed text-gray-600">&ldquo;{o.note}&rdquo;</p>}
+                {o.note && <p className="mt-3 rounded-lg bg-muted px-3 py-2 text-xs leading-relaxed text-muted-foreground">&ldquo;{o.note}&rdquo;</p>}
               </div>
             );
           })}

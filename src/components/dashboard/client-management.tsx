@@ -1,13 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Plus, Search, ExternalLink, Edit2, Trash2, Save } from 'lucide-react';
+import { Plus, Search, ExternalLink, Edit2, Trash2, Save, Users } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
 import { demoIsDemoMode } from '@/lib/env';
 import { TEMPLATE_LIST } from '@/lib/templates';
 import { clientCreateProject } from '@/lib/api/project-client';
 import ConfirmDialog from '@/components/dashboard/confirm-dialog';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 import { InlineError, TableSkeleton } from '@/components/ui/skeleton';
 
 interface Client {
@@ -25,9 +26,9 @@ interface Client {
 }
 
 const STATUS_OPTIONS = [
-  { value: 'aktual', label: 'Aktual', color: 'bg-blue-100 text-blue-700' },
-  { value: 'proses', label: 'Proses', color: 'bg-yellow-100 text-yellow-700' },
-  { value: 'selesai', label: 'Selesai', color: 'bg-green-100 text-green-700' }
+  { value: 'aktual', label: 'Aktual', color: 'bg-accent text-accent-foreground' },
+  { value: 'proses', label: 'Proses', color: 'bg-amber-100 text-amber-800' },
+  { value: 'selesai', label: 'Selesai', color: 'bg-emerald-100 text-emerald-800' }
 ];
 
 const EMPTY_CLIENT = { name: '', email: '', phone: '', project_id: '', design_name: '', template_id: '' };
@@ -161,11 +162,11 @@ export default function ClientManagement() {
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h2 className="text-lg font-semibold">Manajemen Client</h2>
-          <p className="text-sm text-gray-500">{clients.length} client terdaftar</p>
+          <p className="text-sm text-muted-foreground">{clients.length} client terdaftar</p>
         </div>
         <button
           onClick={() => setShowAddModal(true)}
-          className="flex items-center gap-2 rounded-md bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-4 py-2 text-sm font-semibold text-white shadow-sm hover:opacity-90"
+          className="flex items-center gap-2 rounded-md bg-gradient-to-r from-gold to-gold-strong px-4 py-2 text-sm font-semibold text-primary-foreground shadow-gold hover:opacity-90"
         >
           <Plus className="h-4 w-4" /> Tambah Client
         </button>
@@ -174,13 +175,13 @@ export default function ClientManagement() {
       {/* Search */}
       <div className="mb-4">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input
             type="text"
             placeholder="Cari client..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-lg border border-gray-300 py-2 pl-10 pr-4 text-sm focus:border-[#c9a45c] focus:outline-none focus:ring-1 focus:ring-[#c9a45c]"
+            className="w-full rounded-lg border border-input py-2 pl-10 pr-4 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           />
         </div>
       </div>
@@ -195,32 +196,41 @@ export default function ClientManagement() {
           onRetry={loadClients}
         />
       ) : filteredClients.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-gray-300 bg-white py-12 text-center">
-          <p className="text-gray-500">Belum ada data client</p>
+        <div className="flex flex-col items-center rounded-2xl border border-dashed border-border bg-card px-6 py-14 text-center">
+          <span className="flex h-12 w-12 items-center justify-center rounded-full bg-gold/15">
+            <Users className="h-6 w-6 text-gold-strong" aria-hidden />
+          </span>
+          <p className="mt-3 text-sm font-medium text-foreground">Belum ada data client</p>
+          <p className="mt-1 max-w-xs text-xs text-muted-foreground">Tambah client untuk mulai melacak undangan dan status pengerjaan.</p>
+          <Button onClick={() => setShowAddModal(true)} className="mt-4">
+            <Plus className="h-4 w-4" aria-hidden /> Tambah Client
+          </Button>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
+        <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-soft">
+          <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50">
+            <caption className="sr-only">Daftar client</caption>
+            <thead className="bg-muted">
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500">Nama Client</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500">Desain</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500">Link Undangan</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500">Status</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500">Aksi</th>
+                <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">Nama Client</th>
+                <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">Desain</th>
+                <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">Link Undangan</th>
+                <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">Status</th>
+                <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">Aksi</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200">
+            <tbody className="divide-y divide-border">
               {filteredClients.map((client) => (
-                <tr key={client.id} className="hover:bg-gray-50">
+                <tr key={client.id} className="hover:bg-accent/40">
                   <td className="px-4 py-3">
                     <div>
-                      <p className="font-medium text-gray-900">{client.name}</p>
-                      {client.email && <p className="text-xs text-gray-500">{client.email}</p>}
-                      {client.phone && <p className="text-xs text-gray-500">{client.phone}</p>}
+                      <p className="font-medium text-foreground">{client.name}</p>
+                      {client.email && <p className="text-xs text-muted-foreground">{client.email}</p>}
+                      {client.phone && <p className="text-xs text-muted-foreground">{client.phone}</p>}
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-sm text-gray-700">{client.design_name || '-'}</td>
+                  <td className="px-4 py-3 text-sm text-foreground">{client.design_name || '-'}</td>
                   <td className="px-4 py-3">
                     {client.invitation_link ? (
                       <div className="flex flex-col gap-1">
@@ -228,28 +238,29 @@ export default function ClientManagement() {
                           href={client.invitation_link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-sm text-[#c9a45c] hover:underline"
+                          className="inline-flex items-center gap-1 text-sm text-gold-deep hover:underline"
                         >
                           Lihat Undangan <ExternalLink className="h-3 w-3" />
                         </a>
                         {client.project_id && (
                           <a
                             href={`/builder/${client.project_id}`}
-                            className="inline-flex items-center gap-1 text-xs text-gray-500 hover:text-[#c9a45c]"
+                            className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-gold-deep"
                           >
                             Edit Desain
                           </a>
                         )}
                       </div>
                     ) : (
-                      <span className="text-sm text-gray-400">-</span>
+                      <span className="text-sm text-muted-foreground">-</span>
                     )}
                   </td>
                   <td className="px-4 py-3">
                     <select
                       value={client.status}
                       onChange={(e) => handleUpdateStatus(client.id, e.target.value as Client['status'])}
-                      className="rounded-md border border-gray-300 px-2 py-1 text-xs focus:border-[#c9a45c] focus:outline-none"
+                      aria-label={`Status client ${client.name}`}
+                      className="h-11 rounded-md border border-input bg-card px-2 text-xs text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     >
                       {STATUS_OPTIONS.map((opt) => (
                         <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -261,20 +272,20 @@ export default function ClientManagement() {
                       {client.invitation_link && (
                         <a
                           href={`/builder/${client.project_id}`}
-                          className="rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+                          className="inline-flex h-11 w-11 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                           aria-label={`Buka builder untuk ${client.name}`}
                           title="Buka editor"
                         >
-                          <Edit2 className="h-4 w-4" />
+                          <Edit2 className="h-4 w-4" aria-hidden />
                         </a>
                       )}
                       <button
                         onClick={() => setDeleteTarget(client)}
-                        className="rounded p-1 text-gray-400 hover:bg-red-50 hover:text-red-600"
+                        className="inline-flex h-11 w-11 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
                         aria-label={`Hapus client ${client.name}`}
                         title="Hapus client"
                       >
-                        <Trash2 className="h-4 w-4" />
+                        <Trash2 className="h-4 w-4" aria-hidden />
                       </button>
                     </div>
                   </td>
@@ -282,87 +293,88 @@ export default function ClientManagement() {
               ))}
             </tbody>
           </table>
+          </div>
         </div>
       )}
 
       {/* Add Client Modal */}
       <Dialog open={showAddModal} onOpenChange={(o) => { if (!o) setShowAddModal(false); }}>
-        <DialogContent className="max-h-[90vh] w-full max-w-md overflow-y-auto p-6 sm:rounded-xl">
+        <DialogContent className="max-h-[90vh] w-full max-w-md overflow-y-auto p-6 sm:rounded-2xl">
           <DialogTitle className="text-lg font-semibold">Tambah Client Baru</DialogTitle>
           <DialogDescription className="sr-only">
             Isi data client baru, opsional membuat project undangan otomatis dari template.
           </DialogDescription>
           <div className="mt-3 space-y-4">
             <div>
-              <label htmlFor="cl-name" className="mb-1 block text-sm font-medium text-gray-700">Nama Client *</label>
+              <label htmlFor="cl-name" className="mb-1 block text-sm font-medium text-foreground">Nama Client *</label>
               <input
                 id="cl-name"
                 type="text"
                 value={newClient.name}
                 onChange={(e) => setNewClient({ ...newClient, name: e.target.value })}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#c9a45c] focus:outline-none"
+                className="w-full rounded-lg border border-input px-3 py-2 text-sm focus:border-gold focus:outline-none"
                 placeholder="Nama client"
               />
             </div>
             <div>
-              <label htmlFor="cl-email" className="mb-1 block text-sm font-medium text-gray-700">Email</label>
+              <label htmlFor="cl-email" className="mb-1 block text-sm font-medium text-foreground">Email</label>
               <input
                 id="cl-email"
                 type="email"
                 value={newClient.email}
                 onChange={(e) => setNewClient({ ...newClient, email: e.target.value })}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#c9a45c] focus:outline-none"
+                className="w-full rounded-lg border border-input px-3 py-2 text-sm focus:border-gold focus:outline-none"
                 placeholder="email@client.com"
               />
             </div>
             <div>
-              <label htmlFor="cl-phone" className="mb-1 block text-sm font-medium text-gray-700">No. WhatsApp</label>
+              <label htmlFor="cl-phone" className="mb-1 block text-sm font-medium text-foreground">No. WhatsApp</label>
               <input
                 id="cl-phone"
                 type="tel"
                 value={newClient.phone}
                 onChange={(e) => setNewClient({ ...newClient, phone: e.target.value })}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#c9a45c] focus:outline-none"
+                className="w-full rounded-lg border border-input px-3 py-2 text-sm focus:border-gold focus:outline-none"
                 placeholder="08xxxxxxxxxx"
               />
             </div>
             <div>
-              <label htmlFor="cl-design" className="mb-1 block text-sm font-medium text-gray-700">Nama Desain</label>
+              <label htmlFor="cl-design" className="mb-1 block text-sm font-medium text-foreground">Nama Desain</label>
               <input
                 id="cl-design"
                 type="text"
                 value={newClient.design_name}
                 onChange={(e) => setNewClient({ ...newClient, design_name: e.target.value })}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#c9a45c] focus:outline-none"
+                className="w-full rounded-lg border border-input px-3 py-2 text-sm focus:border-gold focus:outline-none"
                 placeholder="Contoh: Wedding Theme Gold"
               />
             </div>
             <div>
-              <label htmlFor="cl-template" className="mb-1 block text-sm font-medium text-gray-700">Pilih Template</label>
+              <label htmlFor="cl-template" className="mb-1 block text-sm font-medium text-foreground">Pilih Template</label>
               <select
                 id="cl-template"
                 value={newClient.template_id}
                 onChange={(e) => setNewClient({ ...newClient, template_id: e.target.value })}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#c9a45c] focus:outline-none"
+                className="w-full rounded-lg border border-input px-3 py-2 text-sm focus:border-gold focus:outline-none"
               >
                 <option value="">-- Pilih Template (otomatis buat project) --</option>
                 {TEMPLATE_LIST.map((t) => (
                   <option key={t.id} value={t.id}>{t.name} ({t.category})</option>
                 ))}
               </select>
-              <p className="mt-1 text-[11px] text-gray-500">Jika dipilih, project undangan akan otomatis dibuat.</p>
+              <p className="mt-1 text-[11px] text-muted-foreground">Jika dipilih, project undangan akan otomatis dibuat.</p>
             </div>
             <div className="flex justify-end gap-3 pt-2">
               <button
                 onClick={() => setShowAddModal(false)}
-                className="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                className="rounded-lg border border-input px-4 py-2 text-sm text-foreground hover:bg-muted"
               >
                 Batal
               </button>
               <button
                 onClick={handleAddClient}
                 disabled={!newClient.name.trim() || creating}
-                className="rounded-lg bg-gradient-to-r from-[#c9a45c] to-[#b98a3e] px-4 py-2 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-50"
+                className="rounded-lg bg-gradient-to-r from-gold to-gold-strong px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-50"
               >
                 {creating ? 'Membuat...' : <><Save className="mr-1 inline h-4 w-4" /> Simpan</>}
               </button>

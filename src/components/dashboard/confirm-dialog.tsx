@@ -25,22 +25,24 @@ export default function ConfirmDialog({
 }: ConfirmDialogProps) {
   return (
     <Dialog open={open} onOpenChange={(o) => { if (!o && !busy) onCancel(); }}>
-      <DialogContent className="w-full max-w-sm gap-2 p-5 sm:rounded-xl">
-        <DialogTitle className="text-base font-semibold text-gray-900">{title}</DialogTitle>
-        <DialogDescription className="mt-2 text-sm leading-relaxed text-gray-600">{message}</DialogDescription>
+      <DialogContent className="w-full max-w-sm gap-2 p-5 sm:rounded-2xl">
+        <DialogTitle className="text-base font-semibold text-foreground">{title}</DialogTitle>
+        <DialogDescription className="mt-2 text-sm leading-relaxed text-muted-foreground">{message}</DialogDescription>
         <div className="mt-5 flex justify-end gap-2">
           <button
             onClick={onCancel}
             disabled={busy}
-            className="rounded-md border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+            className="min-h-11 rounded-md border border-input px-4 text-sm font-medium text-foreground transition-colors hover:bg-muted disabled:pointer-events-none disabled:opacity-50"
           >
             Batal
           </button>
           <button
             onClick={onConfirm}
             disabled={busy}
-            className={`rounded-md px-3 py-1.5 text-sm font-medium text-white disabled:opacity-50 ${
-              danger ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-900 hover:bg-gray-700'
+            className={`min-h-11 rounded-md px-4 text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 ${
+              danger
+                ? 'bg-destructive text-destructive-foreground hover:bg-destructive/90'
+                : 'bg-primary text-primary-foreground shadow-gold hover:bg-primary/90'
             }`}
           >
             {busy ? 'Memproses...' : confirmLabel}

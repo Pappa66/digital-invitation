@@ -182,25 +182,33 @@ export default function MediaLibrary({ open, onClose, onSelect, imageType = 'gen
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-      <div className="flex h-[80vh] w-full max-w-2xl flex-col rounded-2xl bg-white shadow-xl">
-        <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/40 p-4">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Media Library"
+        onKeyDown={(e) => {
+          if (e.key === 'Escape') onClose();
+        }}
+        className="flex h-[80vh] w-full max-w-2xl flex-col rounded-2xl bg-card shadow-dialog"
+      >
+        <div className="flex items-center justify-between border-b border-border px-6 py-4">
           <h2 className="font-semibold">Media Library</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-900">
-            <X className="h-5 w-5" />
+          <button onClick={onClose} aria-label="Tutup" className="inline-flex h-11 w-11 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
+            <X className="h-5 w-5" aria-hidden />
           </button>
         </div>
 
         {/* Image Quality Specs Banner */}
-        <div className="border-b border-gray-200 bg-gray-50 px-6 py-3">
+        <div className="border-b border-border bg-muted px-6 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Info className="h-4 w-4 text-blue-500" />
-              <span className="text-xs font-medium text-gray-700">Spesifikasi Gambar</span>
+              <Info className="h-4 w-4 text-gold-strong" aria-hidden />
+              <span className="text-xs font-medium text-foreground">Spesifikasi Gambar</span>
             </div>
             <button
               onClick={() => setShowSpecs(!showSpecs)}
-              className="text-xs text-blue-600 hover:underline"
+              className="text-xs font-medium text-gold-deep underline-offset-2 hover:underline"
             >
               {showSpecs ? 'Sembunyikan' : 'Lihat Detail'}
             </button>
@@ -208,19 +216,19 @@ export default function MediaLibrary({ open, onClose, onSelect, imageType = 'gen
           {showSpecs && (
             <div className="mt-3 grid grid-cols-2 gap-3 text-xs">
               {Object.entries(IMAGE_SPECS).map(([key, spec]) => (
-                <div key={key} className="rounded-lg bg-white p-2 border border-gray-200">
-                  <div className="font-medium text-gray-800">{spec.label}</div>
-                  <div className="mt-1 text-gray-600">Min: {spec.minW}×{spec.minH}px</div>
-                  <div className="text-gray-600">Rekomendasi: {spec.recW}×{spec.recH}px</div>
-                  <div className="mt-1 text-gray-500 italic">{spec.tip}</div>
+                <div key={key} className="rounded-lg bg-card p-2 border border-border">
+                  <div className="font-medium text-foreground">{spec.label}</div>
+                  <div className="mt-1 text-muted-foreground">Min: {spec.minW}×{spec.minH}px</div>
+                  <div className="text-muted-foreground">Rekomendasi: {spec.recW}×{spec.recH}px</div>
+                  <div className="mt-1 text-muted-foreground italic">{spec.tip}</div>
                 </div>
               ))}
             </div>
           )}
         </div>
 
-        <div className="flex items-center gap-3 border-b border-gray-200 px-6 py-3">
-          <label className="flex cursor-pointer items-center gap-2 rounded-md bg-gray-900 px-3 py-2 text-xs font-medium text-white hover:opacity-90">
+        <div className="flex items-center gap-3 border-b border-border px-6 py-3">
+          <label className="flex cursor-pointer items-center gap-2 rounded-md bg-primary px-3 py-2 text-xs font-medium text-primary-foreground hover:opacity-90">
             {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
             {uploading ? 'Mengunggah...' : 'Upload New'}
             <input
@@ -233,7 +241,7 @@ export default function MediaLibrary({ open, onClose, onSelect, imageType = 'gen
               disabled={uploading}
             />
           </label>
-          <span className="text-xs text-gray-500">
+          <span className="text-xs text-muted-foreground">
             {uploading ? `Mengunggah ${uploadingCount} file...` : 'Pilih gambar atau video; gambar dikompresi otomatis, video diunggah apa adanya.'}
           </span>
         </div>
@@ -241,10 +249,10 @@ export default function MediaLibrary({ open, onClose, onSelect, imageType = 'gen
         {/* Quality Report */}
         {qualityReport && (
           <div className={`mx-6 mt-3 flex items-start gap-2 rounded-lg p-3 text-xs ${
-            qualityReport.status === 'excellent' ? 'bg-green-50 text-green-800' :
-            qualityReport.status === 'good' ? 'bg-blue-50 text-blue-800' :
-            qualityReport.status === 'warning' ? 'bg-yellow-50 text-yellow-800' :
-            'bg-red-50 text-red-800'
+            qualityReport.status === 'excellent' ? 'bg-emerald-50 text-emerald-800' :
+            qualityReport.status === 'good' ? 'bg-accent text-accent-foreground' :
+            qualityReport.status === 'warning' ? 'bg-amber-50 text-amber-800' :
+            'bg-destructive/10 text-destructive'
           }`}>
             {qualityReport.status === 'excellent' || qualityReport.status === 'good' ? (
               <CheckCircle className="h-4 w-4 mt-0.5 shrink-0" />
@@ -254,7 +262,7 @@ export default function MediaLibrary({ open, onClose, onSelect, imageType = 'gen
             <div>
               <div className="font-medium">{qualityReport.message}</div>
               {qualityReport.status === 'poor' && (
-                <div className="mt-1 text-gray-600">
+                <div className="mt-1 text-muted-foreground">
                   Gambar dengan resolusi rendah akan terlihat buram di undangan. Unggah gambar dengan resolusi lebih tinggi untuk hasil terbaik.
                 </div>
               )}
@@ -264,40 +272,48 @@ export default function MediaLibrary({ open, onClose, onSelect, imageType = 'gen
 
         <div className="flex-1 overflow-auto p-6">
           {loading ? (
-            <div className="flex h-full items-center justify-center text-sm text-gray-500">Memuat...</div>
+            <div className="flex h-full items-center justify-center text-sm text-muted-foreground">Memuat...</div>
           ) : files.length === 0 ? (
-            <div className="flex h-full flex-col items-center justify-center text-sm text-gray-500">
+            <div className="flex h-full flex-col items-center justify-center text-sm text-muted-foreground">
               <Upload className="h-8 w-8 mb-2 opacity-30" />
               <p>Belum ada media. Upload gambar atau video pertama Anda.</p>
-              <p className="mt-1 text-xs text-gray-400">Format gambar: JPG, PNG, WebP. Format video: MP4, WebM, MOV (video diputar manual di undangan).</p>
+              <p className="mt-1 text-xs text-muted-foreground">Format gambar: JPG, PNG, WebP. Format video: MP4, WebM, MOV (video diputar manual di undangan).</p>
             </div>
           ) : (
              <div className="grid grid-cols-3 gap-3">
                {files.map((f) => (
-                 <button
+                 <div
                    key={f.name}
-                   onClick={() => onSelect(f.url)}
-                   className="group relative aspect-square overflow-hidden rounded-lg border border-gray-200 hover:border-gray-400"
-                   title={f.name}
+                   className="group relative aspect-square overflow-hidden rounded-lg border border-border hover:border-gold"
                  >
-                   {isVideoName(f.name) ? (
-                     <>
-                       <video src={f.url} muted preload="metadata" className="h-full w-full object-cover" />
-                       <span className="absolute right-1.5 top-1.5 rounded-full bg-black/50 p-1 text-white">
-                         <Video className="h-3.5 w-3.5" />
-                       </span>
-                     </>
-                   ) : (
-                     <Image src={f.url} alt={f.name} fill sizes="(max-width:768px) 33vw, 33vw" className="object-cover" />
-                   )}
-                   <span
-                     className="absolute left-1.5 top-1.5 z-10 rounded-full bg-red-500/80 p-1 text-white opacity-0 transition-opacity hover:bg-red-600 group-hover:opacity-100"
+                   <button
+                     type="button"
+                     onClick={() => onSelect(f.url)}
+                     className="absolute inset-0 h-full w-full"
+                     title={f.name}
+                     aria-label={`Pilih ${f.name}`}
+                   >
+                     {isVideoName(f.name) ? (
+                       <>
+                         <video src={f.url} muted preload="metadata" className="h-full w-full object-cover" />
+                         <span className="absolute right-1.5 top-1.5 rounded-full bg-foreground/50 p-1 text-white" aria-hidden>
+                           <Video className="h-3.5 w-3.5" />
+                         </span>
+                       </>
+                     ) : (
+                       <Image src={f.url} alt={f.name} fill sizes="(max-width:768px) 33vw, 33vw" className="object-cover" />
+                     )}
+                   </button>
+                   <button
+                     type="button"
+                     className="absolute left-1.5 top-1.5 z-10 inline-flex h-8 w-8 items-center justify-center rounded-full bg-destructive/80 text-white opacity-0 transition-opacity hover:bg-destructive focus-visible:opacity-100 group-hover:opacity-100"
                      onClick={(e) => handleDelete(f.name, e)}
+                     aria-label={`Hapus ${f.name}`}
                      title="Hapus"
                    >
-                     {deleting === f.name ? <Loader2 className="h-3 w-3 animate-spin" /> : <Trash2 className="h-3 w-3" />}
-                   </span>
-                 </button>
+                     {deleting === f.name ? <Loader2 className="h-3 w-3 animate-spin" aria-hidden /> : <Trash2 className="h-3 w-3" aria-hidden />}
+                   </button>
+                 </div>
                ))}
              </div>
           )}

@@ -50,7 +50,7 @@ export default function NewProjectModal({ open, onClose }: NewProjectModalProps)
   return (
     <Dialog open={open} onOpenChange={(o) => { if (!o) onClose(); }}>
       <DialogContent className="flex max-h-[90vh] max-w-3xl flex-col gap-0 overflow-hidden p-0 sm:rounded-2xl">
-        <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
+        <div className="flex items-center justify-between border-b border-border px-6 py-4">
           <DialogTitle className="font-semibold">
             {view === 'blank' ? 'Buat Undangan Baru' : 'Pilih Template'}
           </DialogTitle>
@@ -61,7 +61,7 @@ export default function NewProjectModal({ open, onClose }: NewProjectModalProps)
         </DialogDescription>
 
         <div className="flex-1 overflow-y-auto p-6">
-          <label htmlFor="new-project-title" className="text-xs font-medium text-gray-700">
+          <label htmlFor="new-project-title" className="text-xs font-medium text-foreground">
             Nama undangan
           </label>
           <input
@@ -70,10 +70,10 @@ export default function NewProjectModal({ open, onClose }: NewProjectModalProps)
             onChange={(e) => setTitle(e.target.value)}
             placeholder="cth: Perkawinan Panca & Sena"
             aria-describedby={error ? 'new-project-error' : undefined}
-            className="mt-1 w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-900"
+            className="mt-1 w-full rounded-md border border-input bg-muted px-3 py-2 text-sm text-foreground outline-none placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           />
           {error && (
-            <p id="new-project-error" role="alert" className="mt-2 text-xs text-red-600">
+            <p id="new-project-error" role="alert" className="mt-2 text-xs text-destructive">
               {error}
             </p>
           )}
@@ -83,12 +83,12 @@ export default function NewProjectModal({ open, onClose }: NewProjectModalProps)
               <button
                 onClick={startFromScratch}
                 disabled={busy}
-                className="flex w-full items-center gap-3 rounded-xl border border-gray-200 p-4 text-left hover:border-gray-400 disabled:opacity-60"
+                className="flex w-full items-center gap-3 rounded-2xl border border-border p-4 text-left transition-colors hover:border-gold disabled:opacity-60"
               >
-                <FilePlus className="h-5 w-5 text-gray-700" />
+                <FilePlus className="h-5 w-5 text-gold-deep" aria-hidden />
                 <div>
                   <p className="text-sm font-medium">Mulai dari Kosong</p>
-                  <p className="text-xs text-gray-500">Buka kanvas kosong dan bangun desain sendiri</p>
+                  <p className="text-xs text-muted-foreground">Buka kanvas kosong dan bangun desain sendiri</p>
                 </div>
               </button>
             )}
@@ -99,7 +99,7 @@ export default function NewProjectModal({ open, onClose }: NewProjectModalProps)
                   <button
                     onClick={() => setCatFilter('semua')}
                     className={`rounded-full px-3 py-1.5 text-xs font-medium ${
-                      catFilter === 'semua' ? 'bg-gray-900 text-white' : 'border border-gray-300 text-gray-600 hover:bg-gray-50'
+                      catFilter === 'semua' ? 'bg-primary text-primary-foreground' : 'border border-input text-muted-foreground hover:bg-muted'
                     }`}
                   >
                     Semua
@@ -109,7 +109,7 @@ export default function NewProjectModal({ open, onClose }: NewProjectModalProps)
                       key={c.key}
                       onClick={() => setCatFilter(c.key)}
                       className={`rounded-full px-3 py-1.5 text-xs font-medium ${
-                        catFilter === c.key ? 'bg-gray-900 text-white' : 'border border-gray-300 text-gray-600 hover:bg-gray-50'
+                        catFilter === c.key ? 'bg-primary text-primary-foreground' : 'border border-input text-muted-foreground hover:bg-muted'
                       }`}
                     >
                       {c.label}
@@ -117,11 +117,11 @@ export default function NewProjectModal({ open, onClose }: NewProjectModalProps)
                   ))}
                 </div>
 
-                <div className="mb-4 mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3">
-                  <p className="text-[11px] font-semibold uppercase tracking-wider text-amber-700">
+                <div className="mb-4 mt-3 rounded-2xl border border-gold/30 bg-accent px-4 py-3">
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-accent-foreground">
                     {catFilter === 'semua' ? 'Filosofi Kategori' : `Makna ${categoryLabel(catFilter)}`}
                   </p>
-                  <p className="mt-0.5 text-xs leading-relaxed text-gray-600">
+                  <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">
                     {catFilter === 'semua'
                       ? 'Setiap gaya membawa makna dan suasana tersendiri — pilih yang paling dekat dengan cerita cinta kalian.'
                       : CATEGORIES.find((c) => c.key === catFilter)?.desc}
@@ -136,20 +136,20 @@ export default function NewProjectModal({ open, onClose }: NewProjectModalProps)
                         key={t.id}
                         onClick={() => startFromTemplate(t.id)}
                         disabled={busy}
-                        className="relative rounded-xl border border-gray-200 p-4 text-left transition-colors hover:border-gray-400 disabled:opacity-60"
+                        className="relative rounded-2xl border border-border p-4 text-left transition-colors hover:border-gold disabled:opacity-60"
                       >
-                        <span className="pointer-events-none absolute right-2 bottom-0 select-none text-5xl font-bold text-gray-200">
+                        <span className="pointer-events-none absolute right-2 bottom-0 select-none text-5xl font-bold text-border" aria-hidden>
                           {String(number).padStart(2, '0')}
                         </span>
-                        <span className="rounded-full border border-gray-200 bg-gray-50 px-2 py-0.5 text-[10px] font-medium text-gray-500">
+                        <span className="rounded-full border border-border bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
                           {categoryLabel(t.category)}
                         </span>
                         <div className="mb-3 mt-3 flex gap-1.5">
-                          <span className="h-6 w-6 rounded-full border border-black/5" style={{ background: t.primary }} />
-                          <span className="h-6 w-6 rounded-full border border-black/5" style={{ background: t.secondary }} />
+                          <span className="h-6 w-6 rounded-full border border-foreground/5" style={{ background: t.primary }} aria-hidden />
+                          <span className="h-6 w-6 rounded-full border border-foreground/5" style={{ background: t.secondary }} aria-hidden />
                         </div>
                         <p className="text-sm font-medium">{t.name}</p>
-                        <p className="mt-0.5 line-clamp-2 text-xs text-gray-500">{t.description}</p>
+                        <p className="mt-0.5 line-clamp-2 text-xs text-muted-foreground">{t.description}</p>
                       </button>
                     );
                   })}
@@ -159,17 +159,17 @@ export default function NewProjectModal({ open, onClose }: NewProjectModalProps)
           </div>
         </div>
 
-        <div className="flex items-center justify-between border-t border-gray-200 px-6 py-4">
+        <div className="flex items-center justify-between border-t border-border px-6 py-4">
           {view === 'templates' ? (
-            <button onClick={() => setView('blank')} className="flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900">
+            <button onClick={() => setView('blank')} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
               <Plus className="h-4 w-4" /> Mulai kosong
             </button>
           ) : (
-            <button onClick={() => setView('templates')} className="flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900">
+            <button onClick={() => setView('templates')} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
               <LayoutTemplate className="h-4 w-4" /> Mulai dari template
             </button>
           )}
-          <button onClick={onClose} className="text-sm text-gray-400 hover:text-gray-900">
+          <button onClick={onClose} className="text-sm text-muted-foreground hover:text-foreground">
             Batal
           </button>
         </div>

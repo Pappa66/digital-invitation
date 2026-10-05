@@ -90,7 +90,7 @@ export default function StatsDialog({ open, projectId, title, onClose }: StatsDi
         if (!next) onClose();
       }}
     >
-      <DialogContent className="max-w-sm">
+      <DialogContent className="max-w-sm gap-2 p-5 sm:rounded-2xl">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <BarChart3 className="h-5 w-5 text-gold-strong" aria-hidden />
@@ -116,7 +116,7 @@ export default function StatsDialog({ open, projectId, title, onClose }: StatsDi
             <button
               type="button"
               onClick={() => setReloadKey((k) => k + 1)}
-              className="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-semibold text-foreground transition-colors hover:bg-muted"
+              className="min-h-11 rounded-lg border border-border bg-card px-4 text-xs font-semibold text-foreground transition-colors hover:bg-muted"
             >
               Coba lagi
             </button>
@@ -136,7 +136,7 @@ export default function StatsDialog({ open, projectId, title, onClose }: StatsDi
 
 function StatTile({ icon, label, value }: { icon: React.ReactNode; label: string; value: number }) {
   return (
-    <div className="rounded-xl border border-border bg-card p-3 shadow-soft">
+    <div className="rounded-2xl border border-border bg-card p-3 shadow-soft">
       <span className="flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
         <span className="text-gold-strong">{icon}</span>
         {label}

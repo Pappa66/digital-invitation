@@ -14,7 +14,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import type { Project } from '@/lib/types';
 import { demoListProjects } from '@/lib/demo/demo-store';
-import { DashboardSkeleton, Spinner } from '@/components/ui/skeleton';
+import { DashboardSkeleton } from '@/components/ui/skeleton';
 
 interface DashboardClientProps {
   projects: Project[];
@@ -138,8 +138,7 @@ export default function DashboardClient({ projects, isDemo = false, userName, th
   const hasActiveFilters = searchQuery || filterMonth || filterYear || filterStatus;
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6">
+    <div className="mx-auto max-w-6xl">
       {/* Tab Navigation */}
       <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as TabType)} className="mb-4">
         <TabsList>
@@ -164,11 +163,11 @@ export default function DashboardClient({ projects, isDemo = false, userName, th
                   ? '0 undangan ditemukan'
                   : `${(safePage - 1) * PER_PAGE + 1}–${Math.min(safePage * PER_PAGE, filteredItems.length)} dari ${filteredItems.length}`}
                 {hasActiveFilters && (
-                  <button onClick={clearFilters} className="ml-2 text-[#c9a45c] hover:underline">
+                  <button onClick={clearFilters} className="ml-2 font-medium text-gold-deep underline-offset-2 hover:underline">
                     Reset filter
                   </button>
                 )}
-                {isDemo && <span className="ml-2 rounded bg-amber-100 px-1.5 py-0.5 text-xs text-amber-700">Demo</span>}
+                {isDemo && <span className="ml-2 rounded-full bg-accent px-1.5 py-0.5 text-xs font-medium text-accent-foreground">Demo</span>}
               </p>
             </div>
             <div className="flex items-center gap-2">
@@ -182,20 +181,21 @@ export default function DashboardClient({ projects, isDemo = false, userName, th
           </div>
 
           {/* Search and Filters — compact single row */}
-          <div className="mb-4 flex flex-col gap-2 rounded-lg border bg-card p-3 sm:flex-row sm:items-center">
+          <div className="mb-4 flex flex-col gap-2 rounded-2xl border border-border bg-card p-3 shadow-soft sm:flex-row sm:items-center">
             <div className="relative flex-1">
-              <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+              <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" aria-hidden />
               <Input
                 type="text"
                 placeholder="Cari..."
+                aria-label="Cari undangan"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="h-8 pl-8 text-sm"
+                className="h-9 pl-8 text-sm"
               />
             </div>
             <div className="flex items-center gap-1.5">
               <Select value={filterStatus} onValueChange={setFilterStatus}>
-                <SelectTrigger className="h-8 w-auto gap-1.5 text-xs">
+                <SelectTrigger className="h-9 w-auto gap-1.5 text-xs">
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -205,7 +205,7 @@ export default function DashboardClient({ projects, isDemo = false, userName, th
                 </SelectContent>
               </Select>
               <Select value={filterMonth} onValueChange={setFilterMonth}>
-                <SelectTrigger className="h-8 w-auto gap-1.5 text-xs">
+                <SelectTrigger className="h-9 w-auto gap-1.5 text-xs">
                   <SelectValue placeholder="Bulan" />
                 </SelectTrigger>
                 <SelectContent>
@@ -218,7 +218,7 @@ export default function DashboardClient({ projects, isDemo = false, userName, th
                 </SelectContent>
               </Select>
               <Select value={filterYear} onValueChange={setFilterYear}>
-                <SelectTrigger className="h-8 w-auto gap-1.5 text-xs">
+                <SelectTrigger className="h-9 w-auto gap-1.5 text-xs">
                   <SelectValue placeholder="Tahun" />
                 </SelectTrigger>
                 <SelectContent>
@@ -243,9 +243,9 @@ export default function DashboardClient({ projects, isDemo = false, userName, th
           {demoLoading ? (
             <DashboardSkeleton />
           ) : filteredItems.length === 0 ? (
-            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed bg-card py-16 text-center">
-              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#c9a45c]/20 to-[#b98a3e]/10">
-                <svg className="h-8 w-8 text-[#c9a45c]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card py-16 text-center">
+              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-gold/20 to-gold-strong/10">
+                <svg className="h-8 w-8 text-gold-deep" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} aria-hidden>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                 </svg>
               </div>
@@ -257,7 +257,11 @@ export default function DashboardClient({ projects, isDemo = false, userName, th
                   ? 'Coba ubah filter atau kata kunci pencarian Anda.'
                   : 'Buat undangan digital pertama Anda dan bagikan ke tamu dalam hitungan menit.'}
               </p>
-              {!hasActiveFilters && (
+              {hasActiveFilters ? (
+                <Button variant="outline" onClick={clearFilters} className="mt-5">
+                  Reset filter
+                </Button>
+              ) : (
                 <Button onClick={() => setModalOpen(true)} className="mt-5">
                   Buat Undangan Pertama
                 </Button>
@@ -272,8 +276,8 @@ export default function DashboardClient({ projects, isDemo = false, userName, th
           )}
 
           {filteredItems.length > PER_PAGE && (
-            <div className="mt-5 flex items-center justify-center gap-1.5">
-              <Button variant="outline" size="sm" onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={safePage === 1} className="h-8 px-2.5 text-xs">
+            <div className="mt-5 flex flex-wrap items-center justify-center gap-1.5">
+              <Button variant="outline" size="sm" onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={safePage === 1} aria-label="Halaman sebelumnya" className="h-9 px-3 text-xs">
                 Prev
               </Button>
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
@@ -281,7 +285,9 @@ export default function DashboardClient({ projects, isDemo = false, userName, th
                   key={n}
                   variant={n === safePage ? 'default' : 'outline'}
                   size="icon"
-                  className="h-7 w-7 text-xs"
+                  className="h-9 w-9 text-xs"
+                  aria-current={n === safePage ? 'page' : undefined}
+                  aria-label={`Halaman ${n}`}
                   onClick={() => setPage(n)}
                 >
                   {n}
@@ -292,7 +298,8 @@ export default function DashboardClient({ projects, isDemo = false, userName, th
                 size="sm"
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                 disabled={safePage === totalPages}
-                className="h-8 px-2.5 text-xs"
+                aria-label="Halaman berikutnya"
+                className="h-9 px-3 text-xs"
               >
                 Next
               </Button>
@@ -350,7 +357,6 @@ export default function DashboardClient({ projects, isDemo = false, userName, th
           {toast}
         </div>
       )}
-      </div>
     </div>
   );
 }

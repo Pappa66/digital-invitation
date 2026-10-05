@@ -53,7 +53,7 @@ export default function LandingAdmin() {
       <div className="mb-5 flex items-center justify-between">
         <div>
           <h2 className="text-lg font-semibold">Landing Page</h2>
-          <p className="mt-1 text-sm text-gray-500">Konten halaman depan publik.</p>
+          <p className="mt-1 text-sm text-muted-foreground">Konten halaman depan publik.</p>
         </div>
         <Button onClick={handleSave} disabled={saving || loading}>
           {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
@@ -62,7 +62,7 @@ export default function LandingAdmin() {
       </div>
 
       {message && (
-        <p className={`mb-4 rounded-md px-3 py-2 text-xs ${message.ok ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
+        <p className={`mb-4 rounded-md px-3 py-2 text-xs ${message.ok ? 'bg-emerald-50 text-emerald-700' : 'bg-destructive/10 text-destructive'}`}>
           {message.text}
         </p>
       )}
@@ -72,7 +72,7 @@ export default function LandingAdmin() {
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-base">
-              <ImageIcon className="h-4 w-4 text-[#c9a45c]" /> Hero
+              <ImageIcon className="h-4 w-4 text-gold-deep" /> Hero
             </CardTitle>
             <CardDescription>Titik pembuka, judul, dan kolase gambar.</CardDescription>
           </CardHeader>
@@ -127,7 +127,7 @@ export default function LandingAdmin() {
                     </Button>
                     {content.hero.images.length > 1 && (
                       <Button type="button" variant="ghost" size="icon" onClick={() => removeHeroImage(i)} aria-label="Hapus" className="shrink-0">
-                        <Trash2 className="h-4 w-4 text-red-600" />
+                        <Trash2 className="h-4 w-4 text-destructive" />
                       </Button>
                     )}
                   </div>
@@ -194,7 +194,7 @@ export default function LandingAdmin() {
                   <Input value={stat.suffix} onChange={(e) => updateStat(i, 'suffix', e.target.value)} className="w-10" placeholder="+" />
                   <Input value={stat.label} onChange={(e) => updateStat(i, 'label', e.target.value)} placeholder="Label" className="flex-1" />
                   <Button type="button" variant="ghost" size="icon" onClick={() => removeStat(i)} className="shrink-0">
-                    <Trash2 className="h-3.5 w-3.5 text-red-600" />
+                    <Trash2 className="h-3.5 w-3.5 text-destructive" />
                   </Button>
                 </div>
               ))}
@@ -252,7 +252,7 @@ export default function LandingAdmin() {
                   <textarea value={f.a} onChange={(e) => updateFaq(i, 'a', e.target.value)} rows={2} placeholder="Jawaban" className="w-full rounded-md border border-input bg-transparent px-3 py-1.5 text-sm shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-ring" />
                 </div>
                 <Button type="button" variant="ghost" size="icon" onClick={() => removeFaq(i)} className="shrink-0">
-                  <Trash2 className="h-4 w-4 text-red-600" />
+                  <Trash2 className="h-4 w-4 text-destructive" />
                 </Button>
               </div>
             ))}
@@ -301,7 +301,7 @@ export default function LandingAdmin() {
           {saving ? 'Menyimpan...' : 'Simpan'}
         </Button>
         {loading && (
-          <span className="flex items-center gap-1.5 text-xs text-gray-400">
+          <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
             <Loader2 className="h-3.5 w-3.5 animate-spin" /> Memuat...
           </span>
         )}
@@ -396,7 +396,7 @@ function AccordionCard({ title, items, patch, targetKey }: AccordionCardProps) {
               <textarea value={item.desc} onChange={(e) => update(i, 'desc', e.target.value)} rows={2} placeholder="Deskripsi" className="w-full rounded-md border border-input bg-transparent px-3 py-1.5 text-sm shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-ring" />
             </div>
             <Button type="button" variant="ghost" size="icon" onClick={() => setItems(items.filter((_, j) => j !== i))} className="shrink-0">
-              <Trash2 className="h-4 w-4 text-red-600" />
+              <Trash2 className="h-4 w-4 text-destructive" />
             </Button>
           </div>
         ))}

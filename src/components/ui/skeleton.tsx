@@ -2,7 +2,7 @@ import { AlertTriangle, Loader2, RefreshCw } from 'lucide-react';
 
 /** Blok shimmer dasar — aksen warna desain, tanpa animasi berat. */
 export function Skeleton({ className = '', ...props }: { className?: string } & React.HTMLAttributes<HTMLDivElement>) {
-  return <div role="status" aria-hidden className={`animate-pulse rounded-md bg-muted ${className}`} {...props} />;
+  return <div role="status" aria-hidden className={`animate-pulse rounded-md bg-muted motion-reduce:animate-none ${className}`} {...props} />;
 }
 
 /** Baris skeleton tabel data — dipakai saat muat ulang daftar di tab dashboard. */
@@ -109,7 +109,7 @@ export function DashboardSkeleton() {
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {Array.from({ length: 8 }).map((_, i) => (
-        <div key={i} className="animate-pulse overflow-hidden rounded-xl border bg-card" style={{ animationDelay: `${i * 60}ms` }}>
+        <div key={i} className="animate-pulse overflow-hidden rounded-xl border bg-card motion-reduce:animate-none" style={{ animationDelay: `${i * 60}ms` }}>
           <div className="h-36 bg-muted" />
           <div className="space-y-1.5 p-3">
             <div className="h-3.5 w-3/4 rounded bg-muted" />

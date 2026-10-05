@@ -200,16 +200,24 @@ export default function ShareDialog({ open, projectId, slug, title, onClose, rel
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/40" onClick={onClose} />
-      <div className="relative flex max-h-[90vh] w-full max-w-md flex-col overflow-hidden rounded-xl bg-white shadow-2xl">
-        <div className="flex items-center justify-between border-b border-gray-100 px-5 py-3">
-          <h3 className="text-base font-semibold text-gray-900">Bagikan &ldquo;{title}&rdquo;</h3>
-          <button onClick={onClose} className="rounded-md p-1 text-gray-400 hover:bg-gray-100" aria-label="Tutup">
+      <div className="absolute inset-0 bg-foreground/40" onClick={onClose} aria-hidden />
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Bagikan ${title}`}
+        onKeyDown={(e) => {
+          if (e.key === 'Escape') onClose();
+        }}
+        className="relative flex max-h-[90vh] w-full max-w-md flex-col overflow-hidden rounded-2xl bg-card shadow-dialog"
+      >
+        <div className="flex items-center justify-between border-b border-border px-5 py-3">
+          <h3 className="text-base font-semibold text-foreground">Bagikan &ldquo;{title}&rdquo;</h3>
+          <button onClick={onClose} className="inline-flex h-11 w-11 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground" aria-label="Tutup">
             ✕
           </button>
         </div>
 
-        <div className="flex gap-1 border-b border-gray-100 px-5 pt-3">
+        <div className="flex gap-1 border-b border-border px-5 pt-3">
           {(
             [
               { key: 'single', label: 'Satu Tamu', icon: User },
@@ -222,13 +230,13 @@ export default function ShareDialog({ open, projectId, slug, title, onClose, rel
               key={t.key}
               onClick={() => setTab(t.key)}
               className={`flex items-center gap-1.5 border-b-2 px-3 pb-2 text-xs font-medium ${
-                tab === t.key ? 'border-gray-900 text-gray-900' : 'border-transparent text-gray-400 hover:text-gray-600'
+                tab === t.key ? 'border-gold-strong text-gold-ink' : 'border-transparent text-muted-foreground hover:text-muted-foreground'
               }`}
             >
               <t.icon className="h-3.5 w-3.5" />
               {t.label}
               {t.key === 'bulk' && rows.length > 0 && (
-                <span className="rounded-full bg-gray-900 px-1.5 text-[10px] text-white">{rows.length}</span>
+                <span className="rounded-full bg-primary px-1.5 text-[10px] text-primary-foreground">{rows.length}</span>
               )}
             </button>
           ))}
@@ -236,34 +244,34 @@ export default function ShareDialog({ open, projectId, slug, title, onClose, rel
 
         <div className="flex-1 overflow-y-auto p-5">
           {tab === 'single' && (
-            <Section icon={<User className="h-4 w-4 text-gray-400" />} title="Undangan untuk Satu Tamu">
+            <Section icon={<User className="h-4 w-4 text-muted-foreground" />} title="Undangan untuk Satu Tamu">
               <ReligionSelector religion={religion} onChange={changeReligion} />
 
-              <label className="mb-1 mt-3 block text-xs font-medium text-gray-700">Nama Tamu</label>
+              <label className="mb-1 mt-3 block text-xs font-medium text-foreground">Nama Tamu</label>
               <input
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="cth. Bapak/Ibu Surya"
                 maxLength={80}
-                className="w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-900"
+                className="w-full rounded-md border border-input bg-muted px-3 py-2 text-sm outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               />
-              <p className="mt-1 text-[11px] text-gray-400">
+              <p className="mt-1 text-[11px] text-muted-foreground">
                 Nama otomatis muncul di undangan (sapaan) dan di pesan ({'{nama}'}).
               </p>
 
-              <label className="mt-3 mb-1 block text-xs font-medium text-gray-700">Template Ucapan</label>
+              <label className="mt-3 mb-1 block text-xs font-medium text-foreground">Template Ucapan</label>
               <PresetRow presets={cfg.messages} activeId={presetId} onSelect={selectPreset} />
               <textarea
                 value={template}
                 onChange={(e) => editTemplate(e.target.value)}
                 rows={6}
-                className="mt-2 w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-900"
+                className="mt-2 w-full rounded-md border border-input bg-muted px-3 py-2 text-sm outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               />
 
-              <p className="mt-3 mb-1 flex items-center gap-1 text-xs font-medium text-gray-700">
-                <MessageSquare className="h-3.5 w-3.5 text-gray-400" /> Pratinjau Pesan
+              <p className="mt-3 mb-1 flex items-center gap-1 text-xs font-medium text-foreground">
+                <MessageSquare className="h-3.5 w-3.5 text-muted-foreground" /> Pratinjau Pesan
               </p>
-              <div className="whitespace-pre-wrap rounded-md bg-gray-50 px-3 py-2 text-xs leading-relaxed text-gray-700">
+              <div className="whitespace-pre-wrap rounded-md bg-muted px-3 py-2 text-xs leading-relaxed text-foreground">
                 {message}
               </div>
 
@@ -272,20 +280,20 @@ export default function ShareDialog({ open, projectId, slug, title, onClose, rel
                   readOnly
                   value={link}
                   onFocus={(e) => e.currentTarget.select()}
-                  className="w-full truncate rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-xs text-gray-600 outline-none"
+                  className="w-full truncate rounded-md border border-border bg-muted px-3 py-2 text-xs text-muted-foreground outline-none"
                 />
                 <button
                   onClick={() => copy('link', link)}
-                  className="flex shrink-0 items-center gap-1 rounded-md border border-gray-300 px-2.5 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50"
+                  className="flex shrink-0 items-center gap-1 rounded-md border border-input px-2.5 py-2 text-xs font-medium text-foreground hover:bg-muted"
                 >
-                  {copied === 'link' ? <Check className="h-3.5 w-3.5 text-green-600" /> : <Link2 className="h-3.5 w-3.5" />}
+                  {copied === 'link' ? <Check className="h-3.5 w-3.5 text-emerald-700" /> : <Link2 className="h-3.5 w-3.5" />}
                   {copied === 'link' ? 'Disalin' : 'Link'}
                 </button>
                 <button
                   onClick={() => copy('message', message)}
-                  className="flex shrink-0 items-center gap-1 rounded-md bg-gray-900 px-2.5 py-2 text-xs font-medium text-white hover:bg-gray-700"
+                  className="flex shrink-0 items-center gap-1 rounded-md bg-primary px-2.5 py-2 text-xs font-medium text-primary-foreground hover:bg-primary/90"
                 >
-                  {copied === 'message' ? <Check className="h-3.5 w-3.5 text-green-400" /> : <Copy className="h-3.5 w-3.5" />}
+                  {copied === 'message' ? <Check className="h-3.5 w-3.5 text-emerald-500" /> : <Copy className="h-3.5 w-3.5" />}
                   {copied === 'message' ? 'Disalin' : 'Salin'}
                 </button>
               </div>
@@ -293,18 +301,18 @@ export default function ShareDialog({ open, projectId, slug, title, onClose, rel
           )}
 
           {tab === 'bulk' && (
-            <Section icon={<Users className="h-4 w-4 text-gray-400" />} title="Kirim Massal ke Banyak Tamu">
+            <Section icon={<Users className="h-4 w-4 text-muted-foreground" />} title="Kirim Massal ke Banyak Tamu">
               <ReligionSelector religion={religion} onChange={changeReligion} />
 
-              <label className="mt-3 mb-1 block text-xs font-medium text-gray-700">Daftar Tamu</label>
+              <label className="mt-3 mb-1 block text-xs font-medium text-foreground">Daftar Tamu</label>
               <textarea
                 value={bulkText}
                 onChange={(e) => updateBulk(e.target.value)}
                 rows={6}
                 placeholder={'Ketik nama satu per baris.\n\nBisa tambah nomor HP:  Nama | 0812xxxx\natau:  Nama, 0812xxxx'}
-                className="w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-2 font-mono text-xs outline-none focus:ring-2 focus:ring-gray-900"
+                className="w-full rounded-md border border-input bg-muted px-3 py-2 font-mono text-xs outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               />
-              <p className="mt-1 text-[11px] text-gray-400">
+              <p className="mt-1 text-[11px] text-muted-foreground">
                 Terdeteksi <b>{rows.length}</b> tamu. Tanpa nomor HP, tombol WhatsApp akan minta pilih kontak.
               </p>
 
@@ -312,45 +320,45 @@ export default function ShareDialog({ open, projectId, slug, title, onClose, rel
                 <button
                   onClick={() => copy('all-messages', allMessages)}
                   disabled={rows.length === 0}
-                  className="flex items-center gap-1.5 rounded-md border border-gray-300 px-2.5 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-40"
+                  className="flex items-center gap-1.5 rounded-md border border-input px-2.5 py-1.5 text-xs font-medium text-foreground hover:bg-muted disabled:opacity-40"
                 >
-                  {copied === 'all-messages' ? <Check className="h-3.5 w-3.5 text-green-600" /> : <ListChecks className="h-3.5 w-3.5" />}
+                  {copied === 'all-messages' ? <Check className="h-3.5 w-3.5 text-emerald-700" /> : <ListChecks className="h-3.5 w-3.5" />}
                   Salin Semua Pesan
                 </button>
                 <button
                   onClick={() => copy('all-links', bulkLinks.join('\n'))}
                   disabled={rows.length === 0}
-                  className="flex items-center gap-1.5 rounded-md border border-gray-300 px-2.5 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-40"
+                  className="flex items-center gap-1.5 rounded-md border border-input px-2.5 py-1.5 text-xs font-medium text-foreground hover:bg-muted disabled:opacity-40"
                 >
-                  {copied === 'all-links' ? <Check className="h-3.5 w-3.5 text-green-600" /> : <Link2 className="h-3.5 w-3.5" />}
+                  {copied === 'all-links' ? <Check className="h-3.5 w-3.5 text-emerald-700" /> : <Link2 className="h-3.5 w-3.5" />}
                   Salin Semua Link
                 </button>
               </div>
 
               {rows.length > 0 && (
-                <div className="mt-3 max-h-64 overflow-y-auto rounded-md border border-gray-200">
+                <div className="mt-3 max-h-64 overflow-y-auto rounded-md border border-border">
                   {rows.map((row, i) => {
                     const done = sentIndexes.has(i);
                     const rowLink = bulkLinks[i];
                     return (
-                      <div key={i} className={`flex items-center gap-2 border-b border-gray-100 px-2 py-1.5 last:border-0 ${done ? 'bg-green-50' : ''}`}>
+                      <div key={i} className={`flex items-center gap-2 border-b border-border px-2 py-1.5 last:border-0 ${done ? 'bg-emerald-50' : ''}`}>
                         <button
                           onClick={() => toggleSent(i)}
                           title="Tandai sudah dikirim"
-                          className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border ${done ? 'border-green-600 bg-green-600' : 'border-gray-300'}`}
+                          className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border ${done ? 'border-emerald-600 bg-emerald-600' : 'border-input'}`}
                         >
                           {done && <Check className="h-3 w-3 text-white" />}
                         </button>
                         <div className="min-w-0 flex-1">
-                          <p className="truncate text-xs font-medium text-gray-800">{row.name}</p>
-                          <p className="truncate text-[10px] text-gray-400">{row.phone ? `+${normalizePhone(row.phone)}` : 'tanpa nomor'}</p>
+                          <p className="truncate text-xs font-medium text-foreground">{row.name}</p>
+                          <p className="truncate text-[10px] text-muted-foreground">{row.phone ? `+${normalizePhone(row.phone)}` : 'tanpa nomor'}</p>
                         </div>
                         <button
                           onClick={() => copy(`row-msg-${i}`, fill(template, row.name, rowLink))}
                           title="Salin pesan"
-                          className="flex shrink-0 items-center gap-1 rounded-md border border-gray-300 px-1.5 py-1 text-[11px] text-gray-600 hover:bg-gray-50"
+                          className="flex shrink-0 items-center gap-1 rounded-md border border-input px-1.5 py-1 text-[11px] text-muted-foreground hover:bg-muted"
                         >
-                          {copied === `row-msg-${i}` ? <Check className="h-3 w-3 text-green-600" /> : <Copy className="h-3 w-3" />}
+                          {copied === `row-msg-${i}` ? <Check className="h-3 w-3 text-emerald-700" /> : <Copy className="h-3 w-3" />}
                         </button>
                         <button
                           onClick={() => openWa(row, i)}
@@ -368,7 +376,7 @@ export default function ShareDialog({ open, projectId, slug, title, onClose, rel
           )}
 
           {tab === 'team' && (
-            <Section icon={<Link2 className="h-4 w-4 text-gray-400" />} title="Akses untuk Tim (khusus desain ini)">
+            <Section icon={<Link2 className="h-4 w-4 text-muted-foreground" />} title="Akses untuk Tim (khusus desain ini)">
               <AccessRow
                 label="Tautan Lihat"
                 desc="Halaman publik undangan"
@@ -379,31 +387,31 @@ export default function ShareDialog({ open, projectId, slug, title, onClose, rel
               <AccessRow
                 label="Tautan Kelola Tamu"
                 desc="Buka daftar nama tamu & pilih ucapan per agama (tanpa akses desain/dashboard)"
-                icon={<Users className="h-3.5 w-3.5 shrink-0 text-gray-400" />}
+                icon={<Users className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />}
                 value={manageLink}
                 onCopy={() => copy('team-link', manageLink)}
                 copied={copied === 'team-link'}
               />
-              {manageLoading && <p className="mt-1 text-[11px] text-gray-400">Menyiapkan tautan kelola…</p>}
+              {manageLoading && <p className="mt-1 text-[11px] text-muted-foreground">Menyiapkan tautan kelola…</p>}
               {!manageLoading && !manageToken && (
                 <div className="mt-1">
                   <button
                     type="button"
                     onClick={() => refreshManageToken()}
-                    className="rounded-md border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
+                    className="rounded-md border border-input px-3 py-1.5 text-xs font-medium text-foreground hover:bg-muted"
                   >
                     Buat Tautan Kelola
                   </button>
-                  {manageError && <p className="mt-1 text-[11px] text-red-500">{manageError}</p>}
+                  {manageError && <p className="mt-1 text-[11px] text-destructive">{manageError}</p>}
                 </div>
               )}
               {manageToken && (
                 <div className="mt-2 flex flex-wrap items-center gap-2">
-                  <span className="text-[11px] text-gray-500">Masa berlaku</span>
+                  <span className="text-[11px] text-muted-foreground">Masa berlaku</span>
                   <select
                     value={manageDays}
                     onChange={(e) => setManageDays(Number(e.target.value))}
-                    className="rounded-md border border-gray-300 bg-white px-2 py-1 text-xs"
+                    className="rounded-md border border-input bg-card px-2 py-1 text-xs"
                   >
                     <option value={30}>1 bulan</option>
                     <option value={90}>3 bulan</option>
@@ -412,11 +420,11 @@ export default function ShareDialog({ open, projectId, slug, title, onClose, rel
                   <button
                     type="button"
                     onClick={() => refreshManageToken(manageDays, true)}
-                    className="rounded-md border border-gray-300 px-3 py-1 text-xs font-medium text-gray-700 hover:bg-gray-50"
+                    className="rounded-md border border-input px-3 py-1 text-xs font-medium text-foreground hover:bg-muted"
                   >
                     Terapkan
                   </button>
-                  {manageError && <p className="text-[11px] text-red-500">{manageError}</p>}
+                  {manageError && <p className="text-[11px] text-destructive">{manageError}</p>}
                 </div>
               )}
             </Section>
@@ -475,11 +483,11 @@ export default function ShareDialog({ open, projectId, slug, title, onClose, rel
           )}
         </div>
 
-        <div className="flex items-center justify-between border-t border-gray-100 px-5 py-3">
-          <p className="text-[11px] text-gray-400">Daftar bulk tersimpan otomatis.</p>
+        <div className="flex items-center justify-between border-t border-border px-5 py-3">
+          <p className="text-[11px] text-muted-foreground">Daftar bulk tersimpan otomatis.</p>
           <button
             onClick={onClose}
-            className="rounded-md border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
+            className="rounded-md border border-input px-3 py-1.5 text-sm font-medium text-foreground hover:bg-muted"
           >
             Tutup
           </button>
@@ -497,14 +505,14 @@ function normalizePhone(raw: string): string {
 function ReligionSelector({ religion, onChange }: { religion: ReligionKey; onChange: (r: ReligionKey) => void }) {
   return (
     <div>
-      <label className="block text-xs font-medium text-gray-700">Agama &amp; Ucapan</label>
+      <label className="block text-xs font-medium text-foreground">Agama &amp; Ucapan</label>
       <div className="mt-1 grid grid-cols-3 gap-1.5">
         {RELIGIONS.map((r) => (
           <button
             key={r.key}
             onClick={() => onChange(r.key)}
             className={`rounded-md border px-2 py-1.5 text-xs ${
-              religion === r.key ? 'border-gray-900 bg-gray-900 text-white' : 'border-gray-300 text-gray-600 hover:bg-gray-50'
+              religion === r.key ? 'border-primary bg-primary text-primary-foreground' : 'border-input text-muted-foreground hover:bg-muted'
             }`}
           >
             {r.label}
@@ -523,7 +531,7 @@ function PresetRow({ presets, activeId, onSelect }: { presets: { id: string; lab
           key={p.id}
           onClick={() => onSelect(p.id)}
           className={`flex-1 rounded-md border px-2 py-1 text-xs ${
-            activeId === p.id ? 'border-gray-900 bg-gray-900 text-white' : 'border-gray-300 text-gray-600 hover:bg-gray-50'
+            activeId === p.id ? 'border-primary bg-primary text-primary-foreground' : 'border-input text-muted-foreground hover:bg-muted'
           }`}
         >
           {p.label}
@@ -532,7 +540,7 @@ function PresetRow({ presets, activeId, onSelect }: { presets: { id: string; lab
       <button
         onClick={() => onSelect('custom')}
         className={`flex-1 rounded-md border px-2 py-1 text-xs ${
-          activeId === 'custom' ? 'border-gray-900 bg-gray-900 text-white' : 'border-gray-300 text-gray-600 hover:bg-gray-50'
+          activeId === 'custom' ? 'border-primary bg-primary text-primary-foreground' : 'border-input text-muted-foreground hover:bg-muted'
         }`}
       >
         Custom
@@ -546,7 +554,7 @@ function Section({ icon, title, children }: { icon: React.ReactNode; title: stri
     <div>
       <div className="flex items-center gap-2">
         {icon}
-        <h4 className="text-xs font-semibold uppercase tracking-wide text-gray-500">{title}</h4>
+        <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{title}</h4>
       </div>
       <div className="mt-2">{children}</div>
     </div>
@@ -569,22 +577,22 @@ function AccessRow({
   icon?: React.ReactNode;
 }) {
   return (
-    <div className="mb-2 rounded-md border border-gray-200 p-2">
+    <div className="mb-2 rounded-md border border-border p-2">
       <div className="flex items-center justify-between gap-2">
         <div className="flex min-w-0 items-center gap-1.5">
-          {icon ?? (label === 'Tautan Edit' ? <Pencil className="h-3.5 w-3.5 shrink-0 text-gray-400" /> : <Eye className="h-3.5 w-3.5 shrink-0 text-gray-400" />)}
-          <span className="text-xs font-medium text-gray-800">{label}</span>
+          {icon ?? (label === 'Tautan Edit' ? <Pencil className="h-3.5 w-3.5 shrink-0 text-muted-foreground" /> : <Eye className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />)}
+          <span className="text-xs font-medium text-foreground">{label}</span>
         </div>
         <button
           onClick={onCopy}
-          className="flex shrink-0 items-center gap-1 rounded-md border border-gray-300 px-2 py-1 text-[11px] font-medium text-gray-700 hover:bg-gray-50"
+          className="flex shrink-0 items-center gap-1 rounded-md border border-input px-2 py-1 text-[11px] font-medium text-foreground hover:bg-muted"
         >
-          {copied ? <Check className="h-3 w-3 text-green-600" /> : <Copy className="h-3 w-3" />}
+          {copied ? <Check className="h-3 w-3 text-emerald-700" /> : <Copy className="h-3 w-3" />}
           {copied ? 'Disalin' : 'Salin'}
         </button>
       </div>
-      <p className="mt-1 truncate text-[11px] text-gray-500">{value}</p>
-      <p className="mt-0.5 text-[10px] text-gray-400">{desc}</p>
+      <p className="mt-1 truncate text-[11px] text-muted-foreground">{value}</p>
+      <p className="mt-0.5 text-[10px] text-muted-foreground">{desc}</p>
     </div>
   );
 }
@@ -644,15 +652,15 @@ function EditLinkTab({
   const expiredTokens = tokens.filter((t) => !t.is_active || new Date(t.expires_at) <= new Date());
 
   return (
-    <Section icon={<KeyRound className="h-4 w-4 text-gray-400" />} title="Link Edit Tanpa Login">
-      <p className="text-[11px] text-gray-500 mb-3">
+    <Section icon={<KeyRound className="h-4 w-4 text-muted-foreground" />} title="Link Edit Tanpa Login">
+      <p className="text-[11px] text-muted-foreground mb-3">
         Bagikan link ini agar orang lain bisa edit undangan tanpa login. Perubahan langsung disimpan ke project utama.
       </p>
 
       {/* Generate form */}
-      <div className="rounded-lg border border-gray-200 p-3 space-y-3">
+      <div className="rounded-lg border border-border p-3 space-y-3">
         <div>
-          <label className="mb-1 block text-xs font-medium text-gray-700">Berapa lama link berlaku?</label>
+          <label className="mb-1 block text-xs font-medium text-foreground">Berapa lama link berlaku?</label>
           <div className="flex gap-1.5">
             {EXPIRY_OPTIONS.map((opt) => (
               <button
@@ -660,8 +668,8 @@ function EditLinkTab({
                 onClick={() => onExpiryChange(opt.hours)}
                 className={`flex-1 rounded-md border px-2 py-1.5 text-xs font-medium ${
                   expiry === opt.hours
-                    ? 'border-gray-900 bg-gray-900 text-white'
-                    : 'border-gray-300 text-gray-600 hover:bg-gray-50'
+                    ? 'border-primary bg-primary text-primary-foreground'
+                    : 'border-input text-muted-foreground hover:bg-muted'
                 }`}
               >
                 {opt.label}
@@ -671,20 +679,20 @@ function EditLinkTab({
         </div>
 
         <div>
-          <label className="mb-1 block text-xs font-medium text-gray-700">Catatan (opsional)</label>
+          <label className="mb-1 block text-xs font-medium text-foreground">Catatan (opsional)</label>
           <input
             value={note}
             onChange={(e) => onNoteChange(e.target.value)}
             placeholder="cth. Untuk desainer"
             maxLength={100}
-            className="w-full rounded-md border border-gray-300 bg-gray-50 px-2.5 py-1.5 text-xs outline-none focus:ring-2 focus:ring-gray-900"
+            className="w-full rounded-md border border-input bg-muted px-2.5 py-1.5 text-xs outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           />
         </div>
 
         <button
           onClick={onGenerate}
           disabled={loading}
-          className="w-full rounded-md bg-gray-900 px-3 py-2 text-xs font-medium text-white hover:bg-gray-800 disabled:opacity-50"
+          className="w-full rounded-md bg-primary px-3 py-2 text-xs font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
         >
           {loading ? 'Generating...' : 'Generate Link Edit'}
         </button>
@@ -692,31 +700,31 @@ function EditLinkTab({
 
       {/* Error */}
       {error && (
-        <div className="mt-3 rounded-lg border border-red-200 bg-red-50 p-3">
-          <p className="text-[11px] font-medium text-red-700 mb-1">Gagal membuat link</p>
-          <p className="text-[10px] text-red-600 break-words">{error}</p>
+        <div className="mt-3 rounded-lg border border-destructive/30 bg-destructive/10 p-3">
+          <p className="text-[11px] font-medium text-destructive mb-1">Gagal membuat link</p>
+          <p className="text-[10px] text-destructive break-words">{error}</p>
         </div>
       )}
 
       {/* Generated link */}
       {generated && (
-        <div className="mt-3 rounded-lg border border-green-200 bg-green-50 p-3">
-          <p className="text-[11px] font-medium text-green-700 mb-2">Link berhasil dibuat!</p>
+        <div className="mt-3 rounded-lg border border-emerald-200 bg-emerald-50 p-3">
+          <p className="text-[11px] font-medium text-emerald-700 mb-2">Link berhasil dibuat!</p>
           <div className="flex items-center gap-1.5">
             <input
               readOnly
               value={generated.url}
-              className="min-w-0 flex-1 rounded-md border border-green-300 bg-white px-2 py-1.5 text-[11px] text-gray-700"
+              className="min-w-0 flex-1 rounded-md border border-emerald-300 bg-card px-2 py-1.5 text-[11px] text-foreground"
             />
             <button
               onClick={onCopy}
-              className="flex shrink-0 items-center gap-1 rounded-md border border-green-300 bg-white px-2 py-1.5 text-[11px] font-medium text-green-700 hover:bg-green-100"
+              className="flex shrink-0 items-center gap-1 rounded-md border border-emerald-300 bg-card px-2 py-1.5 text-[11px] font-medium text-emerald-700 hover:bg-emerald-100"
             >
               {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
               {copied ? 'Disalin' : 'Salin'}
             </button>
           </div>
-          <p className="mt-1.5 text-[10px] text-green-600">
+          <p className="mt-1.5 text-[10px] text-emerald-700">
             Berlaku {expiry < 24 ? `${expiry} jam` : expiry === 720 ? '1 bulan' : `${expiry / 24} hari`} dari sekarang.
           </p>
         </div>
@@ -725,22 +733,22 @@ function EditLinkTab({
       {/* Active tokens */}
       {activeTokens.length > 0 && (
         <div className="mt-4">
-          <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wide mb-2">Link Aktif</p>
+          <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide mb-2">Link Aktif</p>
           <div className="space-y-1.5">
             {activeTokens.map((t) => {
               const timeLeft = Math.max(0, Math.floor((new Date(t.expires_at).getTime() - now) / 3600000));
               return (
-                <div key={t.id} className="flex items-center justify-between rounded-md border border-gray-200 p-2">
+                <div key={t.id} className="flex items-center justify-between rounded-md border border-border p-2">
                   <div className="min-w-0">
-                    <p className="text-[11px] text-gray-700 truncate">{t.note || 'Link edit'}</p>
-                    <p className="text-[10px] text-gray-400">
+                    <p className="text-[11px] text-foreground truncate">{t.note || 'Link edit'}</p>
+                    <p className="text-[10px] text-muted-foreground">
                       <Clock className="inline h-3 w-3 mr-0.5" />
                       Sisa {timeLeft} jam · Dibuat {new Date(t.created_at).toLocaleDateString('id-ID')}
                     </p>
                   </div>
                   <button
                     onClick={() => onRevoke(t.id)}
-                    className="shrink-0 rounded-md border border-red-200 px-2 py-1 text-[10px] font-medium text-red-600 hover:bg-red-50"
+                    className="shrink-0 rounded-md border border-destructive/30 px-2 py-1 text-[10px] font-medium text-destructive hover:bg-destructive/10"
                   >
                     <Trash2 className="h-3 w-3" />
                   </button>
@@ -754,8 +762,8 @@ function EditLinkTab({
       {/* Expired tokens */}
       {expiredTokens.length > 0 && (
         <div className="mt-3">
-          <p className="text-[11px] font-medium text-gray-400 uppercase tracking-wide mb-1">Riwayat</p>
-          <p className="text-[10px] text-gray-400">{expiredTokens.length} link kedaluwarsa/dinonaktifkan</p>
+          <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide mb-1">Riwayat</p>
+          <p className="text-[10px] text-muted-foreground">{expiredTokens.length} link kedaluwarsa/dinonaktifkan</p>
         </div>
       )}
     </Section>

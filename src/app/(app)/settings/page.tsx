@@ -97,58 +97,60 @@ export default function SettingsPage() {
   return (
     <div className="mx-auto max-w-4xl">
       <div className="mb-6">
-        <h2 className="text-lg font-semibold">Pengaturan</h2>
-        <p className="mt-1 text-sm text-gray-500">Konfigurasi WhatsApp, harga, promo, dan branding.</p>
+        <h2 className="text-lg font-semibold text-foreground">Pengaturan</h2>
+        <p className="mt-1 text-sm text-muted-foreground">Konfigurasi WhatsApp, harga, promo, dan branding.</p>
       </div>
 
       <form onSubmit={handleSave} className="space-y-5">
         <div className="grid gap-5 md:grid-cols-2">
           {/* WhatsApp */}
-          <section className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-            <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-900">
-              <MessageCircle className="h-4 w-4" /> WhatsApp Bisnis
+          <section className="rounded-2xl border border-border bg-card p-5 shadow-soft">
+            <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-foreground">
+              <MessageCircle className="h-4 w-4 text-gold-strong" aria-hidden /> WhatsApp Bisnis
             </h3>
-            <p className="mb-3 text-xs leading-relaxed text-gray-500">
+            <p className="mb-3 text-xs leading-relaxed text-muted-foreground">
               Nomor untuk chat WhatsApp pesanan. Format internasional tanpa &quot;+&quot;.
             </p>
             <div className="relative">
-              <MessageCircle className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+              <MessageCircle className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden />
               <Input
                 value={settings.whatsapp}
                 onChange={(e) => update('whatsapp', e.target.value)}
                 inputMode="tel"
                 placeholder="cth: 6281234567890"
+                aria-label="Nomor WhatsApp bisnis"
                 className="pl-10"
               />
             </div>
-            <p className="mt-1.5 text-xs text-gray-400">
+            <p className="mt-1.5 text-xs text-muted-foreground">
               {settings.whatsapp ? `wa.me/${toWaNumber(settings.whatsapp)}` : '(belum diset)'}
             </p>
           </section>
 
           {/* Branding */}
-          <section className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-            <h3 className="mb-3 text-sm font-semibold text-gray-900">Branding</h3>
+          <section className="rounded-2xl border border-border bg-card p-5 shadow-soft">
+            <h3 className="mb-3 text-sm font-semibold text-foreground">Branding</h3>
             <div>
-              <label className="mb-1 block text-xs font-medium text-gray-700">Nama Bisnis (Watermark)</label>
+              <label htmlFor="business-name" className="mb-1 block text-xs font-medium text-foreground">Nama Bisnis (Watermark)</label>
               <Input
+                id="business-name"
                 type="text"
                 value={settings.business_name}
                 onChange={(e) => update('business_name', e.target.value)}
                 placeholder="PT. Prasha Digital Indonesia"
               />
-              <p className="mt-1 text-xs text-gray-400">Muncul di watermark &quot;Made with Love by ...&quot;</p>
+              <p className="mt-1 text-xs text-muted-foreground">Muncul di watermark &quot;Made with Love by ...&quot;</p>
             </div>
           </section>
         </div>
 
         {/* Harga & Promo — full width */}
-        <section className="rounded-xl border border-[#c9a45c]/30 bg-[#faf7f2] p-5">
+        <section className="rounded-2xl border border-gold/30 bg-accent p-5 shadow-soft">
           <div className="mb-4 flex items-center justify-between">
-            <h3 className="flex items-center gap-2 text-sm font-semibold text-[#4a443c]">
-              <Tag className="h-4 w-4 text-[#c9a45c]" /> Harga & Promo
+            <h3 className="flex items-center gap-2 text-sm font-semibold text-accent-foreground">
+              <Tag className="h-4 w-4 text-gold-strong" aria-hidden /> Harga & Promo
             </h3>
-            <label className="flex items-center gap-2 text-xs font-medium text-[#4a443c]">
+            <label className="flex items-center gap-2 text-xs font-medium text-accent-foreground">
               <Switch checked={settings.show_pricing} onCheckedChange={(v) => update('show_pricing', v)} />
               Tampilkan
             </label>
@@ -157,8 +159,9 @@ export default function SettingsPage() {
           {settings.show_pricing && (
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               <div>
-                <Label className="mb-1 block text-xs font-medium text-[#4a443c]">Harga Dasar (Rp)</Label>
+                <Label htmlFor="base-price" className="mb-1 block text-xs font-medium text-accent-foreground">Harga Dasar (Rp)</Label>
                 <Input
+                  id="base-price"
                   type="number"
                   value={settings.base_price || ''}
                   onChange={(e) => update('base_price', parseInt(e.target.value) || 0)}
@@ -166,8 +169,9 @@ export default function SettingsPage() {
                 />
               </div>
               <div>
-                <Label className="mb-1 block text-xs font-medium text-[#4a443c]">Diskon (%)</Label>
+                <Label htmlFor="discount-percent" className="mb-1 block text-xs font-medium text-accent-foreground">Diskon (%)</Label>
                 <Input
+                  id="discount-percent"
                   type="number"
                   min={0}
                   max={100}
@@ -177,8 +181,9 @@ export default function SettingsPage() {
                 />
               </div>
               <div>
-                <Label className="mb-1 block text-xs font-medium text-[#4a443c]">Kode Promo</Label>
+                <Label htmlFor="promo-code" className="mb-1 block text-xs font-medium text-accent-foreground">Kode Promo</Label>
                 <Input
+                  id="promo-code"
                   type="text"
                   value={settings.promo_code}
                   onChange={(e) => update('promo_code', e.target.value.toUpperCase())}
@@ -187,8 +192,9 @@ export default function SettingsPage() {
                 />
               </div>
               <div>
-                <Label className="mb-1 block text-xs font-medium text-[#4a443c]">Berlaku Hingga</Label>
+                <Label htmlFor="promo-expires" className="mb-1 block text-xs font-medium text-accent-foreground">Berlaku Hingga</Label>
                 <Input
+                  id="promo-expires"
                   type="date"
                   value={settings.promo_expires_at?.split('T')[0] || ''}
                   onChange={(e) => update('promo_expires_at', e.target.value ? `${e.target.value}T23:59:59` : '')}
@@ -197,7 +203,7 @@ export default function SettingsPage() {
             </div>
           )}
           {settings.base_price > 0 && (
-            <p className="mt-3 text-xs text-[#c9a45c]">
+            <p className="mt-3 text-xs font-medium text-gold-deep">
               {settings.discount_percent > 0 && !isPromoExpired(settings.promo_expires_at) ? (
                 <>
                   Harga final: {formatRupiah(computeFinalPrice(settings.base_price, settings.discount_percent))}
@@ -214,17 +220,17 @@ export default function SettingsPage() {
         </section>
 
         {message && (
-          <p className={`rounded-md px-3 py-2 text-xs ${message.ok ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>{message.text}</p>
+          <p role="status" className={`rounded-md px-3 py-2 text-xs ${message.ok ? 'bg-emerald-50 text-emerald-700' : 'bg-destructive/10 text-destructive'}`}>{message.text}</p>
         )}
 
         <div className="flex items-center gap-3">
           <Button type="submit" disabled={saving || loading}>
-            {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+            {saving ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : <Save className="h-4 w-4" aria-hidden />}
             {saving ? 'Menyimpan...' : 'Simpan'}
           </Button>
           {loading && (
-            <span className="flex items-center gap-1.5 text-xs text-gray-400">
-              <Loader2 className="h-3.5 w-3.5 animate-spin" /> Memuat...
+            <span className="flex items-center gap-1.5 text-xs text-muted-foreground" role="status" aria-live="polite">
+              <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden /> Memuat...
             </span>
           )}
         </div>
