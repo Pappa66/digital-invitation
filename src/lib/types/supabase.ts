@@ -449,6 +449,19 @@ export interface Database {
           slug: string;
         }[];
       };
+      record_invitation_view: {
+        Args: { p_project_id: string };
+        Returns: boolean;
+      };
+      get_project_stats: {
+        Args: { p_project_id: string };
+        Returns: {
+          rsvp_total: number;
+          rsvp_hadir: number;
+          checkin_total: number;
+          views_total: number;
+        }[];
+      };
       update_rsvp_by_token: {
         Args: {
           p_token: string;
