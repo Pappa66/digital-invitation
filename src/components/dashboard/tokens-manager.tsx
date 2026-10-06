@@ -232,6 +232,18 @@ export default function TokensManager() {
     setPage(1);
   }, [query, statusFilter, typeFilter]);
 
+  async function purge(kind: 'access' | 'share', id: string) {
+    const sb = supabase as unknown as { from: (t: string) => { delete: () => { eq: (c: string, v: string) => Promise<{ error: { message: string } | null }> } } };
+    const table = kind === 'access' ? 'access_tokens' : 'share_edit_tokens';
+    const { error } = await sb.from(table).delete().eq('id', id);
+    if (error) {
+      setActionError(error.message);
+      return;
+    }
+    if (kind === 'access') setAccessTokens((prev) => prev.filter((t) => t.id !== id));
+    else setShareTokens((prev) => prev.filter((t) => t.id !== id));
+  }
+
   const totalPages = Math.max(1, Math.ceil(filteredGroups.length / PAGE_SIZE));
   const safePage = Math.min(page, totalPages);
   const pagedGroups = filteredGroups.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
@@ -363,6 +375,7 @@ export default function TokensManager() {
                     onCopy={() => void copy(`access-${t.id}`, `${origin}/invite/${project.id}?t=${t.token}`)}
                     revokeLabel="Cabut"
                     onRevoke={() => setTarget({ kind: 'access', projectId: project.id, projectTitle: project.title })}
+                    onDelete={() => void purge('access', t.id)}
                   />
                 ))}
 
@@ -378,6 +391,7 @@ export default function TokensManager() {
                     onCopy={() => void copy(`share-${t.id}`, `${origin}/edit/${t.token}`)}
                     revokeLabel="Cabut"
                     onRevoke={() => setTarget({ kind: 'share', id: t.id, projectTitle: project.title, label: t.note || 'Link edit' })}
+                    onDelete={() => void purge('share', t.id)}
                   />
                 ))}
 
@@ -474,7 +488,8 @@ function LinkRow({
   copied,
   onCopy,
   revokeLabel,
-  onRevoke
+  onRevoke,
+  onDelete
 }: {
   label: string;
   desc?: string;
@@ -485,6 +500,7 @@ function LinkRow({
   onCopy: () => void;
   revokeLabel?: string;
   onRevoke?: () => void;
+  onDelete?: () => void;
 }) {
   const canRevoke = status === 'aktif' && onRevoke;
   return (
@@ -521,6 +537,15 @@ function LinkRow({
             className="inline-flex min-h-11 items-center rounded-md border border-destructive/30 px-3 text-xs font-medium text-destructive transition-colors hover:bg-destructive/10 disabled:pointer-events-none disabled:opacity-40"
           >
             {revokeLabel}
+          </button>
+        )}
+        {onDelete && status && status !== 'aktif' && (
+          <button
+            type="button"
+            onClick={onDelete}
+            className="inline-flex min-h-11 items-center rounded-md border border-destructive/30 px-3 text-xs font-medium text-destructive transition-colors hover:bg-destructive/10"
+          >
+            Hapus
           </button>
         )}
       </div>
