@@ -100,7 +100,7 @@ export default function TokensManager() {
   const [target, setTarget] = useState<RevokeTarget>(null);
   const [revoking, setRevoking] = useState(false);
   const [query, setQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('semua');
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('aktif');
   const [typeFilter, setTypeFilter] = useState<TypeFilter>('semua');
   const [page, setPage] = useState(1);
 
